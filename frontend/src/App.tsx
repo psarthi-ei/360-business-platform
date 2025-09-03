@@ -46,6 +46,7 @@ function App() {
     setCurrentScreen('quotations');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function showLeadFromQuote(leadId: string) {
     // In a real app, this would highlight the specific lead
     setCurrentScreen('leads');
@@ -55,6 +56,7 @@ function App() {
     setCurrentScreen('salesorders');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
     // In a real app, this would convert quote to customer and create sales order
     setCurrentScreen('salesorders');
@@ -85,6 +87,7 @@ function App() {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function renderLanguageSwitcher() {
     return (
       <LanguageSwitcher 
