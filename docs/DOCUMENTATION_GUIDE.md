@@ -120,7 +120,48 @@ This guide explains the purpose of each documentation file and when to update th
 
 ---
 
-### **7. DOCUMENTATION_GUIDE.md** - This File
+### **7. UI_UX_DESIGN_DECISIONS.md** - Visual Design Standards
+**Purpose**: UI/UX design patterns and business context guidelines established from Lead Management screen
+
+**Contains**:
+- Visual design philosophy (business-first, professional manufacturing aesthetics)
+- Multilingual user experience strategy (smart translation approach)
+- Mobile-first responsive design patterns for textile factory environments
+- Information architecture for textile business data (lead cards, priority coding)
+- Navigation patterns and user flow decisions
+- Business context integration (Gujarat textile examples, cultural sensitivity)
+- Consistency guidelines and checklists for future screens
+
+**Update Schedule**:
+- ✅ **Design-driven** - After completing each major screen implementation
+- ✅ When establishing new visual patterns or UI components
+- ✅ When user feedback changes design approach or business context
+- ✅ When adding new device support or responsive breakpoints
+- ⚠️ **After major screens** - Lead Management, Quotation, Orders, Production
+
+---
+
+### **8. BUSINESS_FLOW_DOCUMENTATION.md** - Complete Textile Business Process
+**Purpose**: Comprehensive documentation of the complete lead-to-customer conversion flow for Gujarat textile manufacturers
+
+**Contains**:
+- 8-stage business pipeline from lead capture to final payment
+- Detailed textile manufacturing processes (warping, weaving, dyeing, finishing)
+- Payment cycles and advance payment management (critical gate between quotes and work orders)
+- Quality control checkpoints and customer relationship management
+- Platform integration benefits and operational efficiency gains
+- Critical success factors for textile business operations
+
+**Update Schedule**:
+- ✅ **Business-driven** - When business processes are refined based on user feedback
+- ✅ When new payment methods or business practices are adopted
+- ✅ When expanding to new textile segments (garments, home textiles, industrial)
+- ✅ After major customer onboarding and process learning
+- ⚠️ **Quarterly** - Regular review to ensure accuracy with real business operations
+
+---
+
+### **9. DOCUMENTATION_GUIDE.md** - This File
 **Purpose**: Meta-documentation explaining how to manage all documentation
 
 **Contains**:
@@ -152,6 +193,8 @@ This guide explains the purpose of each documentation file and when to update th
 
 ### **As Needed Updates**
 - ✅ **LEARNING_CONTEXT.md** - When learning approach evolves
+- ✅ **UI_UX_DESIGN_DECISIONS.md** - After major screen implementations
+- ✅ **BUSINESS_FLOW_DOCUMENTATION.md** - When business processes are refined
 - ✅ **DOCUMENTATION_GUIDE.md** - When documentation strategy changes
 
 ---
@@ -173,7 +216,8 @@ This guide explains the purpose of each documentation file and when to update th
 ### **When Adding New Business Feature**
 1. Update **BUSINESS_REQUIREMENTS.md** with feature specification
 2. Consider if **TECHNICAL_STRATEGY.md** needs architecture updates
-3. Update **README.md** if it's a major feature addition
+3. Update **BUSINESS_FLOW_DOCUMENTATION.md** if new business processes are involved
+4. Update **README.md** if it's a major feature addition
 
 ### **When Changing Technology Stack**
 1. Update **TECHNICAL_STRATEGY.md** with decision rationale
