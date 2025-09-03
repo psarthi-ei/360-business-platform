@@ -18,5 +18,9 @@ Complete end-to-end business digitization platform with WhatsApp-level simplicit
 ## Development Status
 🚧 **In Development** - MVP Phase
 
-## Contact
-Built by solo founder-developer for Gujarat textile manufacturers.
+## About
+**Company**: ElevateIdea Technologies Private Limited  
+**Founder & Developer**: Partha Sarthi  
+**Mission**: Digitally transforming India's MSME manufacturing sector through voice-enabled technology
+
+Built with passion for Gujarat textile manufacturers who deserve world-class business tools.
