@@ -187,6 +187,75 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ---
 
+## Global Customer Contact Standardization
+
+### **16. Universal Customer Communication Format**
+**Decision**: Standardized customer contact display and action buttons across all screens
+**Rationale**: 
+- Consistent user experience reduces cognitive load
+- Always accessible communication for textile business operations
+- Eliminates design inconsistencies that confuse users
+- Supports fast-paced customer interaction needs
+
+**Standard Layout Pattern**:
+```
+Card Header: [Company Name - City] + [Priority/Status Badge]
+Business Details: Material, specifications, amounts, dates
+Customer Contact Section: Contact: [Name - Phone]
+Action Buttons: 📞 Call | 📱 WhatsApp | [Context-Specific Action]
+```
+
+**Implementation Rules**:
+- **Contact Section**: Always separate section with bold "Contact:" label
+- **Action Button Order**: Call first, WhatsApp second, then context actions
+- **Button Icons**: Always include emoji icons for instant recognition
+- **Button Spacing**: Consistent spacing and sizing across all screens
+
+**Applied Across All Screens**:
+- ✅ **Lead Management**: 📞 Call | 📱 WhatsApp | 📑 Send Quote
+- ✅ **Quotations**: 📞 Call | 📱 WhatsApp | 📄 View PDF | ✅ Approve/👤 Convert
+- ✅ **Sales Orders**: 📞 Call | 📱 WhatsApp | 📄 View Order | [Payment/Work Order Actions]
+- 🔄 **Future Screens**: Work Orders, Production, Dispatch (same pattern)
+
+**Business Benefit**: 
+No matter what screen a textile manufacturer is viewing, customer communication is always one click away, matching Gujarat business communication patterns.
+
+---
+
+## Screen Filtering and Data Management
+
+### **17. Filter Interface Design - Buttons vs Dropdowns**
+**Decision**: Use horizontal button-based filters instead of dropdown menus for all screen filtering
+**Rationale**: 
+- **Single-click access**: No dropdown opening required for busy textile operations
+- **All options visible**: Users see all filter choices immediately without hidden menus
+- **Mobile-optimized**: Large touch targets work better in factory environments with one-handed operation
+- **Visual feedback**: Active filter state always clearly visible with gold highlighting
+- **Fast switching**: Quick filter changes during rapid business operations
+
+**Filter Categories Implemented**:
+- **Lead Management**: Show All | 🔥 Hot Leads | ⭐ Warm Leads | ❄️ Cold Leads
+- **Quotations**: Show All | ⏳ Pending | ✅ Approved | 🎉 Converted | ❌ Expired
+- **Sales Orders**: Show All | 💳 Pending Payment | ✅ Payment Received | 🔴 Overdue | 🟢 Ready for Production
+
+**Design Specifications**:
+- **Layout**: Horizontal flex layout with wrap for mobile responsiveness
+- **Styling**: Rounded buttons (20px radius) with golden active state (#ffd700)
+- **Spacing**: 10px gap between buttons, centered alignment
+- **Interaction**: Hover effects with subtle lift and color transitions
+- **Multilingual**: All filter labels translate while maintaining emoji icons for recognition
+
+**Alternative Considered**: Dropdown menus were evaluated but rejected due to:
+- Two-step interaction process (click dropdown + select option)
+- Hidden filter options reducing workflow efficiency
+- Less mobile-friendly interaction patterns
+- Unclear current filter state in compact view
+
+**Business Impact**: 
+Textile manufacturers can instantly focus on priority tasks (urgent leads, pending payments, overdue orders) without navigation friction, supporting fast-paced Gujarat business operations.
+
+---
+
 ## Voice Command Integration
 
 ### **13. Multilingual Voice Interface Design**
