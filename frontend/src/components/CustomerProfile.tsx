@@ -1,172 +1,278 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
 
 interface CustomerProfileProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   onNavigateBack: () => void;
-  translations: any;
+  customerId: string;
+  translations: {
+    backToDashboard: string;
+    customerProfile: string;
+    createNewQuote: string;
+    customerSince: string;
+    totalBusiness: string;
+    totalOrders: string;
+    conversionRate: string;
+    paymentScore: string;
+    call: string;
+    whatsapp: string;
+    quoteHistory: string;
+    orderHistory: string;
+    transactionHistory: string;
+    businessInsights: string;
+    [key: string]: string;
+  };
 }
 
-function CustomerProfile(props: CustomerProfileProps) {
-  const currentLanguage = props.currentLanguage;
-  const onLanguageChange = props.onLanguageChange;
-  const onNavigateBack = props.onNavigateBack;
-  const t = props.translations;
+function CustomerProfile({
+  currentLanguage,
+  onLanguageChange,
+  onNavigateBack,
+  customerId,
+  translations: t
+}: CustomerProfileProps) {
+  const customer = getCustomerById(customerId);
+  const customerQuotes = getQuotesByCustomerId(customerId);
+  const customerOrders = getSalesOrdersByCustomerId(customerId);
 
+  if (!customer) {
+    return (
+      <div className="lead-management-screen">
+        <LanguageSwitcher 
+          currentLanguage={currentLanguage} 
+          onLanguageChange={onLanguageChange} 
+        />
+        <div className="screen-header">
+          <button className="back-button" onClick={onNavigateBack}>
+            {t.backToDashboard}
+          </button>
+          <h1>👤 {t.customerProfile}</h1>
+        </div>
+        <div className="customer-header">
+          <h2>Customer not found</h2>
+        </div>
+      </div>
+    );
+  }
+
+  const priorityIcons = {
+    hot: '🔥',
+    warm: '🔶',
+    cold: '✅'
+  };
+
+  const paymentStatusIcon = {
+    good: '✅',
+    overdue: '⚠️',
+    pending: '⚠️'
+  };
   return (
     <div className="lead-management-screen">
       <LanguageSwitcher 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        currentLanguage={currentLanguage} 
+        onLanguageChange={onLanguageChange} 
       />
       
       <div className="screen-header">
         <button className="back-button" onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
-        <h1>👤 Customer Profile</h1>
+        <h1>👤 {t.customerProfile}</h1>
+        <button className="add-button">{t.createNewQuote}</button>
       </div>
 
-      <div className="customer-profile">
-        <div className="customer-header">
-          <div className="customer-basic-info">
-            <h2>🏢 Rajesh Textiles</h2>
-            <p className="customer-location">📍 Ahmedabad, Gujarat</p>
-            <p className="customer-type">🎉 <span style={{color: '#2ed573', fontWeight: 'bold'}}>New Customer</span> (Joined Sep 3, 2025)</p>
-          </div>
-          <div className="customer-stats">
-            <div className="stat-card">
-              <h3>₹95,000</h3>
-              <p>Total Business</p>
-            </div>
-            <div className="stat-card">
-              <h3>1</h3>
-              <p>Active Orders</p>
-            </div>
-            <div className="stat-card">
-              <h3>15</h3>
-              <p>Days Relationship</p>
-            </div>
+      <div className="customer-header">
+        <div className="customer-main-info">
+          <h2>🏭 {customer.name} - {customer.location}</h2>
+          <p className="customer-since">🎉 {t.customerSince}: {customer.customerSince}</p>
+          <p className="customer-type">{priorityIcons[customer.priority]} <strong>{customer.priorityLabel}</strong> - {customer.paymentStatusMessage}</p>
+        </div>
+        <div className="customer-contact-header">
+          <p><strong>Primary Contact:</strong> {customer.contactPerson} - {customer.phone}</p>
+          <div className="header-actions">
+            <button className="action-btn call">{t.call}</button>
+            <button className="action-btn whatsapp">{t.whatsapp}</button>
           </div>
         </div>
+      </div>
 
-        <div className="customer-details-grid">
-          <div className="customer-contact">
-            <h3>📞 Contact Information</h3>
-            <div className="contact-details">
-              <p><strong>Primary Contact:</strong> Rajesh Shah</p>
-              <p><strong>Phone:</strong> 9876543210</p>
-              <p><strong>Email:</strong> rajesh@rasejtextiles.com</p>
-              <p><strong>Address:</strong> 123 Textile Street, Ahmedabad, Gujarat 380001</p>
-              <p><strong>GST Number:</strong> 24ABCDE1234F1Z5</p>
+      <div className="customer-stats">
+        <div className="stat-card">
+          <h3>💰 {t.totalBusiness}</h3>
+          <p className="stat-value">{formatCurrency(customer.totalBusiness)}</p>
+          <p className="stat-detail">({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
+        </div>
+        <div className="stat-card">
+          <h3>📋 {t.totalOrders}</h3>
+          <p className="stat-value">{customer.totalOrders}</p>
+          <p className="stat-detail">{customerOrders.filter(order => order.status !== 'completed').length} active orders</p>
+        </div>
+        <div className="stat-card">
+          <h3>🎯 {t.conversionRate}</h3>
+          <p className="stat-value">{customer.conversionRate}%</p>
+          <p className="stat-detail">({customer.totalOrders}/{customerQuotes.length} quotes)</p>
+        </div>
+        <div className="stat-card">
+          <h3>💳 {t.paymentScore}</h3>
+          <p className={`stat-value payment-${customer.paymentStatus}`}>
+            {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
+          </p>
+          <p className="stat-detail">{customer.paymentStatus === 'good' ? 'Reliable payments' : 'Follow-up required'}</p>
+        </div>
+      </div>
+
+      <div className="transaction-history">
+        <div className="history-section">
+          <h4>📋 {t.quoteHistory}</h4>
+          {customerQuotes.length > 0 ? customerQuotes.map(quote => {
+            const statusIcons = {
+              pending: '⏳',
+              approved: '✅',
+              expired: '❌'
+            };
+            
+            return (
+              <div key={quote.id} className="history-item">
+                <div className="history-header">
+                  <span className="quote-number">{quote.id}</span>
+                  <div className="quote-meta">
+                    <span className="quote-date">{quote.quoteDate}</span>
+                    <span className={`quote-status ${quote.status}`}>
+                      {statusIcons[quote.status]} {quote.status === 'approved' ? 'Converted' : quote.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="history-details">
+                  <p><strong>Amount:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
+                  <p><strong>Items:</strong> {quote.items}</p>
+                  <p><strong>Valid Until:</strong> {quote.validUntil}</p>
+                  <p><strong>Status:</strong> {quote.statusMessage}</p>
+                </div>
+              </div>
+            );
+          }) : <p>No quotes found for this customer.</p>}
+        </div>
+
+        <div className="history-section">
+          <h4>📦 {t.orderHistory}</h4>
+          {customerOrders.length > 0 ? customerOrders.map(order => {
+            const statusIcons = {
+              pending: '⏳',
+              production: '🏭',
+              completed: '✅'
+            };
+            
+            return (
+              <div key={order.id} className="history-item">
+                <div className="history-header">
+                  <span className="order-number">{order.id}</span>
+                  <div className="order-meta">
+                    <span className="order-date">{order.orderDate}</span>
+                    <span className={`order-status ${order.status}`}>
+                      {statusIcons[order.status]} {order.status === 'production' ? 'In Production' : order.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="history-details">
+                  <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
+                  <p><strong>Items:</strong> {order.items}</p>
+                  <p><strong>Expected Delivery:</strong> {order.deliveryDate}</p>
+                  <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
+                  <p><strong>Production Status:</strong> {order.productionStatus}</p>
+                </div>
+              </div>
+            );
+          }) : <p>No orders found for this customer.</p>}
+        </div>
+
+        <div className="history-section">
+          <h4>💳 Payment History</h4>
+          {customerOrders.length > 0 ? customerOrders.map(order => (
+            <div key={order.id} className="history-item">
+              <div className="history-header">
+                <span className="order-number">Payment - {order.id}</span>
+                <div className="order-meta">
+                  <span className="order-date">{order.orderDate}</span>
+                  <span className={`order-status ${order.status}`}>
+                    {order.status === 'pending' ? '⚠️ Pending' : order.status === 'production' ? '💰 In Progress' : '✅ Completed'}
+                  </span>
+                </div>
+              </div>
+              <div className="history-details">
+                <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)}</p>
+                <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
+                <p><strong>Payment Method:</strong> {customer.preferences.paymentMethod}</p>
+                {order.status === 'pending' && (
+                  <p><strong>Action Required:</strong> Follow up for advance payment</p>
+                )}
+              </div>
             </div>
-            <div className="contact-actions">
-              <button className="action-btn call">📞 {t.call}</button>
-              <button className="action-btn whatsapp">📱 {t.whatsapp}</button>
-              <button className="action-btn">📧 Email</button>
+          )) : <p>No payment history available.</p>}
+        </div>
+
+        <div className="history-section">
+          <h4>💬 Communication History</h4>
+          {mockCommunications.map((comm, index) => (
+            <div key={index} className="comm-entry">
+              <div className="comm-date">{comm.date} - {comm.time}</div>
+              <div className="comm-type">{comm.type}</div>
+              <p className="comm-note">{comm.message}</p>
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="business-info">
+        <h4>🏢 Business Information & Insights</h4>
+        <div className="info-grid">
+          <div className="info-item">
+            <h4>Company Details</h4>
+            <p><strong>Business Name:</strong> {customer.name}</p>
+            <p><strong>Contact Person:</strong> {customer.contactPerson}</p>
+            <p><strong>Business Type:</strong> {customer.businessType}</p>
+            <p><strong>Employee Count:</strong> {customer.employeeCount}</p>
+            <p><strong>GST Number:</strong> {customer.gstNumber}</p>
           </div>
-
-          <div className="business-profile">
-            <h3>🏭 Business Profile</h3>
-            <div className="business-details">
-              <p><strong>Business Type:</strong> Cotton Fabric Manufacturing</p>
-              <p><strong>Specialization:</strong> Bandhani & Traditional Prints</p>
-              <p><strong>Monthly Volume:</strong> 2000-3000 meters</p>
-              <p><strong>Preferred Materials:</strong> Cotton, Khadi</p>
-              <p><strong>Quality Requirements:</strong> GSM 80-120, Natural dyes</p>
-              <p><strong>Payment Terms:</strong> 50% advance, 50% on delivery</p>
-            </div>
+          
+          <div className="info-item">
+            <h4>Preferences & Notes</h4>
+            <p><strong>Preferred Payment:</strong> {customer.preferences.paymentMethod}</p>
+            <p><strong>Delivery Preference:</strong> {customer.preferences.deliveryPreference}</p>
+            <p><strong>Quality Requirements:</strong> {customer.preferences.qualityRequirements}</p>
+            <p><strong>Communication:</strong> {customer.preferences.communication}</p>
+            <p><strong>Special Notes:</strong> {customer.preferences.specialNotes}</p>
           </div>
-
-          <div className="transaction-history">
-            <h3>💼 Transaction History</h3>
-            <div className="transaction-list">
-              <div className="transaction-item">
-                <div className="transaction-header">
-                  <span className="transaction-type">📋 Sales Order</span>
-                  <span className="transaction-date">Sep 3, 2025</span>
-                </div>
-                <p><strong>SO-2025-001:</strong> 500m Bandhani Cotton - ₹95,000</p>
-                <p className="transaction-status">🔴 Pending Payment (₹47,500 advance due)</p>
-              </div>
-              
-              <div className="transaction-item">
-                <div className="transaction-header">
-                  <span className="transaction-type">📄 Quote</span>
-                  <span className="transaction-date">Sep 1, 2025</span>
-                </div>
-                <p><strong>QT-2025-001:</strong> 500m Bandhani Cotton - ₹95,000</p>
-                <p className="transaction-status">🎉 Converted to Sales Order</p>
-              </div>
-              
-              <div className="transaction-item">
-                <div className="transaction-header">
-                  <span className="transaction-type">🎯 Lead</span>
-                  <span className="transaction-date">Aug 28, 2025</span>
-                </div>
-                <p><strong>Initial Inquiry:</strong> Bandhani Cotton requirements</p>
-                <p className="transaction-status">✅ Converted to Customer</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="communication-log">
-            <h3>💬 Communication Log</h3>
-            <div className="communication-list">
-              <div className="communication-item">
-                <div className="communication-header">
-                  <span className="communication-type">📞 Phone Call</span>
-                  <span className="communication-date">Sep 2, 2025 2:30 PM</span>
-                </div>
-                <p>Discussed quote details and delivery timeline. Customer agreed to 15-day delivery.</p>
-              </div>
-              
-              <div className="communication-item">
-                <div className="communication-header">
-                  <span className="communication-type">📱 WhatsApp</span>
-                  <span className="communication-date">Sep 1, 2025 11:45 AM</span>
-                </div>
-                <p>Sent quotation PDF. Customer requested minor specification changes.</p>
-              </div>
-              
-              <div className="communication-item">
-                <div className="communication-header">
-                  <span className="communication-type">📞 Phone Call</span>
-                  <span className="communication-date">Aug 30, 2025 4:15 PM</span>
-                </div>
-                <p>Initial inquiry call. Customer explained Bandhani fabric requirements for saree manufacturing.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="business-intelligence">
-            <h3>📊 Business Intelligence</h3>
-            <div className="intelligence-insights">
-              <div className="insight-item">
-                <h4>🎯 Customer Behavior</h4>
-                <p>• Prefers advance payment model (shows financial stability)</p>
-                <p>• Responds quickly to WhatsApp communication</p>
-                <p>• Values traditional fabric quality over price</p>
-              </div>
-              
-              <div className="insight-item">
-                <h4>💡 Business Opportunities</h4>
-                <p>• High potential for repeat orders (saree manufacturing is ongoing)</p>
-                <p>• May need silk fabrics for premium collections</p>
-                <p>• Could introduce to eco-friendly organic cotton options</p>
-              </div>
-              
-              <div className="insight-item">
-                <h4>⚠️ Risk Assessment</h4>
-                <p>• Payment pending - follow up required by Sep 5</p>
-                <p>• New customer - establish strong relationship early</p>
-                <p>• Seasonal business - plan for festival season demands</p>
-              </div>
-            </div>
+          
+          <div className="info-item">
+            <h4>Business Insights</h4>
+            <p><strong>Customer Since:</strong> {customer.customerSince}</p>
+            <p><strong>Order Frequency:</strong> {customer.totalOrders === 0 ? 'No orders yet' : customer.totalOrders === 1 ? 'First-time buyer' : 'Regular customer'}</p>
+            <p><strong>Average Order Value:</strong> {formatCurrency(customer.totalBusiness / (customer.totalOrders || 1))}</p>
+            <p><strong>Payment Behavior:</strong> {customer.paymentStatusMessage}</p>
+            <p><strong>Growth Potential:</strong> {customer.priority === 'hot' ? 'High' : customer.priority === 'warm' ? 'Medium' : 'Stable'}</p>
           </div>
         </div>
+      </div>
+
+      <div className="customer-quick-actions">
+        <h4>⚡ Quick Actions</h4>
+        <div className="action-buttons">
+          <button className="quick-action-btn primary">{t.createNewQuote}</button>
+          <button className="quick-action-btn">📞 Call Customer</button>
+          <button className="quick-action-btn">💬 Send WhatsApp</button>
+          <button className="quick-action-btn warning">💳 Payment Reminder</button>
+          <button className="quick-action-btn">📄 Download Invoice</button>
+          <button className="quick-action-btn">📧 Send Email</button>
+        </div>
+      </div>
+
+      <div className="voice-commands">
+        <p className="voice-hint">
+          🎤 <strong>Try saying:</strong> 
+          "Create new quote for {customer.name}" • "Show payment history" • "Call customer"
+        </p>
       </div>
     </div>
   );

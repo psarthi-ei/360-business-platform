@@ -1,5 +1,6 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
 
 interface QuotationOrdersProps {
   currentLanguage: string;
@@ -7,85 +8,30 @@ interface QuotationOrdersProps {
   onNavigateBack: () => void;
   onShowSalesOrders: () => void;
   onShowCustomerProfile: (customerId: string) => void;
+  onShowLeadManagement?: () => void;
   translations: any;
   filterState: string;
   onFilterChange: (filter: string) => void;
 }
 
-function QuotationOrders(props: QuotationOrdersProps) {
-  const currentLanguage = props.currentLanguage;
-  const onLanguageChange = props.onLanguageChange;
-  const onNavigateBack = props.onNavigateBack;
-  const onShowSalesOrders = props.onShowSalesOrders;
-  const onShowCustomerProfile = props.onShowCustomerProfile;
-  const t = props.translations;
-  const filterState = props.filterState;
-  const onFilterChange = props.onFilterChange;
-
-  function handleFilterClick(filter: string) {
-    onFilterChange(filter);
-  }
-
-  const quotes = [
-    {
-      id: '1',
-      status: 'converted',
-      quoteNumber: 'QT-2025-001',
-      company: 'Rajesh Textiles - Ahmedabad',
-      customerStatus: 'New Customer (Converted from Lead)',
-      salesOrder: 'SO-2025-001',
-      material: '500 meters Bandhani Cotton Fabric, 44" width',
-      specification: '100 GSM, Pre-shrunk, Natural dyes',
-      quoteDate: 'September 1, 2025',
-      validUntil: 'September 15, 2025',
-      totalAmount: '₹95,000',
-      contact: 'Rajesh Shah - 9876543210'
-    },
-    {
-      id: '2',
-      status: 'pending',
-      quoteNumber: 'QT-2025-002',
-      company: 'Gujarat Garments - Surat',
-      customerStatus: 'Warm Lead',
-      material: '750 meters Block Print Khadi, 42" width',
-      specification: '120 GSM, Hand-woven, Natural dyes',
-      quoteDate: 'September 2, 2025',
-      validUntil: 'September 16, 2025',
-      totalAmount: '₹1,20,000',
-      contact: 'Meera Patel - 9876567890'
-    }
-  ];
-
-  function shouldShowQuote(quoteStatus: string) {
-    if (filterState === 'all') return true;
-    return quoteStatus === filterState;
-  }
-
-  function getStatusIcon(status: string) {
-    switch(status) {
-      case 'pending': return '⏳';
-      case 'approved': return '✅';
-      case 'converted': return '🎉';
-      case 'expired': return '❌';
-      default: return '';
-    }
-  }
-
-  function getStatusText(status: string) {
-    switch(status) {
-      case 'pending': return t.pending;
-      case 'approved': return t.approved;
-      case 'converted': return t.converted;
-      case 'expired': return t.expired;
-      default: return status;
-    }
-  }
-
+function QuotationOrders({
+  currentLanguage,
+  onLanguageChange,
+  onNavigateBack,
+  onShowSalesOrders,
+  onShowCustomerProfile,
+  onShowLeadManagement,
+  translations,
+  filterState,
+  onFilterChange
+}: QuotationOrdersProps) {
+  const t = translations;
+  
   return (
-    <div className="lead-management-screen">
+    <div className="quotation-orders-screen">
       <LanguageSwitcher 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        currentLanguage={currentLanguage} 
+        onLanguageChange={onLanguageChange} 
       />
       
       <div className="screen-header">
@@ -93,93 +39,134 @@ function QuotationOrders(props: QuotationOrdersProps) {
           {t.backToDashboard}
         </button>
         <h1>📄 {t.quotationOrders}</h1>
-        <button className="add-button">+ Create New Quote</button>
+        <button className="add-button">{t.addNewQuote}</button>
       </div>
 
-      <div className="filter-buttons">
-        <button 
-          className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('all')}
-        >
-          Show All
-        </button>
-        <button 
-          className={filterState === 'pending' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('pending')}
-        >
-          ⏳ {t.pending}
-        </button>
-        <button 
-          className={filterState === 'approved' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('approved')}
-        >
-          ✅ {t.approved}
-        </button>
-        <button 
-          className={filterState === 'converted' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('converted')}
-        >
-          🎉 {t.converted}
-        </button>
-        <button 
-          className={filterState === 'expired' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('expired')}
-        >
-          ❌ {t.expired}
-        </button>
+      <div className="filters-section">
+        <div className="filter-buttons">
+          <button 
+            className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('all')}
+          >
+            {t.showAll}
+          </button>
+          <button 
+            className={filterState === 'pending' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('pending')}
+          >
+            {t.showPending}
+          </button>
+          <button 
+            className={filterState === 'approved' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('approved')}
+          >
+            {t.showApproved}
+          </button>
+          <button 
+            className={filterState === 'expired' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('expired')}
+          >
+            {t.showExpired}
+          </button>
+        </div>
       </div>
 
-      <div className="leads-container">
-        {quotes.map((quote) => (
-          shouldShowQuote(quote.status) && (
-            <div key={quote.id} className={`lead-card ${quote.status === 'converted' ? 'warm' : quote.status === 'pending' ? 'cold' : 'hot'}-lead`}>
-              <div className="lead-header">
-                <h3>{quote.quoteNumber} - 
+      <div className="quotes-container">
+        {mockQuotes.map(quote => {
+          // Filter logic
+          const shouldShow = (
+            filterState === 'all' ||
+            (filterState === 'pending' && quote.status === 'pending') ||
+            (filterState === 'approved' && quote.status === 'approved') ||
+            (filterState === 'expired' && quote.status === 'expired')
+          );
+
+          if (!shouldShow) return null;
+
+          const statusIcons = {
+            pending: '⏳',
+            approved: '✅',
+            expired: '❌'
+          };
+
+          const statusLabels = {
+            pending: t.pending,
+            approved: t.approved,
+            expired: t.expired
+          };
+
+          const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);
+          const relatedOrder = mockSalesOrders.find(order => order.quoteId === quote.id);
+
+          return (
+            <div key={quote.id} className={`quote-card ${quote.status}-quote`}>
+              <div className="quote-header">
+                <h3>
                   <span 
-                    onClick={() => onShowCustomerProfile(quote.id)} 
-                    style={{cursor: 'pointer', color: '#ffd700', textDecoration: 'underline'}}
+                    onClick={() => onShowCustomerProfile(quote.customerId)}
+                    style={{cursor: 'pointer', textDecoration: 'underline'}}
                   >
-                    {quote.company}
+                    {quote.id} - {quote.customerName}
                   </span>
                 </h3>
-                <span className={`priority-badge ${quote.status === 'converted' ? 'warm' : quote.status === 'pending' ? 'cold' : 'hot'}`}>
-                  {getStatusIcon(quote.status)} {getStatusText(quote.status)}
+                <span className={`status-badge ${quote.status}`}>
+                  {statusIcons[quote.status]} {statusLabels[quote.status]}
                 </span>
               </div>
-              <div className="lead-details">
-                <p><strong>{t.quoteNumber}:</strong> {quote.quoteNumber}</p>
-                {quote.salesOrder && (
-                  <p><strong>Sales Order:</strong> 
-                    <span 
-                      onClick={onShowSalesOrders} 
-                      style={{cursor: 'pointer', color: '#ffd700', textDecoration: 'underline'}}
-                    >
-                      🎉 {quote.salesOrder} (Sep 3, 2025)
-                    </span>
-                  </p>
-                )}
-                <p><strong>Customer Status:</strong> 🎉 <span style={{color: '#2ed573', fontWeight: 'bold'}}>{quote.customerStatus}</span></p>
-                <p><strong>{t.material}:</strong> {quote.material}</p>
-                <p><strong>{t.specification}:</strong> {quote.specification}</p>
-                <p><strong>{t.quoteDate}:</strong> {quote.quoteDate}</p>
-                <p><strong>Valid Until:</strong> {quote.validUntil}</p>
-                <p><strong>{t.totalAmount}:</strong> {quote.totalAmount}</p>
-                <p><strong>{t.contact}:</strong> {quote.contact}</p>
+              <div className="quote-details">
+                <p><strong>{t.customerName}:</strong> {quote.customerName} - {quote.location}</p>
+                <p><strong>{t.quoteDate}:</strong> {quote.quoteDate} | <strong>{t.validUntil}:</strong> {quote.validUntil}</p>
+                <p><strong>Items:</strong> {quote.items}</p>
+                <p><strong>{t.totalAmount}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
+                <p><strong>Status:</strong> {quote.statusMessage}</p>
               </div>
-              <div className="lead-actions">
-                <button className="action-btn call">{t.call}</button>
-                <button className="action-btn whatsapp">{t.whatsapp}</button>
-                <button className="action-btn quote">📄 View PDF</button>
+
+              {/* Related Lead and Order Information */}
+              <div className="quote-mapping">
+                <div className="mapping-info">
+                  {relatedLead && (
+                    <p><strong>📋 From Lead:</strong> 
+                      <span className="mapping-link" onClick={() => onShowLeadManagement?.()}>
+                        {relatedLead.id}
+                      </span> 
+                    - {relatedLead.priority} priority ({relatedLead.budget})</p>
+                  )}
+                  {relatedOrder ? (
+                    <p><strong>📦 Converted to Order:</strong> 
+                      <span className="mapping-link" onClick={() => onShowSalesOrders()}>
+                        {relatedOrder.id}
+                      </span> 
+                    - {relatedOrder.status} ({relatedOrder.statusMessage})</p>
+                  ) : (
+                    <p><strong>📦 Order Status:</strong> <span className="no-order">Not converted to order yet</span></p>
+                  )}
+                </div>
+              </div>
+              
+              <div className="quote-actions">
+                <button className="action-btn view-btn">📄 {t.viewPDF}</button>
                 {quote.status === 'pending' && (
-                  <button className="action-btn approve">✅ Approve</button>
+                  <button className="action-btn approve-btn">✅ {t.approve}</button>
                 )}
-                {quote.status === 'approved' && (
-                  <button className="action-btn approve">👤 Convert to Customer</button>
+                {(quote.status === 'approved' || quote.status === 'pending') && (
+                  <button className="action-btn convert-btn" onClick={() => onShowSalesOrders()}>
+                    🔄 {relatedOrder ? 'View Order' : t.convertToOrder}
+                  </button>
+                )}
+                {quote.status === 'expired' && (
+                  <button className="action-btn approve-btn">🔄 Renew Quote</button>
                 )}
               </div>
             </div>
-          )
-        ))}
+          );
+        })}
+      </div>
+
+      <div className="voice-commands">
+        <p className="voice-hint">
+          🎤 <strong>{t.voiceCommandsHint}</strong> 
+          "{t.createQuoteRajesh}" • "{t.showApprovedQuotes}" • "{t.convertToOrder}"
+        </p>
       </div>
     </div>
   );

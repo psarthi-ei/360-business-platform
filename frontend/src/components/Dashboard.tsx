@@ -1,54 +1,89 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
 
 interface DashboardProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  translations: any;
   onShowLeadManagement: () => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
   onShowCustomerList: () => void;
+  translations: {
+    title: string;
+    company: string;
+    founder: string;
+    leadManagement: string;
+    quotationOrders: string;
+    salesOrder: string;
+    customers: string;
+    workOrders: string;
+    smartProcurement: string;
+    inventory: string;
+    productionTracking: string;
+    dispatchDelivery: string;
+    invoiceFinance: string;
+    customerFeedback: string;
+    voiceCommands: string;
+    analyticsDashboard: string;
+    [key: string]: string;
+  };
 }
 
-function Dashboard(props: DashboardProps) {
-  const currentLanguage = props.currentLanguage;
-  const onLanguageChange = props.onLanguageChange;
-  const t = props.translations;
-  const onShowLeadManagement = props.onShowLeadManagement;
-  const onShowQuotationOrders = props.onShowQuotationOrders;
-  const onShowSalesOrders = props.onShowSalesOrders;
-  const onShowCustomerList = props.onShowCustomerList;
-
+function Dashboard({ 
+  currentLanguage, 
+  onLanguageChange, 
+  onShowLeadManagement,
+  onShowQuotationOrders,
+  onShowSalesOrders,
+  onShowCustomerList,
+  translations: t 
+}: DashboardProps) {
   return (
     <div className="dashboard">
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-      />
-      <h1>🏭 {t.welcome || 'Welcome to Your Business Hub'}</h1>
-      <h2>{t.tagline || '360° Business Platform for Gujarat Textile Manufacturers'}</h2>
+      <div className="language-switcher">
+        <button 
+          className={`lang-btn ${currentLanguage === 'en' ? 'active' : ''}`}
+          onClick={() => onLanguageChange('en')}
+        >
+          English
+        </button>
+        <button 
+          className={`lang-btn ${currentLanguage === 'gu' ? 'active' : ''}`}
+          onClick={() => onLanguageChange('gu')}
+        >
+          ગુજરાતી
+        </button>
+        <button 
+          className={`lang-btn ${currentLanguage === 'hi' ? 'active' : ''}`}
+          onClick={() => onLanguageChange('hi')}
+        >
+          हिंदी
+        </button>
+      </div>
+
+      <h1>🏭 {t.title}</h1>
+      <h2>{t.company}</h2>
       <p className="founder-info">
-        {t.businessPlatform || 'Complete end-to-end solution for textile manufacturing business'}
+        {t.founder}
       </p>
       
       <div className="features-grid">
         <div className="feature-card clickable" onClick={onShowLeadManagement}>
-          📋 {t.leadManagement || 'Lead Management'}
+          📋 {t.leadManagement}
         </div>
         <div className="feature-card clickable" onClick={onShowQuotationOrders}>
-          📑 {t.quotationOrders || 'Quotations & Orders'}
+          📑 {t.quotationOrders}
         </div>
-        <div className="feature-card clickable" onClick={onShowSalesOrders}>💳 {t.salesOrder || 'Sales Orders'}</div>
-        <div className="feature-card clickable" onClick={onShowCustomerList}>👥 {t.customers || 'Customers'}</div>
-        <div className="feature-card">📋 {t.workOrders || 'Work Orders'}</div>
-        <div className="feature-card">🛒 {t.production || 'Production'}</div>
-        <div className="feature-card">📦 {t.inventory || 'Inventory'}</div>
-        <div className="feature-card">🚚 {t.dispatch || 'Dispatch'}</div>
-        <div className="feature-card">💰 {t.accounting || 'Accounting'}</div>
-        <div className="feature-card">📊 {t.analytics || 'Analytics'}</div>
-        <div className="feature-card">📈 {t.reports || 'Reports'}</div>
-        <div className="feature-card">📱 {t.communication || 'Communication'}</div>
+        <div className="feature-card clickable" onClick={onShowSalesOrders}>💳 {t.salesOrder}</div>
+        <div className="feature-card clickable" onClick={onShowCustomerList}>👥 {t.customers}</div>
+        <div className="feature-card">📋 {t.workOrders}</div>
+        <div className="feature-card">🛒 {t.smartProcurement}</div>
+        <div className="feature-card">📦 {t.inventory}</div>
+        <div className="feature-card">⚙️ {t.productionTracking}</div>
+        <div className="feature-card">🚚 {t.dispatchDelivery}</div>
+        <div className="feature-card">🧾 {t.invoiceFinance}</div>
+        <div className="feature-card">⭐ {t.customerFeedback}</div>
+        <div className="feature-card">🎤 {t.voiceCommands}</div>
+        <div className="feature-card">📊 {t.analyticsDashboard}</div>
       </div>
       
       <div className="status">

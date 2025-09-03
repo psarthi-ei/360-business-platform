@@ -269,7 +269,7 @@ describe('App Component - Customer Management Features', () => {
     expect(searchInput).toBeInTheDocument();
     
     fireEvent.change(searchInput, { target: { value: 'Rajesh' } });
-    expect(searchInput.value).toBe('Rajesh');
+    expect((searchInput as HTMLInputElement).value).toBe('Rajesh');
   });
 
   test('navigation to customer profile works', () => {

@@ -5,23 +5,26 @@ interface LanguageSwitcherProps {
   onLanguageChange: (language: string) => void;
 }
 
-function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitcherProps) {
+function LanguageSwitcher(props: LanguageSwitcherProps) {
+  const currentLanguage = props.currentLanguage;
+  const onLanguageChange = props.onLanguageChange;
+
   return (
     <div className="language-switcher">
       <button 
-        className={`lang-btn ${currentLanguage === 'en' ? 'active' : ''}`}
+        className={currentLanguage === 'en' ? 'lang-btn active' : 'lang-btn'}
         onClick={() => onLanguageChange('en')}
       >
         English
       </button>
       <button 
-        className={`lang-btn ${currentLanguage === 'gu' ? 'active' : ''}`}
+        className={currentLanguage === 'gu' ? 'lang-btn active' : 'lang-btn'}
         onClick={() => onLanguageChange('gu')}
       >
         ગુજરાતી
       </button>
       <button 
-        className={`lang-btn ${currentLanguage === 'hi' ? 'active' : ''}`}
+        className={currentLanguage === 'hi' ? 'lang-btn active' : 'lang-btn'}
         onClick={() => onLanguageChange('hi')}
       >
         हिंदी

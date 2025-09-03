@@ -1,161 +1,139 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
 
 interface CustomerListProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   onNavigateBack: () => void;
   onShowCustomerProfile: (customerId: string) => void;
-  translations: any;
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
+  translations: {
+    backToDashboard: string;
+    customers: string;
+    searchCustomers: string;
+    showAll: string;
+    call: string;
+    whatsapp: string;
+    voiceCommandsHint: string;
+    [key: string]: string;
+  };
+  customerSearch: string;
+  onCustomerSearchChange: (search: string) => void;
 }
 
-function CustomerList(props: CustomerListProps) {
-  const currentLanguage = props.currentLanguage;
-  const onLanguageChange = props.onLanguageChange;
-  const onNavigateBack = props.onNavigateBack;
-  const onShowCustomerProfile = props.onShowCustomerProfile;
-  const t = props.translations;
-  const searchTerm = props.searchTerm;
-  const onSearchChange = props.onSearchChange;
-
-  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
-    onSearchChange(event.target.value);
-  }
-
-  const customers = [
-    {
-      id: '1',
-      company: 'Rajesh Textiles',
-      location: 'Ahmedabad',
-      contact: 'Rajesh Shah - 9876543210',
-      status: 'New Customer',
-      totalBusiness: '₹95,000',
-      activeOrders: 1,
-      lastOrder: 'Sep 3, 2025',
-      specialization: 'Bandhani & Traditional Prints'
-    },
-    {
-      id: '2',
-      company: 'Premium Fabrics Ltd',
-      location: 'Mumbai',
-      contact: 'Suresh Kumar - 9876554321',
-      status: 'Repeat Customer',
-      totalBusiness: '₹4,50,000',
-      activeOrders: 0,
-      lastOrder: 'Aug 28, 2025',
-      specialization: 'Silk Cotton Blends'
-    },
-    {
-      id: '3',
-      company: 'Textile Innovation Co',
-      location: 'Surat',
-      contact: 'Kiran Patel - 9876567890',
-      status: 'Payment Delayed',
-      totalBusiness: '₹92,000',
-      activeOrders: 1,
-      lastOrder: 'Aug 22, 2025',
-      specialization: 'Organic Cotton'
-    }
-  ];
-
-  function getFilteredCustomers() {
-    if (!searchTerm) return customers;
-    
-    const searchLower = searchTerm.toLowerCase();
-    return customers.filter(customer => 
-      customer.company.toLowerCase().includes(searchLower) ||
-      customer.location.toLowerCase().includes(searchLower) ||
-      customer.contact.toLowerCase().includes(searchLower) ||
-      customer.specialization.toLowerCase().includes(searchLower)
-    );
-  }
-
-  function getStatusColor(status: string) {
-    switch(status) {
-      case 'New Customer': return '#2ed573';
-      case 'Repeat Customer': return '#5352ed';
-      case 'Payment Delayed': return '#ff4757';
-      default: return '#666';
-    }
-  }
-
-  function getStatusIcon(status: string) {
-    switch(status) {
-      case 'New Customer': return '🎉';
-      case 'Repeat Customer': return '🏆';
-      case 'Payment Delayed': return '⚠️';
-      default: return '👤';
-    }
-  }
-
-  const filteredCustomers = getFilteredCustomers();
-
+function CustomerList({
+  currentLanguage,
+  onLanguageChange,
+  onNavigateBack,
+  onShowCustomerProfile,
+  translations: t,
+  customerSearch,
+  onCustomerSearchChange
+}: CustomerListProps) {
   return (
     <div className="lead-management-screen">
       <LanguageSwitcher 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        currentLanguage={currentLanguage} 
+        onLanguageChange={onLanguageChange} 
       />
       
       <div className="screen-header">
         <button className="back-button" onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
-        <h1>👥 {t.customers}</h1>
-        <button className="add-button">+ Add New Customer</button>
+        <h1>👥 Customer List</h1>
       </div>
 
       <div className="search-section">
         <input 
           type="text" 
-          className="search-input" 
-          placeholder={t.searchCustomers || "Search customers by name, location, or specialization..."}
-          value={searchTerm}
-          onChange={handleSearchChange}
+          className="search-input"
+          placeholder={t.searchCustomers}
+          value={customerSearch}
+          onChange={(e) => onCustomerSearchChange(e.target.value)}
         />
       </div>
 
-      <div className="leads-container">
-        {filteredCustomers.map((customer) => (
-          <div 
-            key={customer.id} 
-            className="lead-card cold-lead customer-card"
-            onClick={() => onShowCustomerProfile(customer.id)}
-            style={{cursor: 'pointer'}}
-          >
-            <div className="lead-header">
-              <h3>🏢 {customer.company}</h3>
-              <span 
-                className="priority-badge cold" 
-                style={{backgroundColor: getStatusColor(customer.status), color: 'white'}}
-              >
-                {getStatusIcon(customer.status)} {customer.status}
-              </span>
-            </div>
-            <div className="lead-details">
-              <p><strong>📍 Location:</strong> {customer.location}</p>
-              <p><strong>🎯 Specialization:</strong> {customer.specialization}</p>
-              <p><strong>💰 Total Business:</strong> {customer.totalBusiness}</p>
-              <p><strong>📋 Active Orders:</strong> {customer.activeOrders}</p>
-              <p><strong>📅 Last Order:</strong> {customer.lastOrder}</p>
-              <p><strong>📞 {t.contact}:</strong> {customer.contact}</p>
-            </div>
-            <div className="lead-actions" onClick={(e) => e.stopPropagation()}>
-              <button className="action-btn call">{t.call}</button>
-              <button className="action-btn whatsapp">{t.whatsapp}</button>
-              <button className="action-btn quote">👤 View Profile</button>
-            </div>
-          </div>
-        ))}
+      <div className="filters-section">
+        <div className="filter-buttons">
+          <button className="filter-btn active">{t.showAll}</button>
+          <button className="filter-btn">🏆 Premium</button>
+          <button className="filter-btn">🎉 New Customers</button>
+          <button className="filter-btn">⚡ Active</button>
+          <button className="filter-btn">⚠️ Payment Issues</button>
+        </div>
+      </div>
 
-        {filteredCustomers.length === 0 && searchTerm && (
-          <div className="no-results">
-            <h3>🔍 No customers found</h3>
-            <p>No customers match your search criteria: "{searchTerm}"</p>
-          </div>
-        )}
+      <div className="leads-container">
+        {mockCustomers
+          .filter(customer => 
+            customerSearch === '' || 
+            customer.name.toLowerCase().includes(customerSearch.toLowerCase()) ||
+            customer.location.toLowerCase().includes(customerSearch.toLowerCase())
+          )
+          .map(customer => {
+            const priorityIcons = {
+              hot: '🔥',
+              warm: '🔶',
+              cold: '✅'
+            };
+
+            const priorityLabels = {
+              hot: 'Hot Customer',
+              warm: 'Warm Customer',
+              cold: 'Completed Customer'
+            };
+
+            const paymentStatusIcon = {
+              good: '✅',
+              overdue: '⚠️',
+              pending: '⚠️'
+            };
+
+            const lastOrder = mockSalesOrders.find(order => order.customerId === customer.id);
+
+            return (
+              <div key={customer.id} className={`lead-card ${customer.priority}-lead`}>
+                <div className="lead-header">
+                  <h3>
+                    <span 
+                      onClick={() => onShowCustomerProfile(customer.id)}
+                      style={{cursor: 'pointer', textDecoration: 'underline'}}
+                    >
+                      🏭 {customer.name} - {customer.location}
+                    </span>
+                  </h3>
+                  <span className={`priority-badge ${customer.priority}`}>
+                    {priorityIcons[customer.priority]} {priorityLabels[customer.priority]}
+                  </span>
+                </div>
+                <div className="lead-details">
+                  <p><strong>Customer Since:</strong> {customer.customerSince}</p>
+                  <p><strong>Total Business:</strong> {formatCurrency(customer.totalBusiness)} ({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''})</p>
+                  <p><strong>Conversion Rate:</strong> {customer.conversionRate}% ({customer.totalOrders}/{customer.totalOrders + 1} quotes)</p>
+                  <p><strong>Last Order:</strong> {lastOrder ? `${lastOrder.orderDate} - ${lastOrder.statusMessage}` : 'No orders yet'}</p>
+                  <p><strong>Payment Status:</strong> 
+                    <span className={`payment-${customer.paymentStatus}`}>
+                      {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
+                    </span>
+                  </p>
+                </div>
+                <div className="lead-actions">
+                  <button className="action-btn call-btn">{t.call}</button>
+                  <button className="action-btn whatsapp-btn">{t.whatsapp}</button>
+                  <button className="action-btn quote-btn">📄 View Profile</button>
+                  <button className="action-btn quote-btn">📋 New Quote</button>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+
+      <div className="voice-commands">
+        <p className="voice-hint">
+          🎤 <strong>{t.voiceCommandsHint}:</strong> 
+          "Show premium customers" • "Call Rajesh Textiles" • "Search Gujarat Garments"
+        </p>
       </div>
     </div>
   );

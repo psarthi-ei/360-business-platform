@@ -1,147 +1,183 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
 
 interface LeadManagementProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   onNavigateBack: () => void;
-  translations: any;
+  onShowCustomerProfile?: (customerId: string) => void;
+  onShowQuoteFromLead?: (leadId: string) => void;
+  onShowQuotationOrders?: () => void;
+  onShowSalesOrders?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  translations: any;
 }
 
-function LeadManagement(props: LeadManagementProps) {
-  const currentLanguage = props.currentLanguage;
-  const onLanguageChange = props.onLanguageChange;
-  const onNavigateBack = props.onNavigateBack;
-  const t = props.translations;
-  const filterState = props.filterState;
-  const onFilterChange = props.onFilterChange;
-
-  function handleFilterClick(filter: string) {
-    onFilterChange(filter);
-  }
-
-  const leads = [
-    {
-      id: '1',
-      type: 'hot',
-      company: 'Rajesh Textiles - Ahmedabad',
-      priority: t.hotLead,
-      material: '500 meters Bandhani Cotton Fabric, 44" width',
-      specification: '100 GSM, Pre-shrunk, Natural dyes',
-      usage: 'For saree manufacturing',
-      budget: '₹180-200 per meter',
-      delivery: '15 days required',
-      contact: 'Rajesh Shah - 9876543210'
-    },
-    {
-      id: '2',
-      type: 'warm',
-      company: 'Gujarat Garments - Surat',
-      priority: t.warmLead,
-      material: '750 meters Block Print Khadi, 42" width',
-      specification: '120 GSM, Hand-woven, Natural dyes',
-      usage: 'For kurta collection',
-      budget: '₹150-170 per meter',
-      delivery: '20 days timeline',
-      contact: 'Meera Patel - 9876567890'
-    },
-    {
-      id: '3',
-      type: 'cold',
-      company: 'Baroda Fashion House - Vadodara',
-      priority: t.coldLead,
-      material: '300 meters Premium Silk, 40" width',
-      specification: '150 GSM, Mulberry silk, Lustrous finish',
-      usage: 'For premium wear collection',
-      budget: '₹400-450 per meter',
-      delivery: '25 days acceptable',
-      contact: 'Vikram Desai - 9876678901'
-    }
-  ];
-
-  function getFilteredLeads() {
-    if (filterState === 'all') return leads;
-    return leads.filter(lead => lead.type === filterState.replace('leads', ''));
-  }
-
-  function shouldShowLead(leadType: string) {
-    if (filterState === 'all') return true;
-    return leadType === filterState.replace('leads', '');
-  }
-
+function LeadManagement({
+  currentLanguage,
+  onLanguageChange,
+  onNavigateBack,
+  onShowCustomerProfile,
+  onShowQuoteFromLead,
+  onShowQuotationOrders,
+  onShowSalesOrders,
+  filterState,
+  onFilterChange,
+  translations
+}: LeadManagementProps) {
+  const t = translations;
   return (
     <div className="lead-management-screen">
       <LanguageSwitcher 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        currentLanguage={currentLanguage} 
+        onLanguageChange={onLanguageChange} 
       />
       
       <div className="screen-header">
         <button className="back-button" onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
-        <h1>🎯 {t.leadManagement}</h1>
-        <button className="add-button">+ Add New Lead</button>
+        <h1>📋 {t.leadManagement}</h1>
+        <button className="add-button">{t.addNewLead}</button>
       </div>
 
-      <div className="filter-buttons">
-        <button 
-          className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('all')}
-        >
-          Show All
-        </button>
-        <button 
-          className={filterState === 'hotleads' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('hotleads')}
-        >
-          🔥 {t.hotLead}
-        </button>
-        <button 
-          className={filterState === 'warmleads' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('warmleads')}
-        >
-          ⭐ {t.warmLead}
-        </button>
-        <button 
-          className={filterState === 'coldleads' ? 'filter-btn active' : 'filter-btn'}
-          onClick={() => handleFilterClick('coldleads')}
-        >
-          ❄️ {t.coldLead}
-        </button>
+      <div className="filters-section">
+        <div className="filter-buttons">
+          <button 
+            className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('all')}
+          >
+            {t.showAll}
+          </button>
+          <button 
+            className={filterState === 'hotleads' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('hotleads')}
+          >
+            {t.showHotLeads}
+          </button>
+          <button 
+            className={filterState === 'warmleads' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('warmleads')}
+          >
+            {t.showWarmLeads}
+          </button>
+          <button 
+            className={filterState === 'coldleads' ? 'filter-btn active' : 'filter-btn'}
+            onClick={() => onFilterChange('coldleads')}
+          >
+            {t.showColdLeads}
+          </button>
+        </div>
       </div>
 
       <div className="leads-container">
-        {leads.map((lead) => (
-          shouldShowLead(lead.type) && (
-            <div key={lead.id} className={`lead-card ${lead.type}-lead`}>
+        {mockLeads.map(lead => {
+          // Filter logic
+          const shouldShow = (
+            filterState === 'all' ||
+            (filterState === 'hotleads' && lead.priority === 'hot') ||
+            (filterState === 'warmleads' && lead.priority === 'warm') ||
+            (filterState === 'coldleads' && lead.priority === 'cold')
+          );
+
+          if (!shouldShow) return null;
+
+          const priorityIcons = {
+            hot: '🔥',
+            warm: '🔶', 
+            cold: '🔵'
+          };
+
+          const priorityLabels = {
+            hot: t.hotLead,
+            warm: t.warmLead,
+            cold: t.coldLead
+          };
+
+          const relatedQuotes = mockQuotes.filter(quote => quote.leadId === lead.id);
+          const relatedOrders = relatedQuotes.length > 0 ? 
+            mockSalesOrders.filter(order => relatedQuotes.some(quote => quote.id === order.quoteId)) : [];
+
+          return (
+            <div key={lead.id} className={`lead-card ${lead.priority}-lead`}>
               <div className="lead-header">
-                <h3>{lead.company}</h3>
-                <span className={`priority-badge ${lead.type}`}>
-                  {lead.type === 'hot' && '🔥'} 
-                  {lead.type === 'warm' && '⭐'} 
-                  {lead.type === 'cold' && '❄️'} 
-                  {lead.priority}
+                <h3>
+                  <span 
+                    onClick={() => onShowCustomerProfile?.(lead.customerId)}
+                    style={{cursor: 'pointer', textDecoration: 'underline'}}
+                  >
+                    {lead.customerName} - {lead.location}
+                  </span>
+                </h3>
+                <span className={`priority-badge ${lead.priority}`}>
+                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
                 </span>
               </div>
               <div className="lead-details">
-                <p><strong>{t.material}:</strong> {lead.material}</p>
-                <p><strong>{t.specification}:</strong> {lead.specification}</p>
-                <p><strong>{t.usage}:</strong> {lead.usage}</p>
-                <p><strong>{t.budget}:</strong> {lead.budget}</p>
-                <p><strong>{t.delivery}:</strong> {lead.delivery}</p>
-                <p><strong>{t.contact}:</strong> {lead.contact}</p>
+                <p><strong>Contact:</strong> {lead.contact}</p>
+                <p><strong>Business:</strong> {lead.business}</p>
+                <p><strong>Inquiry:</strong> {lead.inquiry}</p>
+                <p><strong>Budget:</strong> {lead.budget} | <strong>Timeline:</strong> {lead.timeline}</p>
+                <p><strong>Last Contact:</strong> {lead.lastContact}</p>
               </div>
+
+              {/* Related Quote and Order Information */}
+              <div className="lead-mapping">
+                {relatedQuotes.length > 0 ? (
+                  <div className="mapping-info">
+                    <p><strong>📄 Related Quotes ({relatedQuotes.length}):</strong></p>
+                    {relatedQuotes.map((quote, index) => (
+                      <p key={quote.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
+                        • <span className="mapping-link" onClick={() => onShowQuotationOrders?.()}>
+                          {quote.id}
+                        </span> 
+                        - {formatCurrency(quote.totalAmount)} ({quote.status})
+                      </p>
+                    ))}
+                    {relatedOrders.length > 0 && (
+                      <>
+                        <p><strong>📦 Related Orders ({relatedOrders.length}):</strong></p>
+                        {relatedOrders.map((order, index) => (
+                          <p key={order.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
+                            • <span className="mapping-link" onClick={() => onShowSalesOrders?.()}>
+                              {order.id}
+                            </span> 
+                            - {order.status} ({order.statusMessage})
+                          </p>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mapping-info">
+                    <p><strong>📄 Quote Status:</strong> <span className="no-quote">No quotes created yet</span></p>
+                  </div>
+                )}
+              </div>
+              
               <div className="lead-actions">
-                <button className="action-btn call">{t.call}</button>
-                <button className="action-btn whatsapp">{t.whatsapp}</button>
-                <button className="action-btn quote">{t.sendQuote}</button>
+                <button className="action-btn call-btn">📞 Call{lead.priority === 'hot' ? ' Now' : ''}</button>
+                <button className="action-btn whatsapp-btn">💬 WhatsApp</button>
+                <button className="action-btn quote-btn" onClick={() => onShowQuoteFromLead?.(lead.id)}>
+                  💰 {relatedQuotes.length > 0 ? `View Quotes (${relatedQuotes.length})` : 'Send Quote'}
+                </button>
+              </div>
+              
+              <div className="lead-notes">
+                <p><strong>Notes:</strong> {lead.notes}</p>
               </div>
             </div>
-          )
-        ))}
+          );
+        })}
+      </div>
+
+      <div className="voice-commands">
+        <p className="voice-hint">
+          🎤 <strong>{t.voiceCommandsHint}</strong> 
+          "{t.addFabricInquiry}" • "{t.callRajesh}" • "{t.showCottonLeads}"
+        </p>
       </div>
     </div>
   );
