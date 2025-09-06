@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { themes, themesList, applyTheme, Theme } from '../styles/themes';
+import { themes, themesList, applyTheme } from '../styles/themes';
 import styles from '../styles/ThemeSelector.module.css';
 
 interface ThemeSelectorProps {
@@ -16,7 +16,6 @@ function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {
     setIsOpen(false);
   };
 
-  const currentThemeData = themes[currentTheme];
 
   return (
     <div className={styles.themeSelector}>
