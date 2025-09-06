@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './Dashboard.module.css';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface DashboardProps {
   currentLanguage: string;
@@ -38,55 +40,39 @@ function Dashboard({
   translations: t 
 }: DashboardProps) {
   return (
-    <div className="dashboard">
-      <div className="language-switcher">
-        <button 
-          className={`lang-btn ${currentLanguage === 'en' ? 'active' : ''}`}
-          onClick={() => onLanguageChange('en')}
-        >
-          English
-        </button>
-        <button 
-          className={`lang-btn ${currentLanguage === 'gu' ? 'active' : ''}`}
-          onClick={() => onLanguageChange('gu')}
-        >
-          ગુજરાતી
-        </button>
-        <button 
-          className={`lang-btn ${currentLanguage === 'hi' ? 'active' : ''}`}
-          onClick={() => onLanguageChange('hi')}
-        >
-          हिंदी
-        </button>
-      </div>
+    <div className={styles.dashboard}>
+      <LanguageSwitcher 
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+      />
 
       <h1>🏭 {t.title}</h1>
       <h2>{t.company}</h2>
-      <p className="founder-info">
+      <p className={styles.founderInfo}>
         {t.founder}
       </p>
       
-      <div className="features-grid">
-        <div className="feature-card clickable" onClick={onShowLeadManagement}>
+      <div className={styles.featuresGrid}>
+        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowLeadManagement}>
           📋 {t.leadManagement}
         </div>
-        <div className="feature-card clickable" onClick={onShowQuotationOrders}>
+        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowQuotationOrders}>
           📑 {t.quotationOrders}
         </div>
-        <div className="feature-card clickable" onClick={onShowSalesOrders}>💳 {t.salesOrder}</div>
-        <div className="feature-card clickable" onClick={onShowCustomerList}>👥 {t.customers}</div>
-        <div className="feature-card">📋 {t.workOrders}</div>
-        <div className="feature-card">🛒 {t.smartProcurement}</div>
-        <div className="feature-card">📦 {t.inventory}</div>
-        <div className="feature-card">⚙️ {t.productionTracking}</div>
-        <div className="feature-card">🚚 {t.dispatchDelivery}</div>
-        <div className="feature-card">🧾 {t.invoiceFinance}</div>
-        <div className="feature-card">⭐ {t.customerFeedback}</div>
-        <div className="feature-card">🎤 {t.voiceCommands}</div>
-        <div className="feature-card">📊 {t.analyticsDashboard}</div>
+        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowSalesOrders}>💳 {t.salesOrder}</div>
+        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowCustomerList}>👥 {t.customers}</div>
+        <div className={styles.featureCard}>📋 {t.workOrders}</div>
+        <div className={styles.featureCard}>🛒 {t.smartProcurement}</div>
+        <div className={styles.featureCard}>📦 {t.inventory}</div>
+        <div className={styles.featureCard}>⚙️ {t.productionTracking}</div>
+        <div className={styles.featureCard}>🚚 {t.dispatchDelivery}</div>
+        <div className={styles.featureCard}>🧾 {t.invoiceFinance}</div>
+        <div className={styles.featureCard}>⭐ {t.customerFeedback}</div>
+        <div className={styles.featureCard}>🎤 {t.voiceCommands}</div>
+        <div className={styles.featureCard}>📊 {t.analyticsDashboard}</div>
       </div>
       
-      <div className="status">
+      <div className={styles.status}>
         <p>🚧 MVP in Development - Coming Soon!</p>
       </div>
     </div>

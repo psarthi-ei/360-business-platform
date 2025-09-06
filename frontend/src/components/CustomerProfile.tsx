@@ -1,6 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
+import styles from './CustomerProfile.module.css';
 
 interface CustomerProfileProps {
   currentLanguage: string;
@@ -39,18 +40,18 @@ function CustomerProfile({
 
   if (!customer) {
     return (
-      <div className="lead-management-screen">
+      <div className={styles.leadManagementScreen}>
         <LanguageSwitcher 
           currentLanguage={currentLanguage} 
           onLanguageChange={onLanguageChange} 
         />
-        <div className="screen-header">
-          <button className="back-button" onClick={onNavigateBack}>
+        <div className={styles.screenHeader}>
+          <button className={styles.backButton} onClick={onNavigateBack}>
             {t.backToDashboard}
           </button>
           <h1>👤 {t.customerProfile}</h1>
         </div>
-        <div className="customer-header">
+        <div className={styles.customerHeader}>
           <h2>Customer not found</h2>
         </div>
       </div>
@@ -69,62 +70,62 @@ function CustomerProfile({
     pending: '⚠️'
   };
   return (
-    <div className="lead-management-screen">
+    <div className={styles.leadManagementScreen}>
       <LanguageSwitcher 
         currentLanguage={currentLanguage} 
         onLanguageChange={onLanguageChange} 
       />
       
-      <div className="screen-header">
-        <button className="back-button" onClick={onNavigateBack}>
+      <div className={styles.screenHeader}>
+        <button className={styles.backButton} onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
         <h1>👤 {t.customerProfile}</h1>
-        <button className="add-button">{t.createNewQuote}</button>
+        <button className={styles.addButton}>{t.createNewQuote}</button>
       </div>
 
-      <div className="customer-header">
-        <div className="customer-main-info">
+      <div className={styles.customerHeader}>
+        <div className={styles.customerMainInfo}>
           <h2>🏭 {customer.name} - {customer.location}</h2>
-          <p className="customer-since">🎉 {t.customerSince}: {customer.customerSince}</p>
-          <p className="customer-type">{priorityIcons[customer.priority]} <strong>{customer.priorityLabel}</strong> - {customer.paymentStatusMessage}</p>
+          <p className={styles.customerSince}>🎉 {t.customerSince}: {customer.customerSince}</p>
+          <p className={styles.customerType}>{priorityIcons[customer.priority]} <strong>{customer.priorityLabel}</strong> - {customer.paymentStatusMessage}</p>
         </div>
-        <div className="customer-contact-header">
+        <div className={styles.customerContactHeader}>
           <p><strong>Primary Contact:</strong> {customer.contactPerson} - {customer.phone}</p>
-          <div className="header-actions">
-            <button className="action-btn call">{t.call}</button>
-            <button className="action-btn whatsapp">{t.whatsapp}</button>
+          <div className={styles.headerActions}>
+            <button className={`${styles.actionBtn} ${styles.call}`}>{t.call}</button>
+            <button className={`${styles.actionBtn} ${styles.whatsapp}`}>{t.whatsapp}</button>
           </div>
         </div>
       </div>
 
-      <div className="customer-stats">
-        <div className="stat-card">
+      <div className={styles.customerStats}>
+        <div className={styles.statCard}>
           <h3>💰 {t.totalBusiness}</h3>
-          <p className="stat-value">{formatCurrency(customer.totalBusiness)}</p>
-          <p className="stat-detail">({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
+          <p className={styles.statValue}>{formatCurrency(customer.totalBusiness)}</p>
+          <p className={styles.statDetail}>({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
         </div>
-        <div className="stat-card">
+        <div className={styles.statCard}>
           <h3>📋 {t.totalOrders}</h3>
-          <p className="stat-value">{customer.totalOrders}</p>
-          <p className="stat-detail">{customerOrders.filter(order => order.status !== 'completed').length} active orders</p>
+          <p className={styles.statValue}>{customer.totalOrders}</p>
+          <p className={styles.statDetail}>{customerOrders.filter(order => order.status !== 'completed').length} active orders</p>
         </div>
-        <div className="stat-card">
+        <div className={styles.statCard}>
           <h3>🎯 {t.conversionRate}</h3>
-          <p className="stat-value">{customer.conversionRate}%</p>
-          <p className="stat-detail">({customer.totalOrders}/{customerQuotes.length} quotes)</p>
+          <p className={styles.statValue}>{customer.conversionRate}%</p>
+          <p className={styles.statDetail}>({customer.totalOrders}/{customerQuotes.length} quotes)</p>
         </div>
-        <div className="stat-card">
+        <div className={styles.statCard}>
           <h3>💳 {t.paymentScore}</h3>
-          <p className={`stat-value payment-${customer.paymentStatus}`}>
+          <p className={`${styles.statValue} ${styles[`payment${customer.paymentStatus.charAt(0).toUpperCase() + customer.paymentStatus.slice(1)}`]}`}>
             {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
           </p>
-          <p className="stat-detail">{customer.paymentStatus === 'good' ? 'Reliable payments' : 'Follow-up required'}</p>
+          <p className={styles.statDetail}>{customer.paymentStatus === 'good' ? 'Reliable payments' : 'Follow-up required'}</p>
         </div>
       </div>
 
-      <div className="transaction-history">
-        <div className="history-section">
+      <div className={styles.transactionHistory}>
+        <div className={styles.historySection}>
           <h4>📋 {t.quoteHistory}</h4>
           {customerQuotes.length > 0 ? customerQuotes.map(quote => {
             const statusIcons = {
@@ -134,17 +135,17 @@ function CustomerProfile({
             };
             
             return (
-              <div key={quote.id} className="history-item">
-                <div className="history-header">
-                  <span className="quote-number">{quote.id}</span>
-                  <div className="quote-meta">
-                    <span className="quote-date">{quote.quoteDate}</span>
-                    <span className={`quote-status ${quote.status}`}>
+              <div key={quote.id} className={styles.historyItem}>
+                <div className={styles.historyHeader}>
+                  <span className={styles.quoteNumber}>{quote.id}</span>
+                  <div className={styles.quoteMeta}>
+                    <span className={styles.quoteDate}>{quote.quoteDate}</span>
+                    <span className={`${styles.quoteStatus} ${styles[quote.status]}`}>
                       {statusIcons[quote.status]} {quote.status === 'approved' ? 'Converted' : quote.status}
                     </span>
                   </div>
                 </div>
-                <div className="history-details">
+                <div className={styles.historyDetails}>
                   <p><strong>Amount:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
                   <p><strong>Items:</strong> {quote.items}</p>
                   <p><strong>Valid Until:</strong> {quote.validUntil}</p>
@@ -155,7 +156,7 @@ function CustomerProfile({
           }) : <p>No quotes found for this customer.</p>}
         </div>
 
-        <div className="history-section">
+        <div className={styles.historySection}>
           <h4>📦 {t.orderHistory}</h4>
           {customerOrders.length > 0 ? customerOrders.map(order => {
             const statusIcons = {
@@ -165,17 +166,17 @@ function CustomerProfile({
             };
             
             return (
-              <div key={order.id} className="history-item">
-                <div className="history-header">
-                  <span className="order-number">{order.id}</span>
-                  <div className="order-meta">
-                    <span className="order-date">{order.orderDate}</span>
-                    <span className={`order-status ${order.status}`}>
+              <div key={order.id} className={styles.historyItem}>
+                <div className={styles.historyHeader}>
+                  <span className={styles.orderNumber}>{order.id}</span>
+                  <div className={styles.orderMeta}>
+                    <span className={styles.orderDate}>{order.orderDate}</span>
+                    <span className={`${styles.orderStatus} ${styles[order.status]}`}>
                       {statusIcons[order.status]} {order.status === 'production' ? 'In Production' : order.status}
                     </span>
                   </div>
                 </div>
-                <div className="history-details">
+                <div className={styles.historyDetails}>
                   <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
                   <p><strong>Items:</strong> {order.items}</p>
                   <p><strong>Expected Delivery:</strong> {order.deliveryDate}</p>
@@ -187,7 +188,7 @@ function CustomerProfile({
           }) : <p>No orders found for this customer.</p>}
         </div>
 
-        <div className="history-section">
+        <div className={styles.historySection}>
           <h4>💳 Payment History</h4>
           {customerOrders.length > 0 ? customerOrders.map(order => (
             <div key={order.id} className="history-item">
@@ -212,22 +213,22 @@ function CustomerProfile({
           )) : <p>No payment history available.</p>}
         </div>
 
-        <div className="history-section">
+        <div className={styles.historySection}>
           <h4>💬 Communication History</h4>
           {mockCommunications.map((comm, index) => (
-            <div key={index} className="comm-entry">
-              <div className="comm-date">{comm.date} - {comm.time}</div>
-              <div className="comm-type">{comm.type}</div>
-              <p className="comm-note">{comm.message}</p>
+            <div key={index} className={styles.commEntry}>
+              <div className={styles.commDate}>{comm.date} - {comm.time}</div>
+              <div className={styles.commType}>{comm.type}</div>
+              <p className={styles.commNote}>{comm.message}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="business-info">
+      <div className={styles.businessInfo}>
         <h4>🏢 Business Information & Insights</h4>
-        <div className="info-grid">
-          <div className="info-item">
+        <div className={styles.infoGrid}>
+          <div className={styles.infoItem}>
             <h4>Company Details</h4>
             <p><strong>Business Name:</strong> {customer.name}</p>
             <p><strong>Contact Person:</strong> {customer.contactPerson}</p>
@@ -236,7 +237,7 @@ function CustomerProfile({
             <p><strong>GST Number:</strong> {customer.gstNumber}</p>
           </div>
           
-          <div className="info-item">
+          <div className={styles.infoItem}>
             <h4>Preferences & Notes</h4>
             <p><strong>Preferred Payment:</strong> {customer.preferences.paymentMethod}</p>
             <p><strong>Delivery Preference:</strong> {customer.preferences.deliveryPreference}</p>
@@ -245,7 +246,7 @@ function CustomerProfile({
             <p><strong>Special Notes:</strong> {customer.preferences.specialNotes}</p>
           </div>
           
-          <div className="info-item">
+          <div className={styles.infoItem}>
             <h4>Business Insights</h4>
             <p><strong>Customer Since:</strong> {customer.customerSince}</p>
             <p><strong>Order Frequency:</strong> {customer.totalOrders === 0 ? 'No orders yet' : customer.totalOrders === 1 ? 'First-time buyer' : 'Regular customer'}</p>
@@ -256,20 +257,20 @@ function CustomerProfile({
         </div>
       </div>
 
-      <div className="customer-quick-actions">
+      <div className={styles.customerQuickActions}>
         <h4>⚡ Quick Actions</h4>
-        <div className="action-buttons">
-          <button className="quick-action-btn primary">{t.createNewQuote}</button>
-          <button className="quick-action-btn">📞 Call Customer</button>
-          <button className="quick-action-btn">💬 Send WhatsApp</button>
-          <button className="quick-action-btn warning">💳 Payment Reminder</button>
-          <button className="quick-action-btn">📄 Download Invoice</button>
-          <button className="quick-action-btn">📧 Send Email</button>
+        <div className={styles.actionButtons}>
+          <button className={`${styles.quickActionBtn} ${styles.primary}`}>{t.createNewQuote}</button>
+          <button className={styles.quickActionBtn}>📞 Call Customer</button>
+          <button className={styles.quickActionBtn}>💬 Send WhatsApp</button>
+          <button className={`${styles.quickActionBtn} ${styles.warning}`}>💳 Payment Reminder</button>
+          <button className={styles.quickActionBtn}>📄 Download Invoice</button>
+          <button className={styles.quickActionBtn}>📧 Send Email</button>
         </div>
       </div>
 
-      <div className="voice-commands">
-        <p className="voice-hint">
+      <div className={styles.voiceCommands}>
+        <p className={styles.voiceHint}>
           🎤 <strong>Try saying:</strong> 
           "Create new quote for {customer.name}" • "Show payment history" • "Call customer"
         </p>

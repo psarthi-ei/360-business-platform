@@ -1,0 +1,113 @@
+/* Dashboard Component Styles */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.dashboard h1 {
+  font-size: 2.5rem;
+  margin: 0.5rem 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.dashboard h2 {
+  font-size: 1.8rem;
+  margin: 0.5rem 0;
+  color: #ffd700;
+  font-weight: 300;
+}
+
+.founderInfo {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  opacity: 0.9;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  max-width: 800px;
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.featureCard:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+.languages {
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+  color: #ffd700;
+}
+
+.languages span {
+  margin: 0 10px;
+}
+
+.status {
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  opacity: 0.8;
+  color: #ffd700;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .dashboard {
+    min-height: auto;
+    justify-content: flex-start;
+    padding-top: 60px;
+  }
+  
+  .dashboard h1 {
+    font-size: 2rem;
+  }
+  
+  .dashboard h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard h1 {
+    font-size: 1.8rem;
+  }
+  
+  .dashboard h2 {
+    font-size: 1.2rem;
+  }
+}

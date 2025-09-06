@@ -1,6 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency } from '../data/mockData';
+import styles from './SalesOrders.module.css';
 
 interface SalesOrdersProps {
   currentLanguage: string;
@@ -26,35 +27,35 @@ function SalesOrders({
   const t = translations;
   
   return (
-    <div className="sales-orders-screen">
+    <div className={styles.salesOrdersScreen}>
       <LanguageSwitcher 
         currentLanguage={currentLanguage} 
         onLanguageChange={onLanguageChange} 
       />
       
-      <div className="screen-header">
-        <button className="back-button" onClick={onNavigateBack}>
+      <div className={styles.screenHeader}>
+        <button className={styles.backButton} onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
         <h1>💳 {t.salesOrder}</h1>
       </div>
 
-      <div className="filters-section">
-        <div className="filter-buttons">
+      <div className={styles.filtersSection}>
+        <div className={styles.filterButtons}>
           <button 
-            className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('all')}
           >
             {t.showAll}
           </button>
           <button 
-            className={filterState === 'pending' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('pending')}
           >
             {t.showPending}
           </button>
           <button 
-            className={filterState === 'production' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'production' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('production')}
           >
             {t.readyForProduction}
@@ -62,7 +63,7 @@ function SalesOrders({
         </div>
       </div>
 
-      <div className="orders-container">
+      <div className={styles.ordersContainer}>
         {mockSalesOrders.map(order => {
           // Filter logic
           const shouldShow = (
@@ -89,14 +90,14 @@ function SalesOrders({
           const relatedLead = relatedQuote ? mockLeads.find(lead => lead.id === relatedQuote.leadId) : null;
 
           return (
-            <div key={order.id} className={`order-card ${order.status}-order`}>
-              <div className="order-header">
+            <div key={order.id} className={`${styles.orderCard} ${styles[order.status + 'Order']}`}>
+              <div className={styles.orderHeader}>
                 <h3>{order.id} - {order.customerName}</h3>
-                <span className="status-badge approved">
+                <span className={`${styles.statusBadge} ${styles.approved}`}>
                   {statusIcons[order.status]} {statusLabels[order.status]}
                 </span>
               </div>
-              <div className="order-details">
+              <div className={styles.orderDetails}>
                 <p><strong>{t.customerName}:</strong> {order.customerName} - {order.location}</p>
                 <p><strong>{t.orderDate}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
                 <p><strong>Items:</strong> {order.items}</p>
@@ -105,18 +106,18 @@ function SalesOrders({
               </div>
 
               {/* Related Quote and Lead Information */}
-              <div className="order-mapping">
-                <div className="mapping-info">
+              <div className={styles.orderMapping}>
+                <div className={styles.mappingInfo}>
                   {relatedLead && (
                     <p><strong>📋 Original Lead:</strong> 
-                      <span className="mapping-link" onClick={() => onShowLeadManagement?.()}>
+                      <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
                         {relatedLead.id}
                       </span> 
                     - {relatedLead.priority} priority (Budget: {relatedLead.budget})</p>
                   )}
                   {relatedQuote && (
                     <p><strong>📄 From Quote:</strong> 
-                      <span className="mapping-link" onClick={() => onShowQuotationOrders?.()}>
+                      <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
                         {relatedQuote.id}
                       </span> 
                     - {relatedQuote.quoteDate} ({relatedQuote.status})</p>
@@ -126,19 +127,19 @@ function SalesOrders({
                 </div>
               </div>
               
-              <div className="order-actions">
-                <button className="action-btn view-btn">📄 {t.viewPDF}</button>
+              <div className={styles.orderActions}>
+                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t.viewPDF}</button>
                 {order.status === 'pending' && (
                   <>
-                    <button className="action-btn payment-btn">💳 {t.viewPaymentStatus}</button>
-                    <button className="action-btn production-btn">🏭 Ready for Production</button>
+                    <button className={`${styles.actionBtn} ${styles.paymentBtn}`}>💳 {t.viewPaymentStatus}</button>
+                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 Ready for Production</button>
                   </>
                 )}
                 {order.status === 'production' && (
-                  <button className="action-btn production-btn">🏭 Production Status</button>
+                  <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 Production Status</button>
                 )}
                 {order.status === 'completed' && (
-                  <button className="action-btn view-btn">📋 Delivery Receipt</button>
+                  <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📋 Delivery Receipt</button>
                 )}
               </div>
             </div>
@@ -146,8 +147,8 @@ function SalesOrders({
         })}
       </div>
 
-      <div className="voice-commands">
-        <p className="voice-hint">
+      <div className={styles.voiceCommands}>
+        <p className={styles.voiceHint}>
           🎤 <strong>{t.voiceCommandsHint}</strong> 
           "{t.viewPaymentStatus}" • "{t.sendPaymentReminder}"
         </p>

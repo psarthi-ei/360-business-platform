@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './LanguageSwitcher.module.css';
 
 interface LanguageSwitcherProps {
   currentLanguage: string;
@@ -7,21 +8,21 @@ interface LanguageSwitcherProps {
 
 function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitcherProps) {
   return (
-    <div className="language-switcher">
+    <div className={styles.languageSwitcher}>
       <button 
-        className={`lang-btn ${currentLanguage === 'en' ? 'active' : ''}`}
+        className={`${styles.langBtn} ${currentLanguage === 'en' ? styles.active : ''}`}
         onClick={() => onLanguageChange('en')}
       >
         English
       </button>
       <button 
-        className={`lang-btn ${currentLanguage === 'gu' ? 'active' : ''}`}
+        className={`${styles.langBtn} ${currentLanguage === 'gu' ? styles.active : ''}`}
         onClick={() => onLanguageChange('gu')}
       >
         ગુજરાતી
       </button>
       <button 
-        className={`lang-btn ${currentLanguage === 'hi' ? 'active' : ''}`}
+        className={`${styles.langBtn} ${currentLanguage === 'hi' ? styles.active : ''}`}
         onClick={() => onLanguageChange('hi')}
       >
         हिंदी

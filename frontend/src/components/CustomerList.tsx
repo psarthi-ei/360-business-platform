@@ -1,6 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
+import styles from './CustomerList.module.css';
 
 interface CustomerListProps {
   currentLanguage: string;
@@ -31,40 +32,40 @@ function CustomerList({
   onCustomerSearchChange
 }: CustomerListProps) {
   return (
-    <div className="lead-management-screen">
+    <div className={styles.leadManagementScreen}>
       <LanguageSwitcher 
         currentLanguage={currentLanguage} 
         onLanguageChange={onLanguageChange} 
       />
       
-      <div className="screen-header">
-        <button className="back-button" onClick={onNavigateBack}>
+      <div className={styles.screenHeader}>
+        <button className={styles.backButton} onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
         <h1>👥 Customer List</h1>
       </div>
 
-      <div className="search-section">
+      <div className={styles.searchSection}>
         <input 
           type="text" 
-          className="search-input"
+          className={styles.searchInput}
           placeholder={t.searchCustomers}
           value={customerSearch}
           onChange={(e) => onCustomerSearchChange(e.target.value)}
         />
       </div>
 
-      <div className="filters-section">
-        <div className="filter-buttons">
-          <button className="filter-btn active">{t.showAll}</button>
-          <button className="filter-btn">🏆 Premium</button>
-          <button className="filter-btn">🎉 New Customers</button>
-          <button className="filter-btn">⚡ Active</button>
-          <button className="filter-btn">⚠️ Payment Issues</button>
+      <div className={styles.filtersSection}>
+        <div className={styles.filterButtons}>
+          <button className={`${styles.filterBtn} ${styles.active}`}>{t.showAll}</button>
+          <button className={styles.filterBtn}>🏆 Premium</button>
+          <button className={styles.filterBtn}>🎉 New Customers</button>
+          <button className={styles.filterBtn}>⚡ Active</button>
+          <button className={styles.filterBtn}>⚠️ Payment Issues</button>
         </div>
       </div>
 
-      <div className="leads-container">
+      <div className={styles.leadsContainer}>
         {mockCustomers
           .filter(customer => 
             customerSearch === '' || 
@@ -93,8 +94,8 @@ function CustomerList({
             const lastOrder = mockSalesOrders.find(order => order.customerId === customer.id);
 
             return (
-              <div key={customer.id} className={`lead-card ${customer.priority}-lead`}>
-                <div className="lead-header">
+              <div key={customer.id} className={`${styles.leadCard} ${styles[customer.priority + 'Lead']}`}>
+                <div className={styles.leadHeader}>
                   <h3>
                     <span 
                       onClick={() => onShowCustomerProfile(customer.id)}
@@ -103,34 +104,34 @@ function CustomerList({
                       🏭 {customer.name} - {customer.location}
                     </span>
                   </h3>
-                  <span className={`priority-badge ${customer.priority}`}>
+                  <span className={`${styles.priorityBadge} ${styles[customer.priority]}`}>
                     {priorityIcons[customer.priority]} {priorityLabels[customer.priority]}
                   </span>
                 </div>
-                <div className="lead-details">
+                <div className={styles.leadDetails}>
                   <p><strong>Customer Since:</strong> {customer.customerSince}</p>
                   <p><strong>Total Business:</strong> {formatCurrency(customer.totalBusiness)} ({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''})</p>
                   <p><strong>Conversion Rate:</strong> {customer.conversionRate}% ({customer.totalOrders}/{customer.totalOrders + 1} quotes)</p>
                   <p><strong>Last Order:</strong> {lastOrder ? `${lastOrder.orderDate} - ${lastOrder.statusMessage}` : 'No orders yet'}</p>
                   <p><strong>Payment Status:</strong> 
-                    <span className={`payment-${customer.paymentStatus}`}>
+                    <span className={styles[`payment${customer.paymentStatus.charAt(0).toUpperCase() + customer.paymentStatus.slice(1)}`]}>
                       {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
                     </span>
                   </p>
                 </div>
-                <div className="lead-actions">
-                  <button className="action-btn call-btn">{t.call}</button>
-                  <button className="action-btn whatsapp-btn">{t.whatsapp}</button>
-                  <button className="action-btn quote-btn">📄 View Profile</button>
-                  <button className="action-btn quote-btn">📋 New Quote</button>
+                <div className={styles.leadActions}>
+                  <button className={`${styles.actionBtn} ${styles.callBtn}`}>{t.call}</button>
+                  <button className={`${styles.actionBtn} ${styles.whatsappBtn}`}>{t.whatsapp}</button>
+                  <button className={`${styles.actionBtn} ${styles.quoteBtn}`}>📄 View Profile</button>
+                  <button className={`${styles.actionBtn} ${styles.quoteBtn}`}>📋 New Quote</button>
                 </div>
               </div>
             );
           })}
       </div>
 
-      <div className="voice-commands">
-        <p className="voice-hint">
+      <div className={styles.voiceCommands}>
+        <p className={styles.voiceHint}>
           🎤 <strong>{t.voiceCommandsHint}:</strong> 
           "Show premium customers" • "Call Rajesh Textiles" • "Search Gujarat Garments"
         </p>

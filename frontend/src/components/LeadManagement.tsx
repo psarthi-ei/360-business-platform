@@ -1,6 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
+import styles from './LeadManagement.module.css';
 
 interface LeadManagementProps {
   currentLanguage: string;
@@ -29,42 +30,42 @@ function LeadManagement({
 }: LeadManagementProps) {
   const t = translations;
   return (
-    <div className="lead-management-screen">
+    <div className={styles.leadManagementScreen}>
       <LanguageSwitcher 
         currentLanguage={currentLanguage} 
         onLanguageChange={onLanguageChange} 
       />
       
-      <div className="screen-header">
-        <button className="back-button" onClick={onNavigateBack}>
+      <div className={styles.screenHeader}>
+        <button className={styles.backButton} onClick={onNavigateBack}>
           {t.backToDashboard}
         </button>
         <h1>📋 {t.leadManagement}</h1>
-        <button className="add-button">{t.addNewLead}</button>
+        <button className={styles.addButton}>{t.addNewLead}</button>
       </div>
 
-      <div className="filters-section">
-        <div className="filter-buttons">
+      <div className={styles.filtersSection}>
+        <div className={styles.filterButtons}>
           <button 
-            className={filterState === 'all' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('all')}
           >
             {t.showAll}
           </button>
           <button 
-            className={filterState === 'hotleads' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'hotleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('hotleads')}
           >
             {t.showHotLeads}
           </button>
           <button 
-            className={filterState === 'warmleads' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'warmleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('warmleads')}
           >
             {t.showWarmLeads}
           </button>
           <button 
-            className={filterState === 'coldleads' ? 'filter-btn active' : 'filter-btn'}
+            className={filterState === 'coldleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('coldleads')}
           >
             {t.showColdLeads}
@@ -72,7 +73,7 @@ function LeadManagement({
         </div>
       </div>
 
-      <div className="leads-container">
+      <div className={styles.leadsContainer}>
         {mockLeads.map(lead => {
           // Filter logic
           const shouldShow = (
@@ -101,8 +102,8 @@ function LeadManagement({
             mockSalesOrders.filter(order => relatedQuotes.some(quote => quote.id === order.quoteId)) : [];
 
           return (
-            <div key={lead.id} className={`lead-card ${lead.priority}-lead`}>
-              <div className="lead-header">
+            <div key={lead.id} className={`${styles.leadCard} ${styles[lead.priority + 'Lead']}`}>
+              <div className={styles.leadHeader}>
                 <h3>
                   <span 
                     onClick={() => onShowCustomerProfile?.(lead.customerId)}
@@ -111,11 +112,11 @@ function LeadManagement({
                     {lead.customerName} - {lead.location}
                   </span>
                 </h3>
-                <span className={`priority-badge ${lead.priority}`}>
+                <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
                   {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
                 </span>
               </div>
-              <div className="lead-details">
+              <div className={styles.leadDetails}>
                 <p><strong>Contact:</strong> {lead.contact}</p>
                 <p><strong>Business:</strong> {lead.business}</p>
                 <p><strong>Inquiry:</strong> {lead.inquiry}</p>
@@ -124,13 +125,13 @@ function LeadManagement({
               </div>
 
               {/* Related Quote and Order Information */}
-              <div className="lead-mapping">
+              <div className={styles.leadMapping}>
                 {relatedQuotes.length > 0 ? (
-                  <div className="mapping-info">
+                  <div className={styles.mappingInfo}>
                     <p><strong>📄 Related Quotes ({relatedQuotes.length}):</strong></p>
                     {relatedQuotes.map((quote, index) => (
                       <p key={quote.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
-                        • <span className="mapping-link" onClick={() => onShowQuotationOrders?.()}>
+                        • <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
                           {quote.id}
                         </span> 
                         - {formatCurrency(quote.totalAmount)} ({quote.status})
@@ -141,7 +142,7 @@ function LeadManagement({
                         <p><strong>📦 Related Orders ({relatedOrders.length}):</strong></p>
                         {relatedOrders.map((order, index) => (
                           <p key={order.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
-                            • <span className="mapping-link" onClick={() => onShowSalesOrders?.()}>
+                            • <span className={styles.mappingLink} onClick={() => onShowSalesOrders?.()}>
                               {order.id}
                             </span> 
                             - {order.status} ({order.statusMessage})
@@ -151,21 +152,21 @@ function LeadManagement({
                     )}
                   </div>
                 ) : (
-                  <div className="mapping-info">
-                    <p><strong>📄 Quote Status:</strong> <span className="no-quote">No quotes created yet</span></p>
+                  <div className={styles.mappingInfo}>
+                    <p><strong>📄 Quote Status:</strong> <span className={styles.noQuote}>No quotes created yet</span></p>
                   </div>
                 )}
               </div>
               
-              <div className="lead-actions">
-                <button className="action-btn call-btn">📞 Call{lead.priority === 'hot' ? ' Now' : ''}</button>
-                <button className="action-btn whatsapp-btn">💬 WhatsApp</button>
-                <button className="action-btn quote-btn" onClick={() => onShowQuoteFromLead?.(lead.id)}>
+              <div className={styles.leadActions}>
+                <button className={`${styles.actionBtn} ${styles.callBtn}`}>📞 Call{lead.priority === 'hot' ? ' Now' : ''}</button>
+                <button className={`${styles.actionBtn} ${styles.whatsappBtn}`}>💬 WhatsApp</button>
+                <button className={`${styles.actionBtn} ${styles.quoteBtn}`} onClick={() => onShowQuoteFromLead?.(lead.id)}>
                   💰 {relatedQuotes.length > 0 ? `View Quotes (${relatedQuotes.length})` : 'Send Quote'}
                 </button>
               </div>
               
-              <div className="lead-notes">
+              <div className={styles.leadNotes}>
                 <p><strong>Notes:</strong> {lead.notes}</p>
               </div>
             </div>
@@ -173,8 +174,8 @@ function LeadManagement({
         })}
       </div>
 
-      <div className="voice-commands">
-        <p className="voice-hint">
+      <div className={styles.voiceCommands}>
+        <p className={styles.voiceHint}>
           🎤 <strong>{t.voiceCommandsHint}</strong> 
           "{t.addFabricInquiry}" • "{t.callRajesh}" • "{t.showCottonLeads}"
         </p>
