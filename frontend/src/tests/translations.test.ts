@@ -1,4 +1,4 @@
-import { getCurrentTranslations, TranslationStrings } from './translations';
+import { getCurrentTranslations, TranslationStrings } from '../utils/translations';
 
 describe('Translation Utilities', () => {
   test('returns English translations by default', () => {

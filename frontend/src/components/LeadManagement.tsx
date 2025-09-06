@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
-import styles from './LeadManagement.module.css';
+import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
   currentLanguage: string;

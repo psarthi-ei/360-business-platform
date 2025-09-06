@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CustomerList from './CustomerList';
+import CustomerList from '../components/CustomerList';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -62,8 +62,9 @@ describe('CustomerList Component', () => {
   test('displays customers container', () => {
     render(<CustomerList {...mockProps} />);
     
-    expect(document.querySelector('.leads-container')).toBeInTheDocument();
-    expect(document.querySelectorAll('.lead-card').length).toBeGreaterThan(0);
+    // Test customer content is displayed
+    expect(screen.getByText(/rajesh textiles - ahmedabad/i)).toBeInTheDocument();
+    expect(screen.getByText(/gujarat garments - surat/i)).toBeInTheDocument();
   });
 
   test('customers have clickable names', () => {
@@ -111,15 +112,15 @@ describe('CustomerList Component', () => {
   test('voice commands section exists', () => {
     render(<CustomerList {...mockProps} />);
     
-    expect(document.querySelector('.voice-commands')).toBeInTheDocument();
     expect(screen.getByText(/try saying/i)).toBeInTheDocument();
   });
 
   test('component structure is accessible', () => {
     render(<CustomerList {...mockProps} />);
     
-    expect(document.querySelector('.search-section')).toBeInTheDocument();
-    expect(document.querySelector('.filters-section')).toBeInTheDocument();
-    expect(document.querySelector('.leads-container')).toBeInTheDocument();
+    // Test structural elements by content
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /show all/i })).toBeInTheDocument();
+    expect(screen.getByText(/rajesh textiles - ahmedabad/i)).toBeInTheDocument();
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency } from '../data/mockData';
-import styles from './SalesOrders.module.css';
+import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
   currentLanguage: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
-import styles from './CustomerProfile.module.css';
+import styles from '../styles/CustomerProfile.module.css';
 
 interface CustomerProfileProps {
   currentLanguage: string;

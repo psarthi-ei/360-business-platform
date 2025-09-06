@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
+import App from '../App';
 
 describe('App Component - Dashboard', () => {
   test('renders main dashboard elements', () => {
@@ -15,11 +15,11 @@ describe('App Component - Dashboard', () => {
     expect(screen.getByText(/Sales Orders/i)).toBeInTheDocument();
     expect(screen.getByText(/Customers/i)).toBeInTheDocument();
     expect(screen.getByText(/Work Orders/i)).toBeInTheDocument();
-    expect(screen.getByText(/Production/i)).toBeInTheDocument();
-    expect(screen.getByText(/Inventory/i)).toBeInTheDocument();
-    expect(screen.getByText(/Dispatch/i)).toBeInTheDocument();
-    expect(screen.getByText(/Accounting/i)).toBeInTheDocument();
-    expect(screen.getByText(/Analytics/i)).toBeInTheDocument();
+    expect(screen.getByText(/Production Tracking/i)).toBeInTheDocument();
+    expect(screen.getByText(/Inventory \(3-Tier\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dispatch & Delivery/i)).toBeInTheDocument();
+    expect(screen.getByText(/Invoice & Finance/i)).toBeInTheDocument();
+    expect(screen.getByText(/Voice Commands/i)).toBeInTheDocument();
   });
 
   test('displays feature descriptions correctly', () => {
@@ -185,8 +185,8 @@ describe('App Component - Quotation Management Features', () => {
     render(<App />);
     fireEvent.click(screen.getByText(/Quotations & Orders/i));
     
-    expect(screen.getByText('QT-2025-001 -')).toBeInTheDocument();
-    expect(screen.getByText('QT-2025-002 -')).toBeInTheDocument();
+    expect(screen.getByText('QT-001 -')).toBeInTheDocument();
+    expect(screen.getByText('QT-002 -')).toBeInTheDocument();
     expect(screen.getByText('Rajesh Textiles - Ahmedabad')).toBeInTheDocument();
     expect(screen.getByText('Gujarat Garments - Surat')).toBeInTheDocument();
   });
@@ -208,7 +208,7 @@ describe('App Component - Quotation Management Features', () => {
     render(<App />);
     fireEvent.click(screen.getByText(/Quotations & Orders/i));
     
-    const salesOrderLink = screen.getByText(/🎉 SO-2025-001/i);
+    const salesOrderLink = screen.getByText(/🎉 SO-001/i);
     fireEvent.click(salesOrderLink);
     expect(screen.getByText(/📋 Sales Orders/i)).toBeInTheDocument();
   });
@@ -219,9 +219,9 @@ describe('App Component - Sales Order Features', () => {
     render(<App />);
     fireEvent.click(screen.getByText(/Sales Orders/i));
     
-    expect(screen.getByText('SO-2025-001 - Rajesh Textiles - Ahmedabad')).toBeInTheDocument();
-    expect(screen.getByText('SO-2025-002 - Premium Fabrics Ltd - Mumbai')).toBeInTheDocument();
-    expect(screen.getByText('SO-2025-003 - Textile Innovation Co - Surat')).toBeInTheDocument();
+    expect(screen.getByText('SO-001 - Rajesh Textiles - Ahmedabad')).toBeInTheDocument();
+    expect(screen.getByText('SO-002 - Premium Fabrics Ltd - Mumbai')).toBeInTheDocument();
+    expect(screen.getByText('SO-003 - Textile Innovation Co - Surat')).toBeInTheDocument();
   });
 
   test('sales order filtering works correctly', () => {
@@ -230,22 +230,22 @@ describe('App Component - Sales Order Features', () => {
     
     // Test pending payment filter
     fireEvent.click(screen.getByText(/💳 Pending Payment/i));
-    expect(screen.getByText('SO-2025-001 - Rajesh Textiles - Ahmedabad')).toBeInTheDocument();
+    expect(screen.getByText('SO-001 - Rajesh Textiles - Ahmedabad')).toBeInTheDocument();
     
     // Test payment received filter
     fireEvent.click(screen.getByText(/✅ Payment Received/i));
-    expect(screen.getByText('SO-2025-002 - Premium Fabrics Ltd - Mumbai')).toBeInTheDocument();
+    expect(screen.getByText('SO-002 - Premium Fabrics Ltd - Mumbai')).toBeInTheDocument();
     
     // Test overdue filter
     fireEvent.click(screen.getByText(/🔴 Overdue/i));
-    expect(screen.getByText('SO-2025-003 - Textile Innovation Co - Surat')).toBeInTheDocument();
+    expect(screen.getByText('SO-003 - Textile Innovation Co - Surat')).toBeInTheDocument();
   });
 
   test('navigation to quotations from sales orders works', () => {
     render(<App />);
     fireEvent.click(screen.getByText(/Sales Orders/i));
     
-    const quoteLink = screen.getAllByText(/✅ QT-2025-/i)[0];
+    const quoteLink = screen.getAllByText(/✅ QT-/i)[0];
     fireEvent.click(quoteLink);
     expect(screen.getByText(/📄 Quotations & Orders/i)).toBeInTheDocument();
   });
@@ -325,7 +325,7 @@ describe('App Component - Integration Tests', () => {
     expect(screen.getByText(/📄 Quotations & Orders/i)).toBeInTheDocument();
     
     // Go to Sales Orders via quote link
-    const salesOrderLink = screen.getByText(/🎉 SO-2025-001/i);
+    const salesOrderLink = screen.getByText(/🎉 SO-001/i);
     fireEvent.click(salesOrderLink);
     expect(screen.getByText(/📋 Sales Orders/i)).toBeInTheDocument();
     

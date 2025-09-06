@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './LanguageSwitcher.module.css';
+import styles from '../styles/LanguageSwitcher.module.css';
 
 interface LanguageSwitcherProps {
   currentLanguage: string;

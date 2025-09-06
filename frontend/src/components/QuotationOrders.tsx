@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
-import styles from './QuotationOrders.module.css';
+import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
   currentLanguage: string;

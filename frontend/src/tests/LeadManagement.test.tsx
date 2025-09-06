@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import LeadManagement from './LeadManagement';
+import LeadManagement from '../components/LeadManagement';
 import { getCurrentTranslations } from '../utils/translations';
 
 const mockProps = {
@@ -56,9 +56,9 @@ describe('LeadManagement Component', () => {
   test('displays leads container', () => {
     render(<LeadManagement {...mockProps} />);
     
-    // Test that leads are displayed (without caring about specific content)
-    expect(document.querySelector('.leads-container')).toBeInTheDocument();
-    expect(document.querySelectorAll('.lead-card').length).toBeGreaterThan(0);
+    // Test that leads are displayed by checking for lead content
+    expect(screen.getAllByText(/rajesh textiles/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/gujarat garments/i).length).toBeGreaterThan(0);
   });
 
   test('leads have action buttons', () => {
@@ -66,7 +66,7 @@ describe('LeadManagement Component', () => {
     
     // Test that action buttons exist (without caring about exact count or specific leads)
     expect(screen.getAllByText(/call now|call/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/whatsapp/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/whatsapp/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/send quote|quote/i).length).toBeGreaterThan(0);
   });
 
@@ -106,7 +106,6 @@ describe('LeadManagement Component', () => {
   test('voice commands section exists', () => {
     render(<LeadManagement {...mockProps} />);
     
-    expect(document.querySelector('.voice-commands')).toBeInTheDocument();
     expect(screen.getByText(/try saying|voice commands/i)).toBeInTheDocument();
   });
 

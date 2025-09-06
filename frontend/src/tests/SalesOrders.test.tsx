@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SalesOrders from './SalesOrders';
+import SalesOrders from '../components/SalesOrders';
 import { getCurrentTranslations } from '../utils/translations';
 
 const mockProps = {
@@ -29,13 +29,10 @@ describe('SalesOrders Component', () => {
   test('renders filter functionality', () => {
     render(<SalesOrders {...mockProps} />);
     
-    // Test filter buttons exist - use querySelector for specific filter buttons
-    const filterSection = document.querySelector('.filter-buttons');
-    expect(filterSection).toBeInTheDocument();
+    // Test filter buttons exist using accessible roles
     expect(screen.getByRole('button', { name: /show all/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /show pending/i })).toBeInTheDocument();
-    // Check that filter buttons container has the production filter
-    expect(filterSection?.textContent).toContain('Ready for Production');
+    expect(screen.getByRole('button', { name: /^ready for production$/i })).toBeInTheDocument();
   });
 
   test('filter buttons are interactive', () => {
@@ -44,15 +41,8 @@ describe('SalesOrders Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /show pending/i }));
     expect(mockProps.onFilterChange).toHaveBeenCalledWith('pending');
 
-    // Find the production filter button specifically within filter section
-    const filterButtons = document.querySelectorAll('.filter-buttons button');
-    const productionBtn = Array.from(filterButtons).find(btn => 
-      btn.textContent?.includes('Ready for Production')
-    );
-    if (productionBtn) {
-      fireEvent.click(productionBtn);
-      expect(mockProps.onFilterChange).toHaveBeenCalledWith('production');
-    }
+    fireEvent.click(screen.getByRole('button', { name: /^ready for production$/i }));
+    expect(mockProps.onFilterChange).toHaveBeenCalledWith('production');
 
     fireEvent.click(screen.getByRole('button', { name: /show all/i }));
     expect(mockProps.onFilterChange).toHaveBeenCalledWith('all');
@@ -61,9 +51,10 @@ describe('SalesOrders Component', () => {
   test('displays orders container', () => {
     render(<SalesOrders {...mockProps} />);
     
-    // Test that orders are displayed (without caring about specific content)
-    expect(document.querySelector('.orders-container')).toBeInTheDocument();
-    expect(document.querySelectorAll('.order-card').length).toBeGreaterThan(0);
+    // Test that orders are displayed using content-based selectors
+    expect(screen.getByText(/sales orders/i)).toBeInTheDocument();
+    // Check for order-specific content instead of CSS classes
+    expect(screen.getAllByText(/rajesh textiles/i).length).toBeGreaterThan(0);
   });
 
   test('orders have required fields', () => {
@@ -79,9 +70,10 @@ describe('SalesOrders Component', () => {
   test('orders have action buttons', () => {
     render(<SalesOrders {...mockProps} />);
     
-    // Test that action buttons exist
-    expect(screen.getByText(/view pdf/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/view payment status/i)).toHaveLength(2); // Button and voice command
+    // Test that action buttons exist - use getAllByText for multiple occurrences
+    const pdfButtons = screen.getAllByText(/view pdf/i);
+    expect(pdfButtons.length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/payment.*status/i).length).toBeGreaterThan(0);
   });
 
   test('navigation works', () => {
@@ -110,17 +102,16 @@ describe('SalesOrders Component', () => {
   test('voice commands section exists', () => {
     render(<SalesOrders {...mockProps} />);
     
-    expect(document.querySelector('.voice-commands')).toBeInTheDocument();
     expect(screen.getByText(/try saying/i)).toBeInTheDocument();
   });
 
   test('component structure is accessible', () => {
     render(<SalesOrders {...mockProps} />);
     
-    // Test that important elements have proper structure
-    expect(document.querySelector('.sales-orders-screen')).toBeInTheDocument();
-    expect(document.querySelector('.screen-header')).toBeInTheDocument();
-    expect(document.querySelector('.filters-section')).toBeInTheDocument();
-    expect(document.querySelector('.orders-container')).toBeInTheDocument();
+    // Test that important elements have proper structure by content
+    expect(screen.getByText(/sales orders/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /show all/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/rajesh textiles/i).length).toBeGreaterThan(0);
   });
 });

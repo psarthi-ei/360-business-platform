@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
-import styles from './CustomerList.module.css';
+import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
   currentLanguage: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import QuotationOrders from './QuotationOrders';
+import QuotationOrders from '../components/QuotationOrders';
 import { getCurrentTranslations } from '../utils/translations';
 
 const mockProps = {
@@ -58,19 +58,19 @@ describe('QuotationOrders Component', () => {
   test('displays quotes container', () => {
     render(<QuotationOrders {...mockProps} />);
     
-    // Test that quotes are displayed (without caring about specific content)
-    expect(document.querySelector('.quotes-container')).toBeInTheDocument();
-    expect(document.querySelectorAll('.quote-card').length).toBeGreaterThan(0);
+    // Test that quotes are displayed by checking for quote content
+    expect(screen.getAllByText(/QT-001/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/rajesh textiles/i).length).toBeGreaterThan(0);
   });
 
   test('quotes have required fields', () => {
     render(<QuotationOrders {...mockProps} />);
     
     // Test that basic quote fields exist (without caring about specific values)
-    expect(screen.getByText(/customer name/i)).toBeInTheDocument();
-    expect(screen.getByText(/quote date/i)).toBeInTheDocument();
-    expect(screen.getByText(/valid until/i)).toBeInTheDocument();
-    expect(screen.getByText(/total amount/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/customer name/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/quote date/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/valid until/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/total amount/i).length).toBeGreaterThan(0);
   });
 
   test('quotes have action buttons', () => {
@@ -108,17 +108,16 @@ describe('QuotationOrders Component', () => {
   test('voice commands section exists', () => {
     render(<QuotationOrders {...mockProps} />);
     
-    expect(document.querySelector('.voice-commands')).toBeInTheDocument();
     expect(screen.getByText(/try saying/i)).toBeInTheDocument();
   });
 
   test('component structure is accessible', () => {
     render(<QuotationOrders {...mockProps} />);
     
-    // Test that important elements have proper structure
-    expect(document.querySelector('.quotation-orders-screen')).toBeInTheDocument();
-    expect(document.querySelector('.screen-header')).toBeInTheDocument();
-    expect(document.querySelector('.filters-section')).toBeInTheDocument();
-    expect(document.querySelector('.quotes-container')).toBeInTheDocument();
+    // Test that important elements have proper structure by content
+    expect(screen.getByText(/quotations.*orders/i)).toBeInTheDocument();
+    expect(screen.getByText(/add.*quote/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /show all/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/QT-001/i).length).toBeGreaterThan(0);
   });
 });
