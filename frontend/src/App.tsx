@@ -16,7 +16,7 @@ type Language = 'en' | 'gu' | 'hi';
 function App() {
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
-  const [currentTheme, setCurrentTheme] = useState('classic');
+  const [currentTheme, setCurrentTheme] = useState('minimalist');
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
@@ -38,7 +38,7 @@ function App() {
   }
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('selectedTheme') || 'classic';
+    const savedTheme = localStorage.getItem('selectedTheme') || 'minimalist';
     setCurrentTheme(savedTheme);
     applyTheme(themes[savedTheme]);
   }, []);

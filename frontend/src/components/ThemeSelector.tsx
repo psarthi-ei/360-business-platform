@@ -28,7 +28,9 @@ function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {
       </button>
 
       {isOpen && (
-        <div className={styles.themeDropdown}>
+        <>
+          <div className={styles.themeBackdrop} onClick={() => setIsOpen(false)} />
+          <div className={styles.themeDropdown}>
           <div className={styles.themeHeader}>
             <h4>Choose Your Style</h4>
             <button 
@@ -105,6 +107,7 @@ function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {
             <p>✨ Themes save automatically</p>
           </div>
         </div>
+        </>
       )}
     </div>
   );

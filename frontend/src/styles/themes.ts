@@ -70,7 +70,43 @@ export const classicTheme: Theme = {
   }
 };
 
-// 2. Professional Dark
+// 2. Pure Black
+export const blackTheme: Theme = {
+  name: 'black',
+  displayName: '⚫ Pure Black',
+  colors: {
+    primary: '#ffffff',
+    secondary: '#000000',
+    accent: '#666666',
+    background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+    surface: 'rgba(255, 255, 255, 0.05)',
+    text: '#ffffff',
+    textSecondary: 'rgba(255, 255, 255, 0.7)',
+    success: '#00ff00',
+    warning: '#ffff00',
+    error: '#ff0000',
+    hot: '#ff4444',
+    warm: '#ffaa00',
+    cold: '#4477ff'
+  },
+  gradients: {
+    background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+    card: 'rgba(255, 255, 255, 0.05)',
+    button: 'linear-gradient(45deg, #333333, #666666)'
+  },
+  shadows: {
+    small: '0 2px 15px rgba(255,255,255,0.1)',
+    medium: '0 4px 25px rgba(255,255,255,0.15)',
+    large: '0 8px 40px rgba(255,255,255,0.2)'
+  },
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '12px'
+  }
+};
+
+// 3. Professional Dark
 export const professionalTheme: Theme = {
   name: 'professional',
   displayName: '🌙 Professional Dark',
@@ -106,7 +142,7 @@ export const professionalTheme: Theme = {
   }
 };
 
-// 3. Textile Traditional (Warm Earth Tones)
+// 4. Textile Traditional (Warm Earth Tones)
 export const traditionalTheme: Theme = {
   name: 'traditional',
   displayName: '🧶 Textile Traditional',
@@ -216,10 +252,11 @@ export const vibrantTheme: Theme = {
 
 // Theme Registry
 export const themes: Record<string, Theme> = {
+  minimalist: minimalistTheme,
+  black: blackTheme,
   classic: classicTheme,
   professional: professionalTheme,
   traditional: traditionalTheme,
-  minimalist: minimalistTheme,
   vibrant: vibrantTheme
 };
 
