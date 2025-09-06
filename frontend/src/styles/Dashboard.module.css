@@ -18,7 +18,7 @@
 .dashboard h2 {
   font-size: 1.8rem;
   margin: 0.5rem 0;
-  color: #ffd700;
+  color: var(--color-primary);
   font-weight: 300;
 }
 
@@ -37,17 +37,17 @@
 }
 
 .featureCard {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--gradient-card, rgba(255, 255, 255, 0.1));
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: var(--radius-medium, 10px);
   font-size: 1rem;
   transition: transform 0.3s ease, background-color 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.2));
 }
 
 .featureCard:hover {
   transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--gradient-card-hover, rgba(255, 255, 255, 0.2));
 }
 
 .clickable {
@@ -55,14 +55,14 @@
 }
 
 .clickable:hover {
-  background: rgba(255, 215, 0, 0.2);
-  border-color: #ffd700;
+  background: var(--color-primary-bg, rgba(255, 215, 0, 0.2));
+  border-color: var(--color-primary);
 }
 
 .languages {
   font-size: 1.2rem;
   margin: 1.5rem 0;
-  color: #ffd700;
+  color: var(--color-primary);
 }
 
 .languages span {
@@ -73,7 +73,7 @@
   font-size: 1.1rem;
   margin-top: 2rem;
   opacity: 0.8;
-  color: #ffd700;
+  color: var(--color-primary);
 }
 
 /* Mobile Responsive */

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import Dashboard from './components/Dashboard';
@@ -7,13 +7,16 @@ import QuotationOrders from './components/QuotationOrders';
 import SalesOrders from './components/SalesOrders';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
+import ThemeSelector from './components/ThemeSelector';
 import { getCurrentTranslations } from './utils/translations';
+import { themes, applyTheme } from './styles/themes';
 
 type Language = 'en' | 'gu' | 'hi';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+  const [currentTheme, setCurrentTheme] = useState('classic');
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
@@ -28,6 +31,21 @@ function App() {
   function switchLanguage(language: string) {
     setCurrentLanguage(language as Language);
   }
+
+  function switchTheme(themeName: string) {
+    setCurrentTheme(themeName);
+    localStorage.setItem('selectedTheme', themeName);
+  }
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('selectedTheme') || 'classic';
+    setCurrentTheme(savedTheme);
+    applyTheme(themes[savedTheme]);
+  }, []);
+
+  useEffect(() => {
+    applyTheme(themes[currentTheme]);
+  }, [currentTheme]);
 
   function showDashboard() {
     setCurrentScreen('dashboard');
@@ -184,6 +202,9 @@ function App() {
   return (
     <div className="App">
       <div className="App-content">
+        <div className="theme-selector-container" style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 1001 }}>
+          <ThemeSelector currentTheme={currentTheme} onThemeChange={switchTheme} />
+        </div>
         {currentScreen === 'dashboard' && renderDashboard()}
         {currentScreen === 'leads' && renderLeadManagement()}
         {currentScreen === 'quotations' && renderQuotationOrders()}
