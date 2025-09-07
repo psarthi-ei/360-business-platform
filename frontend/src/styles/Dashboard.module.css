@@ -9,6 +9,37 @@
   position: relative;
 }
 
+/* Header Controls - Language Switcher + Home Button */
+.headerControls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  z-index: 1000;
+}
+
+.homeButton {
+  background: var(--gradient-card, rgba(255, 255, 255, 0.2));
+  color: var(--color-text, #333);
+  border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.homeButton:hover {
+  background: var(--gradient-card-hover, rgba(255, 255, 255, 0.3));
+  border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .dashboard h1 {
   font-size: 2.5rem;
   margin: 0.5rem 0;

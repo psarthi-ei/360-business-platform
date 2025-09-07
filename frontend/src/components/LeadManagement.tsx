@@ -1,12 +1,15 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
+import ProductHeader from './ProductHeader';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   onShowCustomerProfile?: (customerId: string) => void;
   onShowQuoteFromLead?: (leadId: string) => void;
   onShowQuotationOrders?: () => void;
@@ -19,7 +22,10 @@ interface LeadManagementProps {
 function LeadManagement({
   currentLanguage,
   onLanguageChange,
+  currentTheme,
+  onThemeChange,
   onNavigateBack,
+  onNavigateHome,
   onShowCustomerProfile,
   onShowQuoteFromLead,
   onShowQuotationOrders,
@@ -31,18 +37,21 @@ function LeadManagement({
   const t = translations;
   return (
     <div className={styles.leadManagementScreen}>
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={onLanguageChange} 
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateBack={onNavigateBack}
+        onNavigateHome={onNavigateHome}
+        showThemeSelector={true}
       />
       
-      <div className={styles.screenHeader}>
-        <button className={styles.backButton} onClick={onNavigateBack}>
-          {t.backToDashboard}
-        </button>
-        <h1>📋 {t.leadManagement}</h1>
-        <button className={styles.addButton}>{t.addNewLead}</button>
-      </div>
+      <div className={styles.pageContent}>
+        <div className={styles.screenHeader}>
+          <h1 className={styles.centeredHeading}>📋 {t.leadManagement}</h1>
+          <button className={styles.addButton}>{t.addNewLead}</button>
+        </div>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
@@ -179,6 +188,7 @@ function LeadManagement({
           🎤 <strong>{t.voiceCommandsHint}</strong> 
           "{t.addFabricInquiry}" • "{t.callRajesh}" • "{t.showCottonLeads}"
         </p>
+      </div>
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 import React from 'react';
+import ProductHeader from './ProductHeader';
 import styles from '../styles/Dashboard.module.css';
-import LanguageSwitcher from './LanguageSwitcher';
 
 interface DashboardProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
+  onNavigateHome?: () => void;
   onShowLeadManagement: () => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
@@ -32,7 +35,10 @@ interface DashboardProps {
 
 function Dashboard({ 
   currentLanguage, 
-  onLanguageChange, 
+  onLanguageChange,
+  currentTheme,
+  onThemeChange,
+  onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowSalesOrders,
@@ -41,16 +47,17 @@ function Dashboard({
 }: DashboardProps) {
   return (
     <div className={styles.dashboard}>
-      <LanguageSwitcher 
+      <ProductHeader
         currentLanguage={currentLanguage}
         onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateHome={onNavigateHome}
+        showThemeSelector={true}
       />
-
+      
       <h1>🏭 {t.title}</h1>
       <h2>{t.company}</h2>
-      <p className={styles.founderInfo}>
-        {t.founder}
-      </p>
       
       <div className={styles.featuresGrid}>
         <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowLeadManagement}>

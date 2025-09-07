@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
 import LeadManagement from './components/LeadManagement';
 import QuotationOrders from './components/QuotationOrders';
 import SalesOrders from './components/SalesOrders';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
-import ThemeSelector from './components/ThemeSelector';
+import ProductHeader from './components/ProductHeader';
 import { getCurrentTranslations } from './utils/translations';
 import { themes, applyTheme } from './styles/themes';
 
 type Language = 'en' | 'gu' | 'hi';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [currentTheme, setCurrentTheme] = useState('minimalist');
   const [leadFilter, setLeadFilter] = useState('all');
@@ -46,6 +47,10 @@ function App() {
   useEffect(() => {
     applyTheme(themes[currentTheme]);
   }, [currentTheme]);
+
+  function showHomePage() {
+    setCurrentScreen('homepage');
+  }
 
   function showDashboard() {
     setCurrentScreen('dashboard');
@@ -93,15 +98,20 @@ function App() {
     const t = getTranslations();
     
     return (
-      <Dashboard
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onShowLeadManagement={showLeadManagement}
-        onShowQuotationOrders={showQuotationOrders}
-        onShowSalesOrders={showSalesOrders}
-        onShowCustomerList={showCustomerList}
-        translations={t}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <Dashboard
+          currentLanguage={currentLanguage}
+          onLanguageChange={switchLanguage}
+          currentTheme={currentTheme}
+          onThemeChange={switchTheme}
+          onNavigateHome={showHomePage}
+          onShowLeadManagement={showLeadManagement}
+          onShowQuotationOrders={showQuotationOrders}
+          onShowSalesOrders={showSalesOrders}
+          onShowCustomerList={showCustomerList}
+          translations={t}
+        />
+      </div>
     );
   }
 
@@ -199,12 +209,34 @@ function App() {
     );
   }
 
+  function renderHomePage() {
+    const t = getTranslations();
+    
+    return (
+      <HomePage
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onGetStarted={showDashboard}
+        onSeeDemo={showDashboard}
+        onNavigateDashboard={showDashboard}
+        translations={t}
+      />
+    );
+  }
+
   return (
     <div className="App">
       <div className="App-content">
-        <div className="theme-selector-container" style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 1001 }}>
-          <ThemeSelector currentTheme={currentTheme} onThemeChange={switchTheme} />
-        </div>
+        {currentScreen !== 'homepage' && (
+          <ProductHeader
+            currentLanguage={currentLanguage}
+            onLanguageChange={switchLanguage}
+            currentTheme={currentTheme}
+            onThemeChange={switchTheme}
+            onNavigateHome={showHomePage}
+          />
+        )}
+        {currentScreen === 'homepage' && renderHomePage()}
         {currentScreen === 'dashboard' && renderDashboard()}
         {currentScreen === 'leads' && renderLeadManagement()}
         {currentScreen === 'quotations' && renderQuotationOrders()}

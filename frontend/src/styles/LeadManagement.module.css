@@ -1,7 +1,7 @@
 /* Lead Management Screen Styles */
 .leadManagementScreen {
   min-height: 100vh;
-  padding: 20px 10px;
+  padding: 100px 10px 20px 10px;
   text-align: left !important;
   background: var(--gradient-background, linear-gradient(135deg, #1e3c72 0%, #2a5298 100%));
   color: var(--color-text, white);
@@ -20,15 +20,24 @@
 
 .screenHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin: 60px 0 30px 0;
+  margin: 20px 0 30px 0;
   flex-wrap: wrap;
   gap: 1rem;
   padding: 0 10px;
   max-width: 1400px;
   margin-left: auto;
+  position: relative;
   margin-right: auto;
+}
+
+.pageTitle {
+  font-size: 2.2rem;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  color: var(--color-text, white);
+  text-align: center;
 }
 
 .screenHeader h1 {
@@ -37,10 +46,22 @@
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   color: var(--color-text, white);
   flex: 1;
-  text-align: left;
+  text-align: center;
 }
 
-.backButton, .addButton {
+.addButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.backButton {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;

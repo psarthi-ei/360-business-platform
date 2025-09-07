@@ -1,0 +1,128 @@
+/* Common Product Header Styles */
+.productHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-background, rgba(255, 255, 255, 0.98));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  padding: 12px 20px;
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 60px;
+}
+
+/* Logo Section - Fixed width, left side */
+.logoSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.logoImage {
+  height: 28px;
+  width: auto;
+}
+
+.logoText {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #333; /* Fallback for browsers that don't support background-clip */
+}
+
+/* Navigation Section - Center, flexible */
+.navigationSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Controls Section - Right side, auto width */
+.controlsSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.backButton {
+  background: var(--gradient-card, rgba(102, 126, 234, 0.1));
+  color: var(--color-primary, #667eea);
+  border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.backButton:hover {
+  background: var(--gradient-card-hover, rgba(102, 126, 234, 0.2));
+  border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
+  transform: translateY(-1px);
+}
+
+.homeButton {
+  background: var(--gradient-card, rgba(255, 255, 255, 0.9));
+  color: var(--color-text, #333);
+  border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.homeButton:hover {
+  background: var(--gradient-card-hover, rgba(255, 255, 255, 1));
+  border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .productHeader {
+    padding: 10px 15px;
+    grid-template-columns: 150px 1fr auto;
+    gap: 10px;
+  }
+  
+  .logo {
+    font-size: 14px;
+  }
+  
+  .logoImage {
+    height: 24px;
+  }
+  
+  .controlsSection {
+    gap: 8px;
+  }
+  
+  .backButton, .homeButton {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}

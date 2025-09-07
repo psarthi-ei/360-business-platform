@@ -1,0 +1,197 @@
+/* Header Dropdown Container */
+.headerDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Trigger Button */
+.dropdownTrigger {
+  background: var(--gradient-card, rgba(102, 126, 234, 0.1));
+  color: var(--color-primary, #667eea);
+  border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.dropdownTrigger:hover {
+  background: var(--gradient-card-hover, rgba(102, 126, 234, 0.2));
+  border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.triggerIcon {
+  font-size: 16px;
+}
+
+.triggerText {
+  font-weight: 500;
+}
+
+.dropdownArrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+/* Dropdown Menu */
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--color-background, rgba(255, 255, 255, 0.98));
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(20px);
+  min-width: 240px;
+  max-width: 300px;
+  z-index: 2000;
+  margin-top: 8px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menu Sections - Easily Extensible */
+.menuSection {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+}
+
+.menuSection:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--color-background-subtle, rgba(102, 126, 234, 0.05));
+  margin: 0 12px 8px 12px;
+  border-radius: 8px;
+}
+
+/* Menu Items - Consistent Styling */
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--color-text, #333);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  gap: 12px;
+}
+
+.menuItem:hover {
+  background: var(--gradient-card-hover, rgba(102, 126, 234, 0.08));
+  color: var(--color-primary, #667eea);
+}
+
+.menuItem:active {
+  background: var(--gradient-card-hover, rgba(102, 126, 234, 0.12));
+}
+
+/* Active State for Current Selection */
+.activeItem {
+  background: var(--gradient-card, rgba(102, 126, 234, 0.1));
+  color: var(--color-primary, #667eea);
+  font-weight: 500;
+}
+
+.itemIcon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.itemText {
+  flex: 1;
+  font-weight: inherit;
+}
+
+.checkmark {
+  color: var(--color-success, #28a745);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .dropdownTrigger {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-width: 80px;
+  }
+  
+  .triggerText {
+    display: none;
+  }
+  
+  .dropdownMenu {
+    min-width: 200px;
+    right: -20px;
+  }
+  
+  .menuItem {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+  
+  .sectionTitle {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdownMenu {
+    right: -40px;
+    min-width: 180px;
+  }
+}
+
+/* Theme-specific Enhancements */
+.menuSection:first-child .sectionTitle {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+/* Extensible Utility Classes for Future Sections */
+.menuSection.navigationSection .sectionTitle {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
+}
+
+.menuSection.settingsSection .sectionTitle {
+  background: linear-gradient(135deg, rgba(106, 90, 205, 0.1) 0%, rgba(255, 154, 158, 0.1) 100%);
+}
+
+.menuSection.accountSection .sectionTitle {
+  background: linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%);
+}

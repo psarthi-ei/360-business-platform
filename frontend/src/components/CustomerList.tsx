@@ -1,12 +1,15 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
+import ProductHeader from './ProductHeader';
 import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
 import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   onShowCustomerProfile: (customerId: string) => void;
   translations: {
     backToDashboard: string;
@@ -25,7 +28,10 @@ interface CustomerListProps {
 function CustomerList({
   currentLanguage,
   onLanguageChange,
+  currentTheme,
+  onThemeChange,
   onNavigateBack,
+  onNavigateHome,
   onShowCustomerProfile,
   translations: t,
   customerSearch,
@@ -33,17 +39,18 @@ function CustomerList({
 }: CustomerListProps) {
   return (
     <div className={styles.leadManagementScreen}>
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={onLanguageChange} 
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateBack={onNavigateBack}
+        onNavigateHome={onNavigateHome}
+        showThemeSelector={true}
       />
       
-      <div className={styles.screenHeader}>
-        <button className={styles.backButton} onClick={onNavigateBack}>
-          {t.backToDashboard}
-        </button>
-        <h1>👥 Customer List</h1>
-      </div>
+      <div className={styles.pageContent}>
+        <h1 className={styles.centeredHeading}>👥 Customer List</h1>
 
       <div className={styles.searchSection}>
         <input 
@@ -128,6 +135,7 @@ function CustomerList({
               </div>
             );
           })}
+        </div>
       </div>
 
       <div className={styles.voiceCommands}>

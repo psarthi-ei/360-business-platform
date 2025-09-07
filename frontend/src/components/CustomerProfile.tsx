@@ -1,12 +1,15 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
+import ProductHeader from './ProductHeader';
 import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
 import styles from '../styles/CustomerProfile.module.css';
 
 interface CustomerProfileProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   customerId: string;
   translations: {
     backToDashboard: string;
@@ -30,7 +33,10 @@ interface CustomerProfileProps {
 function CustomerProfile({
   currentLanguage,
   onLanguageChange,
+  currentTheme,
+  onThemeChange,
   onNavigateBack,
+  onNavigateHome,
   customerId,
   translations: t
 }: CustomerProfileProps) {
@@ -41,18 +47,20 @@ function CustomerProfile({
   if (!customer) {
     return (
       <div className={styles.leadManagementScreen}>
-        <LanguageSwitcher 
-          currentLanguage={currentLanguage} 
-          onLanguageChange={onLanguageChange} 
+        <ProductHeader
+          currentLanguage={currentLanguage}
+          onLanguageChange={onLanguageChange}
+          currentTheme={currentTheme}
+          onThemeChange={onThemeChange}
+          onNavigateBack={onNavigateBack}
+          onNavigateHome={onNavigateHome}
+          showThemeSelector={true}
         />
-        <div className={styles.screenHeader}>
-          <button className={styles.backButton} onClick={onNavigateBack}>
-            {t.backToDashboard}
-          </button>
-          <h1>👤 {t.customerProfile}</h1>
-        </div>
+        <div className={styles.pageContent}>
+          <h1 className={styles.centeredHeading}>👤 {t.customerProfile}</h1>
         <div className={styles.customerHeader}>
           <h2>Customer not found</h2>
+          </div>
         </div>
       </div>
     );
@@ -71,18 +79,20 @@ function CustomerProfile({
   };
   return (
     <div className={styles.leadManagementScreen}>
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={onLanguageChange} 
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateBack={onNavigateBack}
+        showThemeSelector={true}
       />
       
-      <div className={styles.screenHeader}>
-        <button className={styles.backButton} onClick={onNavigateBack}>
-          {t.backToDashboard}
-        </button>
-        <h1>👤 {t.customerProfile}</h1>
-        <button className={styles.addButton}>{t.createNewQuote}</button>
-      </div>
+      <div className={styles.pageContent}>
+        <div className={styles.screenHeader}>
+          <h1 className={styles.centeredHeading}>👤 {t.customerProfile}</h1>
+          <button className={styles.addButton}>{t.createNewQuote}</button>
+        </div>
 
       <div className={styles.customerHeader}>
         <div className={styles.customerMainInfo}>
@@ -274,6 +284,7 @@ function CustomerProfile({
           🎤 <strong>Try saying:</strong> 
           "Create new quote for {customer.name}" • "Show payment history" • "Call customer"
         </p>
+        </div>
       </div>
     </div>
   );

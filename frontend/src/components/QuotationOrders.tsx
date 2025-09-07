@@ -1,12 +1,15 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
+import ProductHeader from './ProductHeader';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
 import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   onShowSalesOrders: () => void;
   onShowCustomerProfile: (customerId: string) => void;
   onShowLeadManagement?: () => void;
@@ -18,7 +21,10 @@ interface QuotationOrdersProps {
 function QuotationOrders({
   currentLanguage,
   onLanguageChange,
+  currentTheme,
+  onThemeChange,
   onNavigateBack,
+  onNavigateHome,
   onShowSalesOrders,
   onShowCustomerProfile,
   onShowLeadManagement,
@@ -30,18 +36,21 @@ function QuotationOrders({
   
   return (
     <div className={styles.quotationOrdersScreen}>
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={onLanguageChange} 
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateBack={onNavigateBack}
+        onNavigateHome={onNavigateHome}
+        showThemeSelector={true}
       />
       
-      <div className={styles.screenHeader}>
-        <button className={styles.backButton} onClick={onNavigateBack}>
-          {t.backToDashboard}
-        </button>
-        <h1>📄 {t.quotationOrders}</h1>
-        <button className={styles.addButton}>{t.addNewQuote}</button>
-      </div>
+      <div className={styles.pageContent}>
+        <div className={styles.screenHeader}>
+          <h1 className={styles.centeredHeading}>📄 {t.quotationOrders}</h1>
+          <button className={styles.addButton}>{t.addNewQuote}</button>
+        </div>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
@@ -161,6 +170,7 @@ function QuotationOrders({
             </div>
           );
         })}
+        </div>
       </div>
 
       <div className={styles.voiceCommands}>

@@ -1,12 +1,15 @@
 import React from 'react';
-import LanguageSwitcher from './LanguageSwitcher';
+import ProductHeader from './ProductHeader';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency } from '../data/mockData';
 import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   onShowLeadManagement?: () => void;
   onShowQuotationOrders?: () => void;
   translations: any;
@@ -17,7 +20,10 @@ interface SalesOrdersProps {
 function SalesOrders({
   currentLanguage,
   onLanguageChange,
+  currentTheme,
+  onThemeChange,
   onNavigateBack,
+  onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
   translations,
@@ -28,17 +34,18 @@ function SalesOrders({
   
   return (
     <div className={styles.salesOrdersScreen}>
-      <LanguageSwitcher 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={onLanguageChange} 
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onNavigateBack={onNavigateBack}
+        onNavigateHome={onNavigateHome}
+        showThemeSelector={true}
       />
       
-      <div className={styles.screenHeader}>
-        <button className={styles.backButton} onClick={onNavigateBack}>
-          {t.backToDashboard}
-        </button>
-        <h1>💳 {t.salesOrder}</h1>
-      </div>
+      <div className={styles.pageContent}>
+        <h1 className={styles.centeredHeading}>💳 {t.salesOrder}</h1>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
@@ -145,6 +152,7 @@ function SalesOrders({
             </div>
           );
         })}
+        </div>
       </div>
 
       <div className={styles.voiceCommands}>
