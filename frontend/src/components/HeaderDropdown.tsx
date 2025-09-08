@@ -42,11 +42,8 @@ function HeaderDropdown({
   ];
 
   const themes = [
-    { id: 'minimalist', name: 'Minimalist', icon: '🤍' },
-    { id: 'modern', name: 'Modern', icon: '🖤' },
-    { id: 'vibrant', name: 'Vibrant', icon: '🌈' },
-    { id: 'nature', name: 'Nature', icon: '🌿' },
-    { id: 'sunset', name: 'Sunset', icon: '🌅' }
+    { id: 'light', name: 'Light', icon: '☀️' },
+    { id: 'dark', name: 'Dark', icon: '🌙' }
   ];
 
   const currentLang = languages.find(lang => lang.code === currentLanguage);
@@ -64,10 +61,10 @@ function HeaderDropdown({
     setIsOpen(false);
   };
 
-  const handleNavigation = (action: () => void) => {
-    action();
-    setIsOpen(false);
-  };
+  // const handleNavigation = (action: () => void) => {
+  //   action();
+  //   setIsOpen(false);
+  // };
 
   return (
     <div className={styles.headerDropdown} ref={dropdownRef}>

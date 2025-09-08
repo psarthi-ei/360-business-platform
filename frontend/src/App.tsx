@@ -17,7 +17,7 @@ type Language = 'en' | 'gu' | 'hi';
 function App() {
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
-  const [currentTheme, setCurrentTheme] = useState('minimalist');
+  const [currentTheme, setCurrentTheme] = useState('light');
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
@@ -39,13 +39,15 @@ function App() {
   }
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('selectedTheme') || 'minimalist';
+    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
     setCurrentTheme(savedTheme);
-    applyTheme(themes[savedTheme]);
+    const theme = themes[savedTheme] || themes['light'];
+    applyTheme(theme);
   }, []);
 
   useEffect(() => {
-    applyTheme(themes[currentTheme]);
+    const theme = themes[currentTheme] || themes['light'];
+    applyTheme(theme);
   }, [currentTheme]);
 
   function showHomePage() {

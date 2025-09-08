@@ -13,7 +13,7 @@ function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitche
     { code: 'hi', label: 'हिंदी', flag: '🇮🇳' }
   ];
 
-  const currentLanguageData = languageOptions.find(lang => lang.code === currentLanguage) || languageOptions[0];
+  // const currentLanguageData = languageOptions.find(lang => lang.code === currentLanguage) || languageOptions[0];
 
   return (
     <div className={styles.languageSwitcher}>

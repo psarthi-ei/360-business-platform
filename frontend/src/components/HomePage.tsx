@@ -55,7 +55,7 @@ function HomePage({
   // Circular business cycle - complete end-to-end flow (10 steps)
   const businessCycle = [
     { icon: '🎯', key: 'leadGen', title: 'Leads', color: '#ff4757', angle: 0 },
-    { icon: '🛍️', key: 'sales', title: 'Sales', color: '#ffa502', angle: 36 },
+    { icon: '📈', key: 'sales', title: 'Sales', color: '#ffa502', angle: 36 },
     { icon: '💳', key: 'advancePayment', title: 'Advance', color: '#3742fa', angle: 72 },
     { icon: '🛒', key: 'procurement', title: 'Procurement', color: '#2ed573', angle: 108 },
     { icon: '⚙️', key: 'manufacturing', title: 'Manufacturing', color: '#5352ed', angle: 144 },
