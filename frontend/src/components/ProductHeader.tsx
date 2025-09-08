@@ -34,8 +34,12 @@ function ProductHeader({
         </div>
       </div>
       
-      {/* Navigation Section - Quick Dashboard Access */}
+      {/* Navigation Section - Empty for center spacing */}
       <div className={styles.navigationSection}>
+      </div>
+      
+      {/* Controls Section - Dashboard, Home and Options Dropdown */}
+      <div className={styles.controlsSection}>
         {onNavigateBack && (
           <button 
             className={styles.backButton}
@@ -45,10 +49,6 @@ function ProductHeader({
             📊
           </button>
         )}
-      </div>
-      
-      {/* Controls Section - Home and Options Dropdown */}
-      <div className={styles.controlsSection}>
         {onNavigateHome && (
           <button 
             className={styles.homeButton}
