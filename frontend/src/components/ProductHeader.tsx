@@ -45,6 +45,10 @@ function ProductHeader({
             📊
           </button>
         )}
+      </div>
+      
+      {/* Controls Section - Home and Options Dropdown */}
+      <div className={styles.controlsSection}>
         {onNavigateHome && (
           <button 
             className={styles.homeButton}
@@ -54,10 +58,6 @@ function ProductHeader({
             🏠
           </button>
         )}
-      </div>
-      
-      {/* Controls Section - Options Dropdown */}
-      <div className={styles.controlsSection}>
         <HeaderDropdown
           currentLanguage={currentLanguage}
           onLanguageChange={onLanguageChange}

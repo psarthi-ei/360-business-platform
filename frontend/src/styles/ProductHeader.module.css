@@ -59,6 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 8px;
 }
 
 .backButton {
@@ -82,21 +83,26 @@
 }
 
 .homeButton {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.9));
-  color: var(--color-text, #333);
+  background: var(--gradient-card, rgba(102, 126, 234, 0.1));
+  color: var(--color-primary, #667eea);
   border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 8px;
+  font-size: 16px;
   font-weight: 500;
-  border-radius: 16px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
 }
 
 .homeButton:hover {
-  background: var(--gradient-card-hover, rgba(255, 255, 255, 1));
+  background: var(--gradient-card-hover, rgba(102, 126, 234, 0.2));
   border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -123,7 +129,10 @@
   }
   
   .backButton, .homeButton {
-    padding: 4px 8px;
-    font-size: 12px;
+    padding: 6px;
+    font-size: 14px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
   }
 }
