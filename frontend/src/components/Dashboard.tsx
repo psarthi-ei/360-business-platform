@@ -56,7 +56,7 @@ function Dashboard({
         showThemeSelector={true}
       />
       
-      <h1>🏭 {t.title}</h1>
+      <h1>{t.title}</h1>
       <h2>{t.company}</h2>
       
       <div className={styles.featuresGrid}>

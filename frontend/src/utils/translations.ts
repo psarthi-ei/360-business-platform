@@ -163,7 +163,7 @@ const translations: Record<string, TranslationStrings> = {
     
     // Dashboard
     title: "360° Business Platform",
-    company: "ElevateIdea Technologies",
+    company: "ElevateBusiness",
     founder: "Built by Partha Sarthi for Gujarat Textile Manufacturers",
     welcome: "Welcome to Your Business Hub",
     tagline: "360° Business Platform for Gujarat Textile Manufacturers",
@@ -388,7 +388,7 @@ const translations: Record<string, TranslationStrings> = {
     
     // Dashboard
     title: "360° બિઝનેસ પ્લેટફોર્મ",
-    company: "એલિવેટઆઈડિયા ટેકનોલોજીઝ",
+    company: "એલિવેટબિઝનેસ",
     founder: "ગુજરાત ટેક્સટાઇલ ઉત્પાદકો માટે પાર્થ સાર્થી દ્વારા બંધ બનાવેલ",
     welcome: "તમારા બિઝનેસ હબમાં આપનું સ્વાગત",
     tagline: "ગુજરાત ટેક્સટાઈલ ઉત્પાદકો માટે 360° બિઝનેસ પ્લેટફોર્મ",
@@ -613,7 +613,7 @@ const translations: Record<string, TranslationStrings> = {
     
     // Dashboard
     title: "360° बिजनेस प्लेटफॉर्म",
-    company: "एलेवेटआईडिया टेक्नोलॉजीज",
+    company: "एलेवेटबिजनेस",
     founder: "गुजरात टेक्सटाइल निर्माताओं के लिए पार्थ सार्थी द्वारा निर्मित",
     welcome: "आपके बिजनेस हब में आपका स्वागत",
     tagline: "गुजरात टेक्सटाइल निर्माताओं के लिए 360° बिजनेस प्लेटफॉर्म",
