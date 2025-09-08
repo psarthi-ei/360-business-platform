@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/HomePage.module.css';
-import LanguageSwitcher from './LanguageSwitcher';
+import HeaderDropdown from './HeaderDropdown';
 import logoImage from '../assets/images/logo.png';
 
 interface HomePageProps {
@@ -114,9 +114,10 @@ function HomePage({
                 📊
               </button>
             )}
-            <LanguageSwitcher 
+            <HeaderDropdown
               currentLanguage={currentLanguage}
               onLanguageChange={onLanguageChange}
+              showThemeSelector={false}
             />
           </div>
         </div>
