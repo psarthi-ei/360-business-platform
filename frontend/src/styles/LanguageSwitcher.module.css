@@ -1,54 +1,55 @@
 /* Language Switcher Component Styles */
 .languageSwitcher {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   display: flex;
-  gap: 10px;
+  align-items: center;
   z-index: 1000;
 }
 
-.langBtn {
-  padding: 8px 16px;
-  background: var(--gradient-card, rgba(255, 255, 255, 0.1));
-  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.3));
-  color: var(--color-text, white);
-  border-radius: var(--radius-large, 20px);
+.langSelect {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  color: #333;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.langBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+.langSelect:hover {
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.langBtn.active {
-  background: var(--gradient-button, #ffd700);
-  color: var(--color-secondary, #333);
-  border-color: var(--color-primary, #ffd700);
-  font-weight: bold;
+.langSelect:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.langSelect option {
+  padding: 8px 12px;
+  background: white;
+  color: #333;
+  font-size: 14px;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .languageSwitcher {
-    top: 10px;
-    right: 10px;
-    gap: 5px;
-  }
-  
-  .langBtn {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+  .langSelect {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 120px;
   }
 }
 
 @media (max-width: 480px) {
-  .languageSwitcher {
-    position: fixed;
-    top: 10px;
-    right: 10px;
+  .langSelect {
+    padding: 5px 8px;
+    font-size: 12px;
+    min-width: 100px;
   }
 }

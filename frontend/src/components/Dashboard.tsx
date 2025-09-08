@@ -66,7 +66,7 @@ function Dashboard({
         <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowQuotationOrders}>
           📑 {t.quotationOrders}
         </div>
-        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowSalesOrders}>💳 {t.salesOrder}</div>
+        <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowSalesOrders}>₹ {t.salesOrder}</div>
         <div className={`${styles.featureCard} ${styles.clickable}`} onClick={onShowCustomerList}>👥 {t.customers}</div>
         <div className={styles.featureCard}>📋 {t.workOrders}</div>
         <div className={styles.featureCard}>🛒 {t.smartProcurement}</div>

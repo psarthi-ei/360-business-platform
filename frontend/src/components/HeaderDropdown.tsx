@@ -83,19 +83,6 @@ function HeaderDropdown({
 
       {isOpen && (
         <div className={styles.dropdownMenu}>
-          {/* Navigation Section - Home only since Dashboard is in header */}
-          {onNavigateHome && (
-            <div className={styles.menuSection}>
-              <div className={styles.sectionTitle}>Navigation</div>
-              <button 
-                className={styles.menuItem}
-                onClick={() => handleNavigation(onNavigateHome)}
-              >
-                <span className={styles.itemIcon}>🏠</span>
-                <span className={styles.itemText}>Home</span>
-              </button>
-            </div>
-          )}
 
           {/* Language Section */}
           <div className={styles.menuSection}>

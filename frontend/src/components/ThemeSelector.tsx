@@ -24,7 +24,7 @@ function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {
         onClick={() => setIsOpen(!isOpen)}
         title="Change Theme"
       >
-        🎨 Theme
+        🎨
       </button>
 
       {isOpen && (

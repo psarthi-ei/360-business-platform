@@ -286,7 +286,88 @@ const translations: Record<string, TranslationStrings> = {
     searchPlaceholder: "Search customers by name, location, or specialization...",
     
     // Additional missing keys
-    showApproved: "Show Approved"
+    showApproved: "Show Approved",
+
+    // HomePage Translations
+    heroTitle: "Business Benefits",
+    heroSubtitle: "Complete business visibility for Indian MSME textile manufacturers - from lead generation to customer loyalty",
+    voiceControl: "Voice Control",
+    threeLanguages: "3 Languages",
+    mobileFirst: "Mobile First",
+    getStarted: "Get Started",
+    todayBusiness: "Today's Business",
+    newLeads: "New Leads",
+    todaySales: "Today's Sales",
+    ordersReady: "Orders Ready",
+    speakCommand: "Speak your command...",
+    
+    // Workflow Section
+    workflowTitle: "Complete Business Workflow",
+    workflowSubtitle: "From lead to payment - manage everything with voice commands",
+    leadCapture: "Lead Capture",
+    quotation: "Quotation",
+    payment: "Payment",
+    
+    // Impact Statistics
+    impactTitle: "Real Business Impact",
+    hoursDaily: "Hours Saved Daily",
+    hoursDesc: "Automate manual tasks",
+    voiceAccuracy: "Voice Accuracy",
+    accuracyDesc: "In Gujarati & Hindi",
+    efficiency: "Efficiency Gain",
+    efficiencyDesc: "Faster order processing",
+    satisfaction: "User Satisfaction",
+    satisfactionDesc: "Love the simplicity",
+    
+    // Benefits Section
+    benefitsTitle: "Built for Indian MSME Textile Manufacturers",
+    voiceBenefitTitle: "Voice-First Interface",
+    voiceBenefitDesc: "Complete tasks with simple voice commands in your language",
+    multilingualBenefitTitle: "True Multilingual",
+    multilingualBenefitDesc: "Seamlessly switch between Gujarati, Hindi, and English",
+    mobileBenefitTitle: "Mobile Optimized",
+    mobileBenefitDesc: "Access from anywhere - factory floor, office, or on the go",
+    speedBenefitTitle: "Lightning Fast",
+    speedBenefitDesc: "Complete orders 70% faster than traditional methods",
+    
+    // Features Section
+    featuresTitle: "Everything You Need to Run Your Business",
+    salesCategory: "Sales & Orders",
+    productionCategory: "Production",
+    inventoryCategory: "Inventory",
+    orderManagement: "Complete Order Management",
+    intelligentWorkOrders: "Intelligent Work Orders",
+    qualityControl: "Quality Control & Grading",
+    efficiencyMetrics: "Efficiency Metrics",
+    rawMaterials: "Raw Material Management",
+    workInProgress: "Work-in-Progress Tracking",
+    finishedGoods: "Finished Goods Inventory",
+    procurement: "Smart Procurement with GRN",
+    
+    // Testimonials
+    storiesTitle: "Trusted by Gujarat's Leading Manufacturers",
+    testimonial1Name: "Rajesh Patel",
+    testimonial1Business: "Surat Silk Mills",
+    testimonial1Quote: "This platform revolutionized our operations. We save 3 hours daily and our order accuracy improved by 95%",
+    testimonial2Name: "Mehul Shah",
+    testimonial2Business: "Ahmedabad Textiles",
+    testimonial2Quote: "Voice commands in Gujarati made it so easy for our team. Even our senior staff adopted it within days",
+    
+    // CTA Section
+    ctaTitle: "Ready to Transform Your Textile Business?",
+    ctaSubtitle: "Join leading manufacturers who are already saving 3+ hours daily",
+    startFreeTrial: "Start Free Trial",
+    watchDemo: "Watch Demo",
+    ctaNote: "No credit card required • Free 30-day trial • Full support in Gujarati",
+    
+    // Footer
+    footerTagline: "Scaling Business with Technology",
+    contactTitle: "Contact",
+    linkedinTitle: "Connect",
+    supportTitle: "Support",
+    servicesTitle: "Services",
+    languagesTitle: "Languages",
+    allRights: "All rights reserved."
   },
   
   gu: {
@@ -430,7 +511,88 @@ const translations: Record<string, TranslationStrings> = {
     searchPlaceholder: "નામ, સ્થળ અથવા વિશેષતા દ્વારા ગ્રાહકો શોધો...",
     
     // Additional missing keys
-    showApproved: "મંજૂર બતાવો"
+    showApproved: "મંજૂર બતાવો",
+
+    // HomePage Translations
+    heroTitle: "બિઝનેસ બેનિફિટ્સ",
+    heroSubtitle: "ગુજરાતના ટેક્સટાઈલ ઉત્પાદકો માટે બનાવેલ સંપૂર્ણ બિઝનેસ મેનેજમેન્ટ પ્લેટફોર્મ",
+    voiceControl: "વૉઇસ કંટ્રોલ",
+    threeLanguages: "3 ભાષાઓ",
+    mobileFirst: "મોબાઈલ ફર્સ્ટ",
+    getStarted: "શરૂઆત કરો",
+    todayBusiness: "આજનો ધંધો",
+    newLeads: "નવા લીડ્સ",
+    todaySales: "આજની સેલ્સ",
+    ordersReady: "ઓર્ડર્સ તૈયાર",
+    speakCommand: "તમારો આદેશ બોલો...",
+    
+    // Workflow Section
+    workflowTitle: "સંપૂર્ણ બિઝનેસ વર્કફ્લો",
+    workflowSubtitle: "લીડથી પેમેન્ટ સુધી - બધું વૉઇસ કમાન્ડ્સથી મેનેજ કરો",
+    leadCapture: "લીડ કેપ્ચર",
+    quotation: "કોટેશન",
+    payment: "પેમેન્ટ",
+    
+    // Impact Statistics
+    impactTitle: "વાસ્તવિક બિઝનેસ ઇમ્પેક્ટ",
+    hoursDaily: "દૈનિક કલાકો બચાવો",
+    hoursDesc: "મેન્યુઅલ કામ ઓટોમેટ કરો",
+    voiceAccuracy: "વૉઇસ એક્યુરસી",
+    accuracyDesc: "ગુજરાતી અને હિન્દીમાં",
+    efficiency: "કાર્યક્ષમતા વધારો",
+    efficiencyDesc: "ઝડપી ઓર્ડર પ્રોસેસિંગ",
+    satisfaction: "યુઝર સંતોષ",
+    satisfactionDesc: "સરળતા પસંદ કરે છે",
+    
+    // Benefits Section
+    benefitsTitle: "ભારતીય MSME ટેક્સટાઈલ ઉત્પાદકો માટે બનાવેલ",
+    voiceBenefitTitle: "વૉઇસ-ફર્સ્ટ ઇન્ટરફેસ",
+    voiceBenefitDesc: "તમારી ભાષામાં સરળ વૉઇસ કમાન્ડ્સથી કામ પૂર્ણ કરો",
+    multilingualBenefitTitle: "સાચું બહુભાષી",
+    multilingualBenefitDesc: "ગુજરાતી, હિન્દી અને અંગ્રેજી વચ્ચે સરળતાથી સ્વિચ કરો",
+    mobileBenefitTitle: "મોબાઈલ ઓપ્ટિમાઇઝ્ડ",
+    mobileBenefitDesc: "ક્યાંયથી ઍક્સેસ કરો - ફેક્ટરી ફ્લોર, ઓફિસ અથવા મુસાફરીમાં",
+    speedBenefitTitle: "વીજળીની ઝડપે",
+    speedBenefitDesc: "પરંપરાગત પદ્ધતિઓ કરતાં 70% ઝડપી ઓર્ડર પૂર્ણ કરો",
+    
+    // Features Section
+    featuresTitle: "તમારો ધંધો ચલાવવા માટે જરૂરી બધું",
+    salesCategory: "સેલ્સ અને ઓર્ડર્સ",
+    productionCategory: "પ્રોડક્શન",
+    inventoryCategory: "ઇન્વેન્ટરી",
+    orderManagement: "સંપૂર્ણ ઓર્ડર મેનેજમેન્ટ",
+    intelligentWorkOrders: "ઇન્ટેલિજન્ટ વર્ક ઓર્ડર્સ",
+    qualityControl: "ક્વોલિટી કંટ્રોલ અને ગ્રેડિંગ",
+    efficiencyMetrics: "કાર્યક્ષમતા મેટ્રિક્સ",
+    rawMaterials: "કાચા માલ મેનેજમેન્ટ",
+    workInProgress: "વર્ક-ઇન-પ્રોગ્રેસ ટ્રેકિંગ",
+    finishedGoods: "તૈયાર માલ ઇન્વેન્ટરી",
+    procurement: "GRN સાથે સ્માર્ટ પ્રોક્યુરમેન્ટ",
+    
+    // Testimonials
+    storiesTitle: "ગુજરાતના અગ્રણી ઉત્પાદકો દ્વારા વિશ્વસનીય",
+    testimonial1Name: "રાજેશ પટેલ",
+    testimonial1Business: "સુરત સિલ્ક મિલ્સ",
+    testimonial1Quote: "આ પ્લેટફોર્મે અમારી કામગીરીમાં ક્રાંતિ લાવી. અમે દરરોજ 3 કલાક બચાવીએ છીએ અને અમારી ઓર્ડર એક્યુરસી 95% સુધારી",
+    testimonial2Name: "મેહુલ શાહ",
+    testimonial2Business: "અમદાવાદ ટેક્સટાઈલ્સ",
+    testimonial2Quote: "ગુજરાતીમાં વૉઇસ કમાન્ડ્સે અમારી ટીમ માટે તેને ખૂબ સરળ બનાવ્યું. અમારા વરિષ્ઠ સ્ટાફે પણ દિવસોમાં તેને અપનાવ્યું",
+    
+    // CTA Section
+    ctaTitle: "તમારા ટેક્સટાઈલ બિઝનેસને ટ્રાન્સફોર્મ કરવા તૈયાર છો?",
+    ctaSubtitle: "અગ્રણી ઉત્પાદકો સાથે જોડાઓ જે પહેલેથી જ દરરોજ 3+ કલાક બચાવી રહ્યા છે",
+    startFreeTrial: "ફ્રી ટ્રાયલ શરૂ કરો",
+    watchDemo: "ડેમો જુઓ",
+    ctaNote: "કોઈ ક્રેડિટ કાર્ડની જરૂર નથી • 30-દિવસનું ફ્રી ટ્રાયલ • ગુજરાતીમાં સંપૂર્ણ સપોર્ટ",
+    
+    // Footer
+    footerTagline: "ટેકનોલોજી સાથે બિઝનેસ સ્કેલિંગ",
+    contactTitle: "સંપર્ક",
+    linkedinTitle: "કનેક્ટ",
+    supportTitle: "સપોર્ટ",
+    servicesTitle: "સેવાઓ",
+    languagesTitle: "ભાષાઓ",
+    allRights: "બધા અધિકારો સુરક્ષિત."
   },
   
   hi: {
@@ -574,7 +736,88 @@ const translations: Record<string, TranslationStrings> = {
     searchPlaceholder: "नाम, स्थान या विशेषता के अनुसार ग्राहकों को खोजें...",
     
     // Additional missing keys
-    showApproved: "अप्रूव्ड दिखाएं"
+    showApproved: "अप्रूव्ड दिखाएं",
+
+    // HomePage Translations
+    heroTitle: "बिजनेस बेनिफिट्स",
+    heroSubtitle: "गुजरात के टेक्सटाइल निर्माताओं के लिए बनाया गया पूर्ण बिजनेस मैनेजमेंट प्लेटफॉर्म",
+    voiceControl: "वॉयस कंट्रोल",
+    threeLanguages: "3 भाषाएं",
+    mobileFirst: "मोबाइल फर्स्ट",
+    getStarted: "शुरू करें",
+    todayBusiness: "आज का धंधा",
+    newLeads: "नए लीड्स",
+    todaySales: "आज की सेल्स",
+    ordersReady: "ऑर्डर तैयार",
+    speakCommand: "अपनी आज्ञा बोलें...",
+    
+    // Workflow Section
+    workflowTitle: "पूर्ण बिजनेस वर्कफ्लो",
+    workflowSubtitle: "लीड से पेमेंट तक - सब कुछ वॉयस कमांड से मैनेज करें",
+    leadCapture: "लीड कैप्चर",
+    quotation: "कोटेशन",
+    payment: "पेमेंट",
+    
+    // Impact Statistics
+    impactTitle: "वास्तविक बिजनेस इंपैक्ट",
+    hoursDaily: "दैनिक घंटे बचाएं",
+    hoursDesc: "मैन्युअल कार्य ऑटोमेट करें",
+    voiceAccuracy: "वॉयस एक्यूरेसी",
+    accuracyDesc: "गुजराती और हिंदी में",
+    efficiency: "दक्षता वृद्धि",
+    efficiencyDesc: "तेज़ ऑर्डर प्रोसेसिंग",
+    satisfaction: "उपयोगकर्ता संतुष्टि",
+    satisfactionDesc: "सरलता पसंद करते हैं",
+    
+    // Benefits Section
+    benefitsTitle: "भारतीय MSME टेक्सटाइल निर्माताओं के लिए बनाया गया",
+    voiceBenefitTitle: "वॉयस-फर्स्ट इंटरफेस",
+    voiceBenefitDesc: "अपनी भाषा में सरल वॉयस कमांड के साथ कार्य पूर्ण करें",
+    multilingualBenefitTitle: "सच्चा बहुभाषी",
+    multilingualBenefitDesc: "गुजराती, हिंदी और अंग्रेजी के बीच आसानी से स्विच करें",
+    mobileBenefitTitle: "मोबाइल ऑप्टिमाइज़्ड",
+    mobileBenefitDesc: "कहीं से भी एक्सेस करें - फैक्ट्री फ्लोर, ऑफिस या यात्रा में",
+    speedBenefitTitle: "बिजली की गति",
+    speedBenefitDesc: "पारंपरिक तरीकों से 70% तेज़ ऑर्डर पूर्ण करें",
+    
+    // Features Section
+    featuresTitle: "आपका धंधा चलाने के लिए सब कुछ",
+    salesCategory: "सेल्स और ऑर्डर्स",
+    productionCategory: "प्रोडक्शन",
+    inventoryCategory: "इन्वेंटरी",
+    orderManagement: "पूर्ण ऑर्डर मैनेजमेंट",
+    intelligentWorkOrders: "इंटेलिजेंट वर्क ऑर्डर्स",
+    qualityControl: "क्वालिटी कंट्रोल और ग्रेडिंग",
+    efficiencyMetrics: "दक्षता मेट्रिक्स",
+    rawMaterials: "कच्चा माल मैनेजमेंट",
+    workInProgress: "वर्क-इन-प्रोग्रेस ट्रैकिंग",
+    finishedGoods: "तैयार माल इन्वेंटरी",
+    procurement: "GRN के साथ स्मार्ट प्रोक्योरमेंट",
+    
+    // Testimonials
+    storiesTitle: "गुजरात के अग्रणी निर्माताओं द्वारा विश्वसनीय",
+    testimonial1Name: "राजेश पटेल",
+    testimonial1Business: "सूरत सिल्क मिल्स",
+    testimonial1Quote: "इस प्लेटफॉर्म ने हमारे संचालन में क्रांति ला दी। हम रोज 3 घंटे बचाते हैं और हमारी ऑर्डर एक्यूरेसी 95% बेहतर हुई",
+    testimonial2Name: "मेहुल शाह",
+    testimonial2Business: "अहमदाबाद टेक्सटाइल्स",
+    testimonial2Quote: "गुजराती में वॉयस कमांड ने हमारी टीम के लिए इसे बहुत आसान बना दिया। हमारे वरिष्ठ कर्मचारियों ने भी दिनों में इसे अपनाया",
+    
+    // CTA Section
+    ctaTitle: "अपने टेक्सटाइल बिजनेस को बदलने के लिए तैयार हैं?",
+    ctaSubtitle: "अग्रणी निर्माताओं से जुड़ें जो पहले से ही रोज 3+ घंटे बचा रहे हैं",
+    startFreeTrial: "फ्री ट्रायल शुरू करें",
+    watchDemo: "डेमो देखें",
+    ctaNote: "कोई क्रेडिट कार्ड नहीं चाहिए • 30-दिन का फ्री ट्रायल • गुजराती में पूर्ण सहायता",
+    
+    // Footer
+    footerTagline: "प्रौद्योगिकी के साथ बिजनेस स्केलिंग",
+    contactTitle: "संपर्क",
+    linkedinTitle: "कनेक्ट",
+    supportTitle: "सहायता",
+    servicesTitle: "सेवाएं",
+    languagesTitle: "भाषाएं",
+    allRights: "सभी अधिकार सुरक्षित।"
   }
 };
 

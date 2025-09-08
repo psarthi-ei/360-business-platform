@@ -45,6 +45,15 @@ function ProductHeader({
             📊 {backButtonText}
           </button>
         )}
+        {onNavigateHome && (
+          <button 
+            className={styles.homeButton}
+            onClick={onNavigateHome}
+            title="Go to Home"
+          >
+            🏠 Home
+          </button>
+        )}
       </div>
       
       {/* Controls Section - Options Dropdown */}

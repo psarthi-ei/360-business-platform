@@ -111,7 +111,7 @@ function CustomerProfile({
 
       <div className={styles.customerStats}>
         <div className={styles.statCard}>
-          <h3>💰 {t.totalBusiness}</h3>
+          <h3>₹ {t.totalBusiness}</h3>
           <p className={styles.statValue}>{formatCurrency(customer.totalBusiness)}</p>
           <p className={styles.statDetail}>({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
         </div>
@@ -207,7 +207,7 @@ function CustomerProfile({
                 <div className="order-meta">
                   <span className="order-date">{order.orderDate}</span>
                   <span className={`order-status ${order.status}`}>
-                    {order.status === 'pending' ? '⚠️ Pending' : order.status === 'production' ? '💰 In Progress' : '✅ Completed'}
+                    {order.status === 'pending' ? '⚠️ Pending' : order.status === 'production' ? '₹ In Progress' : '✅ Completed'}
                   </span>
                 </div>
               </div>

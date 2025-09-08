@@ -7,26 +7,27 @@ interface LanguageSwitcherProps {
 }
 
 function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitcherProps) {
+  const languageOptions = [
+    { code: 'en', label: 'English', flag: '🇺🇸' },
+    { code: 'gu', label: 'ગુજરાતી', flag: '🇮🇳' },
+    { code: 'hi', label: 'हिंदी', flag: '🇮🇳' }
+  ];
+
+  const currentLanguageData = languageOptions.find(lang => lang.code === currentLanguage) || languageOptions[0];
+
   return (
     <div className={styles.languageSwitcher}>
-      <button 
-        className={`${styles.langBtn} ${currentLanguage === 'en' ? styles.active : ''}`}
-        onClick={() => onLanguageChange('en')}
+      <select 
+        className={styles.langSelect}
+        value={currentLanguage}
+        onChange={(e) => onLanguageChange(e.target.value)}
       >
-        English
-      </button>
-      <button 
-        className={`${styles.langBtn} ${currentLanguage === 'gu' ? styles.active : ''}`}
-        onClick={() => onLanguageChange('gu')}
-      >
-        ગુજરાતી
-      </button>
-      <button 
-        className={`${styles.langBtn} ${currentLanguage === 'hi' ? styles.active : ''}`}
-        onClick={() => onLanguageChange('hi')}
-      >
-        हिंदी
-      </button>
+        {languageOptions.map((lang) => (
+          <option key={lang.code} value={lang.code}>
+            {lang.flag} {lang.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
