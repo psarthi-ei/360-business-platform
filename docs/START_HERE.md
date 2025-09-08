@@ -1,7 +1,12 @@
-# Documentation Management Guide - ElevateIdea 360° Platform
+# START HERE - Master Project Navigator
+## ElevateIdea 360° Platform Documentation System
 
 ## Overview
-This guide explains the purpose of each documentation file and when to update them. Essential reference for maintaining organized project documentation.
+**🚀 READ THIS FIRST in every new session!** 
+
+This is the master navigation document that guides you to all project information. Whether you're Claude starting a new session, a team member joining the project, or anyone needing to understand the 360° Business Platform, always begin here.
+
+**Purpose**: Central hub that explains where every piece of information lives and how to navigate the complete project documentation system.
 
 ---
 
@@ -101,22 +106,24 @@ This guide explains the purpose of each documentation file and when to update th
 
 ---
 
-### **6. LEARNING_CONTEXT.md** - Teaching & Learning Approach
-**Purpose**: Maintain consistency in learning approach and teaching methods
+### **6. COLLABORATION_GUIDE.md** - Working Style & Learning Approach
+**Purpose**: Document effective collaboration methods and maintain consistency in learning approach
 
 **Contains**:
 - Learning preferences (Java background, verbose code style)
+- Working style protocols (explain-first, TodoWrite usage, incremental approach)
 - Effective teaching patterns (Java analogies, explicit examples)
+- Communication strategies that work (business context first, concrete examples)
 - Code style guidelines (avoid JavaScript shorthand initially)
 - Business context preferences (textile manufacturing examples)
-- Communication and explanation strategies that work
 
 **Update Schedule**:
-- ✅ **Learning-driven** - When discovering new effective teaching methods
+- ✅ **Collaboration-driven** - When discovering new effective working methods
 - ✅ When learning preferences or comfort level changes
 - ✅ When establishing new code patterns or standards
 - ✅ After major concept breakthroughs or challenges
-- ⚠️ **As needed** - When teaching approach requires adjustment
+- ✅ When working style protocols need adjustment
+- ⚠️ **As needed** - When collaboration approach requires refinement
 
 ---
 
@@ -226,6 +233,124 @@ This guide explains the purpose of each documentation file and when to update th
 
 ---
 
+---
+
+## **CLEAR SCOPE DEFINITION - WHERE TO PUT WHAT**
+
+### **Information Category Mapping**
+
+| **What You Want to Document** | **Goes In** | **Why** |
+|---|---|---|
+| **Daily Development Progress (features built, challenges, motivation)** | PROGRESS_LOG.md | Personal daily tracking |
+| **Visual Design Patterns (Colors, Layouts)** | UI_UX_DESIGN_DECISIONS.md | Design standards |
+| **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
+| **Business Process (Lead→Quote→Order)** | BUSINESS_FLOW_DOCUMENTATION.md | Industry workflows |
+| **Code Commands & Setup Steps** | DEVELOPMENT_GUIDE.md | How-to instructions |
+| **Feature Requirements (Voice Commands)** | BUSINESS_REQUIREMENTS.md | What to build |
+| **Working Style & Learning Approach** | COLLABORATION_GUIDE.md | Our collaboration methods |
+| **Project Status (MVP ready, beta launch)** | README.md | Public overview |
+
+### **Common Confusion - Examples**
+
+❌ **WRONG**: Adding HomePage component details to BUSINESS_REQUIREMENTS.md  
+✅ **RIGHT**: HomePage goes in PROGRESS_LOG.md (what was built) + UI_UX_DESIGN_DECISIONS.md (design patterns)
+
+❌ **WRONG**: Authentication code examples in UI_UX_DESIGN_DECISIONS.md  
+✅ **RIGHT**: Auth strategy in TECHNICAL_STRATEGY.md + setup steps in DEVELOPMENT_GUIDE.md
+
+❌ **WRONG**: Textile business workflow in TECHNICAL_STRATEGY.md  
+✅ **RIGHT**: Business processes belong in BUSINESS_FLOW_DOCUMENTATION.md
+
+### **Quick Decision Guide**
+
+**Ask yourself**: 
+1. **Is it about business processes?** → BUSINESS_FLOW_DOCUMENTATION.md
+2. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
+3. **Is it visual/UI related?** → UI_UX_DESIGN_DECISIONS.md
+4. **Is it daily progress?** → PROGRESS_LOG.md
+5. **Is it setup instructions?** → DEVELOPMENT_GUIDE.md
+6. **Is it what features to build?** → BUSINESS_REQUIREMENTS.md
+7. **Is it working style/learning approach?** → COLLABORATION_GUIDE.md
+8. **Is it code patterns/standards?** → CODING_STYLE_GUIDE.md
+9. **Is it project overview?** → README.md
+
+### **Keep It Simple Rule**
+- **Each document = Single clear purpose**
+- **No duplicate information across documents**
+- **When in doubt, ask: "What is this information FOR?"**
+
+---
+
+## **DOCUMENT DISTINCTIONS - Detailed Clarification**
+
+### **Technical Documents (WHY vs HOW vs WHAT)**
+
+#### **TECHNICAL_STRATEGY.md = WHY** 
+**Purpose**: Architecture decisions and their rationale
+**Contains**:
+- Why React PWA over native app
+- Why Node.js over Python
+- Why single domain over subdomains
+- Why localStorage auth for MVP vs full backend
+- Deployment strategy decisions
+
+**Example**: "We chose React PWA because it allows faster MVP development for a solo founder"
+
+#### **DEVELOPMENT_GUIDE.md = HOW**
+**Purpose**: Step-by-step setup and build procedures  
+**Contains**:
+- How to install dependencies (`npm install`)
+- How to start development server (`npm start`)
+- How to create new components
+- How to deploy to production
+- Troubleshooting steps
+
+**Example**: "Run `npx create-react-app frontend --template typescript` to set up the project"
+
+#### **CODING_STYLE_GUIDE.md = WHAT**
+**Purpose**: Code patterns and standards to follow
+**Contains**:
+- What naming conventions to use (`camelCase` vs `PascalCase`)
+- What function syntax to prefer (regular functions vs arrow functions)
+- What code organization patterns to follow
+- What commenting style to use
+
+**Example**: "Use `function calculateTotal()` instead of `const calculateTotal = () =>`"
+
+### **Business Documents (WHAT vs HOW vs WHY)**
+
+#### **BUSINESS_REQUIREMENTS.md = WHAT**
+**Purpose**: Feature specifications and scope
+**Contains**:
+- What features to build (12 MVP modules)
+- What voice commands to support
+- What languages to support (Gujarati, Hindi, English)
+- What success metrics to track
+
+**Example**: "Voice command: 'આજના લીડ્સ બતાવો' should show today's leads"
+
+#### **BUSINESS_FLOW_DOCUMENTATION.md = HOW** 
+**Purpose**: How textile business processes actually work
+**Contains**:
+- How lead-to-customer conversion happens
+- How textile manufacturing workflow operates
+- How payment cycles work in the industry
+- How quality control is managed
+
+**Example**: "After quote approval, 30% advance payment is collected before starting production"
+
+#### **UI_UX_DESIGN_DECISIONS.md = WHY**
+**Purpose**: Design decisions and their rationale
+**Contains**:
+- Why mobile-first design for textile manufacturers
+- Why certain color schemes for business context
+- Why specific navigation patterns
+- Why certain information architecture
+
+**Example**: "We use card-based layout because textile manufacturers need to quickly scan multiple leads"
+
+---
+
 ## Documentation Quality Guidelines
 
 ### **Keep It Simple**
@@ -267,5 +392,6 @@ This guide explains the purpose of each documentation file and when to update th
 ---
 
 **Created**: Sep 3, 2025  
-**Purpose**: Establish clear documentation management for ElevateIdea development  
-**Next Review**: After first month of development to assess effectiveness
+**Updated**: Sep 7, 2025 (renamed to START_HERE for clarity)  
+**Purpose**: Master navigation hub - always read this first to understand project structure  
+**Next Review**: After authentication system implementation

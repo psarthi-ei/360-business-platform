@@ -1,4 +1,4 @@
-# ElevateIdea Development - Learning Context & Teaching Approach
+# ElevateIdea Development - Collaboration Guide
 
 ## Project Overview
 **Company**: ElevateIdea Technologies Private Limited  
@@ -201,5 +201,93 @@ const OrderCard = ({ orderId, customerName, status }: OrderProps) => (
 
 ---
 
-**Last Updated**: Sep 3, 2025  
-**Next Review**: After completing first functional screen
+---
+
+## **WORKING STYLE PROTOCOLS (September 7, 2025)**
+
+### **Established Collaboration Approach**
+Based on our successful HomePage implementation, these are our proven working methods:
+
+#### **1. Explain-First Protocol**
+- **Always explain what and why** before making any changes
+- **Get confirmation** before proceeding with significant modifications  
+- **Break down complex tasks** into understandable steps
+- **Ask clarifying questions** when requirements are unclear
+
+#### **2. TodoWrite Tool Usage**
+- **Track all tasks** transparently using TodoWrite tool
+- **Update progress** regularly as tasks are completed
+- **Show current status** so you can see what's being worked on
+- **Plan ahead** by adding upcoming tasks to the list
+
+#### **3. Documentation Discipline**
+- **Document decisions** in appropriate files (not create unnecessary new ones)
+- **Follow established document purposes** (no duplication across files)
+- **Update progress daily** in PROGRESS_LOG.md
+- **Keep documentation organized** and purposeful
+
+#### **4. Incremental Approach**
+- **Small, focused changes** rather than large modifications
+- **Test after each significant change** to ensure everything works
+- **Build on proven patterns** rather than starting from scratch
+- **Iterate based on feedback** rather than assume requirements
+
+### **Communication Patterns That Work**
+- **Business context first** - always frame technical decisions in textile manufacturing terms
+- **Concrete examples** - show actual code/file changes rather than abstract descriptions  
+- **Visual progress** - use TodoWrite to show what's being accomplished
+- **Reality checks** - ask questions when something seems unclear or complex
+
+### **5. New Session Context-Building Protocol**
+**Standard procedure when starting any new session:**
+
+#### **Step 1: Always Start with START_HERE.md**
+- **Read START_HERE.md first** - this is the master navigation document
+- **Use the mapping table** to understand what information goes where
+- **Follow the Quick Decision Guide** to navigate to relevant documents
+
+#### **Step 2: Navigate Based on Task Type**
+**For any "build context" request, read these documents in order:**
+
+1. **START_HERE.md** (master navigator)
+2. **README.md** (project overview)
+3. **BUSINESS_REQUIREMENTS.md** (what we're building)
+4. **TECHNICAL_STRATEGY.md** (how we're building it)
+5. **PROGRESS_LOG.md** (current status and recent work)
+6. **COLLABORATION_GUIDE.md** (this file - working methods)
+
+**Then read task-specific documents:**
+- For UI work: **UI_UX_DESIGN_DECISIONS.md**
+- For business processes: **BUSINESS_FLOW_DOCUMENTATION.md**
+- For setup/coding: **DEVELOPMENT_GUIDE.md** + **CODING_STYLE_GUIDE.md**
+
+#### **Step 3: Confirm Understanding**
+- **Summarize key context** after reading documents
+- **Ask clarifying questions** if anything seems unclear
+- **Use TodoWrite** to plan the work based on context
+
+#### **Why This Protocol Works**
+- **Comprehensive**: Ensures no important information is missed
+- **Systematic**: Same process every time = consistent results
+- **Efficient**: Master document (START_HERE) prevents random document reading
+- **Scalable**: As project grows, documents stay organized and navigable
+
+**Example Context-Building Response:**
+```
+"I've read START_HERE.md and navigated through:
+- README.md (360° platform for textile manufacturers)
+- BUSINESS_REQUIREMENTS.md (12 MVP modules)  
+- TECHNICAL_STRATEGY.md (React PWA, Node.js backend)
+- PROGRESS_LOG.md (HomePage completed Sep 7, 2025)
+- COLLABORATION_GUIDE.md (explain-first approach)
+
+Current status: HomePage implemented, next step is authentication system.
+Ready to proceed with [specific task]."
+```
+
+---
+
+
+**Last Updated**: Sep 7, 2025  
+**Next Review**: After authentication system implementation  
+**Purpose**: Maintain effective collaboration patterns between Claude and Partha

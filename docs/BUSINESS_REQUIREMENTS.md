@@ -9,9 +9,19 @@
 To digitally transform India's MSME manufacturing sector by providing an integrated, voice-enabled, multilingual business platform that covers the complete business lifecycle from lead generation to customer loyalty.
 
 ### **Target Market**
-- **Primary**: MSME Textile Manufacturers in India
-- **Secondary**: Apparel & Garment Manufacturers  
-- **Future**: Food Processing, Auto Components, Other Manufacturing
+- **Primary**: Indian MSME Textile Manufacturers 
+- **First Launch Market**: Gujarat MSME textile manufacturers (Surat, Ahmedabad, Vadodara)
+- **Expansion**: Pan-India MSME textile manufacturing
+- **Secondary**: MSME Apparel & Garment Manufacturers  
+- **Future**: MSME Food Processing, Auto Components, Other Manufacturing
+
+### **Strategic Market Focus**
+- **Business Size**: Micro, Small & Medium Enterprises (MSME) - not large corporations
+- **Industry-Specific**: Built specifically for MSME textile manufacturing processes
+- **Geographic Strategy**: Start Gujarat → Scale India-wide
+- **Messaging**: India-wide MSME appeal with Gujarat-focused customer acquisition
+- **Language Strategy**: Gujarati primary, Hindi secondary, English technical terms
+- **Affordability**: Cost-effective solutions suitable for MSME budgets
 
 ### **Problem Statement**
 - 45+ million MSMEs in India operate with fragmented, manual processes

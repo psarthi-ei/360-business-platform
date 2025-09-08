@@ -11,7 +11,11 @@ Complete end-to-end business digitization platform with WhatsApp-level simplicit
 - **Languages**: Gujarati (primary), Hindi, English
 - **Goal**: MVP in 30-40 days
 
+## 📋 For Claude Code Users
+When asked to "build context", always read [`docs/START_HERE.md`](docs/START_HERE.md) first - it's the master navigation hub that explains all project documentation.
+
 ## Documentation
+- [`docs/START_HERE.md`](docs/START_HERE.md) - **READ THIS FIRST** - Master project navigation
 - [`docs/BUSINESS_REQUIREMENTS.md`](docs/BUSINESS_REQUIREMENTS.md) - Complete business scope and MVP features
 - [`docs/TECHNICAL_STRATEGY.md`](docs/TECHNICAL_STRATEGY.md) - Technology stack and architecture
 

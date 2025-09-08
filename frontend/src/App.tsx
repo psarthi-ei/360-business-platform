@@ -229,15 +229,14 @@ function App() {
   return (
     <div className="App">
       <div className="App-content">
-        {currentScreen !== 'homepage' && (
-          <ProductHeader
-            currentLanguage={currentLanguage}
-            onLanguageChange={switchLanguage}
-            currentTheme={currentTheme}
-            onThemeChange={switchTheme}
-            onNavigateHome={showHomePage}
-          />
-        )}
+        <ProductHeader
+          currentLanguage={currentLanguage}
+          onLanguageChange={switchLanguage}
+          currentTheme={currentTheme}
+          onThemeChange={switchTheme}
+          onNavigateHome={currentScreen !== 'homepage' ? showHomePage : undefined}
+          onNavigateBack={currentScreen === 'homepage' ? showDashboard : undefined}
+        />
         {currentScreen === 'homepage' && renderHomePage()}
         {currentScreen === 'dashboard' && renderDashboard()}
         {currentScreen === 'leads' && renderLeadManagement()}

@@ -6,7 +6,7 @@
 ## **EXECUTIVE SUMMARY**
 
 ### **Our Technical Philosophy**
-Build a **mobile-first, voice-enabled, multilingual** manufacturing platform that starts simple (PWA) but scales to enterprise-grade multi-platform architecture, supporting multiple manufacturing industries with 70% shared codebase and 30% industry-specific modules.
+Build a **mobile-first, voice-enabled, multilingual** textile manufacturing platform specifically for Indian textile manufacturers, starting with Gujarat as our first target market. Platform scales from simple PWA to enterprise-grade multi-platform architecture, with potential to expand to other manufacturing industries using 70% shared codebase and 30% industry-specific modules.
 
 ### **Key Technical Decisions**
 - **MVP**: React PWA for fastest market validation
@@ -120,6 +120,43 @@ Build a **mobile-first, voice-enabled, multilingual** manufacturing platform tha
 
 ---
 
-**Document Version**: 2.0 (Simplified)  
-**Last Updated**: December 2024  
+## **HOMEPAGE TO APPLICATION FLOW (September 7, 2025)**
+
+### **Current Implementation Status**
+- ✅ **HomePage**: Professional marketing landing page with product showcase
+- ✅ **Dashboard**: Feature overview and navigation hub
+- ✅ **Core Features**: Lead Management, Quotations, Sales Orders, Customer Management
+- 🔄 **Next Step**: Authentication system (Login/Signup)
+
+### **Product Architecture Decision**
+**Decision**: Unified experience on single domain (not separate marketing + app subdomains)
+**Why**: Simpler for MVP, easier to manage for solo founder, seamless user experience
+
+**URL Structure**:
+```
+app.elevateidea.com (or elevateidea.com)
+├── / (HomePage - Marketing)
+├── /login (Authentication)
+├── /signup (Registration)  
+└── /app/* (Protected features after login)
+```
+
+### **User Journey Flow**
+```
+1. User visits homepage → Sees product value
+2. Clicks "Get Started" → Goes to login/signup
+3. Authenticates → Redirected to dashboard
+4. Access all features (leads, quotes, orders, etc.)
+```
+
+### **Authentication Strategy for MVP**
+**Phase 1 (Simple)**: localStorage + demo users
+**Phase 2 (Production)**: Node.js + JWT + database
+
+This allows rapid MVP deployment while being scalable for production.
+
+---
+
+**Document Version**: 3.0 (HomePage Complete)  
+**Last Updated**: September 7, 2025  
 **Philosophy**: Ship fast, iterate based on customer feedback, keep it simple

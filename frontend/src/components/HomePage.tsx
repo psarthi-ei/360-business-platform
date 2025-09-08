@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/HomePage.module.css';
-import HeaderDropdown from './HeaderDropdown';
-import logoImage from '../assets/images/logo.png';
 
 interface HomePageProps {
   currentLanguage: string;
@@ -97,32 +95,6 @@ function HomePage({
 
   return (
     <div className={styles.homePage}>
-      {/* Header with Language Switcher */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.logo}>
-            <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
-            <span className={styles.logoText}>ElevateIdea</span>
-          </div>
-          <div className={styles.headerControls}>
-            {onNavigateDashboard && (
-              <button 
-                className={styles.dashboardButton}
-                onClick={onNavigateDashboard}
-                title="Go to Dashboard"
-              >
-                📊
-              </button>
-            )}
-            <HeaderDropdown
-              currentLanguage={currentLanguage}
-              onLanguageChange={onLanguageChange}
-              showThemeSelector={false}
-            />
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section - 360° Business View */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
