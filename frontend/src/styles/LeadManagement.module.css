@@ -94,7 +94,7 @@
 .addButton:hover {
   background: var(--gradient-button, #ffed4e);
   border-color: #ffed4e;
-  transform: translateY(-2px);
+  transform: translateY(calc(-50% - 2px));
 }
 
 /* Filter Styles for Lead Management */
