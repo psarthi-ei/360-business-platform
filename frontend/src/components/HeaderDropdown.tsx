@@ -73,8 +73,7 @@ function HeaderDropdown({
         onClick={() => setIsOpen(!isOpen)}
         title="Options Menu"
       >
-        <span className={styles.triggerIcon}>⚙️</span>
-        <span className={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</span>
+        <span className={styles.triggerIcon}>☰</span>
       </button>
 
       {isOpen && (
