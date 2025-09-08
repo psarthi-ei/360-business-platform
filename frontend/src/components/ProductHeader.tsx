@@ -42,7 +42,7 @@ function ProductHeader({
             onClick={onNavigateBack}
             title="Back to Dashboard"
           >
-            📊 {backButtonText}
+            📊
           </button>
         )}
         {onNavigateHome && (
@@ -51,7 +51,7 @@ function ProductHeader({
             onClick={onNavigateHome}
             title="Go to Home"
           >
-            🏠 Home
+            🏠
           </button>
         )}
       </div>

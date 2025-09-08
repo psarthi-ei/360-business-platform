@@ -74,7 +74,6 @@ function HeaderDropdown({
         title="Options Menu"
       >
         <span className={styles.triggerIcon}>⚙️</span>
-        <span className={styles.triggerText}>Menu</span>
         <span className={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</span>
       </button>
 
@@ -100,6 +99,23 @@ function HeaderDropdown({
               </button>
             ))}
           </div>
+
+          {/* Navigation Section */}
+          {onNavigateHome && (
+            <div className={styles.menuSection}>
+              <div className={styles.sectionTitle}>Navigation</div>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onNavigateHome();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🏠</span>
+                <span className={styles.itemText}>Home</span>
+              </button>
+            </div>
+          )}
 
           {/* Theme Section */}
           {currentTheme && onThemeChange && (

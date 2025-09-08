@@ -111,7 +111,7 @@ function HomePage({
                 onClick={onNavigateDashboard}
                 title="Go to Dashboard"
               >
-                📊 Dashboard
+                📊
               </button>
             )}
             <LanguageSwitcher 

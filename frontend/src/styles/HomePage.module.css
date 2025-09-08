@@ -1058,6 +1058,18 @@
     padding: 20px 16px;
   }
 
+  .dashboardButton {
+    padding: 6px 8px !important;
+    font-size: 18px !important;
+    border-radius: 50% !important;
+    min-width: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
   .impactIcon {
     width: 56px;
     height: 56px;
@@ -1191,6 +1203,18 @@
   .heroSubtitle {
     font-size: 16px;
     margin-bottom: 24px;
+  }
+
+  .dashboardButton {
+    padding: 4px 6px !important;
+    font-size: 16px !important;
+    border-radius: 50% !important;
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .impactChain {
