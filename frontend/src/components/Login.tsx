@@ -17,7 +17,6 @@ function Login(props: LoginProps) {
   // Extract props for Java-style clarity
   const onSwitchToSignup = props.onSwitchToSignup;
   const onLoginSuccess = props.onLoginSuccess;
-  const onGuestMode = props.onGuestMode;
   const onDemoMode = props.onDemoMode;
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;

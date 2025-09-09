@@ -22,7 +22,6 @@ const languages: Language[] = [
 function CompactLanguageSelector({ currentLanguage, onLanguageChange }: CompactLanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
 
   const handleLanguageSelect = (languageCode: string) => {
     onLanguageChange(languageCode);
