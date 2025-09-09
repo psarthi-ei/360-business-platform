@@ -1,144 +1,490 @@
-/* Dashboard Component Styles */
+/* Professional Dashboard Component Styles */
 .dashboard {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-top: 80px; /* Account for fixed header */
+}
+
+.dashboardContainer {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 20px;
-  position: relative;
 }
 
-/* Header Controls - Language Switcher + Home Button */
-.headerControls {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  z-index: 1000;
+/* Header Section */
+.dashboardHeader {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.homeButton {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.2));
-  color: var(--color-text, #333);
-  border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
-  padding: 10px 20px;
-  font-size: 14px;
+.welcomeSection {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.companyName {
+  font-size: 1.5rem;
+  color: #667eea;
   font-weight: 500;
-  border-radius: 20px;
+  margin: 0 0 10px 0;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Business Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.metricCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+.metricCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.metricIcon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.metricValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.metricLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+  opacity: 0.9;
+}
+
+.metricSubtext {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Voice Command Section */
+.voiceSection {
+  margin-bottom: 30px;
+}
+
+.voiceCard {
+  background: linear-gradient(135deg, #ff7b7b 0%, #667eea 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.voiceIcon {
+  font-size: 3rem;
+  opacity: 0.9;
+}
+
+.voiceContent {
+  flex: 1;
+}
+
+.voiceContent h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.voiceContent p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.voiceButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
 }
 
-.homeButton:hover {
-  background: var(--gradient-card-hover, rgba(255, 255, 255, 0.3));
-  border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.voiceButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
 }
 
-.dashboard h1 {
-  font-size: 2.5rem;
-  margin: 0.5rem 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+/* Modules Section */
+.modulesSection {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.dashboard h2 {
+.sectionTitle {
   font-size: 1.8rem;
-  margin: 0.5rem 0;
-  color: var(--color-primary);
-  font-weight: 300;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 30px 0;
+  text-align: center;
 }
 
-.founderInfo {
-  font-size: 1.1rem;
-  margin: 1rem 0;
-  opacity: 0.9;
+.processGroup {
+  margin-bottom: 40px;
 }
 
-.featuresGrid {
+.processGroup:last-child {
+  margin-bottom: 0;
+}
+
+.processTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.moduleGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
-  max-width: 800px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-.featureCard {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.1));
-  padding: 1rem;
-  border-radius: var(--radius-medium, 10px);
-  font-size: 1rem;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.2));
+.moduleCard {
+  background: white;
+  border: 2px solid #ecf0f1;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.featureCard:hover {
-  transform: translateY(-3px);
-  background: var(--gradient-card-hover, rgba(255, 255, 255, 0.2));
+.moduleCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #bdc3c7;
+  transition: all 0.3s ease;
 }
 
-.clickable {
+.moduleCard.implemented {
+  border-color: #27ae60;
   cursor: pointer;
 }
 
-.clickable:hover {
-  background: var(--color-primary-bg, rgba(255, 215, 0, 0.2));
-  border-color: var(--color-primary);
+.moduleCard.implemented::before {
+  background: linear-gradient(to bottom, #27ae60, #2ecc71);
 }
 
-.languages {
-  font-size: 1.2rem;
-  margin: 1.5rem 0;
-  color: var(--color-primary);
+.moduleCard.implemented:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(39, 174, 96, 0.2);
+  border-color: #2ecc71;
 }
 
-.languages span {
-  margin: 0 10px;
+.moduleCard.comingSoon {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.status {
-  font-size: 1.1rem;
-  margin-top: 2rem;
+.moduleCard.comingSoon::before {
+  background: linear-gradient(to bottom, #f39c12, #e67e22);
+}
+
+.moduleIcon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
   opacity: 0.8;
-  color: var(--color-primary);
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .featuresGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
+.moduleContent h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.moduleContent p {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.moduleStatus {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+}
+
+.moduleCard.implemented .moduleStatus {
+  background: #27ae60;
+  color: white;
+}
+
+.moduleCard.comingSoon .moduleStatus {
+  background: #f39c12;
+  color: white;
+}
+
+/* MVP Status */
+.mvpStatus {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.statusCard h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  text-align: center;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+  transition: width 0.5s ease;
+}
+
+.statusCard p {
+  text-align: center;
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .dashboardContainer {
+    max-width: 100%;
+    padding: 15px;
   }
   
+  .metricsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  .moduleGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
   .dashboard {
-    min-height: auto;
-    justify-content: flex-start;
     padding-top: 60px;
   }
   
-  .dashboard h1 {
+  .dashboardHeader {
+    padding: 20px;
+  }
+  
+  .mainTitle {
     font-size: 2rem;
   }
   
-  .dashboard h2 {
-    font-size: 1.4rem;
+  .companyName {
+    font-size: 1.3rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .metricCard {
+    padding: 15px;
+  }
+  
+  .metricValue {
+    font-size: 2rem;
+  }
+  
+  .voiceCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .voiceContent h3 {
+    font-size: 1.2rem;
+  }
+  
+  .moduleGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .modulesSection {
+    padding: 20px;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+  
+  .processTitle {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .featuresGrid {
+  .metricsGrid {
     grid-template-columns: 1fr;
   }
   
-  .dashboard h1 {
+  .mainTitle {
     font-size: 1.8rem;
   }
   
-  .dashboard h2 {
+  .companyName {
     font-size: 1.2rem;
+  }
+  
+  .voiceContent p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Animation for metric cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metricCard {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.metricCard:nth-child(1) { animation-delay: 0.1s; }
+.metricCard:nth-child(2) { animation-delay: 0.2s; }
+.metricCard:nth-child(3) { animation-delay: 0.3s; }
+.metricCard:nth-child(4) { animation-delay: 0.4s; }
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dashboardHeader,
+  .modulesSection,
+  .mvpStatus {
+    background: rgba(30, 30, 30, 0.95);
+    color: #ffffff;
+  }
+  
+  .mainTitle,
+  .sectionTitle,
+  .processTitle,
+  .statusCard h4 {
+    color: #ffffff;
+  }
+  
+  .subtitle,
+  .moduleContent p,
+  .statusCard p {
+    color: #cccccc;
+  }
+  
+  .moduleCard {
+    background: rgba(40, 40, 40, 0.9);
+    border-color: #555555;
+  }
+  
+  .moduleContent h5 {
+    color: #ffffff;
   }
 }

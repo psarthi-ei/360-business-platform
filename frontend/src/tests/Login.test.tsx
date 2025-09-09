@@ -7,6 +7,8 @@ import Login from '../components/Login';
 const mockProps = {
   onSwitchToSignup: jest.fn(),
   onLoginSuccess: jest.fn(),
+  onGuestMode: jest.fn(),
+  onDemoMode: jest.fn(),
   currentLanguage: 'en',
   onLanguageChange: jest.fn(),
   translations: {

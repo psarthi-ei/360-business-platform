@@ -52,8 +52,10 @@ function CustomerProfile({
           onLanguageChange={onLanguageChange}
           currentTheme={currentTheme}
           onThemeChange={onThemeChange}
-          onNavigateBack={onNavigateBack}
-          onNavigateHome={onNavigateHome}
+          onContextNavigation={onNavigateBack}
+          contextNavigationText="Dashboard"
+          contextNavigationIcon="📊"
+          showContextNavigation={true}
           showThemeSelector={true}
         />
         <div className={styles.pageContent}>
@@ -84,7 +86,10 @@ function CustomerProfile({
         onLanguageChange={onLanguageChange}
         currentTheme={currentTheme}
         onThemeChange={onThemeChange}
-        onNavigateBack={onNavigateBack}
+        onContextNavigation={onNavigateBack}
+        contextNavigationText="Dashboard"
+        contextNavigationIcon="📊"
+        showContextNavigation={true}
         showThemeSelector={true}
       />
       

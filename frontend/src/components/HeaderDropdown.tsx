@@ -177,22 +177,6 @@ function HeaderDropdown({
             ))}
           </div>
 
-          {/* Navigation Section */}
-          {onNavigateHome && (
-            <div className={styles.menuSection}>
-              <div className={styles.sectionTitle}>Navigation</div>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onNavigateHome();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>🏠</span>
-                <span className={styles.itemText}>Home</span>
-              </button>
-            </div>
-          )}
 
           {/* Theme Section */}
           {currentTheme && onThemeChange && (

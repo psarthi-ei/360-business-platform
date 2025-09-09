@@ -20,7 +20,7 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [currentTheme, setCurrentTheme] = useState('light');
-  const [userMode, setUserMode] = useState<UserMode>('demo');
+  const [userMode, setUserMode] = useState<UserMode>('guest');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
@@ -147,6 +147,13 @@ function App() {
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
           onShowCustomerList={showCustomerList}
+          onLogin={showLogin}
+          onSignUp={showSignUp}
+          onGuestMode={handleGuestMode}
+          onDemoMode={handleDemoMode}
+          onLogout={handleLogout}
+          isAuthenticated={isAuthenticated}
+          userMode={userMode}
           translations={t}
         />
       </div>
@@ -286,8 +293,22 @@ function App() {
           onLanguageChange={switchLanguage}
           currentTheme={currentTheme}
           onThemeChange={switchTheme}
-          onNavigateHome={currentScreen !== 'homepage' ? showHomePage : undefined}
-          onNavigateBack={currentScreen === 'homepage' ? showDashboard : undefined}
+          // Context-aware navigation: Homepage -> Dashboard when demo/authenticated, Dashboard/Pages -> Homepage
+          onContextNavigation={
+            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? showDashboard :
+            currentScreen !== 'homepage' ? showHomePage : 
+            undefined
+          }
+          contextNavigationText={
+            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? "Dashboard" : "Home"
+          }
+          contextNavigationIcon={
+            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? "📊" : "🏠"
+          }
+          showContextNavigation={
+            (currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated)) ||
+            currentScreen !== 'homepage'
+          }
           onLogin={showLogin}
           onSignUp={showSignUp}
           onGuestMode={handleGuestMode}

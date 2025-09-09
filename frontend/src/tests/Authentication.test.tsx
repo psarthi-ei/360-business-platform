@@ -6,6 +6,8 @@ import Authentication from '../components/Authentication';
 // Mock props
 const mockProps = {
   onAuthSuccess: jest.fn(),
+  onGuestMode: jest.fn(),
+  onDemoMode: jest.fn(),
   currentLanguage: 'en',
   onLanguageChange: jest.fn(),
   translations: {

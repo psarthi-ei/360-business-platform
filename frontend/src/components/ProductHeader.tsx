@@ -8,9 +8,10 @@ interface ProductHeaderProps {
   onLanguageChange: (language: string) => void;
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
-  onNavigateHome?: () => void;
-  onNavigateBack?: () => void;
-  backButtonText?: string;
+  onContextNavigation?: () => void;
+  contextNavigationText?: string;
+  contextNavigationIcon?: string;
+  showContextNavigation?: boolean;
   showThemeSelector?: boolean;
   onLogin?: () => void;
   onSignUp?: () => void;
@@ -26,9 +27,10 @@ function ProductHeader({
   onLanguageChange,
   currentTheme,
   onThemeChange,
-  onNavigateHome,
-  onNavigateBack,
-  backButtonText = "Dashboard",
+  onContextNavigation,
+  contextNavigationText = "Home",
+  contextNavigationIcon = "🏠",
+  showContextNavigation = false,
   showThemeSelector = true,
   onLogin,
   onSignUp,
@@ -52,24 +54,15 @@ function ProductHeader({
       <div className={styles.navigationSection}>
       </div>
       
-      {/* Controls Section - Dashboard, Home and Options Dropdown */}
+      {/* Controls Section - Context Navigation and Options Dropdown */}
       <div className={styles.controlsSection}>
-        {onNavigateBack && (
+        {showContextNavigation && onContextNavigation && (
           <button 
-            className={styles.backButton}
-            onClick={onNavigateBack}
-            title="Back to Dashboard"
+            className={styles.contextButton}
+            onClick={onContextNavigation}
+            title={`Go to ${contextNavigationText}`}
           >
-            📊
-          </button>
-        )}
-        {onNavigateHome && (
-          <button 
-            className={styles.homeButton}
-            onClick={onNavigateHome}
-            title="Go to Home"
-          >
-            🏠
+            {contextNavigationIcon}
           </button>
         )}
         
@@ -78,7 +71,6 @@ function ProductHeader({
           onLanguageChange={onLanguageChange}
           currentTheme={currentTheme}
           onThemeChange={onThemeChange}
-          onNavigateHome={onNavigateHome}
           showThemeSelector={showThemeSelector}
           onLogin={onLogin}
           onSignUp={onSignUp}
