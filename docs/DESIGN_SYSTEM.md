@@ -1,4 +1,4 @@
-# UI/UX Design Decisions - ElevateIdea 360° Platform
+# Design System - ElevateIdea 360° Platform
 
 ## Overview
 This document captures key UI/UX design decisions made during the Lead Management screen development. These decisions establish visual patterns, user experience standards, and business context guidelines for all future screens.

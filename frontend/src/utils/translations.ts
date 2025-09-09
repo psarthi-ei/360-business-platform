@@ -16,6 +16,55 @@ export interface TranslationStrings {
   converted: string;
   expired: string;
   
+  // Authentication
+  welcomeBack: string;
+  signInToContinue: string;
+  email: string;
+  password: string;
+  emailPlaceholder: string;
+  passwordPlaceholder: string;
+  signIn: string;
+  signingIn: string;
+  signUp: string;
+  dontHaveAccount: string;
+  alreadyHaveAccount: string;
+  tryAsGuest: string;
+  guestUser: string;
+  guestCompany: string;
+  textileManufacturers: string;
+  demoAccount: string;
+  demoInstructions: string;
+  fillDemoCredentials: string;
+  pleaseEnterBothFields: string;
+  invalidCredentials: string;
+  createAccount: string;
+  joinThousandsManufacturers: string;
+  businessInfo: string;
+  accountSetup: string;
+  tellUsAboutBusiness: string;
+  ownerName: string;
+  ownerNamePlaceholder: string;
+  companyName: string;
+  companyNamePlaceholder: string;
+  phoneNumber: string;
+  phonePlaceholder: string;
+  businessType: string;
+  textileManufacturing: string;
+  garmentManufacturing: string;
+  textileTrading: string;
+  location: string;
+  locationPlaceholder: string;
+  setupYourAccount: string;
+  confirmPassword: string;
+  confirmPasswordPlaceholder: string;
+  continue: string;
+  back: string;
+  creatingAccount: string;
+  pleaseFillAllFields: string;
+  pleaseFillRequiredFields: string;
+  passwordsDontMatch: string;
+  trustedByManufacturers: string;
+  
   // Dashboard
   title: string;
   company: string;
@@ -160,6 +209,55 @@ const translations: Record<string, TranslationStrings> = {
     approved: "Approved",
     converted: "Converted",
     expired: "Expired",
+    
+    // Authentication
+    welcomeBack: "Welcome Back",
+    signInToContinue: "Sign in to continue managing your textile business",
+    email: "Email Address",
+    password: "Password",
+    emailPlaceholder: "Enter your email address",
+    passwordPlaceholder: "Enter your password",
+    signIn: "Sign In",
+    signingIn: "Signing In...",
+    signUp: "Sign Up",
+    dontHaveAccount: "Don't have an account?",
+    alreadyHaveAccount: "Already have an account?",
+    tryAsGuest: "Try as Guest",
+    guestUser: "Guest User",
+    guestCompany: "Demo Textiles Ltd.",
+    textileManufacturers: "Built for Gujarat textile manufacturers",
+    demoAccount: "Demo Account Available",
+    demoInstructions: "Use demo credentials to explore all features",
+    fillDemoCredentials: "Fill Demo Credentials",
+    pleaseEnterBothFields: "Please enter both email and password",
+    invalidCredentials: "Invalid email or password",
+    createAccount: "Create Account",
+    joinThousandsManufacturers: "Join thousands of manufacturers digitizing their business",
+    businessInfo: "Business Info",
+    accountSetup: "Account Setup",
+    tellUsAboutBusiness: "Tell us about your business",
+    ownerName: "Owner/Manager Name",
+    ownerNamePlaceholder: "Enter your full name",
+    companyName: "Company Name",
+    companyNamePlaceholder: "Enter your company name",
+    phoneNumber: "Phone Number",
+    phonePlaceholder: "+91 98765 43210",
+    businessType: "Business Type",
+    textileManufacturing: "Textile Manufacturing",
+    garmentManufacturing: "Garment Manufacturing", 
+    textileTrading: "Textile Trading",
+    location: "Location",
+    locationPlaceholder: "Surat, Gujarat",
+    setupYourAccount: "Set up your account",
+    confirmPassword: "Confirm Password",
+    confirmPasswordPlaceholder: "Re-enter your password",
+    continue: "Continue",
+    back: "Back",
+    creatingAccount: "Creating Account...",
+    pleaseFillAllFields: "Please fill all required fields",
+    pleaseFillRequiredFields: "Please fill all required fields",
+    passwordsDontMatch: "Passwords don't match",
+    trustedByManufacturers: "Trusted by 500+ textile manufacturers across Gujarat",
     
     // Dashboard
     title: "360° Business Platform",
@@ -371,6 +469,57 @@ const translations: Record<string, TranslationStrings> = {
   },
   
   gu: {
+    // Authentication
+    welcomeBack: "ફરી સ્વાગત છે",
+    signInToContinue: "ચાલુ રાખવા માટે સાઇન ઇન કરો",
+    email: "ઈમેલ",
+    emailPlaceholder: "તમારો ઈમેલ દાખલ કરો",
+    password: "પાસવર્ડ",
+    passwordPlaceholder: "તમારો પાસવર્ડ દાખલ કરો",
+    signIn: "સાઇન ઇન",
+    signingIn: "સાઇન ઇન કરી રહ્યા છીએ...",
+    dontHaveAccount: "એકાઉન્ટ નથી?",
+    signUp: "સાઇન અપ",
+    tryAsGuest: "ગેસ્ટ તરીકે પ્રયાસ કરો",
+    useDemoAccount: "ડેમો એકાઉન્ટનો ઉપયોગ કરો",
+    fillDemoCredentials: "ડેમો ક્રેડેન્શિયલ્સ ભરો",
+    demoAccount: "ડેમો એકાઉન્ટ",
+    textileManufacturers: "ગુજરાત ટેક્સટાઇલ ઉત્પાદકો માટે બનાવાયેલ",
+    tellUsAboutBusiness: "તમારા વ્યવસાય વિશે જણાવો",
+    textileTrading: "ટેક્સટાઇલ ટ્રેડિંગ",
+    trustedByManufacturers: "ઉત્પાદકો દ્વારા વિશ્વસનીય",
+    guestUser: "ગેસ્ટ યુઝર",
+    guestCompany: "ગેસ્ટ કંપની",
+    demoInstructions: "નીચેનો બટન ક્લિક કરીને ડેમો ક્રેડેન્શિયલ્સ સાથે ફોર્મ ભરો",
+    invalidCredentials: "અમાન્ય ક્રેડેન્શિયલ્સ. કૃપા કરીને ફરી પ્રયાસ કરો.",
+    pleaseEnterBothFields: "કૃપા કરીને ઈમેલ અને પાસવર્ડ બંને દાખલ કરો",
+    createAccount: "એકાઉન્ટ બનાવો",
+    setupYourAccount: "તમારું એકાઉન્ટ સેટઅપ કરો",
+    accountSetup: "એકાઉન્ટ સેટઅપ",
+    businessInfo: "વ્યવસાય માહિતી",
+    personalInfo: "વ્યક્તિગત માહિતી",
+    alreadyHaveAccount: "પહેલેથી જ એકાઉન્ટ છે?",
+    back: "પાછળ",
+    continue: "આગળ વધો",
+    creatingAccount: "એકાઉન્ટ બનાવી રહ્યા છીએ...",
+    joinThousandsManufacturers: "ગુજરાતના હજારો ઉત્પાદકો સાથે જોડાઓ",
+    ownerName: "માલિકનું નામ",
+    ownerNamePlaceholder: "તમારું પૂરું નામ",
+    phoneNumber: "મોબાઇલ નંબર",
+    phonePlaceholder: "+91 98765 43210",
+    companyName: "કંપનીનું નામ",
+    companyNamePlaceholder: "તમારી કંપનીનું નામ",
+    businessType: "વ્યવસાય પ્રકાર",
+    textileManufacturing: "ટેક્સટાઈલ ઉત્પાદન",
+    garmentManufacturing: "ગારમેન્ટ ઉત્પાદન",
+    location: "સ્થાન",
+    locationPlaceholder: "શહેર, રાજ્ય",
+    confirmPassword: "પાસવર્ડની પુષ્ટિ કરો",
+    confirmPasswordPlaceholder: "પાસવર્ડ ફરીથી દાખલ કરો",
+    pleaseFillRequiredFields: "કૃપા કરીને તમામ જરૂરી ફીલ્ડ્સ ભરો",
+    pleaseFillAllFields: "કૃપા કરીને તમામ ફીલ્ડ્સ ભરો",
+    passwordsDontMatch: "પાસવર્ડ મેળ ખાતા નથી",
+    
     // Common UI Elements
     backToDashboard: "← ડેશબોર્ડ પર પાછા જાઓ",
     call: "📞 કૉલ",
@@ -596,6 +745,57 @@ const translations: Record<string, TranslationStrings> = {
   },
   
   hi: {
+    // Authentication
+    welcomeBack: "फिर से स्वागत है",
+    signInToContinue: "जारी रखने के लिए साइन इन करें",
+    email: "ईमेल",
+    emailPlaceholder: "अपना ईमेल दर्ज करें",
+    password: "पासवर्ड",
+    passwordPlaceholder: "अपना पासवर्ड दर्ज करें",
+    signIn: "साइन इन",
+    signingIn: "साइन इन कर रहे हैं...",
+    dontHaveAccount: "खाता नहीं है?",
+    signUp: "साइन अप",
+    tryAsGuest: "गेस्ट के रूप में आज़माएं",
+    useDemoAccount: "डेमो खाता उपयोग करें",
+    fillDemoCredentials: "डेमो क्रेडेंशियल भरें",
+    demoAccount: "डेमो खाता",
+    textileManufacturers: "गुजरात टेक्सटाइल निर्माताओं के लिए बनाया गया",
+    tellUsAboutBusiness: "अपने व्यवसाय के बारे में बताएं",
+    textileTrading: "टेक्सटाइल ट्रेडिंग",
+    trustedByManufacturers: "निर्माताओं द्वारा विश्वसनीय",
+    guestUser: "गेस्ट यूजर",
+    guestCompany: "गेस्ट कंपनी",
+    demoInstructions: "नीचे बटन क्लिक करके डेमो क्रेडेंशियल के साथ फॉर्म भरें",
+    invalidCredentials: "अमान्य क्रेडेंशियल। कृपया फिर से कोशिश करें।",
+    pleaseEnterBothFields: "कृपया ईमेल और पासवर्ड दोनों दर्ज करें",
+    createAccount: "खाता बनाएं",
+    setupYourAccount: "अपना खाता सेटअप करें",
+    accountSetup: "खाता सेटअप",
+    businessInfo: "व्यवसाय जानकारी",
+    personalInfo: "व्यक्तिगत जानकारी",
+    alreadyHaveAccount: "पहले से खाता है?",
+    back: "वापस",
+    continue: "आगे बढ़ें",
+    creatingAccount: "खाता बना रहे हैं...",
+    joinThousandsManufacturers: "भारत के हजारों निर्माताओं से जुड़ें",
+    ownerName: "मालिक का नाम",
+    ownerNamePlaceholder: "आपका पूरा नाम",
+    phoneNumber: "मोबाइल नंबर",
+    phonePlaceholder: "+91 98765 43210",
+    companyName: "कंपनी का नाम",
+    companyNamePlaceholder: "आपकी कंपनी का नाम",
+    businessType: "व्यवसाय प्रकार",
+    textileManufacturing: "टेक्सटाइल निर्माण",
+    garmentManufacturing: "गारमेंट निर्माण",
+    location: "स्थान",
+    locationPlaceholder: "शहर, राज्य",
+    confirmPassword: "पासवर्ड की पुष्टि करें",
+    confirmPasswordPlaceholder: "पासवर्ड फिर से दर्ज करें",
+    pleaseFillRequiredFields: "कृपया सभी आवश्यक फील्ड भरें",
+    pleaseFillAllFields: "कृपया सभी फील्ड भरें",
+    passwordsDontMatch: "पासवर्ड मेल नहीं खाते",
+    
     // Common UI Elements
     backToDashboard: "← डैशबोर्ड पर वापस जाएं",
     call: "📞 कॉल",

@@ -1,4 +1,4 @@
-# App.tsx Refactoring Plan - ElevateIdea 360° Business Platform
+# Refactoring Guide - ElevateIdea 360° Business Platform
 
 ## Overview
 The main App.tsx file has grown to 1,389 lines and needs to be refactored into smaller, manageable components for better maintainability, testing, and code organization.

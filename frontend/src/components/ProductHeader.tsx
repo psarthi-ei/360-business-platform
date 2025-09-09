@@ -12,6 +12,13 @@ interface ProductHeaderProps {
   onNavigateBack?: () => void;
   backButtonText?: string;
   showThemeSelector?: boolean;
+  onLogin?: () => void;
+  onSignUp?: () => void;
+  onGuestMode?: () => void;
+  onDemoMode?: () => void;
+  onLogout?: () => void;
+  isAuthenticated?: boolean;
+  userMode?: string;
 }
 
 function ProductHeader({
@@ -22,7 +29,14 @@ function ProductHeader({
   onNavigateHome,
   onNavigateBack,
   backButtonText = "Dashboard",
-  showThemeSelector = true
+  showThemeSelector = true,
+  onLogin,
+  onSignUp,
+  onGuestMode,
+  onDemoMode,
+  onLogout,
+  isAuthenticated = false,
+  userMode = 'guest'
 }: ProductHeaderProps) {
   return (
     <div className={styles.productHeader}>
@@ -58,6 +72,7 @@ function ProductHeader({
             🏠
           </button>
         )}
+        
         <HeaderDropdown
           currentLanguage={currentLanguage}
           onLanguageChange={onLanguageChange}
@@ -65,6 +80,13 @@ function ProductHeader({
           onThemeChange={onThemeChange}
           onNavigateHome={onNavigateHome}
           showThemeSelector={showThemeSelector}
+          onLogin={onLogin}
+          onSignUp={onSignUp}
+          onGuestMode={onGuestMode}
+          onDemoMode={onDemoMode}
+          onLogout={onLogout}
+          isAuthenticated={isAuthenticated}
+          userMode={userMode}
         />
       </div>
     </div>

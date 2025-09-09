@@ -1,4 +1,4 @@
-# Business Flow Documentation - ElevateIdea 360° Platform
+# Business Processes - ElevateIdea 360° Platform
 
 ## Overview
 This document outlines the complete lead-to-customer conversion flow for Gujarat textile manufacturers, capturing the real-world business processes, payment cycles, and operational workflows that the ElevateIdea platform supports.

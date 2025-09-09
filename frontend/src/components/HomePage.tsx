@@ -4,18 +4,20 @@ import styles from '../styles/HomePage.module.css';
 interface HomePageProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  onGetStarted: () => void;
-  onSeeDemo: () => void;
-  onNavigateDashboard?: () => void;
+  onLogin: () => void;
+  onSignUp: () => void;
+  onGuestMode: () => void;
+  onDemoMode: () => void;
   translations: any;
 }
 
 function HomePage({ 
   currentLanguage, 
   onLanguageChange, 
-  onGetStarted,
-  onSeeDemo,
-  onNavigateDashboard,
+  onLogin,
+  onSignUp,
+  onGuestMode,
+  onDemoMode,
   translations: t 
 }: HomePageProps) {
   const [animatedStats, setAnimatedStats] = useState({
@@ -223,7 +225,7 @@ function HomePage({
           
           {/* Hero CTA */}
           <div className={styles.heroCta}>
-            <button className={styles.watchDemoBtn} onClick={onSeeDemo}>
+            <button className={styles.watchDemoBtn} onClick={onDemoMode}>
               {t.watchDemo || "Watch Demo"} 📹
             </button>
           </div>
@@ -324,15 +326,15 @@ function HomePage({
             {t.ctaSubtitle || "Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility"}
           </p>
           <div className={styles.ctaButtons}>
-            <button className={styles.primaryCta} onClick={onGetStarted}>
-              {t.startFreeTrial || "Start Free Trial"} →
+            <button className={styles.primaryCta} onClick={onDemoMode}>
+              {t.watchDemo || "Explore Demo"} 🎬
             </button>
-            <button className={styles.secondaryCta} onClick={onSeeDemo}>
-              {t.watchDemo || "Watch Demo"} 📹
+            <button className={styles.secondaryCta} onClick={onGuestMode}>
+              {t.tryAsGuest || "Try as Guest"} 👤
             </button>
           </div>
           <p className={styles.ctaNote}>
-            {t.ctaNote || "No credit card required • Free 30-day trial • Full support in Gujarati"}
+            {t.ctaNote || "Rich demo data included • No sign-up required • Full Gujarat textile business showcase"}
           </p>
         </div>
       </section>

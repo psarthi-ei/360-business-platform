@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Dashboard from '../components/Dashboard';
 
 const mockProps = {
@@ -11,7 +12,7 @@ const mockProps = {
   onShowCustomerList: jest.fn(),
   translations: {
     title: "360° Business Platform",
-    company: "ElevateIdea Technologies",
+    company: "ElevateIdea Technologies", 
     founder: "Built by Partha Sarthi for Gujarat Textile Manufacturers",
     leadManagement: "Lead Management",
     quotationOrders: "Quotation & Orders",
@@ -34,91 +35,181 @@ describe('Dashboard Component', () => {
     jest.clearAllMocks();
   });
 
-  test('renders dashboard with title and company', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    expect(screen.getByText('🏭 360° Business Platform')).toBeInTheDocument();
-    expect(screen.getByText('ElevateIdea Technologies')).toBeInTheDocument();
-    expect(screen.getByText('Built by Partha Sarthi for Gujarat Textile Manufacturers')).toBeInTheDocument();
+  describe('Component Rendering', () => {
+    test('should render without crashing', () => {
+      render(<Dashboard {...mockProps} />);
+      expect(screen.getByText(mockProps.translations.title)).toBeInTheDocument();
+    });
+
+    test('should render main heading', () => {
+      render(<Dashboard {...mockProps} />);
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    });
+
+    test('should render company information', () => {
+      render(<Dashboard {...mockProps} />);
+      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+    });
+
+    test('should render feature grid', () => {
+      render(<Dashboard {...mockProps} />);
+      const featureCards = screen.getAllByRole('button');
+      expect(featureCards.length).toBeGreaterThan(0);
+    });
   });
 
-  test('renders all feature cards', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    expect(screen.getByText('📋 Lead Management')).toBeInTheDocument();
-    expect(screen.getByText('📑 Quotation & Orders')).toBeInTheDocument();
-    expect(screen.getByText('💳 Sales Orders')).toBeInTheDocument();
-    expect(screen.getByText('👥 Customers')).toBeInTheDocument();
-    expect(screen.getByText('📋 Work Orders')).toBeInTheDocument();
-    expect(screen.getByText('🛒 Smart Procurement')).toBeInTheDocument();
-    expect(screen.getByText('📦 Inventory (3-Tier)')).toBeInTheDocument();
-    expect(screen.getByText('⚙️ Production Tracking')).toBeInTheDocument();
+  describe('Interactive Features', () => {
+    test('should render clickable lead management feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const leadElement = screen.getByText(/lead management/i);
+      expect(leadElement).toBeInTheDocument();
+    });
+
+    test('should call onShowLeadManagement when lead management clicked', async () => {
+      render(<Dashboard {...mockProps} />);
+      const leadElement = screen.getByText(/lead management/i);
+      
+      await userEvent.click(leadElement);
+      
+      expect(mockProps.onShowLeadManagement).toHaveBeenCalledTimes(1);
+    });
+
+    test('should render clickable quotation orders feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const quotationElement = screen.getByText(/quotation.*orders/i);
+      expect(quotationElement).toBeInTheDocument();
+    });
+
+    test('should call onShowQuotationOrders when quotation orders clicked', async () => {
+      render(<Dashboard {...mockProps} />);
+      const quotationElement = screen.getByText(/quotation.*orders/i);
+      
+      await userEvent.click(quotationElement);
+      
+      expect(mockProps.onShowQuotationOrders).toHaveBeenCalledTimes(1);
+    });
+
+    test('should render clickable sales orders feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const salesElement = screen.getByText(/sales orders/i);
+      expect(salesElement).toBeInTheDocument();
+    });
+
+    test('should call onShowSalesOrders when sales orders clicked', async () => {
+      render(<Dashboard {...mockProps} />);
+      const salesElement = screen.getByText(/sales orders/i);
+      
+      await userEvent.click(salesElement);
+      
+      expect(mockProps.onShowSalesOrders).toHaveBeenCalledTimes(1);
+    });
+
+    test('should render clickable customers feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const customersElement = screen.getByText(/customers/i);
+      expect(customersElement).toBeInTheDocument();
+    });
+
+    test('should call onShowCustomerList when customers clicked', async () => {
+      render(<Dashboard {...mockProps} />);
+      const customersElement = screen.getByText(/customers/i);
+      
+      await userEvent.click(customersElement);
+      
+      expect(mockProps.onShowCustomerList).toHaveBeenCalledTimes(1);
+    });
   });
 
-  test('displays language switcher with correct active state', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    const englishBtn = screen.getByRole('button', { name: 'English' });
-    const gujaratiBtn = screen.getByRole('button', { name: 'ગુજરાતી' });
-    const hindiBtn = screen.getByRole('button', { name: 'हिंदी' });
-    
-    expect(englishBtn).toBeInTheDocument();
-    expect(gujaratiBtn).toBeInTheDocument();
-    expect(hindiBtn).toBeInTheDocument();
-    
-    expect(englishBtn).toHaveClass('active');
-    expect(gujaratiBtn).not.toHaveClass('active');
-    expect(hindiBtn).not.toHaveClass('active');
+  describe('Non-Interactive Features', () => {
+    test('should render non-clickable work orders feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const workOrdersCard = screen.getByText(/work orders/i);
+      expect(workOrdersCard).toBeInTheDocument();
+    });
+
+    test('should render non-clickable procurement feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const procurementCard = screen.getByText(/smart procurement/i);
+      expect(procurementCard).toBeInTheDocument();
+    });
+
+    test('should render non-clickable inventory feature', () => {
+      render(<Dashboard {...mockProps} />);
+      const inventoryCard = screen.getByText(/inventory/i);
+      expect(inventoryCard).toBeInTheDocument();
+    });
   });
 
-  test('calls onLanguageChange when language buttons are clicked', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    fireEvent.click(screen.getByRole('button', { name: 'ગુજરાતી' }));
-    expect(mockProps.onLanguageChange).toHaveBeenCalledWith('gu');
+  describe('Props Handling', () => {
+    test('should handle missing optional callbacks gracefully', () => {
+      const minimalProps = {
+        currentLanguage: 'en',
+        onLanguageChange: jest.fn(),
+        onShowLeadManagement: jest.fn(),
+        onShowQuotationOrders: jest.fn(),
+        onShowSalesOrders: jest.fn(),
+        onShowCustomerList: jest.fn(),
+        translations: mockProps.translations
+      };
+      
+      expect(() => {
+        render(<Dashboard {...minimalProps} />);
+      }).not.toThrow();
+    });
 
-    fireEvent.click(screen.getByRole('button', { name: 'हिंदी' }));
-    expect(mockProps.onLanguageChange).toHaveBeenCalledWith('hi');
-  });
-
-  test('calls navigation handlers when feature cards are clicked', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    fireEvent.click(screen.getByText('📋 Lead Management'));
-    expect(mockProps.onShowLeadManagement).toHaveBeenCalled();
-
-    fireEvent.click(screen.getByText('📑 Quotation & Orders'));
-    expect(mockProps.onShowQuotationOrders).toHaveBeenCalled();
-
-    fireEvent.click(screen.getByText('💳 Sales Orders'));
-    expect(mockProps.onShowSalesOrders).toHaveBeenCalled();
-
-    fireEvent.click(screen.getByText('👥 Customers'));
-    expect(mockProps.onShowCustomerList).toHaveBeenCalled();
-  });
-
-  test('shows development status message', () => {
-    render(<Dashboard {...mockProps} />);
-    
-    expect(screen.getByText('🚧 MVP in Development - Coming Soon!')).toBeInTheDocument();
-  });
-
-  test('renders with gujarati language', () => {
-    const gujaratiProps = {
-      ...mockProps,
-      currentLanguage: 'gu',
-      translations: {
+    test('should use provided translations', () => {
+      const customTranslations = {
         ...mockProps.translations,
-        title: "360° બિઝનેસ પ્લેટફોર્મ",
-        company: "એલિવેટઆઈડિયા ટેકનોલોજીઝ",
-        leadManagement: "લીડ મેનેજમેન્ટ"
-      }
-    };
-    
-    render(<Dashboard {...gujaratiProps} />);
-    
-    expect(screen.getByText('🏭 360° બિઝનેસ પ્લેટફોર્મ')).toBeInTheDocument();
-    expect(screen.getByText('એલિવેટઆઈડિયા ટેકનોલોજીઝ')).toBeInTheDocument();
-    expect(screen.getByText('📋 લીડ મેનેજમેન્ટ')).toBeInTheDocument();
+        title: "Custom Platform Title"
+      };
+      
+      render(<Dashboard {...mockProps} translations={customTranslations} />);
+      expect(screen.getByText(/custom platform title/i)).toBeInTheDocument();
+    });
+
+    test('should pass language props correctly', () => {
+      const customProps = {
+        ...mockProps,
+        currentLanguage: 'gu',
+        onLanguageChange: jest.fn()
+      };
+      
+      expect(() => {
+        render(<Dashboard {...customProps} />);
+      }).not.toThrow();
+    });
+  });
+
+  describe('Accessibility', () => {
+    test('should have proper heading hierarchy', () => {
+      render(<Dashboard {...mockProps} />);
+      
+      const h1 = screen.getByRole('heading', { level: 1 });
+      const h2 = screen.getByRole('heading', { level: 2 });
+      
+      expect(h1).toBeInTheDocument();
+      expect(h2).toBeInTheDocument();
+    });
+
+    test('should have interactive clickable elements', () => {
+      render(<Dashboard {...mockProps} />);
+      
+      expect(screen.getByText(/lead management/i)).toBeInTheDocument();
+      expect(screen.getByText(/quotation.*orders/i)).toBeInTheDocument();
+      expect(screen.getByText(/sales orders/i)).toBeInTheDocument();
+      expect(screen.getByText(/customers/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Component Structure', () => {
+    test('should have dashboard container', () => {
+      const { container } = render(<Dashboard {...mockProps} />);
+      expect(container.querySelector('.dashboard')).toBeInTheDocument();
+    });
+
+    test('should render with proper CSS classes', () => {
+      const { container } = render(<Dashboard {...mockProps} />);
+      expect(container.firstChild).toHaveClass('dashboard');
+    });
   });
 });

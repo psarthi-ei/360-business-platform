@@ -1,4 +1,4 @@
-# ElevateIdea Coding Style Guide
+# ElevateIdea Coding Standards
 **Java-Style JavaScript for Textile Manufacturing Platform**
 
 ## Core Philosophy

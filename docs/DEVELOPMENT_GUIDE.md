@@ -1,13 +1,13 @@
 # 360° Business Platform - Development Guide
 **Company**: ElevateIdea Technologies Private Limited  
-**Founder & Lead Developer**: Partha Sarthi  
-**Learning Approach**: Step-by-step with explanations for founder education
+**Audience**: Any developer (Claude AI, team members, contributors) joining this project
 
 ## Overview
-This document tracks all development steps, commands, and decisions. Each step includes:
-- **What we're doing** (the step)
-- **Why we're doing it** (business/technical reason)  
-- **How it works** (basic explanation for learning)
+This guide helps any developer understand how to navigate and contribute to the 360° Business Platform project. It covers:
+- **Project setup and workflow** - How to get started and contribute
+- **Development processes** - How we build features and manage code
+- **Project navigation** - Where to find information and how things are organized
+- **Development phases** - Current status and what's being built when
 - **Commands to run** (exact steps)
 - **Expected outcome** (what you should see)
 

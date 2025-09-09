@@ -1,4 +1,4 @@
-# START HERE - Master Project Navigator
+# DOCUMENTATION INDEX - Master Project Navigator
 ## ElevateIdea 360° Platform Documentation System
 
 ## Overview
@@ -7,6 +7,21 @@
 This is the master navigation document that guides you to all project information. Whether you're Claude starting a new session, a team member joining the project, or anyone needing to understand the 360° Business Platform, always begin here.
 
 **Purpose**: Central hub that explains where every piece of information lives and how to navigate the complete project documentation system.
+
+## **🤖 For Claude AI - New Session Setup**
+
+**Quick Context Command**: 
+```
+"Get full context first - read docs and analyze codebase"
+```
+
+**What this does**:
+1. **Reads all documentation** in /docs/ folder to understand business context, requirements, and current progress
+2. **Analyzes current codebase structure** to understand technical implementation, patterns, and architecture  
+3. **Checks current project status** including test failures, recent changes, and immediate priorities
+4. **Provides complete context summary** before starting any development work
+
+**Why this matters**: Code evolves constantly, so static documentation becomes outdated. This approach ensures you always get the most current understanding of both business requirements (from docs) and technical reality (from code analysis).
 
 ---
 
@@ -30,7 +45,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **2. BUSINESS_REQUIREMENTS.md** - What We're Building
+### **2. PRODUCT_REQUIREMENTS.md** - What We're Building
 **Purpose**: Complete business scope and feature specifications
 
 **Contains**:
@@ -127,7 +142,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **7. UI_UX_DESIGN_DECISIONS.md** - Visual Design Standards
+### **7. DESIGN_SYSTEM.md** - Visual Design Standards
 **Purpose**: UI/UX design patterns and business context guidelines established from Lead Management screen
 
 **Contains**:
@@ -148,7 +163,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **8. BUSINESS_FLOW_DOCUMENTATION.md** - Complete Textile Business Process
+### **8. BUSINESS_PROCESSES.md** - Complete Textile Business Process
 **Purpose**: Comprehensive documentation of the complete lead-to-customer conversion flow for Gujarat textile manufacturers
 
 **Contains**:
@@ -168,8 +183,52 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **9. DOCUMENTATION_GUIDE.md** - This File
-**Purpose**: Meta-documentation explaining how to manage all documentation
+### **9. MVP_DEVELOPMENT_PLAN.md** - Development Roadmap & Milestones
+**Purpose**: High-level development plan with clear milestones and timeline tracking
+
+**Contains**:
+- 13 core MVP modules with logical business flow
+- 3-phase development approach (UI → Backend → Integration)  
+- Milestone tracking with completion status
+- Current progress visibility and next steps
+- 40-day timeline with realistic deliverables
+
+**Update Schedule**:
+- ✅ **Milestone-driven** - When completing major milestones
+- ✅ When module completion status changes
+- ✅ When timeline or approach needs adjustment
+- ⚠️ **Weekly** - Regular progress updates and status tracking
+
+### **10. CODING_STANDARDS.md** - Code Writing Standards & Patterns
+**Purpose**: Java-style JavaScript patterns and code quality standards for consistent development
+
+**Contains**:
+- Core philosophy and coding patterns
+- Component structure and naming conventions
+- Props management and state handling
+- Code organization and best practices
+
+**Update Schedule**:
+- ✅ When new coding patterns are introduced
+- ✅ When code review reveals inconsistencies  
+- ✅ When refactoring approaches are refined
+
+### **11. REFACTORING_GUIDE.md** - Safe Refactoring Methodology
+**Purpose**: Step-by-step methodology for Claude AI to safely refactor complex components without breaking functionality
+
+**Contains**:
+- Incremental refactoring approach
+- Testing requirements after each step
+- Risk mitigation strategies
+- Component extraction methodologies
+
+**Update Schedule**:
+- ✅ When major refactoring operations are planned
+- ✅ When refactoring methodology evolves
+- ✅ After successful complex refactoring operations
+
+### **12. DOCUMENTATION_INDEX.md** - Master Documentation Directory
+**Purpose**: Central navigation hub and index for all project documentation
 
 **Contains**:
 - Purpose and scope of each documentation file
@@ -195,13 +254,13 @@ This is the master navigation document that guides you to all project informatio
 
 ### **Monthly/Milestone Updates**
 - ✅ **README.md** - When reaching project milestones
-- ✅ **BUSINESS_REQUIREMENTS.md** - When scope or features change
+- ✅ **PRODUCT_REQUIREMENTS.md** - When scope or features change
 - ✅ **TECHNICAL_STRATEGY.md** - When architecture decisions change
 
 ### **As Needed Updates**
 - ✅ **LEARNING_CONTEXT.md** - When learning approach evolves
-- ✅ **UI_UX_DESIGN_DECISIONS.md** - After major screen implementations
-- ✅ **BUSINESS_FLOW_DOCUMENTATION.md** - When business processes are refined
+- ✅ **DESIGN_SYSTEM.md** - After major screen implementations
+- ✅ **BUSINESS_PROCESSES.md** - When business processes are refined
 - ✅ **DOCUMENTATION_GUIDE.md** - When documentation strategy changes
 
 ---
@@ -221,9 +280,9 @@ This is the master navigation document that guides you to all project informatio
 3. Consider if **README.md** needs status update
 
 ### **When Adding New Business Feature**
-1. Update **BUSINESS_REQUIREMENTS.md** with feature specification
+1. Update **PRODUCT_REQUIREMENTS.md** with feature specification
 2. Consider if **TECHNICAL_STRATEGY.md** needs architecture updates
-3. Update **BUSINESS_FLOW_DOCUMENTATION.md** if new business processes are involved
+3. Update **BUSINESS_PROCESSES.md** if new business processes are involved
 4. Update **README.md** if it's a major feature addition
 
 ### **When Changing Technology Stack**
@@ -242,36 +301,36 @@ This is the master navigation document that guides you to all project informatio
 | **What You Want to Document** | **Goes In** | **Why** |
 |---|---|---|
 | **Daily Development Progress (features built, challenges, motivation)** | PROGRESS_LOG.md | Personal daily tracking |
-| **Visual Design Patterns (Colors, Layouts)** | UI_UX_DESIGN_DECISIONS.md | Design standards |
+| **Visual Design Patterns (Colors, Layouts)** | DESIGN_SYSTEM.md | Design standards |
 | **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
-| **Business Process (Lead→Quote→Order)** | BUSINESS_FLOW_DOCUMENTATION.md | Industry workflows |
+| **Business Process (Lead→Quote→Order)** | BUSINESS_PROCESSES.md | Industry workflows |
 | **Code Commands & Setup Steps** | DEVELOPMENT_GUIDE.md | How-to instructions |
-| **Feature Requirements (Voice Commands)** | BUSINESS_REQUIREMENTS.md | What to build |
+| **Feature Requirements (Voice Commands)** | PRODUCT_REQUIREMENTS.md | What to build |
 | **Working Style & Learning Approach** | COLLABORATION_GUIDE.md | Our collaboration methods |
 | **Project Status (MVP ready, beta launch)** | README.md | Public overview |
 
 ### **Common Confusion - Examples**
 
-❌ **WRONG**: Adding HomePage component details to BUSINESS_REQUIREMENTS.md  
-✅ **RIGHT**: HomePage goes in PROGRESS_LOG.md (what was built) + UI_UX_DESIGN_DECISIONS.md (design patterns)
+❌ **WRONG**: Adding HomePage component details to PRODUCT_REQUIREMENTS.md  
+✅ **RIGHT**: HomePage goes in PROGRESS_LOG.md (what was built) + DESIGN_SYSTEM.md (design patterns)
 
-❌ **WRONG**: Authentication code examples in UI_UX_DESIGN_DECISIONS.md  
+❌ **WRONG**: Authentication code examples in DESIGN_SYSTEM.md  
 ✅ **RIGHT**: Auth strategy in TECHNICAL_STRATEGY.md + setup steps in DEVELOPMENT_GUIDE.md
 
 ❌ **WRONG**: Textile business workflow in TECHNICAL_STRATEGY.md  
-✅ **RIGHT**: Business processes belong in BUSINESS_FLOW_DOCUMENTATION.md
+✅ **RIGHT**: Business processes belong in BUSINESS_PROCESSES.md
 
 ### **Quick Decision Guide**
 
 **Ask yourself**: 
-1. **Is it about business processes?** → BUSINESS_FLOW_DOCUMENTATION.md
+1. **Is it about business processes?** → BUSINESS_PROCESSES.md
 2. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
-3. **Is it visual/UI related?** → UI_UX_DESIGN_DECISIONS.md
+3. **Is it visual/UI related?** → DESIGN_SYSTEM.md
 4. **Is it daily progress?** → PROGRESS_LOG.md
 5. **Is it setup instructions?** → DEVELOPMENT_GUIDE.md
-6. **Is it what features to build?** → BUSINESS_REQUIREMENTS.md
+6. **Is it what features to build?** → PRODUCT_REQUIREMENTS.md
 7. **Is it working style/learning approach?** → COLLABORATION_GUIDE.md
-8. **Is it code patterns/standards?** → CODING_STYLE_GUIDE.md
+8. **Is it code patterns/standards?** → CODING_STANDARDS.md
 9. **Is it project overview?** → README.md
 
 ### **Keep It Simple Rule**
@@ -307,7 +366,7 @@ This is the master navigation document that guides you to all project informatio
 
 **Example**: "Run `npx create-react-app frontend --template typescript` to set up the project"
 
-#### **CODING_STYLE_GUIDE.md = WHAT**
+#### **CODING_STANDARDS.md = HOW**
 **Purpose**: Code patterns and standards to follow
 **Contains**:
 - What naming conventions to use (`camelCase` vs `PascalCase`)
@@ -319,7 +378,7 @@ This is the master navigation document that guides you to all project informatio
 
 ### **Business Documents (WHAT vs HOW vs WHY)**
 
-#### **BUSINESS_REQUIREMENTS.md = WHAT**
+#### **PRODUCT_REQUIREMENTS.md = WHAT**
 **Purpose**: Feature specifications and scope
 **Contains**:
 - What features to build (12 MVP modules)
@@ -329,7 +388,7 @@ This is the master navigation document that guides you to all project informatio
 
 **Example**: "Voice command: 'આજના લીડ્સ બતાવો' should show today's leads"
 
-#### **BUSINESS_FLOW_DOCUMENTATION.md = HOW** 
+#### **BUSINESS_PROCESSES.md = HOW** 
 **Purpose**: How textile business processes actually work
 **Contains**:
 - How lead-to-customer conversion happens
@@ -339,7 +398,7 @@ This is the master navigation document that guides you to all project informatio
 
 **Example**: "After quote approval, 30% advance payment is collected before starting production"
 
-#### **UI_UX_DESIGN_DECISIONS.md = WHY**
+#### **DESIGN_SYSTEM.md = WHY**
 **Purpose**: Design decisions and their rationale
 **Contains**:
 - Why mobile-first design for textile manufacturers
@@ -392,6 +451,6 @@ This is the master navigation document that guides you to all project informatio
 ---
 
 **Created**: Sep 3, 2025  
-**Updated**: Sep 7, 2025 (renamed to START_HERE for clarity)  
+**Updated**: Sep 9, 2025 (renamed to DOCUMENTATION_INDEX for clarity)  
 **Purpose**: Master navigation hub - always read this first to understand project structure  
 **Next Review**: After authentication system implementation

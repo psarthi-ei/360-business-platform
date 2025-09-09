@@ -9,15 +9,19 @@ import SalesOrders from './components/SalesOrders';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
 import ProductHeader from './components/ProductHeader';
+import Authentication from './components/Authentication';
 import { getCurrentTranslations } from './utils/translations';
 import { themes, applyTheme } from './styles/themes';
 
 type Language = 'en' | 'gu' | 'hi';
+type UserMode = 'guest' | 'demo' | 'authenticated';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [currentTheme, setCurrentTheme] = useState('light');
+  const [userMode, setUserMode] = useState<UserMode>('demo');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
@@ -51,6 +55,38 @@ function App() {
   }, [currentTheme]);
 
   function showHomePage() {
+    setCurrentScreen('homepage');
+  }
+
+  function showLogin() {
+    setCurrentScreen('login');
+  }
+
+  function showSignUp() {
+    setCurrentScreen('signup');
+  }
+
+  function handleAuthSuccess() {
+    setIsAuthenticated(true);
+    setUserMode('authenticated');
+    setCurrentScreen('dashboard');
+  }
+
+  function handleGuestMode() {
+    setUserMode('guest');
+    setIsAuthenticated(false);
+    setCurrentScreen('dashboard');
+  }
+
+  function handleDemoMode() {
+    setUserMode('demo');
+    setIsAuthenticated(false);
+    setCurrentScreen('dashboard');
+  }
+
+  function handleLogout() {
+    setIsAuthenticated(false);
+    setUserMode('guest');
     setCurrentScreen('homepage');
   }
 
@@ -211,6 +247,21 @@ function App() {
     );
   }
 
+  function renderAuthentication() {
+    const t = getTranslations();
+    
+    return (
+      <Authentication
+        onAuthSuccess={handleAuthSuccess}
+        onGuestMode={handleGuestMode}
+        onDemoMode={handleDemoMode}
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        translations={t}
+      />
+    );
+  }
+
   function renderHomePage() {
     const t = getTranslations();
     
@@ -218,9 +269,10 @@ function App() {
       <HomePage
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onGetStarted={showDashboard}
-        onSeeDemo={showDashboard}
-        onNavigateDashboard={showDashboard}
+        onLogin={showLogin}
+        onSignUp={showSignUp}
+        onGuestMode={handleGuestMode}
+        onDemoMode={handleDemoMode}
         translations={t}
       />
     );
@@ -236,8 +288,16 @@ function App() {
           onThemeChange={switchTheme}
           onNavigateHome={currentScreen !== 'homepage' ? showHomePage : undefined}
           onNavigateBack={currentScreen === 'homepage' ? showDashboard : undefined}
+          onLogin={showLogin}
+          onSignUp={showSignUp}
+          onGuestMode={handleGuestMode}
+          onDemoMode={handleDemoMode}
+          onLogout={handleLogout}
+          isAuthenticated={isAuthenticated}
+          userMode={userMode}
         />
         {currentScreen === 'homepage' && renderHomePage()}
+        {(currentScreen === 'login' || currentScreen === 'signup') && renderAuthentication()}
         {currentScreen === 'dashboard' && renderDashboard()}
         {currentScreen === 'leads' && renderLeadManagement()}
         {currentScreen === 'quotations' && renderQuotationOrders()}

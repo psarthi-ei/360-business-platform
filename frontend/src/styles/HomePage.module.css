@@ -930,10 +930,13 @@
 
 .ctaButtons {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   justify-content: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .primaryCta {
@@ -969,6 +972,44 @@
 .secondaryCta:hover {
   background: white;
   color: #667eea;
+}
+
+.guestCta {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.guestCta:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.demoCta {
+  background: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.demoCta:hover {
+  background: rgba(255, 215, 0, 0.25);
+  border-color: #FFD700;
+  transform: translateY(-1px);
 }
 
 .ctaNote {
@@ -1179,12 +1220,15 @@
   .ctaButtons {
     flex-direction: column;
     align-items: center;
+    gap: 15px;
   }
 
-  .primaryCtaButton,
-  .secondaryCtaButton {
+  .primaryCta,
+  .secondaryCta,
+  .guestCta,
+  .demoCta {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
   }
 }
 

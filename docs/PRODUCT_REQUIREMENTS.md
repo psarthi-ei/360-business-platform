@@ -1,5 +1,5 @@
 # 360° BUSINESS PLATFORM FOR MSME MANUFACTURERS
-## Complete Business Requirements Documentation
+## Product Requirements Documentation
 
 ---
 
@@ -172,7 +172,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 
 ### **2. QUOTATION & SALES ORDER WITH STOCK INTEGRATION**
 **MVP Features:**
-- **Quotation creation** (Customer inquiry to formal quote with terms)
+- **Quotation creation** (Lead inquiry to formal quote with terms)
 - **Quote to order conversion** (Approved quotes become sales orders)
 - Order creation (Customer, fabric type, quantity, rate, delivery date)
 - **Stock availability check** (Real-time finished goods availability)
@@ -186,13 +186,30 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "स्टॉक चेक करें" (Check stock)
 - "ऑर्डर स्टेटस बताएं" (Tell order status)
 
+### **3. CRM - 360° CUSTOMER VIEW**
+**MVP Features:**
+- **Customer master data** (Company details, contact persons, addresses, GST)
+- **Complete interaction history** (All leads, quotes, orders in one place)
+- **Customer profile dashboard** (Business summary, total value, payment behavior)
+- **Communication log** (Calls, WhatsApp, emails, meeting notes)
+- **Customer segmentation** (VIP, Regular, New, Inactive)
+- **Relationship tracking** (Key contacts, decision makers, influencers)
+- **Customer preferences** (Preferred fabrics, colors, payment terms)
+- **Business metrics** (Lifetime value, order frequency, average order size)
+
+**Voice Commands:**
+- "कस्टमर प्रोफाइल दिखाओ" (Show customer profile)
+- "ગ્રાહકનો ઇતિહાસ બતાવો" (Show customer history)
+- "VIP customers कौन हैं?" (Who are VIP customers?)
+- "Last order कब था?" (When was last order?)
+
 **Smart Features:**
 - Auto-calculate production requirement after stock check
 - Show clear breakdown: "Stock से मिलेगा: 500m, बनाना पड़ेगा: 300m"
 - Delivery date suggestion based on production capacity
 - WhatsApp quotation and order confirmation to customer
 
-### **3. ADVANCE PAYMENT MANAGEMENT**
+### **4. ADVANCE PAYMENT MANAGEMENT**
 **MVP Features:**
 - Advance collection (Percentage-based advance entry)
 - Payment tracking (Advance received, balance due)
@@ -205,7 +222,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "બાકી પેમેન્ટ કેટલું?" (How much payment pending?)
 - "પેમેન્ટ રીમાઈન્ડર મોકલો" (Send payment reminder)
 
-### **4. INTELLIGENT WORK ORDER SYSTEM**
+### **5. INTELLIGENT WORK ORDER SYSTEM**
 **MVP Features:**
 - **Auto work order creation** (Generated only for stock shortfall quantities)
 - Basic production recipe (Fabric specifications, quality requirements)
@@ -223,7 +240,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - Auto-calculate material requirements with wastage
 - Production scheduling based on delivery commitments
 
-### **5. SMART PROCUREMENT SYSTEM WITH GRN**
+### **6. SMART PROCUREMENT SYSTEM WITH GRN**
 **MVP Features:**
 - Vendor database (Basic supplier information, contact details)
 - **Net requirement calculation** (Orders - Available Stock - WIP)
@@ -247,7 +264,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - **Quality check during GRN** (Accept/Reject/Partial acceptance)
 - **Automatic stock update** after GRN approval
 
-### **6. THREE-TIER INVENTORY MANAGEMENT**
+### **7. THREE-TIER INVENTORY MANAGEMENT**
 **MVP Features:**
 - **Raw Materials** (Yarn stock by count, color, supplier)
 - **Work-in-Process** (Material allocated to work orders)
@@ -266,7 +283,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - Automatic stock reservation for confirmed orders
 - Stock aging alerts for finished goods
 
-### **7. PRODUCTION TRACKING WITH QUALITY**
+### **8. PRODUCTION TRACKING WITH QUALITY**
 **MVP Features:**
 - Daily production entry (Quantity produced by machine/operator)
 - Quality segregation (A-grade, B-grade, reject quantities)
@@ -279,7 +296,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "ક્વોલિટી ચેક કરો" (Do quality check)
 - "मशीन स्टॉप किया" (Machine stopped)
 
-### **8. DISPATCH & DELIVERY MANAGEMENT**
+### **9. DISPATCH & DELIVERY MANAGEMENT**
 **MVP Features:**
 - Dispatch planning (Ready orders, packing instructions)
 - Transport management (Basic courier/transport booking)
@@ -292,7 +309,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "ડિલિવરી સ્ટેટસ ચેક કરો" (Check delivery status)
 - "ग्राहक को फोन करें" (Call customer)
 
-### **9. BASIC INVOICE & FINANCIAL TRACKING**
+### **10. BASIC INVOICE & FINANCIAL TRACKING**
 **MVP Features:**
 - GST invoice generation (Automated tax calculations)
 - Advance adjustment (Auto-adjust advance payments)
@@ -305,7 +322,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "બાકી પેમેન્ટ કેટલું?" (How much payment pending?)
 - "આજની સેલ કેટલી?" (How much today's sales?)
 
-### **10. CUSTOMER FEEDBACK & BASIC LOYALTY**
+### **11. CUSTOMER FEEDBACK & BASIC LOYALTY**
 **MVP Features:**
 - Post-delivery feedback (Simple rating system 1-5 stars)
 - Complaint logging (Issue description, priority, status)
@@ -318,7 +335,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - "કસ્ટમર ને મેસેજ મોકલો" (Send message to customer)
 - "लॉयल्टी पॉइंट्स जोड़ें" (Add loyalty points)
 
-### **11. MULTILINGUAL INTERFACE & VOICE**
+### **12. MULTILINGUAL INTERFACE & VOICE**
 **MVP Features:**
 - **Three Languages**: English (default), Hindi (primary), Gujarati (regional)
 - Mixed interface (Technical terms in English, actions in local language)
@@ -326,7 +343,7 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - WhatsApp integration (Customer communication in preferred language)
 - Language auto-detection (Based on user phone settings)
 
-### **12. ANALYTICS DASHBOARD WITH LEADS & SALES INSIGHTS**
+### **13. ANALYTICS DASHBOARD WITH LEADS & SALES INSIGHTS**
 **MVP Features:**
 - **Lead Analytics** (Daily leads, conversion rates, lead sources, follow-up pending)
 - **Sales Analytics** (Daily/monthly sales, top customers, product performance, quotation conversion)
@@ -497,6 +514,70 @@ Example:
 - Cash flow optimization (Avoid unnecessary procurement)
 - Better customer service (Accurate delivery promises)
 - Inventory turnover (Better stock rotation)
+
+## **USER ACCESS MODES**
+
+The platform provides multiple access modes to optimize user conversion and business demonstrations:
+
+### **1. Demo Mode** 🎬 **(DEFAULT)**
+**Purpose**: Marketing showcase with rich sample data - First impression optimization
+- **Target User**: All new visitors and prospects (default landing experience)
+- **Data State**: Pre-populated with realistic Gujarat textile business data
+- **Business Strategy**: Hook users with impressive showcase before they can doubt capabilities
+- **User Experience**:
+  - Rich sample data (50+ customers, active leads, pending quotes, completed orders)
+  - Realistic textile scenarios: Surat silk mills, Ahmedabad cotton processing
+  - Professional dashboard showing business metrics and KPIs
+  - Guided interactions with realistic business workflows
+  - "Success stories" embedded in sample data
+- **Conversion Psychology**: *"This is what YOUR business could look like"*
+- **Use Case**: *"Wow, this platform is already handling complex textile operations like mine"*
+
+### **2. Guest Mode** 👤
+**Purpose**: Hands-on evaluation with clean slate for testing
+- **Target User**: Convinced prospects who want to test with their own scenarios
+- **Data State**: Clean slate for user experimentation
+- **Business Strategy**: Convert demo-impressed users into active evaluators
+- **User Experience**: 
+  - Empty platform ready for user's test data
+  - Full functionality available for evaluation
+  - Can create realistic scenarios from their business
+  - Data persists during evaluation session
+  - All features unlocked for comprehensive testing
+- **Conversion Psychology**: *"Let me see how this works with MY business needs"*
+- **Use Case**: *"I'm convinced by the demo, now let me test my specific workflows"*
+
+### **3. Authenticated User Mode** 🔑
+**Purpose**: Full production access with personalized business data
+- **Target User**: Converted customers running actual business operations
+- **Data State**: User's real business data with security and backup
+- **Business Strategy**: Retain and expand successful conversions
+- **User Experience**:
+  - Personal business data and configurations
+  - Complete platform access with user management
+  - Integration with external systems (Tally, banks, etc.)
+  - Advanced analytics and reporting features
+  - Premium support and customizations
+- **Use Case**: *"This is now my primary business management system"*
+
+### **Optimized User Journey**
+```
+Homepage → Demo Mode (Default) → Guest Mode → Sign Up → Paid User
+   ↓           ↓                    ↓           ↓         ↓
+Landing    Rich showcase      Personal test   Convert   Retain
+```
+
+**Conversion Funnel Strategy:**
+1. **HOOK** (Demo): Impress with rich data showcase
+2. **CONVINCE** (Guest): Let them test their scenarios  
+3. **CONVERT** (Sign Up): Capture convinced evaluators
+4. **RETAIN** (Paid): Deliver ongoing business value
+
+### **Implementation Priority**
+- **Default Mode**: Demo (maximum first impression impact)
+- **Data Strategy**: Pre-load realistic Gujarat textile business scenarios
+- **Analytics**: Track Demo→Guest→SignUp conversion rates
+- **A/B Testing**: Optimize demo data for highest conversion
 
 ## **COMPETITIVE ADVANTAGE**
 

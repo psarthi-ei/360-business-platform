@@ -8,6 +8,13 @@ interface HeaderDropdownProps {
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
   showThemeSelector?: boolean;
+  onLogin?: () => void;
+  onSignUp?: () => void;
+  onGuestMode?: () => void;
+  onDemoMode?: () => void;
+  onLogout?: () => void;
+  isAuthenticated?: boolean;
+  userMode?: string;
 }
 
 function HeaderDropdown({
@@ -16,7 +23,14 @@ function HeaderDropdown({
   currentTheme,
   onThemeChange,
   onNavigateHome,
-  showThemeSelector = true
+  showThemeSelector = true,
+  onLogin,
+  onSignUp,
+  onGuestMode,
+  onDemoMode,
+  onLogout,
+  isAuthenticated = false,
+  userMode = 'guest'
 }: HeaderDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -78,6 +92,70 @@ function HeaderDropdown({
 
       {isOpen && (
         <div className={styles.dropdownMenu}>
+
+          {/* Authentication Section - Top Priority */}
+          <div className={styles.menuSection}>
+            <div className={styles.sectionTitle}>
+              {isAuthenticated ? `Account: ${userMode === 'guest' ? '👤 Guest' : userMode === 'demo' ? '🎬 Demo User' : '👤 User'}` : 'Access'}
+            </div>
+            {!isAuthenticated && (
+              <>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onLogin?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  <span className={styles.itemIcon}>🔑</span>
+                  <span className={styles.itemText}>Sign In</span>
+                </button>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onSignUp?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  <span className={styles.itemIcon}>📝</span>
+                  <span className={styles.itemText}>Sign Up</span>
+                </button>
+                <div className={styles.sectionTitle} style={{ fontSize: '0.8em', marginTop: '8px' }}>Browse Modes</div>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onGuestMode?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  <span className={styles.itemIcon}>👤</span>
+                  <span className={styles.itemText}>Guest Mode</span>
+                </button>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    onDemoMode?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  <span className={styles.itemIcon}>🎬</span>
+                  <span className={styles.itemText}>Demo Mode</span>
+                </button>
+              </>
+            )}
+            {isAuthenticated && (
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onLogout?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🚪</span>
+                <span className={styles.itemText}>Sign Out</span>
+              </button>
+            )}
+          </div>
 
           {/* Language Section */}
           <div className={styles.menuSection}>

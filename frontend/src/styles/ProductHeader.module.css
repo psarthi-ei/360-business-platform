@@ -114,6 +114,95 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Authentication Buttons */
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loginButton {
+  background: var(--color-primary, #667eea);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loginButton:hover {
+  background: var(--color-primary-dark, #5a67d8);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.signupButton {
+  background: transparent;
+  color: var(--color-primary, #667eea);
+  border: 1px solid var(--color-primary, #667eea);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signupButton:hover {
+  background: var(--color-primary, #667eea);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.guestButton {
+  background: rgba(108, 117, 125, 0.1);
+  color: var(--color-textSecondary, #6c757d);
+  border: 1px solid rgba(108, 117, 125, 0.3);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.guestButton:hover {
+  background: rgba(108, 117, 125, 0.2);
+  transform: translateY(-1px);
+}
+
+.demoButton {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ff8c00;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demoButton:hover {
+  background: rgba(255, 193, 7, 0.2);
+  transform: translateY(-1px);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-primary, #667eea);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .productHeader {
@@ -137,6 +226,20 @@
   .backButton, .homeButton {
     padding: 6px;
     font-size: 14px;
+  }
+  
+  .authButtons {
+    gap: 4px;
+  }
+  
+  .loginButton, .signupButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .guestButton, .demoButton {
+    padding: 4px 8px;
+    font-size: 11px;
     min-width: 36px;
     width: 36px;
     height: 36px;
