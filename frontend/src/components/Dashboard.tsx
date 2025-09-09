@@ -64,12 +64,12 @@ function Dashboard({
   const totalLeads = mockLeads.length;
   const hotLeads = mockLeads.filter(lead => lead.priority === 'hot').length;
   const pendingQuotes = mockQuotes.filter(quote => quote.status === 'pending').length;
-  const activeOrders = mockSalesOrders.filter(order => order.status === 'production').length;
   const totalRevenue = mockSalesOrders.reduce((sum, order) => sum + order.totalAmount, 0);
   const totalCustomers = mockCustomers.length;
   
   // Quick metrics
   const conversionRate = Math.round((mockSalesOrders.length / totalLeads) * 100);
+  
 
   return (
     <div className={styles.dashboard}>
@@ -93,186 +93,143 @@ function Dashboard({
       />
       
       <div className={styles.dashboardContainer}>
-        {/* Header Section */}
-        <div className={styles.dashboardHeader}>
-          <div className={styles.welcomeSection}>
-            <h1 className={styles.mainTitle}>{t.title}</h1>
-            <h2 className={styles.companyName}>{t.company}</h2>
-            <p className={styles.subtitle}>Complete 360° Business Visibility & Control</p>
-          </div>
-          
-          {/* Business Metrics Cards */}
-          <div className={styles.metricsGrid}>
-            <div className={styles.metricCard}>
-              <div className={styles.metricIcon}>📋</div>
-              <div className={styles.metricValue}>{totalLeads}</div>
-              <div className={styles.metricLabel}>Total Leads</div>
-              <div className={styles.metricSubtext}>{hotLeads} Hot Leads</div>
-            </div>
-            <div className={styles.metricCard}>
-              <div className={styles.metricIcon}>📄</div>
-              <div className={styles.metricValue}>{pendingQuotes}</div>
-              <div className={styles.metricLabel}>Pending Quotes</div>
-              <div className={styles.metricSubtext}>Need Action</div>
-            </div>
-            <div className={styles.metricCard}>
-              <div className={styles.metricIcon}>⚙️</div>
-              <div className={styles.metricValue}>{activeOrders}</div>
-              <div className={styles.metricLabel}>Active Orders</div>
-              <div className={styles.metricSubtext}>In Production</div>
-            </div>
-            <div className={styles.metricCard}>
-              <div className={styles.metricIcon}>₹</div>
-              <div className={styles.metricValue}>{formatCurrency(totalRevenue / 100000)}L</div>
-              <div className={styles.metricLabel}>Total Revenue</div>
-              <div className={styles.metricSubtext}>{conversionRate}% Conversion</div>
-            </div>
-          </div>
-        </div>
 
-        {/* Voice Command Section */}
-        <div className={styles.voiceSection}>
-          <div className={styles.voiceCard}>
-            <div className={styles.voiceIcon}>🎤</div>
+        {/* Business Owner's Daily View */}
+        <div className={styles.ownerDashboard}>
+          
+          {/* Today's Business Snapshot */}
+          <div className={styles.todaysSnapshot}>
+            <div className={styles.snapshotHeader}>
+              <h3>Today's Business</h3>
+              <span className={styles.date}>Monday, Sep 9</span>
+            </div>
+            
+            <div className={styles.keyNumbers}>
+              <div className={styles.keyMetric}>
+                <span className={styles.amount}>₹2.4L</span>
+                <span className={styles.label}>Payment Due Today</span>
+                <span className={styles.action}>3 customers</span>
+              </div>
+              <div className={styles.keyMetric}>
+                <span className={styles.amount}>{hotLeads}</span>
+                <span className={styles.label}>Hot Leads to Call</span>
+                <span className={styles.action}>Follow up now</span>
+              </div>
+              <div className={styles.keyMetric}>
+                <span className={styles.amount}>2,500m</span>
+                <span className={styles.label}>Fabric in Production</span>
+                <span className={styles.action}>On schedule</span>
+              </div>
+            </div>
+          </div>
+
+          {/* This Month's Performance */}
+          <div className={styles.monthlyPerformance}>
+            <div className={styles.performanceHeader}>
+              <h3>September Performance</h3>
+              <span className={styles.trend}>↗️ Growing</span>
+            </div>
+            
+            <div className={styles.performanceGrid}>
+              <div className={styles.performanceCard}>
+                <div className={styles.perfNumber}>₹{formatCurrency(totalRevenue / 100000)}L</div>
+                <div className={styles.perfLabel}>Total Revenue</div>
+                <div className={styles.perfChange}>+18% vs last month</div>
+              </div>
+              
+              <div className={styles.performanceCard}>
+                <div className={styles.perfNumber}>{totalLeads}</div>
+                <div className={styles.perfLabel}>New Inquiries</div>
+                <div className={styles.perfChange}>{hotLeads} very interested</div>
+              </div>
+              
+              <div className={styles.performanceCard}>
+                <div className={styles.perfNumber}>{conversionRate}%</div>
+                <div className={styles.perfLabel}>Inquiry to Order</div>
+                <div className={styles.perfChange}>Better than industry</div>
+              </div>
+              
+              <div className={styles.performanceCard}>
+                <div className={styles.perfNumber}>{totalCustomers}</div>
+                <div className={styles.perfLabel}>Happy Customers</div>
+                <div className={styles.perfChange}>5 repeat orders</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Business Areas */}
+          <div className={styles.businessAreas}>
+            <h3>Manage Your Business</h3>
+            
+            <div className={styles.areasGrid}>
+              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowLeadManagement}>
+                <div className={styles.areaIcon}>📞</div>
+                <div className={styles.areaInfo}>
+                  <h4>Customer Inquiries</h4>
+                  <p>{totalLeads} active leads • {hotLeads} need immediate attention</p>
+                </div>
+                <div className={styles.areaStatus}>Live</div>
+              </div>
+              
+              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowQuotationOrders}>
+                <div className={styles.areaIcon}>📋</div>
+                <div className={styles.areaInfo}>
+                  <h4>Quotes & Orders</h4>
+                  <p>{pendingQuotes} quotes pending • Follow up for orders</p>
+                </div>
+                <div className={styles.areaStatus}>Live</div>
+              </div>
+              
+              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowCustomerList}>
+                <div className={styles.areaIcon}>🤝</div>
+                <div className={styles.areaInfo}>
+                  <h4>Customer Relations</h4>
+                  <p>{totalCustomers} customers • Track orders & payments</p>
+                </div>
+                <div className={styles.areaStatus}>Live</div>
+              </div>
+              
+              <div className={`${styles.businessArea} ${styles.coming}`}>
+                <div className={styles.areaIcon}>💰</div>
+                <div className={styles.areaInfo}>
+                  <h4>Payments & Finance</h4>
+                  <p>Track advance payments, collections, cash flow</p>
+                </div>
+                <div className={styles.areaStatus}>Soon</div>
+              </div>
+              
+              <div className={`${styles.businessArea} ${styles.coming}`}>
+                <div className={styles.areaIcon}>🏭</div>
+                <div className={styles.areaInfo}>
+                  <h4>Production Floor</h4>
+                  <p>Work orders, inventory, quality tracking</p>
+                </div>
+                <div className={styles.areaStatus}>Soon</div>
+              </div>
+              
+              <div className={`${styles.businessArea} ${styles.coming}`}>
+                <div className={styles.areaIcon}>🚚</div>
+                <div className={styles.areaInfo}>
+                  <h4>Delivery & Dispatch</h4>
+                  <p>Schedule deliveries, track shipments</p>
+                </div>
+                <div className={styles.areaStatus}>Soon</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Voice Assistant */}
+          <div className={styles.voiceAssistant}>
             <div className={styles.voiceContent}>
-              <h3>Voice Commands Ready</h3>
-              <p>"આજના લીડ્સ બતાવો" • "नया ऑर्डर बनाएं" • "Payment status check करो"</p>
+              <span className={styles.voiceIcon}>🎤</span>
+              <div className={styles.voiceText}>
+                <h4>Ask anything about your business</h4>
+                <p>"આજે કેટલા leads આવ્યા?" • "Payment કોની બાકી છે?" • "Production કેમ ચાલે છે?"</p>
+              </div>
             </div>
             <button className={styles.voiceButton}>Start Voice</button>
           </div>
-        </div>
 
-        {/* Business Process Modules */}
-        <div className={styles.modulesSection}>
-          <h3 className={styles.sectionTitle}>Business Process Modules</h3>
-          
-          {/* Sales Process */}
-          <div className={styles.processGroup}>
-            <h4 className={styles.processTitle}>💼 Sales Process</h4>
-            <div className={styles.moduleGrid}>
-              <div className={`${styles.moduleCard} ${styles.clickable} ${styles.implemented}`} onClick={onShowLeadManagement}>
-                <div className={styles.moduleIcon}>📋</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.leadManagement}</h5>
-                  <p>{hotLeads} hot leads need attention</p>
-                </div>
-                <div className={styles.moduleStatus}>✅ Live</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.clickable} ${styles.implemented}`} onClick={onShowQuotationOrders}>
-                <div className={styles.moduleIcon}>📑</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.quotationOrders}</h5>
-                  <p>{pendingQuotes} quotes pending approval</p>
-                </div>
-                <div className={styles.moduleStatus}>✅ Live</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.clickable} ${styles.implemented}`} onClick={onShowSalesOrders}>
-                <div className={styles.moduleIcon}>💳</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.salesOrder}</h5>
-                  <p>{activeOrders} orders in production</p>
-                </div>
-                <div className={styles.moduleStatus}>✅ Live</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.clickable} ${styles.implemented}`} onClick={onShowCustomerList}>
-                <div className={styles.moduleIcon}>👥</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.customers}</h5>
-                  <p>{totalCustomers} active customers</p>
-                </div>
-                <div className={styles.moduleStatus}>✅ Live</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Production Process */}
-          <div className={styles.processGroup}>
-            <h4 className={styles.processTitle}>🏭 Production Process</h4>
-            <div className={styles.moduleGrid}>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>📋</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.workOrders}</h5>
-                  <p>Manage production scheduling</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>🛒</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.smartProcurement}</h5>
-                  <p>Auto purchase material</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>📦</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.inventory}</h5>
-                  <p>Track raw materials & finished goods</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>⚙️</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.productionTracking}</h5>
-                  <p>Monitor machine efficiency</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Operations Process */}
-          <div className={styles.processGroup}>
-            <h4 className={styles.processTitle}>🚚 Operations Process</h4>
-            <div className={styles.moduleGrid}>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>🚚</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.dispatchDelivery}</h5>
-                  <p>Track shipments & delivery</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>🧾</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.invoiceFinance}</h5>
-                  <p>GST invoicing & payment tracking</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>⭐</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.customerFeedback}</h5>
-                  <p>Collect & analyze feedback</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-              <div className={`${styles.moduleCard} ${styles.comingSoon}`}>
-                <div className={styles.moduleIcon}>📊</div>
-                <div className={styles.moduleContent}>
-                  <h5>{t.analyticsDashboard}</h5>
-                  <p>Business intelligence & reports</p>
-                </div>
-                <div className={styles.moduleStatus}>🚧 Coming Soon</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* MVP Status */}
-        <div className={styles.mvpStatus}>
-          <div className={styles.statusCard}>
-            <h4>🚀 MVP Development Status</h4>
-            <div className={styles.progressBar}>
-              <div className={styles.progressFill} style={{width: '30%'}}></div>
-            </div>
-            <p><strong>4 of 13 modules live</strong> • Sales process complete • Production modules coming next</p>
-          </div>
         </div>
       </div>
     </div>
