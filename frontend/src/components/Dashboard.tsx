@@ -12,6 +12,7 @@ interface DashboardProps {
   onShowLeadManagement: () => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
+  onShowAdvancePaymentManagement: () => void;
   onShowCustomerList: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
@@ -50,6 +51,7 @@ function Dashboard({
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowSalesOrders,
+  onShowAdvancePaymentManagement,
   onShowCustomerList,
   onLogin,
   onSignUp,
@@ -58,8 +60,11 @@ function Dashboard({
   onLogout,
   isAuthenticated,
   userMode,
-  translations: t 
+  translations
 }: DashboardProps) {
+  // Simplified translation approach - use existing translations where available, fallback to English
+  const t = translations;
+  
   // Calculate business metrics from mock data
   const totalLeads = mockLeads.length;
   const hotLeads = mockLeads.filter(lead => lead.priority === 'hot').length;
@@ -157,64 +162,286 @@ function Dashboard({
             </div>
           </div>
 
-          {/* Business Areas */}
-          <div className={styles.businessAreas}>
+          {/* Business Categories */}
+          <div className={styles.businessCategories}>
             <h3>Manage Your Business</h3>
             
-            <div className={styles.areasGrid}>
-              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowLeadManagement}>
-                <div className={styles.areaIcon}>📞</div>
-                <div className={styles.areaInfo}>
-                  <h4>Customer Inquiries</h4>
-                  <p>{totalLeads} active leads • {hotLeads} need immediate attention</p>
+            {/* Categories Grid - 5 Business Categories */}
+            <div className={styles.categoriesGrid}>
+              
+              {/* Category 1: Sales & Customer Management */}
+              <div className={`${styles.businessCategory} ${styles.live}`}>
+                <div className={styles.categoryHeader}>
+                  <div className={styles.categoryIcon}>🎯</div>
+                  <div className={styles.categoryTitle}>
+                    <h4>{translations.salesCustomerCategory}</h4>
+                  </div>
+                  <div className={styles.categoryStatus}>
+                    <span className={styles.statusBadge}>3/4 {translations.liveBadge}</span>
+                  </div>
                 </div>
-                <div className={styles.areaStatus}>Live</div>
+                
+                <div className={styles.categoryMetrics}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>{totalLeads}</span>
+                    <span className={styles.metricLabel}>{t.newLeads}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>{pendingQuotes}</span>
+                    <span className={styles.metricLabel}>{t.pendingQuotes}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>{totalCustomers}</span>
+                    <span className={styles.metricLabel}>{t.activeCustomers}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryModules}>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    onClick={onShowLeadManagement}
+                    title={t.leadManagement}
+                  >
+                    📞 {t.leads}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    onClick={onShowQuotationOrders}
+                    title={t.quotationOrders}
+                  >
+                    📋 {t.quotes}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    onClick={onShowCustomerList}
+                    title={t.customers}
+                  >
+                    🤝 {t.customers}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.loyalty} - ${t.comingBadge}`}
+                  >
+                    🏆 {t.loyalty}
+                  </button>
+                </div>
+              </div>
+
+              {/* Category 2: Financial Management */}
+              <div className={`${styles.businessCategory} ${styles.partial}`}>
+                <div className={styles.categoryHeader}>
+                  <div className={styles.categoryIcon}>💰</div>
+                  <div className={styles.categoryTitle}>
+                    <h4>{t.financialCategory}</h4>
+                  </div>
+                  <div className={styles.categoryStatus}>
+                    <span className={styles.statusBadge}>1/3 {t.liveBadge}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryMetrics}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>
+                      ₹{(mockSalesOrders.reduce((sum, o) => sum + (o.status === 'pending' ? o.totalAmount * 0.5 : 0), 0) / 100000).toFixed(1)}L
+                    </span>
+                    <span className={styles.metricLabel}>{t.pendingPayments}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>
+                      ₹{(totalRevenue / 100000).toFixed(1)}L
+                    </span>
+                    <span className={styles.metricLabel}>{t.totalRevenue}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>
+                      {mockSalesOrders.filter(o => o.paymentStatus.includes('overdue') || o.paymentStatus.includes('Pending')).length}
+                    </span>
+                    <span className={styles.metricLabel}>{t.overdue}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryModules}>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    onClick={onShowAdvancePaymentManagement}
+                    title={t.payments}
+                  >
+                    💳 {t.payments}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.reports} - ${t.comingBadge}`}
+                  >
+                    📊 {t.reports}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.cashFlow} - ${t.comingBadge}`}
+                  >
+                    💵 {t.cashFlow}
+                  </button>
+                </div>
+              </div>
+
+              {/* Category 3: Production & Operations */}
+              <div className={`${styles.businessCategory} ${styles.coming}`}>
+                <div className={styles.categoryHeader}>
+                  <div className={styles.categoryIcon}>🏭</div>
+                  <div className={styles.categoryTitle}>
+                    <h4>{t.productionCategory}</h4>
+                  </div>
+                  <div className={styles.categoryStatus}>
+                    <span className={styles.statusBadge}>0/4 {t.comingBadge}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryMetrics}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.workOrders}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.inProduction}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.qualityIssues}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryModules}>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.workOrders} - ${t.comingBadge}`}
+                  >
+                    🔧 {t.workOrders}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.procurement} - ${t.comingBadge}`}
+                  >
+                    📦 {t.procurement}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.inventory} - ${t.comingBadge}`}
+                  >
+                    📋 {t.inventory}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.production} - ${t.comingBadge}`}
+                  >
+                    ⚙️ {t.production}
+                  </button>
+                </div>
+              </div>
+
+              {/* Category 4: Fulfillment & Delivery */}
+              <div className={`${styles.businessCategory} ${styles.coming}`}>
+                <div className={styles.categoryHeader}>
+                  <div className={styles.categoryIcon}>🚚</div>
+                  <div className={styles.categoryTitle}>
+                    <h4>{t.fulfillmentCategory}</h4>
+                  </div>
+                  <div className={styles.categoryStatus}>
+                    <span className={styles.statusBadge}>0/2 {t.comingBadge}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryMetrics}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.readyToShip}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.inTransit}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.delivered}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryModules}>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.dispatch} - ${t.comingBadge}`}
+                  >
+                    📤 {t.dispatch}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.delivery} - ${t.comingBadge}`}
+                  >
+                    📍 {t.delivery}
+                  </button>
+                </div>
+              </div>
+
+              {/* Category 5: Business Intelligence & Analytics */}
+              <div className={`${styles.businessCategory} ${styles.coming}`}>
+                <div className={styles.categoryHeader}>
+                  <div className={styles.categoryIcon}>📊</div>
+                  <div className={styles.categoryTitle}>
+                    <h4>{t.analyticsCategory}</h4>
+                  </div>
+                  <div className={styles.categoryStatus}>
+                    <span className={styles.statusBadge}>0/3 {t.comingBadge}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryMetrics}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.reports}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>{t.voiceAI}</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricValue}>-</span>
+                    <span className={styles.metricLabel}>AI Insights</span>
+                  </div>
+                </div>
+                
+                <div className={styles.categoryModules}>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.analytics} - ${t.comingBadge}`}
+                  >
+                    📈 {t.analytics}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.voiceAI} - ${t.comingBadge}`}
+                  >
+                    🎤 {t.voiceAI}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    disabled
+                    title={`${t.reports} - ${t.comingBadge}`}
+                  >
+                    📋 {t.reports}
+                  </button>
+                </div>
               </div>
               
-              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowQuotationOrders}>
-                <div className={styles.areaIcon}>📋</div>
-                <div className={styles.areaInfo}>
-                  <h4>Quotes & Orders</h4>
-                  <p>{pendingQuotes} quotes pending • Follow up for orders</p>
-                </div>
-                <div className={styles.areaStatus}>Live</div>
-              </div>
-              
-              <div className={`${styles.businessArea} ${styles.live}`} onClick={onShowCustomerList}>
-                <div className={styles.areaIcon}>🤝</div>
-                <div className={styles.areaInfo}>
-                  <h4>Customer Relations</h4>
-                  <p>{totalCustomers} customers • Track orders & payments</p>
-                </div>
-                <div className={styles.areaStatus}>Live</div>
-              </div>
-              
-              <div className={`${styles.businessArea} ${styles.coming}`}>
-                <div className={styles.areaIcon}>💰</div>
-                <div className={styles.areaInfo}>
-                  <h4>Payments & Finance</h4>
-                  <p>Track advance payments, collections, cash flow</p>
-                </div>
-                <div className={styles.areaStatus}>Soon</div>
-              </div>
-              
-              <div className={`${styles.businessArea} ${styles.coming}`}>
-                <div className={styles.areaIcon}>🏭</div>
-                <div className={styles.areaInfo}>
-                  <h4>Production Floor</h4>
-                  <p>Work orders, inventory, quality tracking</p>
-                </div>
-                <div className={styles.areaStatus}>Soon</div>
-              </div>
-              
-              <div className={`${styles.businessArea} ${styles.coming}`}>
-                <div className={styles.areaIcon}>🚚</div>
-                <div className={styles.areaInfo}>
-                  <h4>Delivery & Dispatch</h4>
-                  <p>Schedule deliveries, track shipments</p>
-                </div>
-                <div className={styles.areaStatus}>Soon</div>
-              </div>
             </div>
           </div>
 

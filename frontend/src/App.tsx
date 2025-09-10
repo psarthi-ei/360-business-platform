@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import LeadManagement from './components/LeadManagement';
 import QuotationOrders from './components/QuotationOrders';
 import SalesOrders from './components/SalesOrders';
+import AdvancePaymentManagement from './components/AdvancePaymentManagement';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
 import ProductHeader from './components/ProductHeader';
@@ -25,6 +26,7 @@ function App() {
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
+  const [paymentFilter, setPaymentFilter] = useState('all');
   const [customerSearch, setCustomerSearch] = useState('');
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
 
@@ -53,6 +55,13 @@ function App() {
     const theme = themes[currentTheme] || themes['light'];
     applyTheme(theme);
   }, [currentTheme]);
+
+  // Scroll to top when screen changes
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+  }, [currentScreen]);
 
   function showHomePage() {
     setCurrentScreen('homepage');
@@ -117,6 +126,10 @@ function App() {
     setCurrentScreen('salesorders');
   }
 
+  function showAdvancePaymentManagement() {
+    setCurrentScreen('advancepayment');
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
     // In a real app, this would convert quote to customer and create sales order
@@ -146,6 +159,7 @@ function App() {
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
+          onShowAdvancePaymentManagement={showAdvancePaymentManagement}
           onShowCustomerList={showCustomerList}
           onLogin={showLogin}
           onSignUp={showSignUp}
@@ -220,6 +234,23 @@ function App() {
         translations={t}
         filterState={orderFilter}
         onFilterChange={setOrderFilter}
+      />
+    );
+  }
+
+  function renderAdvancePaymentManagement() {
+    const t = getTranslations();
+    
+    return (
+      <AdvancePaymentManagement
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onNavigateBack={showDashboard}
+        onShowSalesOrders={showSalesOrders}
+        onShowCustomerProfile={showCustomerProfile}
+        translations={t}
+        filterState={paymentFilter}
+        onFilterChange={setPaymentFilter}
       />
     );
   }
@@ -323,6 +354,7 @@ function App() {
         {currentScreen === 'leads' && renderLeadManagement()}
         {currentScreen === 'quotations' && renderQuotationOrders()}
         {currentScreen === 'salesorders' && renderSalesOrders()}
+        {currentScreen === 'advancepayment' && renderAdvancePaymentManagement()}
         {currentScreen === 'customerprofile' && renderCustomerProfile()}
         {currentScreen === 'customerlist' && renderCustomerList()}
       </div>

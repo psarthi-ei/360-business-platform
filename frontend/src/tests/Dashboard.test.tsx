@@ -9,6 +9,7 @@ const mockProps = {
   onShowLeadManagement: jest.fn(),
   onShowQuotationOrders: jest.fn(),
   onShowSalesOrders: jest.fn(),
+  onShowAdvancePaymentManagement: jest.fn(),
   onShowCustomerList: jest.fn(),
   translations: {
     title: "360° Business Platform",
@@ -148,6 +149,7 @@ describe('Dashboard Component', () => {
         onShowLeadManagement: jest.fn(),
         onShowQuotationOrders: jest.fn(),
         onShowSalesOrders: jest.fn(),
+        onShowAdvancePaymentManagement: jest.fn(),
         onShowCustomerList: jest.fn(),
         translations: mockProps.translations
       };

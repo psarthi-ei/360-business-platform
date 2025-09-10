@@ -118,6 +118,7 @@ describe('Core Application Functionality', () => {
         onShowLeadManagement: jest.fn(),
         onShowQuotationOrders: jest.fn(),
         onShowSalesOrders: jest.fn(),
+        onShowAdvancePaymentManagement: jest.fn(),
         onShowCustomerList: jest.fn(),
         translations: mockTranslations
       };

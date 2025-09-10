@@ -344,8 +344,8 @@
   font-weight: 600;
 }
 
-/* Business Areas - Clear Navigation */
-.businessAreas {
+/* Business Categories - 5 Category Layout */
+.businessCategories {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   padding: 25px;
@@ -354,30 +354,202 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.businessAreas h3 {
+.businessCategories h3 {
   font-size: 1.3rem;
   font-weight: 700;
   color: #2c3e50;
   margin: 0 0 25px 0;
+  text-align: center;
 }
 
-.areasGrid {
+.categoriesGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 15px;
+  gap: 20px;
 }
 
 @media (min-width: 768px) {
-  .areasGrid {
+  .categoriesGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 25px;
   }
 }
 
-@media (min-width: 1100px) {
-  .areasGrid {
+@media (min-width: 1200px) {
+  .categoriesGrid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* Business Category Cards */
+.businessCategory {
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.businessCategory.live {
+  border-color: #27ae60;
+  background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+}
+
+.businessCategory.partial {
+  border-color: #f39c12;
+  background: linear-gradient(135deg, #fff8e1 0%, #ffffff 100%);
+}
+
+.businessCategory.coming {
+  border-color: #95a5a6;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  opacity: 0.7;
+}
+
+.businessCategory:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Category Header */
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.categoryIcon {
+  font-size: 2rem;
+  margin-right: 12px;
+}
+
+.categoryTitle {
+  flex: 1;
+}
+
+.categoryTitle h4 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.categorySubtitle {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-weight: 400;
+}
+
+.categoryStatus {
+  text-align: right;
+}
+
+.statusBadge {
+  background: #e9ecef;
+  color: #495057;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.live .statusBadge {
+  background: #d4edda;
+  color: #155724;
+}
+
+.partial .statusBadge {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.coming .statusBadge {
+  background: #e2e3e5;
+  color: #6c757d;
+}
+
+/* Category Metrics */
+.categoryMetrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.metric {
+  text-align: center;
+  flex: 1;
+}
+
+.metricValue {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Category Modules */
+.categoryModules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.moduleBtn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+}
+
+.moduleBtn.live {
+  background: #27ae60;
+}
+
+.moduleBtn.live:hover {
+  background: #229954;
+  transform: translateY(-1px);
+}
+
+.moduleBtn.coming {
+  background: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.moduleBtn:disabled {
+  cursor: not-allowed;
+}
+
+.moduleBtn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .businessArea {
@@ -1539,19 +1711,43 @@
     font-size: 0.75rem;
   }
   
-  .businessAreas {
+  .businessCategories {
     padding: 20px;
   }
   
-  .businessAreas h3 {
+  .businessCategories h3 {
     font-size: 1.1rem;
   }
   
-  .businessArea {
+  .businessCategory {
     padding: 15px;
+  }
+  
+  .categoryHeader {
     flex-direction: column;
     text-align: center;
     gap: 10px;
+    align-items: center;
+  }
+  
+  .categoryIcon {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .categoryMetrics {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .categoryModules {
+    justify-content: center;
+  }
+  
+  .moduleBtn {
+    min-width: 70px;
+    font-size: 0.75rem;
+    padding: 6px 10px;
   }
   
   .areaIcon {

@@ -1,7 +1,80 @@
 export interface TranslationStrings {
   [key: string]: string;
   
-  // Common UI Elements
+  // Authentication
+  welcomeBack: string;
+  signInToContinue: string;
+  email: string;
+  password: string;
+  emailPlaceholder: string;
+  passwordPlaceholder: string;
+  signIn: string;
+  signingIn: string;
+  signUp: string;
+  dontHaveAccount: string;
+  alreadyHaveAccount: string;
+  tryAsGuest: string;
+  
+  // Dashboard
+  title: string;
+  company: string;
+  founder: string;
+  welcome: string;
+  tagline: string;
+  businessPlatform: string;
+  voiceCommands: string;
+  
+  // Business Categories
+  salesCustomerCategory: string;
+  financialCategory: string;
+  productionCategory: string;
+  fulfillmentCategory: string;
+  analyticsCategory: string;
+  
+  // Module Names
+  leadManagement: string;
+  quotationOrders: string;
+  salesOrder: string;
+  customers: string;
+  workOrders: string;
+  smartProcurement: string;
+  inventory: string;
+  productionTracking: string;
+  dispatchDelivery: string;
+  invoiceFinance: string;
+  customerFeedback: string;
+  analyticsDashboard: string;
+  leads: string;
+  quotes: string;
+  loyalty: string;
+  payments: string;
+  reports: string;
+  cashFlow: string;
+  procurement: string;
+  production: string;
+  dispatch: string;
+  voiceAI: string;
+  analytics: string;
+  
+  // Metrics Labels
+  newLeads: string;
+  pendingQuotes: string;
+  activeCustomers: string;
+  pendingPayments: string;
+  totalRevenue: string;
+  overdue: string;
+  readyToShip: string;
+  inTransit: string;
+  delivered: string;
+  qualityIssues: string;
+  inProduction: string;
+  
+  // Category Status
+  liveBadge: string;
+  comingBadge: string;
+  moduleCount: string;
+  
+  // Common UI
   backToDashboard: string;
   call: string;
   whatsapp: string;
@@ -16,186 +89,112 @@ export interface TranslationStrings {
   converted: string;
   expired: string;
   
-  // Authentication
-  welcomeBack: string;
-  signInToContinue: string;
-  email: string;
-  password: string;
-  emailPlaceholder: string;
-  passwordPlaceholder: string;
-  signIn: string;
-  signingIn: string;
-  signUp: string;
-  dontHaveAccount: string;
-  alreadyHaveAccount: string;
-  tryAsGuest: string;
-  guestUser: string;
-  guestCompany: string;
-  textileManufacturers: string;
-  demoAccount: string;
-  demoInstructions: string;
-  fillDemoCredentials: string;
-  pleaseEnterBothFields: string;
-  invalidCredentials: string;
-  createAccount: string;
-  joinThousandsManufacturers: string;
-  businessInfo: string;
-  accountSetup: string;
-  tellUsAboutBusiness: string;
-  ownerName: string;
-  ownerNamePlaceholder: string;
-  companyName: string;
-  companyNamePlaceholder: string;
-  phoneNumber: string;
-  phonePlaceholder: string;
-  businessType: string;
-  textileManufacturing: string;
-  garmentManufacturing: string;
-  textileTrading: string;
-  location: string;
-  locationPlaceholder: string;
-  setupYourAccount: string;
-  confirmPassword: string;
-  confirmPasswordPlaceholder: string;
-  continue: string;
-  back: string;
-  creatingAccount: string;
-  pleaseFillAllFields: string;
-  pleaseFillRequiredFields: string;
-  passwordsDontMatch: string;
-  trustedByManufacturers: string;
-  
-  // Dashboard
-  title: string;
-  company: string;
-  founder: string;
-  welcome: string;
-  tagline: string;
-  businessPlatform: string;
-  voiceCommands: string;
-  voiceExample1: string;
-  voiceExample2: string;
-  voiceExample3: string;
-  
-  // Feature Cards
-  leadManagement: string;
-  leadManagementDesc: string;
-  quotationOrders: string;
-  quotationOrdersDesc: string;
-  salesOrder: string;
-  salesOrderDesc: string;
-  customers: string;
-  customersDesc: string;
-  workOrders: string;
-  workOrdersDesc: string;
-  smartProcurement: string;
-  productionTracking: string;
-  dispatchDelivery: string;
-  invoiceFinance: string;
-  customerFeedback: string;
-  analyticsDashboard: string;
-  production: string;
-  productionDesc: string;
-  inventory: string;
-  inventoryDesc: string;
-  dispatch: string;
-  dispatchDesc: string;
-  accounting: string;
-  accountingDesc: string;
-  analytics: string;
-  analyticsDesc: string;
-  reports: string;
-  reportsDesc: string;
-  communication: string;
-  communicationDesc: string;
-  
-  // Lead Management
-  addNewLead: string;
-  showAll: string;
-  showHotLeads: string;
-  showWarmLeads: string;
-  showColdLeads: string;
-  hotLead: string;
-  warmLead: string;
-  coldLead: string;
-  sendQuote: string;
-  
-  // Voice Commands
-  voiceCommandsHint: string;
-  addFabricInquiry: string;
-  callRajesh: string;
-  showCottonLeads: string;
-  
-  // Orders & Quotes
-  quoteNumber: string;
-  quoteDate: string;
-  orderNumber: string;
-  orderDate: string;
-  orderStatus: string;
-  customerName: string;
-  totalAmount: string;
-  pendingPayment: string;
-  paymentReceived: string;
-  
-  // Additional Translation Keys
-  colors: string;
-  inquiryDate: string;
-  createQuoteRajesh: string;
-  showApprovedQuotes: string;
-  convertToOrder: string;
-  addNewQuote: string;
-  validUntil: string;
-  status: string;
-  viewPDF: string;
-  approve: string;
-  convertToCustomer: string;
-  readyForProduction: string;
-  filters: string;
-  all: string;
-  showPending: string;
-  showExpired: string;
-  showConverted: string;
+  // Customer Management
   customerProfile: string;
+  createNewQuote: string;
   customerSince: string;
   totalBusiness: string;
   totalOrders: string;
   conversionRate: string;
   paymentScore: string;
+  businessInsights: string;
+  searchCustomers: string;
+  showAll: string;
+  voiceCommandsHint: string;
   quoteHistory: string;
   orderHistory: string;
-  businessInsights: string;
-  averageOrderSize: string;
-  paymentHistory: string;
-  onTime: string;
-  delayed: string;
   transactionHistory: string;
-  allQuotes: string;
-  allOrders: string;
-  communicationLog: string;
-  businessInformation: string;
-  preferredMaterials: string;
-  volumePatterns: string;
-  paymentTerms: string;
-  deliveryPreferences: string;
-  createNewQuote: string;
-  followUpPending: string;
-  viewPaymentStatus: string;
-  sendPaymentReminder: string;
-  customerList: string;
-  addNewCustomer: string;
-  advancePayments: string;
-
-  // Customer Management
-  searchCustomers: string;
-  searchPlaceholder: string;
   
-  // Additional missing keys
+  // Action Buttons
+  viewPDF: string;
+  approve: string;
+  convertToOrder: string;
+  showExpired: string;
   showApproved: string;
+  showHotLeads: string;
+  showWarmLeads: string;
+  showColdLeads: string;
+  addNewLead: string;
+  addNewQuote: string;
+  showPending: string;
 }
 
-const translations: Record<string, TranslationStrings> = {
+const baseTranslations: Record<string, Partial<TranslationStrings>> = {
   en: {
-    // Common UI Elements
+    // Authentication
+    welcomeBack: "Welcome Back",
+    signInToContinue: "Sign in to continue managing your textile business",
+    email: "Email Address",
+    password: "Password",
+    emailPlaceholder: "Enter your email address",
+    passwordPlaceholder: "Enter your password",
+    signIn: "Sign In",
+    signingIn: "Signing In...",
+    signUp: "Sign Up",
+    dontHaveAccount: "Don't have an account?",
+    alreadyHaveAccount: "Already have an account?",
+    tryAsGuest: "Try as Guest",
+    
+    // Dashboard
+    title: "360° Business Platform",
+    company: "ElevateBusiness",
+    founder: "Built by Partha Sarthi for Gujarat Textile Manufacturers",
+    welcome: "Welcome to Your Business Hub",
+    tagline: "360° Business Platform for Gujarat Textile Manufacturers",
+    businessPlatform: "Complete end-to-end solution for textile manufacturing business",
+    voiceCommands: "Voice Commands (Speak in Gujarati, Hindi, or English)",
+    
+    // Business Categories
+    salesCustomerCategory: "Sales & Customer Management",
+    financialCategory: "Financial Management",
+    productionCategory: "Production & Operations",
+    fulfillmentCategory: "Fulfillment & Delivery",
+    analyticsCategory: "Business Intelligence",
+    
+    // Module Names
+    leadManagement: "Lead Management",
+    quotationOrders: "Quotations & Orders",
+    salesOrder: "Sales Orders",
+    customers: "Customers",
+    workOrders: "Work Orders",
+    smartProcurement: "Smart Procurement",
+    inventory: "Inventory (3-Tier)",
+    productionTracking: "Production Tracking",
+    dispatchDelivery: "Dispatch & Delivery",
+    invoiceFinance: "Invoice & Finance",
+    customerFeedback: "Customer Feedback",
+    analyticsDashboard: "Analytics Dashboard",
+    leads: "Leads",
+    quotes: "Quotes",
+    loyalty: "Loyalty",
+    payments: "Payments",
+    reports: "Reports",
+    cashFlow: "Cash Flow",
+    procurement: "Procurement",
+    production: "Production",
+    dispatch: "Dispatch",
+    voiceAI: "Voice AI",
+    analytics: "Analytics",
+    
+    // Metrics Labels
+    newLeads: "New Leads",
+    pendingQuotes: "Pending Quotes",
+    activeCustomers: "Active Customers",
+    pendingPayments: "Pending Payments",
+    totalRevenue: "Total Revenue",
+    overdue: "Overdue",
+    readyToShip: "Ready to Ship",
+    inTransit: "In Transit",
+    delivered: "Delivered",
+    qualityIssues: "Quality Issues",
+    inProduction: "In Production",
+    
+    // Category Status
+    liveBadge: "Live",
+    comingBadge: "Coming",
+    moduleCount: "modules",
+    
+    // Common UI
     backToDashboard: "← Back to Dashboard",
     call: "📞 Call",
     whatsapp: "📱 WhatsApp",
@@ -210,262 +209,34 @@ const translations: Record<string, TranslationStrings> = {
     converted: "Converted",
     expired: "Expired",
     
-    // Authentication
-    welcomeBack: "Welcome Back",
-    signInToContinue: "Sign in to continue managing your textile business",
-    email: "Email Address",
-    password: "Password",
-    emailPlaceholder: "Enter your email address",
-    passwordPlaceholder: "Enter your password",
-    signIn: "Sign In",
-    signingIn: "Signing In...",
-    signUp: "Sign Up",
-    dontHaveAccount: "Don't have an account?",
-    alreadyHaveAccount: "Already have an account?",
-    tryAsGuest: "Try as Guest",
-    guestUser: "Guest User",
-    guestCompany: "Demo Textiles Ltd.",
-    textileManufacturers: "Built for Gujarat textile manufacturers",
-    demoAccount: "Demo Account Available",
-    demoInstructions: "Use demo credentials to explore all features",
-    fillDemoCredentials: "Fill Demo Credentials",
-    pleaseEnterBothFields: "Please enter both email and password",
-    invalidCredentials: "Invalid email or password",
-    createAccount: "Create Account",
-    joinThousandsManufacturers: "Join thousands of manufacturers digitizing their business",
-    businessInfo: "Business Info",
-    accountSetup: "Account Setup",
-    tellUsAboutBusiness: "Tell us about your business",
-    ownerName: "Owner/Manager Name",
-    ownerNamePlaceholder: "Enter your full name",
-    companyName: "Company Name",
-    companyNamePlaceholder: "Enter your company name",
-    phoneNumber: "Phone Number",
-    phonePlaceholder: "+91 98765 43210",
-    businessType: "Business Type",
-    textileManufacturing: "Textile Manufacturing",
-    garmentManufacturing: "Garment Manufacturing", 
-    textileTrading: "Textile Trading",
-    location: "Location",
-    locationPlaceholder: "Surat, Gujarat",
-    setupYourAccount: "Set up your account",
-    confirmPassword: "Confirm Password",
-    confirmPasswordPlaceholder: "Re-enter your password",
-    continue: "Continue",
-    back: "Back",
-    creatingAccount: "Creating Account...",
-    pleaseFillAllFields: "Please fill all required fields",
-    pleaseFillRequiredFields: "Please fill all required fields",
-    passwordsDontMatch: "Passwords don't match",
-    trustedByManufacturers: "Trusted by 500+ textile manufacturers across Gujarat",
-    
-    // Dashboard
-    title: "360° Business Platform",
-    company: "ElevateBusiness",
-    founder: "Built by Partha Sarthi for Gujarat Textile Manufacturers",
-    welcome: "Welcome to Your Business Hub",
-    tagline: "360° Business Platform for Gujarat Textile Manufacturers",
-    businessPlatform: "Complete end-to-end solution for textile manufacturing business",
-    voiceCommands: "Voice Commands (Speak in Gujarati, Hindi, or English)",
-    voiceExample1: "Add new fabric inquiry from Mumbai",
-    voiceExample2: "Call Rajesh Textiles",
-    voiceExample3: "Show cotton fabric leads only",
-    
-    // Feature Cards
-    leadManagement: "Lead Management",
-    leadManagementDesc: "Track and convert potential customers",
-    quotationOrders: "Quotations & Orders",
-    quotationOrdersDesc: "Create quotes and manage approvals",
-    salesOrder: "Sales Orders",
-    salesOrderDesc: "Track confirmed orders and payments",
-    customers: "Customers",
-    customersDesc: "Customer relationship management",
-    workOrders: "Work Orders",
-    workOrdersDesc: "Production planning and scheduling",
-    smartProcurement: "Smart Procurement",
-    productionTracking: "Production Tracking",
-    dispatchDelivery: "Dispatch & Delivery",
-    invoiceFinance: "Invoice & Finance",
-    customerFeedback: "Customer Feedback",
-    analyticsDashboard: "Analytics Dashboard",
-    production: "Production",
-    productionDesc: "Track manufacturing progress",
-    inventory: "Inventory (3-Tier)",
-    inventoryDesc: "Raw materials and finished goods",
-    dispatch: "Dispatch",
-    dispatchDesc: "Shipping and delivery management",
-    accounting: "Accounting",
-    accountingDesc: "Financial tracking and invoicing",
-    analytics: "Analytics",
-    analyticsDesc: "Business insights and reporting",
-    reports: "Reports",
-    reportsDesc: "Generate business reports",
-    communication: "Communication",
-    communicationDesc: "WhatsApp and voice integration",
-    
-    // Lead Management
-    addNewLead: "+ Add New Lead",
-    showAll: "Show All",
-    showHotLeads: "🔥 Hot Lead",
-    showWarmLeads: "⭐ Warm Lead",
-    showColdLeads: "❄️ Cold Lead",
-    hotLead: "Hot Lead",
-    warmLead: "Warm Lead",
-    coldLead: "Cold Lead",
-    sendQuote: "📑 Send Quote",
-    
-    // Voice Commands
-    voiceCommandsHint: "Try saying:",
-    addFabricInquiry: "Add new fabric inquiry from Mumbai",
-    callRajesh: "Call Rajesh Textiles",
-    showCottonLeads: "Show cotton fabric leads only",
-    
-    // Orders & Quotes
-    quoteNumber: "Quote Number",
-    quoteDate: "Quote Date",
-    orderNumber: "Order Number",
-    orderDate: "Order Date",
-    orderStatus: "Order Status",
-    customerName: "Customer Name",
-    totalAmount: "Total Amount",
-    pendingPayment: "Pending Payment",
-    paymentReceived: "Payment Received",
-    
-    // Additional Translation Keys
-    colors: "Colors",
-    inquiryDate: "Inquiry Date",
-    createQuoteRajesh: "Create quote for Rajesh",
-    showApprovedQuotes: "Show approved quotes",
-    convertToOrder: "Convert to Order",
-    addNewQuote: "+ Add New Quote",
-    validUntil: "Valid Until",
-    status: "Status",
-    viewPDF: "View PDF",
-    approve: "Approve",
-    convertToCustomer: "Convert to Customer",
-    readyForProduction: "Ready for Production",
-    filters: "Filters",
-    all: "All",
-    showPending: "Show Pending",
-    showExpired: "Show Expired",
-    showConverted: "Show Converted",
+    // Customer Management
     customerProfile: "Customer Profile",
+    createNewQuote: "Create New Quote",
     customerSince: "Customer Since",
     totalBusiness: "Total Business",
     totalOrders: "Total Orders",
     conversionRate: "Conversion Rate",
     paymentScore: "Payment Score",
+    businessInsights: "Business Insights",
+    searchCustomers: "Search customers by name, location, or specialization...",
+    showAll: "Show All",
+    voiceCommandsHint: "Try saying:",
     quoteHistory: "Quote History",
     orderHistory: "Order History",
-    businessInsights: "Business Insights",
-    averageOrderSize: "Average Order Size",
-    paymentHistory: "Payment History",
-    onTime: "On Time",
-    delayed: "Delayed",
     transactionHistory: "Transaction History",
-    allQuotes: "All Quotes",
-    allOrders: "All Orders",
-    communicationLog: "Communication Log",
-    businessInformation: "Business Information",
-    preferredMaterials: "Preferred Materials",
-    volumePatterns: "Volume Patterns",
-    paymentTerms: "Payment Terms",
-    deliveryPreferences: "Delivery Preferences",
-    createNewQuote: "Create New Quote",
-    followUpPending: "Follow-up Pending",
-    viewPaymentStatus: "View Payment Status",
-    sendPaymentReminder: "Send Payment Reminder",
-    customerList: "Customer List",
-    addNewCustomer: "+ Add New Customer",
-    advancePayments: "Advance Payments",
-
-    // Customer Management
-    searchCustomers: "Search customers by name, location, or specialization...",
-    searchPlaceholder: "Search customers by name, location, or specialization...",
     
-    // Additional missing keys
+    // Action Buttons
+    viewPDF: "View PDF",
+    approve: "Approve", 
+    convertToOrder: "Convert to Order",
+    showExpired: "Show Expired",
     showApproved: "Show Approved",
-
-    // HomePage Translations
-    heroTitle: "Business Benefits",
-    heroSubtitle: "Complete business visibility for Indian MSME textile manufacturers - from lead generation to customer loyalty",
-    voiceControl: "Voice Control",
-    threeLanguages: "3 Languages",
-    mobileFirst: "Mobile First",
-    getStarted: "Get Started",
-    todayBusiness: "Today's Business",
-    newLeads: "New Leads",
-    todaySales: "Today's Sales",
-    ordersReady: "Orders Ready",
-    speakCommand: "Speak your command...",
-    
-    // Workflow Section
-    workflowTitle: "Complete Business Workflow",
-    workflowSubtitle: "From lead to payment - manage everything with voice commands",
-    leadCapture: "Lead Capture",
-    quotation: "Quotation",
-    payment: "Payment",
-    
-    // Impact Statistics
-    impactTitle: "Real Business Impact",
-    hoursDaily: "Hours Saved Daily",
-    hoursDesc: "Automate manual tasks",
-    voiceAccuracy: "Voice Accuracy",
-    accuracyDesc: "In Gujarati & Hindi",
-    efficiency: "Efficiency Gain",
-    efficiencyDesc: "Faster order processing",
-    satisfaction: "User Satisfaction",
-    satisfactionDesc: "Love the simplicity",
-    
-    // Benefits Section
-    benefitsTitle: "Built for Indian MSME Textile Manufacturers",
-    voiceBenefitTitle: "Voice-First Interface",
-    voiceBenefitDesc: "Complete tasks with simple voice commands in your language",
-    multilingualBenefitTitle: "True Multilingual",
-    multilingualBenefitDesc: "Seamlessly switch between Gujarati, Hindi, and English",
-    mobileBenefitTitle: "Mobile Optimized",
-    mobileBenefitDesc: "Access from anywhere - factory floor, office, or on the go",
-    speedBenefitTitle: "Lightning Fast",
-    speedBenefitDesc: "Complete orders 70% faster than traditional methods",
-    
-    // Features Section
-    featuresTitle: "Everything You Need to Run Your Business",
-    salesCategory: "Sales & Orders",
-    productionCategory: "Production",
-    inventoryCategory: "Inventory",
-    orderManagement: "Complete Order Management",
-    intelligentWorkOrders: "Intelligent Work Orders",
-    qualityControl: "Quality Control & Grading",
-    efficiencyMetrics: "Efficiency Metrics",
-    rawMaterials: "Raw Material Management",
-    workInProgress: "Work-in-Progress Tracking",
-    finishedGoods: "Finished Goods Inventory",
-    procurement: "Smart Procurement with GRN",
-    
-    // Testimonials
-    storiesTitle: "Trusted by Gujarat's Leading Manufacturers",
-    testimonial1Name: "Rajesh Patel",
-    testimonial1Business: "Surat Silk Mills",
-    testimonial1Quote: "This platform revolutionized our operations. We save 3 hours daily and our order accuracy improved by 95%",
-    testimonial2Name: "Mehul Shah",
-    testimonial2Business: "Ahmedabad Textiles",
-    testimonial2Quote: "Voice commands in Gujarati made it so easy for our team. Even our senior staff adopted it within days",
-    
-    // CTA Section
-    ctaTitle: "Ready to Transform Your Textile Business?",
-    ctaSubtitle: "Join leading manufacturers who are already saving 3+ hours daily",
-    startFreeTrial: "Start Free Trial",
-    watchDemo: "Watch Demo",
-    ctaNote: "No credit card required • Free 30-day trial • Full support in Gujarati",
-    
-    // Footer
-    footerTagline: "Scaling Business with Technology",
-    contactTitle: "Contact",
-    linkedinTitle: "Connect",
-    supportTitle: "Support",
-    servicesTitle: "Services",
-    languagesTitle: "Languages",
-    allRights: "All rights reserved."
+    showHotLeads: "🔥 Hot Leads",
+    showWarmLeads: "⭐ Warm Leads",
+    showColdLeads: "❄️ Cold Leads",
+    addNewLead: "+ Add New Lead",
+    addNewQuote: "+ Add New Quote",
+    showPending: "Show Pending"
   },
   
   gu: {
@@ -473,54 +244,76 @@ const translations: Record<string, TranslationStrings> = {
     welcomeBack: "ફરી સ્વાગત છે",
     signInToContinue: "ચાલુ રાખવા માટે સાઇન ઇન કરો",
     email: "ઈમેલ",
-    emailPlaceholder: "તમારો ઈમેલ દાખલ કરો",
     password: "પાસવર્ડ",
+    emailPlaceholder: "તમારો ઈમેલ દાખલ કરો",
     passwordPlaceholder: "તમારો પાસવર્ડ દાખલ કરો",
     signIn: "સાઇન ઇન",
     signingIn: "સાઇન ઇન કરી રહ્યા છીએ...",
-    dontHaveAccount: "એકાઉન્ટ નથી?",
     signUp: "સાઇન અપ",
-    tryAsGuest: "ગેસ્ટ તરીકે પ્રયાસ કરો",
-    useDemoAccount: "ડેમો એકાઉન્ટનો ઉપયોગ કરો",
-    fillDemoCredentials: "ડેમો ક્રેડેન્શિયલ્સ ભરો",
-    demoAccount: "ડેમો એકાઉન્ટ",
-    textileManufacturers: "ગુજરાત ટેક્સટાઇલ ઉત્પાદકો માટે બનાવાયેલ",
-    tellUsAboutBusiness: "તમારા વ્યવસાય વિશે જણાવો",
-    textileTrading: "ટેક્સટાઇલ ટ્રેડિંગ",
-    trustedByManufacturers: "ઉત્પાદકો દ્વારા વિશ્વસનીય",
-    guestUser: "ગેસ્ટ યુઝર",
-    guestCompany: "ગેસ્ટ કંપની",
-    demoInstructions: "નીચેનો બટન ક્લિક કરીને ડેમો ક્રેડેન્શિયલ્સ સાથે ફોર્મ ભરો",
-    invalidCredentials: "અમાન્ય ક્રેડેન્શિયલ્સ. કૃપા કરીને ફરી પ્રયાસ કરો.",
-    pleaseEnterBothFields: "કૃપા કરીને ઈમેલ અને પાસવર્ડ બંને દાખલ કરો",
-    createAccount: "એકાઉન્ટ બનાવો",
-    setupYourAccount: "તમારું એકાઉન્ટ સેટઅપ કરો",
-    accountSetup: "એકાઉન્ટ સેટઅપ",
-    businessInfo: "વ્યવસાય માહિતી",
-    personalInfo: "વ્યક્તિગત માહિતી",
+    dontHaveAccount: "એકાઉન્ટ નથી?",
     alreadyHaveAccount: "પહેલેથી જ એકાઉન્ટ છે?",
-    back: "પાછળ",
-    continue: "આગળ વધો",
-    creatingAccount: "એકાઉન્ટ બનાવી રહ્યા છીએ...",
-    joinThousandsManufacturers: "ગુજરાતના હજારો ઉત્પાદકો સાથે જોડાઓ",
-    ownerName: "માલિકનું નામ",
-    ownerNamePlaceholder: "તમારું પૂરું નામ",
-    phoneNumber: "મોબાઇલ નંબર",
-    phonePlaceholder: "+91 98765 43210",
-    companyName: "કંપનીનું નામ",
-    companyNamePlaceholder: "તમારી કંપનીનું નામ",
-    businessType: "વ્યવસાય પ્રકાર",
-    textileManufacturing: "ટેક્સટાઈલ ઉત્પાદન",
-    garmentManufacturing: "ગારમેન્ટ ઉત્પાદન",
-    location: "સ્થાન",
-    locationPlaceholder: "શહેર, રાજ્ય",
-    confirmPassword: "પાસવર્ડની પુષ્ટિ કરો",
-    confirmPasswordPlaceholder: "પાસવર્ડ ફરીથી દાખલ કરો",
-    pleaseFillRequiredFields: "કૃપા કરીને તમામ જરૂરી ફીલ્ડ્સ ભરો",
-    pleaseFillAllFields: "કૃપા કરીને તમામ ફીલ્ડ્સ ભરો",
-    passwordsDontMatch: "પાસવર્ડ મેળ ખાતા નથી",
+    tryAsGuest: "ગેસ્ટ તરીકે પ્રયાસ કરો",
     
-    // Common UI Elements
+    // Dashboard
+    title: "360° બિઝનેસ પ્લેટફોર્મ",
+    company: "એલિવેટબિઝનેસ",
+    founder: "ગુજરાત ટેક્સટાઇલ ઉત્પાદકો માટે પાર્થ સાર્થી દ્વારા બનાવેલ",
+    welcome: "તમારા બિઝનેસ હબમાં આપનું સ્વાગત",
+    tagline: "ગુજરાત ટેક્સટાઈલ ઉત્પાદકો માટે 360° બિઝનેસ પ્લેટફોર્મ",
+    businessPlatform: "ટેક્સટાઈલ મેન્યુફેક્ચરિંગ બિઝનેસ માટે સંપૂર્ણ સોલ્યુશન",
+    voiceCommands: "વૉઈસ કમાન્ડ્સ (ગુજરાતી, હિંદી, અથવા અંગ્રેજીમાં બોલો)",
+    
+    // Business Categories
+    salesCustomerCategory: "સેલ્સ અને ગ્રાહક મેનેજમેન્ટ",
+    financialCategory: "નાણાકીય મેનેજમેન્ટ",
+    productionCategory: "ઉત્પાદન અને કામગીરી",
+    fulfillmentCategory: "પૂર્ણતા અને ડિલિવરી",
+    analyticsCategory: "બિઝનેસ ઇન્ટેલિજન્સ",
+    
+    // Module Names
+    leadManagement: "લીડ મેનેજમેન્ટ",
+    quotationOrders: "કોટેશન અને ઓર્ડર",
+    salesOrder: "સેલ્સ ઓર્ડર",
+    customers: "ગ્રાહકો",
+    workOrders: "વર્ક ઓર્ડર",
+    smartProcurement: "સ્માર્ટ પ્રોક્યુરમેન્ટ",
+    inventory: "ઇન્વેન્ટરી (3-ટિયર)",
+    productionTracking: "પ્રોડક્શન ટ્રેકિંગ",
+    dispatchDelivery: "ડિસ્પેચ અને ડિલિવરી",
+    invoiceFinance: "ઇન્વોઇસ અને ફાઇનાન્સ",
+    customerFeedback: "ગ્રાહક ફીડબેક",
+    analyticsDashboard: "એનાલિટિક્સ ડેશબોર્ડ",
+    leads: "લીડ્સ",
+    quotes: "કોટ્સ",
+    loyalty: "વફાદારી",
+    payments: "પેમેન્ટ્સ",
+    reports: "રિપોર્ટ્સ",
+    cashFlow: "કેશ ફ્લો",
+    procurement: "પ્રોક્યુરમેન્ટ",
+    production: "ઉત્પાદન",
+    dispatch: "ડિસ્પેચ",
+    voiceAI: "વૉઇસ એઆઇ",
+    analytics: "એનાલિટિક્સ",
+    
+    // Metrics Labels
+    newLeads: "નવા લીડ્સ",
+    pendingQuotes: "બાકી કોટ્સ",
+    activeCustomers: "સક્રિય ગ્રાહકો",
+    pendingPayments: "બાકી પેમેન્ટ્સ",
+    totalRevenue: "કુલ આવક",
+    overdue: "મુદતવીતી",
+    readyToShip: "મોકલવા તૈયાર",
+    inTransit: "રસ્તામાં",
+    delivered: "ડિલિવર થયું",
+    qualityIssues: "ક્વૉલિટી સમસ્યા",
+    inProduction: "ઉત્પાદનમાં",
+    
+    // Category Status
+    liveBadge: "લાઇવ",
+    comingBadge: "આવી રહ્યું છે",
+    moduleCount: "મોડ્યુલ્સ",
+    
+    // Common UI
     backToDashboard: "← ડેશબોર્ડ પર પાછા જાઓ",
     call: "📞 કૉલ",
     whatsapp: "📱 વોટ્સએપ",
@@ -535,213 +328,34 @@ const translations: Record<string, TranslationStrings> = {
     converted: "કન્વર્ટ થયેલ",
     expired: "એક્સપાયર",
     
-    // Dashboard
-    title: "360° બિઝનેસ પ્લેટફોર્મ",
-    company: "એલિવેટબિઝનેસ",
-    founder: "ગુજરાત ટેક્સટાઇલ ઉત્પાદકો માટે પાર્થ સાર્થી દ્વારા બંધ બનાવેલ",
-    welcome: "તમારા બિઝનેસ હબમાં આપનું સ્વાગત",
-    tagline: "ગુજરાત ટેક્સટાઈલ ઉત્પાદકો માટે 360° બિઝનેસ પ્લેટફોર્મ",
-    businessPlatform: "ટેક્સટાઈલ મેન્યુફેક્ચરિંગ બિઝનેસ માટે સંપૂર્ણ સોલ્યુશન",
-    voiceCommands: "વૉઈસ કમાન્ડ્સ (ગુજરાતી, હિંદી, અથવા અંગ્રેજીમાં બોલો)",
-    voiceExample1: "મુંબઈથી નવી ફેબ્રિક પૂછપરછ ઉમેરો",
-    voiceExample2: "રાજેશ ટેક્સટાઈલ્સને કૉલ કરો",
-    voiceExample3: "માત્ર કપાસ ફેબ્રિક લીડ્સ બતાવો",
-    
-    // Feature Cards
-    leadManagement: "લીડ મેનેજમેન્ટ",
-    leadManagementDesc: "સંભવિત ગ્રાહકોને ટ્રેક અને કન્વર્ટ કરો",
-    quotationOrders: "કોટેશન અને ઓર્ડર",
-    quotationOrdersDesc: "કોટ બનાવો અને મંજૂરી મેનેજ કરો",
-    salesOrder: "સેલ્સ ઓર્ડર",
-    salesOrderDesc: "કન્ફર્મ ઓર્ડર અને પેમેન્ટ ટ્રેક કરો",
-    customers: "ગ્રાહકો",
-    customersDesc: "ગ્રાહક સંબંધ મેનેજમેન્ટ",
-    workOrders: "વર્ક ઓર્ડર",
-    workOrdersDesc: "ઉત્પાદન આયોજન અને શિડ્યૂલિંગ",
-    smartProcurement: "સ્માર્ટ પ્રોક્યુરમેન્ટ",
-    productionTracking: "પ્રોડક્શન ટ્રેકિંગ",
-    dispatchDelivery: "ડિસ્પેચ અને ડિલિવરી",
-    invoiceFinance: "ઇન્વોઇસ અને ફાઇનાન્સ",
-    customerFeedback: "ગ્રાહક ફીડબેક",
-    analyticsDashboard: "એનાલિટિક્સ ડેશબોર્ડ",
-    production: "ઉત્પાદન",
-    productionDesc: "મેન્યુફેક્ચરિંગ પ્રોગ્રેસ ટ્રેક કરો",
-    inventory: "ઇન્વેન્ટરી (3-ટિયર)",
-    inventoryDesc: "કાચો માલ અને તૈયાર માલ",
-    dispatch: "ડિસ્પેચ",
-    dispatchDesc: "શિપિંગ અને ડિલિવરી મેનેજમેન્ટ",
-    accounting: "એકાઉન્ટિંગ",
-    accountingDesc: "ફાઈનાન્શિયલ ટ્રેકિંગ અને ઇન્વોઇસિંગ",
-    analytics: "એનાલિટિક્સ",
-    analyticsDesc: "બિઝનેસ ઇનસાઇટ્સ અને રિપોર્ટિંગ",
-    reports: "રિપોર્ટ્સ",
-    reportsDesc: "બિઝનેસ રિપોર્ટ્સ જનરેટ કરો",
-    communication: "કમ્યુનિકેશન",
-    communicationDesc: "વોટ્સએપ અને વૉઈસ ઇન્ટિગ્રેશન",
-    
-    // Lead Management
-    addNewLead: "+ નવી લીડ ઉમેરો",
-    showAll: "સબ બતાવો",
-    showHotLeads: "🔥 હોટ લીડ",
-    showWarmLeads: "⭐ વોર્મ લીડ",
-    showColdLeads: "❄️ કોલ્ડ લીડ",
-    hotLead: "હોટ લીડ",
-    warmLead: "વોર્મ લીડ",
-    coldLead: "કોલ્ડ લીડ",
-    sendQuote: "📑 કોટ મોકલો",
-    
-    // Voice Commands
-    voiceCommandsHint: "આ કહીને ટ્રાઇ કરો:",
-    addFabricInquiry: "મુંબઈથી નવી ફેબ્રિક પૂછપરછ ઉમેરો",
-    callRajesh: "રાજેશ ટેક્સટાઈલ્સને કૉલ કરો",
-    showCottonLeads: "માત્ર કપાસ ફેબ્રિક લીડ્સ બતાવો",
-    
-    // Orders & Quotes
-    quoteNumber: "કોટ નંબર",
-    quoteDate: "કોટ તારીખ",
-    orderNumber: "ઓર્ડર નંબર",
-    orderDate: "ઓર્ડર તારીખ",
-    orderStatus: "ઓર્ડર સ્ટેટસ",
-    customerName: "ગ્રાહકનું નામ",
-    totalAmount: "કુલ રકમ",
-    pendingPayment: "પેન્ડિંગ પેમેન્ટ",
-    paymentReceived: "પેમેન્ટ મળેલ",
-    
-    // Additional Translation Keys
-    colors: "રંગો",
-    inquiryDate: "પૂછપરછની તારીખ",
-    createQuoteRajesh: "રાજેશ માટે કોટ બનાવો",
-    showApprovedQuotes: "મંજૂર કોટ્સ બતાવો",
-    convertToOrder: "ઓર્ડરમાં કન્વર્ટ કરો",
-    addNewQuote: "+ નવો કોટ ઉમેરો",
-    validUntil: "સુધી માન્ય",
-    status: "સ્ટેટસ",
-    viewPDF: "PDF જુઓ",
-    approve: "મંજૂરી",
-    convertToCustomer: "ગ્રાહકમાં કન્વર્ટ કરો",
-    readyForProduction: "ઉત્પાદન માટે તૈયાર",
-    filters: "ફિલ્ટર્સ",
-    all: "બધા",
-    showPending: "પેન્ડિંગ બતાવો",
-    showExpired: "એક્સપાયર બતાવો",
-    showConverted: "કન્વર્ટેડ બતાવો",
+    // Customer Management
     customerProfile: "ગ્રાહક પ્રોફાઇલ",
+    createNewQuote: "નવો કોટ બનાવો",
     customerSince: "ગ્રાહક બન્યા ત્યારથી",
     totalBusiness: "કુલ બિઝનેસ",
     totalOrders: "કુલ ઓર્ડર્સ",
     conversionRate: "કન્વર્ઝન રેટ",
     paymentScore: "પેમેન્ટ સ્કોર",
-    quoteHistory: "ક્વોટ હિસ્ટરી",
-    orderHistory: "ઓર્ડર હિસ્ટરી",
     businessInsights: "બિઝનેસ ઇન્સાઇટ્સ",
-    averageOrderSize: "સરેરાશ ઓર્ડર સાઇઝ",
-    paymentHistory: "પેમેન્ટ હિસ્ટરી",
-    onTime: "સમયસર",
-    delayed: "વિલંબિત",
-    transactionHistory: "ટ્રાન્ઝેક્શન હિસ્ટરી",
-    allQuotes: "બધા કોટ્સ",
-    allOrders: "બધા ઓર્ડર્સ",
-    communicationLog: "કમ્યુનિકેશન લોગ",
-    businessInformation: "બિઝનેસ માહિતી",
-    preferredMaterials: "પસંદગીની સામગ્રી",
-    volumePatterns: "વોલ્યુમ પેટર્ન",
-    paymentTerms: "પેમેન્ટ શરતો",
-    deliveryPreferences: "ડિલિવરી પસંદગીઓ",
-    createNewQuote: "નવો કોટ બનાવો",
-    followUpPending: "ફોલો-અપ પેન્ડિંગ",
-    viewPaymentStatus: "પેમેન્ટ સ્ટેટસ જુઓ",
-    sendPaymentReminder: "પેમેન્ટ રિમાઇન્ડર મોકલો",
-    customerList: "ગ્રાહક યાદી",
-    addNewCustomer: "+ નવો ગ્રાહક ઉમેરો",
-    advancePayments: "એડવાન્સ પેમેન્ટ્સ",
-
-    // Customer Management
     searchCustomers: "નામ, સ્થળ અથવા વિશેષતા દ્વારા ગ્રાહકો શોધો...",
-    searchPlaceholder: "નામ, સ્થળ અથવા વિશેષતા દ્વારા ગ્રાહકો શોધો...",
+    showAll: "સબ બતાવો",
+    voiceCommandsHint: "આ કહીને ટ્રાઇ કરો:",
+    quoteHistory: "ક્વોટ હિસ્ટ્રી",
+    orderHistory: "ઓર્ડર હિસ્ટ્રી",
+    transactionHistory: "ટ્રાન્ઝેક્શન હિસ્ટ્રી",
     
-    // Additional missing keys
+    // Action Buttons
+    viewPDF: "PDF જુઓ",
+    approve: "મંજૂરી આપો",
+    convertToOrder: "ઓર્ડરમાં કન્વર્ટ કરો",
+    showExpired: "એક્સપાયર બતાવો",
     showApproved: "મંજૂર બતાવો",
-
-    // HomePage Translations
-    heroTitle: "બિઝનેસ બેનિફિટ્સ",
-    heroSubtitle: "ગુજરાતના ટેક્સટાઈલ ઉત્પાદકો માટે બનાવેલ સંપૂર્ણ બિઝનેસ મેનેજમેન્ટ પ્લેટફોર્મ",
-    voiceControl: "વૉઇસ કંટ્રોલ",
-    threeLanguages: "3 ભાષાઓ",
-    mobileFirst: "મોબાઈલ ફર્સ્ટ",
-    getStarted: "શરૂઆત કરો",
-    todayBusiness: "આજનો ધંધો",
-    newLeads: "નવા લીડ્સ",
-    todaySales: "આજની સેલ્સ",
-    ordersReady: "ઓર્ડર્સ તૈયાર",
-    speakCommand: "તમારો આદેશ બોલો...",
-    
-    // Workflow Section
-    workflowTitle: "સંપૂર્ણ બિઝનેસ વર્કફ્લો",
-    workflowSubtitle: "લીડથી પેમેન્ટ સુધી - બધું વૉઇસ કમાન્ડ્સથી મેનેજ કરો",
-    leadCapture: "લીડ કેપ્ચર",
-    quotation: "કોટેશન",
-    payment: "પેમેન્ટ",
-    
-    // Impact Statistics
-    impactTitle: "વાસ્તવિક બિઝનેસ ઇમ્પેક્ટ",
-    hoursDaily: "દૈનિક કલાકો બચાવો",
-    hoursDesc: "મેન્યુઅલ કામ ઓટોમેટ કરો",
-    voiceAccuracy: "વૉઇસ એક્યુરસી",
-    accuracyDesc: "ગુજરાતી અને હિન્દીમાં",
-    efficiency: "કાર્યક્ષમતા વધારો",
-    efficiencyDesc: "ઝડપી ઓર્ડર પ્રોસેસિંગ",
-    satisfaction: "યુઝર સંતોષ",
-    satisfactionDesc: "સરળતા પસંદ કરે છે",
-    
-    // Benefits Section
-    benefitsTitle: "ભારતીય MSME ટેક્સટાઈલ ઉત્પાદકો માટે બનાવેલ",
-    voiceBenefitTitle: "વૉઇસ-ફર્સ્ટ ઇન્ટરફેસ",
-    voiceBenefitDesc: "તમારી ભાષામાં સરળ વૉઇસ કમાન્ડ્સથી કામ પૂર્ણ કરો",
-    multilingualBenefitTitle: "સાચું બહુભાષી",
-    multilingualBenefitDesc: "ગુજરાતી, હિન્દી અને અંગ્રેજી વચ્ચે સરળતાથી સ્વિચ કરો",
-    mobileBenefitTitle: "મોબાઈલ ઓપ્ટિમાઇઝ્ડ",
-    mobileBenefitDesc: "ક્યાંયથી ઍક્સેસ કરો - ફેક્ટરી ફ્લોર, ઓફિસ અથવા મુસાફરીમાં",
-    speedBenefitTitle: "વીજળીની ઝડપે",
-    speedBenefitDesc: "પરંપરાગત પદ્ધતિઓ કરતાં 70% ઝડપી ઓર્ડર પૂર્ણ કરો",
-    
-    // Features Section
-    featuresTitle: "તમારો ધંધો ચલાવવા માટે જરૂરી બધું",
-    salesCategory: "સેલ્સ અને ઓર્ડર્સ",
-    productionCategory: "પ્રોડક્શન",
-    inventoryCategory: "ઇન્વેન્ટરી",
-    orderManagement: "સંપૂર્ણ ઓર્ડર મેનેજમેન્ટ",
-    intelligentWorkOrders: "ઇન્ટેલિજન્ટ વર્ક ઓર્ડર્સ",
-    qualityControl: "ક્વોલિટી કંટ્રોલ અને ગ્રેડિંગ",
-    efficiencyMetrics: "કાર્યક્ષમતા મેટ્રિક્સ",
-    rawMaterials: "કાચા માલ મેનેજમેન્ટ",
-    workInProgress: "વર્ક-ઇન-પ્રોગ્રેસ ટ્રેકિંગ",
-    finishedGoods: "તૈયાર માલ ઇન્વેન્ટરી",
-    procurement: "GRN સાથે સ્માર્ટ પ્રોક્યુરમેન્ટ",
-    
-    // Testimonials
-    storiesTitle: "ગુજરાતના અગ્રણી ઉત્પાદકો દ્વારા વિશ્વસનીય",
-    testimonial1Name: "રાજેશ પટેલ",
-    testimonial1Business: "સુરત સિલ્ક મિલ્સ",
-    testimonial1Quote: "આ પ્લેટફોર્મે અમારી કામગીરીમાં ક્રાંતિ લાવી. અમે દરરોજ 3 કલાક બચાવીએ છીએ અને અમારી ઓર્ડર એક્યુરસી 95% સુધારી",
-    testimonial2Name: "મેહુલ શાહ",
-    testimonial2Business: "અમદાવાદ ટેક્સટાઈલ્સ",
-    testimonial2Quote: "ગુજરાતીમાં વૉઇસ કમાન્ડ્સે અમારી ટીમ માટે તેને ખૂબ સરળ બનાવ્યું. અમારા વરિષ્ઠ સ્ટાફે પણ દિવસોમાં તેને અપનાવ્યું",
-    
-    // CTA Section
-    ctaTitle: "તમારા ટેક્સટાઈલ બિઝનેસને ટ્રાન્સફોર્મ કરવા તૈયાર છો?",
-    ctaSubtitle: "અગ્રણી ઉત્પાદકો સાથે જોડાઓ જે પહેલેથી જ દરરોજ 3+ કલાક બચાવી રહ્યા છે",
-    startFreeTrial: "ફ્રી ટ્રાયલ શરૂ કરો",
-    watchDemo: "ડેમો જુઓ",
-    ctaNote: "કોઈ ક્રેડિટ કાર્ડની જરૂર નથી • 30-દિવસનું ફ્રી ટ્રાયલ • ગુજરાતીમાં સંપૂર્ણ સપોર્ટ",
-    
-    // Footer
-    footerTagline: "ટેકનોલોજી સાથે બિઝનેસ સ્કેલિંગ",
-    contactTitle: "સંપર્ક",
-    linkedinTitle: "કનેક્ટ",
-    supportTitle: "સપોર્ટ",
-    servicesTitle: "સેવાઓ",
-    languagesTitle: "ભાષાઓ",
-    allRights: "બધા અધિકારો સુરક્ષિત."
+    showHotLeads: "🔥 હોટ લીડ્સ",
+    showWarmLeads: "⭐ વોર્મ લીડ્સ",
+    showColdLeads: "❄️ કોલ્ડ લીડ્સ",
+    addNewLead: "+ નવી લીડ ઉમેરો",
+    addNewQuote: "+ નવો કોટ ઉમેરો",
+    showPending: "પેન્ડિંગ બતાવો"
   },
   
   hi: {
@@ -749,54 +363,76 @@ const translations: Record<string, TranslationStrings> = {
     welcomeBack: "फिर से स्वागत है",
     signInToContinue: "जारी रखने के लिए साइन इन करें",
     email: "ईमेल",
-    emailPlaceholder: "अपना ईमेल दर्ज करें",
     password: "पासवर्ड",
+    emailPlaceholder: "अपना ईमेल दर्ज करें",
     passwordPlaceholder: "अपना पासवर्ड दर्ज करें",
     signIn: "साइन इन",
     signingIn: "साइन इन कर रहे हैं...",
-    dontHaveAccount: "खाता नहीं है?",
     signUp: "साइन अप",
-    tryAsGuest: "गेस्ट के रूप में आज़माएं",
-    useDemoAccount: "डेमो खाता उपयोग करें",
-    fillDemoCredentials: "डेमो क्रेडेंशियल भरें",
-    demoAccount: "डेमो खाता",
-    textileManufacturers: "गुजरात टेक्सटाइल निर्माताओं के लिए बनाया गया",
-    tellUsAboutBusiness: "अपने व्यवसाय के बारे में बताएं",
-    textileTrading: "टेक्सटाइल ट्रेडिंग",
-    trustedByManufacturers: "निर्माताओं द्वारा विश्वसनीय",
-    guestUser: "गेस्ट यूजर",
-    guestCompany: "गेस्ट कंपनी",
-    demoInstructions: "नीचे बटन क्लिक करके डेमो क्रेडेंशियल के साथ फॉर्म भरें",
-    invalidCredentials: "अमान्य क्रेडेंशियल। कृपया फिर से कोशिश करें।",
-    pleaseEnterBothFields: "कृपया ईमेल और पासवर्ड दोनों दर्ज करें",
-    createAccount: "खाता बनाएं",
-    setupYourAccount: "अपना खाता सेटअप करें",
-    accountSetup: "खाता सेटअप",
-    businessInfo: "व्यवसाय जानकारी",
-    personalInfo: "व्यक्तिगत जानकारी",
+    dontHaveAccount: "खाता नहीं है?",
     alreadyHaveAccount: "पहले से खाता है?",
-    back: "वापस",
-    continue: "आगे बढ़ें",
-    creatingAccount: "खाता बना रहे हैं...",
-    joinThousandsManufacturers: "भारत के हजारों निर्माताओं से जुड़ें",
-    ownerName: "मालिक का नाम",
-    ownerNamePlaceholder: "आपका पूरा नाम",
-    phoneNumber: "मोबाइल नंबर",
-    phonePlaceholder: "+91 98765 43210",
-    companyName: "कंपनी का नाम",
-    companyNamePlaceholder: "आपकी कंपनी का नाम",
-    businessType: "व्यवसाय प्रकार",
-    textileManufacturing: "टेक्सटाइल निर्माण",
-    garmentManufacturing: "गारमेंट निर्माण",
-    location: "स्थान",
-    locationPlaceholder: "शहर, राज्य",
-    confirmPassword: "पासवर्ड की पुष्टि करें",
-    confirmPasswordPlaceholder: "पासवर्ड फिर से दर्ज करें",
-    pleaseFillRequiredFields: "कृपया सभी आवश्यक फील्ड भरें",
-    pleaseFillAllFields: "कृपया सभी फील्ड भरें",
-    passwordsDontMatch: "पासवर्ड मेल नहीं खाते",
+    tryAsGuest: "गेस्ट के रूप में आज़माएं",
     
-    // Common UI Elements
+    // Dashboard
+    title: "360° बिजनेस प्लेटफॉर्म",
+    company: "एलेवेटबिजनेस",
+    founder: "गुजरात टेक्सटाइल निर्माताओं के लिए पार्थ सार्थी द्वारा निर्मित",
+    welcome: "आपके बिजनेस हब में आपका स्वागत",
+    tagline: "गुजरात टेक्सटाइल निर्माताओं के लिए 360° बिजनेस प्लेटफॉर्म",
+    businessPlatform: "टेक्सटाइल मैन्युफैक्चरिंग बिजनेस के लिए संपूर्ण समाधान",
+    voiceCommands: "वॉयस कमांड (गुजराती, हिंदी, या अंग्रेजी में बोलें)",
+    
+    // Business Categories
+    salesCustomerCategory: "बिक्री और ग्राहक प्रबंधन",
+    financialCategory: "वित्तीय प्रबंधन",
+    productionCategory: "उत्पादन और परिचालन",
+    fulfillmentCategory: "पूर्णता और डिलीवरी",
+    analyticsCategory: "व्यावसायिक बुद्धिमत्ता",
+    
+    // Module Names
+    leadManagement: "लीड प्रबंधन",
+    quotationOrders: "कोटेशन और ऑर्डर",
+    salesOrder: "सेल्स ऑर्डर",
+    customers: "ग्राहक",
+    workOrders: "वर्क ऑर्डर",
+    smartProcurement: "स्मार्ट प्रोक्यूरमेंट",
+    inventory: "इन्वेंटरी (3-टियर)",
+    productionTracking: "प्रोडक्शन ट्रैकिंग",
+    dispatchDelivery: "डिस्पैच और डिलीवरी",
+    invoiceFinance: "इनवॉइस और फाइनेंस",
+    customerFeedback: "कस्टमर फीडबैक",
+    analyticsDashboard: "एनालिटिक्स डैशबोर्ड",
+    leads: "लीड्स",
+    quotes: "कोट्स",
+    loyalty: "वफादारी",
+    payments: "भुगतान",
+    reports: "रिपोर्ट्स",
+    cashFlow: "कैश फ्लो",
+    procurement: "प्रोक्यूरमेंट",
+    production: "उत्पादन",
+    dispatch: "डिस्पैच",
+    voiceAI: "वॉइस एआई",
+    analytics: "एनालिटिक्स",
+    
+    // Metrics Labels
+    newLeads: "नए लीड्स",
+    pendingQuotes: "लंबित कोट्स",
+    activeCustomers: "सक्रिय ग्राहक",
+    pendingPayments: "लंबित भुगतान",
+    totalRevenue: "कुल आय",
+    overdue: "देय",
+    readyToShip: "भेजने के लिए तैयार",
+    inTransit: "ट्रांजिट में",
+    delivered: "डिलीवर हुआ",
+    qualityIssues: "गुणवत्ता समस्याएं",
+    inProduction: "उत्पादन में",
+    
+    // Category Status
+    liveBadge: "लाइव",
+    comingBadge: "आ रहा है",
+    moduleCount: "मॉड्यूल",
+    
+    // Common UI
     backToDashboard: "← डैशबोर्ड पर वापस जाएं",
     call: "📞 कॉल",
     whatsapp: "📱 व्हाट्सऐप",
@@ -811,218 +447,61 @@ const translations: Record<string, TranslationStrings> = {
     converted: "कन्वर्ट किया गया",
     expired: "एक्सपायर",
     
-    // Dashboard
-    title: "360° बिजनेस प्लेटफॉर्म",
-    company: "एलेवेटबिजनेस",
-    founder: "गुजरात टेक्सटाइल निर्माताओं के लिए पार्थ सार्थी द्वारा निर्मित",
-    welcome: "आपके बिजनेस हब में आपका स्वागत",
-    tagline: "गुजरात टेक्सटाइल निर्माताओं के लिए 360° बिजनेस प्लेटफॉर्म",
-    businessPlatform: "टेक्सटाइल मैन्युफैक्चरिंग बिजनेस के लिए संपूर्ण समाधान",
-    voiceCommands: "वॉयस कमांड (गुजराती, हिंदी, या अंग्रेजी में बोलें)",
-    voiceExample1: "मुंबई से नई फैब्रिक पूछताछ जोड़ें",
-    voiceExample2: "राजेश टेक्सटाइल्स को कॉल करें",
-    voiceExample3: "केवल कपास फैब्रिक लीड्स दिखाएं",
-    
-    // Feature Cards
-    leadManagement: "लीड प्रबंधन",
-    leadManagementDesc: "संभावित ग्राहकों को ट्रैक और कन्वर्ट करें",
-    quotationOrders: "कोटेशन और ऑर्डर",
-    quotationOrdersDesc: "कोट बनाएं और अप्रूवल मैनेज करें",
-    salesOrder: "सेल्स ऑर्डर",
-    salesOrderDesc: "कन्फर्म ऑर्डर और पेमेंट ट्रैक करें",
-    customers: "ग्राहक",
-    customersDesc: "ग्राहक संबंध प्रबंधन",
-    workOrders: "वर्क ऑर्डर",
-    workOrdersDesc: "उत्पादन योजना और शेड्यूलिंग",
-    smartProcurement: "स्मार्ट प्रोक्यूरमेंट",
-    productionTracking: "प्रोडक्शन ट्रैकिंग",
-    dispatchDelivery: "डिस्पैच और डिलीवरी",
-    invoiceFinance: "इनवॉइस और फाइनेंस",
-    customerFeedback: "कस्टमर फीडबैक",
-    analyticsDashboard: "एनालिटिक्स डैशबोर्ड",
-    production: "उत्पादन",
-    productionDesc: "मैन्युफैक्चरिंग प्रोग्रेस ट्रैक करें",
-    inventory: "इन्वेंटरी (3-टियर)",
-    inventoryDesc: "कच्चा माल और तैयार माल",
-    dispatch: "डिस्पैच",
-    dispatchDesc: "शिपिंग और डिलीवरी मैनेजमेंट",
-    accounting: "अकाउंटिंग",
-    accountingDesc: "फाइनेंशियल ट्रैकिंग और इनवॉइसिंग",
-    analytics: "एनालिटिक्स",
-    analyticsDesc: "बिजनेस इनसाइट्स और रिपोर्टिंग",
-    reports: "रिपोर्ट्स",
-    reportsDesc: "बिजनेस रिपोर्ट्स जनरेट करें",
-    communication: "कम्युनिकेशन",
-    communicationDesc: "व्हाट्सऐप और वॉयस इंटीग्रेशन",
-    
-    // Lead Management
-    addNewLead: "+ नया लीड जोड़ें",
-    showAll: "सभी दिखाएं",
-    showHotLeads: "🔥 हॉट लीड",
-    showWarmLeads: "⭐ वार्म लीड",
-    showColdLeads: "❄️ कोल्ड लीड",
-    hotLead: "हॉट लीड",
-    warmLead: "वार्म लीड",
-    coldLead: "कोल्ड लीड",
-    sendQuote: "📑 कोट भेजें",
-    
-    // Voice Commands
-    voiceCommandsHint: "कहने की कोशिश करें:",
-    addFabricInquiry: "मुंबई से नई फैब्रिक पूछताछ जोड़ें",
-    callRajesh: "राजेश टेक्सटाइल्स को कॉल करें",
-    showCottonLeads: "केवल कपास फैब्रिक लीड्स दिखाएं",
-    
-    // Orders & Quotes
-    quoteNumber: "कोट नंबर",
-    quoteDate: "कोट तारीख",
-    orderNumber: "ऑर्डर नंबर",
-    orderDate: "ऑर्डर तारीख",
-    orderStatus: "ऑर्डर स्टेटस",
-    customerName: "ग्राहक का नाम",
-    totalAmount: "कुल राशि",
-    pendingPayment: "पेंडिंग पेमेंट",
-    paymentReceived: "पेमेंट प्राप्त",
-    
-    // Additional Translation Keys
-    colors: "रंग",
-    inquiryDate: "पूछताछ की तारीख",
-    createQuoteRajesh: "राजेश के लिए कोट बनाएं",
-    showApprovedQuotes: "अप्रूव्ड कोट्स दिखाएं",
-    convertToOrder: "ऑर्डर में कन्वर्ट करें",
-    addNewQuote: "+ नया कोट जोड़ें",
-    validUntil: "तक मान्य",
-    status: "स्टेटस",
-    viewPDF: "PDF देखें",
-    approve: "अप्रूव करें",
-    convertToCustomer: "ग्राहक में कन्वर्ट करें",
-    readyForProduction: "प्रोडक्शन के लिए तैयार",
-    filters: "फिल्टर्स",
-    all: "सभी",
-    showPending: "पेंडिंग दिखाएं",
-    showExpired: "एक्सपायर दिखाएं",
-    showConverted: "कन्वर्टेड दिखाएं",
+    // Customer Management
     customerProfile: "ग्राहक प्रोफाइल",
+    createNewQuote: "नया कोट बनाएं",
     customerSince: "ग्राहक बने तब से",
     totalBusiness: "कुल बिजनेस",
     totalOrders: "कुल ऑर्डर्स",
     conversionRate: "कन्वर्जन रेट",
     paymentScore: "पेमेंट स्कोर",
+    businessInsights: "बिजनेस इनसाइट्स",
+    searchCustomers: "नाम, स्थान या विशेषता के अनुसार ग्राहकों को खोजें...",
+    showAll: "सभी दिखाएं",
+    voiceCommandsHint: "कहने की कोशिश करें:",
     quoteHistory: "कोट हिस्ट्री",
     orderHistory: "ऑर्डर हिस्ट्री",
-    businessInsights: "बिजनेस इनसाइट्स",
-    averageOrderSize: "औसत ऑर्डर साइज",
-    paymentHistory: "पेमेंट हिस्ट्री",
-    onTime: "समय पर",
-    delayed: "विलंबित",
     transactionHistory: "ट्रांजेक्शन हिस्ट्री",
-    allQuotes: "सभी कोट्स",
-    allOrders: "सभी ऑर्डर्स",
-    communicationLog: "कम्युनिकेशन लॉग",
-    businessInformation: "बिजनेस जानकारी",
-    preferredMaterials: "पसंदीदा सामग्री",
-    volumePatterns: "वॉल्यूम पैटर्न",
-    paymentTerms: "पेमेंट शर्तें",
-    deliveryPreferences: "डिलीवरी प्राथमिकताएं",
-    createNewQuote: "नया कोट बनाएं",
-    followUpPending: "फॉलो-अप पेंडिंग",
-    viewPaymentStatus: "पेमेंट स्टेटस देखें",
-    sendPaymentReminder: "पेमेंट रिमाइंडर भेजें",
-    customerList: "ग्राहक सूची",
-    addNewCustomer: "+ नया ग्राहक जोड़ें",
-    advancePayments: "एडवांस पेमेंट्स",
-
-    // Customer Management
-    searchCustomers: "नाम, स्थान या विशेषता के अनुसार ग्राहकों को खोजें...",
-    searchPlaceholder: "नाम, स्थान या विशेषता के अनुसार ग्राहकों को खोजें...",
     
-    // Additional missing keys
+    // Action Buttons
+    viewPDF: "PDF देखें",
+    approve: "अप्रूव करें",
+    convertToOrder: "ऑर्डर में कन्वर्ट करें",
+    showExpired: "एक्सपायर दिखाएं",
     showApproved: "अप्रूव्ड दिखाएं",
-
-    // HomePage Translations
-    heroTitle: "बिजनेस बेनिफिट्स",
-    heroSubtitle: "गुजरात के टेक्सटाइल निर्माताओं के लिए बनाया गया पूर्ण बिजनेस मैनेजमेंट प्लेटफॉर्म",
-    voiceControl: "वॉयस कंट्रोल",
-    threeLanguages: "3 भाषाएं",
-    mobileFirst: "मोबाइल फर्स्ट",
-    getStarted: "शुरू करें",
-    todayBusiness: "आज का धंधा",
-    newLeads: "नए लीड्स",
-    todaySales: "आज की सेल्स",
-    ordersReady: "ऑर्डर तैयार",
-    speakCommand: "अपनी आज्ञा बोलें...",
-    
-    // Workflow Section
-    workflowTitle: "पूर्ण बिजनेस वर्कफ्लो",
-    workflowSubtitle: "लीड से पेमेंट तक - सब कुछ वॉयस कमांड से मैनेज करें",
-    leadCapture: "लीड कैप्चर",
-    quotation: "कोटेशन",
-    payment: "पेमेंट",
-    
-    // Impact Statistics
-    impactTitle: "वास्तविक बिजनेस इंपैक्ट",
-    hoursDaily: "दैनिक घंटे बचाएं",
-    hoursDesc: "मैन्युअल कार्य ऑटोमेट करें",
-    voiceAccuracy: "वॉयस एक्यूरेसी",
-    accuracyDesc: "गुजराती और हिंदी में",
-    efficiency: "दक्षता वृद्धि",
-    efficiencyDesc: "तेज़ ऑर्डर प्रोसेसिंग",
-    satisfaction: "उपयोगकर्ता संतुष्टि",
-    satisfactionDesc: "सरलता पसंद करते हैं",
-    
-    // Benefits Section
-    benefitsTitle: "भारतीय MSME टेक्सटाइल निर्माताओं के लिए बनाया गया",
-    voiceBenefitTitle: "वॉयस-फर्स्ट इंटरफेस",
-    voiceBenefitDesc: "अपनी भाषा में सरल वॉयस कमांड के साथ कार्य पूर्ण करें",
-    multilingualBenefitTitle: "सच्चा बहुभाषी",
-    multilingualBenefitDesc: "गुजराती, हिंदी और अंग्रेजी के बीच आसानी से स्विच करें",
-    mobileBenefitTitle: "मोबाइल ऑप्टिमाइज़्ड",
-    mobileBenefitDesc: "कहीं से भी एक्सेस करें - फैक्ट्री फ्लोर, ऑफिस या यात्रा में",
-    speedBenefitTitle: "बिजली की गति",
-    speedBenefitDesc: "पारंपरिक तरीकों से 70% तेज़ ऑर्डर पूर्ण करें",
-    
-    // Features Section
-    featuresTitle: "आपका धंधा चलाने के लिए सब कुछ",
-    salesCategory: "सेल्स और ऑर्डर्स",
-    productionCategory: "प्रोडक्शन",
-    inventoryCategory: "इन्वेंटरी",
-    orderManagement: "पूर्ण ऑर्डर मैनेजमेंट",
-    intelligentWorkOrders: "इंटेलिजेंट वर्क ऑर्डर्स",
-    qualityControl: "क्वालिटी कंट्रोल और ग्रेडिंग",
-    efficiencyMetrics: "दक्षता मेट्रिक्स",
-    rawMaterials: "कच्चा माल मैनेजमेंट",
-    workInProgress: "वर्क-इन-प्रोग्रेस ट्रैकिंग",
-    finishedGoods: "तैयार माल इन्वेंटरी",
-    procurement: "GRN के साथ स्मार्ट प्रोक्योरमेंट",
-    
-    // Testimonials
-    storiesTitle: "गुजरात के अग्रणी निर्माताओं द्वारा विश्वसनीय",
-    testimonial1Name: "राजेश पटेल",
-    testimonial1Business: "सूरत सिल्क मिल्स",
-    testimonial1Quote: "इस प्लेटफॉर्म ने हमारे संचालन में क्रांति ला दी। हम रोज 3 घंटे बचाते हैं और हमारी ऑर्डर एक्यूरेसी 95% बेहतर हुई",
-    testimonial2Name: "मेहुल शाह",
-    testimonial2Business: "अहमदाबाद टेक्सटाइल्स",
-    testimonial2Quote: "गुजराती में वॉयस कमांड ने हमारी टीम के लिए इसे बहुत आसान बना दिया। हमारे वरिष्ठ कर्मचारियों ने भी दिनों में इसे अपनाया",
-    
-    // CTA Section
-    ctaTitle: "अपने टेक्सटाइल बिजनेस को बदलने के लिए तैयार हैं?",
-    ctaSubtitle: "अग्रणी निर्माताओं से जुड़ें जो पहले से ही रोज 3+ घंटे बचा रहे हैं",
-    startFreeTrial: "फ्री ट्रायल शुरू करें",
-    watchDemo: "डेमो देखें",
-    ctaNote: "कोई क्रेडिट कार्ड नहीं चाहिए • 30-दिन का फ्री ट्रायल • गुजराती में पूर्ण सहायता",
-    
-    // Footer
-    footerTagline: "प्रौद्योगिकी के साथ बिजनेस स्केलिंग",
-    contactTitle: "संपर्क",
-    linkedinTitle: "कनेक्ट",
-    supportTitle: "सहायता",
-    servicesTitle: "सेवाएं",
-    languagesTitle: "भाषाएं",
-    allRights: "सभी अधिकार सुरक्षित।"
+    showHotLeads: "🔥 हॉट लीड्स",
+    showWarmLeads: "⭐ वार्म लीड्स",
+    showColdLeads: "❄️ कोल्ड लीड्स",
+    addNewLead: "+ नया लीड जोड़ें",
+    addNewQuote: "+ नया कोट जोड़ें",
+    showPending: "पेंडिंग दिखाएं"
   }
 };
 
+// Helper function to get translations with fallback to English
 export function getCurrentTranslations(language: string): TranslationStrings {
-  return translations[language] || translations.en;
+  const englishTranslations = baseTranslations.en as TranslationStrings;
+  const targetTranslations = baseTranslations[language] || {};
+  
+  // Merge target language with English fallbacks
+  const translations: TranslationStrings = { ...englishTranslations };
+  
+  // Override with target language translations where available
+  Object.keys(targetTranslations).forEach(key => {
+    const value = targetTranslations[key];
+    if (value && typeof value === 'string') {
+      translations[key] = value;
+    }
+  });
+  
+  return translations;
 }
+
+// Default export for backward compatibility
+const translations: Record<string, TranslationStrings> = {
+  en: getCurrentTranslations('en'),
+  gu: getCurrentTranslations('gu'),
+  hi: getCurrentTranslations('hi')
+};
 
 export default translations;
