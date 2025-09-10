@@ -117,6 +117,20 @@ export interface TranslationStrings {
   addNewLead: string;
   addNewQuote: string;
   showPending: string;
+  readyForProduction: string;
+  primaryContact: string;
+  amount: string;
+  items: string;
+  status: string;
+  totalAmount: string;
+  validUntil: string;
+  paymentStatus: string;
+  productionStatus: string;
+  expectedDelivery: string;
+  activeOrders: string;
+  reliablePayments: string;
+  followUpRequired: string;
+  viewPaymentStatus: string;
 }
 
 const baseTranslations: Record<string, Partial<TranslationStrings>> = {
@@ -236,7 +250,21 @@ const baseTranslations: Record<string, Partial<TranslationStrings>> = {
     showColdLeads: "❄️ Cold Leads",
     addNewLead: "+ Add New Lead",
     addNewQuote: "+ Add New Quote",
-    showPending: "Show Pending"
+    showPending: "Show Pending",
+    readyForProduction: "Ready for Production",
+    primaryContact: "Primary Contact",
+    amount: "Amount",
+    items: "Items",
+    status: "Status",
+    totalAmount: "Total Amount",
+    validUntil: "Valid Until",
+    paymentStatus: "Payment Status",
+    productionStatus: "Production Status",
+    expectedDelivery: "Expected Delivery",
+    activeOrders: "active orders",
+    reliablePayments: "Reliable payments",
+    followUpRequired: "Follow-up required",
+    viewPaymentStatus: "View Payment Status"
   },
   
   gu: {

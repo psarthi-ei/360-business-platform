@@ -137,7 +137,7 @@ function Dashboard({
             
             <div className={styles.performanceGrid}>
               <div className={styles.performanceCard}>
-                <div className={styles.perfNumber}>₹{formatCurrency(totalRevenue / 100000)}L</div>
+                <div className={styles.perfNumber}>{formatCurrency(totalRevenue / 100000)}L</div>
                 <div className={styles.perfLabel}>Total Revenue</div>
                 <div className={styles.perfChange}>+18% vs last month</div>
               </div>
@@ -177,7 +177,7 @@ function Dashboard({
                     <h4>{translations.salesCustomerCategory}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>3/4 {translations.liveBadge}</span>
+                    <span className={styles.statusBadge}>4/4 {translations.liveBadge}</span>
                   </div>
                 </div>
                 
@@ -213,17 +213,17 @@ function Dashboard({
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
+                    onClick={onShowSalesOrders}
+                    title={t.salesOrder}
+                  >
+                    📦 {t.salesOrder}
+                  </button>
+                  <button 
+                    className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowCustomerList}
                     title={t.customers}
                   >
                     🤝 {t.customers}
-                  </button>
-                  <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
-                    disabled
-                    title={`${t.loyalty} - ${t.comingBadge}`}
-                  >
-                    🏆 {t.loyalty}
                   </button>
                 </div>
               </div>

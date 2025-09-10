@@ -12,6 +12,7 @@ interface SalesOrdersProps {
   onNavigateHome?: () => void;
   onShowLeadManagement?: () => void;
   onShowQuotationOrders?: () => void;
+  onShowAdvancePaymentManagement?: () => void;
   translations: any;
   filterState: string;
   onFilterChange: (filter: string) => void;
@@ -26,11 +27,40 @@ function SalesOrders({
   onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
+  onShowAdvancePaymentManagement,
   translations,
   filterState,
   onFilterChange
 }: SalesOrdersProps) {
   const t = translations;
+  
+  // Helper function to calculate payment details for an order
+  const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
+    const advancePercentage = 50; // Standard 50% advance
+    const advanceAmount = Math.round(totalAmount * (advancePercentage / 100));
+    
+    // Simulate different payment states based on order ID (same logic as AdvancePaymentManagement)
+    let advanceReceived = 0;
+    let paymentStatus = 'pending';
+    
+    if (orderId === 'SO-001') {
+      paymentStatus = 'overdue';
+      advanceReceived = 0;
+    } else if (orderId === 'SO-002') {
+      paymentStatus = 'received';
+      advanceReceived = advanceAmount;
+    } else if (orderId === 'SO-003') {
+      paymentStatus = 'received';
+      advanceReceived = advanceAmount;
+    }
+    
+    return {
+      advanceAmount,
+      advanceReceived,
+      balanceAdvance: advanceAmount - advanceReceived,
+      paymentStatus
+    };
+  };
   
   return (
     <div className={styles.salesOrdersScreen}>
@@ -67,7 +97,7 @@ function SalesOrders({
             className={filterState === 'production' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('production')}
           >
-            {t.readyForProduction}
+            🏭 {t.readyForProduction}
           </button>
         </div>
       </div>
@@ -91,12 +121,13 @@ function SalesOrders({
 
           const statusLabels = {
             pending: t.pending,
-            production: 'In Production',
-            completed: 'Completed'
+            production: t.inProduction,
+            completed: t.completed || 'Completed'
           };
 
           const relatedQuote = mockQuotes.find(quote => quote.id === order.quoteId);
           const relatedLead = relatedQuote ? mockLeads.find(lead => lead.id === relatedQuote.leadId) : null;
+          const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount);
 
           return (
             <div key={order.id} className={`${styles.orderCard} ${styles[order.status + 'Order']}`}>
@@ -131,7 +162,29 @@ function SalesOrders({
                       </span> 
                     - {relatedQuote.quoteDate} ({relatedQuote.status})</p>
                   )}
-                  <p><strong>💳 Payment:</strong> {order.paymentStatus}</p>
+                  <p>
+                    <strong>💳 Payment:</strong> 
+                    <span 
+                      className={styles.mappingLink} 
+                      onClick={() => onShowAdvancePaymentManagement && onShowAdvancePaymentManagement()}
+                      title="View payment details"
+                      style={{ marginLeft: '8px' }}
+                    >
+                      {paymentDetails.paymentStatus === 'received' ? (
+                        <span style={{ color: '#27ae60' }}>
+                          ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
+                        </span>
+                      ) : paymentDetails.paymentStatus === 'overdue' ? (
+                        <span style={{ color: '#e74c3c' }}>
+                          🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
+                        </span>
+                      ) : (
+                        <span style={{ color: '#f39c12' }}>
+                          ⏳ Pending {formatCurrency(paymentDetails.balanceAdvance)} of {formatCurrency(paymentDetails.advanceAmount)}
+                        </span>
+                      )}
+                    </span>
+                  </p>
                   <p><strong>🏭 Production:</strong> {order.productionStatus}</p>
                 </div>
               </div>
@@ -140,8 +193,13 @@ function SalesOrders({
                 <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t.viewPDF}</button>
                 {order.status === 'pending' && (
                   <>
-                    <button className={`${styles.actionBtn} ${styles.paymentBtn}`}>💳 {t.viewPaymentStatus}</button>
-                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 Ready for Production</button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.paymentBtn}`}
+                      onClick={() => onShowAdvancePaymentManagement && onShowAdvancePaymentManagement()}
+                    >
+                      💳 {t.viewPaymentStatus}
+                    </button>
+                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 {t.readyForProduction}</button>
                   </>
                 )}
                 {order.status === 'production' && (

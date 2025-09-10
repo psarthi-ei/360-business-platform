@@ -231,6 +231,7 @@ function App() {
         onNavigateBack={showDashboard}
         onShowLeadManagement={showLeadManagement}
         onShowQuotationOrders={showQuotationOrders}
+        onShowAdvancePaymentManagement={showAdvancePaymentManagement}
         translations={t}
         filterState={orderFilter}
         onFilterChange={setOrderFilter}

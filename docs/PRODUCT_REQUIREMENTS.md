@@ -152,6 +152,78 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - **Revenue-ready**: Can start charging ₹5-10k/month immediately
 - **Portfolio piece**: Something you're genuinely proud to show
 
+## **BUSINESS CATEGORIES & MODULE ORGANIZATION**
+
+### **Dashboard Structure: 5 Broad Business Categories**
+Based on textile manufacturing workflow analysis, the 13 MVP modules are organized into 5 intuitive business categories that match how MSME owners think about their business:
+
+#### **1. 🎯 SALES & CUSTOMER MANAGEMENT** 
+**Gujarati**: વેચાણ અને ગ્રાહક વ્યવસ્થા  
+**Primary Modules**: 1, 2, 3, 11 (60%)
+- **Module 1**: Lead Management ✅ Live
+- **Module 2**: Quotation & Sales Orders ✅ Live  
+- **Module 3**: CRM - 360° Customer View ✅ Live
+- **Module 11**: Customer Loyalty & Feedback (Primary: 60%) 🔄 Coming
+
+*Complete customer lifecycle from first inquiry to long-term relationship*
+
+#### **2. 💰 FINANCIAL MANAGEMENT**
+**Gujarati**: નાણાકીય વ્યવસ્થા  
+**Primary Modules**: 4, 10 + 11 (15%)
+- **Module 4**: Payments & Invoices ✅ Live
+- **Module 10**: Financial Tracking & Reports 🔄 Coming
+- **Module 11**: Loyalty Points & Rewards (Secondary: 15%) 🔄 Coming
+
+*Cash flow, payments, invoicing, and financial health monitoring*
+
+#### **3. 🏭 PRODUCTION & OPERATIONS**
+**Gujarati**: ઉત્પાદન અને કામકાજ  
+**Primary Modules**: 5, 6, 7, 8
+- **Module 5**: Work Order System 🔄 Coming
+- **Module 6**: Smart Procurement & GRN 🔄 Coming
+- **Module 7**: Three-tier Inventory Management 🔄 Coming
+- **Module 8**: Production Tracking & Quality 🔄 Coming
+
+*Manufacturing operations from raw material to finished goods*
+
+#### **4. 🚚 FULFILLMENT & DELIVERY**
+**Gujarati**: માલ મોકલવો અને ડિલિવરી  
+**Primary Modules**: 9 + 11 (25%)
+- **Module 9**: Dispatch & Delivery Management 🔄 Coming
+- **Module 11**: Post-Delivery Feedback (Secondary: 25%) 🔄 Coming
+
+*Order fulfillment, shipping, delivery, and customer satisfaction*
+
+#### **5. 📊 BUSINESS INTELLIGENCE & ANALYTICS**
+**Gujarati**: ધંધાની માહિતી અને વિશ્લેષણ  
+**Primary Modules**: 12, 13 + 11 (15%)
+- **Module 12**: Voice Commands & Multilingual AI 🔄 Coming
+- **Module 13**: Analytics Dashboard & Reports 🔄 Coming
+- **Module 11**: Customer Satisfaction Analytics (Tertiary: 15%) 🔄 Coming
+
+*Data-driven insights, voice AI, and business performance analytics*
+
+### **Category Implementation Status**
+| Category | Modules | Completion | Status |
+|----------|---------|------------|--------|
+| 🎯 Sales & Customer | 4 modules | 75% (3/4) | ✅ Mostly Live |
+| 💰 Financial | 3 modules | 33% (1/3) | 🔄 Partially Live |
+| 🏭 Production | 4 modules | 0% (0/4) | 🔄 Coming Soon |
+| 🚚 Fulfillment | 2 modules | 0% (0/2) | 🔄 Coming Soon |
+| 📊 Analytics | 3 modules | 0% (0/3) | 🔄 Coming Soon |
+
+**Overall Progress**: 4/13 modules live (31% complete)
+
+### **Module Distribution Logic**
+**Module 11 (Customer Loyalty)** is intelligently distributed across categories:
+- **60%** in Sales & Customer: Loyalty program management, repeat orders
+- **25%** in Fulfillment: Post-delivery feedback collection, satisfaction ratings
+- **15%** in Analytics: Customer satisfaction trends, loyalty ROI metrics
+
+This distribution ensures loyalty features appear contextually where business owners need them most in their workflow.
+
+---
+
 ## **MVP CORE MODULES & FEATURES**
 
 ### **1. LEAD MANAGEMENT WITH ANALYTICS**
@@ -379,6 +451,62 @@ Successful manufacturers will want to scale operations, add team members, and ex
 │  📞 QUICK ACTIONS             │
 │  [Call] [WhatsApp] [SMS]     │
 └─────────────────────────────┘
+```
+
+### **DASHBOARD LAYOUT - 5 BUSINESS CATEGORIES**
+```
+📱 360° Business Platform Dashboard
+
+┌─────────────────────────────────────────────┐
+│  🎤 Voice Assistant (બોલીને કામ કરો)           │
+│  "Lead add કરો" • "Payment check કરો"         │
+└─────────────────────────────────────────────┘
+
+┌─────────────────┬─────────────────┬─────────────────┐
+│  🎯 વેચાણ ગ્રાહક    │  💰 નાણાકીય        │  🏭 ઉત્પાદન કામ     │
+│  Sales &        │  Financial      │  Production &   │
+│  Customer       │  Management     │  Operations     │
+│                 │                 │                 │
+│  4 modules      │  3 modules      │  4 modules      │
+│  ✅ 3 Live      │  ✅ 1 Live      │  🔄 Coming      │
+│                 │                 │                 │
+│  • 7 leads      │  • ₹9.2L pending│  • Work orders  │
+│  • 2 quotes     │  • 1 overdue    │  • Inventory    │
+│  • 1 active     │  • Cash flow    │  • Production   │
+└─────────────────┴─────────────────┴─────────────────┘
+
+┌─────────────────┬─────────────────┬─────────────────┐
+│  🚚 માલ મોકલવો     │  📊 ધંધાની માહિતી   │                 │
+│  Fulfillment    │  Business       │     FUTURE      │
+│  & Delivery     │  Intelligence   │   CATEGORIES    │
+│                 │  & Analytics    │                 │
+│  2 modules      │  3 modules      │                 │
+│  🔄 Coming      │  🔄 Coming      │                 │
+│                 │                 │                 │
+│  • Dispatch     │  • Reports      │                 │
+│  • Delivery     │  • Voice AI     │                 │
+│  • Feedback     │  • Insights     │                 │
+└─────────────────┴─────────────────┴─────────────────┘
+```
+
+### **CATEGORY CARD INTERACTION**
+Each category card shows:
+- **Gujarati name** + English subtitle
+- **Module count** and live status  
+- **Key metrics** relevant to that business area
+- **Quick actions** available via touch or voice
+
+**Example - Sales & Customer Category:**
+```
+🎯 વેચાણ અને ગ્રાહક વ્યવસ્થા
+Sales & Customer Management
+
+✅ 3/4 modules live
+• 7 new leads today
+• 2 quotes pending approval  
+• 1 order in progress
+
+[View Details] [🎤 Voice]
 ```
 
 ### **VOICE-FIRST WORKFLOW EXAMPLES**

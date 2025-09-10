@@ -289,7 +289,7 @@ function AdvancePaymentManagement({
                         onClick={() => onShowSalesOrders && onShowSalesOrders()}
                         title="View in Sales Orders"
                       >
-                        Order: {payment.orderId} →
+                        📦 Order: {payment.orderId} ({formatCurrency(payment.orderAmount)}) →
                       </span>
                     </div>
                     <div 
