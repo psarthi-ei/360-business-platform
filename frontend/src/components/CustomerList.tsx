@@ -88,7 +88,8 @@ function CustomerList({
             const paymentStatusIcon = {
               good: '✅',
               overdue: '⚠️',
-              pending: '⚠️'
+              pending: '⚠️',
+              excellent: '🌟'
             };
 
             const lastOrder = mockSalesOrders.find(order => order.customerId === customer.id);

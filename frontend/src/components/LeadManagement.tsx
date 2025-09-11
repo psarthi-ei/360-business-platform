@@ -116,10 +116,11 @@ function LeadManagement({
               <div className={styles.leadHeader}>
                 <h3>
                   <span 
-                    onClick={() => onShowCustomerProfile?.(lead.customerId)}
-                    style={{cursor: 'pointer', textDecoration: 'underline'}}
+                    onClick={() => lead.convertedCustomerId ? onShowCustomerProfile?.(lead.convertedCustomerId) : null}
+                    style={{cursor: lead.convertedCustomerId ? 'pointer' : 'default', textDecoration: lead.convertedCustomerId ? 'underline' : 'none'}}
+                    title={lead.convertedCustomerId ? 'View customer profile' : 'Not yet converted to customer'}
                   >
-                    {lead.customerName} - {lead.location}
+                    {lead.companyName} - {lead.location}
                   </span>
                 </h3>
                 <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>

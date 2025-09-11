@@ -61,7 +61,8 @@ function CustomerProfile({
   const paymentStatusIcon = {
     good: '✅',
     overdue: '⚠️',
-    pending: '⚠️'
+    pending: '⚠️',
+    excellent: '🌟'
   };
   return (
     <div className={styles.leadManagementScreen}>
@@ -130,7 +131,9 @@ function CustomerProfile({
             const statusIcons = {
               pending: '⏳',
               approved: '✅',
-              expired: '❌'
+              expired: '❌',
+              rejected: '🚫',
+              converted_to_proforma: '📋'
             };
             
             return (

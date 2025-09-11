@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { mockQuotes, mockLeads, mockSalesOrders, mockCustomers, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/QuotationOrders.module.css';
 
@@ -97,13 +97,17 @@ function QuotationOrders({
           const statusIcons = {
             pending: '⏳',
             approved: '✅',
-            expired: '❌'
+            expired: '❌',
+            rejected: '🚫',
+            converted_to_proforma: '📋'
           };
 
           const statusLabels = {
             pending: t('pending'),
             approved: t('approved'),
-            expired: t('expired')
+            expired: t('expired'),
+            rejected: 'Rejected',
+            converted_to_proforma: 'Converted'
           };
 
           const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);
@@ -114,10 +118,17 @@ function QuotationOrders({
               <div className={styles.quoteHeader}>
                 <h3>
                   <span 
-                    onClick={() => onShowCustomerProfile(quote.customerId)}
+                    onClick={() => {
+                      // Find customer who was converted from this quote's lead
+                      const convertedCustomer = mockCustomers.find(c => c.originalLeadId === quote.leadId);
+                      if (convertedCustomer) {
+                        onShowCustomerProfile(convertedCustomer.id);
+                      }
+                    }}
                     style={{cursor: 'pointer', textDecoration: 'underline'}}
+                    title={mockCustomers.find(c => c.originalLeadId === quote.leadId) ? 'View customer profile' : 'Not yet converted to customer'}
                   >
-                    {quote.id} - {quote.customerName}
+                    {quote.id} - {quote.companyName}
                   </span>
                 </h3>
                 <span className={`${styles.statusBadge} ${styles[quote.status]}`}>
@@ -125,7 +136,7 @@ function QuotationOrders({
                 </span>
               </div>
               <div className={styles.quoteDetails}>
-                <p><strong>{t('customerName')}:</strong> {quote.customerName} - {quote.location}</p>
+                <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
                 <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
                 <p><strong>Items:</strong> {quote.items}</p>
                 <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
