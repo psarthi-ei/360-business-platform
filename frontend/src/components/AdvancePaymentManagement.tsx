@@ -49,6 +49,7 @@ function AdvancePaymentManagement({
   filterState,
   onFilterChange
 }: AdvancePaymentManagementProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
 
   // Scroll to top when component mounts

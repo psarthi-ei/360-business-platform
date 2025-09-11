@@ -18,6 +18,7 @@ function Authentication(props: AuthenticationProps) {
   const onDemoMode = props.onDemoMode;
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation();
   
   // State to track which form to show
