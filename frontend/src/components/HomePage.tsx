@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/HomePage.module.css';
 
 interface HomePageProps {
@@ -8,7 +9,6 @@ interface HomePageProps {
   onSignUp: () => void;
   onGuestMode: () => void;
   onDemoMode: () => void;
-  translations: any;
 }
 
 function HomePage({ 
@@ -17,9 +17,9 @@ function HomePage({
   onLogin,
   onSignUp,
   onGuestMode,
-  onDemoMode,
-  translations: t 
+  onDemoMode
 }: HomePageProps) {
+  const { t } = useTranslation();
   const [animatedStats, setAnimatedStats] = useState({
     timeSaved: 0,
     accuracy: 0,
@@ -102,19 +102,19 @@ function HomePage({
         <div className={styles.heroContent}>
           <div className={styles.purposeStatement}>
             <h1 className={styles.heroTitle}>
-              {t.transformationTitle || "360° Business Visibility Drives Results"}
+              {t('transformationTitle') || "360° Business Visibility Drives Results"}
             </h1>
             <p className={styles.heroSubtitle}>
-              {t.transformationSubtitle || "Complete visibility across your entire business cycle improves efficiency, saves costs, enhances customer satisfaction, and grows revenue"}
+              {t('transformationSubtitle') || "Complete visibility across your entire business cycle improves efficiency, saves costs, enhances customer satisfaction, and grows revenue"}
             </p>
           
           {/* Circular Business Flow Visualization */}
           <div className={styles.storyFlowContainer}>
             <div className={styles.storyCenter}>
               <div className={styles.storyCenterContent}>
-                <h3 className={styles.storyCenterTitle}>{t.businessVisibility || "Complete Business"}</h3>
-                <h4 className={styles.storyCenterTitle}>{t.visibility || "Visibility"}</h4>
-                <p className={styles.storyCenterSubtitle}>{t.drivesResults || "Drives Results"}</p>
+                <h3 className={styles.storyCenterTitle}>{t('businessVisibility') || "Complete Business"}</h3>
+                <h4 className={styles.storyCenterTitle}>{t('visibility') || "Visibility"}</h4>
+                <p className={styles.storyCenterSubtitle}>{t('drivesResults') || "Drives Results"}</p>
               </div>
             </div>
             {(() => {
@@ -226,7 +226,7 @@ function HomePage({
           {/* Hero CTA */}
           <div className={styles.heroCta}>
             <button className={styles.watchDemoBtn} onClick={onDemoMode}>
-              {t.watchDemo || "Watch Demo"} 📹
+              {t('watchDemo') || "Watch Demo"} 📹
             </button>
           </div>
           </div>
@@ -237,53 +237,53 @@ function HomePage({
       <section className={styles.impactSection}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>
-            {t.heroTitle || "Business Benefits"}
+            {t('heroTitle') || "Business Benefits"}
           </h2>
           
           <div className={styles.businessBenefits}>
             <div className={styles.benefitCard}>
-              <h4>⚡ {t.efficiencyBenefit || "Improved Efficiency"}</h4>
-              <p>{t.efficiencyDetail || "360° visibility eliminates manual tracking and duplicate work"}</p>
+              <h4>⚡ {t('efficiencyBenefit') || "Improved Efficiency"}</h4>
+              <p>{t('efficiencyDetail') || "360° visibility eliminates manual tracking and duplicate work"}</p>
             </div>
             <div className={styles.benefitCard}>
-              <h4>₹ {t.costBenefit || "Reduced Costs"}</h4>
-              <p>{t.costDetail || "Complete visibility prevents waste and optimizes resources"}</p>
+              <h4>₹ {t('costBenefit') || "Reduced Costs"}</h4>
+              <p>{t('costDetail') || "Complete visibility prevents waste and optimizes resources"}</p>
             </div>
             <div className={styles.benefitCard}>
-              <h4>😊 {t.satisfactionBenefit || "Higher Customer Satisfaction"}</h4>
-              <p>{t.satisfactionDetail || "End-to-end visibility ensures on-time delivery and quality"}</p>
+              <h4>😊 {t('satisfactionBenefit') || "Higher Customer Satisfaction"}</h4>
+              <p>{t('satisfactionDetail') || "End-to-end visibility ensures on-time delivery and quality"}</p>
             </div>
             <div className={styles.benefitCard}>
-              <h4>📈 {t.revenueBenefit || "Increased Revenue"}</h4>
-              <p>{t.revenueDetail || "360° insights help identify opportunities and optimize pricing"}</p>
+              <h4>📈 {t('revenueBenefit') || "Increased Revenue"}</h4>
+              <p>{t('revenueDetail') || "360° insights help identify opportunities and optimize pricing"}</p>
             </div>
           </div>
 
           {/* Impact Statistics */}
           <div className={styles.statsContainer}>
             <h3 className={styles.statsTitle}>
-              {t.impactTitle || "Real Business Impact"}
+              {t('impactTitle') || "Real Business Impact"}
             </h3>
             <div className={styles.statsGrid}>
               <div className={styles.statCard}>
                 <div className={styles.statValue}>{animatedStats.timeSaved}+</div>
-                <div className={styles.statLabel}>{t.hoursDaily || "Hours Saved Daily"}</div>
-                <div className={styles.statDesc}>{t.hoursDesc || "Automate manual tasks"}</div>
+                <div className={styles.statLabel}>{t('hoursDaily') || "Hours Saved Daily"}</div>
+                <div className={styles.statDesc}>{t('hoursDesc') || "Automate manual tasks"}</div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statValue}>{animatedStats.accuracy}%</div>
-                <div className={styles.statLabel}>{t.voiceAccuracy || "Voice Accuracy"}</div>
-                <div className={styles.statDesc}>{t.accuracyDesc || "In Gujarati & Hindi"}</div>
+                <div className={styles.statLabel}>{t('voiceAccuracy') || "Voice Accuracy"}</div>
+                <div className={styles.statDesc}>{t('accuracyDesc') || "In Gujarati & Hindi"}</div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statValue}>{animatedStats.efficiency}%</div>
-                <div className={styles.statLabel}>{t.efficiency || "Efficiency Gain"}</div>
-                <div className={styles.statDesc}>{t.efficiencyDesc || "Faster order processing"}</div>
+                <div className={styles.statLabel}>{t('efficiency') || "Efficiency Gain"}</div>
+                <div className={styles.statDesc}>{t('efficiencyDesc') || "Faster order processing"}</div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statValue}>{animatedStats.satisfaction}%</div>
-                <div className={styles.statLabel}>{t.satisfaction || "User Satisfaction"}</div>
-                <div className={styles.statDesc}>{t.satisfactionDesc || "Love the simplicity"}</div>
+                <div className={styles.statLabel}>{t('satisfaction') || "User Satisfaction"}</div>
+                <div className={styles.statDesc}>{t('satisfactionDesc') || "Love the simplicity"}</div>
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@ function HomePage({
       <section className={styles.benefits}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>
-            {t.benefitsTitle || "Built for Indian MSME Textile Manufacturers"}
+            {t('benefitsTitle') || "Built for Indian MSME Textile Manufacturers"}
           </h2>
           <div className={styles.benefitsGrid}>
             {benefits.map((benefit) => (
@@ -305,10 +305,10 @@ function HomePage({
               >
                 <div className={styles.benefitIcon}>{benefit.icon}</div>
                 <h3 className={styles.benefitTitle}>
-                  {t[benefit.titleKey] || benefit.titleKey}
+                  {t(benefit.titleKey) || benefit.titleKey}
                 </h3>
                 <p className={styles.benefitDesc}>
-                  {t[benefit.descKey] || benefit.descKey}
+                  {t(benefit.descKey) || benefit.descKey}
                 </p>
               </div>
             ))}
@@ -320,21 +320,21 @@ function HomePage({
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>
-            {t.ctaTitle || "Ready for 360° View of Your Business?"}
+            {t('ctaTitle') || "Ready for 360° View of Your Business?"}
           </h2>
           <p className={styles.ctaSubtitle}>
-            {t.ctaSubtitle || "Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility"}
+            {t('ctaSubtitle') || "Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility"}
           </p>
           <div className={styles.ctaButtons}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              {t.watchDemo || "Explore Demo"} 🎬
+              {t('watchDemo') || "Explore Demo"} 🎬
             </button>
             <button className={styles.secondaryCta} onClick={onGuestMode}>
-              {t.tryAsGuest || "Try as Guest"} 👤
+              {t('tryAsGuest') || "Try as Guest"} 👤
             </button>
           </div>
           <p className={styles.ctaNote}>
-            {t.ctaNote || "Rich demo data included • No sign-up required • Full Gujarat textile business showcase"}
+            {t('ctaNote') || "Rich demo data included • No sign-up required • Full Gujarat textile business showcase"}
           </p>
         </div>
       </section>
@@ -344,21 +344,21 @@ function HomePage({
         <div className={styles.footerContent}>
           <div className={styles.footerSection}>
             <h4>ElevateIdea</h4>
-            <p>{t.footerTagline || "360° Business Platform for MSME Textile Manufacturers"}</p>
+            <p>{t('footerTagline') || "360° Business Platform for MSME Textile Manufacturers"}</p>
           </div>
           <div className={styles.footerSection}>
-            <h4>{t.contactTitle || "Contact"}</h4>
+            <h4>{t('contactTitle') || "Contact"}</h4>
             <p>📧 support@elevateidea.com</p>
             <p>📱 +91 98765 43210</p>
             <p>📍 Bangalore, India</p>
           </div>
           <div className={styles.footerSection}>
-            <h4>{t.linkedinTitle || "Connect"}</h4>
+            <h4>{t('linkedinTitle') || "Connect"}</h4>
             <p>💼 Connect with us on LinkedIn</p>
           </div>
         </div>
         <div className={styles.footerBottom}>
-          <p>© 2025 ElevateIdea Technologies Private Limited. {t.allRights || "All rights reserved."}</p>
+          <p>© 2025 ElevateIdea Technologies Private Limited. {t('allRights') || "All rights reserved."}</p>
         </div>
       </footer>
     </div>

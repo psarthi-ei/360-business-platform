@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
@@ -13,7 +14,6 @@ interface SalesOrdersProps {
   onShowLeadManagement?: () => void;
   onShowQuotationOrders?: () => void;
   onShowAdvancePaymentManagement?: () => void;
-  translations: any;
   filterState: string;
   onFilterChange: (filter: string) => void;
 }
@@ -28,11 +28,10 @@ function SalesOrders({
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowAdvancePaymentManagement,
-  translations,
   filterState,
   onFilterChange
 }: SalesOrdersProps) {
-  const t = translations;
+  const { t } = useTranslation();
   
   // Helper function to calculate payment details for an order
   const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
@@ -77,7 +76,7 @@ function SalesOrders({
       />
       
       <div className={styles.pageContent}>
-        <h1 className={styles.centeredHeading}>💳 {t.salesOrder}</h1>
+        <h1 className={styles.centeredHeading}>💳 {t('salesOrder')}</h1>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
@@ -85,19 +84,19 @@ function SalesOrders({
             className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('all')}
           >
-            {t.showAll}
+            {t('showAll')}
           </button>
           <button 
             className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('pending')}
           >
-            {t.showPending}
+            {t('showPending')}
           </button>
           <button 
             className={filterState === 'production' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('production')}
           >
-            🏭 {t.readyForProduction}
+            🏭 {t('readyForProduction')}
           </button>
         </div>
       </div>
@@ -120,9 +119,9 @@ function SalesOrders({
           };
 
           const statusLabels = {
-            pending: t.pending,
-            production: t.inProduction,
-            completed: t.completed || 'Completed'
+            pending: t('pending'),
+            production: t('inProduction'),
+            completed: t('completed') || 'Completed'
           };
 
           const relatedQuote = mockQuotes.find(quote => quote.id === order.quoteId);
@@ -138,11 +137,11 @@ function SalesOrders({
                 </span>
               </div>
               <div className={styles.orderDetails}>
-                <p><strong>{t.customerName}:</strong> {order.customerName} - {order.location}</p>
-                <p><strong>{t.orderDate}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
+                <p><strong>{t('customerName')}:</strong> {order.customerName} - {order.location}</p>
+                <p><strong>{t('orderDate')}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
                 <p><strong>Items:</strong> {order.items}</p>
-                <p><strong>{t.totalAmount}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
-                <p><strong>{t.orderStatus}:</strong> {order.statusMessage}</p>
+                <p><strong>{t('totalAmount')}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
+                <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
               </div>
 
               {/* Related Quote and Lead Information */}
@@ -190,16 +189,16 @@ function SalesOrders({
               </div>
               
               <div className={styles.orderActions}>
-                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t.viewPDF}</button>
+                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
                 {order.status === 'pending' && (
                   <>
                     <button 
                       className={`${styles.actionBtn} ${styles.paymentBtn}`}
                       onClick={() => onShowAdvancePaymentManagement && onShowAdvancePaymentManagement()}
                     >
-                      💳 {t.viewPaymentStatus}
+                      💳 {t('viewPaymentStatus')}
                     </button>
-                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 {t.readyForProduction}</button>
+                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 {t('readyForProduction')}</button>
                   </>
                 )}
                 {order.status === 'production' && (
@@ -217,8 +216,8 @@ function SalesOrders({
 
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
-          🎤 <strong>{t.voiceCommandsHint}</strong> 
-          "{t.viewPaymentStatus}" • "{t.sendPaymentReminder}"
+          🎤 <strong>{t('voiceCommandsHint')}</strong> 
+          "{t('viewPaymentStatus')}" • "{t('sendPaymentReminder')}"
         </p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ProductHeader from './ProductHeader';
 import { mockSalesOrders, formatCurrency, getCustomerById } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/AdvancePaymentManagement.module.css';
 
 interface AdvancePaymentManagementProps {
@@ -12,7 +13,6 @@ interface AdvancePaymentManagementProps {
   onNavigateHome?: () => void;
   onShowSalesOrders?: () => void;
   onShowCustomerProfile?: (customerId: string) => void;
-  translations: any;
   filterState: string;
   onFilterChange: (filter: string) => void;
 }
@@ -46,11 +46,10 @@ function AdvancePaymentManagement({
   onNavigateHome,
   onShowSalesOrders,
   onShowCustomerProfile,
-  translations,
   filterState,
   onFilterChange
 }: AdvancePaymentManagementProps) {
-  // const t = translations; // Currently using hardcoded strings for MVP
+  const { t } = useTranslation();
 
   // Scroll to top when component mounts
   useEffect(() => {

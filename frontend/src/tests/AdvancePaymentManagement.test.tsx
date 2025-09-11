@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import AdvancePaymentManagement from '../components/AdvancePaymentManagement';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -13,15 +14,23 @@ const mockProps = {
   onFilterChange: jest.fn()
 };
 
+const renderWithTranslation = (component: React.ReactElement) => {
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      {component}
+    </TranslationProvider>
+  );
+};
+
 describe('AdvancePaymentManagement Component', () => {
   describe('Core Functionality', () => {
     test('renders without crashing', () => {
-      const { container } = render(<AdvancePaymentManagement {...mockProps} />);
+      const { container } = renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
     test('handles required props', () => {
-      render(<AdvancePaymentManagement {...mockProps} />);
+      renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(mockProps.onLanguageChange).toBeDefined();
       expect(typeof mockProps.onLanguageChange).toBe('function');
       expect(mockProps.onNavigateBack).toBeDefined();
@@ -29,7 +38,7 @@ describe('AdvancePaymentManagement Component', () => {
     });
 
     test('manages callback props', () => {
-      render(<AdvancePaymentManagement {...mockProps} />);
+      renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(mockProps.onNavigateBack).toBeDefined();
       expect(typeof mockProps.onNavigateBack).toBe('function');
       expect(mockProps.onFilterChange).toBeDefined();
@@ -37,24 +46,24 @@ describe('AdvancePaymentManagement Component', () => {
     });
 
     test('supports translation system', () => {
-      render(<AdvancePaymentManagement {...mockProps} />);
+      renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(mockProps.translations).toBeDefined();
       expect(typeof mockProps.translations).toBe('object');
     });
 
     test('handles language switching', () => {
-      render(<AdvancePaymentManagement {...mockProps} />);
+      renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(mockProps.currentLanguage).toBeDefined();
       expect(typeof mockProps.currentLanguage).toBe('string');
     });
 
     test('supports component lifecycle', () => {
-      const { unmount } = render(<AdvancePaymentManagement {...mockProps} />);
+      const { unmount } = renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(() => unmount()).not.toThrow();
     });
 
     test('integrates with styling system', () => {
-      const { container } = render(<AdvancePaymentManagement {...mockProps} />);
+      const { container } = renderWithTranslation(<AdvancePaymentManagement {...mockProps} />);
       expect(container.firstChild).toHaveClass('advancePaymentScreen');
     });
   });

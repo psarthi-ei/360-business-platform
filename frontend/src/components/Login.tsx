@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/Login.module.css';
 import CompactLanguageSelector from './CompactLanguageSelector';
-import { TranslationStrings } from '../utils/translations';
+import { useTranslation } from '../contexts/TranslationContext';
 
 interface LoginProps {
   onSwitchToSignup: () => void;
@@ -10,7 +10,6 @@ interface LoginProps {
   onDemoMode: () => void;
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  translations: TranslationStrings;
 }
 
 function Login(props: LoginProps) {
@@ -20,7 +19,7 @@ function Login(props: LoginProps) {
   const onDemoMode = props.onDemoMode;
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;
-  const translations = props.translations;
+  const { t: translations } = useTranslation();
   
   // Form state management
   const [formData, setFormData] = useState({
@@ -55,7 +54,7 @@ function Login(props: LoginProps) {
 
     // Simple validation
     if (!formData.email || !formData.password) {
-      setErrorMessage(translations.pleaseEnterBothFields);
+      setErrorMessage(translations('pleaseEnterBothFields'));
       setIsLoading(false);
       return;
     }
@@ -68,7 +67,7 @@ function Login(props: LoginProps) {
         setIsLoading(false);
         onLoginSuccess();
       } else {
-        setErrorMessage(translations.invalidCredentials);
+        setErrorMessage(translations('invalidCredentials'));
         setIsLoading(false);
       }
     }, 1000);
@@ -100,23 +99,23 @@ function Login(props: LoginProps) {
         {/* Header */}
         <div className={styles.header}>
           <h1 className={styles.title}>
-            {translations.welcomeBack}
+            {translations('welcomeBack')}
           </h1>
           <p className={styles.subtitle}>
-            {translations.signInToContinue}
+            {translations('signInToContinue')}
           </p>
         </div>
 
         {/* Demo Info Banner */}
         <div className={styles.demoInfo}>
-          <h3>{translations.demoAccount}</h3>
-          <p>{translations.demoInstructions}</p>
+          <h3>{translations('demoAccount')}</h3>
+          <p>{translations('demoInstructions')}</p>
           <button 
             type="button"
             className={styles.demoButton}
             onClick={handleDemoLogin}
           >
-            {translations.fillDemoCredentials}
+            {translations('fillDemoCredentials')}
           </button>
         </div>
 
@@ -125,7 +124,7 @@ function Login(props: LoginProps) {
           {/* Email Field */}
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
-              {translations.email}
+              {translations('email')}
             </label>
             <input
               type="email"
@@ -134,7 +133,7 @@ function Login(props: LoginProps) {
               value={formData.email}
               onChange={handleInputChange}
               className={styles.input}
-              placeholder={translations.emailPlaceholder}
+              placeholder={translations('emailPlaceholder')}
               required
             />
           </div>
@@ -142,7 +141,7 @@ function Login(props: LoginProps) {
           {/* Password Field */}
           <div className={styles.formGroup}>
             <label htmlFor="password" className={styles.label}>
-              {translations.password}
+              {translations('password')}
             </label>
             <input
               type="password"
@@ -151,7 +150,7 @@ function Login(props: LoginProps) {
               value={formData.password}
               onChange={handleInputChange}
               className={styles.input}
-              placeholder={translations.passwordPlaceholder}
+              placeholder={translations('passwordPlaceholder')}
               required
             />
           </div>
@@ -169,7 +168,7 @@ function Login(props: LoginProps) {
             className={styles.submitButton}
             disabled={isLoading}
           >
-            {isLoading ? translations.signingIn : translations.signIn}
+            {isLoading ? translations('signingIn') : translations('signIn')}
           </button>
         </form>
 
@@ -180,27 +179,27 @@ function Login(props: LoginProps) {
           onClick={onDemoMode}
           disabled={isLoading}
         >
-          {translations.tryAsGuest} 🚀
+          {translations('tryAsGuest')} 🚀
         </button>
 
         {/* Switch to Signup */}
         <div className={styles.switchAuth}>
           <span className={styles.switchText}>
-            {translations.dontHaveAccount}
+            {translations('dontHaveAccount')}
           </span>
           <button
             type="button"
             className={styles.switchButton}
             onClick={onSwitchToSignup}
           >
-            {translations.signUp}
+            {translations('signUp')}
           </button>
         </div>
 
         {/* Business Context */}
         <div className={styles.businessContext}>
           <p className={styles.contextText}>
-            {translations.textileManufacturers}
+            {translations('textileManufacturers')}
           </p>
         </div>
       </div>

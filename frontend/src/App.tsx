@@ -11,8 +11,9 @@ import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
 import ProductHeader from './components/ProductHeader';
 import Authentication from './components/Authentication';
-import { getCurrentTranslations } from './utils/translations';
+import { TranslationProvider } from './contexts/TranslationContext';
 import { themes, applyTheme } from './styles/themes';
+import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -31,9 +32,6 @@ function App() {
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
 
 
-  function getTranslations() {
-    return getCurrentTranslations(currentLanguage);
-  }
 
   function switchLanguage(language: string) {
     setCurrentLanguage(language as Language);
@@ -41,11 +39,11 @@ function App() {
 
   function switchTheme(themeName: string) {
     setCurrentTheme(themeName);
-    localStorage.setItem('selectedTheme', themeName);
+    safeLocalStorageSetItem('selectedTheme', themeName);
   }
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
+    const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light');
     setCurrentTheme(savedTheme);
     const theme = themes[savedTheme] || themes['light'];
     applyTheme(theme);
@@ -146,13 +144,9 @@ function App() {
   }
 
   function renderDashboard() {
-    const t = getTranslations();
-    
     return (
       <div style={{ paddingTop: '80px' }}>
         <Dashboard
-          currentLanguage={currentLanguage}
-          onLanguageChange={switchLanguage}
           currentTheme={currentTheme}
           onThemeChange={switchTheme}
           onNavigateHome={showHomePage}
@@ -168,7 +162,6 @@ function App() {
           onLogout={handleLogout}
           isAuthenticated={isAuthenticated}
           userMode={userMode}
-          translations={t}
         />
       </div>
     );
@@ -185,8 +178,6 @@ function App() {
   }
 
   function renderLeadManagement() {
-    const t = getTranslations();
-    
     return (
       <LeadManagement
         currentLanguage={currentLanguage}
@@ -196,7 +187,6 @@ function App() {
         onShowQuoteFromLead={showQuoteFromLead}
         onShowQuotationOrders={showQuotationOrders}
         onShowSalesOrders={showSalesOrders}
-        translations={t}
         filterState={leadFilter}
         onFilterChange={setLeadFilter}
       />
@@ -204,8 +194,6 @@ function App() {
   }
 
   function renderQuotationOrders() {
-    const t = getTranslations();
-    
     return (
       <QuotationOrders
         currentLanguage={currentLanguage}
@@ -214,7 +202,6 @@ function App() {
         onShowSalesOrders={showSalesOrders}
         onShowCustomerProfile={showCustomerProfile}
         onShowLeadManagement={showLeadManagement}
-        translations={t}
         filterState={quoteFilter}
         onFilterChange={setQuoteFilter}
       />
@@ -222,8 +209,6 @@ function App() {
   }
 
   function renderSalesOrders() {
-    const t = getTranslations();
-    
     return (
       <SalesOrders
         currentLanguage={currentLanguage}
@@ -232,7 +217,6 @@ function App() {
         onShowLeadManagement={showLeadManagement}
         onShowQuotationOrders={showQuotationOrders}
         onShowAdvancePaymentManagement={showAdvancePaymentManagement}
-        translations={t}
         filterState={orderFilter}
         onFilterChange={setOrderFilter}
       />
@@ -240,8 +224,6 @@ function App() {
   }
 
   function renderAdvancePaymentManagement() {
-    const t = getTranslations();
-    
     return (
       <AdvancePaymentManagement
         currentLanguage={currentLanguage}
@@ -249,7 +231,6 @@ function App() {
         onNavigateBack={showDashboard}
         onShowSalesOrders={showSalesOrders}
         onShowCustomerProfile={showCustomerProfile}
-        translations={t}
         filterState={paymentFilter}
         onFilterChange={setPaymentFilter}
       />
@@ -257,29 +238,23 @@ function App() {
   }
 
   function renderCustomerProfile() {
-    const t = getTranslations();
-    
     return (
       <CustomerProfile
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
         customerId={selectedCustomerId}
-        translations={t}
       />
     );
   }
 
   function renderCustomerList() {
-    const t = getTranslations();
-    
     return (
       <CustomerList
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
         onShowCustomerProfile={showCustomerProfile}
-        translations={t}
         customerSearch={customerSearch}
         onCustomerSearchChange={setCustomerSearch}
       />
@@ -287,8 +262,6 @@ function App() {
   }
 
   function renderAuthentication() {
-    const t = getTranslations();
-    
     return (
       <Authentication
         onAuthSuccess={handleAuthSuccess}
@@ -296,14 +269,11 @@ function App() {
         onDemoMode={handleDemoMode}
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        translations={t}
       />
     );
   }
 
   function renderHomePage() {
-    const t = getTranslations();
-    
     return (
       <HomePage
         currentLanguage={currentLanguage}
@@ -312,14 +282,14 @@ function App() {
         onSignUp={showSignUp}
         onGuestMode={handleGuestMode}
         onDemoMode={handleDemoMode}
-        translations={t}
       />
     );
   }
 
   return (
-    <div className="App">
-      <div className="App-content">
+    <TranslationProvider defaultLanguage={currentLanguage}>
+      <div className="App">
+        <div className="App-content">
         <ProductHeader
           currentLanguage={currentLanguage}
           onLanguageChange={switchLanguage}
@@ -358,8 +328,9 @@ function App() {
         {currentScreen === 'advancepayment' && renderAdvancePaymentManagement()}
         {currentScreen === 'customerprofile' && renderCustomerProfile()}
         {currentScreen === 'customerlist' && renderCustomerList()}
+        </div>
       </div>
-    </div>
+    </TranslationProvider>
   );
 }
 

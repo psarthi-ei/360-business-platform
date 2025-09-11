@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Authentication from '../components/Authentication';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 // Mock props
 const mockProps = {
@@ -61,9 +62,13 @@ const mockProps = {
   } as any
 };
 
-// Helper function to render Authentication
+// Helper function to render Authentication with TranslationProvider
 const renderAuthentication = (props = mockProps) => {
-  return render(<Authentication {...props} />);
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      <Authentication {...props} />
+    </TranslationProvider>
+  );
 };
 
 describe('Authentication Component', () => {

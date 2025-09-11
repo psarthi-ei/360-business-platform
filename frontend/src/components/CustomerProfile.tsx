@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerProfile.module.css';
 
 interface CustomerProfileProps {
@@ -11,23 +12,6 @@ interface CustomerProfileProps {
   onNavigateBack: () => void;
   onNavigateHome?: () => void;
   customerId: string;
-  translations: {
-    backToDashboard: string;
-    customerProfile: string;
-    createNewQuote: string;
-    customerSince: string;
-    totalBusiness: string;
-    totalOrders: string;
-    conversionRate: string;
-    paymentScore: string;
-    call: string;
-    whatsapp: string;
-    quoteHistory: string;
-    orderHistory: string;
-    transactionHistory: string;
-    businessInsights: string;
-    [key: string]: string;
-  };
 }
 
 function CustomerProfile({
@@ -37,9 +21,9 @@ function CustomerProfile({
   onThemeChange,
   onNavigateBack,
   onNavigateHome,
-  customerId,
-  translations: t
+  customerId
 }: CustomerProfileProps) {
+  const { t } = useTranslation();
   const customer = getCustomerById(customerId);
   const customerQuotes = getQuotesByCustomerId(customerId);
   const customerOrders = getSalesOrdersByCustomerId(customerId);
@@ -59,7 +43,7 @@ function CustomerProfile({
           showThemeSelector={true}
         />
         <div className={styles.pageContent}>
-          <h1 className={styles.centeredHeading}>👤 {t.customerProfile}</h1>
+          <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
         <div className={styles.customerHeader}>
           <h2>Customer not found</h2>
           </div>
@@ -95,43 +79,43 @@ function CustomerProfile({
       
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>👤 {t.customerProfile}</h1>
-          <button className={styles.addButton}>{t.createNewQuote}</button>
+          <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
+          <button className={styles.addButton}>{t('createNewQuote')}</button>
         </div>
 
       <div className={styles.customerHeader}>
         <div className={styles.customerMainInfo}>
           <h2>🏭 {customer.name} - {customer.location}</h2>
-          <p className={styles.customerSince}>🎉 {t.customerSince}: {customer.customerSince}</p>
+          <p className={styles.customerSince}>🎉 {t('customerSince')}: {customer.customerSince}</p>
           <p className={styles.customerType}>{priorityIcons[customer.priority]} <strong>{customer.priorityLabel}</strong> - {customer.paymentStatusMessage}</p>
         </div>
         <div className={styles.customerContactHeader}>
           <p><strong>Primary Contact:</strong> {customer.contactPerson} - {customer.phone}</p>
           <div className={styles.headerActions}>
-            <button className={`${styles.actionBtn} ${styles.call}`}>{t.call}</button>
-            <button className={`${styles.actionBtn} ${styles.whatsapp}`}>{t.whatsapp}</button>
+            <button className={`${styles.actionBtn} ${styles.call}`}>{t('call')}</button>
+            <button className={`${styles.actionBtn} ${styles.whatsapp}`}>{t('whatsapp')}</button>
           </div>
         </div>
       </div>
 
       <div className={styles.customerStats}>
         <div className={styles.statCard}>
-          <h3>₹ {t.totalBusiness}</h3>
+          <h3>₹ {t('totalBusiness')}</h3>
           <p className={styles.statValue}>{formatCurrency(customer.totalBusiness)}</p>
           <p className={styles.statDetail}>({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
         </div>
         <div className={styles.statCard}>
-          <h3>📋 {t.totalOrders}</h3>
+          <h3>📋 {t('totalOrders')}</h3>
           <p className={styles.statValue}>{customer.totalOrders}</p>
           <p className={styles.statDetail}>{customerOrders.filter(order => order.status !== 'completed').length} active orders</p>
         </div>
         <div className={styles.statCard}>
-          <h3>🎯 {t.conversionRate}</h3>
+          <h3>🎯 {t('conversionRate')}</h3>
           <p className={styles.statValue}>{customer.conversionRate}%</p>
           <p className={styles.statDetail}>({customer.totalOrders}/{customerQuotes.length} quotes)</p>
         </div>
         <div className={styles.statCard}>
-          <h3>💳 {t.paymentScore}</h3>
+          <h3>💳 {t('paymentScore')}</h3>
           <p className={`${styles.statValue} ${styles[`payment${customer.paymentStatus.charAt(0).toUpperCase() + customer.paymentStatus.slice(1)}`]}`}>
             {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
           </p>
@@ -141,7 +125,7 @@ function CustomerProfile({
 
       <div className={styles.transactionHistory}>
         <div className={styles.historySection}>
-          <h4>📋 {t.quoteHistory}</h4>
+          <h4>📋 {t('quoteHistory')}</h4>
           {customerQuotes.length > 0 ? customerQuotes.map(quote => {
             const statusIcons = {
               pending: '⏳',
@@ -172,7 +156,7 @@ function CustomerProfile({
         </div>
 
         <div className={styles.historySection}>
-          <h4>📦 {t.orderHistory}</h4>
+          <h4>📦 {t('orderHistory')}</h4>
           {customerOrders.length > 0 ? customerOrders.map(order => {
             const statusIcons = {
               pending: '⏳',
@@ -275,7 +259,7 @@ function CustomerProfile({
       <div className={styles.customerQuickActions}>
         <h4>⚡ Quick Actions</h4>
         <div className={styles.actionButtons}>
-          <button className={`${styles.quickActionBtn} ${styles.primary}`}>{t.createNewQuote}</button>
+          <button className={`${styles.quickActionBtn} ${styles.primary}`}>{t('createNewQuote')}</button>
           <button className={styles.quickActionBtn}>📞 Call Customer</button>
           <button className={styles.quickActionBtn}>💬 Send WhatsApp</button>
           <button className={`${styles.quickActionBtn} ${styles.warning}`}>💳 Payment Reminder</button>

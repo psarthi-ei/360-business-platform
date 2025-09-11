@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import QuotationOrders from '../components/QuotationOrders';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -30,6 +31,14 @@ const mockProps = {
   onFilterChange: jest.fn()
 };
 
+const renderWithTranslation = (component: React.ReactElement) => {
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      {component}
+    </TranslationProvider>
+  );
+};
+
 describe('QuotationOrders Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -37,16 +46,16 @@ describe('QuotationOrders Component', () => {
 
   describe('Core Functionality', () => {
     test('renders without crashing', () => {
-      const { container } = render(<QuotationOrders {...mockProps} />);
+      const { container } = renderWithTranslation(<QuotationOrders {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
     test('handles required props', () => {
-      expect(() => render(<QuotationOrders {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...mockProps} />)).not.toThrow();
     });
 
     test('manages callback props', () => {
-      render(<QuotationOrders {...mockProps} />);
+      renderWithTranslation(<QuotationOrders {...mockProps} />);
       expect(mockProps.onNavigateBack).toBeDefined();
       expect(mockProps.onLanguageChange).toBeDefined();
       expect(mockProps.onFilterChange).toBeDefined();
@@ -56,41 +65,41 @@ describe('QuotationOrders Component', () => {
 
     test('handles filter state prop', () => {
       const customProps = { ...mockProps, filterState: 'pending' };
-      expect(() => render(<QuotationOrders {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...customProps} />)).not.toThrow();
     });
 
     test('supports different filter states', () => {
       const filterStates = ['all', 'pending', 'approved', 'expired'];
       filterStates.forEach(filterState => {
         const customProps = { ...mockProps, filterState };
-        expect(() => render(<QuotationOrders {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<QuotationOrders {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports translation system', () => {
-      expect(() => render(<QuotationOrders {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...mockProps} />)).not.toThrow();
     });
 
     test('handles language switching', () => {
       const customProps = { ...mockProps, currentLanguage: 'gu' };
-      expect(() => render(<QuotationOrders {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...customProps} />)).not.toThrow();
     });
 
     test('handles different language codes', () => {
       const languages = ['en', 'gu', 'hi'];
       languages.forEach(language => {
         const customProps = { ...mockProps, currentLanguage: language };
-        expect(() => render(<QuotationOrders {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<QuotationOrders {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports component lifecycle', () => {
-      const { unmount } = render(<QuotationOrders {...mockProps} />);
+      const { unmount } = renderWithTranslation(<QuotationOrders {...mockProps} />);
       expect(() => unmount()).not.toThrow();
     });
 
     test('integrates with styling system', () => {
-      const { container } = render(<QuotationOrders {...mockProps} />);
+      const { container } = renderWithTranslation(<QuotationOrders {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
       expect(container.firstChild).toHaveAttribute('class');
     });
@@ -104,7 +113,7 @@ describe('QuotationOrders Component', () => {
         onShowSalesOrders: jest.fn(),
         onShowCustomerProfile: jest.fn()
       };
-      expect(() => render(<QuotationOrders {...customCallbacks} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...customCallbacks} />)).not.toThrow();
     });
 
     test('manages translation prop variations', () => {
@@ -116,7 +125,7 @@ describe('QuotationOrders Component', () => {
           addNewQuote: 'Custom Add New Quote'
         }
       };
-      expect(() => render(<QuotationOrders {...customTranslations} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...customTranslations} />)).not.toThrow();
     });
 
     test('handles optional callback props gracefully', () => {
@@ -130,17 +139,17 @@ describe('QuotationOrders Component', () => {
         filterState: 'all',
         onFilterChange: jest.fn()
       };
-      expect(() => render(<QuotationOrders {...minimalProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...minimalProps} />)).not.toThrow();
     });
 
     test('supports prop changes without errors', () => {
-      const { rerender } = render(<QuotationOrders {...mockProps} />);
+      const { rerender } = renderWithTranslation(<QuotationOrders {...mockProps} />);
       const updatedProps = { 
         ...mockProps, 
         currentLanguage: 'gu',
         filterState: 'pending'
       };
-      expect(() => rerender(<QuotationOrders {...updatedProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<QuotationOrders {...updatedProps} />)).not.toThrow();
     });
   });
 });

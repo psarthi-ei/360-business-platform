@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styles from '../styles/SignUp.module.css';
 import CompactLanguageSelector from './CompactLanguageSelector';
-import { TranslationStrings } from '../utils/translations';
+import { useTranslation } from '../contexts/TranslationContext';
+import { safeLocalStorageSetItem, debugUnicodeIssues } from '../utils/unicodeUtils';
 
 interface SignUpProps {
   onSwitchToLogin: () => void;
   onSignUpSuccess: () => void;
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  translations: TranslationStrings;
 }
 
 function SignUp(props: SignUpProps) {
@@ -17,7 +17,7 @@ function SignUp(props: SignUpProps) {
   const onSignUpSuccess = props.onSignUpSuccess;
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;
-  const translations = props.translations;
+  const { t: translations } = useTranslation();
   
   // Form state management
   const [formData, setFormData] = useState({
@@ -65,13 +65,13 @@ function SignUp(props: SignUpProps) {
 
     // Validation
     if (!formData.email || !formData.password || !formData.ownerName || !formData.companyName) {
-      setErrorMessage(translations.pleaseFillAllFields);
+      setErrorMessage(translations('pleaseFillAllFields'));
       setIsLoading(false);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage(translations.passwordsDontMatch);
+      setErrorMessage(translations('passwordsDontMatch'));
       setIsLoading(false);
       return;
     }
@@ -82,7 +82,9 @@ function SignUp(props: SignUpProps) {
       setIsLoading(false);
       // Store user data for demo purposes
       localStorage.setItem('userMode', 'registered');
-      localStorage.setItem('userData', JSON.stringify({
+      
+      // Sanitize data to prevent Unicode issues
+      const userData = {
         name: formData.ownerName,
         company: formData.companyName,
         email: formData.email,
@@ -90,7 +92,18 @@ function SignUp(props: SignUpProps) {
         businessType: formData.businessType,
         location: formData.location,
         role: 'owner'
-      }));
+      };
+      
+      // Debug Unicode issues in development
+      debugUnicodeIssues(userData, 'userData');
+      debugUnicodeIssues(formData, 'formData');
+      
+      // Use safe localStorage operation that handles Unicode properly
+      const saved = safeLocalStorageSetItem('userData', userData);
+      
+      if (!saved) {
+        console.warn('Failed to save complete user data, but registration will continue');
+      }
       onSignUpSuccess();
     }, 1500);
   }
@@ -99,7 +112,7 @@ function SignUp(props: SignUpProps) {
   function handleNextStep() {
     // Validate first step
     if (!formData.ownerName || !formData.companyName || !formData.phone) {
-      setErrorMessage(translations.pleaseFillRequiredFields);
+      setErrorMessage(translations('pleaseFillRequiredFields'));
       return;
     }
     
@@ -130,22 +143,22 @@ function SignUp(props: SignUpProps) {
         {/* Header */}
         <div className={styles.header}>
           <h1 className={styles.title}>
-            {translations.createAccount}
+            {translations('createAccount')}
           </h1>
           <p className={styles.subtitle}>
-            {translations.joinThousandsManufacturers}
+            {translations('joinThousandsManufacturers')}
           </p>
           
           {/* Step Indicator */}
           <div className={styles.stepIndicator}>
             <div className={`${styles.step} ${currentStep >= 1 ? styles.active : ''}`}>
               <span>1</span>
-              <small>{translations.businessInfo}</small>
+              <small>{translations('businessInfo')}</small>
             </div>
             <div className={styles.stepLine}></div>
             <div className={`${styles.step} ${currentStep >= 2 ? styles.active : ''}`}>
               <span>2</span>
-              <small>{translations.accountSetup}</small>
+              <small>{translations('accountSetup')}</small>
             </div>
           </div>
         </div>
@@ -156,12 +169,12 @@ function SignUp(props: SignUpProps) {
             <>
               {/* Step 1: Business Information */}
               <div className={styles.stepTitle}>
-                {translations.tellUsAboutBusiness}
+                {translations('tellUsAboutBusiness')}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="ownerName" className={styles.label}>
-                  {translations.ownerName} <span className={styles.required}>*</span>
+                  {translations('ownerName')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
@@ -170,14 +183,14 @@ function SignUp(props: SignUpProps) {
                   value={formData.ownerName}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.ownerNamePlaceholder}
+                  placeholder={translations('ownerNamePlaceholder')}
                   required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="companyName" className={styles.label}>
-                  {translations.companyName} <span className={styles.required}>*</span>
+                  {translations('companyName')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
@@ -186,14 +199,14 @@ function SignUp(props: SignUpProps) {
                   value={formData.companyName}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.companyNamePlaceholder}
+                  placeholder={translations('companyNamePlaceholder')}
                   required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="phone" className={styles.label}>
-                  {translations.phoneNumber} <span className={styles.required}>*</span>
+                  {translations('phoneNumber')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="tel"
@@ -202,7 +215,7 @@ function SignUp(props: SignUpProps) {
                   value={formData.phone}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.phonePlaceholder}
+                  placeholder={translations('phonePlaceholder')}
                   required
                 />
               </div>
@@ -210,7 +223,7 @@ function SignUp(props: SignUpProps) {
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="businessType" className={styles.label}>
-                    {translations.businessType}
+                    {translations('businessType')}
                   </label>
                   <select
                     id="businessType"
@@ -219,15 +232,15 @@ function SignUp(props: SignUpProps) {
                     onChange={handleInputChange}
                     className={styles.select}
                   >
-                    <option value="textile">{translations.textileManufacturing}</option>
-                    <option value="garment">{translations.garmentManufacturing}</option>
-                    <option value="trading">{translations.textileTrading}</option>
+                    <option value="textile">{translations('textileManufacturing')}</option>
+                    <option value="garment">{translations('garmentManufacturing')}</option>
+                    <option value="trading">{translations('textileTrading')}</option>
                   </select>
                 </div>
 
                 <div className={styles.formGroup}>
                   <label htmlFor="location" className={styles.label}>
-                    {translations.location}
+                    {translations('location')}
                   </label>
                   <input
                     type="text"
@@ -236,7 +249,7 @@ function SignUp(props: SignUpProps) {
                     value={formData.location}
                     onChange={handleInputChange}
                     className={styles.input}
-                    placeholder={translations.locationPlaceholder}
+                    placeholder={translations('locationPlaceholder')}
                   />
                 </div>
               </div>
@@ -245,12 +258,12 @@ function SignUp(props: SignUpProps) {
             <>
               {/* Step 2: Account Setup */}
               <div className={styles.stepTitle}>
-                {translations.setupYourAccount}
+                {translations('setupYourAccount')}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="email" className={styles.label}>
-                  {translations.email} <span className={styles.required}>*</span>
+                  {translations('email')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="email"
@@ -259,14 +272,14 @@ function SignUp(props: SignUpProps) {
                   value={formData.email}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.emailPlaceholder}
+                  placeholder={translations('emailPlaceholder')}
                   required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="password" className={styles.label}>
-                  {translations.password} <span className={styles.required}>*</span>
+                  {translations('password')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="password"
@@ -275,14 +288,14 @@ function SignUp(props: SignUpProps) {
                   value={formData.password}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.passwordPlaceholder}
+                  placeholder={translations('passwordPlaceholder')}
                   required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="confirmPassword" className={styles.label}>
-                  {translations.confirmPassword} <span className={styles.required}>*</span>
+                  {translations('confirmPassword')} <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="password"
@@ -291,7 +304,7 @@ function SignUp(props: SignUpProps) {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   className={styles.input}
-                  placeholder={translations.confirmPasswordPlaceholder}
+                  placeholder={translations('confirmPasswordPlaceholder')}
                   required
                 />
               </div>
@@ -313,7 +326,7 @@ function SignUp(props: SignUpProps) {
                 className={styles.backButton}
                 onClick={handlePreviousStep}
               >
-                {translations.back}
+                {translations('back')}
               </button>
             )}
             
@@ -323,10 +336,10 @@ function SignUp(props: SignUpProps) {
               disabled={isLoading}
             >
               {isLoading 
-                ? translations.creatingAccount 
+                ? translations('creatingAccount') 
                 : currentStep === 1 
-                  ? translations.continue 
-                  : translations.createAccount
+                  ? translations('continue') 
+                  : translations('createAccount')
               }
             </button>
           </div>
@@ -335,21 +348,21 @@ function SignUp(props: SignUpProps) {
         {/* Switch to Login */}
         <div className={styles.switchAuth}>
           <span className={styles.switchText}>
-            {translations.alreadyHaveAccount}
+            {translations('alreadyHaveAccount')}
           </span>
           <button
             type="button"
             className={styles.switchButton}
             onClick={onSwitchToLogin}
           >
-            {translations.signIn}
+            {translations('signIn')}
           </button>
         </div>
 
         {/* Business Context */}
         <div className={styles.businessContext}>
           <p className={styles.contextText}>
-            {translations.trustedByManufacturers}
+            {translations('trustedByManufacturers')}
           </p>
         </div>
       </div>

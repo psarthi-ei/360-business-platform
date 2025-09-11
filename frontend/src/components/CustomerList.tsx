@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
@@ -11,16 +12,6 @@ interface CustomerListProps {
   onNavigateBack: () => void;
   onNavigateHome?: () => void;
   onShowCustomerProfile: (customerId: string) => void;
-  translations: {
-    backToDashboard: string;
-    customers: string;
-    searchCustomers: string;
-    showAll: string;
-    call: string;
-    whatsapp: string;
-    voiceCommandsHint: string;
-    [key: string]: string;
-  };
   customerSearch: string;
   onCustomerSearchChange: (search: string) => void;
 }
@@ -33,10 +24,10 @@ function CustomerList({
   onNavigateBack,
   onNavigateHome,
   onShowCustomerProfile,
-  translations: t,
   customerSearch,
   onCustomerSearchChange
 }: CustomerListProps) {
+  const { t } = useTranslation();
   return (
     <div className={styles.leadManagementScreen}>
       <ProductHeader
@@ -58,7 +49,7 @@ function CustomerList({
         <input 
           type="text" 
           className={styles.searchInput}
-          placeholder={t.searchCustomers}
+          placeholder={t('searchCustomers')}
           value={customerSearch}
           onChange={(e) => onCustomerSearchChange(e.target.value)}
         />
@@ -66,7 +57,7 @@ function CustomerList({
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
-          <button className={`${styles.filterBtn} ${styles.active}`}>{t.showAll}</button>
+          <button className={`${styles.filterBtn} ${styles.active}`}>{t('showAll')}</button>
           <button className={styles.filterBtn}>🏆 Premium</button>
           <button className={styles.filterBtn}>🎉 New Customers</button>
           <button className={styles.filterBtn}>⚡ Active</button>
@@ -129,8 +120,8 @@ function CustomerList({
                   </p>
                 </div>
                 <div className={styles.leadActions}>
-                  <button className={`${styles.actionBtn} ${styles.callBtn}`}>{t.call}</button>
-                  <button className={`${styles.actionBtn} ${styles.whatsappBtn}`}>{t.whatsapp}</button>
+                  <button className={`${styles.actionBtn} ${styles.callBtn}`}>{t('call')}</button>
+                  <button className={`${styles.actionBtn} ${styles.whatsappBtn}`}>{t('whatsapp')}</button>
                   <button className={`${styles.actionBtn} ${styles.quoteBtn}`}>📄 View Profile</button>
                   <button className={`${styles.actionBtn} ${styles.quoteBtn}`}>📋 New Quote</button>
                 </div>
@@ -142,7 +133,7 @@ function CustomerList({
 
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
-          🎤 <strong>{t.voiceCommandsHint}:</strong> 
+          🎤 <strong>{t('voiceCommandsHint')}:</strong> 
           "Show premium customers" • "Call Rajesh Textiles" • "Search Gujarat Garments"
         </p>
       </div>

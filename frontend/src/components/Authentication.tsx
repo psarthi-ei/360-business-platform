@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Login from './Login';
 import SignUp from './SignUp';
-import { TranslationStrings } from '../utils/translations';
+import { useTranslation } from '../contexts/TranslationContext';
 
 interface AuthenticationProps {
   onAuthSuccess: () => void;
@@ -9,7 +9,6 @@ interface AuthenticationProps {
   onDemoMode: () => void;
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  translations: TranslationStrings;
 }
 
 function Authentication(props: AuthenticationProps) {
@@ -19,7 +18,7 @@ function Authentication(props: AuthenticationProps) {
   const onDemoMode = props.onDemoMode;
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;
-  const translations = props.translations;
+  const { t } = useTranslation();
   
   // State to track which form to show
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -48,7 +47,6 @@ function Authentication(props: AuthenticationProps) {
         onSignUpSuccess={handleAuthSuccess}
         currentLanguage={currentLanguage}
         onLanguageChange={onLanguageChange}
-        translations={translations}
       />
     );
   }
@@ -61,7 +59,6 @@ function Authentication(props: AuthenticationProps) {
       onDemoMode={onDemoMode}
       currentLanguage={currentLanguage}
       onLanguageChange={onLanguageChange}
-      translations={translations}
     />
   );
 }

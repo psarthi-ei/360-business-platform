@@ -1,11 +1,10 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { mockLeads, mockQuotes, mockSalesOrders, mockCustomers, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Dashboard.module.css';
 
 interface DashboardProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
@@ -21,30 +20,9 @@ interface DashboardProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
-  translations: {
-    title: string;
-    company: string;
-    founder: string;
-    leadManagement: string;
-    quotationOrders: string;
-    salesOrder: string;
-    customers: string;
-    workOrders: string;
-    smartProcurement: string;
-    inventory: string;
-    productionTracking: string;
-    dispatchDelivery: string;
-    invoiceFinance: string;
-    customerFeedback: string;
-    voiceCommands: string;
-    analyticsDashboard: string;
-    [key: string]: string;
-  };
 }
 
 function Dashboard({ 
-  currentLanguage, 
-  onLanguageChange,
   currentTheme,
   onThemeChange,
   onNavigateHome,
@@ -59,11 +37,10 @@ function Dashboard({
   onDemoMode,
   onLogout,
   isAuthenticated,
-  userMode,
-  translations
+  userMode
 }: DashboardProps) {
-  // Simplified translation approach - use existing translations where available, fallback to English
-  const t = translations;
+  // Use translation hook - no more props needed!
+  const { t, currentLanguage, setLanguage } = useTranslation();
   
   // Calculate business metrics from mock data
   const totalLeads = mockLeads.length;
@@ -80,7 +57,7 @@ function Dashboard({
     <div className={styles.dashboard}>
       <ProductHeader
         currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        onLanguageChange={setLanguage}
         currentTheme={currentTheme}
         onThemeChange={onThemeChange}
         onContextNavigation={onNavigateHome}
@@ -174,25 +151,25 @@ function Dashboard({
                 <div className={styles.categoryHeader}>
                   <div className={styles.categoryIcon}>🎯</div>
                   <div className={styles.categoryTitle}>
-                    <h4>{translations.salesCustomerCategory}</h4>
+                    <h4>{t('salesCustomerCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>4/4 {translations.liveBadge}</span>
+                    <span className={styles.statusBadge}>4/4 {t('liveBadge')}</span>
                   </div>
                 </div>
                 
                 <div className={styles.categoryMetrics}>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>{totalLeads}</span>
-                    <span className={styles.metricLabel}>{t.newLeads}</span>
+                    <span className={styles.metricLabel}>{t('newLeads')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>{pendingQuotes}</span>
-                    <span className={styles.metricLabel}>{t.pendingQuotes}</span>
+                    <span className={styles.metricLabel}>{t('pendingQuotes')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>{totalCustomers}</span>
-                    <span className={styles.metricLabel}>{t.activeCustomers}</span>
+                    <span className={styles.metricLabel}>{t('activeCustomers')}</span>
                   </div>
                 </div>
                 
@@ -200,30 +177,30 @@ function Dashboard({
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowLeadManagement}
-                    title={t.leadManagement}
+                    title={t('leadManagement')}
                   >
-                    📞 {t.leads}
+                    📞 {t('leads')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowQuotationOrders}
-                    title={t.quotationOrders}
+                    title={t('quotationOrders')}
                   >
-                    📋 {t.quotes}
+                    📋 {t('quotes')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowSalesOrders}
-                    title={t.salesOrder}
+                    title={t('salesOrder')}
                   >
-                    📦 {t.salesOrder}
+                    📦 {t('salesOrder')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowCustomerList}
-                    title={t.customers}
+                    title={t('customers')}
                   >
-                    🤝 {t.customers}
+                    🤝 {t('customers')}
                   </button>
                 </div>
               </div>
@@ -233,10 +210,10 @@ function Dashboard({
                 <div className={styles.categoryHeader}>
                   <div className={styles.categoryIcon}>💰</div>
                   <div className={styles.categoryTitle}>
-                    <h4>{t.financialCategory}</h4>
+                    <h4>{t('financialCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>1/3 {t.liveBadge}</span>
+                    <span className={styles.statusBadge}>1/3 {t('liveBadge')}</span>
                   </div>
                 </div>
                 
@@ -245,19 +222,19 @@ function Dashboard({
                     <span className={styles.metricValue}>
                       ₹{(mockSalesOrders.reduce((sum, o) => sum + (o.status === 'pending' ? o.totalAmount * 0.5 : 0), 0) / 100000).toFixed(1)}L
                     </span>
-                    <span className={styles.metricLabel}>{t.pendingPayments}</span>
+                    <span className={styles.metricLabel}>{t('pendingPayments')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>
                       ₹{(totalRevenue / 100000).toFixed(1)}L
                     </span>
-                    <span className={styles.metricLabel}>{t.totalRevenue}</span>
+                    <span className={styles.metricLabel}>{t('totalRevenue')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>
                       {mockSalesOrders.filter(o => o.paymentStatus.includes('overdue') || o.paymentStatus.includes('Pending')).length}
                     </span>
-                    <span className={styles.metricLabel}>{t.overdue}</span>
+                    <span className={styles.metricLabel}>{t('overdue')}</span>
                   </div>
                 </div>
                 
@@ -265,23 +242,23 @@ function Dashboard({
                   <button 
                     className={`${styles.moduleBtn} ${styles.live}`} 
                     onClick={onShowAdvancePaymentManagement}
-                    title={t.payments}
+                    title={t('payments')}
                   >
-                    💳 {t.payments}
+                    💳 {t('payments')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.reports} - ${t.comingBadge}`}
+                    title={`${t('reports')} - ${t('comingBadge')}`}
                   >
-                    📊 {t.reports}
+                    📊 {t('reports')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.cashFlow} - ${t.comingBadge}`}
+                    title={`${t('cashFlow')} - ${t('comingBadge')}`}
                   >
-                    💵 {t.cashFlow}
+                    💵 {t('cashFlow')}
                   </button>
                 </div>
               </div>
@@ -291,25 +268,25 @@ function Dashboard({
                 <div className={styles.categoryHeader}>
                   <div className={styles.categoryIcon}>🏭</div>
                   <div className={styles.categoryTitle}>
-                    <h4>{t.productionCategory}</h4>
+                    <h4>{t('productionCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>0/4 {t.comingBadge}</span>
+                    <span className={styles.statusBadge}>0/4 {t('comingBadge')}</span>
                   </div>
                 </div>
                 
                 <div className={styles.categoryMetrics}>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.workOrders}</span>
+                    <span className={styles.metricLabel}>{t('workOrders')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.inProduction}</span>
+                    <span className={styles.metricLabel}>{t('inProduction')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.qualityIssues}</span>
+                    <span className={styles.metricLabel}>{t('qualityIssues')}</span>
                   </div>
                 </div>
                 
@@ -317,30 +294,30 @@ function Dashboard({
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.workOrders} - ${t.comingBadge}`}
+                    title={`${t('workOrders')} - ${t('comingBadge')}`}
                   >
-                    🔧 {t.workOrders}
+                    🔧 {t('workOrders')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.procurement} - ${t.comingBadge}`}
+                    title={`${t('procurement')} - ${t('comingBadge')}`}
                   >
-                    📦 {t.procurement}
+                    📦 {t('procurement')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.inventory} - ${t.comingBadge}`}
+                    title={`${t('inventory')} - ${t('comingBadge')}`}
                   >
-                    📋 {t.inventory}
+                    📋 {t('inventory')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.production} - ${t.comingBadge}`}
+                    title={`${t('production')} - ${t('comingBadge')}`}
                   >
-                    ⚙️ {t.production}
+                    ⚙️ {t('production')}
                   </button>
                 </div>
               </div>
@@ -350,25 +327,25 @@ function Dashboard({
                 <div className={styles.categoryHeader}>
                   <div className={styles.categoryIcon}>🚚</div>
                   <div className={styles.categoryTitle}>
-                    <h4>{t.fulfillmentCategory}</h4>
+                    <h4>{t('fulfillmentCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>0/2 {t.comingBadge}</span>
+                    <span className={styles.statusBadge}>0/2 {t('comingBadge')}</span>
                   </div>
                 </div>
                 
                 <div className={styles.categoryMetrics}>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.readyToShip}</span>
+                    <span className={styles.metricLabel}>{t('readyToShip')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.inTransit}</span>
+                    <span className={styles.metricLabel}>{t('inTransit')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.delivered}</span>
+                    <span className={styles.metricLabel}>{t('delivered')}</span>
                   </div>
                 </div>
                 
@@ -376,16 +353,16 @@ function Dashboard({
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.dispatch} - ${t.comingBadge}`}
+                    title={`${t('dispatch')} - ${t('comingBadge')}`}
                   >
-                    📤 {t.dispatch}
+                    📤 {t('dispatch')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.delivery} - ${t.comingBadge}`}
+                    title={`${t('delivery')} - ${t('comingBadge')}`}
                   >
-                    📍 {t.delivery}
+                    📍 {t('delivery')}
                   </button>
                 </div>
               </div>
@@ -395,21 +372,21 @@ function Dashboard({
                 <div className={styles.categoryHeader}>
                   <div className={styles.categoryIcon}>📊</div>
                   <div className={styles.categoryTitle}>
-                    <h4>{t.analyticsCategory}</h4>
+                    <h4>{t('analyticsCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>0/3 {t.comingBadge}</span>
+                    <span className={styles.statusBadge}>0/3 {t('comingBadge')}</span>
                   </div>
                 </div>
                 
                 <div className={styles.categoryMetrics}>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.reports}</span>
+                    <span className={styles.metricLabel}>{t('reports')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
-                    <span className={styles.metricLabel}>{t.voiceAI}</span>
+                    <span className={styles.metricLabel}>{t('voiceAI')}</span>
                   </div>
                   <div className={styles.metric}>
                     <span className={styles.metricValue}>-</span>
@@ -421,23 +398,23 @@ function Dashboard({
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.analytics} - ${t.comingBadge}`}
+                    title={`${t('analytics')} - ${t('comingBadge')}`}
                   >
-                    📈 {t.analytics}
+                    📈 {t('analytics')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.voiceAI} - ${t.comingBadge}`}
+                    title={`${t('voiceAI')} - ${t('comingBadge')}`}
                   >
-                    🎤 {t.voiceAI}
+                    🎤 {t('voiceAI')}
                   </button>
                   <button 
                     className={`${styles.moduleBtn} ${styles.coming}`} 
                     disabled
-                    title={`${t.reports} - ${t.comingBadge}`}
+                    title={`${t('reports')} - ${t('comingBadge')}`}
                   >
-                    📋 {t.reports}
+                    📋 {t('reports')}
                   </button>
                 </div>
               </div>

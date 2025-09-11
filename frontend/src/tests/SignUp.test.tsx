@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SignUp from '../components/SignUp';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 // Mock props
 const mockProps = {
@@ -46,9 +47,13 @@ const mockProps = {
   } as any
 };
 
-// Helper function to render SignUp
+// Helper function to render SignUp with TranslationProvider
 const renderSignUp = (props = mockProps) => {
-  return render(<SignUp {...props} />);
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      <SignUp {...props} />
+    </TranslationProvider>
+  );
 };
 
 describe('SignUp Component', () => {

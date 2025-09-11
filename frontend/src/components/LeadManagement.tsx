@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
@@ -16,7 +17,6 @@ interface LeadManagementProps {
   onShowSalesOrders?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  translations: any;
 }
 
 function LeadManagement({
@@ -31,10 +31,9 @@ function LeadManagement({
   onShowQuotationOrders,
   onShowSalesOrders,
   filterState,
-  onFilterChange,
-  translations
+  onFilterChange
 }: LeadManagementProps) {
-  const t = translations;
+  const { t } = useTranslation();
   return (
     <div className={styles.leadManagementScreen}>
       <ProductHeader
@@ -51,8 +50,8 @@ function LeadManagement({
       
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>📋 {t.leadManagement}</h1>
-          <button className={styles.addButton}>{t.addNewLead}</button>
+          <h1 className={styles.centeredHeading}>📋 {t('leadManagement')}</h1>
+          <button className={styles.addButton}>{t('addNewLead')}</button>
         </div>
 
       <div className={styles.filtersSection}>
@@ -61,25 +60,25 @@ function LeadManagement({
             className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('all')}
           >
-            {t.showAll}
+            {t('showAll')}
           </button>
           <button 
             className={filterState === 'hotleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('hotleads')}
           >
-            {t.showHotLeads}
+            {t('showHotLeads')}
           </button>
           <button 
             className={filterState === 'warmleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('warmleads')}
           >
-            {t.showWarmLeads}
+            {t('showWarmLeads')}
           </button>
           <button 
             className={filterState === 'coldleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('coldleads')}
           >
-            {t.showColdLeads}
+            {t('showColdLeads')}
           </button>
         </div>
       </div>
@@ -103,9 +102,9 @@ function LeadManagement({
           };
 
           const priorityLabels = {
-            hot: t.hotLead,
-            warm: t.warmLead,
-            cold: t.coldLead
+            hot: t('hotLead'),
+            warm: t('warmLead'),
+            cold: t('coldLead')
           };
 
           const relatedQuotes = mockQuotes.filter(quote => quote.leadId === lead.id);
@@ -187,8 +186,8 @@ function LeadManagement({
 
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
-          🎤 <strong>{t.voiceCommandsHint}</strong> 
-          "{t.addFabricInquiry}" • "{t.callRajesh}" • "{t.showCottonLeads}"
+          🎤 <strong>{t('voiceCommandsHint')}</strong> 
+          "{t('addFabricInquiry')}" • "{t('callRajesh')}" • "{t('showCottonLeads')}"
         </p>
       </div>
       </div>

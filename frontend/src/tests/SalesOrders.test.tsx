@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SalesOrders from '../components/SalesOrders';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -25,6 +26,14 @@ const mockProps = {
   onFilterChange: jest.fn()
 };
 
+const renderWithTranslation = (component: React.ReactElement) => {
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      {component}
+    </TranslationProvider>
+  );
+};
+
 describe('SalesOrders Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,16 +41,16 @@ describe('SalesOrders Component', () => {
 
   describe('Core Functionality', () => {
     test('renders without crashing', () => {
-      const { container } = render(<SalesOrders {...mockProps} />);
+      const { container } = renderWithTranslation(<SalesOrders {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
     test('handles required props', () => {
-      expect(() => render(<SalesOrders {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...mockProps} />)).not.toThrow();
     });
 
     test('manages callback props', () => {
-      render(<SalesOrders {...mockProps} />);
+      renderWithTranslation(<SalesOrders {...mockProps} />);
       expect(mockProps.onNavigateBack).toBeDefined();
       expect(mockProps.onLanguageChange).toBeDefined();
       expect(mockProps.onFilterChange).toBeDefined();
@@ -49,41 +58,41 @@ describe('SalesOrders Component', () => {
 
     test('handles filter state prop', () => {
       const customProps = { ...mockProps, filterState: 'pending' };
-      expect(() => render(<SalesOrders {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...customProps} />)).not.toThrow();
     });
 
     test('supports different filter states', () => {
       const filterStates = ['all', 'pending', 'production'];
       filterStates.forEach(filterState => {
         const customProps = { ...mockProps, filterState };
-        expect(() => render(<SalesOrders {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<SalesOrders {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports translation system', () => {
-      expect(() => render(<SalesOrders {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...mockProps} />)).not.toThrow();
     });
 
     test('handles language switching', () => {
       const customProps = { ...mockProps, currentLanguage: 'gu' };
-      expect(() => render(<SalesOrders {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...customProps} />)).not.toThrow();
     });
 
     test('handles different language codes', () => {
       const languages = ['en', 'gu', 'hi'];
       languages.forEach(language => {
         const customProps = { ...mockProps, currentLanguage: language };
-        expect(() => render(<SalesOrders {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<SalesOrders {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports component lifecycle', () => {
-      const { unmount } = render(<SalesOrders {...mockProps} />);
+      const { unmount } = renderWithTranslation(<SalesOrders {...mockProps} />);
       expect(() => unmount()).not.toThrow();
     });
 
     test('integrates with styling system', () => {
-      const { container } = render(<SalesOrders {...mockProps} />);
+      const { container } = renderWithTranslation(<SalesOrders {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
       expect(container.firstChild).toHaveAttribute('class');
     });
@@ -95,7 +104,7 @@ describe('SalesOrders Component', () => {
         onLanguageChange: jest.fn(),
         onFilterChange: jest.fn()
       };
-      expect(() => render(<SalesOrders {...customCallbacks} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...customCallbacks} />)).not.toThrow();
     });
 
     test('manages translation prop variations', () => {
@@ -107,7 +116,7 @@ describe('SalesOrders Component', () => {
           showAll: 'Custom Show All'
         }
       };
-      expect(() => render(<SalesOrders {...customTranslations} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...customTranslations} />)).not.toThrow();
     });
 
     test('handles optional props gracefully', () => {
@@ -119,26 +128,26 @@ describe('SalesOrders Component', () => {
         filterState: 'all',
         onFilterChange: jest.fn()
       };
-      expect(() => render(<SalesOrders {...minimalProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...minimalProps} />)).not.toThrow();
     });
 
     test('supports prop changes without errors', () => {
-      const { rerender } = render(<SalesOrders {...mockProps} />);
+      const { rerender } = renderWithTranslation(<SalesOrders {...mockProps} />);
       const updatedProps = { 
         ...mockProps, 
         currentLanguage: 'hi',
         filterState: 'production'
       };
-      expect(() => rerender(<SalesOrders {...updatedProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...updatedProps} />)).not.toThrow();
     });
 
     test('handles edge case filter states', () => {
       const edgeCaseProps = { ...mockProps, filterState: 'unknown' };
-      expect(() => render(<SalesOrders {...edgeCaseProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<SalesOrders {...edgeCaseProps} />)).not.toThrow();
     });
 
     test('manages multiple re-renders gracefully', () => {
-      const { rerender } = render(<SalesOrders {...mockProps} />);
+      const { rerender } = renderWithTranslation(<SalesOrders {...mockProps} />);
       
       // Test multiple prop changes
       const changes = [
@@ -149,7 +158,7 @@ describe('SalesOrders Component', () => {
       
       changes.forEach(change => {
         const updatedProps = { ...mockProps, ...change };
-        expect(() => rerender(<SalesOrders {...updatedProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<SalesOrders {...updatedProps} />)).not.toThrow();
       });
     });
   });

@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
@@ -13,7 +14,6 @@ interface QuotationOrdersProps {
   onShowSalesOrders: () => void;
   onShowCustomerProfile: (customerId: string) => void;
   onShowLeadManagement?: () => void;
-  translations: any;
   filterState: string;
   onFilterChange: (filter: string) => void;
 }
@@ -28,11 +28,10 @@ function QuotationOrders({
   onShowSalesOrders,
   onShowCustomerProfile,
   onShowLeadManagement,
-  translations,
   filterState,
   onFilterChange
 }: QuotationOrdersProps) {
-  const t = translations;
+  const { t } = useTranslation();
   
   return (
     <div className={styles.quotationOrdersScreen}>
@@ -50,8 +49,8 @@ function QuotationOrders({
       
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>📄 {t.quotationOrders}</h1>
-          <button className={styles.addButton}>{t.addNewQuote}</button>
+          <h1 className={styles.centeredHeading}>📄 {t('quotationOrders')}</h1>
+          <button className={styles.addButton}>{t('addNewQuote')}</button>
         </div>
 
       <div className={styles.filtersSection}>
@@ -60,25 +59,25 @@ function QuotationOrders({
             className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('all')}
           >
-            {t.showAll}
+            {t('showAll')}
           </button>
           <button 
             className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('pending')}
           >
-            {t.showPending}
+            {t('showPending')}
           </button>
           <button 
             className={filterState === 'approved' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('approved')}
           >
-            {t.showApproved}
+            {t('showApproved')}
           </button>
           <button 
             className={filterState === 'expired' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('expired')}
           >
-            {t.showExpired}
+            {t('showExpired')}
           </button>
         </div>
       </div>
@@ -102,9 +101,9 @@ function QuotationOrders({
           };
 
           const statusLabels = {
-            pending: t.pending,
-            approved: t.approved,
-            expired: t.expired
+            pending: t('pending'),
+            approved: t('approved'),
+            expired: t('expired')
           };
 
           const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);
@@ -126,10 +125,10 @@ function QuotationOrders({
                 </span>
               </div>
               <div className={styles.quoteDetails}>
-                <p><strong>{t.customerName}:</strong> {quote.customerName} - {quote.location}</p>
-                <p><strong>{t.quoteDate}:</strong> {quote.quoteDate} | <strong>{t.validUntil}:</strong> {quote.validUntil}</p>
+                <p><strong>{t('customerName')}:</strong> {quote.customerName} - {quote.location}</p>
+                <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
                 <p><strong>Items:</strong> {quote.items}</p>
-                <p><strong>{t.totalAmount}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
+                <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
                 <p><strong>Status:</strong> {quote.statusMessage}</p>
               </div>
 
@@ -156,13 +155,13 @@ function QuotationOrders({
               </div>
               
               <div className={styles.quoteActions}>
-                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t.viewPDF}</button>
+                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
                 {quote.status === 'pending' && (
-                  <button className={`${styles.actionBtn} ${styles.approveBtn}`}>✅ {t.approve}</button>
+                  <button className={`${styles.actionBtn} ${styles.approveBtn}`}>✅ {t('approve')}</button>
                 )}
                 {(quote.status === 'approved' || quote.status === 'pending') && (
                   <button className={`${styles.actionBtn} ${styles.convertBtn}`} onClick={() => onShowSalesOrders()}>
-                    🔄 {relatedOrder ? 'View Order' : t.convertToOrder}
+                    🔄 {relatedOrder ? 'View Order' : t('convertToOrder')}
                   </button>
                 )}
                 {quote.status === 'expired' && (
@@ -177,8 +176,8 @@ function QuotationOrders({
 
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
-          🎤 <strong>{t.voiceCommandsHint}</strong> 
-          "{t.createQuoteRajesh}" • "{t.showApprovedQuotes}" • "{t.convertToOrder}"
+          🎤 <strong>{t('voiceCommandsHint')}</strong> 
+          "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "{t('convertToOrder')}"
         </p>
       </div>
     </div>

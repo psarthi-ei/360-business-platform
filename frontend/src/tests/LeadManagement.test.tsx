@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LeadManagement from '../components/LeadManagement';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -23,6 +24,14 @@ const mockProps = {
   onFilterChange: jest.fn()
 };
 
+const renderWithTranslation = (component: React.ReactElement) => {
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      {component}
+    </TranslationProvider>
+  );
+};
+
 describe('LeadManagement Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -30,16 +39,16 @@ describe('LeadManagement Component', () => {
 
   describe('Core Functionality', () => {
     test('renders without crashing', () => {
-      const { container } = render(<LeadManagement {...mockProps} />);
+      const { container } = renderWithTranslation(<LeadManagement {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
     test('handles required props', () => {
-      expect(() => render(<LeadManagement {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...mockProps} />)).not.toThrow();
     });
 
     test('manages callback props', () => {
-      render(<LeadManagement {...mockProps} />);
+      renderWithTranslation(<LeadManagement {...mockProps} />);
       expect(mockProps.onNavigateBack).toBeDefined();
       expect(mockProps.onLanguageChange).toBeDefined();
       expect(mockProps.onFilterChange).toBeDefined();
@@ -47,41 +56,41 @@ describe('LeadManagement Component', () => {
 
     test('handles filter state prop', () => {
       const customProps = { ...mockProps, filterState: 'hotleads' };
-      expect(() => render(<LeadManagement {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...customProps} />)).not.toThrow();
     });
 
     test('supports different filter states', () => {
       const filterStates = ['all', 'hotleads', 'warmleads', 'coldleads'];
       filterStates.forEach(filterState => {
         const customProps = { ...mockProps, filterState };
-        expect(() => render(<LeadManagement {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<LeadManagement {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports translation system', () => {
-      expect(() => render(<LeadManagement {...mockProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...mockProps} />)).not.toThrow();
     });
 
     test('handles language switching', () => {
       const customProps = { ...mockProps, currentLanguage: 'gu' };
-      expect(() => render(<LeadManagement {...customProps} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...customProps} />)).not.toThrow();
     });
 
     test('handles different language codes', () => {
       const languages = ['en', 'gu', 'hi'];
       languages.forEach(language => {
         const customProps = { ...mockProps, currentLanguage: language };
-        expect(() => render(<LeadManagement {...customProps} />)).not.toThrow();
+        expect(() => renderWithTranslation(<LeadManagement {...customProps} />)).not.toThrow();
       });
     });
 
     test('supports component lifecycle', () => {
-      const { unmount } = render(<LeadManagement {...mockProps} />);
+      const { unmount } = renderWithTranslation(<LeadManagement {...mockProps} />);
       expect(() => unmount()).not.toThrow();
     });
 
     test('integrates with styling system', () => {
-      const { container } = render(<LeadManagement {...mockProps} />);
+      const { container } = renderWithTranslation(<LeadManagement {...mockProps} />);
       expect(container.firstChild).toBeInTheDocument();
       expect(container.firstChild).toHaveAttribute('class');
     });
@@ -93,7 +102,7 @@ describe('LeadManagement Component', () => {
         onLanguageChange: jest.fn(),
         onFilterChange: jest.fn()
       };
-      expect(() => render(<LeadManagement {...customCallbacks} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...customCallbacks} />)).not.toThrow();
     });
 
     test('manages translation prop variations', () => {
@@ -105,7 +114,7 @@ describe('LeadManagement Component', () => {
           addNewLead: 'Custom Add New Lead'
         }
       };
-      expect(() => render(<LeadManagement {...customTranslations} />)).not.toThrow();
+      expect(() => renderWithTranslation(<LeadManagement {...customTranslations} />)).not.toThrow();
     });
   });
 });

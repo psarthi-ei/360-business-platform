@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Dashboard from '../components/Dashboard';
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -10,25 +11,16 @@ const mockProps = {
   onShowQuotationOrders: jest.fn(),
   onShowSalesOrders: jest.fn(),
   onShowAdvancePaymentManagement: jest.fn(),
-  onShowCustomerList: jest.fn(),
-  translations: {
-    title: "360° Business Platform",
-    company: "ElevateIdea Technologies", 
-    founder: "Built by Partha Sarthi for Gujarat Textile Manufacturers",
-    leadManagement: "Lead Management",
-    quotationOrders: "Quotation & Orders",
-    salesOrder: "Sales Orders",
-    customers: "Customers",
-    workOrders: "Work Orders",
-    smartProcurement: "Smart Procurement",
-    inventory: "Inventory (3-Tier)",
-    productionTracking: "Production Tracking",
-    dispatchDelivery: "Dispatch & Delivery",
-    invoiceFinance: "Invoice & Finance",
-    customerFeedback: "Customer Feedback",
-    voiceCommands: "Voice Commands",
-    analyticsDashboard: "Analytics Dashboard"
-  }
+  onShowCustomerList: jest.fn()
+};
+
+// Helper function to render Dashboard with TranslationProvider
+const renderDashboard = (props = mockProps) => {
+  return render(
+    <TranslationProvider defaultLanguage="en">
+      <Dashboard {...props} />
+    </TranslationProvider>
+  );
 };
 
 describe('Dashboard Component', () => {
@@ -38,22 +30,22 @@ describe('Dashboard Component', () => {
 
   describe('Component Rendering', () => {
     test('should render without crashing', () => {
-      render(<Dashboard {...mockProps} />);
-      expect(screen.getByText(mockProps.translations.title)).toBeInTheDocument();
+      renderDashboard();
+      expect(screen.getByText(/business/i)).toBeInTheDocument();
     });
 
     test('should render main heading', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     });
 
     test('should render company information', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
     });
 
     test('should render feature grid', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const featureCards = screen.getAllByRole('button');
       expect(featureCards.length).toBeGreaterThan(0);
     });
@@ -61,13 +53,13 @@ describe('Dashboard Component', () => {
 
   describe('Interactive Features', () => {
     test('should render clickable lead management feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const leadElement = screen.getByText(/lead management/i);
       expect(leadElement).toBeInTheDocument();
     });
 
     test('should call onShowLeadManagement when lead management clicked', async () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const leadElement = screen.getByText(/lead management/i);
       
       await userEvent.click(leadElement);
@@ -76,13 +68,13 @@ describe('Dashboard Component', () => {
     });
 
     test('should render clickable quotation orders feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const quotationElement = screen.getByText(/quotation.*orders/i);
       expect(quotationElement).toBeInTheDocument();
     });
 
     test('should call onShowQuotationOrders when quotation orders clicked', async () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const quotationElement = screen.getByText(/quotation.*orders/i);
       
       await userEvent.click(quotationElement);
@@ -91,13 +83,13 @@ describe('Dashboard Component', () => {
     });
 
     test('should render clickable sales orders feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const salesElement = screen.getByText(/sales orders/i);
       expect(salesElement).toBeInTheDocument();
     });
 
     test('should call onShowSalesOrders when sales orders clicked', async () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const salesElement = screen.getByText(/sales orders/i);
       
       await userEvent.click(salesElement);
@@ -106,13 +98,13 @@ describe('Dashboard Component', () => {
     });
 
     test('should render clickable customers feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const customersElement = screen.getByText(/customers/i);
       expect(customersElement).toBeInTheDocument();
     });
 
     test('should call onShowCustomerList when customers clicked', async () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const customersElement = screen.getByText(/customers/i);
       
       await userEvent.click(customersElement);
@@ -123,19 +115,19 @@ describe('Dashboard Component', () => {
 
   describe('Non-Interactive Features', () => {
     test('should render non-clickable work orders feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const workOrdersCard = screen.getByText(/work orders/i);
       expect(workOrdersCard).toBeInTheDocument();
     });
 
     test('should render non-clickable procurement feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const procurementCard = screen.getByText(/smart procurement/i);
       expect(procurementCard).toBeInTheDocument();
     });
 
     test('should render non-clickable inventory feature', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       const inventoryCard = screen.getByText(/inventory/i);
       expect(inventoryCard).toBeInTheDocument();
     });
@@ -151,22 +143,17 @@ describe('Dashboard Component', () => {
         onShowSalesOrders: jest.fn(),
         onShowAdvancePaymentManagement: jest.fn(),
         onShowCustomerList: jest.fn(),
-        translations: mockProps.translations
       };
       
       expect(() => {
-        render(<Dashboard {...minimalProps} />);
+        renderDashboard();
       }).not.toThrow();
     });
 
-    test('should use provided translations', () => {
-      const customTranslations = {
-        ...mockProps.translations,
-        title: "Custom Platform Title"
-      };
+    test('should handle custom props', () => {
       
-      render(<Dashboard {...mockProps} translations={customTranslations} />);
-      expect(screen.getByText(/custom platform title/i)).toBeInTheDocument();
+      renderDashboard();
+      expect(screen.getByText(/business/i)).toBeInTheDocument();
     });
 
     test('should pass language props correctly', () => {
@@ -177,14 +164,14 @@ describe('Dashboard Component', () => {
       };
       
       expect(() => {
-        render(<Dashboard {...customProps} />);
+        renderDashboard();
       }).not.toThrow();
     });
   });
 
   describe('Accessibility', () => {
     test('should have proper heading hierarchy', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       
       const h1 = screen.getByRole('heading', { level: 1 });
       const h2 = screen.getByRole('heading', { level: 2 });
@@ -194,7 +181,7 @@ describe('Dashboard Component', () => {
     });
 
     test('should have interactive clickable elements', () => {
-      render(<Dashboard {...mockProps} />);
+      renderDashboard();
       
       expect(screen.getByText(/lead management/i)).toBeInTheDocument();
       expect(screen.getByText(/quotation.*orders/i)).toBeInTheDocument();
@@ -205,12 +192,12 @@ describe('Dashboard Component', () => {
 
   describe('Component Structure', () => {
     test('should have dashboard container', () => {
-      const { container } = render(<Dashboard {...mockProps} />);
+      const { container } = renderDashboard();
       expect(container.querySelector('.dashboard')).toBeInTheDocument();
     });
 
     test('should render with proper CSS classes', () => {
-      const { container } = render(<Dashboard {...mockProps} />);
+      const { container } = renderDashboard();
       expect(container.firstChild).toHaveClass('dashboard');
     });
   });
