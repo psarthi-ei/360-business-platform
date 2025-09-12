@@ -1,0 +1,319 @@
+/* Mobile-first external profile form styles */
+.externalFormContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.formHeader h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.formHeader p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.progressBar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.step.active {
+  background: #27ae60;
+  transform: scale(1.1);
+}
+
+.formContent {
+  background: white;
+  border-radius: 15px;
+  padding: 30px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stepContent h2 {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.fieldGroup {
+  margin-bottom: 20px;
+}
+
+.fieldGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.fieldGroup input,
+.fieldGroup select,
+.fieldGroup textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.fieldGroup input:focus,
+.fieldGroup select:focus,
+.fieldGroup textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.fieldGroup input.error,
+.fieldGroup select.error,
+.fieldGroup textarea.error {
+  border-color: #e74c3c;
+}
+
+.fieldGroup input.readonly {
+  background: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.errorText {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.summaryBox {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.summaryBox h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.summaryBox p {
+  margin-bottom: 8px;
+  color: #5a6c7d;
+  font-size: 14px;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.backBtn,
+.cancelBtn,
+.nextBtn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.backBtn {
+  background: #6c757d;
+  color: white;
+}
+
+.backBtn:hover {
+  background: #5a6268;
+}
+
+.cancelBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.cancelBtn:hover {
+  background: #c82333;
+}
+
+.nextBtn {
+  background: #27ae60;
+  color: white;
+  flex: 1;
+  max-width: 200px;
+}
+
+.nextBtn:hover {
+  background: #219a52;
+  transform: translateY(-2px);
+}
+
+.helpText {
+  text-align: center;
+  color: white;
+  opacity: 0.8;
+  font-size: 14px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.helpText p {
+  margin-bottom: 5px;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .externalFormContainer {
+    padding: 15px;
+  }
+  
+  .formContent {
+    padding: 25px 15px;
+  }
+  
+  .fieldRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .formActions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .backBtn,
+  .cancelBtn,
+  .nextBtn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .progressBar {
+    gap: 15px;
+  }
+  
+  .step {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+}
+
+/* WhatsApp-friendly styling */
+@media (max-width: 400px) {
+  .formHeader h1 {
+    font-size: 20px;
+  }
+  
+  .formHeader p {
+    font-size: 14px;
+  }
+  
+  .stepContent h2 {
+    font-size: 18px;
+  }
+  
+  .fieldGroup input,
+  .fieldGroup select,
+  .fieldGroup textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+/* Submission Status Messages */
+.submitMessage {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.submitMessage.success {
+  background: linear-gradient(135deg, #27ae60, #2ed573);
+  color: white;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.submitMessage.processing {
+  background: linear-gradient(135deg, #3742fa, #5352ed);
+  color: white;
+  box-shadow: 0 4px 15px rgba(55, 66, 250, 0.3);
+}
+
+.submitMessage.error {
+  background: linear-gradient(135deg, #e74c3c, #ff4757);
+  color: white;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.nextBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

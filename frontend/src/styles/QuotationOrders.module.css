@@ -418,3 +418,38 @@
     font-size: 0.85rem;
   }
 }
+
+/* Workflow Action Button Styles */
+.actionBtn.checkBtn {
+  background: #3742fa;
+  color: white;
+}
+
+.actionBtn.checkBtn:hover {
+  background: #2f3542;
+  transform: translateY(-2px);
+}
+
+/* Workflow Message Styles */
+.workflowMessage {
+  background: linear-gradient(135deg, #2ed573, #1dd1a1);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

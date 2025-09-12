@@ -9,6 +9,7 @@ import SalesOrders from './components/SalesOrders';
 import AdvancePaymentManagement from './components/AdvancePaymentManagement';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
+import ExternalProfileForm from './components/ExternalProfileForm';
 import ProductHeader from './components/ProductHeader';
 import Authentication from './components/Authentication';
 import { TranslationProvider } from './contexts/TranslationContext';
@@ -30,6 +31,9 @@ function App() {
   const [paymentFilter, setPaymentFilter] = useState('all');
   const [customerSearch, setCustomerSearch] = useState('');
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
+  const [profileLinkId, setProfileLinkId] = useState('');
+  const [profileQuoteId, setProfileQuoteId] = useState('');
+  const [profileCompanyName, setProfileCompanyName] = useState('');
 
 
 
@@ -141,6 +145,13 @@ function App() {
 
   function showCustomerList() {
     setCurrentScreen('customerlist');
+  }
+
+  function showProfileCompletion(linkId: string, quoteId: string, companyName: string) {
+    setProfileLinkId(linkId);
+    setProfileQuoteId(quoteId);
+    setProfileCompanyName(companyName);
+    setCurrentScreen('profilecompletion');
   }
 
   function renderDashboard() {
@@ -286,6 +297,32 @@ function App() {
     );
   }
 
+  function renderProfileCompletion() {
+    function handleProfileSubmit(profileData: any) {
+      console.log('Profile submitted:', profileData);
+      // Show success message and redirect to homepage
+      setTimeout(() => {
+        alert('Profile created successfully! Our team will contact you soon.');
+        showHomePage();
+      }, 2000);
+    }
+
+    function handleProfileSuccess(businessProfileId: string) {
+      console.log('Business profile created:', businessProfileId);
+    }
+
+    return (
+      <ExternalProfileForm
+        quoteId={profileQuoteId}
+        companyName={profileCompanyName}
+        linkId={profileLinkId}
+        onSubmit={handleProfileSubmit}
+        onSuccess={handleProfileSuccess}
+        onCancel={() => showHomePage()}
+      />
+    );
+  }
+
   return (
     <TranslationProvider defaultLanguage={currentLanguage}>
       <div className="App">
@@ -328,6 +365,7 @@ function App() {
         {currentScreen === 'advancepayment' && renderAdvancePaymentManagement()}
         {currentScreen === 'customerprofile' && renderCustomerProfile()}
         {currentScreen === 'customerlist' && renderCustomerList()}
+        {currentScreen === 'profilecompletion' && renderProfileCompletion()}
         </div>
       </div>
     </TranslationProvider>

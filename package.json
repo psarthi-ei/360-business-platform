@@ -1,1 +1,25 @@
-{}
+{
+  "name": "360-business-platform",
+  "version": "1.0.0",
+  "description": "ElevateBusiness 360° - Voice-first multilingual business platform for textile manufacturers",
+  "scripts": {
+    "dev": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "test": "cd frontend && npm test"
+  },
+  "keywords": [
+    "textile",
+    "manufacturing",
+    "MSME",
+    "voice-first",
+    "multilingual",
+    "Gujarat",
+    "business-platform"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/360-business-platform.git"
+  },
+  "author": "Partha Sarthi - ElevateIdea Technologies",
+  "license": "MIT"
+}

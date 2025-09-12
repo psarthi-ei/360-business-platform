@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProductHeader from './ProductHeader';
-import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/QuotationOrders.module.css';
 
@@ -32,6 +32,122 @@ function QuotationOrders({
   onFilterChange
 }: QuotationOrdersProps) {
   const { t } = useTranslation();
+  
+  // Component state for workflow tracking
+  const [workflowState, setWorkflowState] = useState({
+    approvedQuotes: [] as string[],
+    profileLinks: [] as {linkId: string, quoteId: string, expiresAt: Date}[],
+    completedProfiles: [] as string[],
+    processingQuotes: [] as string[]
+  });
+  const [workflowMessages, setWorkflowMessages] = useState<{[key: string]: string}>({});
+
+  // Workflow Method 1: Handle Quote Approval
+  function handleQuoteApproval(quoteId: string) {
+    const quote = mockQuotes.find(q => q.id === quoteId);
+    if (!quote) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote not found'});
+      return;
+    }
+
+    // Update quote status
+    quote.status = 'approved';
+    quote.approvalDate = new Date().toLocaleDateString();
+    quote.statusMessage = 'Quote approved - Ready for next step';
+    
+    // Check if BusinessProfile already exists
+    const existingProfile = quote.businessProfileId ? 
+      mockBusinessProfiles.find(bp => bp.id === quote.businessProfileId) : null;
+
+    if (existingProfile && existingProfile.customerStatus === 'customer') {
+      // Customer already exists - can proceed directly to proforma invoice
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Quote approved! Customer exists - ready for proforma invoice.'});
+    } else {
+      // Prospect - need to collect business profile
+      setWorkflowState(prev => ({
+        ...prev,
+        approvedQuotes: [...prev.approvedQuotes, quoteId]
+      }));
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Quote approved! Send profile completion link to proceed.'});
+    }
+  }
+
+  // Workflow Method 2: Handle Send Profile Link
+  function handleSendProfileLink(quoteId: string) {
+    const quote = mockQuotes.find(q => q.id === quoteId);
+    if (!quote) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote not found'});
+      return;
+    }
+
+    // Generate secure profile link
+    const linkId = 'LINK-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    const linkData = {
+      linkId,
+      quoteId,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+    };
+    
+    setWorkflowState(prev => ({
+      ...prev,
+      profileLinks: [...prev.profileLinks, linkData]
+    }));
+
+    // Create shareable WhatsApp message
+    const profileUrl = `${window.location.origin}/profile-complete/${linkId}`;
+    const whatsappMessage = `Hello ${quote.companyName}! 🏢\n\nThank you for approving our quote ${quoteId}. To proceed with your order, please complete your business profile using this secure link:\n\n${profileUrl}\n\n📋 This will take just 3 minutes\n🔒 Your information is secure\n⏰ Link expires in 7 days\n\nBest regards,\nElevateBusiness Team`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    setWorkflowMessages({...workflowMessages, [quoteId]: `Profile link generated! Share via WhatsApp or copy: ${profileUrl}`});
+    
+    // Open WhatsApp sharing (optional)
+    if (window.confirm('Open WhatsApp to share profile completion link?')) {
+      window.open(whatsappUrl, '_blank');
+    }
+  }
+
+  // Workflow Method 3: Handle Proforma Invoice Generation (for existing customers)
+  function handleProformaGeneration(quoteId: string) {
+    const quote = mockQuotes.find(q => q.id === quoteId);
+    if (!quote || !quote.businessProfileId) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote or customer not found'});
+      return;
+    }
+
+    // Generate proforma invoice ID
+    const proformaId = 'PI-' + Date.now();
+    const advanceAmount = Math.round(quote.totalAmount * 0.5); // 50% advance
+    
+    // Update quote with proforma details
+    quote.proformaInvoiceId = proformaId;
+    quote.advancePaymentRequired = advanceAmount;
+    quote.advancePaymentStatus = 'awaiting';
+    quote.statusMessage = `Proforma invoice ${proformaId} generated. Advance payment of ${formatCurrency(advanceAmount)} awaiting.`;
+    
+    setWorkflowMessages({...workflowMessages, [quoteId]: `Proforma invoice generated! Advance payment ${formatCurrency(advanceAmount)} requested.`});
+  }
+
+  // Workflow Method 4: Check Profile Completion Status
+  function checkProfileStatus(quoteId: string) {
+    const linkData = workflowState.profileLinks.find(pl => pl.quoteId === quoteId);
+    if (!linkData) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'No profile link found for this quote'});
+      return;
+    }
+
+    const isExpired = new Date() > linkData.expiresAt;
+    const isCompleted = workflowState.completedProfiles.includes(quoteId);
+    
+    if (isCompleted) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Profile completed! Ready for proforma invoice generation.'});
+    } else if (isExpired) {
+      setWorkflowMessages({...workflowMessages, [quoteId]: 'Profile link expired. Generate new link.'});
+    } else {
+      const daysLeft = Math.ceil((linkData.expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000));
+      setWorkflowMessages({...workflowMessages, [quoteId]: `Profile link active. ${daysLeft} days remaining.`});
+    }
+  }
   
   return (
     <div className={styles.quotationOrdersScreen}>
@@ -112,9 +228,14 @@ function QuotationOrders({
 
           const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);
           const relatedOrder = mockSalesOrders.find(order => order.quoteId === quote.id);
+          
+          // Determine customer status for visual differentiation
+          const businessProfile = quote.businessProfileId ? getBusinessProfileById(quote.businessProfileId) : null;
+          const isCustomer = businessProfile?.customerStatus === 'customer';
+          const isProspect = !businessProfile || businessProfile.customerStatus === 'prospect';
 
           return (
-            <div key={quote.id} className={`${styles.quoteCard} ${styles[quote.status + 'Quote']}`}>
+            <div key={quote.id} className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard}`}>
               <div className={styles.quoteHeader}>
                 <h3>
                   <span 
@@ -124,15 +245,24 @@ function QuotationOrders({
                         onShowCustomerProfile(quote.businessProfileId);
                       }
                     }}
-                    style={{cursor: quote.businessProfileId ? 'pointer' : 'default', textDecoration: quote.businessProfileId ? 'underline' : 'none'}}
+                    style={{
+                      cursor: quote.businessProfileId ? 'pointer' : 'default', 
+                      textDecoration: quote.businessProfileId ? 'underline' : 'none',
+                      color: isCustomer ? '#27ae60' : (isProspect ? '#7f8c8d' : 'inherit')
+                    }}
                     title={quote.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
                   >
-                    {quote.id} - {quote.companyName}
+                    {isCustomer ? '✅' : '🔸'} {quote.id} - {quote.companyName}
                   </span>
                 </h3>
-                <span className={`${styles.statusBadge} ${styles[quote.status]}`}>
-                  {statusIcons[quote.status]} {statusLabels[quote.status]}
-                </span>
+                <div className={styles.badgeContainer}>
+                  <span className={`${styles.customerStatusBadge} ${isCustomer ? styles.customerBadge : styles.prospectBadge}`}>
+                    {isCustomer ? 'Customer' : 'Prospect'}
+                  </span>
+                  <span className={`${styles.statusBadge} ${styles[quote.status]}`}>
+                    {statusIcons[quote.status]} {statusLabels[quote.status]}
+                  </span>
+                </div>
               </div>
               <div className={styles.quoteDetails}>
                 <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
@@ -166,18 +296,63 @@ function QuotationOrders({
               
               <div className={styles.quoteActions}>
                 <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
-                {quote.status === 'pending' && (
-                  <button className={`${styles.actionBtn} ${styles.approveBtn}`}>✅ {t('approve')}</button>
-                )}
-                {(quote.status === 'approved' || quote.status === 'pending') && (
-                  <button className={`${styles.actionBtn} ${styles.convertBtn}`} onClick={() => onShowSalesOrders()}>
-                    🔄 {relatedOrder ? 'View Order' : t('convertToOrder')}
+                
+                {/* Progressive workflow actions based on quote status and customer type */}
+                {quote.status === 'pending' && isProspect && (
+                  <button 
+                    className={`${styles.actionBtn} ${styles.approveBtn}`}
+                    onClick={() => handleQuoteApproval(quote.id)}
+                  >
+                    ✅ Mark as Verbally Approved
                   </button>
                 )}
+                
+                {quote.status === 'approved' && isProspect && !workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
+                  <button 
+                    className={`${styles.actionBtn} ${styles.profileBtn}`}
+                    onClick={() => handleSendProfileLink(quote.id)}
+                  >
+                    📝 Send Profile Link
+                  </button>
+                )}
+                
+                {quote.status === 'approved' && isProspect && workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
+                  <button 
+                    className={`${styles.actionBtn} ${styles.checkBtn}`}
+                    onClick={() => checkProfileStatus(quote.id)}
+                  >
+                    🔍 Check Profile Status
+                  </button>
+                )}
+                
+                {quote.status === 'approved' && isCustomer && !relatedOrder && (
+                  <button 
+                    className={`${styles.actionBtn} ${styles.invoiceBtn}`}
+                    onClick={() => handleProformaGeneration(quote.id)}
+                  >
+                    📋 Send Proforma Invoice
+                  </button>
+                )}
+                
+                {relatedOrder && (
+                  <button className={`${styles.actionBtn} ${styles.viewOrderBtn}`} onClick={() => onShowSalesOrders()}>
+                    📦 View Order ({relatedOrder.status})
+                  </button>
+                )}
+                
                 {quote.status === 'expired' && (
-                  <button className={`${styles.actionBtn} ${styles.approveBtn}`}>🔄 Renew Quote</button>
+                  <button className={`${styles.actionBtn} ${styles.renewBtn}`}>
+                    🔄 Renew Quote
+                  </button>
                 )}
               </div>
+              
+              {/* Workflow Messages */}
+              {workflowMessages[quote.id] && (
+                <div className={styles.workflowMessage}>
+                  💬 {workflowMessages[quote.id]}
+                </div>
+              )}
             </div>
           );
         })}
@@ -187,7 +362,7 @@ function QuotationOrders({
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
           🎤 <strong>{t('voiceCommandsHint')}</strong> 
-          "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "{t('convertToOrder')}"
+          "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "Mark as approved" • "Send profile link"
         </p>
       </div>
     </div>

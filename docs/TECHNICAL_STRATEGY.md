@@ -446,6 +446,496 @@ function handleAuthSuccess() {
 
 ---
 
-**Document Version**: 5.0 (Authentication Flow Architecture Added)  
-**Last Updated**: September 9, 2025  
+## **ENTITY ARCHITECTURE - BUSINESS DATA MODEL (September 12, 2025)**
+
+### **The Fundamental Architectural Question**
+Should we use a **unified BusinessProfile entity** or **separate Company + Customer entities** for managing business relationships?
+
+This decision impacts every aspect of our data model: Lead management, Quote processing, Sales Orders, Payment tracking, and Customer relationship management.
+
+### **Business Context Analysis - Textile Manufacturing Reality**
+
+#### **What "Customer" Actually Means in Textile Business**
+In our target market (Gujarat textile manufacturers), a "customer" is always a **company**, never an individual person:
+- **Customer** = Company (Gujarat Garments, Baroda Fashion House)
+- **Contact Person** = Individual within the company (Kiran Patel, Mehul Shah)
+- **Lead** = Early-stage company inquiry (not yet a paying customer)
+
+#### **Key Business Characteristics**
+1. **GST-Based Relationships**: Every business relationship is tied to GST number and company registration
+2. **Single Relationship per Company**: Each company has ONE relationship status with us (prospect → customer → inactive)
+3. **Company Evolution**: Same entity progresses through different stages, not separate entities
+4. **B2B Context**: All transactions are company-to-company, individual contacts are just communication points
+
+### **Architectural Decision: UNIFIED BUSINESSPROFILE ✅**
+
+After comprehensive analysis, we chose the **unified BusinessProfile approach** over separated entities.
+
+#### **BusinessProfile Interface Design**
+```typescript
+interface BusinessProfile {
+  // Company Identity (stable, rarely changes)
+  id: string;
+  companyName: string;
+  gstNumber: string;
+  panNumber: string;
+  registeredAddress: Address;
+  
+  // Relationship Evolution (dynamic, changes over time)
+  customerStatus: 'prospect' | 'customer' | 'inactive';
+  becameCustomerDate?: string;
+  firstPaymentProjectId?: string;
+  
+  // Business Metrics (accumulated over time)
+  totalProjects: number;
+  totalRevenue: number;
+  paymentScore: number; // 1-100 based on payment history
+  creditStatus: 'excellent' | 'good' | 'watch' | 'hold';
+  
+  // Contact Information (operational, can change)
+  contactPerson: string;
+  phone: string;
+  email: string;
+  
+  // Business Intelligence
+  preferences: CustomerPreferences;
+  priority: 'hot' | 'warm' | 'cold';
+  loyalty?: CustomerLoyalty;
+}
+```
+
+### **Why This Architecture is CORRECT**
+
+#### **1. Matches Business Reality**
+- **Natural Flow**: Company starts as prospect, becomes customer through first payment
+- **Single Entity Evolution**: Same company, different relationship status over time
+- **GST-Centric**: Company identity IS the customer identity in Indian B2B context
+
+#### **2. Technical Benefits**
+- **Single Source of Truth**: No data duplication between Company and Customer tables
+- **Atomic Operations**: Status changes happen in one transaction
+- **Simpler Queries**: No complex joins needed for complete company information
+- **Voice Command Friendly**: "Show Gujarat Garments details" = single lookup
+
+#### **3. Operational Efficiency**
+- **Mobile Performance**: Fewer network calls, better for on-the-go textile business owners
+- **Data Consistency**: No sync issues between separate company and customer records
+- **Maintenance**: Update company contact info in one place, reflects everywhere
+
+#### **4. Scaling Benefits**
+- **Industry Expansion**: Same model works for any B2B manufacturing (food processing, chemicals, etc.)
+- **Multi-language Support**: Single entity simplifies translation and voice commands
+- **Reporting**: Natural aggregation of company metrics without joins
+
+### **Implementation Impact on Related Entities**
+
+#### **Lead Entity Relationship**
+```typescript
+interface Lead {
+  businessProfileId?: string; // Links to company when BusinessProfile created
+  companyName: string; // Duplicate during lead stage, consolidated on conversion
+  conversionStatus: 'active_lead' | 'quote_sent' | 'verbally_approved' | 'converted_to_customer';
+}
+```
+
+#### **Quote Entity Relationship**
+```typescript
+interface Quote {
+  businessProfileId?: string; // Links to company BusinessProfile after customer conversion
+  leadId: string; // Maintains lead relationship during quote stage
+}
+```
+
+#### **Sales Order Entity Relationship**
+```typescript
+interface SalesOrder {
+  businessProfileId: string; // Always links to company (customers only)
+  advancePaymentId: string; // Payment that triggered customer creation
+}
+```
+
+#### **Payment Architecture**
+```typescript
+interface AdvancePayment {
+  businessProfileId: string; // Links to company
+  proformaInvoiceId: string;
+  // Payment triggers customer status change in BusinessProfile
+}
+```
+
+### **Alternative Rejected: Separated Entities**
+
+#### **What Separated Architecture Would Look Like**
+```typescript
+interface Company {
+  companyName, gstNumber, registeredAddress
+  businessType, specialization
+}
+
+interface Customer {
+  companyId: string; // Foreign key
+  customerSince, paymentScore, totalRevenue
+}
+```
+
+#### **Why We Rejected This Approach**
+1. **Data Duplication Risk**: Company name and contact info duplicated
+2. **Sync Complexity**: Risk of company and customer data becoming inconsistent
+3. **Query Overhead**: Need joins for complete business information
+4. **Doesn't Match Business Flow**: Creates artificial separation that doesn't exist in real workflow
+5. **Mobile Performance**: Additional network calls for complete company view
+6. **Voice Commands**: More complex - "Show Gujarat Garments" needs multiple lookups
+
+### **Migration Considerations for Future**
+
+If business requirements change dramatically, we have a clear migration path:
+
+#### **Potential Trigger Points**
+- **Multi-relationship per company**: If companies need multiple relationship types
+- **Individual customer tracking**: If we need to track individual buyers within companies
+- **Separate access control**: If different teams need completely separate data access
+
+#### **Migration Strategy**
+1. **Phase 1**: Create normalized Company and Customer tables
+2. **Phase 2**: Migrate BusinessProfile data with referential integrity
+3. **Phase 3**: Update application logic to use separated entities
+4. **Phase 4**: Maintain backward compatibility during transition
+
+### **Conclusion**
+
+The **unified BusinessProfile architecture aligns perfectly with textile manufacturing business reality** and provides optimal performance for our voice-first, mobile-first platform targeting Gujarat textile manufacturers.
+
+This decision provides:
+- **Technical efficiency** (single entity, no joins)
+- **Business logic alignment** (matches real-world company evolution)
+- **Operational simplicity** (one place for company data)
+- **Scaling foundation** (works for any B2B manufacturing industry)
+
+**Architecture Status**: ✅ **APPROVED** - Foundation for automated lead-to-customer conversion workflow
+
+---
+
+## **PAYMENT MANAGEMENT ARCHITECTURE - DUAL-LEVEL STRATEGY (September 12, 2025)**
+
+### **The Business Challenge**
+Textile manufacturing requires sophisticated payment management that tracks both:
+1. **Customer Creditworthiness**: Overall reliability for future business decisions
+2. **Order Payment Progress**: Specific payment status of individual orders
+
+This dual requirement emerged from user feedback asking: "What's the difference between credit status and payment status?"
+
+### **Business Context Analysis**
+
+#### **Real Textile Manufacturing Payment Flow**
+1. **Customer Evaluation**: Before quoting, check customer's credit history
+2. **Quote Approval**: Customer approves quote terms
+3. **Advance Payment**: 30-50% advance required before production
+4. **Production**: Only start after advance payment received
+5. **Final Payment**: Balance payment on delivery
+
+#### **Dual Information Requirement**
+- **Business Decision Making**: "Should I accept a large order from Gujarat Garments?" → Check creditStatus
+- **Operational Management**: "Can I start production on order SO-001?" → Check paymentStatus
+
+### **Architectural Solution: DUAL-LEVEL PAYMENT TRACKING ✅**
+
+#### **Level 1: Customer Credit Status (BusinessProfile)**
+```typescript
+interface BusinessProfile {
+  creditStatus: 'excellent' | 'good' | 'watch' | 'hold';
+  // Overall customer reliability assessment
+  // Used for: Business decisions, credit limits, order acceptance
+}
+```
+
+**Business Logic**:
+- **Excellent**: Always pays on time, accepts large orders immediately
+- **Good**: Generally reliable, standard business terms
+- **Watch**: Some payment delays, requires follow-up
+- **Hold**: Significant payment issues, cash-on-delivery only
+
+#### **Level 2: Order Payment Status (SalesOrder)**
+```typescript
+interface SalesOrder {
+  paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue';
+  // Specific order payment progress
+  // Used for: Production decisions, delivery scheduling, cash flow
+}
+```
+
+**Business Logic**:
+- **Pending**: Awaiting advance payment (production blocked)
+- **Advance Received**: Can start production (50% paid)
+- **Partial**: Advance paid, balance pending (can deliver)
+- **Completed**: Fully paid (order closed)
+- **Overdue**: Payment deadline passed (follow-up required)
+
+### **Implementation in User Interface**
+
+#### **CustomerProfile Component Enhancement**
+Shows both levels clearly:
+```jsx
+// Customer-level credit assessment
+<h3>💳 Credit Status</h3>
+<p>{customer.creditStatus} credit rating</p>
+
+// Order-level payment tracking
+<p><strong>Order Payment:</strong> {order.paymentStatus} | 
+   <strong>Credit Status:</strong> {customer.creditStatus}</p>
+```
+
+#### **SalesOrders Component Integration**
+Links payment details to payment management:
+```jsx
+<span onClick={() => onShowAdvancePaymentManagement()}>
+  {paymentStatus === 'received' ? 
+    '✅ Received' : '⏳ Pending advance payment'}
+</span>
+```
+
+#### **AdvancePaymentManagement Component**
+Detailed view linking orders to payments with business context.
+
+### **Technical Benefits**
+
+#### **1. Business Decision Support**
+- **Credit Status**: "Can I trust this customer with ₹50 lakh order?"
+- **Payment Status**: "Can I start production on this specific order?"
+- **Combined View**: Complete financial relationship understanding
+
+#### **2. Operational Efficiency**
+- **Production Planning**: Only start when `paymentStatus = 'advance_received'`
+- **Delivery Scheduling**: Deliver when `paymentStatus = 'partial'` or `'completed'`
+- **Follow-up Management**: Focus on `creditStatus = 'watch'` customers
+
+#### **3. Voice Command Friendly**
+- **English**: "Show payment status for order SO-001"
+- **Gujarati**: "ઓર્ડર SO-001 નું પેમેન્ટ સ્ટેટસ બતાવો"
+- **Hindi**: "ऑर्डर SO-001 का पेमेंट स्टेटस दिखाओ"
+
+### **Data Model Implementation**
+
+#### **BusinessProfile Interface Updates**
+```typescript
+interface BusinessProfile {
+  // Changed: Textile business uses "orders" not "projects"
+  totalOrders: number;        // was: totalProjects
+  activeOrders: number;       // was: activeProjects
+  creditStatus: 'excellent' | 'good' | 'watch' | 'hold';
+}
+```
+
+#### **SalesOrder Interface Enhancement**
+```typescript
+interface SalesOrder {
+  // Added: Order-level payment tracking
+  paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue';
+  // Links to advance payment management
+  advancePaymentId?: string;
+}
+```
+
+### **User Experience Impact**
+
+#### **Before (Confusing)**
+- Single "payment status" field with unclear meaning
+- Users confused: "Is this about the customer or the order?"
+- Business decisions made with incomplete information
+
+#### **After (Clear)**
+- **Customer Profile**: Shows credit rating for business decisions
+- **Order View**: Shows specific payment progress for operations
+- **Payment Management**: Complete view linking both levels
+
+### **Business Value Delivered**
+
+#### **1. Risk Management**
+- **Customer Level**: Avoid bad debt through credit status tracking
+- **Order Level**: Ensure cash flow through payment progress monitoring
+
+#### **2. Operational Clarity**
+- **Production Team**: Clear go/no-go decisions based on payment status
+- **Sales Team**: Customer creditworthiness for deal sizing
+- **Finance Team**: Complete payment pipeline visibility
+
+#### **3. Growth Enablement**
+- **Confident Scaling**: Better risk assessment for larger orders
+- **Process Automation**: Clear rules for payment-triggered workflows
+- **Customer Relationships**: Balanced approach between credit and operations
+
+### **Implementation Status**
+
+#### **✅ Completed**
+1. **BusinessProfile Interface**: Updated terminology (orders vs projects)
+2. **SalesOrder Interface**: Added paymentStatus enum with proper values
+3. **Mock Data Alignment**: Updated with textile business terminology
+4. **UI Component Updates**: CustomerProfile shows dual-level payment info
+5. **Cross-Component Integration**: SalesOrders links to AdvancePaymentManagement
+
+#### **📋 Benefits Achieved**
+- **Business Alignment**: Matches actual textile payment workflows
+- **Technical Clarity**: Separated concerns between credit and payment
+- **User Experience**: Clear distinction between customer reliability and order progress
+- **Voice Command Ready**: Natural language patterns for both levels
+
+### **Conclusion**
+
+The **dual-level payment management architecture** solves the fundamental business need for both strategic customer assessment and tactical order management in textile manufacturing.
+
+This approach provides:
+- **Strategic Intelligence**: Customer creditworthiness for business decisions
+- **Operational Clarity**: Order payment status for production/delivery decisions  
+- **Technical Efficiency**: Clean separation of concerns in data model
+- **User Experience**: Intuitive understanding of payment vs credit information
+
+**Architecture Status**: ✅ **IMPLEMENTED** - Dual-level payment strategy active in system
+
+---
+
+## **API NAMING CONVENTIONS - DOMAIN ABSTRACTION STRATEGY (September 12, 2025)**
+
+### **The Naming Convention Question**
+During TypeScript unification, a key architectural question emerged: **Should API function names use business domain terminology or technical data field names?**
+
+**Example**: Function named `getByCustomerId()` internally uses `businessProfileId` field - is this confusing or correct?
+
+### **Our Strategic Decision: DOMAIN-DRIVEN NAMING ✅**
+
+We intentionally use **business domain terminology** in public APIs while using **technical field names** in internal implementation. This is a **Domain-Driven Design pattern**, not an inconsistency.
+
+#### **Implementation Pattern**
+```typescript
+// ✅ PUBLIC API - Business Domain Language
+export function getByCustomerId(customerId: string): BusinessProfile | undefined {
+  // ✅ INTERNAL IMPLEMENTATION - Technical Field Names
+  return mockBusinessProfiles.find(profile => profile.businessProfileId === customerId);
+}
+
+export function getCustomerSalesOrders(customerId: string): SalesOrder[] {
+  // Internal field: businessProfileId
+  return mockSalesOrders.filter(order => order.businessProfileId === customerId);
+}
+```
+
+### **Why This Architecture is CORRECT**
+
+#### **1. Business Domain Abstraction**
+- **User Mental Model**: "Show me customer details" (business language)
+- **Technical Reality**: `businessProfileId` field in database (implementation detail)
+- **API Translation**: Bridges business concepts with technical implementation
+
+#### **2. Team Communication Benefits**
+- **Business Stakeholders**: Use familiar "customer" terminology
+- **Developer Team**: API functions match business requirements documents
+- **Voice Commands**: "Show customer Gujarat Garments" maps naturally to `getByCustomerId()`
+
+#### **3. Evolution Protection**
+- **Interface Stability**: Public API remains stable as internal schema evolves
+- **Refactoring Safety**: Can change internal field names without breaking API contracts
+- **Business Model Changes**: API semantics stable during technical restructuring
+
+#### **4. Industry Standard Pattern**
+- **Domain-Driven Design**: Separate business domain from technical implementation
+- **API Design Best Practice**: Use business language in public interfaces
+- **Translation Layer**: Clean abstraction between business logic and data layer
+
+### **Real-World Usage Examples**
+
+#### **Voice Commands (Business Language)**
+- **English**: "Show payment status for customer Gujarat Garments"
+- **Gujarati**: "ગુજરાત ગારમેન્ટ્સ ગ્રાહકનો પેમેન્ટ સ્ટેટસ બતાવો"
+- **Hindi**: "गुजरात गारमेंट्स कस्टमर का पेमेंट स्टेटस दिखाओ"
+
+#### **Technical Implementation (Technical Fields)**
+```typescript
+// Internal query uses technical field names
+const orders = mockSalesOrders.filter(order => 
+  order.businessProfileId === customerId && 
+  order.paymentStatus === 'advance_received'
+);
+```
+
+### **Function Naming Standards**
+
+#### **Customer-Related Functions**
+```typescript
+// ✅ APPROVED - Business Domain Names
+getByCustomerId()              // → queries businessProfileId
+getCustomerSalesOrders()       // → filters by businessProfileId
+getCustomerPaymentHistory()    // → aggregates by businessProfileId
+getCustomerCreditStatus()      // → retrieves creditStatus field
+```
+
+#### **Order-Related Functions**
+```typescript
+// ✅ APPROVED - Business Domain Names  
+getOrdersByCustomerId()        // → filters by businessProfileId
+getOrderPaymentStatus()        // → retrieves paymentStatus field
+getOrdersByStatus()           // → filters by order.status field
+```
+
+### **Team Guidelines**
+
+#### **✅ DO - Business Domain Language in APIs**
+- Use "customer" in function names and public interfaces
+- Use "order" terminology for sales operations
+- Use "payment" language for financial operations
+- Match business process terminology in API design
+
+#### **❌ DON'T - Technical Field Names in APIs**
+- Don't expose `businessProfileId` in function names
+- Don't use database column names in public interfaces
+- Don't make users think about technical implementation
+- Don't break business domain abstraction
+
+### **Documentation Pattern for New Developers**
+
+When adding new API functions, follow this pattern:
+```typescript
+/**
+ * Retrieves customer payment history for business analysis
+ * @param customerId - Business identifier (maps to businessProfileId internally)
+ * @returns Payment history for the specified customer
+ */
+export function getCustomerPaymentHistory(customerId: string): PaymentHistory[] {
+  // Internal implementation uses technical field names
+  return mockPayments.filter(payment => payment.businessProfileId === customerId);
+}
+```
+
+### **Why NOT to "Fix" This Pattern**
+
+#### **Common Misconception**
+New team members might see `getByCustomerId()` using `businessProfileId` internally and think:
+> "This is confusing - let's rename the function to `getByBusinessProfileId()` to match"
+
+#### **Why This Would Be WRONG**
+1. **Breaks Business Domain**: Users don't think in terms of "businessProfileId"
+2. **Reduces API Usability**: Technical terminology in business application
+3. **Voice Command Impact**: Harder to map natural language to technical terms
+4. **Violates DDD Principles**: Exposes implementation details in domain layer
+
+### **Migration Considerations**
+
+If business terminology changes (e.g., "customer" → "client"), we update:
+- **Public API names**: `getByCustomerId()` → `getByClientId()`
+- **Keep internal fields**: `businessProfileId` remains unchanged
+- **Maintain abstraction**: Clean separation between business and technical layers
+
+### **Conclusion**
+
+The **Domain-Driven Naming strategy** is a **deliberate architectural decision** that:
+- **Maintains business domain abstraction** in public APIs
+- **Uses technical field names** in internal implementation  
+- **Provides clean translation layer** between business and technical concerns
+- **Supports voice-first, multilingual platform** requirements
+
+**Team Guidance**: This naming pattern is **intentional architecture**, not confusion. Do not "fix" it by exposing technical field names in business APIs.
+
+**Architecture Status**: ✅ **DOCUMENTED** - Domain-Driven Design naming standards established
+
+---
+
+**Document Version**: 8.0 (API Naming Conventions - Domain Abstraction Strategy Added)  
+**Last Updated**: September 12, 2025  
 **Philosophy**: Ship fast, iterate based on customer feedback, keep it simple, test core functionality
