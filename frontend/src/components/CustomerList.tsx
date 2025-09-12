@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockCustomers, mockSalesOrders, formatCurrency } from '../data/mockData';
+import { mockBusinessProfiles, mockSalesOrders, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerList.module.css';
 
@@ -66,13 +66,13 @@ function CustomerList({
       </div>
 
       <div className={styles.leadsContainer}>
-        {mockCustomers
-          .filter(customer => 
+        {mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer')
+          .filter(profile => 
             customerSearch === '' || 
-            customer.name.toLowerCase().includes(customerSearch.toLowerCase()) ||
-            customer.location.toLowerCase().includes(customerSearch.toLowerCase())
+            profile.companyName.toLowerCase().includes(customerSearch.toLowerCase()) ||
+            profile.registeredAddress.city.toLowerCase().includes(customerSearch.toLowerCase())
           )
-          .map(customer => {
+          .map(profile => {
             const priorityIcons = {
               hot: '🔥',
               warm: '🔶',
@@ -86,37 +86,37 @@ function CustomerList({
             };
 
             const paymentStatusIcon = {
+              excellent: '🌟',
               good: '✅',
-              overdue: '⚠️',
-              pending: '⚠️',
-              excellent: '🌟'
+              watch: '👀',
+              hold: '🛑'
             };
 
-            const lastOrder = mockSalesOrders.find(order => order.customerId === customer.id);
+            const lastOrder = mockSalesOrders.find(order => order.businessProfileId === profile.id);
 
             return (
-              <div key={customer.id} className={`${styles.leadCard} ${styles[customer.priority + 'Lead']}`}>
+              <div key={profile.id} className={`${styles.leadCard} ${styles[profile.priority + 'Lead']}`}>
                 <div className={styles.leadHeader}>
                   <h3>
                     <span 
-                      onClick={() => onShowCustomerProfile(customer.id)}
+                      onClick={() => onShowCustomerProfile(profile.id)}
                       style={{cursor: 'pointer', textDecoration: 'underline'}}
                     >
-                      🏭 {customer.name} - {customer.location}
+                      🏭 {profile.companyName} - {profile.registeredAddress.city}
                     </span>
                   </h3>
-                  <span className={`${styles.priorityBadge} ${styles[customer.priority]}`}>
-                    {priorityIcons[customer.priority]} {priorityLabels[customer.priority]}
+                  <span className={`${styles.priorityBadge} ${styles[profile.priority]}`}>
+                    {priorityIcons[profile.priority]} {priorityLabels[profile.priority]}
                   </span>
                 </div>
                 <div className={styles.leadDetails}>
-                  <p><strong>Customer Since:</strong> {customer.customerSince}</p>
-                  <p><strong>Total Business:</strong> {formatCurrency(customer.totalBusiness)} ({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''})</p>
-                  <p><strong>Conversion Rate:</strong> {customer.conversionRate}% ({customer.totalOrders}/{customer.totalOrders + 1} quotes)</p>
+                  <p><strong>Customer Since:</strong> {profile.becameCustomerDate}</p>
+                  <p><strong>Total Business:</strong> {formatCurrency(profile.totalRevenue)} ({profile.totalOrders} order{profile.totalOrders > 1 ? 's' : ''})</p>
+                  <p><strong>Active Orders:</strong> {profile.activeOrders} | <strong>Average Order Value:</strong> {formatCurrency(profile.averageOrderValue)}</p>
                   <p><strong>Last Order:</strong> {lastOrder ? `${lastOrder.orderDate} - ${lastOrder.statusMessage}` : 'No orders yet'}</p>
                   <p><strong>Payment Status:</strong> 
-                    <span className={styles[`payment${customer.paymentStatus.charAt(0).toUpperCase() + customer.paymentStatus.slice(1)}`]}>
-                      {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
+                    <span className={styles[`payment${profile.creditStatus.charAt(0).toUpperCase() + profile.creditStatus.slice(1)}`]}>
+                      {paymentStatusIcon[profile.creditStatus] || '✅'} {profile.creditStatus} payment history
                     </span>
                   </p>
                 </div>

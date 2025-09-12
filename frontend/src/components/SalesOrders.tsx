@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency } from '../data/mockData';
+import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/SalesOrders.module.css';
 
@@ -131,13 +131,13 @@ function SalesOrders({
           return (
             <div key={order.id} className={`${styles.orderCard} ${styles[order.status + 'Order']}`}>
               <div className={styles.orderHeader}>
-                <h3>{order.id} - {order.customerName}</h3>
+                <h3>{order.id} - Order</h3>
                 <span className={`${styles.statusBadge} ${styles.approved}`}>
                   {statusIcons[order.status]} {statusLabels[order.status]}
                 </span>
               </div>
               <div className={styles.orderDetails}>
-                <p><strong>{t('customerName')}:</strong> {order.customerName} - {order.location}</p>
+                <p><strong>{t('customerName')}:</strong> {getBusinessProfileById(order.businessProfileId)?.companyName || 'Unknown'} - {getBusinessProfileById(order.businessProfileId)?.registeredAddress.city || 'Unknown'}</p>
                 <p><strong>{t('orderDate')}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
                 <p><strong>Items:</strong> {order.items}</p>
                 <p><strong>{t('totalAmount')}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>

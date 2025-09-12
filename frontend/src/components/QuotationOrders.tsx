@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockQuotes, mockLeads, mockSalesOrders, mockCustomers, formatCurrency } from '../data/mockData';
+import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/QuotationOrders.module.css';
 
@@ -119,14 +119,13 @@ function QuotationOrders({
                 <h3>
                   <span 
                     onClick={() => {
-                      // Find customer who was converted from this quote's lead
-                      const convertedCustomer = mockCustomers.find(c => c.originalLeadId === quote.leadId);
-                      if (convertedCustomer) {
-                        onShowCustomerProfile(convertedCustomer.id);
+                      // Navigate to customer profile if quote is linked to a BusinessProfile
+                      if (quote.businessProfileId) {
+                        onShowCustomerProfile(quote.businessProfileId);
                       }
                     }}
-                    style={{cursor: 'pointer', textDecoration: 'underline'}}
-                    title={mockCustomers.find(c => c.originalLeadId === quote.leadId) ? 'View customer profile' : 'Not yet converted to customer'}
+                    style={{cursor: quote.businessProfileId ? 'pointer' : 'default', textDecoration: quote.businessProfileId ? 'underline' : 'none'}}
+                    title={quote.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
                   >
                     {quote.id} - {quote.companyName}
                   </span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { getCustomerById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
+import { getBusinessProfileById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerProfile.module.css';
 
@@ -24,7 +24,7 @@ function CustomerProfile({
   customerId
 }: CustomerProfileProps) {
   const { t } = useTranslation();
-  const customer = getCustomerById(customerId);
+  const customer = getBusinessProfileById(customerId);
   const customerQuotes = getQuotesByCustomerId(customerId);
   const customerOrders = getSalesOrdersByCustomerId(customerId);
 
@@ -59,10 +59,10 @@ function CustomerProfile({
   };
 
   const paymentStatusIcon = {
+    excellent: '🌟',
     good: '✅',
-    overdue: '⚠️',
-    pending: '⚠️',
-    excellent: '🌟'
+    watch: '👀',
+    hold: '🛑'
   };
   return (
     <div className={styles.leadManagementScreen}>
@@ -86,9 +86,9 @@ function CustomerProfile({
 
       <div className={styles.customerHeader}>
         <div className={styles.customerMainInfo}>
-          <h2>🏭 {customer.name} - {customer.location}</h2>
-          <p className={styles.customerSince}>🎉 {t('customerSince')}: {customer.customerSince}</p>
-          <p className={styles.customerType}>{priorityIcons[customer.priority]} <strong>{customer.priorityLabel}</strong> - {customer.paymentStatusMessage}</p>
+          <h2>🏭 {customer.companyName} - {customer.registeredAddress.city}</h2>
+          <p className={styles.customerSince}>🎉 {t('customerSince')}: {customer.becameCustomerDate}</p>
+          <p className={styles.customerType}>{priorityIcons[customer.priority]} <strong>{customer.priority} priority</strong> - {customer.creditStatus} payment status</p>
         </div>
         <div className={styles.customerContactHeader}>
           <p><strong>Primary Contact:</strong> {customer.contactPerson} - {customer.phone}</p>
@@ -102,8 +102,8 @@ function CustomerProfile({
       <div className={styles.customerStats}>
         <div className={styles.statCard}>
           <h3>₹ {t('totalBusiness')}</h3>
-          <p className={styles.statValue}>{formatCurrency(customer.totalBusiness)}</p>
-          <p className={styles.statDetail}>({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} placed)</p>
+          <p className={styles.statValue}>{formatCurrency(customer.totalRevenue)}</p>
+          <p className={styles.statDetail}>({customer.totalOrders} order{customer.totalOrders > 1 ? 's' : ''} completed)</p>
         </div>
         <div className={styles.statCard}>
           <h3>📋 {t('totalOrders')}</h3>
@@ -112,15 +112,15 @@ function CustomerProfile({
         </div>
         <div className={styles.statCard}>
           <h3>🎯 {t('conversionRate')}</h3>
-          <p className={styles.statValue}>{customer.conversionRate}%</p>
+          <p className={styles.statValue}>{Math.round((customer.totalOrders / customerQuotes.length) * 100)}%</p>
           <p className={styles.statDetail}>({customer.totalOrders}/{customerQuotes.length} quotes)</p>
         </div>
         <div className={styles.statCard}>
-          <h3>💳 {t('paymentScore')}</h3>
-          <p className={`${styles.statValue} ${styles[`payment${customer.paymentStatus.charAt(0).toUpperCase() + customer.paymentStatus.slice(1)}`]}`}>
-            {paymentStatusIcon[customer.paymentStatus]} {customer.paymentStatusMessage}
+          <h3>💳 Credit Status</h3>
+          <p className={`${styles.statValue} ${styles[`payment${customer.creditStatus.charAt(0).toUpperCase() + customer.creditStatus.slice(1)}`]}`}>
+            {paymentStatusIcon[customer.creditStatus] || '✅'} {customer.creditStatus} credit rating
           </p>
-          <p className={styles.statDetail}>{customer.paymentStatus === 'good' ? 'Reliable payments' : 'Follow-up required'}</p>
+          <p className={styles.statDetail}>Customer creditworthiness: {customer.creditStatus === 'good' || customer.creditStatus === 'excellent' ? 'Reliable payments' : 'Follow-up required'}</p>
         </div>
       </div>
 
@@ -182,7 +182,7 @@ function CustomerProfile({
                   <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
                   <p><strong>Items:</strong> {order.items}</p>
                   <p><strong>Expected Delivery:</strong> {order.deliveryDate}</p>
-                  <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
+                  <p><strong>Order Payment:</strong> {order.paymentStatus} | <strong>Credit Status:</strong> {customer.creditStatus}</p>
                   <p><strong>Production Status:</strong> {order.productionStatus}</p>
                 </div>
               </div>
@@ -232,7 +232,7 @@ function CustomerProfile({
         <div className={styles.infoGrid}>
           <div className={styles.infoItem}>
             <h4>Company Details</h4>
-            <p><strong>Business Name:</strong> {customer.name}</p>
+            <p><strong>Business Name:</strong> {customer.companyName}</p>
             <p><strong>Contact Person:</strong> {customer.contactPerson}</p>
             <p><strong>Business Type:</strong> {customer.businessType}</p>
             <p><strong>Employee Count:</strong> {customer.employeeCount}</p>
@@ -250,10 +250,10 @@ function CustomerProfile({
           
           <div className={styles.infoItem}>
             <h4>Business Insights</h4>
-            <p><strong>Customer Since:</strong> {customer.customerSince}</p>
+            <p><strong>Customer Since:</strong> {customer.becameCustomerDate}</p>
             <p><strong>Order Frequency:</strong> {customer.totalOrders === 0 ? 'No orders yet' : customer.totalOrders === 1 ? 'First-time buyer' : 'Regular customer'}</p>
-            <p><strong>Average Order Value:</strong> {formatCurrency(customer.totalBusiness / (customer.totalOrders || 1))}</p>
-            <p><strong>Payment Behavior:</strong> {customer.paymentStatusMessage}</p>
+            <p><strong>Average Order Value:</strong> {formatCurrency(customer.totalRevenue / (customer.totalOrders || 1))}</p>
+            <p><strong>Payment Behavior:</strong> {customer.creditStatus === 'good' || customer.creditStatus === 'excellent' ? 'Reliable payments' : 'Follow-up required'}</p>
             <p><strong>Growth Potential:</strong> {customer.priority === 'hot' ? 'High' : customer.priority === 'warm' ? 'Medium' : 'Stable'}</p>
           </div>
         </div>
@@ -274,7 +274,7 @@ function CustomerProfile({
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
           🎤 <strong>Try saying:</strong> 
-          "Create new quote for {customer.name}" • "Show payment history" • "Call customer"
+          "Create new quote for {customer.companyName}" • "Show payment history" • "Call customer"
         </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ProductHeader from './ProductHeader';
-import { mockSalesOrders, formatCurrency, getCustomerById } from '../data/mockData';
+import { mockSalesOrders, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/AdvancePaymentManagement.module.css';
 
@@ -59,7 +59,7 @@ function AdvancePaymentManagement({
 
   // Create mock payment records based on sales orders
   const mockPaymentRecords: PaymentRecord[] = mockSalesOrders.map(order => {
-    const customer = getCustomerById(order.customerId);
+    const customer = getBusinessProfileById(order.businessProfileId);
     const advancePercentage = 50; // Standard 50% advance
     const advanceAmount = Math.round(order.totalAmount * (advancePercentage / 100));
     
@@ -85,8 +85,8 @@ function AdvancePaymentManagement({
     return {
       id: `PAY-${order.id}`,
       orderId: order.id,
-      customerName: order.customerName,
-      location: order.location,
+      customerName: customer?.companyName || 'Unknown',
+      location: customer?.registeredAddress.city || 'Unknown',
       orderAmount: order.totalAmount,
       advancePercentage,
       advanceAmount,

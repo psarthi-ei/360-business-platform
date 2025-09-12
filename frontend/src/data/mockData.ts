@@ -3,25 +3,40 @@
 
 export interface Lead {
   id: string;
+  businessProfileId?: string; // Links to company when BusinessProfile created
+  
+  // Company Information (will migrate to BusinessProfile)
   companyName: string;
-  contactPerson: string;
   location: string;
-  contact: string;
   business: string;
+  
+  // Contact Information (Individual Level)
+  contactPerson: string;
+  designation?: string;
+  department?: string;
+  contact: string; // phone/email combined
+  phone?: string;
+  email?: string;
+  
+  // Project Information (Specific to this lead)
   inquiry: string;
   budget: string;
   timeline: string;
-  lastContact: string;
   priority: 'hot' | 'warm' | 'cold';
+  
+  // Relationship Tracking
+  lastContact: string;
   notes: string;
-  conversionStatus: 'active_lead' | 'quote_sent' | 'awaiting_payment' | 'converted_to_customer';
-  convertedCustomerId?: string; // Only populated after conversion
-  conversionDate?: string; // Only populated after conversion
+  
+  // Enhanced Conversion Status
+  conversionStatus: 'active_lead' | 'quote_sent' | 'verbally_approved' | 'profile_pending' | 'proforma_sent' | 'awaiting_payment' | 'converted_to_customer';
+  convertedToCustomerDate?: string;
 }
 
 export interface Quote {
   id: string;
   leadId: string;
+  businessProfileId?: string; // Links to company BusinessProfile
   companyName: string;
   location: string;
   quoteDate: string;
@@ -30,47 +45,49 @@ export interface Quote {
   totalAmount: number;
   status: 'pending' | 'approved' | 'expired' | 'rejected' | 'converted_to_proforma';
   statusMessage: string;
-  approvalDate?: string; // When quote was approved
-  proformaInvoiceId?: string; // Link to generated proforma invoice
-  advancePaymentRequired?: number; // Required advance payment amount
-  advancePaymentStatus?: 'not_requested' | 'awaiting' | 'overdue' | 'received'; // Advance payment status
+  approvalDate?: string;
+  proformaInvoiceId?: string;
+  advancePaymentRequired?: number;
+  advancePaymentStatus?: 'not_requested' | 'awaiting' | 'overdue' | 'received';
 }
 
-export interface SalesOrder {
+// Enhanced BusinessProfile replaces Customer entity
+export interface BusinessProfile {
   id: string;
-  quoteId: string;
-  customerId: string;
-  customerName: string;
-  location: string;
-  orderDate: string;
-  deliveryDate: string;
-  items: string;
-  totalAmount: number;
-  status: 'pending' | 'production' | 'completed';
-  statusMessage: string;
-  paymentStatus: string;
-  productionStatus: string;
-  advancePaymentReceived?: number; // Amount of advance payment received
-  balancePaymentDue?: number; // Remaining balance due
-}
-
-export interface Customer {
-  id: string;
-  name: string;
-  location: string;
-  contactPerson: string;
+  companyName: string;
+  gstNumber: string;
+  panNumber?: string;
+  registeredAddress: Address;
+  deliveryAddresses?: Address[];
+  contactPerson: string; // Primary contact
   phone: string;
   email: string;
-  customerSince: string;
-  totalBusiness: number;
-  totalOrders: number;
-  conversionRate: number;
-  paymentStatus: 'good' | 'overdue' | 'pending' | 'excellent';
-  paymentStatusMessage: string;
+  
+  // Customer Status Evolution
+  customerStatus: 'prospect' | 'customer' | 'inactive';
+  becameCustomerDate?: string;
+  firstPaymentProjectId?: string;
+  originalLeadId?: string; // Link back to original lead that created this profile
+  
+  // Business Information
   businessType: string;
   specialization: string;
   employeeCount: string;
-  gstNumber: string;
+  establishedYear?: string;
+  
+  // Business Metrics
+  totalOrders: number;
+  activeOrders: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  
+  // Credit & Payment Management
+  creditLimit: number;
+  paymentScore: number; // 1-100 rating based on payment history
+  creditStatus: 'excellent' | 'good' | 'watch' | 'hold';
+  paymentBehavior: 'excellent' | 'good' | 'fair' | 'poor';
+  
+  // Preferences and Relationships
   preferences: {
     paymentMethod: string;
     deliveryPreference: string;
@@ -79,15 +96,74 @@ export interface Customer {
     specialNotes: string;
   };
   priority: 'hot' | 'warm' | 'cold';
-  priorityLabel: string;
-  loyalty: CustomerLoyalty;
-  fabricPreferences: string[];
-  // Conversion tracking fields
-  originalLeadId: string; // Reference to original lead
-  conversionDate: string; // When lead converted to customer
-  firstAdvancePaymentId: string; // First payment that triggered conversion
-  firstSalesOrderId: string; // First order created during conversion
+  loyalty?: CustomerLoyalty;
+  fabricPreferences?: string[];
 }
+
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+}
+
+export interface AdvancePayment {
+  id: string;
+  proformaInvoiceId: string;
+  quoteId: string;
+  leadId: string;
+  businessProfileId: string;
+  amount: number;
+  dueDate: string;
+  status: 'pending' | 'overdue' | 'received' | 'partial';
+  receivedDate?: string;
+  receivedAmount?: number;
+  bankReference?: string;
+  paymentMethod: 'RTGS' | 'NEFT' | 'Cash' | 'Cheque' | 'UPI';
+}
+
+export interface ProformaInvoice {
+  id: string;
+  quoteId: string;
+  leadId: string;
+  businessProfileId: string;
+  issueDate: string;
+  dueDate: string;
+  subtotal: number;
+  gstAmount: number;
+  totalAmount: number;
+  advanceAmount: number;
+  bankDetails: BankDetails;
+  status: 'pending' | 'sent' | 'payment_received' | 'expired';
+  paymentInstructions: string;
+}
+
+export interface BankDetails {
+  bankName: string;
+  accountNumber: string;
+  ifscCode: string;
+  accountName: string;
+  branch: string;
+}
+
+export interface SalesOrder {
+  id: string;
+  quoteId: string;
+  businessProfileId: string; // Changed from customerId
+  advancePaymentId: string; // Links to advance payment that created this order
+  orderDate: string;
+  deliveryDate: string;
+  items: string;
+  totalAmount: number;
+  status: 'pending' | 'production' | 'completed';
+  statusMessage: string;
+  paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue';
+  productionStatus: string;
+  balancePaymentDue?: number; // Remaining balance after advance
+}
+
+// Customer interface removed - using BusinessProfile for all customer data
 
 export interface Communication {
   date: string;
@@ -127,26 +203,7 @@ export interface ProformaItem {
   amount: number;
 }
 
-export interface ProformaInvoice {
-  id: string;
-  customerId: string;
-  quoteId: string;
-  customerName: string;
-  issueDate: string;
-  validUntil: string;
-  items: ProformaItem[];
-  subtotal: number;
-  gstRate: number;
-  gstAmount: number;
-  totalAmount: number;
-  advancePercentage: number;
-  advanceAmount: number;
-  bankDetails: BankDetails;
-  termsAndConditions: string[];
-  status: 'pending' | 'payment_received' | 'expired' | 'converted_to_order';
-  paymentReceivedDate?: string;
-  notes: string;
-}
+// Duplicate ProformaInvoice interface removed - using the one defined above
 
 export interface FabricSpecification {
   type: string;
@@ -227,19 +284,7 @@ export interface ProductionRecord {
   efficiency: number; // percentage
 }
 
-// Advance Payment Records - Module 4: Actual payments against proforma invoices
-export interface AdvancePayment {
-  id: string;
-  proformaInvoiceId: string;
-  customerId: string;
-  customerName: string;
-  amount: number;
-  paymentDate: string;
-  paymentMethod: 'RTGS' | 'NEFT' | 'Cash' | 'Cheque' | 'UPI';
-  transactionReference: string;
-  status: 'received' | 'verified' | 'adjusted';
-  notes: string;
-}
+// Duplicate AdvancePayment interface removed - using the one defined earlier
 
 // Final GST Invoices - Module 10: Post-delivery billing
 export interface FinalInvoice {
@@ -306,37 +351,182 @@ export interface LoyaltyTransaction {
 }
 
 // Mock Data
+export const mockBusinessProfiles: BusinessProfile[] = [
+  // Customer Companies (have made advance payments)
+  {
+    id: 'bp-gujarat-garments',
+    companyName: 'Gujarat Garments',
+    gstNumber: '24GUJARAT5566P9Q',
+    panNumber: 'ABCDE1234F',
+    registeredAddress: {
+      street: '123 Textile Hub, Ring Road',
+      city: 'Surat',
+      state: 'Gujarat',
+      pincode: '395007',
+      country: 'India'
+    },
+    contactPerson: 'Kiran Patel',
+    phone: '+91 99884 55667',
+    email: 'kiran@gujaratgarments.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'March 15, 2024',
+    firstPaymentProjectId: 'SO-002',
+    
+    businessType: 'Garment Manufacturing & Trading',
+    specialization: 'Casual wear fabrics, export quality, bulk orders',
+    employeeCount: '200+ employees',
+    establishedYear: '2018',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 975000,
+    averageOrderValue: 975000,
+    
+    creditLimit: 2000000,
+    paymentScore: 85,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    preferences: {
+      paymentMethod: 'RTGS/NEFT - HDFC Bank',
+      deliveryPreference: 'Factory pickup with quality inspection',
+      qualityRequirements: 'Export quality, consistent dyeing, GSM 140-180',
+      communication: 'WhatsApp preferred for order updates, calls 9 AM - 6 PM',
+      specialNotes: 'First-time customer - reliable and fast decision maker.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Mixed casual wear fabrics', 'Cotton blends', 'Export quality materials']
+  },
+  {
+    id: 'bp-baroda-fashion',
+    companyName: 'Baroda Fashion House',
+    gstNumber: '24BARODA7788Q1W',
+    panNumber: 'FGHIJ5678K',
+    registeredAddress: {
+      street: '456 Fashion Street, Alkapuri',
+      city: 'Vadodara',
+      state: 'Gujarat',
+      pincode: '390007',
+      country: 'India'
+    },
+    contactPerson: 'Rajesh Mehta',
+    phone: '+91 98765 43210',
+    email: 'rajesh@barodafashion.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'April 02, 2024',
+    firstPaymentProjectId: 'SO-004',
+    
+    businessType: 'Fashion House & Seasonal Collections',
+    specialization: 'Seasonal fabrics, fashion trends, premium collections',
+    employeeCount: '150+ employees',
+    establishedYear: '2015',
+    
+    totalOrders: 1,
+    activeOrders: 0,
+    totalRevenue: 735000,
+    averageOrderValue: 735000,
+    
+    creditLimit: 1500000,
+    paymentScore: 95,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    preferences: {
+      paymentMethod: 'RTGS - SBI Bank',
+      deliveryPreference: 'Direct delivery to warehouse',
+      qualityRequirements: 'Premium quality, color fastness, trendy designs',
+      communication: 'Email preferred, calls for urgent matters only',
+      specialNotes: 'Excellent payment behavior - completed first order successfully.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Seasonal fashion fabrics', 'Trendy designs', 'Premium quality materials']
+  }
+];
+
 export const mockLeads: Lead[] = [
-  // ACTIVE LEADS - Currently in lead management process
+  // ACTIVE LEADS - Currently in lead management process (no BusinessProfile yet)
   {
     id: 'lead-001',
     companyName: 'Mumbai Cotton Mills',
-    contactPerson: 'Pradeep Kumar',
     location: 'Mumbai',
-    contact: '+91 98765 11111 | pradeep@mumbaicomills.com',
     business: 'Cotton fabric manufacturing, 300+ employees',
+    contactPerson: 'Pradeep Kumar',
+    designation: 'Purchase Manager',
+    department: 'Procurement',
+    contact: '+91 98765 11111 | pradeep@mumbaicomills.com',
+    phone: '+91 98765 11111',
+    email: 'pradeep@mumbaicomills.com',
     inquiry: 'Industrial cotton fabric - 8,000 yards',
     budget: '₹12-15 lakhs',
     timeline: '45 days',
-    lastContact: 'Today 10:30 AM - "Very interested, send samples"',
     priority: 'hot',
+    lastContact: 'Today 10:30 AM - "Very interested, send samples"',
     notes: 'New potential customer. Quick decision maker. Needs samples by Friday.',
     conversionStatus: 'active_lead'
   },
   {
     id: 'lead-002',
     companyName: 'Surat Fashion House',
-    contactPerson: 'Meera Patel',
     location: 'Surat',
-    contact: '+91 99887 22222 | meera@suratfashion.com',
     business: 'Fashion garments, mid-scale operation',
+    contactPerson: 'Meera Patel',
+    designation: 'Production Head',
+    department: 'Production',
+    contact: '+91 99887 22222 | meera@suratfashion.com',
+    phone: '+91 99887 22222',
+    email: 'meera@suratfashion.com',
     inquiry: 'Mixed fabric for seasonal wear - 6,000 yards',
     budget: '₹10-14 lakhs',
     timeline: '60 days',
-    lastContact: 'Yesterday - "Comparing suppliers, will decide soon"',
     priority: 'warm',
+    lastContact: 'Yesterday - "Comparing suppliers, will decide soon"',
     notes: 'Price-sensitive buyer. Interested in long-term partnership.',
     conversionStatus: 'quote_sent'
+  },
+  // CONVERTED LEADS - Linked to existing customers
+  {
+    id: 'gujarat-002',
+    businessProfileId: 'bp-gujarat-garments',
+    companyName: 'Gujarat Garments',
+    location: 'Surat',
+    business: 'Garment Manufacturing & Trading',
+    contactPerson: 'Kiran Patel',
+    designation: 'Owner',
+    department: 'Management',
+    contact: '+91 99884 55667 | kiran@gujaratgarments.com',
+    phone: '+91 99884 55667',
+    email: 'kiran@gujaratgarments.com',
+    inquiry: 'Export quality cotton fabric - 5,000 yards',
+    budget: '₹8-10 lakhs',
+    timeline: '30 days',
+    priority: 'hot',
+    lastContact: 'Converted to customer on March 15, 2024',
+    notes: 'Successfully converted to customer. First order completed successfully.',
+    conversionStatus: 'converted_to_customer',
+    convertedToCustomerDate: 'March 15, 2024'
+  },
+  {
+    id: 'baroda-004',
+    businessProfileId: 'bp-baroda-fashion',
+    companyName: 'Baroda Fashion House',
+    location: 'Vadodara',
+    business: 'Fashion House & Seasonal Collections',
+    contactPerson: 'Rajesh Mehta',
+    designation: 'Creative Director',
+    department: 'Design',
+    contact: '+91 98765 43210 | rajesh@barodafashion.com',
+    phone: '+91 98765 43210',
+    email: 'rajesh@barodafashion.com',
+    inquiry: 'Premium fashion fabric - 3,500 yards',
+    budget: '₹6-8 lakhs',
+    timeline: '20 days',
+    priority: 'warm',
+    lastContact: 'Converted to customer on April 02, 2024',
+    notes: 'Excellent payment behavior - completed first order successfully.',
+    conversionStatus: 'converted_to_customer',
+    convertedToCustomerDate: 'April 02, 2024'
   },
   {
     id: 'lead-003',
@@ -367,7 +557,7 @@ export const mockLeads: Lead[] = [
     lastContact: 'Today 2:30 PM - "Will pay advance by tomorrow"',
     priority: 'hot',
     notes: 'Quote approved. Proforma invoice sent. Advance payment expected tomorrow.',
-    conversionStatus: 'awaiting_payment'
+    conversionStatus: 'proforma_sent'
   },
   // CONVERTED LEADS - Examples of successful conversions
   {
@@ -384,41 +574,75 @@ export const mockLeads: Lead[] = [
     priority: 'hot',
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_customer',
-    convertedCustomerId: 'gujarat-fabrics',
-    conversionDate: 'March 31, 2024'
+    convertedToCustomerDate: 'March 31, 2024',
+    businessProfileId: 'gujarat-garments'
   }
 ];
 
 export const mockQuotes: Quote[] = [
+  // Quotes for active leads (no BusinessProfile yet)
   {
     id: 'QT-001',
-    leadId: 'rajesh-001',
-    companyName: 'Rajesh Textiles',
-    location: 'Ahmedabad',
+    leadId: 'lead-001',
+    companyName: 'Mumbai Cotton Mills',
+    location: 'Mumbai',
     quoteDate: 'March 15, 2024',
     validUntil: 'March 30, 2024',
-    items: 'High-grade cotton fabric - 10,000 yards @ ₹185/yard',
-    totalAmount: 1850000,
-    status: 'approved',
-    statusMessage: 'Quote approved by lead - Awaiting proforma invoice and advance payment',
-    proformaInvoiceId: 'PI-001',
-    advancePaymentRequired: 925000, // 50% advance
-    advancePaymentStatus: 'awaiting'
+    items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard',
+    totalAmount: 1480000,
+    status: 'pending',
+    statusMessage: 'Quote sent - Awaiting customer response',
+    advancePaymentRequired: 740000, // 50% advance
+    advancePaymentStatus: 'not_requested'
   },
   {
-    id: 'QT-001B',
-    leadId: 'rajesh-001',
-    companyName: 'Rajesh Textiles',
-    location: 'Ahmedabad',
+    id: 'QT-002',
+    leadId: 'lead-002',
+    companyName: 'Surat Fashion House',
+    location: 'Surat',
     quoteDate: 'March 18, 2024',
     validUntil: 'April 5, 2024',
-    items: 'Premium cotton fabric - 8,000 yards @ ₹210/yard (Alternative Quote)',
-    totalAmount: 1680000,
-    status: 'pending',
-    statusMessage: 'Alternative premium quote - Lead comparing with main quote',
-    proformaInvoiceId: undefined,
-    advancePaymentRequired: 840000, // 50% advance
-    advancePaymentStatus: 'not_requested'
+    items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
+    totalAmount: 1320000,
+    status: 'approved',
+    statusMessage: 'Quote approved - Ready for proforma invoice and advance payment',
+    advancePaymentRequired: 660000, // 50% advance
+    advancePaymentStatus: 'awaiting'
+  },
+  // Quotes for converted customers (linked to BusinessProfile)
+  {
+    id: 'QT-GJ-002',
+    leadId: 'gujarat-002',
+    businessProfileId: 'bp-gujarat-garments',
+    companyName: 'Gujarat Garments',
+    location: 'Surat',
+    quoteDate: 'March 10, 2024',
+    validUntil: 'March 25, 2024',
+    items: 'Export quality cotton fabric - 5,000 yards @ ₹195/yard',
+    totalAmount: 975000,
+    status: 'approved',
+    statusMessage: 'Quote approved - Advance payment received, customer created',
+    approvalDate: 'March 12, 2024',
+    proformaInvoiceId: 'PI-GJ-002',
+    advancePaymentRequired: 487500, // 50% advance
+    advancePaymentStatus: 'received' // This triggered customer creation
+  },
+  {
+    id: 'QT-BR-004',
+    leadId: 'baroda-004',
+    businessProfileId: 'bp-baroda-fashion',
+    companyName: 'Baroda Fashion House',
+    location: 'Vadodara',
+    quoteDate: 'March 28, 2024',
+    validUntil: 'April 15, 2024',
+    items: 'Premium fashion fabric - 3,500 yards @ ₹210/yard',
+    totalAmount: 735000,
+    status: 'approved',
+    statusMessage: 'Quote approved - Advance payment received, customer created',
+    approvalDate: 'March 30, 2024',
+    proformaInvoiceId: 'PI-BR-004',
+    advancePaymentRequired: 367500, // 50% advance
+    advancePaymentStatus: 'received' // This triggered customer creation
   },
   {
     id: 'QT-002',
@@ -487,134 +711,37 @@ export const mockSalesOrders: SalesOrder[] = [
   {
     id: 'SO-002',
     quoteId: 'QT-002',
-    customerId: 'gujarat-garments', // Auto-created when advance payment received
-    customerName: 'Gujarat Garments',
-    location: 'Surat',
-    orderDate: 'March 15, 2024', // Same day advance payment received
+    businessProfileId: 'gujarat-garments',
+    advancePaymentId: 'ADV-QT-002-001',
+    orderDate: 'March 15, 2024',
     deliveryDate: 'April 10, 2024',
     items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
-    status: 'production',
+    status: 'production' as const,
     statusMessage: 'Auto-created after advance payment - Currently in production (60% done)',
-    paymentStatus: 'Advance paid - Balance due on delivery',
+    paymentStatus: 'partial' as const,
     productionStatus: 'In production - 60% completed',
-    advancePaymentReceived: 487500, // 50% advance that triggered creation
     balancePaymentDue: 487500
   },
   // SO-004: Created when QT-004 advance payment was received, triggering customer conversion
   {
     id: 'SO-004',
     quoteId: 'QT-004',
-    customerId: 'baroda-fashion', // Auto-created when advance payment received
-    customerName: 'Baroda Fashion House',
-    location: 'Vadodara',
-    orderDate: 'March 10, 2024', // Same day advance payment received
+    businessProfileId: 'baroda-fashion',
+    advancePaymentId: 'ADV-QT-004-001',
+    orderDate: 'March 10, 2024',
     deliveryDate: 'April 5, 2024',
     items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
     totalAmount: 735000,
-    status: 'completed',
+    status: 'completed' as const,
     statusMessage: 'Auto-created after advance payment - Order completed successfully',
-    paymentStatus: 'Fully paid - Advance + Balance completed',
+    paymentStatus: 'completed' as const,
     productionStatus: 'Completed and delivered',
-    advancePaymentReceived: 367500, // 50% advance that triggered creation
-    balancePaymentDue: 0 // Balance was paid
+    balancePaymentDue: 0
   }
 ];
 
-export const mockCustomers: Customer[] = [
-  // Customer 1: Gujarat Garments - Auto-created when QT-002 advance payment received
-  {
-    id: 'gujarat-garments',
-    name: 'Gujarat Garments',
-    location: 'Surat',
-    contactPerson: 'Kiran Patel',
-    phone: '+91 99884 55667',
-    email: 'kiran@gujaratgarments.com',
-    customerSince: 'March 15, 2024', // Auto-created on advance payment date
-    totalBusiness: 975000, // From first and only order SO-002
-    totalOrders: 1,
-    conversionRate: 100, // Perfect - paid advance immediately after quote approval
-    paymentStatus: 'good',
-    paymentStatusMessage: 'Advance paid - Balance due on delivery',
-    businessType: 'Garment Manufacturing & Trading',
-    specialization: 'Casual wear fabrics, export quality, bulk orders',
-    employeeCount: '200+ employees',
-    gstNumber: '24GUJARAT5566P9Q',
-    preferences: {
-      paymentMethod: 'RTGS/NEFT - HDFC Bank',
-      deliveryPreference: 'Factory pickup with quality inspection',
-      qualityRequirements: 'Export quality, consistent dyeing, GSM 140-180',
-      communication: 'WhatsApp preferred for order updates, calls 9 AM - 6 PM',
-      specialNotes: 'New customer - converted from lead after first advance payment. Reliable and fast decision maker.'
-    },
-    priority: 'hot',
-    priorityLabel: 'New Customer - First Order in Production',
-    loyalty: {
-      tier: 'Bronze', // New customer, first order
-      points: 975,
-      annualVolume: 5000, // yards from first order
-      totalBusinessValue: 975000,
-      discountPercentage: 1, // New customer rate
-      paymentTerms: 15, // New customer terms
-      priorityLevel: 2,
-      benefits: ['New customer support', 'Quality guidance', 'Production priority'],
-      anniversaryDate: 'March 15, 2024',
-      nextTierRequirement: 'Complete 3 orders successfully for Silver tier'
-    },
-    fabricPreferences: ['Mixed casual wear fabrics', 'Cotton blends', 'Export quality materials'],
-    // New fields for automated conversion tracking
-    originalLeadId: 'gujarat-002',
-    conversionDate: 'March 15, 2024',
-    firstAdvancePaymentId: 'AP-002',
-    firstSalesOrderId: 'SO-002'
-  },
-  // Customer 2: Baroda Fashion House - Auto-created when QT-004 advance payment received  
-  {
-    id: 'baroda-fashion',
-    name: 'Baroda Fashion House',
-    location: 'Vadodara',
-    contactPerson: 'Mehul Shah',
-    phone: '+91 97645 33221',
-    email: 'mehul@barodafashion.com',
-    customerSince: 'March 10, 2024', // Auto-created on advance payment date
-    totalBusiness: 735000, // From first and only order SO-004
-    totalOrders: 1,
-    conversionRate: 100, // Perfect - paid advance after quote approval
-    paymentStatus: 'excellent',
-    paymentStatusMessage: 'Fully paid - Order completed successfully',
-    businessType: 'Fashion House & Seasonal Collections',
-    specialization: 'Seasonal fabrics, fashion trends, premium collections',
-    employeeCount: '120+ employees',
-    gstNumber: '24BARODA7788R2S',
-    preferences: {
-      paymentMethod: 'Online banking - State Bank of India',
-      deliveryPreference: 'Express delivery for urgent orders',
-      qualityRequirements: 'Premium finish, trend-aligned colors, consistent quality',
-      communication: 'Phone calls preferred, English/Gujarati',
-      specialNotes: 'New customer - converted from lead. Seasonal buyer with urgent delivery needs. Excellent payment record.'
-    },
-    priority: 'hot',
-    priorityLabel: 'New Customer - Excellent Payment Record',
-    loyalty: {
-      tier: 'Silver', // Promoted due to full payment + order completion
-      points: 735,
-      annualVolume: 3500, // yards from first order
-      totalBusinessValue: 735000,
-      discountPercentage: 2, // Silver tier rate
-      paymentTerms: 20, // Improved terms due to excellent payment
-      priorityLevel: 2,
-      benefits: ['Fast payment recognition', 'Priority delivery', 'Seasonal collection access'],
-      anniversaryDate: 'March 10, 2024',
-      nextTierRequirement: 'Maintain payment excellence, reach ₹15L for Gold tier'
-    },
-    fabricPreferences: ['Seasonal collections', 'Fashion trends', 'Premium finish textiles', 'Updated fabric varieties'],
-    // New fields for automated conversion tracking
-    originalLeadId: 'baroda-003',
-    conversionDate: 'March 10, 2024',
-    firstAdvancePaymentId: 'AP-004',
-    firstSalesOrderId: 'SO-004'
-  }
-];
+// mockBusinessProfiles removed - using mockBusinessProfiles instead for unified customer data model
 
 export const mockCommunications: Communication[] = [
   {
@@ -650,126 +777,48 @@ export const companyBankDetails: BankDetails = {
 export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2024-001',
-    customerId: 'rajesh-textiles',
     quoteId: 'QT-001',
-    customerName: 'Rajesh Textiles',
+    leadId: 'L-001',
+    businessProfileId: 'rajesh-textiles',
     issueDate: 'March 18, 2024',
-    validUntil: 'April 2, 2024',
-    items: [
-      {
-        description: 'High-grade Export Cotton Fabric',
-        fabricType: 'Premium Cotton',
-        gsm: 180,
-        width: '44 inches',
-        quantity: 10000,
-        rate: 185,
-        amount: 1850000
-      }
-    ],
+    dueDate: 'April 2, 2024',
     subtotal: 1850000,
-    gstRate: 5,
     gstAmount: 92500,
     totalAmount: 1942500,
-    advancePercentage: 50,
     advanceAmount: 971250,
     bankDetails: companyBankDetails,
-    termsAndConditions: [
-      '50% advance payment required before production start',
-      'Delivery within 30 days from advance payment receipt',
-      'Quality specifications as per export standards',
-      'Final payment within 15 days of delivery',
-      'GST @ 5% as per current government rates',
-      'Material: 100% cotton, GSM 180, width 44 inches',
-      'Color fastness: Grade 4-5 as per international standards',
-      'Packaging: Standard bales suitable for export'
-    ],
     status: 'pending',
-    notes: 'Premium customer - priority production after advance payment'
+    paymentInstructions: 'Please pay 50% advance (₹9,71,250) within 15 days to confirm order'
   },
   {
     id: 'PI-2024-002',
-    customerId: 'morbi-cotton-mills',
     quoteId: 'QT-004',
-    customerName: 'Morbi Cotton Mills',
+    leadId: 'L-004', 
+    businessProfileId: 'morbi-cotton-mills',
     issueDate: 'March 25, 2024',
-    validUntil: 'April 10, 2024',
-    items: [
-      {
-        description: 'Industrial Cotton Canvas',
-        fabricType: 'Industrial Cotton',
-        gsm: 220,
-        width: '58 inches',
-        quantity: 5000,
-        rate: 165,
-        amount: 825000
-      }
-    ],
+    dueDate: 'April 10, 2024',
     subtotal: 825000,
-    gstRate: 5,
     gstAmount: 41250,
     totalAmount: 866250,
-    advancePercentage: 30,
     advanceAmount: 259875,
     bankDetails: companyBankDetails,
-    termsAndConditions: [
-      '30% advance payment for new customer',
-      'Production timeline: 20 days from advance receipt',
-      'Quality inspection welcome at factory',
-      'Industrial grade specifications maintained',
-      'GST @ 5% applicable',
-      'Material: Industrial cotton canvas, 220 GSM',
-      'Suitable for industrial applications',
-      'Payment terms: 15 days for new customers'
-    ],
     status: 'pending',
-    notes: 'New customer - first order evaluation, quality focus'
+    paymentInstructions: '30% advance payment (₹2,59,875) required for new customer'
   },
   {
     id: 'PI-2024-003',
-    customerId: 'bhavnagar-export-house',
     quoteId: 'QT-005',
-    customerName: 'Bhavnagar Export House',
+    leadId: 'L-005',
+    businessProfileId: 'bhavnagar-export-house',
     issueDate: 'March 28, 2024',
-    validUntil: 'April 15, 2024',
-    items: [
-      {
-        description: 'Organic Cotton Fabric - Export Grade',
-        fabricType: 'Certified Organic Cotton',
-        gsm: 150,
-        width: '44 inches',
-        quantity: 25000,
-        rate: 220,
-        amount: 5500000
-      },
-      {
-        description: 'Combed Cotton Premium',
-        fabricType: 'Combed Cotton',
-        gsm: 180,
-        width: '58 inches',
-        quantity: 15000,
-        rate: 245,
-        amount: 3675000
-      }
-    ],
+    dueDate: 'April 15, 2024',
     subtotal: 9175000,
-    gstRate: 5,
     gstAmount: 458750,
     totalAmount: 9633750,
-    advancePercentage: 40,
     advanceAmount: 3853500,
     bankDetails: companyBankDetails,
-    termsAndConditions: [
-      '40% advance payment required for export orders',
-      'OEKO-TEX Standard 100 certification provided',
-      'Delivery: FOB Kandla Port within 45 days',
-      'LC/Bank guarantee acceptable for payment',
-      'Quality: Zero defects policy for export',
-      'Organic certification documents provided',
-      'Container loading supervision available',
-      'Export documentation support included'
-    ],
     status: 'pending',
-    notes: 'High-value export order - requires certifications and documentation'
+    paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee'
   }
 ];
 
@@ -875,24 +924,29 @@ export const getSalesOrderById = (id: string): SalesOrder | undefined => {
   return mockSalesOrders.find(order => order.id === id);
 };
 
-export const getCustomerById = (id: string): Customer | undefined => {
-  return mockCustomers.find(customer => customer.id === id);
+export const getBusinessProfileById = (id: string): BusinessProfile | undefined => {
+  return mockBusinessProfiles.find(profile => profile.id === id);
+};
+
+// Legacy compatibility function
+export const getCustomerById = (id: string): BusinessProfile | undefined => {
+  return getBusinessProfileById(id);
 };
 
 export const getQuotesByCustomerId = (customerId: string): Quote[] => {
   // Since quotes are linked to leads, find quotes for leads that were converted to this customer
-  const customer = mockCustomers.find(c => c.id === customerId);
+  const customer = mockBusinessProfiles.find(c => c.id === customerId);
   if (!customer || !customer.originalLeadId) return [];
   return mockQuotes.filter(quote => quote.leadId === customer.originalLeadId);
 };
 
 export const getSalesOrdersByCustomerId = (customerId: string): SalesOrder[] => {
-  return mockSalesOrders.filter(order => order.customerId === customerId);
+  return mockSalesOrders.filter(order => order.businessProfileId === customerId);
 };
 
 export const getLeadsByCustomerId = (customerId: string): Lead[] => {
   // Find leads that were converted to this customer
-  const customer = mockCustomers.find(c => c.id === customerId);
+  const customer = mockBusinessProfiles.find(c => c.id === customerId);
   if (!customer || !customer.originalLeadId) return [];
   return mockLeads.filter(lead => lead.id === customer.originalLeadId);
 };
@@ -905,7 +959,7 @@ export const getProformaInvoiceById = (id: string): ProformaInvoice | undefined 
 };
 
 export const getProformaInvoicesByCustomerId = (customerId: string): ProformaInvoice[] => {
-  return mockProformaInvoices.filter(pi => pi.customerId === customerId);
+  return mockProformaInvoices.filter(pi => pi.businessProfileId === customerId);
 };
 
 export const getProformaInvoiceByQuoteId = (quoteId: string): ProformaInvoice | undefined => {
@@ -915,16 +969,16 @@ export const getProformaInvoiceByQuoteId = (quoteId: string): ProformaInvoice | 
 // Customer Loyalty Functions
 export const getCustomerLoyaltyTier = (customerId: string): string => {
   const customer = getCustomerById(customerId);
-  return customer?.loyalty.tier || 'Bronze';
+  return customer?.loyalty?.tier || 'Bronze';
 };
 
 export const getCustomerDiscount = (customerId: string): number => {
   const customer = getCustomerById(customerId);
-  return customer?.loyalty.discountPercentage || 0;
+  return customer?.loyalty?.discountPercentage || 0;
 };
 
-export const getCustomersbyLoyaltyTier = (tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum'): Customer[] => {
-  return mockCustomers.filter(customer => customer.loyalty.tier === tier);
+export const getCustomersbyLoyaltyTier = (tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum'): BusinessProfile[] => {
+  return mockBusinessProfiles.filter(customer => customer.loyalty?.tier === tier);
 };
 
 // Fabric Specification Functions
@@ -942,40 +996,40 @@ export const getFabricsByGSMRange = (minGSM: number, maxGSM: number): FabricSpec
 
 // Business Analytics Functions
 export const calculateTotalBusiness = (): number => {
-  return mockCustomers.reduce((total, customer) => total + customer.totalBusiness, 0);
+  return mockBusinessProfiles.reduce((total, customer) => total + customer.totalRevenue, 0);
 };
 
-export const getTopCustomersByBusiness = (limit: number = 5): Customer[] => {
-  return [...mockCustomers]
-    .sort((a, b) => b.totalBusiness - a.totalBusiness)
+export const getTopCustomersByBusiness = (limit: number = 5): BusinessProfile[] => {
+  return [...mockBusinessProfiles]
+    .sort((a, b) => b.totalRevenue - a.totalRevenue)
     .slice(0, limit);
 };
 
-export const getCustomersByPaymentStatus = (status: 'good' | 'overdue' | 'pending'): Customer[] => {
-  return mockCustomers.filter(customer => customer.paymentStatus === status);
+export const getCustomersByPaymentStatus = (status: 'good' | 'overdue' | 'pending'): BusinessProfile[] => {
+  return mockBusinessProfiles.filter(customer => customer.creditStatus === status);
 };
 
 export const getAverageOrderValue = (): number => {
-  const totalOrders = mockCustomers.reduce((total, customer) => total + customer.totalOrders, 0);
+  const totalOrders = mockBusinessProfiles.reduce((total, customer) => total + customer.totalOrders, 0);
   const totalBusiness = calculateTotalBusiness();
   return totalOrders > 0 ? totalBusiness / totalOrders : 0;
 };
 
 // Gujarat-Specific Business Logic
-export const getCustomersByLocation = (location: string): Customer[] => {
-  return mockCustomers.filter(customer => 
-    customer.location.toLowerCase().includes(location.toLowerCase())
+export const getCustomersByLocation = (location: string): BusinessProfile[] => {
+  return mockBusinessProfiles.filter(customer => 
+    customer.registeredAddress.city.toLowerCase().includes(location.toLowerCase())
   );
 };
 
-export const getCustomersBySpecialization = (specialization: string): Customer[] => {
-  return mockCustomers.filter(customer => 
+export const getCustomersBySpecialization = (specialization: string): BusinessProfile[] => {
+  return mockBusinessProfiles.filter(customer => 
     customer.specialization.toLowerCase().includes(specialization.toLowerCase())
   );
 };
 
-export const getSeasonalCustomers = (): Customer[] => {
-  return mockCustomers.filter(customer => 
+export const getSeasonalCustomers = (): BusinessProfile[] => {
+  return mockBusinessProfiles.filter(customer => 
     customer.preferences.specialNotes.toLowerCase().includes('seasonal') ||
     customer.specialization.toLowerCase().includes('wedding') ||
     customer.specialization.toLowerCase().includes('festival')
@@ -1358,50 +1412,55 @@ export const mockAdvancePayments: AdvancePayment[] = [
   {
     id: 'AP-2024-001',
     proformaInvoiceId: 'PI-2024-001',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    quoteId: 'QT-001',
+    leadId: 'L-001',
+    businessProfileId: 'rajesh-textiles',
     amount: 971250,
-    paymentDate: 'March 19, 2024',
-    paymentMethod: 'RTGS',
-    transactionReference: 'HDFC240319RT12345',
-    status: 'verified',
-    notes: 'Advance payment received on time. Production can start immediately.'
+    dueDate: 'April 2, 2024',
+    status: 'received',
+    receivedDate: 'March 19, 2024',
+    receivedAmount: 971250,
+    bankReference: 'HDFC240319RT12345',
+    paymentMethod: 'RTGS'
   },
   {
     id: 'AP-2024-002',
     proformaInvoiceId: 'PI-2024-002',
-    customerId: 'morbi-cotton-mills',
-    customerName: 'Morbi Cotton Mills',
+    quoteId: 'QT-004',
+    leadId: 'L-004',
+    businessProfileId: 'morbi-cotton-mills',
     amount: 259875,
-    paymentDate: 'March 28, 2024',
-    paymentMethod: 'NEFT',
-    transactionReference: 'SBI240328NF67890',
-    status: 'verified',
-    notes: 'First advance payment from new customer. Received successfully.'
+    dueDate: 'April 10, 2024',
+    status: 'received',
+    receivedDate: 'March 28, 2024',
+    receivedAmount: 259875,
+    bankReference: 'SBI240328NF67890',
+    paymentMethod: 'NEFT'
   },
   {
     id: 'AP-2024-003',
     proformaInvoiceId: 'PI-2024-003',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
-    amount: 550000,
-    paymentDate: 'March 24, 2024',
-    paymentMethod: 'RTGS',
-    transactionReference: 'BOB240324RT24680',
-    status: 'adjusted',
-    notes: 'Regular customer advance payment. Adjusted against final invoice.'
+    quoteId: 'QT-005',
+    leadId: 'L-005',
+    businessProfileId: 'bhavnagar-export-house',
+    amount: 3853500,
+    dueDate: 'April 15, 2024',
+    status: 'pending',
+    paymentMethod: 'RTGS'
   },
   {
     id: 'AP-2024-004',
     proformaInvoiceId: 'PI-2024-004',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    quoteId: 'QT-006',
+    leadId: 'L-006',
+    businessProfileId: 'gujarat-fabrics',
     amount: 750000,
-    paymentDate: 'March 31, 2024',
-    paymentMethod: 'RTGS',
-    transactionReference: 'ICICI240331RT13579',
-    status: 'adjusted',
-    notes: 'Premium customer - always pays on time. Production completed successfully.'
+    dueDate: 'April 20, 2024',
+    status: 'received',
+    receivedDate: 'March 31, 2024',
+    receivedAmount: 750000,
+    bankReference: 'ICICI240331RT13579',
+    paymentMethod: 'RTGS'
   }
 ];
 
@@ -1762,7 +1821,7 @@ export const getAdvancePaymentByProformaId = (proformaId: string): AdvancePaymen
 };
 
 export const getAdvancePaymentsByCustomerId = (customerId: string): AdvancePayment[] => {
-  return mockAdvancePayments.filter(ap => ap.customerId === customerId);
+  return mockAdvancePayments.filter(ap => ap.businessProfileId === customerId);
 };
 
 export const getFinalInvoiceById = (id: string): FinalInvoice | undefined => {
@@ -1897,8 +1956,8 @@ export const getOrderFulfillmentStatus = (salesOrderId: string) => {
   };
 };
 
-export const getTopPerformingCustomers = (limit: number = 5): Customer[] => {
-  return [...mockCustomers]
+export const getTopPerformingCustomers = (limit: number = 5): BusinessProfile[] => {
+  return [...mockBusinessProfiles]
     .sort((a, b) => {
       const aRating = getAverageCustomerRating(a.id);
       const bRating = getAverageCustomerRating(b.id);

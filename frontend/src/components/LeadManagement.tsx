@@ -116,9 +116,9 @@ function LeadManagement({
               <div className={styles.leadHeader}>
                 <h3>
                   <span 
-                    onClick={() => lead.convertedCustomerId ? onShowCustomerProfile?.(lead.convertedCustomerId) : null}
-                    style={{cursor: lead.convertedCustomerId ? 'pointer' : 'default', textDecoration: lead.convertedCustomerId ? 'underline' : 'none'}}
-                    title={lead.convertedCustomerId ? 'View customer profile' : 'Not yet converted to customer'}
+                    onClick={() => lead.businessProfileId ? onShowCustomerProfile?.(lead.businessProfileId) : null}
+                    style={{cursor: lead.businessProfileId ? 'pointer' : 'default', textDecoration: lead.businessProfileId ? 'underline' : 'none'}}
+                    title={lead.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
                   >
                     {lead.companyName} - {lead.location}
                   </span>

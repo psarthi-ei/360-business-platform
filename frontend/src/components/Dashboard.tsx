@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockLeads, mockQuotes, mockSalesOrders, mockCustomers, formatCurrency } from '../data/mockData';
+import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Dashboard.module.css';
 
@@ -47,7 +47,7 @@ function Dashboard({
   const hotLeads = mockLeads.filter(lead => lead.priority === 'hot').length;
   const pendingQuotes = mockQuotes.filter(quote => quote.status === 'pending').length;
   const totalRevenue = mockSalesOrders.reduce((sum, order) => sum + order.totalAmount, 0);
-  const totalCustomers = mockCustomers.length;
+  const totalCustomers = mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length;
   
   // Quick metrics
   const conversionRate = Math.round((mockSalesOrders.length / totalLeads) * 100);
