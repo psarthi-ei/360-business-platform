@@ -474,7 +474,498 @@ For each new screen, ensure:
 
 ---
 
-**Document Updated**: Sep 7, 2025  
-**Latest Screen**: HomePage (marketing landing page)  
-**Next Update**: After authentication system implementation  
-**Purpose**: Document comprehensive design system for ElevateIdea platform including marketing and application screens
+---
+
+## Process-Driven Dashboard Design
+
+### **24. Business Process Entry Points Strategy**
+**Decision**: Replace functional categories with 4 business process entry points
+**Rationale**:
+- Textile manufacturers think in business processes, not software modules
+- Natural workflow progression reduces cognitive load
+- Contextual intelligence guides users through connected business operations
+- Eliminates artificial separation between related business activities
+
+### **25. Four Core Business Process Areas**
+
+#### **🔥 NEW INQUIRIES (નવી પૂછપરછ)**
+**Process Focus**: Lead → Quote conversion workflow
+**Business Perspective**: "Who called today? What quotes need to be sent?"
+
+**Visual Design**:
+- **Color**: Hot orange gradient (#ff6b35 to #f7931e) 
+- **Priority Indicators**: Badge showing urgent inquiry count
+- **Sub-Actions Grid**: 2x2 layout for mobile optimization
+
+**Sub-Actions**:
+```
+[📞 CALL NOW]          [✍️ CREATE QUOTES]
+Hot inquiries needing   Leads ready for pricing
+immediate response      Quick quote generation
+
+[📋 FOLLOW UP]         [📊 INQUIRY REPORTS]  
+Warm leads to nurture   Source analysis & trends
+Schedule callbacks      Conversion tracking
+```
+
+**Smart Context**:
+- Show "→ 3 ready for quotes" pointing to ACTIVE BUSINESS
+- Display similar customer pricing suggestions
+- Auto-suggest follow-up timing based on lead temperature
+
+#### **💼 ACTIVE BUSINESS (ચાલતો બિઝનેસ)**
+**Process Focus**: Quote → Order → Production workflow  
+**Business Perspective**: "What orders am I working on? What payments should I collect?"
+
+**Visual Design**:
+- **Color**: Professional blue gradient (#4834d4 to #686de0)
+- **Activity Indicators**: Live order count and production status
+- **Progress Tracking**: Visual completion indicators
+
+**Sub-Actions**:
+```
+[💰 COLLECT ADVANCE]   [🔧 IN PRODUCTION]
+Approved quotes ready  Active orders tracking
+30% payment collection Production timeline view
+
+[📤 READY TO SHIP]     [📊 ORDER REPORTS]
+Completed orders       Production efficiency
+Final payment pending  Delay analysis tools
+```
+
+**Smart Context**:
+- Auto-transition approved quotes from NEW INQUIRIES
+- Show "→ ₹2.4L pending" pointing to MONEY MATTERS
+- Production timeline with delivery predictions
+
+#### **💳 MONEY MATTERS (પૈસાનો મામલો)**
+**Process Focus**: Payments → Invoices → Collections workflow
+**Business Perspective**: "Who owes me money? What invoices should I send?"
+
+**Visual Design**:
+- **Color**: Success green gradient (#00d2d3 to #54a0ff)
+- **Financial Indicators**: Outstanding amounts and overdue alerts
+- **Priority Actions**: Payment collection focus
+
+**Sub-Actions**:
+```
+[💰 COLLECT TODAY]     [📄 SEND INVOICES]
+Due payments priority  Proforma & final billing
+Overdue reminders      Automated invoice generation
+
+[📊 MONEY REPORTS]     [🏦 BANK STATUS]
+Cash flow analysis     Account reconciliation  
+Monthly trends         Transaction tracking
+```
+
+**Smart Context**:
+- Auto-receive completed orders from ACTIVE BUSINESS
+- Show aging analysis for overdue payments
+- Link to customer payment history
+
+#### **🤝 CUSTOMERS (મારા ગ્રાહકો)**
+**Process Focus**: Relationship → Retention → Growth workflow
+**Business Perspective**: "Who are my best customers? Who should I call for repeat business?"
+
+**Visual Design**:
+- **Color**: Loyalty purple gradient (#5f27cd to #a55eea)
+- **Relationship Indicators**: VIP customer count and repeat business metrics
+- **Growth Focus**: Expansion opportunity highlights
+
+**Sub-Actions**:
+```
+[👑 VIP CUSTOMERS]     [🎯 TARGET REPEAT]
+High-value regulars    Ready for next order
+Special treatment      Follow-up opportunities
+
+[⭐ GET FEEDBACK]      [📊 CUSTOMER REPORTS]
+Service satisfaction   Purchase pattern analysis
+Quality assessments    Loyalty program metrics
+```
+
+**Smart Context**:
+- Auto-add successful orders from MONEY MATTERS
+- Predict next order timing based on historical patterns
+- Show cross-selling opportunities
+
+### **26. Smart Cross-Navigation System**
+
+#### **Contextual Process Linking**
+**Implementation**: Each process entry point shows relevant connections to other processes
+
+**Cross-Navigation Examples**:
+```typescript
+// From NEW INQUIRIES - Hot Lead Card
+<ContextualActions>
+  <PrimaryAction>📞 Call Rajesh Textiles</PrimaryAction>
+  <SmartLink to="active-business">💼 See Similar Orders (₹2.4L avg)</SmartLink>
+  <SmartLink to="customers">🤝 Customer History (3 orders, always paid)</SmartLink>
+  <SmartLink to="money">💳 Payment Pattern (Net 15 days)</SmartLink>
+</ContextualActions>
+
+// From ACTIVE BUSINESS - Production Order
+<ContextualActions>
+  <PrimaryAction>🔧 Update Production Status</PrimaryAction>
+  <SmartLink to="money">💰 Schedule Final Payment (₹1.2L due)</SmartLink>
+  <SmartLink to="customers">🤝 Customer Profile (VIP status)</SmartLink>
+  <SmartLink to="inquiries">📞 Related Inquiries (2 pending)</SmartLink>
+</ContextualActions>
+```
+
+#### **Process Flow Completion Tracking**
+**Visual Progress Indicators**: Each business process shows completion stages
+
+**NEW INQUIRIES Process Tracker**:
+```
+🔥 Inquiry Received ✅ → 📞 Contact Made (85%) → ✍️ Quote Sent (60%) → 💼 Move to ACTIVE
+```
+
+**ACTIVE BUSINESS Process Tracker**:
+```
+💰 Advance Collected ✅ → 📋 Work Order (75%) → 🔧 Production (45%) → 💳 Move to MONEY
+```
+
+### **27. Enhanced Mobile Process Navigation**
+
+#### **Swipe-Based Process Switching**
+**Interaction Design**: Natural left-right swiping between business processes
+```
+Left Swipe: NEW INQUIRIES → ACTIVE BUSINESS → MONEY → CUSTOMERS
+Right Swipe: CUSTOMERS → MONEY → ACTIVE BUSINESS → NEW INQUIRIES
+Pull Down: Refresh current process data
+Pull Up: Access cross-navigation smart menu
+```
+
+#### **Process-Aware Action Panels**
+**Contextual Actions**: Instead of separate modules, show contextual action panels
+```typescript
+// When viewing Hot Lead in NEW INQUIRIES
+<ContextualPanel>
+  <PrimaryActions>
+    <Action type="call">📞 Call Rajesh Textiles</Action>
+    <Action type="whatsapp">📱 Send WhatsApp</Action>
+  </PrimaryActions>
+  <SmartActions>
+    <SmartAction>📝 Create Quote (2 mins avg)</SmartAction>
+    <SmartAction>🤝 View Customer (3 orders history)</SmartAction>
+    <SmartAction>💼 Similar Orders (₹6.5/meter usual)</SmartAction>
+  </SmartActions>
+</ContextualPanel>
+```
+
+### **28. Business Intelligence Integration**
+
+#### **Smart Suggestions Based on Historical Data**
+**Implementation**: System learns from business patterns to provide contextual intelligence
+```
+// In NEW INQUIRIES - When creating quote
+💡 Smart Suggestion: Similar customer (Shah Textiles) paid ₹6.50/meter 
+for same 60 GSM cotton fabric last month
+
+// In ACTIVE BUSINESS - When collecting advance  
+💡 Prediction: Based on history, Patel Textiles usually pays within 2 days
+Send payment reminder on day 3 if not received
+
+// In CUSTOMERS - When targeting repeat business
+💡 Opportunity: Rajesh Exports orders every 60 days, last order 45 days ago
+90% chance of ₹3L+ order this month - call now
+```
+
+### **29. Voice Command Process Integration**
+
+#### **Process-Specific Voice Commands**
+**Language-Adaptive Commands**: Voice shortcuts for each business process area
+
+**NEW INQUIRIES Voice Commands**:
+```
+English: "Show hot inquiries" / "Call next lead" / "Create quote for Rajesh"
+Gujarati: "હોટ પૂછપરછ બતાવો" / "આગળ લીડને કૉલ કરો" / "રાજેશ માટે કોટ બનાવો"
+Hindi: "गर्म पूछताछ दिखाएं" / "अगली लीड को कॉल करें" / "राजेश के लिए कोट बनाएं"
+```
+
+**MONEY MATTERS Voice Commands**:
+```
+English: "Who owes money?" / "Send payment reminder" / "Show overdue payments"
+Gujarati: "કોને પૈસા આપવાના છે?" / "પેમેન્ટ રિમાઈન્ડર મોકલો" / "બાકી પેમેન્ટ બતાવો"
+Hindi: "किसका पैसा बकाया है?" / "पेमेंट रिमाइंडर भेजें" / "बकाया पेमेंट दिखाएं"
+```
+
+### **30. Implementation Benefits for Textile Manufacturers**
+
+#### **Natural Business Workflow Alignment**
+- **Matches Daily Routine**: Morning inquiries → Active orders → Payment collection → Customer relationships
+- **Reduces Cognitive Load**: Only 4 main choices instead of 12+ technical modules
+- **Contextual Intelligence**: System suggests next logical business actions
+- **Process Completion**: Clear progress tracking for each business workflow
+
+#### **Enhanced User Experience**
+- **Zero Learning Curve**: Business owners immediately understand the process flow
+- **Fast Navigation**: Swipe between processes, contextual actions within each
+- **Smart Suggestions**: Historical data provides business intelligence
+- **Cross-Process Linking**: Related information accessible from any process entry point
+
+---
+
+## Global Search Integration
+
+### **31. Business-Context Global Search Design**
+**Decision**: Implement global search organized by business entities rather than technical data types
+**Rationale**:
+- MSME textile manufacturers search by business context (companies, orders, payments) not database fields
+- Cross-process search enables finding related information across all business workflows
+- Voice-first search supports hands-free operation during factory work
+- Multilingual search matches natural language patterns of Gujarat textile business owners
+
+### **32. Search Categories Aligned with Business Thinking**
+
+#### **🏢 Companies & Customers Search**
+**Business Pattern**: "Find everything about Rajesh Textiles"
+**Search Results Format**:
+```
+🏢 Rajesh Textiles
+├─ 🔥 NEW INQUIRIES: Hot lead - Cotton fabric (2 days ago)
+├─ 💼 ACTIVE BUSINESS: Order #WO2024-034 in production  
+├─ 💳 MONEY MATTERS: No outstanding payments
+└─ 🤝 CUSTOMERS: VIP status, 12 completed orders
+```
+
+**Quick Actions**: 📞 Call | 📱 WhatsApp | 💼 View Orders | 💳 Check Payments | 🤝 Customer Profile
+
+#### **📱 Phone Number Search**
+**Business Pattern**: "Who is this number? What's their status?"
+**Implementation**: Search by phone number returns complete business context
+```
+📱 +91-9876543210
+├─ 🏢 Patel Textiles - Contact: Ramesh Patel
+├─ 📞 Last contact: Yesterday 3:30 PM
+├─ 💼 Active quote: ₹13,000 pending approval
+└─ 🤝 Payment history: Always pays on time
+```
+
+#### **🧵 Materials & Products Search**
+**Business Pattern**: "Show me all cotton fabric inquiries and orders"
+**Search Results**: Cross-process material tracking
+```
+🧵 Cotton 60 GSM
+├─ 🔥 3 hot inquiries - Similar fabric requirements
+├─ 💼 2 active orders - In production queue  
+├─ 💰 Market price: ₹6.50/meter (avg last month)
+└─ 📊 Demand trend: +15% this quarter
+```
+
+#### **💰 Amount & Order Value Search**
+**Business Pattern**: "Find the ₹85,000 payment" or "Which order was ₹2.4L?"
+**Implementation**: Search by monetary amounts across all processes
+```
+💰 ₹85,000
+├─ 💳 Shah Industries - Final payment overdue 3 days
+├─ 💼 Order #WO2024-031 - Delivered last week
+└─ 📄 Invoice #INV-2024-089 - Sent 3 days ago
+```
+
+#### **📅 Date & Timeline Search**
+**Business Pattern**: "What happened last week?" or "September deliveries"
+**Timeline Results**: Business activity by date range
+```
+📅 September 6 - 12
+├─ 📤 3 orders delivered
+├─ 💳 ₹2.4L payments received  
+├─ 🔥 5 new inquiries captured
+└─ 💼 2 orders started production
+```
+
+### **33. Multilingual Search Implementation**
+
+#### **Language-Adaptive Search Input**
+**English Patterns**:
+- "Rajesh Textiles" → Company search
+- "cotton fabric" → Material search  
+- "overdue payments" → Payment status search
+
+**Gujarati Patterns**:
+- "રાજેશ ટેક્સટાઈલ્સ" → Company search
+- "કપાસ ફેબ્રિક" → Material search
+- "બાકી પેમેન્ટ" → Payment status search
+
+**Hindi Patterns**:
+- "राजेश टेक्सटाइल्स" → Company search
+- "कपास फैब्रिक" → Material search  
+- "बकाया पेमेंट" → Payment status search
+
+#### **Voice Search Commands**
+```typescript
+const voiceSearchCommands = {
+  english: [
+    "Find Rajesh Textiles",
+    "Show all cotton orders", 
+    "Who owes money?",
+    "What's due today?"
+  ],
+  gujarati: [
+    "રાજેશ ટેક્સટાઈલ્સ શોધો",
+    "બધા કપાસના ઓર્ડર બતાવો",
+    "કોને પૈસા આપવાના છે?",
+    "આજે શું બાકી છે?"
+  ],
+  hindi: [
+    "राजेश टेक्सटाइल्स खोजें",
+    "सभी कपास के ऑर्डर दिखाएं", 
+    "किसका पैसा बकाया है?",
+    "आज क्या देना है?"
+  ]
+};
+```
+
+### **34. Search UI Components Design**
+
+#### **Global Search Header**
+**Positioning**: Always visible across all process entry points
+**Components**: Search input + Voice button + Quick filters
+```css
+.globalSearch {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.searchInput {
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  padding: 12px 20px;
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.voiceButton {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffd700;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+```
+
+#### **Search Result Cards**
+**Process-Aware Design**: Each result shows which business process contains the information
+```css
+.searchResultCard {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--process-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.processBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.processBadge.inquiries { background: rgba(255, 107, 53, 0.1); color: #ff6b35; }
+.processBadge.business { background: rgba(72, 52, 212, 0.1); color: #4834d4; }
+.processBadge.money { background: rgba(0, 210, 211, 0.1); color: #00d2d3; }
+.processBadge.customers { background: rgba(95, 39, 205, 0.1); color: #5f27cd; }
+```
+
+#### **Quick Action Buttons**
+**Contextual Actions**: Direct actions from search results
+```css
+.quickActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.quickAction {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quickAction:hover {
+  background: #667eea;
+  color: white;
+}
+```
+
+### **35. Search-to-Process Navigation Flow**
+
+#### **Navigation Logic**
+1. **User searches** → Global search results appear
+2. **User selects result** → Navigate to relevant process entry point
+3. **Item highlighted** → Specific item highlighted within process
+4. **Context maintained** → Search context preserved for easy return
+
+#### **Implementation Pattern**
+```typescript
+interface SearchResult {
+  id: string;
+  type: 'company' | 'order' | 'payment' | 'material';
+  process: 'inquiries' | 'business' | 'money' | 'customers';
+  title: string;
+  context: string;
+  quickActions: QuickAction[];
+  navigationTarget: {
+    processId: string;
+    itemId: string;
+    highlightItem: boolean;
+  };
+}
+
+const handleSearchResultClick = (result: SearchResult) => {
+  // Navigate to process entry point
+  setCurrentProcess(result.process);
+  
+  // Highlight specific item within process
+  if (result.navigationTarget.highlightItem) {
+    highlightItem(result.navigationTarget.itemId);
+  }
+  
+  // Maintain search context for back navigation
+  setSearchContext({
+    query: currentSearchQuery,
+    resultIndex: selectedResultIndex
+  });
+};
+```
+
+### **36. Mobile-Optimized Search Experience**
+
+#### **Touch-Friendly Search Interface**
+- **Large search input**: 44px minimum height for easy touch
+- **Voice button**: Prominent positioning for one-handed access
+- **Swipe gestures**: Swipe to dismiss search results
+- **Quick filters**: Horizontal scrollable filter buttons
+
+#### **Search Results Mobile Layout**
+- **Card-based design**: Easy thumb navigation
+- **Contextual actions**: Large touch targets for quick actions
+- **Process indicators**: Clear visual distinction between business processes
+- **Infinite scroll**: Paginated results for large datasets
+
+---
+
+**Document Updated**: Sep 14, 2025  
+**Latest Addition**: Global Search Integration Design System  
+**Next Update**: After search implementation  
+**Purpose**: Comprehensive design system including process-driven dashboard and global search architecture for ElevateIdea platform

@@ -154,73 +154,123 @@ Successful manufacturers will want to scale operations, add team members, and ex
 
 ## **BUSINESS CATEGORIES & MODULE ORGANIZATION**
 
-### **Dashboard Structure: 5 Broad Business Categories**
-Based on textile manufacturing workflow analysis, the 13 MVP modules are organized into 5 intuitive business categories that match how MSME owners think about their business:
+### **Dashboard Structure: 4 Process-Driven Business Entry Points**
+Based on extensive manufacturing business flow analysis and MSME owner mental models, the 13 MVP modules are organized into 4 natural business process entry points that match how textile manufacturers actually think and work throughout their daily operations:
 
-#### **1. 🎯 SALES & CUSTOMER MANAGEMENT** 
-**Gujarati**: વેચાણ અને ગ્રાહક વ્યવસ્થા  
-**Primary Modules**: 1, 2, 3, 11 (60%)
-- **Module 1**: Lead Management ✅ Live
-- **Module 2**: Quotation & Sales Orders ✅ Live  
-- **Module 3**: CRM - 360° Customer View ✅ Live
-- **Module 11**: Customer Loyalty & Feedback (Primary: 60%) 🔄 Coming
+**Core Insight**: Textile manufacturers think in business processes, not functional categories. The dashboard eliminates artificial separation between interconnected business activities.
 
-*Complete customer lifecycle from first inquiry to long-term relationship*
+**Reference**: Complete process-driven dashboard specifications in `/docs/DESIGN_SYSTEM.md` sections 24-30.
 
-#### **2. 💰 FINANCIAL MANAGEMENT**
-**Gujarati**: નાણાકીય વ્યવસ્થા  
-**Primary Modules**: 4, 10 + 11 (15%)
-- **Module 4**: Payments & Invoices ✅ Live
-- **Module 10**: Financial Tracking & Reports 🔄 Coming
-- **Module 11**: Loyalty Points & Rewards (Secondary: 15%) 🔄 Coming
+#### **🔥 NEW INQUIRIES (નવી પૂછપરછ)**
+**Process Focus**: Lead → Quote conversion workflow  
+**Business Mental Model**: "કોણ call કર્યો? કયા quotes મોકલવા? કોને ફૉલો કરવું?"
+**Daily Priority**: "Who called today? What quotes need to be sent?"
 
-*Cash flow, payments, invoicing, and financial health monitoring*
+**Sub-Actions (2x2 Mobile Grid)**:
+- **📞 CALL NOW** → Hot inquiries needing immediate response
+- **✍️ CREATE QUOTES** → Leads ready for pricing and quote generation  
+- **📋 FOLLOW UP** → Warm leads to nurture with scheduled callbacks
+- **📊 INQUIRY REPORTS** → Source analysis, conversion tracking, trends
 
-#### **3. 🏭 PRODUCTION & OPERATIONS**
-**Gujarati**: ઉત્પાદન અને કામકાજ  
-**Primary Modules**: 5, 6, 7, 8
-- **Module 5**: Work Order System 🔄 Coming
-- **Module 6**: Smart Procurement & GRN 🔄 Coming
-- **Module 7**: Three-tier Inventory Management 🔄 Coming
-- **Module 8**: Production Tracking & Quality 🔄 Coming
+**Smart Context**: Shows "→ 3 ready for quotes" pointing to ACTIVE BUSINESS, displays similar customer pricing suggestions, auto-suggests follow-up timing based on lead temperature.
 
-*Manufacturing operations from raw material to finished goods*
+**Modules Included**: 1 (Lead Management) + Quote generation from Module 2
+**Status**: ✅ Live with contextual cross-navigation
 
-#### **4. 🚚 FULFILLMENT & DELIVERY**
-**Gujarati**: માલ મોકલવો અને ડિલિવરી  
-**Primary Modules**: 9 + 11 (25%)
-- **Module 9**: Dispatch & Delivery Management 🔄 Coming
-- **Module 11**: Post-Delivery Feedback (Secondary: 25%) 🔄 Coming
+#### **💼 ACTIVE BUSINESS (ચાલતો બિઝનેસ)**
+**Process Focus**: Quote → Order → Production workflow  
+**Business Mental Model**: "કયા orders ચાલી રહ્યા? કોની advance લેવાની? Production કેમ ચાલે છે?"
+**Daily Priority**: "What orders am I working on? What payments should I collect?"
 
-*Order fulfillment, shipping, delivery, and customer satisfaction*
+**Sub-Actions (2x2 Mobile Grid)**:
+- **💰 COLLECT ADVANCE** → Approved quotes ready for 30% payment collection
+- **🔧 IN PRODUCTION** → Active orders tracking with production timeline view
+- **📤 READY TO SHIP** → Completed orders awaiting final payment and dispatch
+- **📊 ORDER REPORTS** → Production efficiency, delay analysis, timeline tracking
 
-#### **5. 📊 BUSINESS INTELLIGENCE & ANALYTICS**
-**Gujarati**: ધંધાની માહિતી અને વિશ્લેષણ  
-**Primary Modules**: 12, 13 + 11 (15%)
-- **Module 12**: Voice Commands & Multilingual AI 🔄 Coming
-- **Module 13**: Analytics Dashboard & Reports 🔄 Coming
-- **Module 11**: Customer Satisfaction Analytics (Tertiary: 15%) 🔄 Coming
+**Smart Context**: Auto-transitions approved quotes from NEW INQUIRIES, shows "→ ₹2.4L pending" pointing to MONEY MATTERS, provides production timeline with delivery predictions.
 
-*Data-driven insights, voice AI, and business performance analytics*
+**Modules Included**: 2 (Quotations), 5 (Work Orders), 8 (Production), 9 (Dispatch)  
+**Status**: ✅ Quotations Live, Production Tracking in Development
+
+#### **💳 MONEY MATTERS (પૈસાનો મામલો)**
+**Process Focus**: Payments → Invoices → Collections workflow
+**Business Mental Model**: "કોને પૈસા આપવાના? કયા bills મોકલવા? કેટલા પૈસા બાકી?"
+**Daily Priority**: "Who owes me money? What invoices should I send?"
+
+**Sub-Actions (2x2 Mobile Grid)**:
+- **💰 COLLECT TODAY** → Due payments priority with overdue reminders
+- **📄 SEND INVOICES** → Proforma & final billing with automated generation
+- **📊 MONEY REPORTS** → Cash flow analysis, monthly trends, profit tracking
+- **🏦 BANK STATUS** → Account reconciliation, transaction tracking
+
+**Smart Context**: Auto-receives completed orders from ACTIVE BUSINESS, shows aging analysis for overdue payments, links to customer payment history and patterns.
+
+**Modules Included**: 4 (Payment Management), 10 (Invoices), 13 (Financial Analytics)
+**Status**: ✅ Payments & Invoices Live, Analytics in Development
+
+#### **🤝 CUSTOMERS (મારા ગ્રાહકો)**
+**Process Focus**: Relationship → Retention → Growth workflow
+**Business Mental Model**: "મારા best customers કોણ? કોને repeat માટે call કરવું? Customer ખુશ છે?"
+**Daily Priority**: "Who are my best customers? Who should I call for repeat business?"
+
+**Sub-Actions (2x2 Mobile Grid)**:
+- **👑 VIP CUSTOMERS** → High-value regulars with special treatment protocols
+- **🎯 TARGET REPEAT** → Ready for next order with follow-up opportunities
+- **⭐ GET FEEDBACK** → Service satisfaction and quality assessments  
+- **📊 CUSTOMER REPORTS** → Purchase pattern analysis, loyalty program metrics
+
+**Smart Context**: Auto-adds successful orders from MONEY MATTERS, predicts next order timing based on historical patterns, shows cross-selling opportunities.
+
+**Modules Included**: 3 (Customer Management), 11 (Customer Feedback), 12 (Loyalty Programs)
+**Status**: ✅ Customer Management Live, Feedback & Loyalty in Development
+
+### **Key Process-Driven Dashboard Benefits**
+
+#### **Natural Business Workflow Alignment**
+- **Matches Daily Routine**: Morning inquiries → Active orders → Payment collection → Customer relationships
+- **Reduces Cognitive Load**: Only 4 main process entry points instead of 12+ technical modules
+- **Contextual Intelligence**: System suggests next logical business actions based on current process state
+- **Process Completion Tracking**: Clear progress indicators for each business workflow stage
+
+#### **Smart Cross-Navigation System**
+- **Contextual Linking**: Each process shows relevant connections to other processes (e.g., "3 quotes ready for orders" in NEW INQUIRIES links to ACTIVE BUSINESS)
+- **Historical Intelligence**: System provides business insights based on patterns ("Similar customer paid ₹6.5/meter last month")
+- **Predictive Suggestions**: Auto-suggests next actions based on business flow completion status
+
+#### **Enhanced Mobile User Experience**
+- **Swipe Navigation**: Natural left-right swiping between business processes
+- **2x2 Grid Layout**: Mobile-optimized sub-action organization
+- **Contextual Action Panels**: Related actions appear based on current business context
+- **Voice Commands**: Process-specific voice shortcuts in Gujarati, Hindi, and English
 
 ### **Category Implementation Status**
-| Category | Modules | Completion | Status |
-|----------|---------|------------|--------|
-| 🎯 Sales & Customer | 4 modules | 75% (3/4) | ✅ Mostly Live |
-| 💰 Financial | 3 modules | 33% (1/3) | 🔄 Partially Live |
-| 🏭 Production | 4 modules | 0% (0/4) | 🔄 Coming Soon |
-| 🚚 Fulfillment | 2 modules | 0% (0/2) | 🔄 Coming Soon |
-| 📊 Analytics | 3 modules | 0% (0/3) | 🔄 Coming Soon |
+| Category | Sub-Categories | Modules | Completion | Status |
+|----------|----------------|---------|------------|--------|
+| 📞 Sales & Customers | 4 | 4 modules | 75% (3/4) | ✅ Mostly Live |
+| 💰 Money & Payments | 4 | 3 modules | 33% (1/3) | 🔄 Partially Live |
+| 🏭 Production & Delivery | 4 | 6 modules | 0% (0/6) | 🔄 Coming Soon |
 
 **Overall Progress**: 4/13 modules live (31% complete)
 
-### **Module Distribution Logic**
-**Module 11 (Customer Loyalty)** is intelligently distributed across categories:
-- **60%** in Sales & Customer: Loyalty program management, repeat orders
-- **25%** in Fulfillment: Post-delivery feedback collection, satisfaction ratings
-- **15%** in Analytics: Customer satisfaction trends, loyalty ROI metrics
+### **Business-First Design Principles**
+1. **Manufacturing Workflow Alignment**: Categories follow actual textile manufacturing process flow
+2. **MSME Mental Model**: Uses language and concepts familiar to business owners
+3. **Voice-Command Ready**: Categories map to natural voice commands in local languages
+4. **Mobile-First Layout**: Each category displays as 2x2 grid for optimal mobile experience
+5. **Contextual Reports**: Business intelligence integrated within relevant business contexts
 
-This distribution ensures loyalty features appear contextually where business owners need them most in their workflow.
+### **Voice Command Integration**
+- **Sales Commands**: "Show me customers", "કસ્ટમર બતાવો", "नए leads दिखाओ"
+- **Money Commands**: "Money બતાવો", "payment check કરો", "कितना पैसा बाकी है?"
+- **Production Commands**: "Production બતાવો", "આજે શું બનાવવું?", "quality कैसी है?"
+
+### **Reports Architecture**
+#### **Two-Level Reporting System**:
+1. **Category Overview Reports**: Quick business health check (dashboard level)
+2. **Sub-Category Action Reports**: Detailed analysis for specific decisions (detail page level)
+
+This ensures business owners get both "big picture" insights and actionable intelligence exactly when needed.
 
 ---
 
@@ -453,40 +503,49 @@ This distribution ensures loyalty features appear contextually where business ow
 └─────────────────────────────┘
 ```
 
-### **DASHBOARD LAYOUT - 5 BUSINESS CATEGORIES**
+### **DASHBOARD LAYOUT - 3 BUSINESS CATEGORIES**
 ```
 📱 360° Business Platform Dashboard
 
 ┌─────────────────────────────────────────────┐
 │  🎤 Voice Assistant (બોલીને કામ કરો)           │
-│  "Lead add કરો" • "Payment check કરો"         │
+│  "Customer બતાવો" • "Money check કરો" • "Production બતાવો" │
 └─────────────────────────────────────────────┘
 
-┌─────────────────┬─────────────────┬─────────────────┐
-│  🎯 વેચાણ ગ્રાહક    │  💰 નાણાકીય        │  🏭 ઉત્પાદન કામ     │
-│  Sales &        │  Financial      │  Production &   │
-│  Customer       │  Management     │  Operations     │
-│                 │                 │                 │
-│  4 modules      │  3 modules      │  4 modules      │
-│  ✅ 3 Live      │  ✅ 1 Live      │  🔄 Coming      │
-│                 │                 │                 │
-│  • 7 leads      │  • ₹9.2L pending│  • Work orders  │
-│  • 2 quotes     │  • 1 overdue    │  • Inventory    │
-│  • 1 active     │  • Cash flow    │  • Production   │
-└─────────────────┴─────────────────┴─────────────────┘
+┌─────────────────────────────────────────────┐
+│  📞 SALES & CUSTOMERS (વેચાણ અને ગ્રાહકો)      │
+│  Sales Inquiries | My Customers             │
+│  Customer Feedback | Loyalty Program        │
+│  ✅ 3/4 Live • 7 leads • 45 customers       │
+└─────────────────────────────────────────────┘
 
-┌─────────────────┬─────────────────┬─────────────────┐
-│  🚚 માલ મોકલવો     │  📊 ધંધાની માહિતી   │                 │
-│  Fulfillment    │  Business       │     FUTURE      │
-│  & Delivery     │  Intelligence   │   CATEGORIES    │
-│                 │  & Analytics    │                 │
-│  2 modules      │  3 modules      │                 │
-│  🔄 Coming      │  🔄 Coming      │                 │
-│                 │                 │                 │
-│  • Dispatch     │  • Reports      │                 │
-│  • Delivery     │  • Voice AI     │                 │
-│  • Feedback     │  • Insights     │                 │
-└─────────────────┴─────────────────┴─────────────────┘
+┌─────────────────────────────────────────────┐
+│  💰 MONEY & PAYMENTS (પૈસા અને પેમેન્ટ)        │
+│  Collect Payment | Send Invoice             │
+│  Money Reports | Bank & Cash                │
+│  🔄 2/4 Live • ₹9.2L pending • 1 overdue    │
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│  🏭 PRODUCTION & DELIVERY (ઉત્પાદન અને ડિલિવરી) │
+│  Make Orders | Buy Materials                │
+│  Ship Orders | Quality Check               │
+│  🔄 0/4 Coming • Production planning        │
+└─────────────────────────────────────────────┘
+```
+
+### **Category Interaction Flow**
+```
+Dashboard → Category → Sub-Category → Actions & Reports
+
+Example: Money Category
+📱 Dashboard
+    ↓ Tap "💰 MONEY & PAYMENTS"
+📊 Category Overview (Quick metrics + 4 action buttons)
+    ↓ Tap "💰 Collect Payment" 
+📋 PaymentManagement.tsx (Detail page with actions + reports)
+    ↓ Action buttons + 📊 Reports section
+✅ Specific business actions completed
 ```
 
 ### **CATEGORY CARD INTERACTION**

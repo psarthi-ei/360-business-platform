@@ -1,304 +1,655 @@
-# COMPREHENSIVE BUSINESS WORKFLOW REDESIGN - IMPLEMENTATION PLAN
+# FINAL IMPLEMENTATION PLAN: Process-Driven Dashboard
 
-**Context**: After successful quote-to-customer workflow implementation, critical issues identified requiring comprehensive fixes: compilation errors, poor payment filter design, incorrect business process flow, and dashboard layout improvements.
+## 🎯 **OVERVIEW**
+Transform the current 3-category functional dashboard into a **4 process-driven business entry point system** that matches how MSME textile manufacturers actually think and work throughout their daily operations.
 
-## 🚨 CRITICAL ISSUES IDENTIFIED BY USER
-1. **Compilation Errors**: Old component references preventing app from running
-2. **Poor Payment Filter Design**: Current filters look bad from design perspective  
-3. **Incorrect Business Flow**: Quotes exist without proforma invoice and showing as customer
-4. **Wrong Process**: Quote existing with sales order as prospect (should be customer)
-5. **Missing Automation**: Proper lead-to-customer conversion flow missing
-6. **Dashboard Layout**: 4+ horizontal buttons should be 2x2 grid layout
-
-## 🚀 APPROVED COMPREHENSIVE 6-PHASE PLAN
-
-### **Phase 1: Fix Critical Compilation Errors** 🔥 URGENT - IN PROGRESS
-**Problem**: App won't start due to old component references and interface mismatches
-
-**Technical Fixes Required**:
-- **App.tsx Line 9**: Remove `import AdvancePaymentManagement from './components/AdvancePaymentManagement'` (file doesn't exist)
-- **Payments.tsx Line 50**: Fix interface name `AdvancePaymentManagementProps` → `PaymentsProps`
-- **Payments.tsx Line 401**: Fix export `AdvancePaymentManagement` → `Payments`
-- **PaymentRecord Interface**: Fix mismatched properties (type, invoiceId, paymentAmount vs proformaInvoiceId, balanceAdvance)
-- **Test Files**: Update all AdvancePaymentManagement imports to Payments
-- **BusinessProfile Properties**: Fix .mobile/.city/.state property access (should be .phone/.registeredAddress.city)
-- **Remove Unused Variables**: Clean up proformaFilter, setProformaFilter, showProfileCompletion, etc.
-
-**Expected Outcome**: Clean compilation with zero errors, app starts successfully
+**Core Insight**: Textile manufacturers think in business processes (daily workflow), not functional software categories. This approach eliminates cognitive friction and provides contextual intelligence.
 
 ---
 
-### **Phase 2: Dashboard 2x2 Grid Layout for Financial Management** 📊 PENDING
-**Current**: Horizontal button layout cluttering dashboard
-**Target**: Modern 2x2 grid layout for Financial Management section
+## 📋 **4-PHASE IMPLEMENTATION ROADMAP**
 
-**Technical Implementation**:
+### **Phase 1: Core Dashboard Structure** 🏗️
+**Goal**: Replace current categories with 4 business process entry points
+
+#### **Tasks**:
+
+**1.1 Update Dashboard.tsx Component Structure**
+- Remove current 3-category grid (Sales & Customers, Money & Payments, Production & Delivery)
+- Implement new 4 process entry point structure
+- Add business health snapshot at dashboard top
+
+**1.2 Create New Process Cards**
 ```typescript
-// Dashboard.tsx - Financial Management Section
-<div className={styles.financialGrid}>
-  <div className={styles.gridRow}>
-    <button onClick={onShowPayments} className={styles.gridCard}>
-      💰 Payments
-      <span className={styles.cardSubtext}>Advance & Final</span>
-    </button>
-    <button onClick={onShowInvoices} className={styles.gridCard}>
-      📄 Invoices  
-      <span className={styles.cardSubtext}>Proforma & Final</span>
-    </button>
-  </div>
-  <div className={styles.gridRow}>
-    <button className={styles.gridCard}>
-      📊 Reports
-      <span className={styles.cardSubtext}>Coming Soon</span>
-    </button>
-    <button className={styles.gridCard}>
-      💵 Cash Flow
-      <span className={styles.cardSubtext}>Coming Soon</span>
-    </button>
-  </div>
-</div>
+// 🔥 NEW INQUIRIES (નવી પૂછપરછ) - Orange gradient
+<ProcessCard 
+  type="inquiries" 
+  gradient="orange" 
+  title="NEW INQUIRIES"
+  subtitle="નવી પૂછપરછ"
+  businessQuestion="Who called today? What quotes need to be sent?"
+  actions={[
+    {id: "call-now", label: "📞 CALL NOW", subtext: "Hot inquiries needing immediate response"},
+    {id: "create-quotes", label: "✍️ CREATE QUOTES", subtext: "Leads ready for pricing"},
+    {id: "follow-up", label: "📋 FOLLOW UP", subtext: "Warm leads to nurture"},
+    {id: "inquiry-reports", label: "📊 INQUIRY REPORTS", subtext: "Source analysis & trends"}
+  ]}
+  smartContext="→ 3 ready for quotes pointing to ACTIVE BUSINESS"
+  metrics={{hotLeads: 5, totalInquiries: 8, conversionRate: "60%"}}
+/>
+
+// 💼 ACTIVE BUSINESS (ચાલતો બિઝનેસ) - Blue gradient  
+<ProcessCard 
+  type="business" 
+  gradient="blue"
+  title="ACTIVE BUSINESS"
+  subtitle="ચાલતો બિઝનેસ"
+  businessQuestion="What orders am I working on? What payments should I collect?"
+  actions={[
+    {id: "collect-advance", label: "💰 COLLECT ADVANCE", subtext: "Approved quotes ready for 30% payment"},
+    {id: "in-production", label: "🔧 IN PRODUCTION", subtext: "Active orders tracking"},
+    {id: "ready-to-ship", label: "📤 READY TO SHIP", subtext: "Completed orders"},
+    {id: "order-reports", label: "📊 ORDER REPORTS", subtext: "Production efficiency"}
+  ]}
+  smartContext="→ ₹2.4L pending pointing to MONEY MATTERS"
+  metrics={{activeOrders: 12, inProduction: 5, readyToShip: 2}}
+/>
+
+// 💳 MONEY MATTERS (પૈસાનો મામલો) - Green gradient
+<ProcessCard 
+  type="money" 
+  gradient="green"
+  title="MONEY MATTERS"
+  subtitle="પૈસાનો મામલો"
+  businessQuestion="Who owes me money? What invoices should I send?"
+  actions={[
+    {id: "collect-today", label: "💰 COLLECT TODAY", subtext: "Due payments priority"},
+    {id: "send-invoices", label: "📄 SEND INVOICES", subtext: "Proforma & final billing"},
+    {id: "money-reports", label: "📊 MONEY REPORTS", subtext: "Cash flow analysis"},
+    {id: "bank-status", label: "🏦 BANK STATUS", subtext: "Account reconciliation"}
+  ]}
+  smartContext="Auto-receive completed orders from ACTIVE BUSINESS"
+  metrics={{pendingPayments: "₹8.4L", overduePayments: "₹2.1L", todaysDue: "₹2.4L"}}
+/>
+
+// 🤝 CUSTOMERS (મારા ગ્રાહકો) - Purple gradient
+<ProcessCard 
+  type="customers" 
+  gradient="purple"
+  title="CUSTOMERS"
+  subtitle="મારા ગ્રાહકો"
+  businessQuestion="Who are my best customers? Who should I call for repeat business?"
+  actions={[
+    {id: "vip-customers", label: "👑 VIP CUSTOMERS", subtext: "High-value regulars"},
+    {id: "target-repeat", label: "🎯 TARGET REPEAT", subtext: "Ready for next order"},
+    {id: "get-feedback", label: "⭐ GET FEEDBACK", subtext: "Service satisfaction"},
+    {id: "customer-reports", label: "📊 CUSTOMER REPORTS", subtext: "Purchase patterns"}
+  ]}
+  smartContext="Predict next order timing, show cross-selling opportunities"
+  metrics={{totalCustomers: 47, vipCustomers: 12, repeatOpportunities: 8}}
+/>
 ```
 
-**CSS Updates**: Create modern card-based grid with gradients, shadows, and mobile responsiveness
-
-**Expected Outcome**: Professional 2x2 grid layout improving visual hierarchy and mobile UX
+**1.3 Add Business Health Snapshot**
+```typescript
+<BusinessHealthSnapshot>
+  <TodaysNumbers>
+    <Metric value="₹2.4L" label="Payment Due Today" action="Collect Now" urgent={true} />
+    <Metric value="5" label="Hot Inquiries" action="Call Now" urgent={true} />  
+    <Metric value="3" label="Ready to Ship" action="Process Now" urgent={false} />
+  </TodaysNumbers>
+  <MonthlyPerformance>
+    <PerformanceCard metric="₹{formatCurrency(totalRevenue/100000)}L" label="Total Revenue" change="+18% vs last month" />
+    <PerformanceCard metric="{totalLeads}" label="New Inquiries" change="{hotLeads} very interested" />
+    <PerformanceCard metric="{conversionRate}%" label="Inquiry to Order" change="Better than industry" />
+  </MonthlyPerformance>
+</BusinessHealthSnapshot>
+```
 
 ---
 
-### **Phase 3: Modern Payment Filter Design with Cards** 🎨 PENDING
-**Problem**: Current payment filters "look bad from design front"
-**Target**: Modern card-based filter design with gradients and professional appearance
+### **Phase 2: Enhanced CSS Styling** 🎨
+**Goal**: Professional visual design for each process entry point
 
-**Technical Implementation**:
+#### **Tasks**:
+
+**2.1 Create Process-Specific Gradients**
 ```css
-.filterCards {
+/* Process Entry Point Gradients */
+.processInquiries {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+}
+
+.processBusiness {
+  background: linear-gradient(135deg, #4834d4, #686de0);
+  border: 1px solid rgba(72, 52, 212, 0.3);
+}
+
+.processMoney {
+  background: linear-gradient(135deg, #00d2d3, #54a0ff);
+  border: 1px solid rgba(0, 210, 211, 0.3);
+}
+
+.processCustomers {
+  background: linear-gradient(135deg, #5f27cd, #a55eea);
+  border: 1px solid rgba(95, 39, 205, 0.3);
+}
+
+/* 2x2 Grid Layout for Sub-Actions */
+.processGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
 }
 
-.filterCard {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 15px;
-  padding: 20px;
+.gridCard {
+  min-height: 65px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.filterCard.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #333;
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+.gridCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gridCardLabel {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.gridCardSubtext {
+  font-size: 0.75rem;
+  color: #666;
+  font-style: italic;
 }
 ```
 
-**Filter Categories**:
-- Payment Type: All | Advance | Final  
-- Status: All | Pending | Received | Overdue
+**2.2 Process Indicators and Badges**
+```css
+.processCard {
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
 
-**Expected Outcome**: Professional, visually appealing filter interface matching enterprise design standards
+.processHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.processTitle h4 {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.processSubtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.processMetrics {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.metric {
+  text-align: center;
+  color: white;
+}
+
+.metricValue {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.smartContext {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.8rem;
+  margin-top: 12px;
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+}
+```
 
 ---
 
-### **Phase 4: Fix Business Process Data Flow** 🔄 PENDING
-**Current Problem**: "Quote verbal approval → send profile link → update business information → proforma invoice generated automatically → on payment received customer would be generated"
+### **Phase 3: Smart Cross-Navigation System** 🧠
+**Goal**: Contextual intelligence connecting related business processes
 
-**Correct Flow Implementation**:
-```typescript
-// Correct Business Process Flow
-1. Lead Generation (mockLeads)
-2. Quote Creation (mockQuotes) - Status: 'prospect'
-3. Verbal Approval → Send Profile Link
-4. Profile Completion → BusinessProfile created with customerStatus: 'prospect'
-5. Auto-generate Proforma Invoice (linked to BusinessProfile + Quote)  
-6. Advance Payment Received → BusinessProfile.customerStatus: 'prospect' → 'customer'
-7. Auto-create Sales Order (customer-linked)
-8. Production & Delivery
-9. Final Payment & Final Invoice
-```
+#### **Tasks**:
 
-**Data Model Updates**:
+**3.1 Contextual Process Linking**
 ```typescript
-interface BusinessProfile {
-  customerStatus: 'prospect' | 'customer';
-  profileCompletionDate: string;
-  becameCustomerDate?: string;
-  firstPaymentDate?: string;
-  // ... existing fields
+interface SmartLink {
+  targetProcess: 'inquiries' | 'business' | 'money' | 'customers';
+  label: string;
+  context: string;
+  count?: number;
+  amount?: string;
 }
 
-interface ProformaInvoice {
-  businessProfileId: string; // Links to BusinessProfile (prospect)
-  quoteId: string; // Links to original Quote
-  // ... invoice details
-}
-
-interface SalesOrder {
-  businessProfileId: string; // Links to BusinessProfile (now customer)
-  proformaInvoiceId: string; // Links back to proforma
-  // ... order details  
-}
-```
-
-**Expected Outcome**: Proper business process automation with correct prospect→customer conversion triggers
-
----
-
-### **Phase 5: Implement Automated Customer Conversion Logic** ⚡ PENDING  
-**Target**: Fully automated lead-to-customer conversion triggered by advance payment receipt
-
-**Implementation**:
-```typescript
-// Automated Customer Conversion System
-function handleAdvancePaymentReceived(paymentRecord: PaymentRecord) {
-  // 1. Get related business profile
-  const businessProfile = getBusinessProfileById(paymentRecord.businessProfileId);
-  
-  // 2. Convert prospect to customer
-  if (businessProfile.customerStatus === 'prospect') {
-    updateBusinessProfileStatus(businessProfile.id, {
-      customerStatus: 'customer',
-      becameCustomerDate: new Date().toISOString(),
-      firstPaymentDate: paymentRecord.receivedDate,
-      firstPaymentAmount: paymentRecord.paymentAmount
-    });
-    
-    // 3. Auto-create Sales Order
-    autoCreateSalesOrder({
-      businessProfileId: businessProfile.id,
-      proformaInvoiceId: paymentRecord.invoiceId,
-      paymentId: paymentRecord.id
-    });
-    
-    // 4. Update mock data for consistent display
-    updateMockDataCustomerStatus(businessProfile.id, 'customer');
+// Example contextual links from NEW INQUIRIES
+const inquiriesSmartLinks: SmartLink[] = [
+  {
+    targetProcess: 'business',
+    label: 'Ready for Orders',
+    context: '3 approved quotes → ACTIVE BUSINESS',
+    count: 3
+  },
+  {
+    targetProcess: 'customers',
+    label: 'Existing Customers',
+    context: '2 inquiries from repeat customers',
+    count: 2
   }
-}
+];
+
+// Smart navigation component
+<SmartNavigation currentProcess="inquiries">
+  {inquiriesSmartLinks.map(link => (
+    <SmartLink 
+      key={link.targetProcess}
+      onClick={() => navigateToProcess(link.targetProcess)}
+      {...link}
+    />
+  ))}
+</SmartNavigation>
 ```
 
-**Integration Points**:
-- Payments component triggers conversion
-- QuotationOrders updates prospect/customer badges  
-- SalesOrders shows converted customers
-- CustomerList reflects new customers
-
-**Expected Outcome**: Seamless automation from lead generation to customer conversion with zero manual intervention
-
----
-
-### **Phase 6: Update Interfaces and Type Definitions** 🔧 PENDING
-**Target**: Clean, consistent TypeScript interfaces across all components
-
-**Interface Updates**:
+**3.2 Business Intelligence Suggestions**
 ```typescript
-// Unified Payment Interface
-interface PaymentRecord {
-  id: string;
-  type: 'advance' | 'final';
-  invoiceId: string; // Links to ProformaInvoice or FinalInvoice
-  businessProfileId: string;
-  paymentAmount: number;
-  balanceAmount: number;
-  status: 'pending' | 'received' | 'overdue';
-  receivedDate?: string;
-  dueDate: string;
-  paymentMethod?: string;
-  bankReference?: string;
+interface BusinessSuggestion {
+  type: 'pricing' | 'timing' | 'opportunity' | 'reminder';
+  message: string;
+  action?: string;
+  priority: 'high' | 'medium' | 'low';
 }
 
-// Enhanced BusinessProfile
-interface BusinessProfile {
-  id: string;
-  companyName: string;
-  customerStatus: 'prospect' | 'customer';
-  registeredAddress: {
-    city: string;
-    state: string;
-    // ... address fields
-  };
-  phone: string; // Standardized (not mobile)
-  // ... other fields
-}
+const businessIntelligence = {
+  // In NEW INQUIRIES - When creating quote
+  pricing: {
+    type: 'pricing',
+    message: 'Similar customer (Shah Textiles) paid ₹6.50/meter for same 60 GSM cotton fabric last month',
+    action: 'Use Similar Pricing',
+    priority: 'medium'
+  },
+  
+  // In ACTIVE BUSINESS - When collecting advance  
+  timing: {
+    type: 'timing',
+    message: 'Based on history, Patel Textiles usually pays within 2 days. Send reminder on day 3 if not received',
+    action: 'Set Reminder',
+    priority: 'low'
+  },
+  
+  // In CUSTOMERS - When targeting repeat business
+  opportunity: {
+    type: 'opportunity',
+    message: 'Rajesh Exports orders every 60 days, last order 45 days ago. 90% chance of ₹3L+ order this month',
+    action: 'Call Now',
+    priority: 'high'
+  }
+};
 
-// Updated Dashboard Props  
-interface DashboardProps {
-  onShowPayments: () => void;
-  onShowInvoices: () => void;
-  // Remove old ProformaInvoiceManagement props
-  // ... other props
-}
+<BusinessIntelligencePanel>
+  {suggestions.map(suggestion => (
+    <SuggestionCard key={suggestion.type} {...suggestion} />
+  ))}
+</BusinessIntelligencePanel>
 ```
 
-**Cleanup Tasks**:
-- Remove unused imports and variables
-- Fix all TypeScript compilation warnings
-- Update test files with correct interfaces
-- Ensure consistent naming conventions
+**3.3 Process Completion Tracking**
+```typescript
+interface ProcessStep {
+  id: string;
+  label: string;
+  completed: boolean;
+  completionPercentage: number;
+  nextAction?: string;
+}
 
-**Expected Outcome**: Zero TypeScript errors, consistent interfaces, maintainable codebase
+const processTrackers = {
+  inquiries: [
+    { id: 'received', label: 'Inquiry Received', completed: true, completionPercentage: 100 },
+    { id: 'contacted', label: 'Initial Contact', completed: true, completionPercentage: 85, nextAction: 'Follow up call' },
+    { id: 'quoted', label: 'Quote Created', completed: false, completionPercentage: 60, nextAction: 'Send quote' },
+    { id: 'approved', label: 'Move to ACTIVE BUSINESS', completed: false, completionPercentage: 0 }
+  ],
+  
+  business: [
+    { id: 'advance', label: 'Advance Collected', completed: true, completionPercentage: 100 },
+    { id: 'workorder', label: 'Work Order Created', completed: true, completionPercentage: 75 },
+    { id: 'production', label: 'Production Started', completed: false, completionPercentage: 45, nextAction: 'Check production status' },
+    { id: 'completed', label: 'Move to MONEY MATTERS', completed: false, completionPercentage: 0 }
+  ]
+};
 
----
-
-## 🎯 EXPECTED COMPREHENSIVE BENEFITS
-
-### **Immediate Fixes**
-- ✅ **App Functionality**: Compilation errors resolved, app starts successfully
-- ✅ **Visual Design**: Professional payment filters with modern card design
-- ✅ **User Experience**: Improved 2x2 dashboard grid layout
-
-### **Business Process Improvements**  
-- ✅ **Correct Workflow**: Proper lead-to-customer conversion automation
-- ✅ **Data Accuracy**: Consistent prospect/customer status across all components
-- ✅ **Process Efficiency**: Automated triggers reducing manual intervention
-
-### **Technical Excellence**
-- ✅ **Code Quality**: Clean interfaces, zero compilation errors
-- ✅ **Maintainability**: Consistent patterns and naming conventions  
-- ✅ **Type Safety**: Comprehensive TypeScript coverage
-
----
-
-## 🛠️ EXECUTION METHODOLOGY
-
-**Development Sequence**:
-1. **Phase 1 FIRST**: Fix critical compilation errors (blocks all development)
-2. **Phase 2-3**: UI/UX improvements (dashboard & filters)  
-3. **Phase 4-5**: Business logic corrections & automation
-4. **Phase 6**: Final cleanup and type safety
-
-**Quality Assurance per Phase**:
-- Zero compilation errors before proceeding
-- Test all business process flows
-- Verify mobile responsiveness
-- Confirm multilingual support maintained
-- Validate cross-component navigation
-
-**Success Criteria**:
-- Clean npm start with zero errors/warnings
-- Professional UI matching enterprise standards  
-- Correct business process automation
-- Complete lead-to-customer workflow working
-- All TypeScript interfaces consistent
+<ProcessTracker steps={processTrackers[currentProcess]} />
+```
 
 ---
 
-**Current Session Status**: Phase 1 (Fix Compilation Errors) - IN PROGRESS
-**Next Immediate Action**: Continue fixing critical compilation errors identified in build output
-**Overall Progress**: 6-phase plan approved, implementation started
+### **Phase 4: Enhanced User Experience** 📱
+**Goal**: Natural mobile-first interaction patterns
 
-## 📋 DETAILED ERROR LOG (Phase 1 Reference)
+#### **Tasks**:
 
-**Critical Errors Requiring Immediate Fix**:
-1. **App.tsx:9** - `Cannot find module './components/AdvancePaymentManagement'`
-2. **Payments.tsx:50** - `Cannot find name 'AdvancePaymentManagementProps'`  
-3. **Payments.tsx:401** - `Cannot find name 'AdvancePaymentManagement'` (export)
-4. **PaymentRecord Interface Mismatch** - Missing required properties
-5. **BusinessProfile Property Access** - .mobile/.city/.state don't exist
-6. **Test Files** - Multiple AdvancePaymentManagement import errors
-7. **Unused Variables** - proformaFilter, showProfileCompletion, etc.
+**4.1 Swipe Navigation Implementation**
+```typescript
+import { useSwipeable } from 'react-swipeable';
 
-**Fix Sequence**: Address in order listed above for fastest compilation success
+const processOrder = ['inquiries', 'business', 'money', 'customers'];
+
+const handlers = useSwipeable({
+  onSwipedLeft: () => {
+    const currentIndex = processOrder.indexOf(currentProcess);
+    const nextIndex = (currentIndex + 1) % processOrder.length;
+    setCurrentProcess(processOrder[nextIndex]);
+  },
+  onSwipedRight: () => {
+    const currentIndex = processOrder.indexOf(currentProcess);
+    const prevIndex = currentIndex === 0 ? processOrder.length - 1 : currentIndex - 1;
+    setCurrentProcess(processOrder[prevIndex]);
+  },
+  preventDefaultTouchmoveEvent: true,
+  trackMouse: true
+});
+
+// Swipe indicator component
+<SwipeIndicator>
+  <ProcessDots>
+    {processOrder.map((process, index) => (
+      <Dot 
+        key={process} 
+        active={process === currentProcess}
+        onClick={() => setCurrentProcess(process)}
+      />
+    ))}
+  </ProcessDots>
+  <SwipeHint>← Swipe between processes →</SwipeHint>
+</SwipeIndicator>
+```
+
+**4.2 Contextual Action Panels**
+```typescript
+// When viewing specific items, show related actions from other processes
+const getContextualActions = (itemType: string, itemId: string) => {
+  switch (itemType) {
+    case 'hot-lead':
+      return [
+        { process: 'inquiries', action: 'Call Now', icon: '📞' },
+        { process: 'inquiries', action: 'Create Quote', icon: '✍️' },
+        { process: 'business', action: 'See Similar Orders (₹2.4L avg)', icon: '💼' },
+        { process: 'customers', action: 'Customer History (3 orders)', icon: '🤝' },
+        { process: 'money', action: 'Payment Pattern (Net 15 days)', icon: '💳' }
+      ];
+    
+    case 'production-order':
+      return [
+        { process: 'business', action: 'Update Production Status', icon: '🔧' },
+        { process: 'money', action: 'Schedule Final Payment (₹1.2L due)', icon: '💰' },
+        { process: 'customers', action: 'Customer Profile (VIP status)', icon: '🤝' },
+        { process: 'inquiries', action: 'Related Inquiries (2 pending)', icon: '📞' }
+      ];
+  }
+};
+
+<ContextualActionPanel actions={getContextualActions(itemType, itemId)} />
+```
+
+**4.3 Voice Command Integration**
+```typescript
+interface VoiceCommand {
+  languages: {
+    english: string;
+    gujarati: string;
+    hindi: string;
+  };
+  targetProcess: string;
+  action: string;
+}
+
+const voiceCommands: VoiceCommand[] = [
+  // NEW INQUIRIES commands
+  {
+    languages: {
+      english: "Show hot inquiries",
+      gujarati: "હોટ પૂછપરછ બતાવો",
+      hindi: "गर्म पूछताछ दिखाएं"
+    },
+    targetProcess: 'inquiries',
+    action: 'show-hot-leads'
+  },
+  
+  // MONEY MATTERS commands
+  {
+    languages: {
+      english: "Who owes money?",
+      gujarati: "કોને પૈસા આપવાના છે?",
+      hindi: "किसका पैसा बकाया है?"
+    },
+    targetProcess: 'money',
+    action: 'show-overdue-payments'
+  },
+  
+  // CUSTOMERS commands
+  {
+    languages: {
+      english: "Show repeat customers",
+      gujarati: "વારંવાર આવતા ગ્રાહકો બતાવો",
+      hindi: "दोहराने वाले ग्राहक दिखाएं"
+    },
+    targetProcess: 'customers',
+    action: 'show-repeat-opportunities'
+  }
+];
+
+<VoiceCommandInterface 
+  commands={voiceCommands}
+  currentLanguage={currentLanguage}
+  onCommand={handleVoiceCommand}
+/>
+```
+
+---
+
+### **Phase 5: Global Search Integration** 🔍
+**Goal**: Business-context global search across all process entry points
+
+#### **Tasks**:
+
+**5.1 Global Search Header Implementation**
+```typescript
+// Add persistent search header across all processes
+<GlobalSearchHeader>
+  <SearchInput 
+    placeholder={t("Search companies, orders, payments...")}
+    value={searchQuery}
+    onChange={handleSearchChange}
+    onVoiceClick={handleVoiceSearch}
+  />
+  <VoiceButton active={isListening} />
+  <QuickFilters>
+    <Filter active={searchType === 'companies'}>🏢 Companies</Filter>
+    <Filter active={searchType === 'orders'}>💼 Orders</Filter>
+    <Filter active={searchType === 'payments'}>💳 Payments</Filter>
+    <Filter active={searchType === 'materials'}>🧵 Materials</Filter>
+  </QuickFilters>
+</GlobalSearchHeader>
+```
+
+**5.2 Business-Context Search Categories**
+- **🏢 Companies & Customers**: Search by company names with complete business context
+- **📱 Phone Numbers**: Quick customer lookup by contact information
+- **🧵 Materials & Products**: Search by fabric types, GSM, specifications  
+- **💰 Amounts & Orders**: Search by payment amounts, order values
+- **📅 Dates & Timeline**: Search by delivery dates, payment due dates
+
+**5.3 Process-Aware Search Results**
+```typescript
+interface SearchResult {
+  id: string;
+  type: 'company' | 'order' | 'payment' | 'material' | 'date';
+  process: 'inquiries' | 'business' | 'money' | 'customers';
+  title: string;
+  context: string;
+  quickActions: QuickAction[];
+  navigationTarget: {
+    processId: string;
+    itemId: string;
+    highlightItem: boolean;
+  };
+}
+
+// Search result format
+🏢 Rajesh Textiles
+├─ 🔥 NEW INQUIRIES: Hot lead - Cotton fabric (2 days ago)
+├─ 💼 ACTIVE BUSINESS: Order #WO2024-034 in production  
+├─ 💳 MONEY MATTERS: No outstanding payments
+└─ 🤝 CUSTOMERS: VIP status, 12 completed orders
+```
+
+**5.4 Multilingual Voice Search**
+```typescript
+const voiceSearchCommands = {
+  english: [
+    "Find Rajesh Textiles", "Show all cotton orders", 
+    "Who owes money?", "What's due today?"
+  ],
+  gujarati: [
+    "રાજેશ ટેક્સટાઈલ્સ શોધો", "બધા કપાસના ઓર્ડર બતાવો",
+    "કોને પૈસા આપવાના છે?", "આજે શું બાકી છે?"
+  ],
+  hindi: [
+    "राजेश टेक्सटाइल्स खोजें", "सभी कपास के ऑर्डर दिखाएं", 
+    "किसका पैसा बकाया है?", "आज क्या देना है?"
+  ]
+};
+```
+
+**5.5 Search-to-Process Navigation**
+- Navigate from search results to relevant process entry point
+- Highlight specific items within the target process
+- Maintain search context for easy back navigation
+- Provide contextual quick actions from search results
+
+**5.6 Mobile-Optimized Search UI**
+```css
+.globalSearch {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.searchResultCard {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--process-color);
+}
+
+.processBadge.inquiries { background: rgba(255, 107, 53, 0.1); color: #ff6b35; }
+.processBadge.business { background: rgba(72, 52, 212, 0.1); color: #4834d4; }
+.processBadge.money { background: rgba(0, 210, 211, 0.1); color: #00d2d3; }
+.processBadge.customers { background: rgba(95, 39, 205, 0.1); color: #5f27cd; }
+```
+
+---
+
+## 🎯 **EXPECTED OUTCOMES**
+
+### **Business Benefits**
+- ✅ **Natural Workflow**: Matches daily MSME textile manufacturer routine (Morning inquiries → Active orders → Payment collection → Customer relationships)
+- ✅ **Zero Learning Curve**: Business owners immediately understand the process flow without training
+- ✅ **Contextual Intelligence**: System suggests next logical business actions based on current process state and historical data
+- ✅ **Reduced Cognitive Load**: Only 4 process entry points vs 12+ technical modules, dramatically simplifying decision-making
+
+### **Technical Benefits**
+- ✅ **Mobile-First**: Optimized for factory floor usage with one-handed operation and swipe navigation
+- ✅ **Smart Cross-Navigation**: Related information accessible from any process entry point with contextual suggestions
+- ✅ **Process Completion Tracking**: Clear progress indicators for business workflows with automatic status updates
+- ✅ **Scalable Architecture**: Easy to add new processes or enhance existing ones without breaking current functionality
+
+### **User Experience Benefits**
+- ✅ **Intuitive Navigation**: Swipe between processes, 2x2 grid layouts for mobile optimization
+- ✅ **Business Intelligence**: Historical data provides smart suggestions and predictive recommendations
+- ✅ **Voice Integration**: Gujarati/Hindi/English voice commands for hands-free operation during factory work
+- ✅ **Contextual Actions**: System shows relevant actions based on current business context and workflow stage
+- ✅ **Global Search**: Business-context search across all processes with voice support and multilingual capabilities
+
+---
+
+## 📁 **FILES TO MODIFY**
+
+### **Primary Files**
+- `/frontend/src/components/Dashboard.tsx` - Complete component restructure with process entry points
+- `/frontend/src/styles/Dashboard.module.css` - New process-specific styling and layouts
+- `/frontend/src/components/GlobalSearch.tsx` - Global search header and results components
+- `/frontend/src/styles/GlobalSearch.module.css` - Search interface styling
+
+### **Supporting Files**
+- Update navigation components to integrate with new process-driven structure
+- Modify state management to handle cross-process data flow and search state
+- Enhance existing components (LeadManagement, Payments, etc.) with contextual linking
+- Add search API integration for cross-process data queries
+- Voice search integration with multilingual support
+
+---
+
+## ✅ **IMPLEMENTATION STATUS**
+
+- 📋 **Documentation**: COMPLETE ✅ All design specifications documented in `/docs/DESIGN_SYSTEM.md`
+- 📋 **Requirements**: COMPLETE ✅ Business process entry points defined in `/docs/PRODUCT_REQUIREMENTS.md`  
+- 📋 **Architecture**: COMPLETE ✅ Technical implementation approach detailed above
+- 🔧 **Implementation**: READY TO BEGIN
+
+**Next Step**: Begin Phase 1 - Core Dashboard Structure implementation starting with Dashboard.tsx component restructure according to the specifications above.
+
+### **5-Phase Implementation Summary**
+1. **Phase 1**: Core Dashboard Structure - 4 process entry points with business health snapshot
+2. **Phase 2**: Enhanced CSS Styling - Process-specific gradients and mobile-optimized layouts
+3. **Phase 3**: Smart Cross-Navigation - Contextual intelligence and business suggestions
+4. **Phase 4**: Enhanced UX - Swipe navigation and voice commands
+5. **Phase 5**: Global Search Integration - Business-context search across all processes
+
+---
+
+## 🎯 **SUCCESS METRICS**
+
+- **User Adoption**: Business owners can navigate without training within 2 minutes
+- **Task Completion**: 90% reduction in clicks to complete common business workflows
+- **Mobile Usage**: 80%+ of dashboard interactions happen on mobile devices
+- **Process Flow**: Users complete end-to-end business processes (inquiry → quote → order → payment) seamlessly
