@@ -1924,3 +1924,109 @@
     color: #ffa726;
   }
 }
+
+/* Universal 2x2 Grid Layout for All Business Categories */
+.categoryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 15px;
+  margin: 0;
+}
+
+.gridCard {
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+  backdrop-filter: blur(10px);
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gridCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.gridCard:hover::before {
+  opacity: 1;
+}
+
+.gridCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.gridCard:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+}
+
+.gridCard:disabled:hover {
+  transform: none;
+  border-color: rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gridCard:disabled::before {
+  background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(230, 126, 34, 0.1));
+  opacity: 0.5;
+}
+
+.cardSubtext {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #7f8c8d;
+  margin-top: 5px;
+  opacity: 0.8;
+}
+
+/* Mobile Responsive Adjustments for Category Grids */
+@media (max-width: 768px) {
+  .categoryGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+  
+  .gridCard {
+    min-height: 100px;
+    padding: 16px;
+    font-size: 0.9rem;
+  }
+  
+  .cardSubtext {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridCard {
+    min-height: 80px;
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+}

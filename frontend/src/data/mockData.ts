@@ -575,7 +575,7 @@ export const mockLeads: Lead[] = [
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_customer',
     convertedToCustomerDate: 'March 31, 2024',
-    businessProfileId: 'gujarat-garments'
+    businessProfileId: 'bp-gujarat-garments'
   }
 ];
 
@@ -645,8 +645,9 @@ export const mockQuotes: Quote[] = [
     advancePaymentStatus: 'received' // This triggered customer creation
   },
   {
-    id: 'QT-002',
+    id: 'QT-GUJ-001',
     leadId: 'gujarat-002',
+    businessProfileId: 'bp-gujarat-garments',
     companyName: 'Gujarat Garments',
     location: 'Surat',
     quoteDate: 'March 10, 2024',
@@ -710,8 +711,8 @@ export const mockSalesOrders: SalesOrder[] = [
   // SO-002: Created when QT-002 advance payment was received, triggering customer conversion
   {
     id: 'SO-002',
-    quoteId: 'QT-002',
-    businessProfileId: 'gujarat-garments',
+    quoteId: 'QT-GUJ-001',
+    businessProfileId: 'bp-gujarat-garments',
     advancePaymentId: 'ADV-QT-002-001',
     orderDate: 'March 15, 2024',
     deliveryDate: 'April 10, 2024',
@@ -727,7 +728,7 @@ export const mockSalesOrders: SalesOrder[] = [
   {
     id: 'SO-004',
     quoteId: 'QT-004',
-    businessProfileId: 'baroda-fashion',
+    businessProfileId: 'bp-baroda-fashion',
     advancePaymentId: 'ADV-QT-004-001',
     orderDate: 'March 10, 2024',
     deliveryDate: 'April 5, 2024',

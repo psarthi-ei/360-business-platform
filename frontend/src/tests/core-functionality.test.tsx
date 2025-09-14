@@ -122,7 +122,8 @@ describe('Core Application Functionality', () => {
         onShowLeadManagement: jest.fn(),
         onShowQuotationOrders: jest.fn(),
         onShowSalesOrders: jest.fn(),
-        onShowAdvancePaymentManagement: jest.fn(),
+        onShowPayments: jest.fn(),
+        onShowInvoices: jest.fn(),
         onShowCustomerList: jest.fn()
       };
 
@@ -269,7 +270,8 @@ describe('Core Application Functionality', () => {
             onShowLeadManagement: jest.fn(), 
             onShowQuotationOrders: jest.fn(), 
             onShowSalesOrders: jest.fn(), 
-            onShowAdvancePaymentManagement: jest.fn(), 
+            onShowPayments: jest.fn(),
+            onShowInvoices: jest.fn(), 
             onShowCustomerList: jest.fn() 
           } 
         },
@@ -339,7 +341,8 @@ describe('Core Application Functionality', () => {
         onShowLeadManagement: jest.fn(),
         onShowQuotationOrders: jest.fn(),
         onShowSalesOrders: jest.fn(),
-        onShowAdvancePaymentManagement: jest.fn(),
+        onShowPayments: jest.fn(),
+        onShowInvoices: jest.fn(),
         onShowCustomerList: jest.fn()
       };
 

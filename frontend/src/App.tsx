@@ -6,7 +6,8 @@ import Dashboard from './components/Dashboard';
 import LeadManagement from './components/LeadManagement';
 import QuotationOrders from './components/QuotationOrders';
 import SalesOrders from './components/SalesOrders';
-import AdvancePaymentManagement from './components/AdvancePaymentManagement';
+import Payments from './components/Payments';
+import Invoices from './components/Invoices';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
 import ExternalProfileForm from './components/ExternalProfileForm';
@@ -29,6 +30,7 @@ function App() {
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
   const [paymentFilter, setPaymentFilter] = useState('all');
+  const [invoiceFilter, setInvoiceFilter] = useState('all');
   const [customerSearch, setCustomerSearch] = useState('');
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
   const [profileLinkId, setProfileLinkId] = useState('');
@@ -128,9 +130,14 @@ function App() {
     setCurrentScreen('salesorders');
   }
 
-  function showAdvancePaymentManagement() {
+  function showPayments() {
     setCurrentScreen('advancepayment');
   }
+
+  function showInvoices() {
+    setCurrentScreen('invoices');
+  }
+
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
@@ -164,7 +171,8 @@ function App() {
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
-          onShowAdvancePaymentManagement={showAdvancePaymentManagement}
+          onShowPayments={showPayments}
+          onShowInvoices={showInvoices}
           onShowCustomerList={showCustomerList}
           onLogin={showLogin}
           onSignUp={showSignUp}
@@ -227,16 +235,16 @@ function App() {
         onNavigateBack={showDashboard}
         onShowLeadManagement={showLeadManagement}
         onShowQuotationOrders={showQuotationOrders}
-        onShowAdvancePaymentManagement={showAdvancePaymentManagement}
+        onShowPayments={showPayments}
         filterState={orderFilter}
         onFilterChange={setOrderFilter}
       />
     );
   }
 
-  function renderAdvancePaymentManagement() {
+  function renderPayments() {
     return (
-      <AdvancePaymentManagement
+      <Payments
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
@@ -244,6 +252,21 @@ function App() {
         onShowCustomerProfile={showCustomerProfile}
         filterState={paymentFilter}
         onFilterChange={setPaymentFilter}
+      />
+    );
+  }
+
+  function renderInvoices() {
+    return (
+      <Invoices
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onNavigateBack={showDashboard}
+        onShowQuotationOrders={showQuotationOrders}
+        onShowPayments={showPayments}
+        onShowCustomerProfile={showCustomerProfile}
+        filterState={invoiceFilter}
+        onFilterChange={setInvoiceFilter}
       />
     );
   }
@@ -362,7 +385,8 @@ function App() {
         {currentScreen === 'leads' && renderLeadManagement()}
         {currentScreen === 'quotations' && renderQuotationOrders()}
         {currentScreen === 'salesorders' && renderSalesOrders()}
-        {currentScreen === 'advancepayment' && renderAdvancePaymentManagement()}
+        {currentScreen === 'advancepayment' && renderPayments()}
+        {currentScreen === 'invoices' && renderInvoices()}
         {currentScreen === 'customerprofile' && renderCustomerProfile()}
         {currentScreen === 'customerlist' && renderCustomerList()}
         {currentScreen === 'profilecompletion' && renderProfileCompletion()}

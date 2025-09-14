@@ -11,7 +11,8 @@ interface DashboardProps {
   onShowLeadManagement: () => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
-  onShowAdvancePaymentManagement: () => void;
+  onShowPayments: () => void;
+  onShowInvoices: () => void;
   onShowCustomerList: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
@@ -29,7 +30,8 @@ function Dashboard({
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowSalesOrders,
-  onShowAdvancePaymentManagement,
+  onShowPayments,
+  onShowInvoices,
   onShowCustomerList,
   onLogin,
   onSignUp,
@@ -173,34 +175,38 @@ function Dashboard({
                   </div>
                 </div>
                 
-                <div className={styles.categoryModules}>
+                <div className={styles.categoryGrid}>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    className={styles.gridCard} 
                     onClick={onShowLeadManagement}
                     title={t('leadManagement')}
                   >
                     📞 {t('leads')}
+                    <span className={styles.cardSubtext}>Inquiry to Quote</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    className={styles.gridCard} 
                     onClick={onShowQuotationOrders}
                     title={t('quotationOrders')}
                   >
                     📋 {t('quotes')}
+                    <span className={styles.cardSubtext}>Price & Terms</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    className={styles.gridCard} 
                     onClick={onShowSalesOrders}
                     title={t('salesOrder')}
                   >
                     📦 {t('salesOrder')}
+                    <span className={styles.cardSubtext}>Order Processing</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.live}`} 
+                    className={styles.gridCard} 
                     onClick={onShowCustomerList}
                     title={t('customers')}
                   >
                     🤝 {t('customers')}
+                    <span className={styles.cardSubtext}>Customer CRM</span>
                   </button>
                 </div>
               </div>
@@ -213,7 +219,7 @@ function Dashboard({
                     <h4>{t('financialCategory')}</h4>
                   </div>
                   <div className={styles.categoryStatus}>
-                    <span className={styles.statusBadge}>1/3 {t('liveBadge')}</span>
+                    <span className={styles.statusBadge}>2/4 {t('liveBadge')}</span>
                   </div>
                 </div>
                 
@@ -238,27 +244,38 @@ function Dashboard({
                   </div>
                 </div>
                 
-                <div className={styles.categoryModules}>
+                <div className={styles.categoryGrid}>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.live}`} 
-                    onClick={onShowAdvancePaymentManagement}
-                    title={t('payments')}
+                    className={styles.gridCard} 
+                    onClick={onShowPayments}
+                    title="All Payments - Advance & Final"
                   >
-                    💳 {t('payments')}
+                    💰 Payments
+                    <span className={styles.cardSubtext}>Advance & Final</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
+                    onClick={onShowInvoices}
+                    title="All Invoices - Proforma & Final"
+                  >
+                    📄 Invoices
+                    <span className={styles.cardSubtext}>Proforma & Final</span>
+                  </button>
+                  <button 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('reports')} - ${t('comingBadge')}`}
                   >
                     📊 {t('reports')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('cashFlow')} - ${t('comingBadge')}`}
                   >
                     💵 {t('cashFlow')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                 </div>
               </div>
@@ -290,34 +307,38 @@ function Dashboard({
                   </div>
                 </div>
                 
-                <div className={styles.categoryModules}>
+                <div className={styles.categoryGrid}>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('workOrders')} - ${t('comingBadge')}`}
                   >
                     🔧 {t('workOrders')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('procurement')} - ${t('comingBadge')}`}
                   >
                     📦 {t('procurement')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('inventory')} - ${t('comingBadge')}`}
                   >
                     📋 {t('inventory')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('production')} - ${t('comingBadge')}`}
                   >
                     ⚙️ {t('production')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                 </div>
               </div>
@@ -349,20 +370,38 @@ function Dashboard({
                   </div>
                 </div>
                 
-                <div className={styles.categoryModules}>
+                <div className={styles.categoryGrid}>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('dispatch')} - ${t('comingBadge')}`}
                   >
                     📤 {t('dispatch')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('delivery')} - ${t('comingBadge')}`}
                   >
                     📍 {t('delivery')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
+                  </button>
+                  <button 
+                    className={styles.gridCard} 
+                    disabled
+                    title={`Customer Feedback - ${t('comingBadge')}`}
+                  >
+                    ⭐ Feedback
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
+                  </button>
+                  <button 
+                    className={styles.gridCard} 
+                    disabled
+                    title={`Quality Check - ${t('comingBadge')}`}
+                  >
+                    ✅ Quality
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                 </div>
               </div>
@@ -394,27 +433,38 @@ function Dashboard({
                   </div>
                 </div>
                 
-                <div className={styles.categoryModules}>
+                <div className={styles.categoryGrid}>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('analytics')} - ${t('comingBadge')}`}
                   >
                     📈 {t('analytics')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('voiceAI')} - ${t('comingBadge')}`}
                   >
                     🎤 {t('voiceAI')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                   <button 
-                    className={`${styles.moduleBtn} ${styles.coming}`} 
+                    className={styles.gridCard} 
                     disabled
                     title={`${t('reports')} - ${t('comingBadge')}`}
                   >
                     📋 {t('reports')}
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
+                  </button>
+                  <button 
+                    className={styles.gridCard} 
+                    disabled
+                    title={`Business Insights - ${t('comingBadge')}`}
+                  >
+                    🧠 Insights
+                    <span className={styles.cardSubtext}>{t('comingBadge')}</span>
                   </button>
                 </div>
               </div>
