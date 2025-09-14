@@ -1,5 +1,5 @@
-/* Quotation Orders Screen Styles */
-.quotationOrdersScreen {
+/* Proforma Invoice Management Screen Styles */
+.proformaInvoiceScreen {
   min-height: 100vh;
   padding: 100px 10px 20px 10px;
   text-align: left !important;
@@ -11,7 +11,7 @@
   margin: 0;
 }
 
-.quotationOrdersScreen .languageSwitcher {
+.proformaInvoiceScreen .languageSwitcher {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -40,7 +40,12 @@
   text-align: left;
 }
 
-.backButton, .addButton {
+.headerActions {
+  display: flex;
+  gap: 12px;
+}
+
+.backButton {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -49,9 +54,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
-}
-
-.backButton {
   background: var(--gradient-card, rgba(255, 255, 255, 0.15));
   color: var(--color-text, white);
   border: 2px solid var(--color-primary, rgba(255, 255, 255, 0.3));
@@ -60,19 +62,6 @@
 .backButton:hover {
   background: var(--gradient-card, rgba(255, 255, 255, 0.25));
   border-color: var(--color-primary, rgba(255, 255, 255, 0.5));
-  transform: translateY(-2px);
-}
-
-.addButton {
-  background: var(--gradient-button, #ffd700);
-  color: var(--color-secondary, #1e3c72);
-  font-weight: bold;
-  border: 2px solid var(--color-primary, #ffd700);
-}
-
-.addButton:hover {
-  background: var(--gradient-button, #ffed4e);
-  border-color: var(--color-primary, #ffed4e);
   transform: translateY(-2px);
 }
 
@@ -122,7 +111,7 @@
   transform: translateY(-2px);
 }
 
-.quotesContainer {
+.invoicesContainer {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 10px;
@@ -131,7 +120,7 @@
   margin-bottom: 40px;
 }
 
-.quoteCard {
+.invoiceCard {
   background: var(--gradient-card, rgba(255, 255, 255, 0.08));
   border-radius: var(--radius-large, 16px);
   padding: 24px;
@@ -141,28 +130,33 @@
   border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.1));
 }
 
-.quoteCard:hover {
+.invoiceCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
   background: var(--gradient-card, rgba(255, 255, 255, 0.12));
 }
 
-.quoteCard.pendingQuote {
+.invoiceCard.pendingInvoice {
   border-left-color: #ffa502;
   background: rgba(255, 165, 2, 0.08);
 }
 
-.quoteCard.approvedQuote {
+.invoiceCard.sentInvoice {
+  border-left-color: #5352ed;
+  background: rgba(83, 82, 237, 0.08);
+}
+
+.invoiceCard.payment_receivedInvoice {
   border-left-color: #2ed573;
   background: rgba(46, 213, 115, 0.08);
 }
 
-.quoteCard.expiredQuote {
+.invoiceCard.expiredInvoice {
   border-left-color: #ff4757;
   background: rgba(255, 71, 87, 0.08);
 }
 
-.quoteHeader {
+.invoiceHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -171,12 +165,18 @@
   gap: 12px;
 }
 
-.quoteHeader h3 {
+.invoiceTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.invoiceTitle h3 {
   margin: 0;
   font-size: 1.4rem;
   color: var(--color-primary, #ffd700);
   font-weight: 600;
-  flex: 1;
 }
 
 .statusBadge {
@@ -189,49 +189,55 @@
   flex-shrink: 0;
 }
 
-.statusBadge.pending {
+.statusBadge.statusPending {
   background: linear-gradient(135deg, #ffa502, #ff9500);
   color: var(--color-text, white);
   box-shadow: 0 4px 15px rgba(255, 165, 2, 0.4);
 }
 
-.statusBadge.approved {
+.statusBadge.statusSent {
+  background: linear-gradient(135deg, #5352ed, #3742fa);
+  color: var(--color-text, white);
+  box-shadow: 0 4px 15px rgba(83, 82, 237, 0.4);
+}
+
+.statusBadge.statusPaid {
   background: linear-gradient(135deg, #2ed573, #20bf6b);
   color: var(--color-text, white);
   box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
 }
 
-.statusBadge.expired {
+.statusBadge.statusExpired {
   background: linear-gradient(135deg, #ff4757, #ff3742);
   color: var(--color-text, white);
   box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
 }
 
-.quoteDetails {
+.invoiceDetails {
   margin-bottom: 20px;
   text-align: left;
 }
 
-.quoteDetails p {
+.invoiceDetails p {
   margin: 8px 0;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-textSecondary, rgba(255, 255, 255, 0.9));
 }
 
-.quoteDetails strong {
+.invoiceDetails strong {
   color: var(--color-primary, #ffd700);
   font-weight: 600;
 }
 
-.quoteActions {
+.invoiceActions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 20px;
 }
 
-.quoteActions .actionBtn {
+.invoiceActions .actionBtn {
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
@@ -254,25 +260,83 @@
   transform: translateY(-2px);
 }
 
-.actionBtn.approveBtn {
+.actionBtn.downloadBtn {
   background: #2ed573;
   color: var(--color-text, white);
 }
 
-.actionBtn.approveBtn:hover {
+.actionBtn.downloadBtn:hover {
   background: #20bf6b;
   transform: translateY(-2px);
 }
 
-.actionBtn.convertBtn {
+.actionBtn.quoteBtn {
   background: var(--gradient-button, #ffd700);
   color: var(--color-secondary, #1e3c72);
   font-weight: 700;
 }
 
-.actionBtn.convertBtn:hover {
+.actionBtn.quoteBtn:hover {
   background: var(--gradient-button, #ffed4e);
   transform: translateY(-2px);
+}
+
+.actionBtn.customerBtn {
+  background: #ff6b6b;
+  color: var(--color-text, white);
+}
+
+.actionBtn.customerBtn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-textSecondary, rgba(255, 255, 255, 0.7));
+}
+
+.emptyState h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--color-primary, #ffd700);
+}
+
+.emptyState p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.quickActions {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 10px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.quickActionBtn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--gradient-card, rgba(255, 255, 255, 0.1));
+  color: var(--color-text, white);
+  border: 2px solid var(--color-primary, rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+}
+
+.quickActionBtn:hover {
+  background: var(--gradient-card, rgba(255, 255, 255, 0.2));
+  border-color: var(--color-primary, rgba(255, 255, 255, 0.4));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
 }
 
 .voiceCommands {
@@ -290,200 +354,4 @@
   font-size: 1.1rem;
   color: var(--color-primary, #ffd700);
   font-weight: 500;
-}
-
-/* Badge Container Styles */
-.badgeContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.customerStatusBadge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.customerBadge {
-  background: linear-gradient(135deg, #4caf50, #45a049);
-  color: white;
-  border-color: #4caf50;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.prospectBadge {
-  background: linear-gradient(135deg, #9e9e9e, #757575);
-  color: white;
-  border-color: #9e9e9e;
-  box-shadow: 0 2px 8px rgba(158, 158, 158, 0.3);
-}
-
-/* Data Mapping Styles */
-.quoteMapping {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.05));
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 8px;
-  border-left: 4px solid var(--color-primary, #ffd700);
-}
-
-.mappingInfo p {
-  margin: 8px 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.mappingLink {
-  background: rgba(255, 215, 0, 0.2);
-  color: var(--color-primary, #ffd700);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.mappingLink:hover {
-  background: rgba(255, 215, 0, 0.3);
-}
-
-.noOrder {
-  color: var(--color-textSecondary, rgba(255, 255, 255, 0.6));
-  font-style: italic;
-}
-
-/* New styles for ProductHeader integration */
-.pageContent {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 10px;
-}
-
-.centeredHeading {
-  font-size: 2.2rem;
-  margin: 20px 0 30px 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  color: var(--color-text, white);
-  text-align: center;
-  font-weight: 600;
-}
-
-/* Update screenHeader for centered heading with right-aligned button */
-.screenHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 30px 0;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 0 10px;
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.screenHeader h1 {
-  flex: 1;
-  margin: 0;
-}
-
-/* Mobile Responsive for Quotation Orders */
-@media (max-width: 768px) {
-  .screenHeader {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    margin-top: 80px;
-    padding: 0 10px;
-  }
-
-  .screenHeader h1 {
-    text-align: center;
-    font-size: 1.8rem;
-  }
-
-  .quoteHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .quoteActions {
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .actionBtn {
-    flex: 1;
-    min-width: 100px;
-    font-size: 0.8rem;
-    padding: 8px 12px;
-  }
-
-  .quotationOrdersScreen .languageSwitcher {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-
-  .filtersSection,
-  .quotesContainer,
-  .voiceCommands {
-    margin-left: 10px;
-    margin-right: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .quoteCard {
-    padding: 20px;
-  }
-
-  .filterBtn {
-    padding: 10px 16px;
-    font-size: 0.85rem;
-  }
-}
-
-/* Workflow Action Button Styles */
-.actionBtn.checkBtn {
-  background: #3742fa;
-  color: white;
-}
-
-.actionBtn.checkBtn:hover {
-  background: #2f3542;
-  transform: translateY(-2px);
-}
-
-/* Workflow Message Styles */
-.workflowMessage {
-  background: linear-gradient(135deg, #2ed573, #1dd1a1);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

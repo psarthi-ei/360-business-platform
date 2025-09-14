@@ -13,7 +13,7 @@ interface SalesOrdersProps {
   onNavigateHome?: () => void;
   onShowLeadManagement?: () => void;
   onShowQuotationOrders?: () => void;
-  onShowAdvancePaymentManagement?: () => void;
+  onShowPayments?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
 }
@@ -27,7 +27,7 @@ function SalesOrders({
   onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
-  onShowAdvancePaymentManagement,
+  onShowPayments,
   filterState,
   onFilterChange
 }: SalesOrdersProps) {
@@ -38,7 +38,7 @@ function SalesOrders({
     const advancePercentage = 50; // Standard 50% advance
     const advanceAmount = Math.round(totalAmount * (advancePercentage / 100));
     
-    // Simulate different payment states based on order ID (same logic as AdvancePaymentManagement)
+    // Simulate different payment states based on order ID (same logic as Payments)
     let advanceReceived = 0;
     let paymentStatus = 'pending';
     
@@ -165,7 +165,7 @@ function SalesOrders({
                     <strong>💳 Payment:</strong> 
                     <span 
                       className={styles.mappingLink} 
-                      onClick={() => onShowAdvancePaymentManagement && onShowAdvancePaymentManagement()}
+                      onClick={() => onShowPayments && onShowPayments()}
                       title="View payment details"
                       style={{ marginLeft: '8px' }}
                     >
@@ -194,7 +194,7 @@ function SalesOrders({
                   <>
                     <button 
                       className={`${styles.actionBtn} ${styles.paymentBtn}`}
-                      onClick={() => onShowAdvancePaymentManagement && onShowAdvancePaymentManagement()}
+                      onClick={() => onShowPayments && onShowPayments()}
                     >
                       💳 {t('viewPaymentStatus')}
                     </button>
