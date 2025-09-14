@@ -965,20 +965,38 @@ const handleSearchResultClick = (result: SearchResult) => {
 
 ---
 
-## **EXECUTIVE BUSINESS INTELLIGENCE DASHBOARD**
+## **BUSINESS PROCESS-DRIVEN DASHBOARD DESIGN**
 
-### **37. Dashboard Information Architecture (40/40/20 Principle)**
+### **37. Sequential Process Layout Architecture**
 
-#### **Visual Hierarchy Strategy**
-The new dashboard follows a **business intelligence-first approach** with clear information prioritization:
+#### **8-Card Sequential Flow Design**
+The dashboard is redesigned to mirror the **natural textile manufacturing business process flow** with sequential card organization:
 
 ```
-40% - Executive Summary Section: Comprehensive business health monitoring
-40% - Information-Rich Process Cards: Business intelligence + navigation  
-20% - Tools & Utilities: Search, voice assistant, quick actions
+🔄 BUSINESS PROCESS FLOW LAYOUT:
+
+Row 1: 🔥 LEAD PIPELINE → 📋 QUOTATIONS → 💰 ADVANCE PAYMENTS
+Row 2: 🏭 PRODUCTION → 📦 INVENTORY → 🚚 FULFILLMENT  
+Row 3: 🤝 CUSTOMERS → 📊 BUSINESS ANALYTICS
+
+Visual Flow Indicators: Subtle arrows connecting process stages
+Mobile Layout: 2-column responsive grid maintaining process sequence
 ```
 
-**Design Philosophy**: *"Dashboard = Business Intelligence Hub + Navigation, Components = Detailed Actions"*
+**Design Philosophy**: *"Dashboard = Digital Mirror of Textile Business Reality"*
+
+#### **Process-Driven Information Hierarchy**
+```
+30% - Executive Business Health Summary: Key performance indicators
+50% - Sequential Process Cards: Business intelligence + stage navigation
+20% - Global Tools: Voice assistant, search, cross-process navigation
+```
+
+#### **Sequential Card Layout Strategy**
+- **Process Flow Logic**: Cards arranged left-to-right, top-to-bottom following business workflow
+- **Visual Progression**: Subtle design cues show progression from lead to customer
+- **Context Intelligence**: Each card shows relevant connections to next/previous process stages
+- **Mobile Optimization**: Process sequence maintained in responsive 2-column grid
 
 #### **Executive Summary Section Design**
 **Purpose**: Comprehensive 360° business view that builds credibility and trust
@@ -1031,10 +1049,323 @@ The new dashboard follows a **business intelligence-first approach** with clear 
 .trendNeutral { color: #6b7280; }
 ```
 
-### **38. Information-Rich Process Cards Design**
+### **38. Process-Specific Card Design Patterns**
 
-#### **Process Card Enhancement Strategy**
-Transform simple navigation cards into **business intelligence centers** with actionable insights:
+#### **Sequential Process Card Strategy**
+Each process stage has unique design characteristics while maintaining consistent visual language:
+
+#### **Lead Pipeline Card Design (Entry Point)**
+```css
+.leadPipelineCard {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border-left: 5px solid #ff4500;
+}
+
+.processStageIndicator::before {
+  content: "1/8 •";
+  font-weight: 600;
+  opacity: 0.8;
+}
+```
+
+#### **Production Card Design (Manufacturing Core)**
+```css
+.productionCard {
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  border-left: 5px solid #319795;
+}
+
+.processStageIndicator::before {
+  content: "4/8 •";
+  font-weight: 600;
+  opacity: 0.8;
+}
+```
+
+#### **Customer Card Design (Relationship End Point)**
+```css
+.customerCard {
+  background: linear-gradient(135deg, #5f27cd, #a55eea);
+  border-left: 5px solid #8b5cf6;
+}
+
+.processStageIndicator::before {
+  content: "7/8 •";
+  font-weight: 600;
+  opacity: 0.8;
+}
+```
+
+#### **Tabbed Sub-Module Interface Design**
+Transform card clicks into tabbed management interfaces with process-specific organization:
+
+```css
+.processManagementInterface {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.processTabNavigation {
+  display: flex;
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.processTab {
+  flex: 1;
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.processTab.active {
+  background: white;
+  border-bottom-color: var(--process-primary);
+  font-weight: 600;
+}
+
+.tabContent {
+  padding: 24px;
+  min-height: 400px;
+}
+```
+
+### **39. Cross-Process Intelligence & Navigation Patterns**
+
+#### **Smart Context Links Design**
+Visual design for intelligent connections between business process stages:
+
+```css
+.smartContextLink {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  margin-top: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.smartContextLink:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+}
+
+.contextLinkIcon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.contextLinkText {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.contextLinkArrow {
+  font-size: 1rem;
+  opacity: 0.7;
+}
+```
+
+#### **Process Flow Visual Indicators**
+Subtle design elements showing business process progression:
+
+```css
+.processFlowContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 16px;
+  position: relative;
+}
+
+.processFlowArrow {
+  position: absolute;
+  color: rgba(0,0,0,0.1);
+  font-size: 1.2rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Flow arrows positioning */
+.arrow-1-2 { top: 50%; left: 33%; }
+.arrow-2-3 { top: 50%; left: 66%; }
+.arrow-3-4 { top: 25%; right: 16px; transform: rotate(90deg); }
+/* Continue for all process connections */
+```
+
+### **40. Sequential Process Layout Framework (UI ARCHITECTURE)**
+
+#### **Dashboard Grid Layout System**
+```css
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 16px;
+  padding: 20px;
+}
+
+/* 8-card sequential layout */
+.processCard {
+  border-radius: 16px;
+  padding: 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.processCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Sequential positioning in grid */
+.card-1 { grid-column: 1; grid-row: 1; } /* Lead Pipeline */
+.card-2 { grid-column: 2; grid-row: 1; } /* Quotations */
+.card-3 { grid-column: 3; grid-row: 1; } /* Advance Payments */
+.card-4 { grid-column: 1; grid-row: 2; } /* Production */
+.card-5 { grid-column: 2; grid-row: 2; } /* Inventory */
+.card-6 { grid-column: 3; grid-row: 2; } /* Fulfillment */
+.card-7 { grid-column: 1; grid-row: 3; } /* Customers */
+.card-8 { grid-column: 2; grid-row: 3; } /* Analytics */
+
+/* Mobile responsive grid */
+@media (max-width: 768px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+  
+  .card-1 { grid-column: 1; grid-row: 1; }
+  .card-2 { grid-column: 2; grid-row: 1; }
+  .card-3 { grid-column: 1; grid-row: 2; }
+  .card-4 { grid-column: 2; grid-row: 2; }
+  .card-5 { grid-column: 1; grid-row: 3; }
+  .card-6 { grid-column: 2; grid-row: 3; }
+  .card-7 { grid-column: 1; grid-row: 4; }
+  .card-8 { grid-column: 2; grid-row: 4; }
+}
+```
+
+#### **Process Stage Visual Indicators**
+```css
+.stageIndicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.stageIndicator::before {
+  content: attr(data-stage) "/8 • ";
+}
+
+/* Stage-specific styling */
+.stage-1::before { content: "1/8 • Entry"; }
+.stage-2::before { content: "2/8 • Convert"; }
+.stage-3::before { content: "3/8 • Payment"; }
+.stage-4::before { content: "4/8 • Make"; }
+.stage-5::before { content: "5/8 • Stock"; }
+.stage-6::before { content: "6/8 • Ship"; }
+.stage-7::before { content: "7/8 • Relate"; }
+.stage-8::before { content: "8/8 • Analyze"; }
+```
+
+#### **Tabbed Sub-Module Interface Framework**
+```css
+.moduleInterface {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.moduleHeader {
+  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.moduleTabBar {
+  display: flex;
+  background: #f8fafc;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.moduleTab {
+  flex: 1;
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.moduleTab.active {
+  background: white;
+  border-bottom-color: var(--process-primary);
+  font-weight: 600;
+}
+
+.moduleTab:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.moduleContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+```
+
+**Cross-Document References**:
+- **Business Requirements**: See `/docs/PRODUCT_REQUIREMENTS.md` for feature specifications and module organization
+- **Business Workflow Context**: See `/docs/BUSINESS_PROCESSES.md` for textile manufacturing workflow details and business mental models
+
+**Usage Guidelines**:
+- Use this document for UI/UX implementation and visual design patterns
+- Reference PRODUCT_REQUIREMENTS.md for feature requirements and acceptance criteria
+- Reference BUSINESS_PROCESSES.md to understand why certain UI decisions match business reality
 
 ```css
 .informationRichProcessCard {

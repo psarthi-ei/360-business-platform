@@ -152,125 +152,307 @@ Successful manufacturers will want to scale operations, add team members, and ex
 - **Revenue-ready**: Can start charging ₹5-10k/month immediately
 - **Portfolio piece**: Something you're genuinely proud to show
 
-## **BUSINESS CATEGORIES & MODULE ORGANIZATION**
+## **BUSINESS PROCESS-DRIVEN MODULE ORGANIZATION**
 
-### **Dashboard Structure: 4 Process-Driven Business Entry Points**
-Based on extensive manufacturing business flow analysis and MSME owner mental models, the 13 MVP modules are organized into 4 natural business process entry points that match how textile manufacturers actually think and work throughout their daily operations:
+### **Dashboard Structure: 8 Sequential Business Process Cards**
+Based on comprehensive textile manufacturing workflow analysis, the 13 MVP modules are organized into 8 sequential business process cards that mirror the natural flow of textile manufacturing operations from lead capture to customer relationship management:
 
-**Core Insight**: Textile manufacturers think in business processes, not functional categories. The dashboard eliminates artificial separation between interconnected business activities.
+**Core Strategy**: Transform dashboard from functional software categories into a **digital mirror of textile business reality** - matching how manufacturers actually think, work, and process business daily.
 
-**Reference**: Complete process-driven dashboard specifications in `/docs/DESIGN_SYSTEM.md` sections 24-30.
+**Cross-Document References**:
+- **Business Workflow Details**: See `/docs/BUSINESS_PROCESSES.md` for complete textile manufacturing workflow and business mental models
+- **UI/UX Implementation**: See `/docs/DESIGN_SYSTEM.md` for visual design patterns and technical implementation details
 
-#### **🔥 NEW INQUIRIES (નવી પૂછપરછ)**
-**Process Focus**: Lead → Quote conversion workflow  
-**Business Mental Model**: "કોણ call કર્યો? કયા quotes મોકલવા? કોને ફૉલો કરવું?"
-**Daily Priority**: "Who called today? What quotes need to be sent?"
+#### **🔥 LEAD PIPELINE** (Business Entry Point)
+**Primary Features**:
+- Lead capture and management system
+- Lead prioritization (Hot/Warm/Cold classification)
+- Lead communication tracking and follow-up scheduling
+- Lead-to-quote conversion workflow
 
-**Sub-Actions (2x2 Mobile Grid)**:
-- **📞 CALL NOW** → Hot inquiries needing immediate response
-- **✍️ CREATE QUOTES** → Leads ready for pricing and quote generation  
-- **📋 FOLLOW UP** → Warm leads to nurture with scheduled callbacks
-- **📊 INQUIRY REPORTS** → Source analysis, conversion tracking, trends
+**Tabbed Interface Requirements**:
+- **[All Leads]** - Complete lead database with filtering and search capabilities
+- **[Hot Leads]** - High-priority leads requiring immediate attention  
+- **[Follow-up]** - Scheduled callbacks and nurturing activities management
+- **[Analytics]** - Lead source analysis, conversion tracking, performance metrics
 
-**Smart Context**: Shows "→ 3 ready for quotes" pointing to ACTIVE BUSINESS, displays similar customer pricing suggestions, auto-suggests follow-up timing based on lead temperature.
+**Cross-Process Navigation**:
+- Smart links to QUOTATIONS when leads are ready for quotes
+- Connection to CUSTOMERS for existing customer lead tracking
+- Context-aware navigation based on lead status
 
-**Modules Included**: 1 (Lead Management) + Quote generation from Module 2
-**Status**: ✅ Live with contextual cross-navigation
+**Voice Integration Requirements**:
+- Voice commands: "Show hot leads", "Add new lead", "Call next lead"
+- Multilingual support (Gujarati, Hindi, English)
+- Context-aware voice suggestions
 
-#### **💼 ACTIVE BUSINESS (ચાલતો બિઝનેસ)**
-**Process Focus**: Quote → Order → Production workflow  
-**Business Mental Model**: "કયા orders ચાલી રહ્યા? કોની advance લેવાની? Production કેમ ચાલે છે?"
-**Daily Priority**: "What orders am I working on? What payments should I collect?"
+**Included Modules**: Lead Management + CRM Initial Contact + Voice Integration
+**Success Criteria**: Users can manage complete lead lifecycle with 2-click access to any function
 
-**Sub-Actions (2x2 Mobile Grid)**:
-- **💰 COLLECT ADVANCE** → Approved quotes ready for 30% payment collection
-- **🔧 IN PRODUCTION** → Active orders tracking with production timeline view
-- **📤 READY TO SHIP** → Completed orders awaiting final payment and dispatch
-- **📊 ORDER REPORTS** → Production efficiency, delay analysis, timeline tracking
+#### **📋 QUOTATIONS & ORDERS** (Conversion Stage)  
+**Primary Features**:
+- Quote creation system with template support
+- Quote lifecycle management (pending, approved, rejected)
+- Sales order generation from approved quotes
+- Quote-to-order conversion workflow
 
-**Smart Context**: Auto-transitions approved quotes from NEW INQUIRIES, shows "→ ₹2.4L pending" pointing to MONEY MATTERS, provides production timeline with delivery predictions.
+**Tabbed Interface Requirements**:
+- **[Create Quotes]** - Quote generation interface with lead data integration
+- **[Quote Status]** - Quote tracking and status management system
+- **[Sales Orders]** - Sales order creation and management (post-payment)
+- **[Quote Analytics]** - Conversion analytics and performance tracking
 
-**Modules Included**: 2 (Quotations), 5 (Work Orders), 8 (Production), 9 (Dispatch)  
-**Status**: ✅ Quotations Live, Production Tracking in Development
+**Cross-Process Navigation**:
+- Integration with ADVANCE PAYMENTS for payment collection
+- Feedback integration with LEAD PIPELINE for quote performance
+- Smart status indicators showing process progression
 
-#### **💳 MONEY MATTERS (પૈસાનો મામલો)**
-**Process Focus**: Payments → Invoices → Collections workflow
-**Business Mental Model**: "કોને પૈસા આપવાના? કયા bills મોકલવા? કેટલા પૈસા બાકી?"
-**Daily Priority**: "Who owes me money? What invoices should I send?"
+**Voice Integration Requirements**:
+- Voice commands: "Create quote for [company]", "Show pending quotes", "Quote status"
+- Quote status inquiries via voice
+- Voice-guided quote creation process
 
-**Sub-Actions (2x2 Mobile Grid)**:
-- **💰 COLLECT TODAY** → Due payments priority with overdue reminders
-- **📄 SEND INVOICES** → Proforma & final billing with automated generation
-- **📊 MONEY REPORTS** → Cash flow analysis, monthly trends, profit tracking
-- **🏦 BANK STATUS** → Account reconciliation, transaction tracking
+**Included Modules**: Quotation Management + Sales Order Creation + Quote Analytics  
+**Success Criteria**: Complete quote-to-order conversion with automated progression to payment collection
 
-**Smart Context**: Auto-receives completed orders from ACTIVE BUSINESS, shows aging analysis for overdue payments, links to customer payment history and patterns.
+#### **💰 ADVANCE PAYMENTS** (Financial Commitment Gate)
+**Primary Features**:
+- Advance payment collection and tracking system
+- Proforma invoice generation and management
+- Automated lead-to-customer conversion upon payment
+- Payment reminder and follow-up system
 
-**Modules Included**: 4 (Payment Management), 10 (Invoices), 13 (Financial Analytics)
-**Status**: ✅ Payments & Invoices Live, Analytics in Development
+**Tabbed Interface Requirements**:
+- **[Collect Advance]** - Payment collection interface with proforma invoice generation
+- **[Track Payments]** - Payment status tracking, reminders, bank reconciliation
+- **[Conversions]** - Lead-to-customer conversion tracking and automation
+- **[Financial Reports]** - Cash flow analysis and payment collection analytics
 
-#### **🤝 CUSTOMERS (મારા ગ્રાહકો)**
-**Process Focus**: Relationship → Retention → Growth workflow
-**Business Mental Model**: "મારા best customers કોણ? કોને repeat માટે call કરવું? Customer ખુશ છે?"
-**Daily Priority**: "Who are my best customers? Who should I call for repeat business?"
+**Cross-Process Integration**:
+- Automated triggers to PRODUCTION upon payment confirmation
+- Customer profile creation and linking to CUSTOMERS module
+- Integration with banking systems for payment verification
 
-**Sub-Actions (2x2 Mobile Grid)**:
-- **👑 VIP CUSTOMERS** → High-value regulars with special treatment protocols
-- **🎯 TARGET REPEAT** → Ready for next order with follow-up opportunities
-- **⭐ GET FEEDBACK** → Service satisfaction and quality assessments  
-- **📊 CUSTOMER REPORTS** → Purchase pattern analysis, loyalty program metrics
+**Voice Integration Requirements**:
+- Voice commands: "Record payment", "Outstanding payments", "Send payment reminders"
+- Payment status inquiries via voice
+- Payment confirmation processing
 
-**Smart Context**: Auto-adds successful orders from MONEY MATTERS, predicts next order timing based on historical patterns, shows cross-selling opportunities.
+**Included Modules**: Payment Collection + Proforma Invoices + Lead-Customer Conversion
+**Success Criteria**: Automated customer creation upon payment with seamless transition to production planning
 
-**Modules Included**: 3 (Customer Management), 11 (Customer Feedback), 12 (Loyalty Programs)
-**Status**: ✅ Customer Management Live, Feedback & Loyalty in Development
+**Critical Business Rule**: No customer creation or production authorization without verified advance payment
 
-### **Key Process-Driven Dashboard Benefits**
+#### **🏭 PRODUCTION** (Manufacturing Stage)
+**Primary Features**:
+- Work order creation and management system
+- Production tracking and progress monitoring
+- Quality control checkpoints and defect management
+- Production planning and scheduling tools
 
-#### **Natural Business Workflow Alignment**
-- **Matches Daily Routine**: Morning inquiries → Active orders → Payment collection → Customer relationships
-- **Reduces Cognitive Load**: Only 4 main process entry points instead of 12+ technical modules
-- **Contextual Intelligence**: System suggests next logical business actions based on current process state
-- **Process Completion Tracking**: Clear progress indicators for each business workflow stage
+**Tabbed Interface Requirements**:
+- **[Work Orders]** - Work order creation, scheduling, and resource allocation
+- **[Production Status]** - Real-time production tracking and progress monitoring
+- **[Quality Control]** - Quality checkpoints, defect logging, approval workflows
+- **[Production Reports]** - Efficiency analytics, capacity utilization, performance metrics
 
-#### **Smart Cross-Navigation System**
-- **Contextual Linking**: Each process shows relevant connections to other processes (e.g., "3 quotes ready for orders" in NEW INQUIRIES links to ACTIVE BUSINESS)
-- **Historical Intelligence**: System provides business insights based on patterns ("Similar customer paid ₹6.5/meter last month")
-- **Predictive Suggestions**: Auto-suggests next actions based on business flow completion status
+**Cross-Process Integration**:
+- Material requirements integration with INVENTORY module
+- Order completion triggers to FULFILLMENT for dispatch
+- Customer order linking for production tracking
 
-#### **Enhanced Mobile User Experience**
-- **Swipe Navigation**: Natural left-right swiping between business processes
-- **2x2 Grid Layout**: Mobile-optimized sub-action organization
-- **Contextual Action Panels**: Related actions appear based on current business context
-- **Voice Commands**: Process-specific voice shortcuts in Gujarati, Hindi, and English
+**Voice Integration Requirements**:
+- Voice commands: "Production status", "Start production", "Quality check", "Production report"
+- Voice-guided quality control processes
+- Production updates via voice input
 
-### **Category Implementation Status**
-| Category | Sub-Categories | Modules | Completion | Status |
-|----------|----------------|---------|------------|--------|
-| 📞 Sales & Customers | 4 | 4 modules | 75% (3/4) | ✅ Mostly Live |
-| 💰 Money & Payments | 4 | 3 modules | 33% (1/3) | 🔄 Partially Live |
-| 🏭 Production & Delivery | 4 | 6 modules | 0% (0/6) | 🔄 Coming Soon |
+**Included Modules**: Work Order Management + Production Tracking + Quality Control
+**Success Criteria**: Complete production lifecycle management with quality assurance and automated progression to fulfillment
 
-**Overall Progress**: 4/13 modules live (31% complete)
+#### **📦 INVENTORY & MATERIALS** (Supply Chain Management)
+**Primary Features**:
+- Stock management and inventory tracking system
+- Material procurement and supplier management
+- Stock reservation and allocation for orders
+- Material planning and requirement analysis
 
-### **Business-First Design Principles**
-1. **Manufacturing Workflow Alignment**: Categories follow actual textile manufacturing process flow
-2. **MSME Mental Model**: Uses language and concepts familiar to business owners
-3. **Voice-Command Ready**: Categories map to natural voice commands in local languages
-4. **Mobile-First Layout**: Each category displays as 2x2 grid for optimal mobile experience
-5. **Contextual Reports**: Business intelligence integrated within relevant business contexts
+**Tabbed Interface Requirements**:
+- **[Stock Status]** - Real-time inventory levels, availability, and reservation tracking
+- **[Procurement]** - Material purchasing, supplier management, goods receipt notes (GRN)
+- **[Material Planning]** - Stock requirement analysis and procurement planning
+- **[Stock Reports]** - Inventory analytics, aging reports, movement analysis
 
-### **Voice Command Integration**
-- **Sales Commands**: "Show me customers", "કસ્ટમર બતાવો", "नए leads दिखाओ"
-- **Money Commands**: "Money બતાવો", "payment check કરો", "कितना पैसा बाकी है?"
-- **Production Commands**: "Production બતાવો", "આજે શું બનાવવું?", "quality कैसी है?"
+**Cross-Process Integration**:
+- Stock allocation integration with PRODUCTION for material requirements
+- Finished goods tracking with FULFILLMENT for dispatch readiness
+- Cost tracking integration with financial modules
 
-### **Reports Architecture**
-#### **Two-Level Reporting System**:
-1. **Category Overview Reports**: Quick business health check (dashboard level)
-2. **Sub-Category Action Reports**: Detailed analysis for specific decisions (detail page level)
+**Voice Integration Requirements**:
+- Voice commands: "Stock check", "Material order", "Stock status", "Reserve stock"
+- Voice-guided inventory counts and updates
+- Stock level inquiries via voice
 
-This ensures business owners get both "big picture" insights and actionable intelligence exactly when needed.
+**Included Modules**: Inventory Management + Procurement & GRN + Material Planning
+**Success Criteria**: Complete supply chain visibility with automated stock alerts and seamless production material flow
+
+#### **🚚 FULFILLMENT** (Delivery & Completion)
+**Primary Features**:
+- Dispatch planning and shipping coordination
+- Delivery tracking and logistics management
+- Order completion and customer confirmation
+- Transport and courier integration
+
+**Tabbed Interface Requirements**:
+- **[Ready to Ship]** - Order packaging, dispatch readiness, shipping documentation
+- **[Dispatch]** - Transport booking, courier coordination, delivery scheduling
+- **[Delivery Tracking]** - Real-time tracking, delivery status updates, proof of delivery
+- **[Fulfillment Reports]** - Delivery performance analytics, on-time delivery metrics
+
+**Cross-Process Integration**:
+- Order completion triggers for final invoicing via BUSINESS ANALYTICS
+- Customer satisfaction feedback integration with CUSTOMERS module
+- Delivery confirmation for payment processing
+
+**Voice Integration Requirements**:
+- Voice commands: "Ready to ship", "Dispatch status", "Delivery tracking", "Confirm delivery"
+- Voice-guided dispatch processes
+- Delivery status inquiries via voice
+
+**Included Modules**: Dispatch & Delivery + Order Completion + Logistics Tracking
+**Success Criteria**: Complete order fulfillment with delivery tracking and automated final billing triggers
+
+#### **🤝 CUSTOMERS** (Relationship Management)
+**Primary Features**:
+- Comprehensive customer profile management system
+- Customer relationship tracking and communication history
+- Customer feedback collection and satisfaction monitoring
+- Customer loyalty program and repeat business management
+
+**Tabbed Interface Requirements**:
+- **[Customer List]** - Customer database with search, filtering, and segmentation
+- **[Customer Details]** - Complete customer profile with 360° business history
+- **[Feedback & Loyalty]** - Satisfaction tracking, feedback forms, loyalty point management
+- **[Relationship Reports]** - Customer analytics, lifetime value, repeat opportunity analysis
+
+**Cross-Process Integration**:
+- Repeat order opportunity generation for LEAD PIPELINE
+- Payment history and collection status integration with ADVANCE PAYMENTS
+- Order history and delivery satisfaction tracking
+
+**Voice Integration Requirements**:
+- Voice commands: "Customer profile", "VIP customers", "Customer feedback", "Loyalty status"
+- Voice-guided customer interaction logging
+- Customer search and profile access via voice
+
+**Included Modules**: Customer 360° View + Customer Feedback + Loyalty Management
+**Success Criteria**: Complete customer lifecycle management with satisfaction tracking and repeat business generation
+
+#### **📊 BUSINESS ANALYTICS** (Intelligence & Optimization)
+**Primary Features**:
+- Cross-process business analytics and reporting system
+- Performance monitoring and KPI tracking
+- Financial analytics and profitability analysis
+- Predictive analytics and business intelligence
+
+**Tabbed Interface Requirements**:
+- **[Business Reports]** - Cross-process analytics, performance metrics, trend analysis
+- **[Financial Analytics]** - Revenue analysis, profitability tracking, cash flow insights
+- **[Performance KPIs]** - Process efficiency metrics, conversion rates, operational analytics
+- **[Business Intelligence]** - Predictive insights, recommendations, optimization suggestions
+
+**Cross-Process Data Sources**:
+- Lead conversion and pipeline analytics from all process stages
+- Production efficiency and quality metrics
+- Customer satisfaction and retention analytics
+- Financial performance across complete business cycle
+
+**Voice Integration Requirements**:
+- Voice commands: "Business performance", "Monthly sales", "Analytics report", "Show KPIs"
+- Voice-guided report generation
+- Business metrics inquiries via voice
+
+**Included Modules**: Analytics Dashboard + Final Invoicing + Performance Reports
+**Success Criteria**: Complete business intelligence with actionable insights and performance optimization recommendations
+
+### **System Requirements & Acceptance Criteria**
+
+#### **Navigation Requirements**
+- **2-Click Access Rule**: Any business function accessible within maximum 2 clicks
+- **Sequential Card Layout**: Dashboard cards arranged in logical business process sequence
+- **Cross-Process Integration**: Smart navigation links between related process stages
+- **Mobile-First Design**: Optimized for mobile factory environments with touch-friendly interface
+
+#### **Voice Integration Requirements**
+- **Multilingual Support**: Full functionality in Gujarati, Hindi, and English
+- **Context-Aware Commands**: Voice commands adapt to current module/process context
+- **Cross-Process Voice Navigation**: Voice commands enable movement between business stages
+- **Factory Environment Optimization**: Hands-free operation for manufacturing environments
+
+#### **Performance Requirements**
+- **Real-Time Updates**: Process status changes reflect immediately across all related modules
+- **Cross-Process Data Flow**: Information updates propagate seamlessly between integrated stages
+- **Offline Capability**: Core functions available during network interruptions
+- **Mobile Performance**: Optimal loading and response times on mobile devices
+
+#### **Integration Requirements**
+- **Banking Integration**: Automated payment verification and reconciliation
+- **Communication Integration**: WhatsApp, SMS, email integration for customer communication
+- **Voice Processing**: Real-time voice recognition and command processing
+- **Export/Import**: Data export capabilities for reporting and analysis
+
+### **Implementation Status: Process-Based Organization**
+| Process Stage | Sub-Modules | MVP Modules | Completion | Status |
+|---------------|-------------|-------------|------------|---------|
+| 🔥 Lead Pipeline | 4 tabs | 3 modules | 66% (2/3) | ✅ Mostly Live |
+| 📋 Quotations | 4 tabs | 2 modules | 50% (1/2) | 🔄 Partially Live |
+| 💰 Advance Payments | 4 tabs | 3 modules | 33% (1/3) | 🔄 Partially Live |
+| 🏭 Production | 4 tabs | 3 modules | 0% (0/3) | 🔄 Coming Soon |
+| 📦 Inventory | 4 tabs | 2 modules | 0% (0/2) | 🔄 Coming Soon |
+| 🚚 Fulfillment | 4 tabs | 1 module | 0% (0/1) | 🔄 Coming Soon |
+| 🤝 Customers | 4 tabs | 2 modules | 50% (1/2) | 🔄 Partially Live |
+| 📊 Analytics | 4 tabs | 2 modules | 0% (0/2) | 🔄 Coming Soon |
+
+**Overall Progress**: 5/16 sub-modules live across 8 process stages (31% complete)
+
+### **Process-Driven Design Principles**
+1. **Sequential Flow Logic**: Cards arranged in natural business process sequence
+2. **Contextual Intelligence**: Each stage provides relevant insights for next stage decisions
+3. **Cross-Process Integration**: Smart links connect related activities across stages
+4. **Mobile Manufacturing Focus**: Optimized for textile factory floor environments
+5. **Voice-Process Integration**: Context-aware voice commands for each business stage
+
+### **Process-Aware Voice Command Architecture**
+```
+🔥 LEAD PIPELINE: "Show hot leads", "Add new lead", "Call next lead"
+📋 QUOTATIONS: "Create quote", "Pending quotes", "Quote approval status"
+💰 PAYMENTS: "Record payment", "Outstanding payments", "Customer conversion"
+🏭 PRODUCTION: "Production status", "Start production", "Quality check"
+📦 INVENTORY: "Stock check", "Material order", "Stock allocation"
+🚚 FULFILLMENT: "Ready to ship", "Dispatch status", "Delivery tracking"
+🤝 CUSTOMERS: "Customer profile", "VIP customers", "Repeat opportunities"
+📊 ANALYTICS: "Business performance", "Monthly sales", "Process efficiency"
+```
+
+### **Document Usage Guidelines**
+
+#### **For Product Managers**
+- Use this document to understand WHAT features to build and WHY they're needed
+- Reference BUSINESS_PROCESSES.md to understand the textile manufacturing context behind requirements
+- Use acceptance criteria and success metrics to validate feature completion
+
+#### **For Developers**
+- Use this document for feature requirements and business logic
+- Reference DESIGN_SYSTEM.md for implementation patterns and UI specifications
+- Reference BUSINESS_PROCESSES.md to understand domain context and business rules
+
+#### **For Designers**
+- Use this document to understand user requirements and feature scope
+- Reference BUSINESS_PROCESSES.md for business context and user mental models
+- Reference DESIGN_SYSTEM.md for visual design patterns and UI standards
+
+### **Cross-Process Business Intelligence**
+#### **Smart Context Linking Throughout Process Flow**:
+Each process stage provides intelligent connections to related stages, creating a unified business intelligence system that mirrors real textile manufacturing workflow patterns and decision-making processes.
 
 ---
 
