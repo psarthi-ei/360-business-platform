@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductHeader from './ProductHeader';
-import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency } from '../data/mockData';
+import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Dashboard.module.css';
 
@@ -14,6 +14,9 @@ interface DashboardProps {
   onShowPayments: () => void;
   onShowInvoices: () => void;
   onShowCustomerList: () => void;
+  onShowInventory?: () => void;
+  onShowFulfillment?: () => void;
+  onShowAnalytics?: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
   onGuestMode?: () => void;
@@ -33,6 +36,9 @@ function Dashboard({
   onShowPayments,
   onShowInvoices,
   onShowCustomerList,
+  onShowInventory,
+  onShowFulfillment,
+  onShowAnalytics,
   onLogin,
   onSignUp,
   onGuestMode,
@@ -52,6 +58,8 @@ function Dashboard({
   // Voice command state
   const [isListening, setIsListening] = useState(false);
   const [voiceCommand, setVoiceCommand] = useState('');
+  const [voiceResponse, setVoiceResponse] = useState('');
+  const [showVoiceResponse, setShowVoiceResponse] = useState(false);
   
   // Global search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,38 +128,65 @@ function Dashboard({
     }
   };
 
-  // Voice command processing
+  // Enhanced voice command processing with business intelligence
   const processVoiceCommand = (command: string) => {
     const lowerCommand = command.toLowerCase();
+    let response = '';
     
-    // Gujarati commands
-    if (lowerCommand.includes('નવી પૂછપરછ') || lowerCommand.includes('લીડ્સ')) {
-      onShowLeadManagement();
-    } else if (lowerCommand.includes('ચાલતો બિઝનેસ') || lowerCommand.includes('ઓર્ડર')) {
-      onShowSalesOrders();
-    } else if (lowerCommand.includes('પૈસો') || lowerCommand.includes('પેમેન્ટ')) {
-      onShowPayments();
-    } else if (lowerCommand.includes('ગ્રાહક') || lowerCommand.includes('કસ્ટમર')) {
-      onShowCustomerList();
+    // Business intelligence queries
+    if (lowerCommand.includes('what needs attention') || lowerCommand.includes('શું attention') || lowerCommand.includes('क्या attention')) {
+      response = `Today's priorities: ${hotLeads} hot leads need calls, ${overduePayments} overdue payments, ${readyToShip} orders ready to ship`;
+      setVoiceResponse(response);
+      setShowVoiceResponse(true);
+      return;
     }
-    // English commands
-    else if (lowerCommand.includes('leads') || lowerCommand.includes('inquiry')) {
-      onShowLeadManagement();
-    } else if (lowerCommand.includes('orders') || lowerCommand.includes('business')) {
-      onShowSalesOrders();
-    } else if (lowerCommand.includes('money') || lowerCommand.includes('payment')) {
+    
+    // Payment queries
+    if (lowerCommand.includes('payment કોની બાકી') || lowerCommand.includes('who owes money') || lowerCommand.includes('pending payments')) {
+      const overdueCustomers = mockSalesOrders.filter(order => order.paymentStatus && order.paymentStatus.includes('overdue'));
+      const topCustomer = overdueCustomers.length > 0 ? getBusinessProfileById(overdueCustomers[0].businessProfileId)?.companyName : 'None';
+      response = `${overdueCustomers.length} customers have overdue payments. Top priority: ${topCustomer}`;
+      setVoiceResponse(response);
+      setShowVoiceResponse(true);
       onShowPayments();
-    } else if (lowerCommand.includes('customer')) {
-      onShowCustomerList();
+      return;
     }
-    // Hindi commands  
-    else if (lowerCommand.includes('लीड') || lowerCommand.includes('पूछताछ')) {
+    
+    // Hot leads queries
+    if (lowerCommand.includes('call hot leads') || lowerCommand.includes('કૉલ કરવા') || lowerCommand.includes('गर्म लीड')) {
+      response = `${hotLeads} hot leads ready for calls. Opening lead management...`;
+      setVoiceResponse(response);
+      setShowVoiceResponse(true);
       onShowLeadManagement();
-    } else if (lowerCommand.includes('व्यापार') || lowerCommand.includes('ऑर्डर')) {
+      return;
+    }
+    
+    // Order status queries
+    if (lowerCommand.includes('order status') || lowerCommand.includes('production status') || lowerCommand.includes('ઓર્ડર status')) {
+      response = `${activeOrders} orders in production, ${readyToShip} ready to ship. Opening order tracking...`;
+      setVoiceResponse(response);
+      setShowVoiceResponse(true);
       onShowSalesOrders();
-    } else if (lowerCommand.includes('पैसा') || lowerCommand.includes('पेमेंट')) {
+      return;
+    }
+    
+    // Customer queries
+    if (lowerCommand.includes('best customers') || lowerCommand.includes('vip customers') || lowerCommand.includes('ગ્રાહક કોણ')) {
+      response = `You have ${totalCustomers} customers, ${Math.floor(totalCustomers * 0.25)} are VIP customers. Opening customer management...`;
+      setVoiceResponse(response);
+      setShowVoiceResponse(true);
+      onShowCustomerList();
+      return;
+    }
+    
+    // Navigation commands (fallback)
+    if (lowerCommand.includes('નવી પૂછપરછ') || lowerCommand.includes('લીડ્સ') || lowerCommand.includes('leads') || lowerCommand.includes('inquiry') || lowerCommand.includes('लीड')) {
+      onShowLeadManagement();
+    } else if (lowerCommand.includes('ચાલતો બિઝનેસ') || lowerCommand.includes('ઓર્ડર') || lowerCommand.includes('orders') || lowerCommand.includes('business') || lowerCommand.includes('ऑर्डर')) {
+      onShowSalesOrders();
+    } else if (lowerCommand.includes('પૈસો') || lowerCommand.includes('પેમેન્ટ') || lowerCommand.includes('money') || lowerCommand.includes('payment') || lowerCommand.includes('पैसा')) {
       onShowPayments();
-    } else if (lowerCommand.includes('ग्राहक')) {
+    } else if (lowerCommand.includes('ગ્રાહક') || lowerCommand.includes('કસ્ટમર') || lowerCommand.includes('customer') || lowerCommand.includes('ग्राहक')) {
       onShowCustomerList();
     }
   };
@@ -205,12 +240,12 @@ function Dashboard({
     mockLeads.forEach(lead => {
       if (lead.companyName.toLowerCase().includes(lowerQuery) ||
           lead.contactPerson.toLowerCase().includes(lowerQuery) ||
-          lead.material.toLowerCase().includes(lowerQuery) ||
+          lead.inquiry.toLowerCase().includes(lowerQuery) ||
           lead.priority.toLowerCase().includes(lowerQuery)) {
         results.push({
           type: 'lead',
           title: lead.companyName,
-          subtitle: `${lead.contactPerson} - ${lead.material}`,
+          subtitle: `${lead.contactPerson} - ${lead.inquiry}`,
           priority: lead.priority,
           action: () => onShowLeadManagement(),
           category: 'NEW INQUIRIES'
@@ -220,13 +255,13 @@ function Dashboard({
 
     // Search in quotes
     mockQuotes.forEach(quote => {
-      if (quote.customerName.toLowerCase().includes(lowerQuery) ||
-          quote.material.toLowerCase().includes(lowerQuery) ||
+      if (quote.companyName.toLowerCase().includes(lowerQuery) ||
+          quote.items.toLowerCase().includes(lowerQuery) ||
           quote.status.toLowerCase().includes(lowerQuery)) {
         results.push({
           type: 'quote',
-          title: `Quote #${quote.quoteNumber}`,
-          subtitle: `${quote.customerName} - ${quote.material}`,
+          title: quote.companyName,
+          subtitle: `${quote.items.split(' - ')[0]} - ${formatCurrency(quote.totalAmount)}`,
           status: quote.status,
           action: () => onShowQuotationOrders(),
           category: 'ACTIVE BUSINESS'
@@ -236,14 +271,16 @@ function Dashboard({
 
     // Search in sales orders
     mockSalesOrders.forEach(order => {
-      if (order.customerName.toLowerCase().includes(lowerQuery) ||
-          order.material.toLowerCase().includes(lowerQuery) ||
+      const customer = getBusinessProfileById(order.businessProfileId);
+      const customerName = customer?.companyName || 'Unknown Customer';
+      if (customerName.toLowerCase().includes(lowerQuery) ||
+          order.items.toLowerCase().includes(lowerQuery) ||
           order.status.toLowerCase().includes(lowerQuery) ||
-          order.paymentStatus.toLowerCase().includes(lowerQuery)) {
+          (order.paymentStatus && order.paymentStatus.toLowerCase().includes(lowerQuery))) {
         results.push({
           type: 'order',
-          title: `Order #${order.orderNumber}`,
-          subtitle: `${order.customerName} - ${order.material}`,
+          title: customerName,
+          subtitle: `${order.items.split(' - ')[0]} - ${formatCurrency(order.totalAmount)}`,
           status: order.status,
           action: () => onShowSalesOrders(),
           category: 'ACTIVE BUSINESS'
@@ -280,6 +317,28 @@ function Dashboard({
   const closeSearchResults = () => {
     setShowSearchResults(false);
   };
+
+  // Utility function for dynamic date
+  const getCurrentDateString = () => {
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return today.toLocaleDateString('en-US', options);
+  };
+
+  // Auto-hide voice response after 5 seconds
+  useEffect(() => {
+    if (showVoiceResponse) {
+      const timer = setTimeout(() => {
+        setShowVoiceResponse(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showVoiceResponse]);
   
 
   return (
@@ -305,477 +364,357 @@ function Dashboard({
       
       <div className={styles.dashboardContainer}>
 
-        {/* Business Owner's Daily View */}
-        <div className={styles.ownerDashboard}>
+        {/* Executive Business Intelligence Dashboard */}
+        <div className={styles.executiveDashboard}>
           
-          {/* Today's Business Snapshot */}
-          <div className={styles.todaysSnapshot}>
-            <div className={styles.snapshotHeader}>
-              <h3>Today's Business</h3>
-              <span className={styles.date}>Monday, Sep 9</span>
+          {/* Executive Summary Section - 40% of dashboard */}
+          <div className={styles.executiveSummary}>
+            <div className={styles.executiveSummaryHeader}>
+              <h2>📊 Business Intelligence - {getCurrentDateString()}</h2>
             </div>
             
-            <div className={styles.keyNumbers}>
-              <div className={styles.keyMetric}>
-                <span className={styles.amount}>₹2.4L</span>
-                <span className={styles.label}>Payment Due Today</span>
-                <span className={styles.action}>3 customers</span>
-              </div>
-              <div className={styles.keyMetric}>
-                <span className={styles.amount}>{hotLeads}</span>
-                <span className={styles.label}>Hot Leads to Call</span>
-                <span className={styles.action}>Follow up now</span>
-              </div>
-              <div className={styles.keyMetric}>
-                <span className={styles.amount}>2,500m</span>
-                <span className={styles.label}>Fabric in Production</span>
-                <span className={styles.action}>On schedule</span>
-              </div>
-            </div>
-          </div>
-
-          {/* This Month's Performance */}
-          <div className={styles.monthlyPerformance}>
-            <div className={styles.performanceHeader}>
-              <h3>September Performance</h3>
-              <span className={styles.trend}>↗️ Growing</span>
-            </div>
-            
-            <div className={styles.performanceGrid}>
-              <div className={styles.performanceCard}>
-                <div className={styles.perfNumber}>{formatCurrency(totalRevenue / 100000)}L</div>
-                <div className={styles.perfLabel}>Total Revenue</div>
-                <div className={styles.perfChange}>+18% vs last month</div>
-              </div>
+            {/* Business Health Cards */}
+            <div className={styles.businessHealthGrid}>
               
-              <div className={styles.performanceCard}>
-                <div className={styles.perfNumber}>{totalLeads}</div>
-                <div className={styles.perfLabel}>New Inquiries</div>
-                <div className={styles.perfChange}>{hotLeads} very interested</div>
-              </div>
-              
-              <div className={styles.performanceCard}>
-                <div className={styles.perfNumber}>{conversionRate}%</div>
-                <div className={styles.perfLabel}>Inquiry to Order</div>
-                <div className={styles.perfChange}>Better than industry</div>
-              </div>
-              
-              <div className={styles.performanceCard}>
-                <div className={styles.perfNumber}>{totalCustomers}</div>
-                <div className={styles.perfLabel}>Happy Customers</div>
-                <div className={styles.perfChange}>5 repeat orders</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Global Search Bar */}
-          <div className={styles.globalSearch}>
-            <div className={styles.searchContainer}>
-              <div className={styles.searchInputWrapper}>
-                <span className={styles.searchIcon}>🔍</span>
-                <input
-                  type="text"
-                  placeholder={t('globalSearchPlaceholder') || 'Search customers, orders, leads, quotes...'}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className={styles.searchInput}
-                />
-                {searchQuery && (
-                  <button className={styles.clearSearch} onClick={() => {
-                    setSearchQuery('');
-                    setSearchResults([]);
-                    setShowSearchResults(false);
-                  }}>
-                    ✕
-                  </button>
-                )}
-              </div>
-              
-              {/* Search Results Dropdown */}
-              {showSearchResults && searchResults.length > 0 && (
-                <div className={styles.searchResults}>
-                  <div className={styles.searchResultsHeader}>
-                    <span>Found {searchResults.length} results for "{searchQuery}"</span>
-                    <button onClick={closeSearchResults} className={styles.closeResults}>✕</button>
-                  </div>
-                  <div className={styles.searchResultsList}>
-                    {searchResults.map((result, index) => (
-                      <div 
-                        key={index}
-                        className={`${styles.searchResultItem} ${styles[`result${result.type.charAt(0).toUpperCase() + result.type.slice(1)}`]}`}
-                        onClick={() => {
-                          result.action();
-                          closeSearchResults();
-                        }}
-                      >
-                        <div className={styles.resultContent}>
-                          <div className={styles.resultTitle}>{result.title}</div>
-                          <div className={styles.resultSubtitle}>{result.subtitle}</div>
-                          <div className={styles.resultCategory}>{result.category}</div>
-                        </div>
-                        <div className={`${styles.resultStatus} ${styles[`status${result.priority || result.status || ''}`.replace(/\s/g, '')]}`}>
-                          {result.priority || result.status}
-                        </div>
-                      </div>
-                    ))}
+              {/* Financial Health */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>💰</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>₹{(pendingAdvanceAmount / 100000).toFixed(1)}L</div>
+                    <div className={styles.metricLabel}>Outstanding Payments</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={overduePayments > 0 ? styles.trendNegative : styles.trendPositive}>
+                        {overduePayments > 0 ? `${overduePayments} overdue` : 'All current'}
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <div className={styles.quickAction}>
+                  <button onClick={onShowPayments}>View Details →</button>
+                </div>
+              </div>
+
+              {/* Sales Pipeline */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>🔥</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>{hotLeads}</div>
+                    <div className={styles.metricLabel}>Priority Leads</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={styles.trendPositive}>
+                        {totalLeads} Total Inquiries
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.quickAction}>
+                  <button onClick={onShowLeadManagement}>View Details →</button>
+                </div>
+              </div>
+
+              {/* Operations Status */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>🏭</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>{activeOrders}</div>
+                    <div className={styles.metricLabel}>Active Orders</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={styles.trendPositive}>
+                        {readyToShip} Ready to Ship
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.quickAction}>
+                  <button onClick={onShowSalesOrders}>View Details →</button>
+                </div>
+              </div>
+
+              {/* Customer Insights */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>🤝</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>{totalCustomers}</div>
+                    <div className={styles.metricLabel}>Active Customers</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={styles.trendPositive}>
+                        95% Satisfaction Rate
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.quickAction}>
+                  <button onClick={onShowCustomerList}>View Details →</button>
+                </div>
+              </div>
+
+              {/* Priority Alerts */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>⚠️</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>{overduePayments + hotLeads}</div>
+                    <div className={styles.metricLabel}>Priority Items</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={overduePayments > 0 ? styles.trendNegative : styles.trendPositive}>
+                        Needs immediate attention
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.quickAction}>
+                  <button onClick={() => processVoiceCommand('what needs attention today')}>
+                    Show Details →
+                  </button>
+                </div>
+              </div>
+
+              {/* Today's Summary */}
+              <div className={styles.businessHealthCard}>
+                <div className={styles.metricHeader}>
+                  <span className={styles.metricIcon}>📈</span>
+                  <div className={styles.metricInfo}>
+                    <div className={styles.metricValue}>₹{((activeOrders * 50000) / 100000).toFixed(1)}L</div>
+                    <div className={styles.metricLabel}>Business Value</div>
+                    <div className={styles.trendIndicator}>
+                      <span className={styles.trendPositive}>
+                        Active pipeline value
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.quickAction}>
+                  <button onClick={() => processVoiceCommand('business performance')}>
+                    Analytics →
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Voice Response Display */}
+          {showVoiceResponse && (
+            <div className={styles.voiceResponsePanel}>
+              <div className={styles.voiceResponseContent}>
+                <span className={styles.voiceResponseIcon}>💬</span>
+                <div className={styles.voiceResponseText}>
+                  <strong>Business Assistant:</strong> {voiceResponse}
+                </div>
+              </div>
+              <button 
+                className={styles.closeVoiceResponse} 
+                onClick={() => setShowVoiceResponse(false)}
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
+          {/* Integrated Search */}
+          <div className={styles.integratedSearch}>
+            <div className={styles.searchInputWrapper}>
+              <span className={styles.searchIcon}>🔍</span>
+              <input
+                type="text"
+                placeholder="Search or try voice commands..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.searchInput}
+              />
+              {searchQuery && (
+                <button className={styles.clearSearch} onClick={() => {
+                  setSearchQuery('');
+                  setSearchResults([]);
+                  setShowSearchResults(false);
+                }}>
+                  ✕
+                </button>
               )}
             </div>
-          </div>
-
-          {/* Process-Driven Business Entry Points - 4 Core Processes */}
-          <div className={styles.processEntryPoints}>
-            <h3>Your Business Processes</h3>
             
-            {/* Swipe Navigation Indicators */}
-            <div className={styles.swipeIndicators}>
-              {processes.map((process, index) => (
-                <div 
-                  key={process.key}
-                  className={`${styles.swipeIndicator} ${index === currentProcess ? styles.active : ''}`}
-                  onClick={() => setCurrentProcess(index)}
-                >
-                  <span className={styles.indicatorDot}></span>
-                  <span className={styles.indicatorLabel}>{process.name}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Process Entry Points Grid - 4 Business Processes */}
-            <div 
-              className={styles.processGrid}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              
-              {/* Process 1: NEW INQUIRIES */}
-              <div className={`${styles.processCard} ${styles.processInquiries}`}>
-                <div className={styles.processHeader}>
-                  <div className={styles.processIcon}>🔥</div>
-                  <div className={styles.processTitle}>
-                    <h4>NEW INQUIRIES</h4>
-                    <p className={styles.processSubtitle}>નવી પૂછપરછ</p>
-                    <p className={styles.businessQuestion}>Who called today? What quotes need to be sent?</p>
+            {/* Voice-Enhanced Search Results */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className={styles.searchResults}>
+                <div className={styles.searchResultsHeader}>
+                  <span>Found {searchResults.length} results</span>
+                  <div className={styles.voiceSearchSuggestion}>
+                    🎤 Try: "Show me {searchQuery}"
                   </div>
                 </div>
-                
-                <div className={styles.processMetrics}>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{hotLeads}</span>
-                    <span className={styles.metricLabel}>Hot Leads</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{totalLeads}</span>
-                    <span className={styles.metricLabel}>Total Inquiries</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{conversionRate}%</span>
-                    <span className={styles.metricLabel}>Conversion Rate</span>
-                  </div>
-                </div>
-                
-                <div className={styles.processActions}>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowLeadManagement}
-                    title="Call hot inquiries needing immediate response"
-                  >
-                    📞 CALL NOW
-                    <span className={styles.actionSubtext}>Hot inquiries needing response</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowQuotationOrders}
-                    title="Create quotes for leads ready for pricing"
-                  >
-                    ✍️ CREATE QUOTES
-                    <span className={styles.actionSubtext}>Leads ready for pricing</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowLeadManagement}
-                    title="Follow up with warm leads"
-                  >
-                    📋 FOLLOW UP
-                    <span className={styles.actionSubtext}>Warm leads to nurture</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Source analysis and conversion tracking"
-                  >
-                    📊 INQUIRY REPORTS
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                </div>
-                
-                <div className={`${styles.smartContext} ${styles[`health${processHealth.inquiries.charAt(0).toUpperCase() + processHealth.inquiries.slice(1)}`]}`}>
-                  <div className={styles.contextSuggestion}>
-                    💡 <strong>{leadsReadyForQuotes} leads ready for quotes</strong> → Navigate to ACTIVE BUSINESS
-                  </div>
-                  <div className={styles.processHealthIndicator}>
-                    <span className={styles.healthLabel}>Process Health:</span>
-                    <span className={`${styles.healthBadge} ${styles[`health${processHealth.inquiries.charAt(0).toUpperCase() + processHealth.inquiries.slice(1)}`]}`}>
-                      {processHealth.inquiries.toUpperCase()}
-                    </span>
-                  </div>
+                <div className={styles.searchResultsList}>
+                  {searchResults.slice(0, 4).map((result, index) => (
+                    <div 
+                      key={index}
+                      className={styles.searchResultItem}
+                      onClick={() => {
+                        result.action();
+                        closeSearchResults();
+                      }}
+                    >
+                      <div className={styles.resultContent}>
+                        <div className={styles.resultTitle}>{result.title}</div>
+                        <div className={styles.resultSubtitle}>{result.subtitle}</div>
+                      </div>
+                      <span className={styles.voiceHint}>🎤</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              {/* Process 2: ACTIVE BUSINESS */}
-              <div className={`${styles.processCard} ${styles.processBusiness}`}>
-                <div className={styles.processHeader}>
-                  <div className={styles.processIcon}>💼</div>
-                  <div className={styles.processTitle}>
-                    <h4>ACTIVE BUSINESS</h4>
-                    <p className={styles.processSubtitle}>ચાલતો બિઝનેસ</p>
-                    <p className={styles.businessQuestion}>What orders am I working on? What payments should I collect?</p>
-                  </div>
-                </div>
-                
-                <div className={styles.processMetrics}>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{mockSalesOrders.length}</span>
-                    <span className={styles.metricLabel}>Active Orders</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{mockSalesOrders.filter(o => o.status === 'production').length}</span>
-                    <span className={styles.metricLabel}>In Production</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{mockSalesOrders.filter(o => o.status === 'completed').length}</span>
-                    <span className={styles.metricLabel}>Ready to Ship</span>
-                  </div>
-                </div>
-                
-                <div className={styles.processActions}>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowQuotationOrders}
-                    title="Collect 30% advance from approved quotes"
-                  >
-                    💰 COLLECT ADVANCE
-                    <span className={styles.actionSubtext}>Approved quotes ready for payment</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowSalesOrders}
-                    title="Track active orders in production"
-                  >
-                    🔧 IN PRODUCTION
-                    <span className={styles.actionSubtext}>Active orders tracking</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowSalesOrders}
-                    title="Process completed orders ready for shipment"
-                  >
-                    📤 READY TO SHIP
-                    <span className={styles.actionSubtext}>Completed orders</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Production efficiency and delay analysis"
-                  >
-                    📊 ORDER REPORTS
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                </div>
-                
-                <div className={`${styles.smartContext} ${styles[`health${processHealth.business.charAt(0).toUpperCase() + processHealth.business.slice(1)}`]}`}>
-                  <div className={styles.contextSuggestion}>
-                    💰 <strong>₹{(pendingAdvanceAmount / 100000).toFixed(1)}L advance pending</strong> → Navigate to MONEY MATTERS
-                  </div>
-                  <div className={styles.processHealthIndicator}>
-                    <span className={styles.healthLabel}>Process Health:</span>
-                    <span className={`${styles.healthBadge} ${styles[`health${processHealth.business.charAt(0).toUpperCase() + processHealth.business.slice(1)}`]}`}>
-                      {processHealth.business.toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Process 3: MONEY MATTERS */}
-              <div className={`${styles.processCard} ${styles.processMoney}`}>
-                <div className={styles.processHeader}>
-                  <div className={styles.processIcon}>💳</div>
-                  <div className={styles.processTitle}>
-                    <h4>MONEY MATTERS</h4>
-                    <p className={styles.processSubtitle}>પૈસાનો મામલો</p>
-                    <p className={styles.businessQuestion}>Who owes me money? What invoices should I send?</p>
-                  </div>
-                </div>
-                
-                <div className={styles.processMetrics}>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>₹{(mockSalesOrders.reduce((sum, o) => sum + (o.status === 'pending' ? o.totalAmount * 0.3 : 0), 0) / 100000).toFixed(1)}L</span>
-                    <span className={styles.metricLabel}>Pending Payments</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>₹{(totalRevenue / 100000).toFixed(1)}L</span>
-                    <span className={styles.metricLabel}>Total Revenue</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{mockSalesOrders.filter(o => o.paymentStatus.includes('overdue')).length}</span>
-                    <span className={styles.metricLabel}>Overdue</span>
-                  </div>
-                </div>
-                
-                <div className={styles.processActions}>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowPayments}
-                    title="Collect payments due today with overdue reminders"
-                  >
-                    💰 COLLECT TODAY
-                    <span className={styles.actionSubtext}>Due payments priority</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowInvoices}
-                    title="Send proforma and final invoices"
-                  >
-                    📄 SEND INVOICES
-                    <span className={styles.actionSubtext}>Proforma & final billing</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Cash flow analysis and monthly trends"
-                  >
-                    📊 MONEY REPORTS
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Account reconciliation and transaction tracking"
-                  >
-                    🏦 BANK STATUS
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                </div>
-                
-                <div className={`${styles.smartContext} ${styles[`health${processHealth.money.charAt(0).toUpperCase() + processHealth.money.slice(1)}`]}`}>
-                  <div className={styles.contextSuggestion}>
-                    📋 <strong>{overduePayments} overdue payments</strong> → Automatic alerts from ACTIVE BUSINESS
-                  </div>
-                  <div className={styles.processHealthIndicator}>
-                    <span className={styles.healthLabel}>Process Health:</span>
-                    <span className={`${styles.healthBadge} ${styles[`health${processHealth.money.charAt(0).toUpperCase() + processHealth.money.slice(1)}`]}`}>
-                      {processHealth.money.toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Process 4: CUSTOMERS */}
-              <div className={`${styles.processCard} ${styles.processCustomers}`}>
-                <div className={styles.processHeader}>
-                  <div className={styles.processIcon}>🤝</div>
-                  <div className={styles.processTitle}>
-                    <h4>CUSTOMERS</h4>
-                    <p className={styles.processSubtitle}>મારા ગ્રાહકો</p>
-                    <p className={styles.businessQuestion}>Who are my best customers? Who should I call for repeat business?</p>
-                  </div>
-                </div>
-                
-                <div className={styles.processMetrics}>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{totalCustomers}</span>
-                    <span className={styles.metricLabel}>Total Customers</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{Math.floor(totalCustomers * 0.25)}</span>
-                    <span className={styles.metricLabel}>VIP Customers</span>
-                  </div>
-                  <div className={styles.processMetric}>
-                    <span className={styles.metricValue}>{Math.floor(totalCustomers * 0.4)}</span>
-                    <span className={styles.metricLabel}>Repeat Opportunities</span>
-                  </div>
-                </div>
-                
-                <div className={styles.processActions}>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowCustomerList}
-                    title="Manage high-value regular customers"
-                  >
-                    👑 VIP CUSTOMERS
-                    <span className={styles.actionSubtext}>High-value regulars</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    onClick={onShowCustomerList}
-                    title="Target customers ready for next order"
-                  >
-                    🎯 TARGET REPEAT
-                    <span className={styles.actionSubtext}>Ready for next order</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Collect service satisfaction feedback"
-                  >
-                    ⭐ GET FEEDBACK
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                  <button 
-                    className={styles.processActionCard} 
-                    disabled
-                    title="Purchase pattern analysis and loyalty metrics"
-                  >
-                    📊 CUSTOMER REPORTS
-                    <span className={styles.actionSubtext}>{t('comingBadge')}</span>
-                  </button>
-                </div>
-                
-                <div className={`${styles.smartContext} ${styles[`health${processHealth.customers.charAt(0).toUpperCase() + processHealth.customers.slice(1)}`]}`}>
-                  <div className={styles.contextSuggestion}>
-                    🎯 <strong>{repeatCustomerOpportunities} repeat order opportunities</strong> → Drive revenue growth
-                  </div>
-                  <div className={styles.processHealthIndicator}>
-                    <span className={styles.healthLabel}>Process Health:</span>
-                    <span className={`${styles.healthBadge} ${styles[`health${processHealth.customers.charAt(0).toUpperCase() + processHealth.customers.slice(1)}`]}`}>
-                      {processHealth.customers.toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
+            )}
           </div>
 
-          {/* Enhanced Voice Assistant with Commands */}
-          <div className={styles.voiceAssistant}>
-            <div className={styles.voiceContent}>
-              <span className={`${styles.voiceIcon} ${isListening ? styles.listening : ''}`}>
-                {isListening ? '🎙️' : '🎤'}
-              </span>
-              <div className={styles.voiceText}>
-                <h4>Voice Commands Ready</h4>
-                {voiceCommand ? (
-                  <p className={styles.lastCommand}>
-                    <strong>Last command:</strong> "{voiceCommand}"
-                  </p>
-                ) : (
-                  <p>"આજે કેટલા leads આવ્યા?" • "Payment કોની બાકી છે?" • "Production કેમ ચાલે છે?"</p>
-                )}
-                <div className={styles.voiceCommands}>
-                  <span>Try: "Leads" • "Orders" • "Payment" • "Customers"</span>
-                </div>
-              </div>
+          {/* 8 Smart Business Cards - Complete Business Coverage */}
+          <div className={styles.businessProcesses}>
+            <div className={styles.processHeader}>
+              <h3>Business Operations</h3>
+              <div className={styles.processSubtitle}>Complete business management access</div>
             </div>
-            <button 
-              className={`${styles.voiceButton} ${isListening ? styles.listening : ''}`}
-              onClick={startVoiceRecognition}
-              disabled={isListening}
-            >
-              {isListening ? 'Listening...' : 'Start Voice'}
-            </button>
+            
+            {/* 8 Smart Business Cards Grid */}
+            <div className={styles.smartCardsGrid}>
+              
+              {/* Card 1: Sales Pipeline */}
+              <div className={`${styles.smartCard} ${styles.cardSales}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>🔥</span>
+                  <h4>{t('salesManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{hotLeads} Hot Leads • {totalLeads} Total</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Follow Up
+                </div>
+                <button onClick={onShowLeadManagement} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 2: Quotations */}
+              <div className={`${styles.smartCard} ${styles.cardQuotes}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>📋</span>
+                  <h4>{t('quotationManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{pendingQuotes} Pending • {approvedQuotes} Approved</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Send Quotes
+                </div>
+                <button onClick={onShowQuotationOrders} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 3: Production */}
+              <div className={`${styles.smartCard} ${styles.cardProduction}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>🏭</span>
+                  <h4>{t('productionManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{activeOrders} Active • {readyToShip} Ready</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Quality Check
+                </div>
+                <button onClick={onShowSalesOrders} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 4: Financials */}
+              <div className={`${styles.smartCard} ${styles.cardFinancials}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>💰</span>
+                  <h4>{t('financialManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>₹{(pendingAdvanceAmount / 100000).toFixed(1)}L Due • {overduePayments} Overdue</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Collect Payment
+                </div>
+                <button onClick={onShowPayments} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 5: Inventory */}
+              <div className={`${styles.smartCard} ${styles.cardInventory}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>📦</span>
+                  <h4>{t('inventoryManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>Cotton: Low • Yarn: Good</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Order Cotton
+                </div>
+                <button onClick={onShowInventory || (() => console.log('Navigate to Inventory'))} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 6: Fulfillment */}
+              <div className={`${styles.smartCard} ${styles.cardFulfillment}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>🚚</span>
+                  <h4>{t('fulfillmentManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{readyToShip} Ready • 2 Shipped</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Ship Orders
+                </div>
+                <button onClick={onShowFulfillment || (() => console.log('Navigate to Fulfillment'))} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 7: Customers */}
+              <div className={`${styles.smartCard} ${styles.cardCustomers}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>🤝</span>
+                  <h4>{t('customerManagement')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{totalCustomers} Active • {Math.floor(totalCustomers * 0.25)} Premium</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: Follow Up
+                </div>
+                <button onClick={onShowCustomerList} className={styles.cardButton}>
+                  {t('manage')} →
+                </button>
+              </div>
+
+              {/* Card 8: Analytics */}
+              <div className={`${styles.smartCard} ${styles.cardAnalytics}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>📊</span>
+                  <h4>{t('analyticsReports')}</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>85% On-Time • 12 Reports</span>
+                </div>
+                <div className={styles.cardNext}>
+                  {t('priorityAction')}: View Reports
+                </div>
+                <button onClick={onShowAnalytics || (() => console.log('Navigate to Analytics'))} className={styles.cardButton}>
+                  View Reports →
+                </button>
+              </div>
+              
+            </div>
           </div>
 
         </div>

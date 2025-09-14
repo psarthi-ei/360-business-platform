@@ -83,6 +83,23 @@ const translations: TranslationData = {
     voiceAI: "Voice AI",
     analytics: "Analytics",
     
+    // Floating Voice Assistant
+    voiceAssistant: "Voice Assistant",
+    voiceListening: "Listening",
+    voiceClick: "Click to speak",
+    
+    // Professional Business Card Titles
+    salesManagement: "Sales Pipeline",
+    quotationManagement: "Quotations & Orders", 
+    productionManagement: "Production",
+    financialManagement: "Financial Operations",
+    inventoryManagement: "Inventory & Stock",
+    fulfillmentManagement: "Dispatch & Delivery",
+    customerManagement: "Customer Relations",
+    analyticsReports: "Business Analytics",
+    priorityAction: "Action",
+    manage: "Manage",
+    
     // Metrics Labels
     newLeads: "New Leads",
     pendingQuotes: "Pending Quotes",
@@ -304,6 +321,23 @@ const translations: TranslationData = {
     voiceAI: "વૉઇસ એઆઇ",
     analytics: "એનાલિટિક્સ",
     
+    // Floating Voice Assistant
+    voiceAssistant: "વૉઇસ આસિસ્ટન્ટ",
+    voiceListening: "સાંભળી રહ્યું છે",
+    voiceClick: "બોલવા માટે ક્લિક કરો",
+    
+    // Professional Business Card Titles
+    salesManagement: "સેલ્સ પાઇપલાઇન",
+    quotationManagement: "કોટેશન અને ઓર્ડર", 
+    productionManagement: "ઉત્પાદન",
+    financialManagement: "નાણાકીય કામકાજ",
+    inventoryManagement: "ઇન્વેન્ટરી અને સ્ટોક",
+    fulfillmentManagement: "ડિસ્પેચ અને ડિલિવરી",
+    customerManagement: "ગ્રાહક સંબંધો",
+    analyticsReports: "બિઝનેસ એનાલિટિક્સ",
+    priorityAction: "ક્રિયા",
+    manage: "મેનેજ કરો",
+    
     // Common UI
     backToDashboard: "← ડેશબોર્ડ પર પાછા જાઓ",
     call: "📞 કૉલ",
@@ -462,6 +496,23 @@ const translations: TranslationData = {
     dispatch: "डिस्पैच",
     voiceAI: "वॉइस एआई",
     analytics: "एनालिटिक्स",
+    
+    // Floating Voice Assistant
+    voiceAssistant: "वॉइस असिस्टेंट",
+    voiceListening: "सुन रहा है",
+    voiceClick: "बोलने के लिए क्लिक करें",
+    
+    // Professional Business Card Titles
+    salesManagement: "सेल्स पाइपलाइन",
+    quotationManagement: "कोटेशन और ऑर्डर", 
+    productionManagement: "उत्पादन",
+    financialManagement: "वित्तीय कार्य",
+    inventoryManagement: "इन्वेंटरी और स्टॉक",
+    fulfillmentManagement: "डिस्पैच और डिलीवरी",
+    customerManagement: "ग्राहक संबंध",
+    analyticsReports: "बिजनेस एनालिटिक्स",
+    priorityAction: "कार्य",
+    manage: "प्रबंधन करें",
     
     // Common UI
     backToDashboard: "← डैशबोर्ड पर वापस जाएं",

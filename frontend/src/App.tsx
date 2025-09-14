@@ -11,7 +11,11 @@ import Invoices from './components/Invoices';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
 import ExternalProfileForm from './components/ExternalProfileForm';
+import InventoryManagement from './components/InventoryManagement';
+import FulfillmentManagement from './components/FulfillmentManagement';
+import AnalyticsManagement from './components/AnalyticsManagement';
 import ProductHeader from './components/ProductHeader';
+import { FloatingVoiceAssistant } from './components/FloatingVoiceAssistant';
 import Authentication from './components/Authentication';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { themes, applyTheme } from './styles/themes';
@@ -154,11 +158,52 @@ function App() {
     setCurrentScreen('customerlist');
   }
 
+  function showInventory() {
+    setCurrentScreen('inventory');
+  }
+
+  function showFulfillment() {
+    setCurrentScreen('fulfillment');
+  }
+
+  function showAnalytics() {
+    setCurrentScreen('analytics');
+  }
+
   function showProfileCompletion(linkId: string, quoteId: string, companyName: string) {
     setProfileLinkId(linkId);
     setProfileQuoteId(quoteId);
     setProfileCompanyName(companyName);
     setCurrentScreen('profilecompletion');
+  }
+
+  function handleVoiceCommand(command: string) {
+    const lowerCommand = command.toLowerCase();
+    
+    // Navigation commands
+    if (lowerCommand.includes('dashboard') || lowerCommand.includes('डैशबोर्ड') || lowerCommand.includes('ડેશબોર્ડ')) {
+      showDashboard();
+    } else if (lowerCommand.includes('home') || lowerCommand.includes('होम') || lowerCommand.includes('હોમ')) {
+      showHomePage();
+    } else if (lowerCommand.includes('lead') || lowerCommand.includes('लीड') || lowerCommand.includes('લીડ')) {
+      showLeadManagement();
+    } else if (lowerCommand.includes('quote') || lowerCommand.includes('कोटेशन') || lowerCommand.includes('કોટેશન')) {
+      showQuotationOrders();
+    } else if (lowerCommand.includes('order') || lowerCommand.includes('ऑर्डर') || lowerCommand.includes('ઓર્ડર')) {
+      showSalesOrders();
+    } else if (lowerCommand.includes('payment') || lowerCommand.includes('भुगतान') || lowerCommand.includes('પેમેન્ટ')) {
+      showPayments();
+    } else if (lowerCommand.includes('invoice') || lowerCommand.includes('इनवॉइस') || lowerCommand.includes('ઇન્વૉઇસ')) {
+      showInvoices();
+    } else if (lowerCommand.includes('customer') || lowerCommand.includes('ग्राहक') || lowerCommand.includes('ગ્રાહક')) {
+      showCustomerList();
+    } else if (lowerCommand.includes('inventory') || lowerCommand.includes('इन्वेंटरी') || lowerCommand.includes('ઇન્વેન્ટરી')) {
+      showInventory();
+    } else if (lowerCommand.includes('fulfillment') || lowerCommand.includes('dispatch') || lowerCommand.includes('डिस्पैच') || lowerCommand.includes('ડિસ્પેચ')) {
+      showFulfillment();
+    } else if (lowerCommand.includes('analytics') || lowerCommand.includes('विश्लेषण') || lowerCommand.includes('વિશ્લેષણ')) {
+      showAnalytics();
+    }
   }
 
   function renderDashboard() {
@@ -174,6 +219,9 @@ function App() {
           onShowPayments={showPayments}
           onShowInvoices={showInvoices}
           onShowCustomerList={showCustomerList}
+          onShowInventory={showInventory}
+          onShowFulfillment={showFulfillment}
+          onShowAnalytics={showAnalytics}
           onLogin={showLogin}
           onSignUp={showSignUp}
           onGuestMode={handleGuestMode}
@@ -346,6 +394,30 @@ function App() {
     );
   }
 
+  function renderInventoryManagement() {
+    return (
+      <InventoryManagement
+        onBackToDashboard={showDashboard}
+      />
+    );
+  }
+
+  function renderFulfillmentManagement() {
+    return (
+      <FulfillmentManagement
+        onBackToDashboard={showDashboard}
+      />
+    );
+  }
+
+  function renderAnalyticsManagement() {
+    return (
+      <AnalyticsManagement
+        onBackToDashboard={showDashboard}
+      />
+    );
+  }
+
   return (
     <TranslationProvider defaultLanguage={currentLanguage}>
       <div className="App">
@@ -390,6 +462,17 @@ function App() {
         {currentScreen === 'customerprofile' && renderCustomerProfile()}
         {currentScreen === 'customerlist' && renderCustomerList()}
         {currentScreen === 'profilecompletion' && renderProfileCompletion()}
+        {currentScreen === 'inventory' && renderInventoryManagement()}
+        {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
+        {currentScreen === 'analytics' && renderAnalyticsManagement()}
+        
+        {/* Global Voice Assistant - Available on all screens */}
+        {currentScreen !== 'homepage' && (
+          <FloatingVoiceAssistant
+            currentScreen={currentScreen}
+            onVoiceCommand={handleVoiceCommand}
+          />
+        )}
         </div>
       </div>
     </TranslationProvider>
