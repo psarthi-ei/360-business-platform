@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ProductHeader from './ProductHeader';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import TabNavigation from './TabNavigation';
+import ProcessMetrics from './ProcessMetrics';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Dashboard.module.css';
@@ -55,11 +58,15 @@ function Dashboard({
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
   
-  // Voice command state
-  const [isListening, setIsListening] = useState(false);
-  const [voiceCommand, setVoiceCommand] = useState('');
-  const [voiceResponse, setVoiceResponse] = useState('');
-  const [showVoiceResponse, setShowVoiceResponse] = useState(false);
+  // Current process stage for voice assistant
+  const [currentProcessStage, setCurrentProcessStage] = useState('dashboard');
+  
+  // Tab navigation state
+  const [showTabNavigation, setShowTabNavigation] = useState(false);
+  const [activeCardType, setActiveCardType] = useState<string | null>(null);
+  
+  // Process metrics state
+  const [showProcessMetrics, setShowProcessMetrics] = useState(false);
   
   // Global search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -77,6 +84,186 @@ function Dashboard({
   const activeOrders = mockSalesOrders.filter(order => order.status === 'production').length;
   const readyToShip = mockSalesOrders.filter(order => order.status === 'completed').length;
   const overduePayments = mockSalesOrders.filter(order => order.paymentStatus && order.paymentStatus.includes('overdue')).length;
+  
+  // Business data for voice assistant
+  const businessData = {
+    hotLeads,
+    overduePayments,
+    readyToShip,
+    totalCustomers
+  };
+
+  // Tab navigation handlers
+  const handleCardClick = (cardType: string) => {
+    setActiveCardType(cardType);
+    setShowTabNavigation(true);
+    setCurrentProcessStage(cardType);
+  };
+
+  const closeTabNavigation = () => {
+    setShowTabNavigation(false);
+    setActiveCardType(null);
+    setCurrentProcessStage('dashboard');
+  };
+
+  // Process metrics handlers
+  const showMetrics = () => {
+    setShowProcessMetrics(true);
+  };
+
+  const closeMetrics = () => {
+    setShowProcessMetrics(false);
+  };
+
+  const handleMetricsStageClick = (stage: string) => {
+    setShowProcessMetrics(false);
+    handleCardClick(stage);
+  };
+
+  // Get tab configuration for each card type
+  const getTabConfiguration = (cardType: string) => {
+    const configurations = {
+      'leads': {
+        title: 'LEAD PIPELINE MANAGEMENT',
+        icon: '🔥',
+        tabs: [
+          { id: 'all', label: 'All Leads', icon: '📋', count: totalLeads, action: onShowLeadManagement },
+          { id: 'hot', label: 'Hot Leads', icon: '🔥', count: hotLeads },
+          { id: 'followup', label: 'Follow-up', icon: '📞', count: warmLeads },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `${hotLeads} Hot • ${warmLeads} Warm • ${totalLeads - hotLeads - warmLeads} Cold`,
+        nextAction: 'Call Surat Textiles',
+        voiceCommands: ['Show hot leads', 'Add new lead', 'Call next lead'],
+        smartLinks: [
+          { text: `${leadsReadyForQuotes} leads ready for quotes`, action: () => handleCardClick('quotes') },
+          { text: `${Math.floor(totalCustomers * 0.3)} leads from existing customers`, action: () => handleCardClick('customers') }
+        ]
+      },
+      'quotes': {
+        title: 'QUOTATIONS & ORDERS',
+        icon: '📋',
+        tabs: [
+          { id: 'all', label: 'All Quotes', icon: '📋', count: mockQuotes.length, action: onShowQuotationOrders },
+          { id: 'pending', label: 'Pending', icon: '⏳', count: pendingQuotes },
+          { id: 'approved', label: 'Approved', icon: '✅', count: approvedQuotes },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `${pendingQuotes} Pending • ${approvedQuotes} Approved • ${Math.round((approvedQuotes/mockQuotes.length)*100)}% Success Rate`,
+        nextAction: 'Follow up on Premium Cotton quote',
+        voiceCommands: ['Create quote', 'Show pending quotes', 'Quote approval status'],
+        smartLinks: [
+          { text: `₹${(pendingAdvanceAmount/100000).toFixed(1)}L quotes approved, awaiting payment`, action: () => handleCardClick('payments') },
+          { text: 'Quote for existing customer', action: () => handleCardClick('customers') }
+        ]
+      },
+      'payments': {
+        title: 'ADVANCE PAYMENTS',
+        icon: '💰',
+        tabs: [
+          { id: 'all', label: 'All Payments', icon: '💰', action: onShowPayments },
+          { id: 'pending', label: 'Outstanding', icon: '⏰', count: overduePayments },
+          { id: 'received', label: 'Received', icon: '✅' },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `₹${(pendingAdvanceAmount/100000).toFixed(1)}L Outstanding • ${overduePayments} Overdue Customers`,
+        nextAction: 'Follow up with Gujarat Mills for ₹2.4L payment',
+        voiceCommands: ['Record payment', 'Outstanding payments', 'Payment reminders'],
+        smartLinks: [
+          { text: 'Payment received, ready for production', action: () => handleCardClick('production') },
+          { text: `${Math.floor(totalCustomers * 0.2)} customers created from payments`, action: () => handleCardClick('customers') }
+        ]
+      },
+      'production': {
+        title: 'PRODUCTION MANAGEMENT',
+        icon: '🏭',
+        tabs: [
+          { id: 'all', label: 'All Orders', icon: '🏭', count: mockSalesOrders.length, action: onShowSalesOrders },
+          { id: 'active', label: 'In Production', icon: '⚙️', count: activeOrders },
+          { id: 'quality', label: 'Quality Check', icon: '🔍' },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `${activeOrders} In Production • ${readyToShip} Ready to Ship • 92% On Time`,
+        nextAction: 'Quality check for Ahmedabad Textiles order',
+        voiceCommands: ['Production status', 'Start production', 'Quality check'],
+        smartLinks: [
+          { text: 'Materials needed for orders', action: () => handleCardClick('inventory') },
+          { text: `${readyToShip} completed orders ready to ship`, action: () => handleCardClick('fulfillment') }
+        ]
+      },
+      'inventory': {
+        title: 'INVENTORY & MATERIALS',
+        icon: '📦',
+        tabs: [
+          { id: 'all', label: 'All Stock', icon: '📦', action: onShowInventory },
+          { id: 'low', label: 'Low Stock', icon: '⚠️', count: 3 },
+          { id: 'procurement', label: 'Procurement', icon: '🛒' },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: '85% Stock Health • 3 Items Low Stock • ₹12.5L Inventory Value',
+        nextAction: 'Reorder Cotton 40s - only 2 days stock left',
+        voiceCommands: ['Stock check', 'Material order', 'Stock allocation'],
+        smartLinks: [
+          { text: 'Stock reserved for orders', action: () => handleCardClick('production') },
+          { text: 'Materials ready for dispatch', action: () => handleCardClick('fulfillment') }
+        ]
+      },
+      'fulfillment': {
+        title: 'FULFILLMENT & DELIVERY',
+        icon: '🚚',
+        tabs: [
+          { id: 'all', label: 'All Shipments', icon: '🚚', action: onShowFulfillment },
+          { id: 'ready', label: 'Ready to Ship', icon: '📦', count: readyToShip },
+          { id: 'transit', label: 'In Transit', icon: '🚛', count: 2 },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `${readyToShip} Ready • 2 In Transit • 1 Delivered Today`,
+        nextAction: 'Schedule pickup for Mumbai Exports order',
+        voiceCommands: ['Ready to ship', 'Dispatch status', 'Delivery tracking'],
+        smartLinks: [
+          { text: 'Orders delivered, generate invoice', action: () => handleCardClick('analytics') },
+          { text: 'Customer feedback pending', action: () => handleCardClick('customers') }
+        ]
+      },
+      'customers': {
+        title: 'CUSTOMER MANAGEMENT',
+        icon: '🤝',
+        tabs: [
+          { id: 'all', label: 'All Customers', icon: '🤝', count: totalCustomers, action: onShowCustomerList },
+          { id: 'vip', label: 'VIP Customers', icon: '⭐', count: Math.floor(totalCustomers * 0.25) },
+          { id: 'feedback', label: 'Feedback', icon: '💬' },
+          { id: 'analytics', label: 'Analytics', icon: '📊' }
+        ],
+        quickStats: `${totalCustomers} Total • ${Math.floor(totalCustomers * 0.25)} VIP • ${Math.floor(totalCustomers * 0.6)} Active This Month`,
+        nextAction: 'Follow up with Rajkot Industries for repeat order',
+        voiceCommands: ['Customer profile', 'VIP customers', 'Customer feedback'],
+        smartLinks: [
+          { text: `${repeatCustomerOpportunities} customers ready for repeat orders`, action: () => handleCardClick('leads') },
+          { text: 'Payment due from customers', action: () => handleCardClick('payments') }
+        ]
+      },
+      'analytics': {
+        title: 'BUSINESS ANALYTICS',
+        icon: '📊',
+        tabs: [
+          { id: 'overview', label: 'Overview', icon: '📊', action: onShowAnalytics },
+          { id: 'financial', label: 'Financial', icon: '💰' },
+          { id: 'operations', label: 'Operations', icon: '⚙️' },
+          { id: 'reports', label: 'Reports', icon: '📋' }
+        ],
+        quickStats: `₹${(totalRevenue/100000).toFixed(1)}L Revenue • ${conversionRate}% Conversion • 94% Customer Satisfaction`,
+        nextAction: 'Review monthly performance report',
+        voiceCommands: ['Business performance', 'Monthly sales', 'Show KPIs'],
+        smartLinks: [
+          { text: 'View Process Metrics & KPIs', action: showMetrics },
+          { text: 'Low conversion leads need attention', action: () => handleCardClick('leads') },
+          { text: 'Production efficiency insights', action: () => handleCardClick('production') }
+        ]
+      }
+    };
+
+    return configurations[cardType as keyof typeof configurations] || configurations.leads;
+  };
   
   // Quick metrics
   const conversionRate = Math.round((mockSalesOrders.length / totalLeads) * 100);
@@ -128,102 +315,8 @@ function Dashboard({
     }
   };
 
-  // Enhanced voice command processing with business intelligence
-  const processVoiceCommand = (command: string) => {
-    const lowerCommand = command.toLowerCase();
-    let response = '';
-    
-    // Business intelligence queries
-    if (lowerCommand.includes('what needs attention') || lowerCommand.includes('શું attention') || lowerCommand.includes('क्या attention')) {
-      response = `Today's priorities: ${hotLeads} hot leads need calls, ${overduePayments} overdue payments, ${readyToShip} orders ready to ship`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      return;
-    }
-    
-    // Payment queries
-    if (lowerCommand.includes('payment કોની બાકી') || lowerCommand.includes('who owes money') || lowerCommand.includes('pending payments')) {
-      const overdueCustomers = mockSalesOrders.filter(order => order.paymentStatus && order.paymentStatus.includes('overdue'));
-      const topCustomer = overdueCustomers.length > 0 ? getBusinessProfileById(overdueCustomers[0].businessProfileId)?.companyName : 'None';
-      response = `${overdueCustomers.length} customers have overdue payments. Top priority: ${topCustomer}`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      onShowPayments();
-      return;
-    }
-    
-    // Hot leads queries
-    if (lowerCommand.includes('call hot leads') || lowerCommand.includes('કૉલ કરવા') || lowerCommand.includes('गर्म लीड')) {
-      response = `${hotLeads} hot leads ready for calls. Opening lead management...`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      onShowLeadManagement();
-      return;
-    }
-    
-    // Order status queries
-    if (lowerCommand.includes('order status') || lowerCommand.includes('production status') || lowerCommand.includes('ઓર્ડર status')) {
-      response = `${activeOrders} orders in production, ${readyToShip} ready to ship. Opening order tracking...`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      onShowSalesOrders();
-      return;
-    }
-    
-    // Customer queries
-    if (lowerCommand.includes('best customers') || lowerCommand.includes('vip customers') || lowerCommand.includes('ગ્રાહક કોણ')) {
-      response = `You have ${totalCustomers} customers, ${Math.floor(totalCustomers * 0.25)} are VIP customers. Opening customer management...`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      onShowCustomerList();
-      return;
-    }
-    
-    // Navigation commands (fallback)
-    if (lowerCommand.includes('નવી પૂછપરછ') || lowerCommand.includes('લીડ્સ') || lowerCommand.includes('leads') || lowerCommand.includes('inquiry') || lowerCommand.includes('लीड')) {
-      onShowLeadManagement();
-    } else if (lowerCommand.includes('ચાલતો બિઝનેસ') || lowerCommand.includes('ઓર્ડર') || lowerCommand.includes('orders') || lowerCommand.includes('business') || lowerCommand.includes('ऑर्डर')) {
-      onShowSalesOrders();
-    } else if (lowerCommand.includes('પૈસો') || lowerCommand.includes('પેમેન્ટ') || lowerCommand.includes('money') || lowerCommand.includes('payment') || lowerCommand.includes('पैसा')) {
-      onShowPayments();
-    } else if (lowerCommand.includes('ગ્રાહક') || lowerCommand.includes('કસ્ટમર') || lowerCommand.includes('customer') || lowerCommand.includes('ग्राहक')) {
-      onShowCustomerList();
-    }
-  };
 
-  // Voice recognition setup
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = currentLanguage === 'gu' ? 'gu-IN' : currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
 
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setVoiceCommand(transcript);
-        processVoiceCommand(transcript);
-        setIsListening(false);
-      };
-
-      recognition.onerror = () => {
-        setIsListening(false);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      if (isListening) {
-        recognition.start();
-      }
-    }
-  }, [isListening, currentLanguage]);
-
-  const startVoiceRecognition = () => {
-    setIsListening(true);
-  };
 
   // Global search functionality
   const performGlobalSearch = (query: string) => {
@@ -330,15 +423,6 @@ function Dashboard({
     return today.toLocaleDateString('en-US', options);
   };
 
-  // Auto-hide voice response after 5 seconds
-  useEffect(() => {
-    if (showVoiceResponse) {
-      const timer = setTimeout(() => {
-        setShowVoiceResponse(false);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showVoiceResponse]);
   
 
   return (
@@ -371,6 +455,14 @@ function Dashboard({
           <div className={styles.executiveSummary}>
             <div className={styles.executiveSummaryHeader}>
               <h2>📊 Business Intelligence - {getCurrentDateString()}</h2>
+              <button 
+                className={styles.processIntelligenceButton}
+                onClick={showMetrics}
+                title="View Process Metrics & KPIs"
+              >
+                <span className={styles.buttonIcon}>🎯</span>
+                <span className={styles.buttonText}>Process Intelligence</span>
+              </button>
             </div>
             
             {/* Business Health Cards */}
@@ -467,7 +559,7 @@ function Dashboard({
                   </div>
                 </div>
                 <div className={styles.quickAction}>
-                  <button onClick={() => processVoiceCommand('what needs attention today')}>
+                  <button onClick={() => onShowLeadManagement()}>
                     Show Details →
                   </button>
                 </div>
@@ -488,7 +580,7 @@ function Dashboard({
                   </div>
                 </div>
                 <div className={styles.quickAction}>
-                  <button onClick={() => processVoiceCommand('business performance')}>
+                  <button onClick={() => onShowAnalytics?.()}>
                     Analytics →
                   </button>
                 </div>
@@ -497,23 +589,6 @@ function Dashboard({
             </div>
           </div>
 
-          {/* Voice Response Display */}
-          {showVoiceResponse && (
-            <div className={styles.voiceResponsePanel}>
-              <div className={styles.voiceResponseContent}>
-                <span className={styles.voiceResponseIcon}>💬</span>
-                <div className={styles.voiceResponseText}>
-                  <strong>Business Assistant:</strong> {voiceResponse}
-                </div>
-              </div>
-              <button 
-                className={styles.closeVoiceResponse} 
-                onClick={() => setShowVoiceResponse(false)}
-              >
-                ✕
-              </button>
-            </div>
-          )}
 
           {/* Integrated Search */}
           <div className={styles.integratedSearch}>
@@ -568,149 +643,227 @@ function Dashboard({
             )}
           </div>
 
-          {/* 8 Smart Business Cards - Complete Business Coverage */}
+          {/* 8 Sequential Business Process Cards */}
           <div className={styles.businessProcesses}>
             <div className={styles.processHeader}>
-              <h3>Business Operations</h3>
-              <div className={styles.processSubtitle}>Complete business management access</div>
+              <h3>🔄 Business Process Flow</h3>
+              <div className={styles.processSubtitle}>Sequential workflow from lead to customer - natural textile manufacturing process</div>
             </div>
             
-            {/* 8 Smart Business Cards Grid */}
+            {/* Sequential 8-Card Layout with Process Flow */}
             <div className={styles.smartCardsGrid}>
               
-              {/* Card 1: Sales Pipeline */}
-              <div className={`${styles.smartCard} ${styles.cardSales}`}>
+              {/* Process Flow Arrows */}
+              <div className={`${styles.processFlowArrow} ${styles['arrow-1-2']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-2-3']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-3-4']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-4-5']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-5-6']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-6-7']}`}>→</div>
+              <div className={`${styles.processFlowArrow} ${styles['arrow-7-8']}`}>→</div>
+              
+              {/* Card 1: Lead Pipeline (Business Entry Point) */}
+              <div className={`${styles.smartCard} ${styles.cardSales} ${styles['card-1']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-1']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>🔥</span>
-                  <h4>{t('salesManagement')}</h4>
+                  <h4>LEAD PIPELINE</h4>
                 </div>
                 <div className={styles.cardMetrics}>
-                  <span>{hotLeads} Hot Leads • {totalLeads} Total</span>
+                  <span>{hotLeads} Hot • {warmLeads} Warm • {totalLeads - hotLeads - warmLeads} Cold</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Follow Up
+                  Next: Call {leadsReadyForQuotes} leads → Quotations
                 </div>
-                <button onClick={onShowLeadManagement} className={styles.cardButton}>
-                  {t('manage')} →
+                {leadsReadyForQuotes > 0 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('quotes')}>
+                    <span className={styles.contextLinkIcon}>💡</span>
+                    <span className={styles.contextLinkText}>{leadsReadyForQuotes} leads ready for quotes</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('leads')} className={styles.cardButton}>
+                  Manage Leads →
                 </button>
               </div>
 
-              {/* Card 2: Quotations */}
-              <div className={`${styles.smartCard} ${styles.cardQuotes}`}>
+              {/* Card 2: Quotations & Orders (Conversion Stage) */}
+              <div className={`${styles.smartCard} ${styles.cardQuotes} ${styles['card-2']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-2']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>📋</span>
-                  <h4>{t('quotationManagement')}</h4>
+                  <h4>QUOTATIONS</h4>
                 </div>
                 <div className={styles.cardMetrics}>
                   <span>{pendingQuotes} Pending • {approvedQuotes} Approved</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Send Quotes
+                  Next: {quotesReadyForAdvance} quotes → Advance Payments
                 </div>
-                <button onClick={onShowQuotationOrders} className={styles.cardButton}>
-                  {t('manage')} →
+                {quotesReadyForAdvance > 0 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('payments')}>
+                    <span className={styles.contextLinkIcon}>💰</span>
+                    <span className={styles.contextLinkText}>₹{((quotesReadyForAdvance * 50000) / 100000).toFixed(1)}L awaiting payment</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('quotes')} className={styles.cardButton}>
+                  Manage Quotes →
                 </button>
               </div>
 
-              {/* Card 3: Production */}
-              <div className={`${styles.smartCard} ${styles.cardProduction}`}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.cardIcon}>🏭</span>
-                  <h4>{t('productionManagement')}</h4>
-                </div>
-                <div className={styles.cardMetrics}>
-                  <span>{activeOrders} Active • {readyToShip} Ready</span>
-                </div>
-                <div className={styles.cardNext}>
-                  {t('priorityAction')}: Quality Check
-                </div>
-                <button onClick={onShowSalesOrders} className={styles.cardButton}>
-                  {t('manage')} →
-                </button>
-              </div>
-
-              {/* Card 4: Financials */}
-              <div className={`${styles.smartCard} ${styles.cardFinancials}`}>
+              {/* Card 3: Advance Payments (Financial Commitment Gate) */}
+              <div className={`${styles.smartCard} ${styles.cardFinancials} ${styles['card-3']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-3']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>💰</span>
-                  <h4>{t('financialManagement')}</h4>
+                  <h4>ADVANCE PAYMENTS</h4>
                 </div>
                 <div className={styles.cardMetrics}>
                   <span>₹{(pendingAdvanceAmount / 100000).toFixed(1)}L Due • {overduePayments} Overdue</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Collect Payment
+                  Next: Payment received → Production
                 </div>
-                <button onClick={onShowPayments} className={styles.cardButton}>
-                  {t('manage')} →
+                {activeOrders > 0 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('production')}>
+                    <span className={styles.contextLinkIcon}>🏭</span>
+                    <span className={styles.contextLinkText}>{activeOrders} orders ready for production</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('payments')} className={styles.cardButton}>
+                  Collect Payments →
                 </button>
               </div>
 
-              {/* Card 5: Inventory */}
-              <div className={`${styles.smartCard} ${styles.cardInventory}`}>
+              {/* Card 4: Production (Manufacturing Stage) */}
+              <div className={`${styles.smartCard} ${styles.cardProduction} ${styles['card-4']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-4']}`}></div>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardIcon}>🏭</span>
+                  <h4>PRODUCTION</h4>
+                </div>
+                <div className={styles.cardMetrics}>
+                  <span>{activeOrders} In Production • {readyToShip} Completed</span>
+                </div>
+                <div className={styles.cardNext}>
+                  Next: Materials needed → Inventory
+                </div>
+                {activeOrders > 2 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('inventory')}>
+                    <span className={styles.contextLinkIcon}>📦</span>
+                    <span className={styles.contextLinkText}>Materials needed for production</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('production')} className={styles.cardButton}>
+                  Manage Production →
+                </button>
+              </div>
+
+              {/* Card 5: Inventory & Materials (Supply Chain) */}
+              <div className={`${styles.smartCard} ${styles.cardInventory} ${styles['card-5']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-5']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>📦</span>
-                  <h4>{t('inventoryManagement')}</h4>
+                  <h4>INVENTORY</h4>
                 </div>
                 <div className={styles.cardMetrics}>
-                  <span>Cotton: Low • Yarn: Good</span>
+                  <span>Cotton: Low • Yarn: Good • 2 Orders Reserved</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Order Cotton
+                  Next: Stock ready → Fulfillment
                 </div>
-                <button onClick={onShowInventory || (() => console.log('Navigate to Inventory'))} className={styles.cardButton}>
-                  {t('manage')} →
+                {readyToShip > 0 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('fulfillment')}>
+                    <span className={styles.contextLinkIcon}>🚚</span>
+                    <span className={styles.contextLinkText}>{readyToShip} orders ready for dispatch</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('inventory')} className={styles.cardButton}>
+                  Manage Stock →
                 </button>
               </div>
 
-              {/* Card 6: Fulfillment */}
-              <div className={`${styles.smartCard} ${styles.cardFulfillment}`}>
+              {/* Card 6: Fulfillment (Delivery & Completion) */}
+              <div className={`${styles.smartCard} ${styles.cardFulfillment} ${styles['card-6']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-6']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>🚚</span>
-                  <h4>{t('fulfillmentManagement')}</h4>
+                  <h4>FULFILLMENT</h4>
                 </div>
                 <div className={styles.cardMetrics}>
-                  <span>{readyToShip} Ready • 2 Shipped</span>
+                  <span>{readyToShip} Ready to Ship • 2 Delivered</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Ship Orders
+                  Next: Orders delivered → Customer feedback
                 </div>
-                <button onClick={onShowFulfillment || (() => console.log('Navigate to Fulfillment'))} className={styles.cardButton}>
-                  {t('manage')} →
+                {totalCustomers > 5 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('customers')}>
+                    <span className={styles.contextLinkIcon}>🤝</span>
+                    <span className={styles.contextLinkText}>Feedback pending from customers</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('fulfillment')} className={styles.cardButton}>
+                  Manage Delivery →
                 </button>
               </div>
 
-              {/* Card 7: Customers */}
-              <div className={`${styles.smartCard} ${styles.cardCustomers}`}>
+              {/* Card 7: Customers (Relationship Management) */}
+              <div className={`${styles.smartCard} ${styles.cardCustomers} ${styles['card-7']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-7']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>🤝</span>
-                  <h4>{t('customerManagement')}</h4>
+                  <h4>CUSTOMERS</h4>
                 </div>
                 <div className={styles.cardMetrics}>
-                  <span>{totalCustomers} Active • {Math.floor(totalCustomers * 0.25)} Premium</span>
+                  <span>{totalCustomers} Active • {repeatCustomerOpportunities} Repeat Opportunities</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: Follow Up
+                  Next: Repeat business → Lead Pipeline
                 </div>
-                <button onClick={onShowCustomerList} className={styles.cardButton}>
-                  {t('manage')} →
+                {repeatCustomerOpportunities > 3 && (
+                  <div className={styles.smartContextLink} onClick={() => handleCardClick('leads')}>
+                    <span className={styles.contextLinkIcon}>🔥</span>
+                    <span className={styles.contextLinkText}>{repeatCustomerOpportunities} repeat opportunities</span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('customers')} className={styles.cardButton}>
+                  Manage Relations →
                 </button>
               </div>
 
-              {/* Card 8: Analytics */}
-              <div className={`${styles.smartCard} ${styles.cardAnalytics}`}>
+              {/* Card 8: Business Analytics (Intelligence & Optimization) */}
+              <div className={`${styles.smartCard} ${styles.cardAnalytics} ${styles['card-8']}`}>
+                <div className={`${styles.stageIndicator} ${styles['stage-8']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>📊</span>
-                  <h4>{t('analyticsReports')}</h4>
+                  <h4>BUSINESS ANALYTICS</h4>
                 </div>
                 <div className={styles.cardMetrics}>
-                  <span>85% On-Time • 12 Reports</span>
+                  <span>{conversionRate}% Conversion • Pipeline Health: Good</span>
                 </div>
                 <div className={styles.cardNext}>
-                  {t('priorityAction')}: View Reports
+                  Next: Optimize → All process stages
                 </div>
-                <button onClick={onShowAnalytics || (() => console.log('Navigate to Analytics'))} className={styles.cardButton}>
-                  View Reports →
+                {(hotLeads < 2 || overduePayments > 2) && (
+                  <div className={styles.smartContextLink} onClick={() => {
+                    if (hotLeads < 2) onShowLeadManagement();
+                    else if (overduePayments > 2) onShowPayments();
+                  }}>
+                    <span className={styles.contextLinkIcon}>⚠️</span>
+                    <span className={styles.contextLinkText}>
+                      {hotLeads < 2 ? 'Low lead conversion needs attention' : 'Payment issues need focus'}
+                    </span>
+                    <span className={styles.contextLinkArrow}>→</span>
+                  </div>
+                )}
+                <button onClick={() => handleCardClick('analytics')} className={styles.cardButton}>
+                  View Analytics →
                 </button>
               </div>
               
@@ -719,6 +872,54 @@ function Dashboard({
 
         </div>
       </div>
+
+      {/* Floating Voice Assistant */}
+      <FloatingVoiceAssistant
+        currentProcessStage={currentProcessStage}
+        onNavigateToLeads={() => { setCurrentProcessStage('leads'); onShowLeadManagement(); }}
+        onNavigateToQuotes={() => { setCurrentProcessStage('quotes'); onShowQuotationOrders(); }}
+        onNavigateToPayments={() => { setCurrentProcessStage('payments'); onShowPayments(); }}
+        onNavigateToProduction={() => { setCurrentProcessStage('production'); onShowSalesOrders(); }}
+        onNavigateToInventory={() => { setCurrentProcessStage('inventory'); onShowInventory?.(); }}
+        onNavigateToFulfillment={() => { setCurrentProcessStage('fulfillment'); onShowFulfillment?.(); }}
+        onNavigateToCustomers={() => { setCurrentProcessStage('customers'); onShowCustomerList(); }}
+        onNavigateToAnalytics={() => { setCurrentProcessStage('analytics'); onShowAnalytics?.(); }}
+        businessData={businessData}
+      />
+
+      {/* Tab Navigation Overlay */}
+      {showTabNavigation && activeCardType && (
+        <TabNavigation
+          {...getTabConfiguration(activeCardType)}
+          onClose={closeTabNavigation}
+        >
+          <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
+            <h3>Sub-module content will be loaded here</h3>
+            <p>This is where the specific module interface ({activeCardType}) will be displayed with tabs and detailed functionality.</p>
+          </div>
+        </TabNavigation>
+      )}
+
+      {/* Process Metrics Overlay */}
+      {showProcessMetrics && (
+        <div className={styles.metricsOverlay}>
+          <div className={styles.metricsContainer}>
+            <div className={styles.metricsHeader}>
+              <h2>Business Process Intelligence</h2>
+              <button 
+                className={styles.closeMetricsButton}
+                onClick={closeMetrics}
+                aria-label="Close Metrics"
+              >
+                ✕
+              </button>
+            </div>
+            <div className={styles.metricsContent}>
+              <ProcessMetrics onStageClick={handleMetricsStageClick} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

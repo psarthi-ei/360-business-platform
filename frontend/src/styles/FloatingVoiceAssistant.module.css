@@ -1,234 +1,254 @@
 /* Floating Voice Assistant - WhatsApp Style */
-.floatingVoiceContainer {
+.floatingVoiceAssistant {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-}
-
-.voiceButton {
+  bottom: 20px;
+  right: 20px;
   width: 60px;
   height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-  border: none;
-  font-size: 28px;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
 }
 
-.voiceButton:hover {
+.floatingVoiceAssistant:hover {
   transform: scale(1.1);
-  box-shadow: 0 12px 32px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
 }
 
-.voiceButton:active {
-  transform: scale(0.95);
-}
-
-/* Listening state */
-.voiceButton.listening {
-  background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+.floatingVoiceAssistant.listening {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   animation: pulse 1.5s infinite;
+}
+
+.floatingVoiceAssistant.disabled {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 8px 24px rgba(81, 207, 102, 0.3);
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 12px 32px rgba(81, 207, 102, 0.5);
+    box-shadow: 0 6px 30px rgba(231, 76, 60, 0.8);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 8px 24px rgba(81, 207, 102, 0.3);
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
   }
 }
 
-/* Pulse ring effect when listening */
-.listeningIcon {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Voice Response Panel */
+.voiceResponsePanel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInFromTop 0.3s ease-out;
 }
 
-.pulseRing {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
-  animation: pulseRing 1s infinite;
-}
-
-@keyframes pulseRing {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
+@keyframes slideInFromTop {
+  from {
     opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 }
 
-/* Transcript bubble */
-.transcriptBubble {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 20px;
-  max-width: 250px;
-  word-wrap: break-word;
-  margin-bottom: 8px;
-  position: relative;
-  animation: fadeInUp 0.3s ease;
-}
-
-.transcriptBubble::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  right: 20px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid rgba(0, 0, 0, 0.8);
-}
-
-.transcriptBubble p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-/* Listening indicator */
-.listeningIndicator {
-  background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 20px;
+.voiceResponseContent {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 8px;
-  animation: fadeInUp 0.3s ease;
-  box-shadow: 0 4px 16px rgba(81, 207, 102, 0.3);
 }
 
-.listeningIndicator p {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
+.voiceResponseIcon {
+  font-size: 1.5rem;
+  margin-top: 2px;
 }
 
-/* Sound wave animation */
-.soundWave {
+.voiceResponseText {
+  flex: 1;
+  font-size: 1rem;
+  color: #2c3e50;
+  line-height: 1.5;
+}
+
+.closeVoiceResponse {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.closeVoiceResponse:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Voice Command Suggestions Panel */
+.voiceCommandPanel {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.voiceCommandPanel.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.voiceCommandPanelHeader {
   display: flex;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.wave {
-  width: 3px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 2px;
-  animation: soundWave 1s infinite ease-in-out;
+.voiceCommandTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
-.wave:nth-child(2) {
-  animation-delay: 0.1s;
+.closeVoicePanel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
-.wave:nth-child(3) {
-  animation-delay: 0.2s;
+.closeVoicePanel:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-@keyframes soundWave {
-  0%, 100% {
-    height: 6px;
-  }
-  50% {
-    height: 18px;
-  }
+.voiceStageContext {
+  font-size: 0.8rem;
+  color: #667eea;
+  font-weight: 500;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 4px;
+  text-align: center;
 }
 
-/* Fade in up animation */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.voiceCommandSuggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* Mobile responsiveness */
+.voiceCommandSuggestion {
+  padding: 8px 12px;
+  margin: 4px 0;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  color: #34495e;
+}
+
+.voiceCommandSuggestion:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateX(4px);
+}
+
+.voiceCommandSuggestion::before {
+  content: "🎤 ";
+  margin-right: 6px;
+}
+
+.voiceCommandHint {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .floatingVoiceContainer {
-    bottom: 20px;
+  .floatingVoiceAssistant {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .voiceCommandPanel {
+    width: calc(100vw - 40px);
     right: 20px;
+    left: 20px;
+    bottom: 75px;
   }
   
-  .voiceButton {
-    width: 56px;
-    height: 56px;
-    font-size: 24px;
-  }
-  
-  .transcriptBubble,
-  .listeningIndicator {
-    max-width: 200px;
-    font-size: 13px;
+  .voiceResponsePanel {
+    width: calc(100vw - 40px);
+    max-width: none;
+    margin: 0 20px;
   }
 }
 
-/* Tablet adjustments */
-@media (max-width: 1024px) {
-  .floatingVoiceContainer {
-    bottom: 20px;
-    right: 20px;
-  }
-}
-
-/* High contrast mode */
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .voiceButton {
+  .floatingVoiceAssistant {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+  }
+  
+  .voiceCommandPanel,
+  .voiceResponsePanel {
+    background: #fff;
     border: 2px solid #000;
-  }
-  
-  .transcriptBubble {
-    border: 1px solid #fff;
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .voiceButton,
-  .pulseRing,
-  .wave {
-    animation: none;
-  }
-  
-  .voiceButton:hover {
-    transform: none;
   }
 }

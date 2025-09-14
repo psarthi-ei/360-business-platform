@@ -15,7 +15,6 @@ import InventoryManagement from './components/InventoryManagement';
 import FulfillmentManagement from './components/FulfillmentManagement';
 import AnalyticsManagement from './components/AnalyticsManagement';
 import ProductHeader from './components/ProductHeader';
-import { FloatingVoiceAssistant } from './components/FloatingVoiceAssistant';
 import Authentication from './components/Authentication';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { themes, applyTheme } from './styles/themes';
@@ -466,13 +465,6 @@ function App() {
         {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
         {currentScreen === 'analytics' && renderAnalyticsManagement()}
         
-        {/* Global Voice Assistant - Available on all screens */}
-        {currentScreen !== 'homepage' && (
-          <FloatingVoiceAssistant
-            currentScreen={currentScreen}
-            onVoiceCommand={handleVoiceCommand}
-          />
-        )}
         </div>
       </div>
     </TranslationProvider>

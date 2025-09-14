@@ -3639,6 +3639,117 @@
   margin: 0;
 }
 
+.processIntelligenceButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.processIntelligenceButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.buttonIcon {
+  font-size: 1rem;
+}
+
+.buttonText {
+  font-weight: 600;
+}
+
+/* Process Metrics Overlay */
+.metricsOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.metricsContainer {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 1400px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metricsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.metricsHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeMetricsButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease;
+}
+
+.closeMetricsButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.metricsContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
 .voiceAssistantIcon {
   width: 40px;
   height: 40px;
@@ -4141,12 +4252,14 @@
   }
 }
 
-/* 8 Smart Business Cards Styles */
+/* 8 Smart Business Cards Styles - Sequential Process Flow Layout */
 .smartCardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 16px;
   margin-top: 24px;
+  position: relative;
 }
 
 .smartCard {
@@ -4236,45 +4349,159 @@
 .cardCustomers .cardIcon { background: rgba(39, 174, 96, 0.1); }
 .cardAnalytics .cardIcon { background: rgba(52, 73, 94, 0.1); }
 
+/* Smart Context Links */
+.smartContextLink {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.smartContextLink:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+}
+
+.contextLinkIcon {
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+.contextLinkText {
+  flex: 1;
+  font-weight: 500;
+}
+
+.contextLinkArrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+/* Process-specific card styling */
+.cardSales { 
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+}
+
+.cardQuotes { 
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.cardFinancials { 
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.cardProduction { 
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  color: white;
+}
+
+.cardInventory { 
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  color: white;
+}
+
+.cardFulfillment { 
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.cardCustomers { 
+  background: linear-gradient(135deg, #5f27cd, #a55eea);
+  color: white;
+}
+
+.cardAnalytics { 
+  background: linear-gradient(135deg, #34495e, #2c3e50);
+  color: white;
+}
+
+/* Sequential positioning in grid */
+.card-1 { grid-column: 1; grid-row: 1; } /* Lead Pipeline */
+.card-2 { grid-column: 2; grid-row: 1; } /* Quotations */
+.card-3 { grid-column: 3; grid-row: 1; } /* Advance Payments */
+.card-4 { grid-column: 1; grid-row: 2; } /* Production */
+.card-5 { grid-column: 2; grid-row: 2; } /* Inventory */
+.card-6 { grid-column: 3; grid-row: 2; } /* Fulfillment */
+.card-7 { grid-column: 1; grid-row: 3; } /* Customers */
+.card-8 { grid-column: 2; grid-row: 3; } /* Analytics */
+
+/* Process Stage Visual Indicators */
+.stageIndicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Stage-specific styling */
+.stage-1::before { content: "1/8 • Entry"; }
+.stage-2::before { content: "2/8 • Convert"; }
+.stage-3::before { content: "3/8 • Payment"; }
+.stage-4::before { content: "4/8 • Make"; }
+.stage-5::before { content: "5/8 • Stock"; }
+.stage-6::before { content: "6/8 • Ship"; }
+.stage-7::before { content: "7/8 • Relate"; }
+.stage-8::before { content: "8/8 • Analyze"; }
+
+/* Process Flow Arrows */
+.processFlowArrow {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 1.2rem;
+  z-index: 1;
+  pointer-events: none;
+  font-weight: bold;
+}
+
+.arrow-1-2 { top: 15%; left: 32%; }
+.arrow-2-3 { top: 15%; left: 65%; }
+.arrow-3-4 { top: 30%; right: 10%; transform: rotate(135deg); }
+.arrow-4-5 { top: 48%; left: 32%; }
+.arrow-5-6 { top: 48%; left: 65%; }
+.arrow-6-7 { top: 65%; right: 10%; transform: rotate(135deg); }
+.arrow-7-8 { top: 82%; left: 32%; }
+
 /* Mobile Responsiveness for Smart Cards */
 @media (max-width: 768px) {
   .smartCardsGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 12px;
+  }
+  
+  /* Mobile responsive grid positioning */
+  .card-1 { grid-column: 1; grid-row: 1; }
+  .card-2 { grid-column: 2; grid-row: 1; }
+  .card-3 { grid-column: 1; grid-row: 2; }
+  .card-4 { grid-column: 2; grid-row: 2; }
+  .card-5 { grid-column: 1; grid-row: 3; }
+  .card-6 { grid-column: 2; grid-row: 3; }
+  .card-7 { grid-column: 1; grid-row: 4; }
+  .card-8 { grid-column: 2; grid-row: 4; }
+  
+  /* Hide arrows on mobile */
+  .processFlowArrow {
+    display: none;
   }
   
   .smartCard {
     padding: 16px;
-  }
-  
-  .cardHeader {
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .cardIcon {
-    font-size: 1.5rem;
-    width: 35px;
-    height: 35px;
-  }
-  
-  .cardHeader h4 {
-    font-size: 1rem;
-  }
-  
-  .cardMetrics {
-    font-size: 0.85rem;
-    margin-bottom: 6px;
-  }
-  
-  .cardNext {
-    font-size: 0.8rem;
-    margin-bottom: 12px;
-    padding: 5px 8px;
-  }
-  
-  .cardButton {
-    padding: 9px 14px;
-    font-size: 0.85rem;
   }
 }
