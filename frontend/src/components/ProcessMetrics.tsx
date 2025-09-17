@@ -130,6 +130,16 @@ function ProcessMetrics({ onStageClick }: ProcessMetricsProps) {
         bottleneckScore: getBottleneckScore(leadToCustomerRate),
         trend: getTrend(leadToCustomerRate),
         status: getStatus(leadToCustomerRate)
+      },
+      {
+        stage: 'analytics',
+        icon: '📊',
+        title: 'Analytics',
+        count: Math.floor(totalLeads * 0.8), // Simulated analytics data points
+        conversionRate: 88, // Simulated analytics efficiency
+        bottleneckScore: 1,
+        trend: 'up',
+        status: 'excellent'
       }
     ];
   };
@@ -206,46 +216,48 @@ function ProcessMetrics({ onStageClick }: ProcessMetricsProps) {
           <span>{t('8-Stage Business Process Flow')}</span>
         </div>
         
-        <div className={styles.stageMetricsGrid}>
-          {stageMetrics.map((stage, index) => (
-            <div key={stage.stage} className={styles.stageMetricCard}>
+        {/* Circular Process Layout */}
+        <div className={styles.circularProcessContainer}>
+          <div className={styles.circularProcessWheel}>
+            {stageMetrics.map((stage, index) => (
               <div 
-                className={`${styles.stageCard} ${styles[`stage-${stage.status}`]}`}
+                key={stage.stage}
+                className={`${styles.circularStage} ${styles[`position-${index}`]} ${styles[`stage-${stage.status}`]}`}
                 onClick={() => onStageClick?.(stage.stage)}
               >
-                <div className={styles.stageHeader}>
-                  <span className={styles.stageIcon}>{stage.icon}</span>
-                  <div className={styles.stageInfo}>
-                    <h4 className={styles.stageTitle}>{stage.title}</h4>
-                    <span className={styles.stageCount}>{stage.count} {t('items')}</span>
+                <div className={styles.circularStageCard}>
+                  <div className={styles.stageIconLarge}>{stage.icon}</div>
+                  <h4 className={styles.circularStageTitle}>{stage.title}</h4>
+                  <div className={styles.circularStageMetrics}>
+                    <span className={styles.circularCount}>{stage.count}</span>
+                    <span className={styles.circularConversion}>{stage.conversionRate.toFixed(0)}%</span>
                   </div>
-                  <div className={styles.stageStatus}>
+                  <div className={styles.circularStatus}>
                     <span className={styles.statusIcon}>{getStatusIcon(stage.status)}</span>
-                  </div>
-                </div>
-
-                <div className={styles.stageMetrics}>
-                  <div className={styles.conversionRate}>
-                    <span className={styles.metricLabel}>{t('Conversion')}:</span>
-                    <span className={styles.metricValue}>{stage.conversionRate.toFixed(1)}%</span>
                     <span className={styles.trendIcon}>{getTrendIcon(stage.trend)}</span>
                   </div>
-                  
-                  <div className={styles.bottleneckInfo}>
-                    <span className={styles.bottleneckLabel}>{t('Flow')}:</span>
-                    <span className={`${styles.bottleneckValue} ${styles[`bottleneck-${stage.bottleneckScore}`]}`}>
-                      {getBottleneckDescription(stage.bottleneckScore)}
-                    </span>
-                  </div>
                 </div>
+                
+                {/* Flow arrows between stages */}
+                {index < stageMetrics.length - 1 && (
+                  <div className={`${styles.circularArrow} ${styles[`arrow-${index}`]}`}>→</div>
+                )}
+                {index === stageMetrics.length - 1 && (
+                  <div className={`${styles.circularArrow} ${styles.arrowComplete}`}>✓</div>
+                )}
               </div>
-
-              {/* Process Flow Arrow */}
-              {index < stageMetrics.length - 1 && (
-                <div className={styles.processArrow}>→</div>
-              )}
+            ))}
+            
+            {/* Center Hub */}
+            <div className={styles.centerHub}>
+              <div className={styles.hubIcon}>🎯</div>
+              <div className={styles.hubTitle}>Business Flow</div>
+              <div className={styles.hubMetric}>
+                {workflowMetrics.overallConversion.toFixed(1)}%
+              </div>
+              <div className={styles.hubSubtitle}>Overall Conversion</div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
