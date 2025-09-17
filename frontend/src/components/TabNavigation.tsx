@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/TabNavigation.module.css';
 
 interface TabItem {
@@ -39,7 +38,6 @@ function TabNavigation({
   children,
   activeTabContent
 }: TabNavigationProps) {
-  const { t } = useTranslation();
   const tabBarRef = useRef<HTMLDivElement>(null);
   
   // Set active tab to first non-disabled tab
@@ -155,11 +153,6 @@ function TabNavigation({
     return (
       <div className={styles.moduleContent}>
         <div className={styles.unifiedCard}>
-          {/* Purpose Section - No Header */}
-          <div className={styles.purposeSection}>
-            <p className={styles.sectionContent}>{currentTab.purpose || 'Purpose not defined'}</p>
-          </div>
-          
           {/* Stats Section */}
           <div className={styles.statsSection}>
             <div className={styles.sectionHeader}>
