@@ -3,6 +3,93 @@
 
 ---
 
+## 📚 **TABLE OF CONTENTS**
+
+### **🎯 OVERVIEW & STRATEGY**
+- [**EXECUTIVE SUMMARY**](#executive-summary)
+  - [Business Vision](#business-vision)
+  - [Target Market](#target-market)
+  - [Strategic Market Focus](#strategic-market-focus)
+  - [Problem Statement](#problem-statement)
+  - [Solution](#solution)
+- [**MARKET STRATEGY & INDUSTRY SELECTION**](#market-strategy--industry-selection)
+  - [Why MSMEs?](#why-msmes)
+  - [Industry Expansion Roadmap](#industry-expansion-roadmap)
+
+### **🚀 ROADMAP & DEVELOPMENT**
+- [**POST-MVP ROADMAP (PHASE 2-4)**](#post-mvp-roadmap-phase-2-4)
+  - [PHASE 2: Enhanced Operations](#phase-2-enhanced-operations-month-4-6)
+  - [PHASE 3: Customer Intelligence](#phase-3-customer-intelligence-month-7-9)
+  - [PHASE 4: Scale & Expansion](#phase-4-scale--expansion-month-10-12)
+- [**MVP SCOPE - SOLO FOUNDER VERSION**](#mvp-scope---solo-founder-version)
+
+### **📊 DASHBOARD & BUSINESS PROCESSES**
+- [**BUSINESS PROCESS-DRIVEN MODULE ORGANIZATION**](#business-process-driven-module-organization)
+  - [Dashboard Structure: 8 Sequential Business Process Cards](#dashboard-structure-8-sequential-business-process-cards)
+  - [Implementation Status](#implementation-status-process-based-organization)
+  - [Process-Driven Design Principles](#process-driven-design-principles)
+- [**COMPLETE DASHBOARD DESIGN FRAMEWORK**](#complete-dashboard-design-framework)
+  - [Dashboard Page Layout](#dashboard-page-layout-specification)
+  - [3-Level Information Architecture](#3-level-information-architecture)
+  - [Navigation Framework](#navigation-framework-specification)
+  - [Mobile-First Design](#mobile-first-design-requirements)
+
+### **⚙️ TECHNICAL SPECIFICATIONS**
+- [**3-LEVEL DATA PATTERN SPECIFICATIONS**](#3-level-data-pattern-specifications)
+  - [Level 1: Process Cards](#level-1-process-cards-business-health-overview)
+  - [Level 2: Tab Navigation](#level-2-tab-navigation-module-selector-interface)
+  - [Level 3: Module Content](#level-3-module-content-full-operational-interface)
+- [**DATA REQUIREMENTS**](#data-requirements-for-framework-implementation)
+- [**CROSS-PROCESS ANALYTICS**](#cross-process-analytics-intelligence)
+
+### **🔧 CORE MODULES & FEATURES**
+- [**MVP CORE MODULES & FEATURES**](#mvp-core-modules--features)
+  - [1. Lead Management](#1-lead-management-with-analytics)
+  - [2. Quotation & Sales Order](#2-quotation--sales-order-with-stock-integration)
+  - [3. CRM - 360° Customer View](#3-crm---360°-customer-view)
+  - [4. Advance Payment Management](#4-advance-payment-management)
+  - [5. Work Order System](#5-intelligent-work-order-system)
+  - [6. Procurement with GRN](#6-smart-procurement-system-with-grn)
+  - [7. Inventory Management](#7-three-tier-inventory-management)
+  - [8. Production Tracking](#8-production-tracking-with-quality)
+  - [9. Dispatch & Delivery](#9-dispatch--delivery-management)
+  - [10. Invoice & Financial](#10-basic-invoice--financial-tracking)
+  - [11. Customer Feedback](#11-customer-feedback--basic-loyalty)
+  - [12. Multilingual & Voice](#12-multilingual-interface--voice)
+  - [13. Analytics Dashboard](#13-analytics-dashboard-with-leads--sales-insights)
+
+### **📱 USER EXPERIENCE & INTERFACE**
+- [**ULTRA-SIMPLE USER EXPERIENCE DESIGN**](#ultra-simple-user-experience-design)
+  - [Home Screen Design](#home-screen---like-whatsapp-main-screen)
+  - [Dashboard Layout](#dashboard-layout---3-business-categories)
+  - [Voice-First Workflows](#voice-first-workflow-examples)
+- [**USER ACCESS MODES & AUTHENTICATION**](#user-access-modes--authentication-flow)
+  - [Guest Mode](#1-guest-mode-)
+  - [Demo Mode](#2-demo-mode-)
+  - [Authenticated Mode](#3-authenticated-user-mode-)
+
+### **⏰ EXECUTION & DELIVERY**
+- [**30-DAY DEVELOPMENT TIMELINE**](#30-day-development-timeline)
+  - [Week 1: Foundation](#week-1-foundation--core-flow-days-1-7)
+  - [Week 2: Production & Inventory](#week-2-production--inventory-core-days-8-14)
+  - [Week 3: Financial & Dispatch](#week-3-financial--dispatch-days-15-21)
+  - [Week 4: Polish & Integration](#week-4-polish--gujarati-integration-days-22-30)
+
+### **🎯 BUSINESS STRATEGY**
+- [**KEY BUSINESS LOGIC**](#key-business-logic---inventory-intelligence)
+- [**COMPETITIVE ADVANTAGE**](#competitive-advantage)
+- [**TARGET CUSTOMERS**](#target-customers)
+- [**LONG-TERM VISION**](#long-term-vision)
+
+---
+
+> **Quick Navigation Tips:**
+> - Click any section link above to jump directly to that content
+> - Use `Ctrl+F` (or `Cmd+F` on Mac) to search for specific terms
+> - Each major section has subsection links for deeper navigation
+
+---
+
 ## **EXECUTIVE SUMMARY**
 
 ### **Business Vision**
@@ -155,12 +242,13 @@ Successful manufacturers will want to scale operations, add team members, and ex
 ## **BUSINESS PROCESS-DRIVEN MODULE ORGANIZATION**
 
 ### **Dashboard Structure: 8 Sequential Business Process Cards**
-Based on comprehensive textile manufacturing workflow analysis, the 13 MVP modules are organized into 8 sequential business process cards that mirror the natural flow of textile manufacturing operations from lead capture to customer relationship management:
+Based on comprehensive textile manufacturing workflow analysis, the 13 MVP modules are organized into 8 sequential business process cards displayed under **"🔄 Textile Business Pipeline"** that mirror the natural flow of textile manufacturing operations from lead capture to customer relationship management:
 
-**Core Strategy**: Transform dashboard from functional software categories into a **digital mirror of textile business reality** - matching how manufacturers actually think, work, and process business daily.
+**Core Strategy**: The **"🔄 Textile Business Pipeline"** transforms the dashboard from functional software categories into a **digital mirror of textile business reality** - matching how manufacturers actually think, work, and process business daily.
 
 **Cross-Document References**:
 - **Business Workflow Details**: See `/docs/BUSINESS_PROCESSES.md` for complete textile manufacturing workflow and business mental models
+- **Dashboard Design Details**: See `/docs/DASHBOARD_SPECIFICATIONS.md` for comprehensive dashboard implementation, component architecture, and recent improvements
 - **UI/UX Implementation**: See `/docs/DESIGN_SYSTEM.md` for visual design patterns and technical implementation details
 
 #### **🔥 LEAD PIPELINE** (Business Entry Point)

@@ -1,5 +1,89 @@
 # Business Processes - ElevateIdea 360° Platform
 
+---
+
+## 📚 **TABLE OF CONTENTS**
+
+### **🎯 OVERVIEW & CORE CONCEPTS**
+- [**OVERVIEW**](#overview)
+- [**DASHBOARD-TO-PROCESS MAPPING**](#dashboard-to-process-mapping)
+  - [8-Stage Business Process = 8 Dashboard Cards](#8-stage-business-process--8-dashboard-cards)
+- [**CRM MODULE ARCHITECTURE**](#crm-module-architecture)
+  - [Unified CRM System with Intelligent Views](#unified-crm-system-with-intelligent-views)
+
+### **📋 CRITICAL DOCUMENT HIERARCHY**
+- [**SALES ORDER vs WORK ORDER**](#critical-document-hierarchy-sales-order-vs-work-order)
+  - [Commercial Documents vs Production Documents](#commercial-documents-vs-production-documents)
+  - [Business Area Mapping](#business-area-mapping)
+
+### **🔄 8-STAGE BUSINESS PIPELINE**
+- [**COMPLETE BUSINESS PIPELINE**](#complete-business-pipeline)
+  - [Stage 1: Lead Generation & Capture](#stage-1-lead-generation--capture)
+  - [Stage 2: Commercial Document Management](#stage-2-commercial-document-management)
+  - [Stage 3: Quote Lifecycle & Financial Workflow](#stage-3-quote-lifecycle-management)
+  - [Stage 4: Manufacturing Execution & Work Orders](#stage-4-manufacturing-execution--work-order-management)
+  - [Stage 5: Supply Chain & Materials Management](#stage-5-supply-chain--materials-management)
+  - [Stage 6: Delivery & Order Completion](#stage-6-delivery--order-completion)
+  - [Stage 7: Customer Relationship Management](#stage-7-customer-relationship--lifecycle-management)
+  - [Stage 8: Business Intelligence & Analytics](#stage-8-business-intelligence--performance-analytics)
+
+### **🤖 AUTOMATED SYSTEMS**
+- [**AUTOMATED LEAD-TO-CUSTOMER CONVERSION**](#automated-lead-to-customer-conversion-system)
+  - [Core Business Philosophy](#core-business-philosophy)
+  - [Automated Conversion Trigger Points](#automated-conversion-trigger-points)
+  - [Data Integrity & Business Logic](#data-integrity--business-logic)
+  - [Module Responsibility](#module-responsibility-in-automated-flow)
+  - [Business Benefits](#business-benefits-of-automated-conversion)
+
+### **📊 CRITICAL SUCCESS FACTORS**
+- [**BUSINESS SUCCESS METRICS**](#critical-success-factors)
+  - [Cash Flow Management](#cash-flow-management)
+  - [Quality Consistency](#quality-consistency)
+  - [Timeline Management](#timeline-management)
+  - [Customer Relationship](#customer-relationship)
+- [**PLATFORM INTEGRATION BENEFITS**](#platform-integration-benefits)
+  - [Operational Efficiency](#operational-efficiency)
+  - [Business Intelligence](#business-intelligence)
+  - [Risk Management](#risk-management)
+
+### **🔐 BUSINESS RULES & COMPLIANCE**
+- [**CRITICAL BUSINESS RULES & DATA INTEGRITY**](#critical-business-rules--data-integrity)
+  - [Non-Negotiable Business Rules](#-non-negotiable-business-rules)
+  - [Data Security & Compliance](#-data-security--compliance)
+
+### **🎨 UI/UX & USER EXPERIENCE**
+- [**UI/UX FLOW & USER JOURNEY**](#️-uiux-flow--user-journey)
+  - [Complete Lead-to-Customer Navigation Path](#complete-lead-to-customer-ui-navigation-path)
+  - [Visual Design Language](#-visual-design-language--status-differentiation)
+  - [Mobile-First Responsive Design](#-mobile-first-responsive-design)
+  - [Financial Management Consolidation](#-financial-management-consolidation-current-enhancement)
+  - [Critical UI/UX Business Rules](#-critical-uiux-business-rules)
+
+### **🔄 CROSS-PROCESS INTELLIGENCE**
+- [**CROSS-PROCESS DASHBOARD INTELLIGENCE**](#cross-process-dashboard-intelligence)
+  - [Smart Navigation Between Process Stages](#smart-navigation-between-process-stages)
+  - [Process Stage Indicators](#process-stage-indicators)
+  - [Context-Aware Cross-Navigation](#context-aware-cross-navigation)
+  - [Business Intelligence Integration](#business-intelligence-integration)
+
+### **📋 WORKFLOW SUMMARIES**
+- [**COMMERCIAL-TO-PRODUCTION WORKFLOW SUMMARY**](#complete-commercial-to-production-workflow-summary)
+  - [Critical Business Logic](#critical-business-logic-document-creation-sequence)
+  - [Key Business Document Relationship](#key-business-document-relationship)
+  - [Critical Business Gates](#critical-business-gates)
+  - [System Integration Points](#system-integration-points)
+- [**UNIVERSAL PLATFORM CAPABILITIES**](#universal-platform-capabilities)
+  - [Voice Integration](#voice-integration)
+
+---
+
+> **Quick Navigation Tips:**
+> - Click any section link above to jump directly to that content
+> - Use `Ctrl+F` (or `Cmd+F` on Mac) to search for specific terms
+> - This document focuses on **business workflows** - see `/docs/PRODUCT_REQUIREMENTS.md` for technical specifications
+
+---
+
 ## Overview
 This document outlines the complete lead-to-customer conversion flow for Gujarat textile manufacturers, capturing the real-world business processes that map directly to the 8-stage dashboard organization. The ElevateIdea platform mirrors these natural business workflows through sequential process-driven dashboard design.
 
@@ -24,6 +108,7 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD                MVP MODULES
 
 **Cross-Document References**:
 - **Feature Requirements**: See `/docs/PRODUCT_REQUIREMENTS.md` for detailed feature specifications and system requirements based on these business processes
+- **Dashboard Implementation**: See `/docs/DASHBOARD_SPECIFICATIONS.md` for complete dashboard design details, component specifications, and recent improvements
 - **UI/UX Implementation**: See `/docs/DESIGN_SYSTEM.md` for visual design patterns that implement this business process flow
 
 **Document Purpose**: This document provides the business context and domain knowledge that drives product and design decisions. Use this to understand WHY the system is organized in 8 sequential process stages and HOW textile manufacturers actually work.
