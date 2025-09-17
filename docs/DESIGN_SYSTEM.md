@@ -102,11 +102,411 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 - Textile managers often hold samples, documents, or use phone one-handed
 - Common actions (call, WhatsApp, quote) should be thumb-reachable
 
+### **7. Comprehensive Mobile Touch Interface Design**
+**Decision**: Professional mobile touch interface optimized for factory environments and rapid business operations
+**Rationale**:
+- MSME textile owners primarily use smartphones for business operations
+- Factory environments require specific touch adaptations (noise, gloves, lighting)
+- Business decisions happen quickly and require confident touch interactions
+
+**Touch Interaction Standards**:
+```css
+/* Touch Target Specifications */
+.touchTarget {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  
+  /* Enhanced touch feedback */
+  transition: all 0.15s ease;
+  transform-origin: center;
+}
+
+.touchTarget:active {
+  transform: scale(0.97);
+  background: var(--touch-active-bg);
+}
+
+/* Factory Environment Adaptations */
+.factoryOptimized {
+  /* Larger touch targets for gloved hands */
+  min-height: 48px;
+  padding: 16px 20px;
+  
+  /* High contrast for bright lighting */
+  background: #ffffff;
+  border: 2px solid var(--process-primary);
+  color: var(--neutral-900);
+  
+  /* Clear visual feedback */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Primary Action Buttons */
+.primaryMobileAction {
+  min-height: 52px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Secondary Action Buttons */
+.secondaryMobileAction {
+  min-height: 44px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: white;
+  color: var(--process-primary);
+  border: 2px solid var(--process-primary);
+  border-radius: 8px;
+}
+
+/* Quick Action Grid */
+.mobileActionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Full-width critical actions */
+.criticalMobileAction {
+  grid-column: 1 / -1;
+  min-height: 56px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+```
+
+**Gesture Support Standards**:
+```css
+/* Swipe Actions for Cards */
+.swipeableCard {
+  position: relative;
+  touch-action: pan-x;
+  transition: transform 0.2s ease;
+}
+
+.swipeableCard.swipeLeft {
+  transform: translateX(-80px);
+}
+
+.swipeableCard.swipeRight {
+  transform: translateX(80px);
+}
+
+/* Swipe Action Indicators */
+.swipeIndicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.swipeLeft .leftIndicator {
+  left: 0;
+  background: #ef4444;
+}
+
+.swipeRight .rightIndicator {
+  right: 0;
+  background: #10b981;
+}
+
+/* Pull-to-refresh */
+.pullToRefresh {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 0 0 12px 12px;
+  transform: translateY(-60px);
+  transition: transform 0.3s ease;
+}
+
+.pullToRefresh.active {
+  transform: translateY(0);
+}
+```
+
+**Mobile Navigation Patterns**:
+```css
+/* Bottom Navigation Bar */
+.mobileBottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 16px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.navButton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: var(--neutral-500);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navButton.active {
+  color: var(--process-primary);
+}
+
+.navIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* Floating Action Button */
+.mobileFAB {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 999;
+  transition: all 0.2s ease;
+}
+
+.mobileFAB:active {
+  transform: scale(0.95);
+}
+```
+
+**Factory Environment Optimizations**:
+```css
+/* High Contrast Mode for Bright Lighting */
+.factoryHighContrast {
+  background: #ffffff;
+  color: #000000;
+  border: 3px solid var(--process-primary);
+  font-weight: 600;
+  text-shadow: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Glove-Friendly Touch Targets */
+.gloveOptimized {
+  min-height: 52px;
+  min-width: 52px;
+  padding: 18px 24px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  
+  /* Increased spacing */
+  margin: 8px 4px;
+}
+
+/* Noise-Resistant Visual Feedback */
+.visualFeedback {
+  /* Strong color changes for status */
+  transition: all 0.1s ease;
+}
+
+.visualFeedback.success {
+  background: #10b981;
+  color: white;
+  animation: successPulse 0.4s ease;
+}
+
+.visualFeedback.error {
+  background: #ef4444;
+  color: white;
+  animation: errorShake 0.4s ease;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); background: #059669; }
+  100% { transform: scale(1); }
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* One-Handed Operation Zone */
+.thumbZone {
+  /* Bottom 75% of screen for thumb reach */
+  margin-bottom: env(safe-area-inset-bottom);
+  padding-bottom: 20px;
+}
+
+.thumbZonePrimary {
+  /* Bottom right area for right-handed users */
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  z-index: 998;
+}
+
+.thumbZoneSecondary {
+  /* Bottom left area for left-handed users */
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  z-index: 998;
+}
+```
+
+### **8. Mobile Performance Optimization Standards**
+**Decision**: Optimize mobile performance for smooth business operations
+**Rationale**:
+- Quick load times essential for time-sensitive textile business decisions
+- Smooth animations maintain professional appearance
+- Efficient touch response reduces user frustration
+
+**Performance Standards**:
+```css
+/* Hardware Acceleration */
+.hardwareAccelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Efficient Animations */
+.efficientAnimation {
+  /* Use transform and opacity only */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  
+  /* Avoid expensive properties */
+  /* DON'T animate: width, height, top, left, background-size */
+}
+
+/* Touch Response Optimization */
+.touchOptimized {
+  /* Immediate visual feedback */
+  transition: transform 0.05s ease;
+  
+  /* Prevent touch delays */
+  touch-action: manipulation;
+  
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Memory-Efficient Scrolling */
+.efficientScroll {
+  /* Enable momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  
+  /* Optimize rendering */
+  contain: layout style paint;
+}
+```
+
+### **9. Mobile Accessibility Standards for Factory Environments**
+**Decision**: Ensure mobile interface accessibility for diverse textile manufacturing contexts
+**Rationale**:
+- Factory workers may have varying technical expertise levels
+- Environmental factors (noise, lighting, gloves) affect interaction
+- Business-critical operations require reliable mobile accessibility
+
+**Accessibility Implementation**:
+```css
+/* Voice Feedback Integration */
+.voiceAccessible {
+  /* Support screen readers */
+  aria-label: attr(data-voice-label);
+  
+  /* Voice command indicators */
+  position: relative;
+}
+
+.voiceAccessible::after {
+  content: "🎤";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  .touchTarget {
+    border: 3px solid currentColor;
+    background: var(--high-contrast-bg);
+    color: var(--high-contrast-text);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .efficientAnimation {
+    transition: none;
+    animation: none;
+  }
+  
+  .visualFeedback {
+    /* Use color changes only */
+    transition: background-color 0.1s ease;
+  }
+}
+
+/* Font Size Scaling */
+@media (min-resolution: 1.5dppx) {
+  .touchTarget {
+    font-size: calc(1rem + 0.2vw);
+    min-height: calc(44px + 1vw);
+  }
+}
+
+/* Orientation Support */
+@media (orientation: landscape) {
+  .mobileActionGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .mobileBottomNav {
+    height: 60px;
+  }
+}
+```
+
 ---
 
 ## Information Architecture
 
-### **7. Lead Card Information Hierarchy**
+### **10. Lead Card Information Hierarchy**
 **Decision**: Structured lead cards with clear visual priority
 **Rationale**:
 - Users need to quickly scan multiple leads for urgent follow-ups
@@ -120,7 +520,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 4. **Contact**: Person name and phone number
 5. **Actions**: Call, Quote, WhatsApp buttons (always visible)
 
-### **8. Textile Industry Data Fields**
+### **11. Textile Industry Data Fields**
 **Decision**: Use authentic textile manufacturing terminology
 **Rationale**:
 - Familiar terms reduce learning curve and build trust
@@ -138,7 +538,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ## Navigation and User Flow
 
-### **9. Simplified Navigation Pattern**
+### **12. Simplified Navigation Pattern**
 **Decision**: Clear back navigation instead of complex menu systems
 **Rationale**:
 - Textile business operations require fast, predictable navigation
@@ -150,7 +550,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 - **Screen Title**: Prominent display of current section
 - **Add Action**: Primary action button in header for common tasks
 
-### **10. Context-Aware Quick Actions**
+### **13. Context-Aware Quick Actions**
 **Decision**: Action buttons directly on each lead card
 **Rationale**:
 - Textile business decisions happen quickly - minimize screen transitions
@@ -161,7 +561,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ## Visual Feedback and Status Indicators
 
-### **11. Priority-Based Visual Coding**
+### **14. Priority-Based Visual Coding**
 **Decision**: Color and icon coding for lead priority and status
 **Rationale**:
 - Quick visual scanning helps identify urgent opportunities
@@ -173,7 +573,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 - **⭐ Warm Lead**: Orange background, follow up soon  
 - **❄️ Cold Lead**: Blue background, future opportunity
 
-### **12. Interactive Visual Feedback**
+### **15. Interactive Visual Feedback**
 **Decision**: Subtle hover effects and state changes
 **Rationale**:
 - Users need clear feedback that elements are interactive
@@ -189,7 +589,7 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ## Global Customer Contact Standardization
 
-### **16. Universal Customer Communication Format**
+### **19. Universal Customer Communication Format**
 **Decision**: Standardized customer contact display and action buttons across all screens
 **Rationale**: 
 - Consistent user experience reduces cognitive load
@@ -224,7 +624,7 @@ No matter what screen a textile manufacturer is viewing, customer communication 
 
 ## Screen Filtering and Data Management
 
-### **17. Filter Interface Design - Buttons vs Dropdowns**
+### **20. Filter Interface Design - Buttons vs Dropdowns**
 **Decision**: Use horizontal button-based filters instead of dropdown menus for all screen filtering
 **Rationale**: 
 - **Single-click access**: No dropdown opening required for busy textile operations
@@ -258,7 +658,7 @@ Textile manufacturers can instantly focus on priority tasks (urgent leads, pendi
 
 ## Voice Command Integration
 
-### **13. Multilingual Voice Interface Design**
+### **16. Multilingual Voice Interface Design**
 **Decision**: Voice commands displayed and processed in user's current selected language
 **Rationale**:
 - Gujarat textile owners naturally speak in their preferred language
@@ -295,7 +695,7 @@ Voice commands change dynamically based on language selection, following the sam
 
 ## Business Context Integration
 
-### **14. Authentic Demo Data Strategy**
+### **17. Authentic Demo Data Strategy**
 **Decision**: Use realistic Gujarat textile business examples
 **Rationale**:
 - Users immediately recognize familiar business patterns
@@ -307,7 +707,7 @@ Voice commands change dynamically based on language selection, following the sam
 - **Gujarat Garments - Surat**: Block print khadi (warm lead)  
 - **Baroda Fashion House - Vadodara**: Premium silk fabrics (cold lead)
 
-### **15. Cultural Communication Patterns**
+### **18. Cultural Communication Patterns**
 **Decision**: Support established Gujarat business communication styles
 **Rationale**:
 - WhatsApp heavily used for textile business communication
@@ -365,7 +765,7 @@ For each new screen, ensure:
 
 ## HomePage Design Implementation (September 7, 2025)
 
-### **18. Landing Page Visual Strategy**
+### **21. Landing Page Visual Strategy**
 **Decision**: Create comprehensive marketing homepage that showcases product value before user enters application
 **Rationale**: 
 - Professional first impression essential for B2B textile manufacturers
@@ -385,7 +785,7 @@ For each new screen, ensure:
 8. Footer - Contact and company information
 ```
 
-### **19. Professional Marketing Aesthetics**
+### **22. Professional Marketing Aesthetics**
 **Decision**: Sophisticated gradient-based design with textile industry visual cues
 **Rationale**:
 - Must appear credible to textile business owners and managers
@@ -399,7 +799,7 @@ For each new screen, ensure:
 - **Interactive Elements**: Hover effects with subtle lift animations
 - **Brand Consistency**: ElevateIdea gold (#ffd700) for CTAs and highlights
 
-### **20. Animated User Engagement**
+### **23. Animated User Engagement**
 **Decision**: Strategic use of animations to demonstrate product capabilities
 **Rationale**:
 - Statistics animation shows real business impact visually
@@ -414,7 +814,7 @@ For each new screen, ensure:
 - **Page Transitions**: Smooth transitions between sections
 - **Call-to-Action**: Subtle scale animations on button interactions
 
-### **21. Textile Industry Context Integration**
+### **24. Textile Industry Context Integration**
 **Decision**: Deep integration of authentic Gujarat textile business context throughout homepage
 **Rationale**:
 - Builds immediate recognition and trust with target audience
@@ -428,7 +828,7 @@ For each new screen, ensure:
 - **Feature Examples**: GSM, yarn count, fabric specifications
 - **Geographic References**: Surat, Ahmedabad, Gujarat textile hubs
 
-### **22. Mobile-First Marketing Design**
+### **25. Mobile-First Marketing Design**
 **Decision**: Homepage optimized for mobile viewing while maintaining desktop elegance
 **Rationale**:
 - Gujarat textile manufacturers primarily use smartphones
@@ -442,7 +842,7 @@ For each new screen, ensure:
 - **Image Optimization**: Phone mockup scales appropriately
 - **Navigation Simplicity**: Single-page scroll with smooth sections
 
-### **23. Trust Building Through Professional Presentation**
+### **26. Trust Building Through Professional Presentation**
 **Decision**: Enterprise-grade visual presentation to build confidence in platform capabilities
 **Rationale**:
 - Textile manufacturers need confidence in technology partner
@@ -476,572 +876,196 @@ For each new screen, ensure:
 
 ---
 
-## Process-Driven Dashboard Design
+## Dashboard Design Reference
 
-### **24. Business Process Entry Points Strategy**
-**Decision**: Replace functional categories with 4 business process entry points
-**Rationale**:
-- Textile manufacturers think in business processes, not software modules
-- Natural workflow progression reduces cognitive load
-- Contextual intelligence guides users through connected business operations
-- Eliminates artificial separation between related business activities
+### **Dashboard Structure & Organization**
+**For complete dashboard design specifications, see `PRODUCT_REQUIREMENTS.md`**
 
-### **25. Four Core Business Process Areas**
+The dashboard follows an **8-card sequential business process design** that mirrors the natural textile manufacturing workflow:
+- 🔥 LEAD PIPELINE → 📋 QUOTATIONS & ORDERS → 💰 PAYMENTS → 🏭 PRODUCTION → 📦 INVENTORY → 🚚 FULFILLMENT → 🤝 CUSTOMERS → 📊 BUSINESS ANALYTICS
 
-#### **🔥 NEW INQUIRIES (નવી પૂછપરછ)**
-**Process Focus**: Lead → Quote conversion workflow
-**Business Perspective**: "Who called today? What quotes need to be sent?"
-
-**Visual Design**:
-- **Color**: Hot orange gradient (#ff6b35 to #f7931e) 
-- **Priority Indicators**: Badge showing urgent inquiry count
-- **Sub-Actions Grid**: 2x2 layout for mobile optimization
-
-**Sub-Actions**:
-```
-[📞 CALL NOW]          [✍️ CREATE QUOTES]
-Hot inquiries needing   Leads ready for pricing
-immediate response      Quick quote generation
-
-[📋 FOLLOW UP]         [📊 INQUIRY REPORTS]  
-Warm leads to nurture   Source analysis & trends
-Schedule callbacks      Conversion tracking
-```
-
-**Smart Context**:
-- Show "→ 3 ready for quotes" pointing to ACTIVE BUSINESS
-- Display similar customer pricing suggestions
-- Auto-suggest follow-up timing based on lead temperature
-
-#### **💼 ACTIVE BUSINESS (ચાલતો બિઝનેસ)**
-**Process Focus**: Quote → Order → Production workflow  
-**Business Perspective**: "What orders am I working on? What payments should I collect?"
-
-**Visual Design**:
-- **Color**: Professional blue gradient (#4834d4 to #686de0)
-- **Activity Indicators**: Live order count and production status
-- **Progress Tracking**: Visual completion indicators
-
-**Sub-Actions**:
-```
-[💰 COLLECT ADVANCE]   [🔧 IN PRODUCTION]
-Approved quotes ready  Active orders tracking
-30% payment collection Production timeline view
-
-[📤 READY TO SHIP]     [📊 ORDER REPORTS]
-Completed orders       Production efficiency
-Final payment pending  Delay analysis tools
-```
-
-**Smart Context**:
-- Auto-transition approved quotes from NEW INQUIRIES
-- Show "→ ₹2.4L pending" pointing to MONEY MATTERS
-- Production timeline with delivery predictions
-
-#### **💳 MONEY MATTERS (પૈસાનો મામલો)**
-**Process Focus**: Payments → Invoices → Collections workflow
-**Business Perspective**: "Who owes me money? What invoices should I send?"
-
-**Visual Design**:
-- **Color**: Success green gradient (#00d2d3 to #54a0ff)
-- **Financial Indicators**: Outstanding amounts and overdue alerts
-- **Priority Actions**: Payment collection focus
-
-**Sub-Actions**:
-```
-[💰 COLLECT TODAY]     [📄 SEND INVOICES]
-Due payments priority  Proforma & final billing
-Overdue reminders      Automated invoice generation
-
-[📊 MONEY REPORTS]     [🏦 BANK STATUS]
-Cash flow analysis     Account reconciliation  
-Monthly trends         Transaction tracking
-```
-
-**Smart Context**:
-- Auto-receive completed orders from ACTIVE BUSINESS
-- Show aging analysis for overdue payments
-- Link to customer payment history
-
-#### **🤝 CUSTOMERS (મારા ગ્રાહકો)**
-**Process Focus**: Relationship → Retention → Growth workflow
-**Business Perspective**: "Who are my best customers? Who should I call for repeat business?"
-
-**Visual Design**:
-- **Color**: Loyalty purple gradient (#5f27cd to #a55eea)
-- **Relationship Indicators**: VIP customer count and repeat business metrics
-- **Growth Focus**: Expansion opportunity highlights
-
-**Sub-Actions**:
-```
-[👑 VIP CUSTOMERS]     [🎯 TARGET REPEAT]
-High-value regulars    Ready for next order
-Special treatment      Follow-up opportunities
-
-[⭐ GET FEEDBACK]      [📊 CUSTOMER REPORTS]
-Service satisfaction   Purchase pattern analysis
-Quality assessments    Loyalty program metrics
-```
-
-**Smart Context**:
-- Auto-add successful orders from MONEY MATTERS
-- Predict next order timing based on historical patterns
-- Show cross-selling opportunities
-
-### **26. Smart Cross-Navigation System**
-
-#### **Contextual Process Linking**
-**Implementation**: Each process entry point shows relevant connections to other processes
-
-**Cross-Navigation Examples**:
-```typescript
-// From NEW INQUIRIES - Hot Lead Card
-<ContextualActions>
-  <PrimaryAction>📞 Call Rajesh Textiles</PrimaryAction>
-  <SmartLink to="active-business">💼 See Similar Orders (₹2.4L avg)</SmartLink>
-  <SmartLink to="customers">🤝 Customer History (3 orders, always paid)</SmartLink>
-  <SmartLink to="money">💳 Payment Pattern (Net 15 days)</SmartLink>
-</ContextualActions>
-
-// From ACTIVE BUSINESS - Production Order
-<ContextualActions>
-  <PrimaryAction>🔧 Update Production Status</PrimaryAction>
-  <SmartLink to="money">💰 Schedule Final Payment (₹1.2L due)</SmartLink>
-  <SmartLink to="customers">🤝 Customer Profile (VIP status)</SmartLink>
-  <SmartLink to="inquiries">📞 Related Inquiries (2 pending)</SmartLink>
-</ContextualActions>
-```
-
-#### **Process Flow Completion Tracking**
-**Visual Progress Indicators**: Each business process shows completion stages
-
-**NEW INQUIRIES Process Tracker**:
-```
-🔥 Inquiry Received ✅ → 📞 Contact Made (85%) → ✍️ Quote Sent (60%) → 💼 Move to ACTIVE
-```
-
-**ACTIVE BUSINESS Process Tracker**:
-```
-💰 Advance Collected ✅ → 📋 Work Order (75%) → 🔧 Production (45%) → 💳 Move to MONEY
-```
-
-### **27. Enhanced Mobile Process Navigation**
-
-#### **Swipe-Based Process Switching**
-**Interaction Design**: Natural left-right swiping between business processes
-```
-Left Swipe: NEW INQUIRIES → ACTIVE BUSINESS → MONEY → CUSTOMERS
-Right Swipe: CUSTOMERS → MONEY → ACTIVE BUSINESS → NEW INQUIRIES
-Pull Down: Refresh current process data
-Pull Up: Access cross-navigation smart menu
-```
-
-#### **Process-Aware Action Panels**
-**Contextual Actions**: Instead of separate modules, show contextual action panels
-```typescript
-// When viewing Hot Lead in NEW INQUIRIES
-<ContextualPanel>
-  <PrimaryActions>
-    <Action type="call">📞 Call Rajesh Textiles</Action>
-    <Action type="whatsapp">📱 Send WhatsApp</Action>
-  </PrimaryActions>
-  <SmartActions>
-    <SmartAction>📝 Create Quote (2 mins avg)</SmartAction>
-    <SmartAction>🤝 View Customer (3 orders history)</SmartAction>
-    <SmartAction>💼 Similar Orders (₹6.5/meter usual)</SmartAction>
-  </SmartActions>
-</ContextualPanel>
-```
-
-### **28. Business Intelligence Integration**
-
-#### **Smart Suggestions Based on Historical Data**
-**Implementation**: System learns from business patterns to provide contextual intelligence
-```
-// In NEW INQUIRIES - When creating quote
-💡 Smart Suggestion: Similar customer (Shah Textiles) paid ₹6.50/meter 
-for same 60 GSM cotton fabric last month
-
-// In ACTIVE BUSINESS - When collecting advance  
-💡 Prediction: Based on history, Patel Textiles usually pays within 2 days
-Send payment reminder on day 3 if not received
-
-// In CUSTOMERS - When targeting repeat business
-💡 Opportunity: Rajesh Exports orders every 60 days, last order 45 days ago
-90% chance of ₹3L+ order this month - call now
-```
-
-### **29. Voice Command Process Integration**
-
-#### **Process-Specific Voice Commands**
-**Language-Adaptive Commands**: Voice shortcuts for each business process area
-
-**NEW INQUIRIES Voice Commands**:
-```
-English: "Show hot inquiries" / "Call next lead" / "Create quote for Rajesh"
-Gujarati: "હોટ પૂછપરછ બતાવો" / "આગળ લીડને કૉલ કરો" / "રાજેશ માટે કોટ બનાવો"
-Hindi: "गर्म पूछताछ दिखाएं" / "अगली लीड को कॉल करें" / "राजेश के लिए कोट बनाएं"
-```
-
-**MONEY MATTERS Voice Commands**:
-```
-English: "Who owes money?" / "Send payment reminder" / "Show overdue payments"
-Gujarati: "કોને પૈસા આપવાના છે?" / "પેમેન્ટ રિમાઈન્ડર મોકલો" / "બાકી પેમેન્ટ બતાવો"
-Hindi: "किसका पैसा बकाया है?" / "पेमेंट रिमाइंडर भेजें" / "बकाया पेमेंट दिखाएं"
-```
-
-### **30. Implementation Benefits for Textile Manufacturers**
-
-#### **Natural Business Workflow Alignment**
-- **Matches Daily Routine**: Morning inquiries → Active orders → Payment collection → Customer relationships
-- **Reduces Cognitive Load**: Only 4 main choices instead of 12+ technical modules
-- **Contextual Intelligence**: System suggests next logical business actions
-- **Process Completion**: Clear progress tracking for each business workflow
-
-#### **Enhanced User Experience**
-- **Zero Learning Curve**: Business owners immediately understand the process flow
-- **Fast Navigation**: Swipe between processes, contextual actions within each
-- **Smart Suggestions**: Historical data provides business intelligence
-- **Cross-Process Linking**: Related information accessible from any process entry point
+**Visual design patterns from this system apply universally across all screens and components.**
 
 ---
 
-## Global Search Integration
+## Universal Search Patterns
 
-### **31. Business-Context Global Search Design**
-**Decision**: Implement global search organized by business entities rather than technical data types
-**Rationale**:
-- MSME textile manufacturers search by business context (companies, orders, payments) not database fields
-- Cross-process search enables finding related information across all business workflows
-- Voice-first search supports hands-free operation during factory work
-- Multilingual search matches natural language patterns of Gujarat textile business owners
+### **Business-Context Search Strategy**
+**Design Philosophy**: Search organized by business entities (companies, orders, payments) rather than technical data types
 
-### **32. Search Categories Aligned with Business Thinking**
+**Key Principles**:
+- Multilingual search patterns for Gujarati/Hindi/English
+- Voice-first search for hands-free factory operation
+- Cross-process search results
+- Mobile-optimized touch interface
 
-#### **🏢 Companies & Customers Search**
-**Business Pattern**: "Find everything about Rajesh Textiles"
-**Search Results Format**:
-```
-🏢 Rajesh Textiles
-├─ 🔥 NEW INQUIRIES: Hot lead - Cotton fabric (2 days ago)
-├─ 💼 ACTIVE BUSINESS: Order #WO2024-034 in production  
-├─ 💳 MONEY MATTERS: No outstanding payments
-└─ 🤝 CUSTOMERS: VIP status, 12 completed orders
-```
+**Implementation**: See `PRODUCT_REQUIREMENTS.md` for complete search feature specifications and business logic.
 
-**Quick Actions**: 📞 Call | 📱 WhatsApp | 💼 View Orders | 💳 Check Payments | 🤝 Customer Profile
+---
 
-#### **📱 Phone Number Search**
-**Business Pattern**: "Who is this number? What's their status?"
-**Implementation**: Search by phone number returns complete business context
-```
-📱 +91-9876543210
-├─ 🏢 Patel Textiles - Contact: Ramesh Patel
-├─ 📞 Last contact: Yesterday 3:30 PM
-├─ 💼 Active quote: ₹13,000 pending approval
-└─ 🤝 Payment history: Always pays on time
-```
+## **COMPLETE DASHBOARD DESIGN SYSTEM**
 
-#### **🧵 Materials & Products Search**
-**Business Pattern**: "Show me all cotton fabric inquiries and orders"
-**Search Results**: Cross-process material tracking
-```
-🧵 Cotton 60 GSM
-├─ 🔥 3 hot inquiries - Similar fabric requirements
-├─ 💼 2 active orders - In production queue  
-├─ 💰 Market price: ₹6.50/meter (avg last month)
-└─ 📊 Demand trend: +15% this quarter
-```
+### **3-Level Dashboard Visual Hierarchy**
 
-#### **💰 Amount & Order Value Search**
-**Business Pattern**: "Find the ₹85,000 payment" or "Which order was ₹2.4L?"
-**Implementation**: Search by monetary amounts across all processes
-```
-💰 ₹85,000
-├─ 💳 Shah Industries - Final payment overdue 3 days
-├─ 💼 Order #WO2024-031 - Delivered last week
-└─ 📄 Invoice #INV-2024-089 - Sent 3 days ago
-```
+The platform implements a comprehensive visual design system for the complete dashboard interface across three distinct levels. This system ensures consistent, professional presentation that combines information architecture, navigation patterns, and business intelligence to create a credible, intuitive interface for MSME textile manufacturers.
 
-#### **📅 Date & Timeline Search**
-**Business Pattern**: "What happened last week?" or "September deliveries"
-**Timeline Results**: Business activity by date range
-```
-📅 September 6 - 12
-├─ 📤 3 orders delivered
-├─ 💳 ₹2.4L payments received  
-├─ 🔥 5 new inquiries captured
-└─ 💼 2 orders started production
-```
+### **Dashboard Page Layout Design Standards**
 
-### **33. Multilingual Search Implementation**
-
-#### **Language-Adaptive Search Input**
-**English Patterns**:
-- "Rajesh Textiles" → Company search
-- "cotton fabric" → Material search  
-- "overdue payments" → Payment status search
-
-**Gujarati Patterns**:
-- "રાજેશ ટેક્સટાઈલ્સ" → Company search
-- "કપાસ ફેબ્રિક" → Material search
-- "બાકી પેમેન્ટ" → Payment status search
-
-**Hindi Patterns**:
-- "राजेश टेक्सटाइल्स" → Company search
-- "कपास फैब्रिक" → Material search  
-- "बकाया पेमेंट" → Payment status search
-
-#### **Voice Search Commands**
-```typescript
-const voiceSearchCommands = {
-  english: [
-    "Find Rajesh Textiles",
-    "Show all cotton orders", 
-    "Who owes money?",
-    "What's due today?"
-  ],
-  gujarati: [
-    "રાજેશ ટેક્સટાઈલ્સ શોધો",
-    "બધા કપાસના ઓર્ડર બતાવો",
-    "કોને પૈસા આપવાના છે?",
-    "આજે શું બાકી છે?"
-  ],
-  hindi: [
-    "राजेश टेक्सटाइल्स खोजें",
-    "सभी कपास के ऑर्डर दिखाएं", 
-    "किसका पैसा बकाया है?",
-    "आज क्या देना है?"
-  ]
-};
-```
-
-### **34. Search UI Components Design**
-
-#### **Global Search Header**
-**Positioning**: Always visible across all process entry points
-**Components**: Search input + Voice button + Quick filters
+#### **Overall Page Visual Structure**
 ```css
-.globalSearch {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  padding: 12px 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.dashboardPage {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
-.searchInput {
-  background: rgba(255,255,255,0.95);
-  border-radius: 25px;
-  padding: 12px 20px;
-  border: none;
-  font-size: 1rem;
-  width: 100%;
+.dashboardMain {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 24px;
+  padding: 24px;
+  overflow-y: auto;
 }
 
-.voiceButton {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #ffd700;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+/* Executive Section: 30% of viewport */
+.executiveDashboard {
+  min-height: 30vh;
+  max-height: 40vh;
+}
+
+/* Process Cards: 60% of viewport */  
+.businessProcessSection {
+  min-height: 60vh;
+  flex: 1;
+}
+
+/* Global Tools: 10% of viewport */
+.globalToolsSection {
+  min-height: 10vh;
+  max-height: 15vh;
 }
 ```
 
-#### **Search Result Cards**
-**Process-Aware Design**: Each result shows which business process contains the information
+#### **Responsive Layout Standards**
 ```css
-.searchResultCard {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  border-left: 4px solid var(--process-color);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.processBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.processBadge.inquiries { background: rgba(255, 107, 53, 0.1); color: #ff6b35; }
-.processBadge.business { background: rgba(72, 52, 212, 0.1); color: #4834d4; }
-.processBadge.money { background: rgba(0, 210, 211, 0.1); color: #00d2d3; }
-.processBadge.customers { background: rgba(95, 39, 205, 0.1); color: #5f27cd; }
-```
-
-#### **Quick Action Buttons**
-**Contextual Actions**: Direct actions from search results
-```css
-.quickActions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-
-.quickAction {
-  padding: 6px 12px;
-  border-radius: 16px;
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.quickAction:hover {
-  background: #667eea;
-  color: white;
-}
-```
-
-### **35. Search-to-Process Navigation Flow**
-
-#### **Navigation Logic**
-1. **User searches** → Global search results appear
-2. **User selects result** → Navigate to relevant process entry point
-3. **Item highlighted** → Specific item highlighted within process
-4. **Context maintained** → Search context preserved for easy return
-
-#### **Implementation Pattern**
-```typescript
-interface SearchResult {
-  id: string;
-  type: 'company' | 'order' | 'payment' | 'material';
-  process: 'inquiries' | 'business' | 'money' | 'customers';
-  title: string;
-  context: string;
-  quickActions: QuickAction[];
-  navigationTarget: {
-    processId: string;
-    itemId: string;
-    highlightItem: boolean;
-  };
-}
-
-const handleSearchResultClick = (result: SearchResult) => {
-  // Navigate to process entry point
-  setCurrentProcess(result.process);
-  
-  // Highlight specific item within process
-  if (result.navigationTarget.highlightItem) {
-    highlightItem(result.navigationTarget.itemId);
+/* Desktop Layout (>1200px) */
+@media (min-width: 1200px) {
+  .executiveSummary {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
   }
   
-  // Maintain search context for back navigation
-  setSearchContext({
-    query: currentSearchQuery,
-    resultIndex: selectedResultIndex
-  });
-};
-```
-
-### **36. Mobile-Optimized Search Experience**
-
-#### **Touch-Friendly Search Interface**
-- **Large search input**: 44px minimum height for easy touch
-- **Voice button**: Prominent positioning for one-handed access
-- **Swipe gestures**: Swipe to dismiss search results
-- **Quick filters**: Horizontal scrollable filter buttons
-
-#### **Search Results Mobile Layout**
-- **Card-based design**: Easy thumb navigation
-- **Contextual actions**: Large touch targets for quick actions
-- **Process indicators**: Clear visual distinction between business processes
-- **Infinite scroll**: Paginated results for large datasets
-
----
-
-## **BUSINESS PROCESS-DRIVEN DASHBOARD DESIGN**
-
-### **37. Sequential Process Layout Architecture**
-
-#### **8-Card Sequential Flow Design**
-The dashboard is redesigned to mirror the **natural textile manufacturing business process flow** with sequential card organization:
-
-```
-🔄 BUSINESS PROCESS FLOW LAYOUT:
-
-Row 1: 🔥 LEAD PIPELINE → 📋 QUOTATIONS → 💰 ADVANCE PAYMENTS
-Row 2: 🏭 PRODUCTION → 📦 INVENTORY → 🚚 FULFILLMENT  
-Row 3: 🤝 CUSTOMERS → 📊 BUSINESS ANALYTICS
-
-Visual Flow Indicators: Subtle arrows connecting process stages
-Mobile Layout: 2-column responsive grid maintaining process sequence
-```
-
-**Design Philosophy**: *"Dashboard = Digital Mirror of Textile Business Reality"*
-
-#### **Process-Driven Information Hierarchy**
-```
-30% - Executive Business Health Summary: Key performance indicators
-50% - Sequential Process Cards: Business intelligence + stage navigation
-20% - Global Tools: Voice assistant, search, cross-process navigation
-```
-
-#### **Sequential Card Layout Strategy**
-- **Process Flow Logic**: Cards arranged left-to-right, top-to-bottom following business workflow
-- **Visual Progression**: Subtle design cues show progression from lead to customer
-- **Context Intelligence**: Each card shows relevant connections to next/previous process stages
-- **Mobile Optimization**: Process sequence maintained in responsive 2-column grid
-
-#### **Executive Summary Section Design**
-**Purpose**: Comprehensive 360° business view that builds credibility and trust
-**Target**: Make textile manufacturers feel they have a sophisticated business management system
-
-```css
-.executiveSummary {
-  grid-area: exec-summary;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid rgba(0,0,0,0.08);
+  .smartCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 16px;
+  }
 }
 
+/* Tablet Layout (768px - 1200px) */
+@media (min-width: 768px) and (max-width: 1200px) {
+  .executiveSummary {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  
+  .smartCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Mobile Layout (<768px) */
+@media (max-width: 768px) {
+  .dashboardMain {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .executiveSummary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .smartCardsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+```
+
+### **Level 1: Executive Dashboard Visual Design**
+
+#### **Business Intelligence Section Layout**
+```css
+.executiveDashboard {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.executiveSummary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+```
+
+#### **Business Health Card Design Standards**
+```css
 .businessHealthCard {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   border-left: 4px solid var(--metric-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.businessHealthCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.metricHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.metricIcon {
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0.9;
 }
 
 .metricValue {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: var(--metric-color);
+  line-height: 1;
   margin-bottom: 4px;
 }
 
 .metricLabel {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #64748b;
   font-weight: 500;
+  margin-bottom: 8px;
 }
 
 .trendIndicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: 8px;
-  font-size: 0.8rem;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .trendPositive { color: #10b981; }
@@ -1049,107 +1073,76 @@ Mobile Layout: 2-column responsive grid maintaining process sequence
 .trendNeutral { color: #6b7280; }
 ```
 
-### **38. Process-Specific Card Design Patterns**
-
-#### **Sequential Process Card Strategy**
-Each process stage has unique design characteristics while maintaining consistent visual language:
-
-#### **Lead Pipeline Card Design (Entry Point)**
+#### **Executive Dashboard Color Palette**
 ```css
-.leadPipelineCard {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  border-left: 5px solid #ff4500;
-}
-
-.processStageIndicator::before {
-  content: "1/8 •";
-  font-weight: 600;
-  opacity: 0.8;
+:root {
+  /* Executive Health Indicators */
+  --financial-health: #10b981;
+  --sales-pipeline: #3b82f6;
+  --operations-status: #8b5cf6;
+  --customer-intelligence: #f59e0b;
+  --priority-alerts: #ef4444;
+  --business-value: #06b6d4;
+  
+  /* Performance Status Colors */
+  --excellent-performance: #10b981;
+  --good-performance: #84cc16;
+  --attention-needed: #f59e0b;
+  --critical-status: #ef4444;
 }
 ```
 
-#### **Production Card Design (Manufacturing Core)**
+### **Level 2: Process Card Analytics Design**
+
+#### **Process Card Metrics Section**
 ```css
-.productionCard {
-  background: linear-gradient(135deg, #2d3748, #4a5568);
-  border-left: 5px solid #319795;
-}
-
-.processStageIndicator::before {
-  content: "4/8 •";
-  font-weight: 600;
-  opacity: 0.8;
-}
-```
-
-#### **Customer Card Design (Relationship End Point)**
-```css
-.customerCard {
-  background: linear-gradient(135deg, #5f27cd, #a55eea);
-  border-left: 5px solid #8b5cf6;
-}
-
-.processStageIndicator::before {
-  content: "7/8 •";
-  font-weight: 600;
-  opacity: 0.8;
-}
-```
-
-#### **Tabbed Sub-Module Interface Design**
-Transform card clicks into tabbed management interfaces with process-specific organization:
-
-```css
-.processManagementInterface {
-  background: white;
+.processCard {
+  position: relative;
+  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.processTabNavigation {
-  display: flex;
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.processTab {
-  flex: 1;
-  padding: 12px 16px;
-  text-align: center;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.processTab.active {
-  background: white;
-  border-bottom-color: var(--process-primary);
-  font-weight: 600;
-}
-
-.tabContent {
   padding: 24px;
-  min-height: 400px;
+  color: white;
+  min-height: 220px;
 }
+
+.cardMetrics {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.processHealthIndicator {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.healthExcellent { background: #10b981; }
+.healthGood { background: #84cc16; }
+.healthAttention { background: #f59e0b; }
+.healthCritical { background: #ef4444; }
 ```
 
-### **39. Cross-Process Intelligence & Navigation Patterns**
-
-#### **Smart Context Links Design**
-Visual design for intelligent connections between business process stages:
-
+#### **Smart Context Link Design**
 ```css
 .smartContextLink {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 10px 14px;
   border-radius: 8px;
-  border-left: 3px solid rgba(255, 255, 255, 0.5);
   margin-top: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  border-left: 3px solid rgba(255, 255, 255, 0.4);
 }
 
 .smartContextLink:hover {
@@ -1160,440 +1153,276 @@ Visual design for intelligent connections between business process stages:
 .contextLinkIcon {
   margin-right: 8px;
   font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .contextLinkText {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .contextLinkArrow {
   font-size: 1rem;
   opacity: 0.7;
+  margin-left: 8px;
 }
 ```
 
-#### **Process Flow Visual Indicators**
-Subtle design elements showing business process progression:
+### **Level 3: Module Interface Design System**
 
+#### **Tab Navigation Overlay Layout**
 ```css
-.processFlowContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 16px;
-  position: relative;
-}
-
-.processFlowArrow {
-  position: absolute;
-  color: rgba(0,0,0,0.1);
-  font-size: 1.2rem;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Flow arrows positioning */
-.arrow-1-2 { top: 50%; left: 33%; }
-.arrow-2-3 { top: 50%; left: 66%; }
-.arrow-3-4 { top: 25%; right: 16px; transform: rotate(90deg); }
-/* Continue for all process connections */
-```
-
-### **40. Sequential Process Layout Framework (UI ARCHITECTURE)**
-
-#### **Dashboard Grid Layout System**
-```css
-.dashboardGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 16px;
-  padding: 20px;
-}
-
-/* 8-card sequential layout */
-.processCard {
-  border-radius: 16px;
-  padding: 24px;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  min-height: 180px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.processCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-/* Sequential positioning in grid */
-.card-1 { grid-column: 1; grid-row: 1; } /* Lead Pipeline */
-.card-2 { grid-column: 2; grid-row: 1; } /* Quotations */
-.card-3 { grid-column: 3; grid-row: 1; } /* Advance Payments */
-.card-4 { grid-column: 1; grid-row: 2; } /* Production */
-.card-5 { grid-column: 2; grid-row: 2; } /* Inventory */
-.card-6 { grid-column: 3; grid-row: 2; } /* Fulfillment */
-.card-7 { grid-column: 1; grid-row: 3; } /* Customers */
-.card-8 { grid-column: 2; grid-row: 3; } /* Analytics */
-
-/* Mobile responsive grid */
-@media (max-width: 768px) {
-  .dashboardGrid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
-  }
-  
-  .card-1 { grid-column: 1; grid-row: 1; }
-  .card-2 { grid-column: 2; grid-row: 1; }
-  .card-3 { grid-column: 1; grid-row: 2; }
-  .card-4 { grid-column: 2; grid-row: 2; }
-  .card-5 { grid-column: 1; grid-row: 3; }
-  .card-6 { grid-column: 2; grid-row: 3; }
-  .card-7 { grid-column: 1; grid-row: 4; }
-  .card-8 { grid-column: 2; grid-row: 4; }
-}
-```
-
-#### **Process Stage Visual Indicators**
-```css
-.stageIndicator {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  opacity: 0.8;
-}
-
-.stageIndicator::before {
-  content: attr(data-stage) "/8 • ";
-}
-
-/* Stage-specific styling */
-.stage-1::before { content: "1/8 • Entry"; }
-.stage-2::before { content: "2/8 • Convert"; }
-.stage-3::before { content: "3/8 • Payment"; }
-.stage-4::before { content: "4/8 • Make"; }
-.stage-5::before { content: "5/8 • Stock"; }
-.stage-6::before { content: "6/8 • Ship"; }
-.stage-7::before { content: "7/8 • Relate"; }
-.stage-8::before { content: "8/8 • Analyze"; }
-```
-
-#### **Tabbed Sub-Module Interface Framework**
-```css
-.moduleInterface {
+.tabNavigationOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: white;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.moduleHeader {
-  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
-  color: white;
-  padding: 16px 20px;
+.tabNavigationContainer {
+  width: 90vw;
+  max-width: 1200px;
+  height: 85vh;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tabNavigationHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
+  color: white;
 }
 
-.backButton {
+.headerTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeButton {
   background: none;
   border: none;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
   transition: background 0.2s ease;
 }
 
-.backButton:hover {
+.closeButton:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+```
 
-.moduleTabBar {
+#### **Module Tab Bar Design**
+```css
+.tabBar {
   display: flex;
   background: #f8fafc;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.moduleTab {
+.tab {
   flex: 1;
-  padding: 12px 16px;
-  text-align: center;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
+  transition: all 0.2s ease;
   border-bottom: 3px solid transparent;
   font-weight: 500;
-  transition: all 0.2s ease;
+  color: #64748b;
 }
 
-.moduleTab.active {
+.tab:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--process-primary);
+}
+
+.tab.tabActive {
   background: white;
+  color: var(--process-primary);
   border-bottom-color: var(--process-primary);
   font-weight: 600;
 }
 
-.moduleTab:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.moduleContent {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-```
-
-**Cross-Document References**:
-- **Business Requirements**: See `/docs/PRODUCT_REQUIREMENTS.md` for feature specifications and module organization
-- **Business Workflow Context**: See `/docs/BUSINESS_PROCESSES.md` for textile manufacturing workflow details and business mental models
-
-**Usage Guidelines**:
-- Use this document for UI/UX implementation and visual design patterns
-- Reference PRODUCT_REQUIREMENTS.md for feature requirements and acceptance criteria
-- Reference BUSINESS_PROCESSES.md to understand why certain UI decisions match business reality
-
-```css
-.informationRichProcessCard {
-  background: linear-gradient(135deg, var(--process-primary), var(--process-secondary));
-  border-radius: 16px;
-  padding: 24px;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  min-height: 200px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.informationRichProcessCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.processIntelligenceSection {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.businessMetricsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.processInsight {
-  background: rgba(255,255,255,0.1);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  border-left: 3px solid rgba(255,255,255,0.3);
-}
-```
-
-### **39. Professional B2B Visual Language**
-
-#### **Business-Grade Color Palette**
-**Primary Colors**: Professional blues and greens that build trust
-```css
-:root {
-  /* Executive Dashboard Colors */
-  --exec-primary: #1e40af;     /* Professional blue */
-  --exec-secondary: #059669;   /* Success green */
-  --exec-accent: #d97706;      /* Warning amber */
-  --exec-danger: #dc2626;      /* Alert red */
-  --exec-neutral: #64748b;     /* Professional gray */
-  
-  /* Process Colors - Enhanced */
-  --inquiries-primary: #ea580c;    /* Vibrant orange */
-  --inquiries-secondary: #fb923c;  /* Light orange */
-  
-  --business-primary: #2563eb;     /* Business blue */
-  --business-secondary: #60a5fa;   /* Light blue */
-  
-  --money-primary: #059669;        /* Success green */  
-  --money-secondary: #34d399;      /* Light green */
-  
-  --customers-primary: #7c3aed;    /* Professional purple */
-  --customers-secondary: #a78bfa;  /* Light purple */
-}
-```
-
-#### **Textile Industry Context Integration**
-**Industry-Specific Design Elements**:
-```css
-.textileContext {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  --fabric-font: 'SF Mono', 'Monaco', monospace; /* For GSM, specifications */
-}
-
-.gsmSpecification {
-  font-family: var(--fabric-font);
-  background: rgba(0,0,0,0.05);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.pricePerMeter {
-  color: var(--money-primary);
-  font-weight: 700;
-  font-size: 1.1em;
-}
-
-.qualityIndicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.qualityIndicator.aGrade { 
-  background: rgba(16, 185, 129, 0.1); 
-  color: #10b981; 
-}
-.qualityIndicator.bGrade { 
-  background: rgba(245, 158, 11, 0.1); 
-  color: #f59e0b; 
-}
-```
-
-### **40. Header-Based Search Integration**
-
-#### **Professional Header Layout**
-**Search positioned as business tool, not primary interface**:
-```css
-.professionalHeader {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto auto;
-  align-items: center;
-  gap: 20px;
-  padding: 16px 24px;
-  background: white;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-
-.businessSearch {
-  position: relative;
-  max-width: 400px;
-  width: 100%;
-}
-
-.businessSearchInput {
-  width: 100%;
-  padding: 12px 16px 12px 44px;
-  border: 2px solid rgba(0,0,0,0.1);
-  border-radius: 24px;
-  background: #f8fafc;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-.businessSearchInput:focus {
-  outline: none;
-  border-color: var(--exec-primary);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-}
-
-.searchIcon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
+.tabIcon {
   font-size: 1.1rem;
 }
+
+.tabCount {
+  background: var(--process-primary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
 ```
 
-### **41. Voice Assistant Integration (Supporting Role)**
-
-#### **Floating Voice Assistant Design**
-**Voice as business assistant, not primary interface**:
+#### **Module Content Area Design**
 ```css
-.voiceAssistant {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
+.contentArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: #fafbfc;
+}
+
+.quickInfoSection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border-left: 4px solid var(--process-primary);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.quickStats, .nextAction, .voiceCommands {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.quickStatsIcon, .nextActionIcon, .voiceCommandsIcon {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.quickStatsText, .nextActionText, .voiceCommandsText {
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 500;
+}
+```
+
+#### **Smart Links Section Design**
+```css
+.smartLinksSection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+  border-top: 3px solid var(--process-primary);
+}
+
+.smartLinksHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--process-primary);
+  font-weight: 600;
+}
+
+.smartLinksIcon {
+  font-size: 1.2rem;
+}
+
+.smartLinksList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 12px;
 }
 
-.voiceMainButton {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--exec-primary), var(--business-primary));
-  border: none;
-  color: white;
-  font-size: 1.5rem;
+.smartLinkButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.3);
   transition: all 0.2s ease;
+  text-align: left;
 }
 
-.voiceMainButton:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+.smartLinkButton:hover {
+  background: #e2e8f0;
+  border-color: var(--process-primary);
+  transform: translateX(4px);
 }
 
-.voiceMainButton.listening {
-  animation: voicePulse 1.5s infinite;
-  background: linear-gradient(135deg, #dc2626, #ef4444);
+.smartLinkText {
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 500;
 }
 
-.voiceContextPanel {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,0,0,0.08);
-  max-width: 300px;
-  transform: translateY(10px);
-  opacity: 0;
-  transition: all 0.2s ease;
-}
-
-.voiceContextPanel.active {
-  transform: translateY(0);
-  opacity: 1;
+.smartLinkArrow {
+  color: var(--process-primary);
+  font-weight: 600;
 }
 ```
 
-### **42. Mobile-First Business Intelligence**
+#### **Module Status Indicators**
+```css
+.moduleStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(var(--process-primary-rgb), 0.1);
+  border-radius: 8px;
+  margin-top: 16px;
+}
 
-#### **Responsive Dashboard Grid**
-**Mobile optimization prioritizing business data**:
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.statusActive { background: #10b981; }
+.statusPending { background: #f59e0b; }
+.statusOverdue { background: #ef4444; }
+.statusCompleted { background: #6b7280; }
+```
+
+### **Responsive Analytics Design**
+
+#### **Mobile Analytics Optimization**
 ```css
 @media (max-width: 768px) {
   .executiveSummary {
     grid-template-columns: 1fr;
     gap: 16px;
-    padding: 20px;
-    margin: 0 -12px 20px;
+    padding: 16px;
   }
   
   .businessHealthCard {
@@ -1601,44 +1430,445 @@ Subtle design elements showing business process progression:
   }
   
   .metricValue {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   
-  .informationRichProcessCard {
-    padding: 20px;
-    margin: 0 -12px 16px;
-    border-radius: 12px;
-  }
-  
-  .processIntelligenceSection {
-    grid-template-columns: 1fr;
+  .tabAnalyticsGrid {
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
   
-  .businessMetricsGrid {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .processCard {
+    min-height: 180px;
+    padding: 20px;
   }
 }
 ```
 
-### **43. Success Metrics & Design Validation**
+#### **Analytics Typography Standards**
+```css
+.analyticsTypography {
+  /* Executive Level Typography */
+  --exec-metric-size: 2.5rem;
+  --exec-label-size: 0.95rem;
+  --exec-trend-size: 0.85rem;
+  
+  /* Process Level Typography */
+  --process-metric-size: 1.2rem;
+  --process-label-size: 0.9rem;
+  --process-context-size: 0.85rem;
+  
+  /* Module Level Typography */
+  --module-metric-size: 1.5rem;
+  --module-label-size: 0.8rem;
+  --module-status-size: 0.85rem;
+  
+  /* Font Weights */
+  --metric-weight: 700;
+  --label-weight: 500;
+  --trend-weight: 500;
+}
+```
 
-#### **Business Credibility Indicators**
-- **Professional Appearance**: Suitable for customer/investor demonstrations
-- **Information Density**: Rich business data without overwhelming complexity
-- **Mobile Efficiency**: Maximum business intelligence in minimal screen space
-- **Industry Context**: Authentic textile manufacturing terminology and workflows
+### **Professional Business Aesthetics**
 
-#### **User Experience Validation**
-- **Executive Appeal**: "This looks like a system successful textile businesses use"
-- **Quick Insights**: Critical business health visible within 3 seconds
-- **Actionable Intelligence**: Clear next steps and priority actions
-- **Professional Trust**: Visual design builds confidence in system capabilities
+#### **Analytics Visual Hierarchy Principles**
+1. **Executive Level**: Large, prominent metrics with clear health indicators
+2. **Process Level**: Medium-sized metrics integrated into process context
+3. **Module Level**: Detailed operational metrics with actionable insights
+
+#### **Business Credibility Design Elements**
+```css
+.professionalAnalytics {
+  /* Subtle animations for modern feel */
+  transition: all 0.2s ease;
+  
+  /* Professional shadows */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  
+  /* Business-grade typography */
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  
+  /* Consistent spacing */
+  padding: clamp(16px, 4vw, 24px);
+  
+  /* Subtle borders */
+  border: 1px solid rgba(0,0,0,0.06);
+}
+```
+
+### **Navigation Visual Patterns**
+
+#### **Process Flow Visual Indicators**
+```css
+.processFlowArrows {
+  position: relative;
+}
+
+.processFlowArrow {
+  position: absolute;
+  color: rgba(0, 0, 0, 0.15);
+  font-size: 1.5rem;
+  z-index: 1;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.processFlowArrow.active {
+  color: var(--process-primary);
+  animation: flowPulse 2s infinite;
+}
+
+@keyframes flowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Arrow positioning for 3-2-3 grid */
+.arrow-1-2 { top: 50%; left: calc(33.33% - 12px); }
+.arrow-2-3 { top: 50%; left: calc(66.66% - 12px); }
+.arrow-3-4 { top: calc(33.33% + 50%); right: calc(66.66% + 12px); transform: rotate(90deg); }
+.arrow-4-5 { top: calc(33.33% + 50%); left: calc(33.33% - 12px); }
+.arrow-5-6 { top: calc(33.33% + 50%); left: calc(66.66% - 12px); }
+.arrow-6-7 { top: calc(66.66% + 50%); right: calc(66.66% + 12px); transform: rotate(90deg); }
+.arrow-7-8 { top: calc(66.66% + 50%); left: calc(33.33% - 12px); }
+```
+
+#### **Cross-Process Navigation Visual Cues**
+```css
+.crossProcessNavigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(45deg, var(--from-process), var(--to-process));
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+}
+
+.crossProcessNavigation:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.processConnectionLine {
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, var(--from-process), var(--to-process));
+  margin: 0 8px;
+}
+```
+
+### **Professional Business Design Framework**
+
+#### **Design System Principles**
+1. **Business Credibility**: Professional appearance suitable for customer/investor demonstrations
+2. **Information Hierarchy**: Clear visual distinction between executive, process, and operational levels
+3. **Contextual Intelligence**: Visual cues guide users through natural business workflows
+4. **Mobile Optimization**: Factory-friendly interface optimized for touch and one-handed operation
+5. **Cultural Adaptation**: Design patterns that respect textile manufacturing business context
+
+#### **Comprehensive Color System**
+```css
+:root {
+  /* Process-Specific Brand Colors */
+  --leads-primary: #ff6b35; --leads-secondary: #ff8c66;
+  --quotes-primary: #3b82f6; --quotes-secondary: #60a5fa;
+  --payments-primary: #10b981; --payments-secondary: #34d399;
+  --production-primary: #8b5cf6; --production-secondary: #a78bfa;
+  --inventory-primary: #f59e0b; --inventory-secondary: #fbbf24;
+  --fulfillment-primary: #06b6d4; --fulfillment-secondary: #22d3ee;
+  --customers-primary: #ec4899; --customers-secondary: #f472b6;
+  --analytics-primary: #6366f1; --analytics-secondary: #818cf8;
+  
+  /* Status Indicators */
+  --excellent: #10b981; --good: #84cc16;
+  --attention: #f59e0b; --critical: #ef4444;
+  
+  /* Neutral Palette */
+  --neutral-50: #f8fafc; --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0; --neutral-300: #cbd5e1;
+  --neutral-400: #94a3b8; --neutral-500: #64748b;
+  --neutral-600: #475569; --neutral-700: #334155;
+  --neutral-800: #1e293b; --neutral-900: #0f172a;
+}
+```
+
+#### **Typography Standards for Business Context**
+```css
+.businessTypography {
+  /* Professional font stack */
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Executive level typography */
+  --exec-heading: 2.5rem; --exec-subheading: 1.25rem;
+  --exec-metric: 2.5rem; --exec-label: 0.95rem;
+  
+  /* Process level typography */
+  --process-heading: 1.5rem; --process-subheading: 1.1rem;
+  --process-metric: 1.2rem; --process-label: 0.9rem;
+  
+  /* Module level typography */
+  --module-heading: 1.25rem; --module-subheading: 1rem;
+  --module-metric: 1.5rem; --module-label: 0.8rem;
+  
+  /* Font weights */
+  --weight-light: 300; --weight-normal: 400;
+  --weight-medium: 500; --weight-semibold: 600;
+  --weight-bold: 700; --weight-extrabold: 800;
+}
+```
+
+#### **Cross-Reference Implementation**
+**For complete dashboard requirements and business logic**: See `PRODUCT_REQUIREMENTS.md` - Complete Dashboard Design Framework section  
+**For textile manufacturing workflow context**: See `BUSINESS_PROCESSES.md` for process workflow understanding  
+**For navigation and user action specifications**: See `PRODUCT_REQUIREMENTS.md` - Navigation Framework and User Action Framework sections
+
+## Factory-Specific Mobile Optimization Integration
+
+### **27. Complete Factory Environment Design Synthesis**
+**Decision**: Integrate all mobile, touch, and factory-specific optimizations into a comprehensive design framework
+**Rationale**:
+- Factory environments present unique challenges requiring holistic design approach
+- MSME textile manufacturers need interfaces that work reliably in industrial settings
+- Business-critical operations demand robust, accessible mobile interfaces
+
+**Integrated Factory-Optimized Design Standards**:
+```css
+/* Complete Factory-Ready Interface */
+.factoryReadyInterface {
+  /* Environmental Adaptations */
+  min-height: 52px; /* Glove-friendly */
+  background: #ffffff; /* High contrast for bright lighting */
+  border: 3px solid var(--process-primary); /* Clear boundaries */
+  color: #1e293b; /* High contrast text */
+  font-weight: 600; /* Bold for readability */
+  font-size: calc(1rem + 0.15vw); /* Responsive scaling */
+  
+  /* Touch Optimizations */
+  padding: 18px 24px; /* Generous touch targets */
+  margin: 8px 4px; /* Spacing for accurate taps */
+  border-radius: 12px; /* Rounded but substantial */
+  
+  /* Performance & Feedback */
+  transition: all 0.1s ease; /* Fast response */
+  transform-origin: center;
+  touch-action: manipulation; /* Prevent delays */
+  user-select: none; /* Prevent text selection */
+  
+  /* Visual Feedback */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2); /* Strong shadows */
+}
+
+.factoryReadyInterface:active {
+  transform: scale(0.97);
+  background: var(--process-primary);
+  color: white;
+  animation: factoryFeedback 0.3s ease;
+}
+
+@keyframes factoryFeedback {
+  0% { box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  50% { box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  100% { box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+}
+
+/* Complete Mobile Navigation for Factory Use */
+.factoryMobileNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px; /* Larger for factory use */
+  background: linear-gradient(to top, #ffffff 0%, #f8fafc 100%);
+  border-top: 3px solid var(--process-primary);
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.15);
+  z-index: 1000;
+  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.factoryNavButton {
+  flex: 1;
+  max-width: 80px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  
+  background: white;
+  border: 2px solid var(--neutral-200);
+  border-radius: 12px;
+  margin: 0 4px;
+  
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--neutral-600);
+  text-align: center;
+  
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.factoryNavButton.active {
+  background: var(--process-primary);
+  border-color: var(--process-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.factoryNavIcon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* Voice Integration for Factory Environments */
+.factoryVoiceControl {
+  position: fixed;
+  bottom: 110px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: 4px solid white;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  
+  z-index: 999;
+  transition: all 0.2s ease;
+}
+
+.factoryVoiceControl:active {
+  transform: scale(0.95);
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  animation: voicePulse 1s infinite;
+}
+
+@keyframes voicePulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+  50% { box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6); }
+}
+
+/* Emergency/Priority Actions for Factory */
+.emergencyAction {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  border: 3px solid #b91c1c !important;
+  font-weight: 700 !important;
+  min-height: 56px !important;
+  
+  animation: emergencyPulse 2s infinite;
+}
+
+@keyframes emergencyPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.95; }
+}
+
+/* Factory Data Display Optimizations */
+.factoryDataDisplay {
+  background: white;
+  border: 2px solid var(--neutral-300);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 8px 0;
+  
+  /* High contrast typography */
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.4;
+  
+  /* Clear visual hierarchy */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.factoryDataLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--process-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.factoryDataValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Notification System for Factory Environment */
+.factoryNotification {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 3px solid #047857;
+  
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  z-index: 1100;
+  
+  animation: factorySlideIn 0.4s ease;
+}
+
+.factoryNotification.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-color: #b91c1c;
+}
+
+.factoryNotification.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #b45309;
+}
+
+@keyframes factorySlideIn {
+  0% { transform: translateY(-100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+```
+
+**Factory Environment Testing Checklist**:
+- ✅ Interface readable under bright industrial lighting
+- ✅ Touch targets accessible with work gloves
+- ✅ Visual feedback clear in noisy environments
+- ✅ Voice commands work with background factory noise
+- ✅ Critical actions always accessible within thumb reach
+- ✅ Emergency/priority functions prominently highlighted
+- ✅ Data displays optimized for quick scanning
+- ✅ Navigation reliable during single-handed operation
+
+**Business Impact**: Complete factory-ready mobile interface ensures textile manufacturers can manage business operations efficiently from the factory floor, production areas, and during facility visits, maintaining professional productivity in industrial environments.
 
 ---
 
-**Document Updated**: Sep 14, 2025  
-**Latest Addition**: Executive Business Intelligence Dashboard Design System  
-**Next Update**: After dashboard implementation  
-**Purpose**: Comprehensive design system with professional B2B dashboard architecture for MSME textile manufacturers
+**Document Updated**: Sep 16, 2025  
+**Latest Update**: Added comprehensive mobile-first design with factory environment optimizations  
+**Dashboard Design**: See `PRODUCT_REQUIREMENTS.md` for complete dashboard specifications  
+**Business Workflow**: See `BUSINESS_PROCESSES.md` for textile manufacturing process details  
+**Purpose**: Universal design system with professional B2B visual standards and factory-optimized mobile interface for MSME textile manufacturers

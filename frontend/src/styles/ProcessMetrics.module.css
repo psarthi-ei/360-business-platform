@@ -78,18 +78,243 @@
   font-size: 1.2rem;
 }
 
-.stageMetricsGrid {
+/* Circular Process Layout */
+.circularProcessContainer {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 12px;
-  overflow-x: auto;
-  padding: 16px 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  padding: 40px 20px;
+  min-height: 600px;
 }
 
-.stageMetricsGrid::-webkit-scrollbar {
-  display: none;
+.circularProcessWheel {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.circularStage {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.circularStage:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+/* Position each stage around the circle */
+.position-0 { /* Leads - Top */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-1 { /* Quotes - Top Right */
+  top: 15%;
+  right: 15%;
+}
+
+.position-2 { /* Payments - Right */
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.position-3 { /* Production - Bottom Right */
+  bottom: 15%;
+  right: 15%;
+}
+
+.position-4 { /* Inventory - Bottom */
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-5 { /* Fulfillment - Bottom Left */
+  bottom: 15%;
+  left: 15%;
+}
+
+.position-6 { /* Customers - Left */
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.position-7 { /* Analytics - Top Left */
+  top: 15%;
+  left: 15%;
+}
+
+.circularStageCard {
+  width: 100%;
+  height: 100%;
+  background: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.stageIconLarge {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.circularStageTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 4px 0;
+  line-height: 1.2;
+}
+
+.circularStageMetrics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.circularCount {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.circularConversion {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.circularStatus {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+/* Center Hub */
+.centerHub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.hubIcon {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.hubTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.hubMetric {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.hubSubtitle {
+  font-size: 0.6rem;
+  opacity: 0.9;
+}
+
+/* Circular Arrows */
+.circularArrow {
+  position: absolute;
+  font-size: 1.2rem;
+  color: #667eea;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.arrow-0 { /* Between Leads and Quotes */
+  top: -10px;
+  right: -15px;
+}
+
+.arrow-1 { /* Between Quotes and Payments */
+  bottom: -10px;
+  right: -10px;
+}
+
+.arrow-2 { /* Between Payments and Production */
+  bottom: -15px;
+  left: -10px;
+}
+
+.arrow-3 { /* Between Production and Inventory */
+  bottom: -10px;
+  left: -15px;
+}
+
+.arrow-4 { /* Between Inventory and Fulfillment */
+  top: -10px;
+  left: -15px;
+}
+
+.arrow-5 { /* Between Fulfillment and Customers */
+  top: -10px;
+  right: -10px;
+}
+
+.arrow-6 { /* Between Customers and Analytics */
+  top: -15px;
+  right: -10px;
+}
+
+.arrowComplete { /* Between Analytics and back to Leads (complete cycle) */
+  top: -10px;
+  right: -15px;
+  color: #22c55e;
+}
+
+/* Stage Status Colors */
+.stage-excellent .circularStageCard {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.02);
+}
+
+.stage-good .circularStageCard {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.02);
+}
+
+.stage-attention .circularStageCard {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.02);
+}
+
+.stageMetricsGrid {
+  display: none; /* Hide the old grid layout */
 }
 
 .stageMetricCard {

@@ -9,15 +9,15 @@ This document outlines the complete lead-to-customer conversion flow for Gujarat
 The platform dashboard is organized as a **digital mirror of textile manufacturing business reality**, with each business process stage corresponding to a dashboard card:
 
 ```
-BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
-1. Lead Generation & Capture → 🔥 LEAD PIPELINE      → Lead Management + CRM + Voice
-2. Quote Creation & Negotiation → 📋 QUOTATIONS      → Quote Management + Sales Orders  
-3. Quote Approval & Proforma → 💰 ADVANCE PAYMENTS   → Payment Collection + Proforma + Conversion
-4. Work Order Creation      → 🏭 PRODUCTION          → Work Orders + Production Tracking + Quality
-5. Inventory & Materials    → 📦 INVENTORY           → Stock Management + Procurement + Planning  
-6. Quality & Dispatch       → 🚚 FULFILLMENT        → Dispatch + Delivery + Order Completion
-7. Final Payment & Customer → 🤝 CUSTOMERS           → Customer 360° + Feedback + Loyalty
-8. Analytics & Intelligence → 📊 BUSINESS ANALYTICS  → Business Reports + Financial + Performance
+BUSINESS PROCESS STAGE          DASHBOARD CARD                MVP MODULES
+1. Lead Generation & Capture → 🔥 LEAD PIPELINE           → Lead Management + CRM + Voice
+2. Commercial Workflow      → 📋 QUOTATIONS & ORDERS     → Quotations + Sales Orders (post-payment)  
+3. Financial Workflow       → 💰 PAYMENTS                → Proforma + Advance + Final + Collection
+4. Manufacturing Execution  → 🏭 PRODUCTION               → Work Orders + Manufacturing + Quality
+5. Supply Chain Management  → 📦 INVENTORY                → Stock + Procurement + Materials Planning  
+6. Delivery & Completion    → 🚚 FULFILLMENT             → Dispatch + Delivery + Order Completion
+7. Relationship Management  → 🤝 CUSTOMERS                → Customer 360° + Feedback + Loyalty
+8. Business Intelligence    → 📊 BUSINESS ANALYTICS       → Reports + KPIs + Performance Analytics
 ```
 
 **Key Design Principle**: Dashboard sequence matches the natural flow of textile manufacturing business operations, eliminating cognitive friction and providing intuitive navigation.
@@ -30,11 +30,99 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
+## **CRM MODULE ARCHITECTURE**
+
+### **Unified CRM System with Intelligent Views**
+The platform implements a single, unified CRM module that automatically displays the appropriate view based on the contact's status:
+
+#### **CRM Module Structure**
+```
+CRM MODULE (Single Unified System)
+├── Prospect View (displayed in LEAD PIPELINE business area)
+│   ├── Contact management for prospects/leads only
+│   ├── Lead interaction tracking and follow-up scheduling
+│   ├── Lead scoring and prioritization
+│   └── Conversion preparation and nurturing
+└── Customer 360° View (displayed in CUSTOMERS business area)
+    ├── Complete business profiles for paying customers only
+    ├── Order history and financial analytics
+    ├── Relationship intelligence and lifecycle management
+    └── Strategic account planning and growth opportunities
+```
+
+#### **Automatic View Switching**
+- **Before Advance Payment**: Contact appears in CRM Prospect View (LEAD area)
+- **After Advance Payment**: Contact automatically transfers to CRM Customer 360° View (CUSTOMER area)
+- **Same Person, Same CRM Module**: Different views based on business relationship status
+
+#### **Data Continuity**
+- **Complete History Preserved**: All interactions from prospect stage transfer to customer stage
+- **Seamless Transition**: No data loss during prospect-to-customer conversion
+- **Unified Database**: Same contact record, different interface based on payment status
+- **Business Logic**: Payment status determines which view displays the contact
+
+---
+
+## **CRITICAL DOCUMENT HIERARCHY: SALES ORDER vs WORK ORDER**
+
+### **Commercial Documents vs Production Documents**
+
+Understanding the distinction between **Sales Orders** and **Work Orders** is fundamental to textile business operations:
+
+#### **Sales Order (Master Commercial Document)**
+- **Created When**: Advance payment (30%) received from customer
+- **Purpose**: Master customer order authorizing complete business transaction
+- **Contains**: 
+  - Customer requirements and specifications
+  - Commercial terms (pricing, payment schedule, delivery)
+  - Total order value and profit margins
+  - Delivery commitments and logistics
+- **Scope**: Entire customer order (could be multiple products/batches)
+- **Example**: "SO-2024-001: Rajesh Textiles - 1000m Cotton Fabric Order (₹2,40,000)"
+- **Business Function**: Customer-facing commercial management
+
+#### **Work Order (Production Sub-Component)**
+- **Created From**: Sales Order breakdown for manufacturing execution
+- **Purpose**: Specific production instructions for manufacturing teams
+- **Contains**:
+  - Detailed production specifications and processes
+  - Material requirements and machine allocations
+  - Production timeline and quality checkpoints
+  - Resource assignments (workers, machines, materials)
+- **Scope**: Individual manufacturing tasks within the sales order
+- **Examples**:
+  - "WO-2024-001A: Weaving 500m Cotton 40s (Loom-3, 5 days)"
+  - "WO-2024-001B: Dyeing 500m Natural Blue (Tank-2, 2 days)"  
+  - "WO-2024-001C: Finishing & Quality Check (QC-Lab, 1 day)"
+- **Business Function**: Internal production management
+
+#### **Document Relationship Hierarchy**
+```
+Sales Order (1) → Work Orders (Many)
+     ↓                    ↓
+Commercial View      Production View
+Customer-facing      Internal execution
+Business terms      Manufacturing tasks
+Order management     Production planning
+```
+
+### **Business Area Mapping**
+- **📋 QUOTATIONS & ORDERS** → Manages **Sales Orders** (commercial documents)
+- **🏭 PRODUCTION** → Manages **Work Orders** (manufacturing execution)
+
+This separation ensures:
+- **Commercial clarity** for customer relationships
+- **Production efficiency** for manufacturing teams  
+- **Proper authorization flow** from payment → sales order → work orders
+- **Clear responsibility boundaries** between sales and production teams
+
+---
+
 ## Complete Business Pipeline
 
 ### **Stage 1: Lead Generation & Capture**
 **Dashboard Card**: 🔥 **LEAD PIPELINE** (Business Entry Point)
-**Platform Modules**: Lead Management + CRM Initial Contact + Voice Integration
+**Platform Modules**: Lead Management + CRM (Prospect View)
 
 #### **Business Mental Model & Daily Workflow**
 **Business Owner's Mindset**: "કોણ call કર્યો? કયા leads hot છે? આજે કોને quotes મોકલવા?"
@@ -72,9 +160,15 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 2: Quote Creation & Negotiation**
-**Dashboard Card**: 📋 **QUOTATIONS & ORDERS** (Conversion Stage)
-**Platform Modules**: Quotation Management + Sales Order Creation + Quote Analytics
+### **Stage 2: Commercial Document Management**
+**Dashboard Card**: 📋 **QUOTATIONS & ORDERS** (Commercial Workflow)
+**Platform Modules**: Quotation Management + Sales Order Management + Commercial Analytics
+
+#### **Business Area Scope**
+This business area manages the complete commercial document lifecycle:
+1. **Quotations**: Price proposals and commercial negotiations (pre-payment)
+2. **Sales Orders**: Master customer orders (created after advance payment received)
+3. **Commercial Analytics**: Quote-to-order conversion and commercial performance
 
 #### **Business Mental Model & Daily Workflow**
 **Business Owner's Mindset**: "કયા quotes મોકલવા? કયા approved છે? કયા orders બનાવવા?"
@@ -145,10 +239,17 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 4: Quote Approval & Proforma Invoice Generation**
-**Dashboard Card**: 💰 **ADVANCE PAYMENTS** (Financial Commitment Gate)
-**Platform Modules**: Payment Collection + Proforma Invoices + Lead-Customer Conversion
-**Cross-Process Flow**: 📋 QUOTATIONS → 💰 ADVANCE PAYMENTS
+### **Stage 3: Complete Financial Workflow Management**
+**Dashboard Card**: 💰 **PAYMENTS** (Financial Transaction Hub)
+**Platform Modules**: Proforma Invoices + Advance Payment + Final Payment + Collection Management
+**Cross-Process Flow**: 📋 QUOTATIONS & ORDERS → 💰 PAYMENTS → 🏭 PRODUCTION
+
+#### **Business Area Scope**  
+This business area manages the complete financial transaction lifecycle:
+1. **Proforma Invoices**: Formal invoice generation from approved quotes
+2. **Advance Payments**: 30% advance collection (critical business gate)
+3. **Final Invoices**: Final invoice generation after production completion
+4. **Payment Collection**: Outstanding payment tracking and collection management
 
 #### **Business Mental Model & Daily Workflow**
 **Business Owner's Mindset**: "કોની advance લેવાની? કયા payment આવ્યા? કયા customers બન્યા?"
@@ -232,10 +333,17 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 6: Work Order Creation**
-**Dashboard Card**: 🏭 **PRODUCTION** (Manufacturing Stage)
-**Platform Modules**: Work Order Management + Production Tracking + Quality Control
-**Cross-Process Flow**: 💰 ADVANCE PAYMENTS → 🏭 PRODUCTION
+### **Stage 4: Manufacturing Execution & Work Order Management**
+**Dashboard Card**: 🏭 **PRODUCTION** (Manufacturing Execution Hub)
+**Platform Modules**: Work Order Management + Manufacturing Execution + Production Tracking + Quality Control
+**Cross-Process Flow**: 💰 PAYMENTS → 🏭 PRODUCTION → 📦 INVENTORY
+
+#### **Business Area Scope**
+This business area manages manufacturing execution from sales orders to completed products:
+1. **Work Orders**: Production tasks created from sales orders (one sales order → multiple work orders)
+2. **Manufacturing**: Production floor execution, machine scheduling, resource allocation
+3. **Production Tracking**: Progress monitoring, timeline management, bottleneck identification
+4. **Quality Control**: In-process quality checks, final inspection, compliance management
 
 #### **Business Mental Model & Daily Workflow**
 **Business Owner's Mindset**: "કયા orders production માં છે? આજે શું બનાવવું? Quality કેમ છે?"
@@ -247,12 +355,21 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 - **Production Monitoring**: Track progress, handle quality issues, adjust schedules
 - **Quality Control**: Monitor fabric GSM, width, color consistency throughout production
 
-#### **Work Order Prerequisites (All Automated)**
-- **✅ Sales Order Created**: Auto-created from quote after advance payment
-- **✅ Customer Converted**: Lead automatically converted to customer
-- **✅ Advance Payment Verified**: Required advance payment confirmed in bank
-- **✅ Specifications Locked**: All technical details from approved quote
-- **✅ Delivery Schedule**: Production timeline from original quote confirmed
+#### **Sales Order to Work Order Flow (Automated)**
+
+**Prerequisites for Work Order Creation:**
+- **✅ Sales Order Created**: Auto-created from approved quote after advance payment received
+- **✅ Customer Converted**: Lead automatically converted to customer upon payment
+- **✅ Advance Payment Verified**: 30% advance payment confirmed in bank account
+- **✅ Specifications Locked**: All technical details transferred from approved quote
+- **✅ Production Authorization**: Manufacturing authorized by payment receipt
+
+**Work Order Creation Process:**
+1. **Sales Order Analysis**: System analyzes sales order requirements and specifications
+2. **Production Breakdown**: Complex orders split into manageable work order components
+3. **Resource Planning**: Materials, machines, and workforce allocated to each work order
+4. **Timeline Scheduling**: Production sequence planned based on delivery commitments
+5. **Work Order Generation**: Individual work orders created with specific production instructions
 
 **Work Order Details:**
 - **WO Number**: Unique work order identifier (WO-YYYY-XXX)
@@ -281,10 +398,10 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 7: Production & Manufacturing**
-**Dashboard Card**: 🏭 **PRODUCTION** (Manufacturing Stage - Continued) + 📦 **INVENTORY**
-**Platform Modules**: Production Tracking + Quality Control + Inventory Management + Procurement
-**Cross-Process Flow**: 🏭 PRODUCTION ↔ 📦 INVENTORY (Materials & Stock Management)
+### **Stage 5: Supply Chain & Materials Management**  
+**Dashboard Card**: 📦 **INVENTORY** (Supply Chain Hub)
+**Platform Modules**: Stock Management + Procurement + Materials Planning + GRN (Goods Receipt Note)
+**Cross-Process Flow**: 🏭 PRODUCTION ↔ 📦 INVENTORY → 🚚 FULFILLMENT
 
 #### **Inventory Business Mental Model**
 **Business Owner's Mindset**: "કેટલો stock છે? શું material ઓર્ડર કરવું? કયા orders માટે stock છે?"
@@ -325,10 +442,10 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 8: Quality Assurance & Dispatch**
-**Dashboard Card**: 🚚 **FULFILLMENT** (Delivery & Completion)
-**Platform Modules**: Dispatch & Delivery + Order Completion + Logistics Tracking
-**Cross-Process Flow**: 🏭 PRODUCTION → 🚚 FULFILLMENT
+### **Stage 6: Delivery & Order Completion**
+**Dashboard Card**: 🚚 **FULFILLMENT** (Delivery & Completion Hub)  
+**Platform Modules**: Dispatch Management + Delivery Tracking + Order Completion + Logistics Coordination
+**Cross-Process Flow**: 📦 INVENTORY → 🚚 FULFILLMENT → 🤝 CUSTOMERS
 
 #### **Fulfillment Business Mental Model**
 **Business Owner's Mindset**: "કયા orders ready છે? કયા dispatch કરવા? Delivery કેમ ચાલે છે?"
@@ -365,10 +482,15 @@ BUSINESS PROCESS STAGE          DASHBOARD CARD           MVP MODULES
 
 ---
 
-### **Stage 9: Final Payment & Relationship Management**
-**Dashboard Card**: 🤝 **CUSTOMERS** (Relationship Management) + 📊 **BUSINESS ANALYTICS**
-**Platform Modules**: Customer 360° View + Customer Feedback + Analytics Dashboard + Final Invoicing
-**Cross-Process Flow**: 🚚 FULFILLMENT → 🤝 CUSTOMERS → 📊 BUSINESS ANALYTICS
+### **Stage 7: Customer Relationship & Lifecycle Management**
+**Dashboard Card**: 🤝 **CUSTOMERS** (Relationship Management Hub)
+**Platform Modules**: CRM (Customer 360° View) + Relationship Management + Loyalty Programs
+**Cross-Process Flow**: 🚚 FULFILLMENT → 🤝 CUSTOMERS → 🔥 LEAD PIPELINE (repeat business)
+
+### **Stage 8: Business Intelligence & Performance Analytics**
+**Dashboard Card**: 📊 **BUSINESS ANALYTICS** (Intelligence & Optimization Hub)
+**Platform Modules**: Performance Analytics + Financial Reports + Process Analytics + Predictive Intelligence  
+**Cross-Process Flow**: All Stages → 📊 BUSINESS ANALYTICS → Process Optimization Insights
 
 #### **Customer Relationship Business Mental Model**
 **Business Owner's Mindset**: "મારા best customers કોણ? કોને repeat માટે call કરવું? Customer satisfaction કેમ છે?"
@@ -936,31 +1058,34 @@ Financial Management Section:
 The dashboard provides intelligent connections showing how business processes naturally flow together:
 
 ```
-🔥 LEAD PIPELINE → 📋 QUOTATIONS → 💰 ADVANCE PAYMENTS → 🏭 PRODUCTION
-    ↓                                   ↓                    ↓
-🤝 CUSTOMERS ← 📊 BUSINESS ANALYTICS ← 🚚 FULFILLMENT ← 📦 INVENTORY
+🔥 LEAD PIPELINE → 📋 QUOTATIONS & ORDERS → 💰 PAYMENTS → 🏭 PRODUCTION
+    ↑                                                           ↓
+🤝 CUSTOMERS ← 🚚 FULFILLMENT ← 📦 INVENTORY ← 🏭 PRODUCTION
+    ↓                                              ↑
+📊 BUSINESS ANALYTICS ← ← ← ← ← ← ← ← ← ← ← ← ← (All Stages)
 ```
 
 ### **Process Stage Indicators**
 Each dashboard card shows its position in the business flow:
 - **🔥 LEAD PIPELINE**: "Stage 1/8 • Entry Point" 
-- **📋 QUOTATIONS**: "Stage 2/8 • Conversion"
-- **💰 ADVANCE PAYMENTS**: "Stage 3/8 • Commitment Gate"
-- **🏭 PRODUCTION**: "Stage 4/8 • Manufacturing"
-- **📦 INVENTORY**: "Stage 5/8 • Supply Chain" 
-- **🚚 FULFILLMENT**: "Stage 6/8 • Delivery"
-- **🤝 CUSTOMERS**: "Stage 7/8 • Relationship"
-- **📊 BUSINESS ANALYTICS**: "Stage 8/8 • Intelligence"
+- **📋 QUOTATIONS & ORDERS**: "Stage 2/8 • Commercial Workflow"
+- **💰 PAYMENTS**: "Stage 3/8 • Financial Hub"
+- **🏭 PRODUCTION**: "Stage 4/8 • Manufacturing Execution"
+- **📦 INVENTORY**: "Stage 5/8 • Supply Chain Management" 
+- **🚚 FULFILLMENT**: "Stage 6/8 • Delivery & Completion"
+- **🤝 CUSTOMERS**: "Stage 7/8 • Relationship Management"
+- **📊 BUSINESS ANALYTICS**: "Stage 8/8 • Business Intelligence"
 
 ### **Context-Aware Cross-Navigation**
 Dashboard cards show smart links to related process stages:
-- **From LEAD PIPELINE**: "3 hot leads ready for quotes → QUOTATIONS"
-- **From QUOTATIONS**: "₹2.4L quotes approved, awaiting payment → ADVANCE PAYMENTS"
-- **From ADVANCE PAYMENTS**: "Payment received, ready for production → PRODUCTION"
-- **From PRODUCTION**: "Materials needed for orders → INVENTORY"
-- **From INVENTORY**: "Stock ready for dispatch → FULFILLMENT"
+- **From LEAD PIPELINE**: "3 hot leads ready for quotes → QUOTATIONS & ORDERS"
+- **From QUOTATIONS & ORDERS**: "₹2.4L quotes approved, awaiting payment → PAYMENTS"
+- **From PAYMENTS**: "Advance payment received, ready for production → PRODUCTION"  
+- **From PRODUCTION**: "Materials needed for work orders → INVENTORY"
+- **From INVENTORY**: "Stock allocated, ready for fulfillment → FULFILLMENT"
 - **From FULFILLMENT**: "Orders delivered, customer feedback → CUSTOMERS"
 - **From CUSTOMERS**: "Repeat business opportunity → LEAD PIPELINE"
+- **From BUSINESS ANALYTICS**: "Process optimization insights → All Stages"
 
 ### **Business Intelligence Integration**
 The 📊 **BUSINESS ANALYTICS** card provides cross-process insights:
@@ -971,8 +1096,109 @@ The 📊 **BUSINESS ANALYTICS** card provides cross-process insights:
 
 ---
 
+---
+
+## **COMPLETE COMMERCIAL-TO-PRODUCTION WORKFLOW SUMMARY**
+
+### **Critical Business Logic: Document Creation Sequence**
+
+```mermaid
+flowchart TD
+    A[Lead Inquiry] --> B[Quote Creation]
+    B --> C[Quote Approval by Customer]
+    C --> D[Proforma Invoice Auto-Generated]
+    D --> E[Customer Pays 30% Advance]
+    E --> F{Payment Verification}
+    F -->|Verified| G[🚀 AUTOMATED TRIGGERS]
+    F -->|Failed| D
+    
+    G --> H[Sales Order Created]
+    G --> I[Customer Profile Created]
+    G --> J[Lead Converted to Customer]
+    
+    H --> K[Work Orders Generated]
+    K --> L[Production Authorization]
+    L --> M[Manufacturing Execution]
+    M --> N[Production Completion]
+    N --> O[Final Invoice Generated - 70%]
+    O --> P[Final Payment Collection]
+    P --> Q[Delivery Authorization]
+```
+
+### **Key Business Document Relationship**
+
+**QUOTATIONS & ORDERS Business Area**:
+- **Quotations**: Pre-payment commercial proposals
+- **Sales Orders**: Post-payment master commercial documents
+
+**PRODUCTION Business Area**:
+- **Work Orders**: Manufacturing tasks created from sales orders  
+- **Manufacturing**: Production execution of work orders
+
+**Document Hierarchy**:
+```
+Lead → Quote → Proforma Invoice → Advance Payment
+                     ↓
+            Sales Order (Master Document)
+                     ↓
+         Work Order 1 + Work Order 2 + Work Order 3
+                     ↓
+            Production Tasks → Completion
+                     ↓
+         Final Invoice → Final Payment → Delivery
+```
+
+### **Critical Business Gates**
+1. **Quote Approval** → Proforma invoice generation
+2. **Advance Payment (30%)** → Sales order + Customer creation + Work order authorization
+3. **Production Completion** → Final invoice generation  
+4. **Final Payment (70%)** → Delivery authorization
+
+### **System Integration Points**
+- **QUOTATIONS & ORDERS** manages commercial documents (quotes → sales orders)
+- **PAYMENTS** manages financial workflow (proforma → advance → final)
+- **PRODUCTION** manages manufacturing execution (work orders → completion)
+- **CUSTOMERS** manages relationships (post-payment customer profiles)
+
+This workflow ensures proper financial commitment before production and maintains clear separation between commercial and manufacturing operations.
+
+---
+
+## **UNIVERSAL PLATFORM CAPABILITIES**
+
+### **Voice Integration**
+Voice commands are available as a **standard platform feature** across all business areas and modules. Users can interact with any part of the system using multilingual voice commands (Gujarati, Hindi, English) optimized for factory environments.
+
+#### **Universal Voice Capabilities**
+- **Navigation**: Move between business areas and modules hands-free
+- **Search and Retrieval**: Find customers, orders, leads, and data using natural language
+- **Quick Actions**: Perform common tasks without screen interaction
+- **Status Updates**: Get real-time information about business processes
+- **Factory Environment Optimization**: Noise cancellation and clear recognition for industrial settings
+
+#### **Multilingual Support**
+- **Gujarati** (Primary): Natural language for local textile manufacturers
+- **Hindi** (Secondary): Pan-India business expansion support
+- **English** (Technical): Technical terms and export-related functionality
+
+#### **Context-Aware Commands**
+Voice commands automatically adapt to the current business area:
+- Commands understand which screen/module user is currently viewing
+- Responses provide relevant information for current business context
+- Smart suggestions based on user's current workflow and data
+
+#### **Factory Environment Benefits**
+- **Hands-Free Operation**: Continue fabric handling while managing business data
+- **Noise Resistance**: Optimized for manufacturing environment sound levels
+- **Speed and Efficiency**: Faster than typing for quick queries and updates
+- **Accessibility**: Natural interaction for users with varying technical expertise
+
+**Note**: Voice capability is universal across all 8 business areas and is not highlighted separately for individual areas as it's a standard platform feature.
+
+---
+
 **Document Created**: September 3, 2025  
-**Last Updated**: September 14, 2025 - Added Dashboard-to-Process Mapping & Cross-Process Intelligence Documentation  
+**Last Updated**: September 16, 2025 - Complete 8-stage workflow with Sales Order/Work Order hierarchy and commercial-to-production workflow documentation
 **Purpose**: Complete business flow documentation with process-driven dashboard organization for ElevateIdea 360° Platform  
 **Next Review**: Monthly updates based on user feedback and business process refinements  
 **Target Users**: Gujarat textile manufacturers, garment producers, fabric traders

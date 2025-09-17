@@ -936,6 +936,108 @@ The **Domain-Driven Naming strategy** is a **deliberate architectural decision**
 
 ---
 
-**Document Version**: 8.0 (API Naming Conventions - Domain Abstraction Strategy Added)  
-**Last Updated**: September 12, 2025  
+## **CRM MODULE TECHNICAL ARCHITECTURE**
+
+### **Unified CRM with Dual Views**
+
+The platform implements a single, unified CRM module that intelligently displays different views based on contact status, ensuring seamless prospect-to-customer lifecycle management.
+
+#### **CRM System Architecture**
+```
+CRM MODULE (Single System)
+├── Database Layer (Unified)
+│   ├── Contact Records (All prospects + customers)
+│   ├── Interaction History (Complete timeline from first contact)
+│   ├── Business Intelligence (Analytics across complete lifecycle)
+│   └── Relationship Data (From prospect nurturing to customer growth)
+└── View Layer (Context-Aware)
+    ├── Prospect View → LEAD PIPELINE Business Area
+    │   ├── Shows: Contacts with status = 'prospect' (no advance payment)
+    │   ├── Features: Lead management, nurturing, conversion tracking
+    │   └── Actions: Qualify, follow-up, create quotes, schedule calls
+    └── Customer 360° View → CUSTOMERS Business Area
+        ├── Shows: Contacts with status = 'customer' (advance payment received)
+        ├── Features: Account management, analytics, relationship planning
+        └── Actions: Order analysis, payment tracking, growth planning
+```
+
+#### **Automatic Status Transition Logic**
+1. **Contact Created** → CRM Prospect View (LEAD area)
+2. **Advance Payment Received** → Status automatically changes to 'customer'
+3. **Contact Moves** → CRM Customer 360° View (CUSTOMER area)
+4. **Complete History Preserved** → Seamless relationship continuity throughout transition
+
+#### **Data Integration Architecture**
+- **Single Contact Record**: One database record per company/person
+- **Status-Based Views**: Interface adapts based on payment/relationship status
+- **Complete Audit Trail**: All interactions preserved from first contact to ongoing business
+- **Cross-Reference Integrity**: Sales orders, payments, and quotes linked to same contact record
+
+#### **Business Rules Implementation**
+- **Prospect View Access**: Available until advance payment received
+- **Customer 360° Access**: Activated automatically upon payment verification
+- **Data Continuity**: No manual data transfer required during status change
+- **Relationship Intelligence**: Complete interaction history available in both views
+
+---
+
+## **UNIVERSAL VOICE INTEGRATION ARCHITECTURE**
+
+### **Voice-First Platform Design**
+
+Voice commands are implemented as a **universal platform feature** available across all 8 business areas, ensuring consistent user experience and maximum efficiency for textile manufacturers operating in factory environments.
+
+#### **Technical Implementation Specifications**
+- **Multilingual Support**: Gujarati (primary), Hindi (secondary), English (technical terms)
+- **Factory Environment Optimization**: Advanced noise cancellation and clear recognition for industrial settings
+- **Context Awareness**: Voice commands automatically adapt to current business area and screen
+- **Hands-Free Operation**: Complete platform functionality accessible via voice commands
+- **Real-Time Processing**: Immediate response and action execution for voice commands
+
+#### **Universal Command Architecture**
+
+**Navigation Commands** (Work Everywhere):
+```
+"Show me customers" → Navigate to CUSTOMERS business area
+"Go to production" → Navigate to PRODUCTION business area  
+"Open payments" → Navigate to PAYMENTS business area
+"Back to dashboard" → Return to main dashboard
+```
+
+**Search Commands** (Platform-Wide):
+```
+"Find Rajesh Textiles" → Search across all business areas for company
+"Search Gujarat Mills" → Locate customer/prospect in relevant area
+"Show order SO-2024-001" → Find specific sales order
+"Find overdue payments" → Query financial data
+```
+
+**Quick Action Commands** (Context-Aware):
+```
+"Add new lead" → Create prospect (works from any screen)
+"Record payment" → Payment entry (context-aware amount/customer)
+"Mark as complete" → Status update (adapts to current screen)
+"Send reminder" → Communication action (context-dependent)
+```
+
+**Status Query Commands** (Universal):
+```
+"What's pending today?" → Today's priority items across all areas
+"Show urgent items" → High-priority tasks from all business areas
+"Today's schedule" → Follow-ups, deliveries, payments due
+"Business summary" → Quick overview of all process areas
+```
+
+#### **Technical Architecture Benefits**
+- **Universal Capability**: Single voice integration covers all business areas (no module-specific development)
+- **Consistent Experience**: Same voice interaction patterns across entire platform
+- **Scalable Architecture**: New business areas automatically inherit voice capabilities
+- **Business Continuity**: Voice enables uninterrupted work flow during manufacturing operations
+
+**Note**: Voice integration is a universal platform capability and is not highlighted separately for individual business areas to avoid confusion and redundancy.
+
+---
+
+**Document Version**: 9.0 (CRM Architecture & Universal Voice Integration Added)  
+**Last Updated**: September 16, 2025  
 **Philosophy**: Ship fast, iterate based on customer feedback, keep it simple, test core functionality

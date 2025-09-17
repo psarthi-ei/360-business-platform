@@ -24,7 +24,7 @@
 .dashboardContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px 40px 40px 40px;
   position: relative;
   z-index: 1;
 }
@@ -801,6 +801,15 @@
     gap: 15px;
   }
 
+  .integratedSearch {
+    margin: 4px auto 30px auto;
+    max-width: 100%;
+  }
+
+  .integratedSearch .searchInputWrapper {
+    padding: 16px 20px;
+  }
+
   .voiceCommandCenter {
     padding: 16px;
     margin: 0 -5px;
@@ -922,8 +931,20 @@
 
 @media (max-width: 480px) {
   .dashboardContainer {
-    padding: 8px;
+    padding: 12px;
     gap: 12px;
+  }
+
+  .integratedSearch {
+    margin: 4px auto 25px auto;
+  }
+
+  .integratedSearch .searchInputWrapper {
+    padding: 14px 18px;
+  }
+
+  .searchInput {
+    font-size: 1rem;
   }
 
   .voiceCommandCenter {
@@ -1960,7 +1981,7 @@
 @media (max-width: 1200px) {
   .dashboardContainer {
     max-width: 100%;
-    padding: 15px;
+    padding: 25px;
   }
   
   .metricsGrid {
@@ -2000,7 +2021,7 @@
   }
   
   .dashboardContainer {
-    padding: 5px;
+    padding: 15px;
   }
   
   .dashboardHeader {
@@ -2754,19 +2775,21 @@
 }
 
 .searchIcon {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-right: 12px;
-  opacity: 0.7;
+  opacity: 0.6;
+  color: #9aa0a6;
 }
 
 .searchInput {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #2c3e50;
   outline: none;
   placeholder-color: #7f8c8d;
+  margin-left: 8px;
 }
 
 .searchInput::placeholder {
@@ -2796,15 +2819,15 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.98);
+  background: white;
   border-radius: 16px;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 8px;
   max-height: 400px;
   overflow: hidden;
   animation: slideDown 0.3s ease;
+  z-index: 1000;
 }
 
 @keyframes slideDown {
@@ -3319,13 +3342,13 @@
   box-shadow: 0 8px 30px rgba(72, 52, 212, 0.4);
 }
 
-/* Integrated Search */
+/* Integrated Search - Google Style */
 .integratedSearch {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px auto 30px auto;
+  max-width: 600px;
   position: relative;
 }
 
@@ -3333,15 +3356,19 @@
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 25px;
-  padding: 12px 20px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 50px;
+  padding: 18px 24px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .integratedSearch .searchInputWrapper:focus-within {
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow: 0 8px 40px rgba(102, 126, 234, 0.25);
+  transform: translateY(-2px);
 }
 
 .voiceSearchSuggestion {
@@ -3605,7 +3632,134 @@
 }
 
 /* ========================================
-   EXECUTIVE BUSINESS INTELLIGENCE DASHBOARD
+   COMPACT BUSINESS INTELLIGENCE METRICS BAR
+   ======================================== */
+
+/* Compact Business Intelligence Metrics Bar */
+.compactMetricsBar {
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.compactMetric {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.compactMetric:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.compactIcon {
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(102, 126, 234, 0.1);
+  flex-shrink: 0;
+}
+
+.compactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.compactValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1.2;
+}
+
+.compactLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+/* Color variants for different metrics */
+.compactMetric:nth-child(1) {
+  border-left-color: #059669; /* Financial - Green */
+}
+
+.compactMetric:nth-child(1) .compactIcon {
+  background: rgba(5, 150, 105, 0.1);
+}
+
+.compactMetric:nth-child(2) {
+  border-left-color: #ea580c; /* Sales - Orange */
+}
+
+.compactMetric:nth-child(2) .compactIcon {
+  background: rgba(234, 88, 12, 0.1);
+}
+
+.compactMetric:nth-child(3) {
+  border-left-color: #2563eb; /* Operations - Blue */
+}
+
+.compactMetric:nth-child(3) .compactIcon {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.compactMetric:nth-child(4) {
+  border-left-color: #dc2626; /* Priority - Red */
+}
+
+.compactMetric:nth-child(4) .compactIcon {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+/* Mobile responsive for compact metrics */
+@media (max-width: 768px) {
+  .compactMetricsBar {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+  
+  .compactMetric {
+    padding: 10px 12px;
+  }
+  
+  .compactIcon {
+    font-size: 1.3rem;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .compactValue {
+    font-size: 1rem;
+  }
+  
+  .compactLabel {
+    font-size: 0.7rem;
+  }
+}
+
+/* ========================================
+   EXECUTIVE BUSINESS INTELLIGENCE DASHBOARD - DEPRECATED
    ======================================== */
 
 /* Executive Dashboard Container */
@@ -3771,7 +3925,8 @@
 /* Business Health Grid */
 .businessHealthGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 16px;
 }
 
@@ -3803,6 +3958,9 @@
 
 .metricInfo {
   flex: 1;
+  min-width: 0;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .metricValue {
@@ -3906,6 +4064,35 @@
 
 .businessHealthCard:nth-child(6) .metricValue {
   color: #d97706;
+}
+
+/* Process Intelligence Section - Integrated on Home */
+.processIntelligenceSection {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.processIntelligenceHeader {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.processIntelligenceHeader h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.processIntelligenceSubtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
 }
 
 /* Mobile Responsive - Executive Dashboard */
@@ -4255,8 +4442,8 @@
 /* 8 Smart Business Cards Styles - Sequential Process Flow Layout */
 .smartCardsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 16px;
   margin-top: 24px;
   position: relative;
@@ -4271,6 +4458,8 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .smartCard:hover {
@@ -4280,9 +4469,11 @@
 
 .cardHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  min-height: 44px;
+  /* Consistent header height across all cards - left aligned */
 }
 
 .cardIcon {
@@ -4307,18 +4498,72 @@
   font-size: 0.9rem;
   color: #34495e;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  white-space: normal;
+  word-wrap: break-word;
+  min-width: 0;
+  width: 100%;
+  min-height: 72px;
+  text-align: left;
+  /* Fixed height to accommodate 3 lines consistently - left aligned */
+}
+
+/* Business Health Metrics Styles - Professional & Readable */
+.businessHealth {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1a202c;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  min-width: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.keyInsight {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #2d3748;
+  margin-bottom: 2px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  min-width: 0;
+  text-align: left;
+}
+
+.businessTrend {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: #4a5568;
+  font-style: italic;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  min-width: 0;
+  text-align: left;
 }
 
 .cardNext {
   font-size: 0.85rem;
   color: #7f8c8d;
   margin-bottom: 16px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   background: rgba(0, 0, 0, 0.03);
   border-radius: 6px;
   border-left: 3px solid #3498db;
+  min-height: 40px;
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.3;
+  /* Fixed height for consistent spacing - left aligned */
 }
 
 .cardButton {
@@ -4332,6 +4577,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   width: 100%;
+  margin-top: auto;
 }
 
 .cardButton:hover {
@@ -4340,33 +4586,42 @@
 }
 
 /* Card Color Variants */
-.cardSales .cardIcon { background: rgba(231, 76, 60, 0.1); }
-.cardQuotes .cardIcon { background: rgba(52, 152, 219, 0.1); }
-.cardProduction .cardIcon { background: rgba(155, 89, 182, 0.1); }
-.cardFinancials .cardIcon { background: rgba(241, 196, 15, 0.1); }
-.cardInventory .cardIcon { background: rgba(26, 188, 156, 0.1); }
-.cardFulfillment .cardIcon { background: rgba(230, 126, 34, 0.1); }
-.cardCustomers .cardIcon { background: rgba(39, 174, 96, 0.1); }
-.cardAnalytics .cardIcon { background: rgba(52, 73, 94, 0.1); }
+.cardSales .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardQuotes .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardProduction .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardFinancials .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardInventory .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardFulfillment .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardCustomers .cardIcon { background: rgba(107, 126, 234, 0.1); }
+.cardAnalytics .cardIcon { background: rgba(107, 126, 234, 0.1); }
 
 /* Smart Context Links */
 .smartContextLink {
   display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 6px 10px;
+  align-items: flex-start;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 8px 10px;
   border-radius: 6px;
-  border-left: 3px solid rgba(255, 255, 255, 0.3);
-  margin-top: 8px;
+  border-left: 3px solid rgba(0, 0, 0, 0.2);
+  margin: 8px 0 16px 0;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #2d3748;
+  min-height: 36px;
+  /* Fixed height for consistent spacing across all cards - left aligned */
 }
 
 .smartContextLink:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.1);
   transform: translateX(4px);
+}
+
+/* Spacer for cards without smartContextLink to maintain uniform spacing */
+.cardSpacer {
+  min-height: 36px;
+  margin: 8px 0 16px 0;
+  /* Matches smartContextLink spacing exactly */
 }
 
 .contextLinkIcon {
@@ -4387,54 +4642,62 @@
 
 /* Process-specific card styling */
 .cardSales { 
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardQuotes { 
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardFinancials { 
-  background: linear-gradient(135deg, #f39c12, #e67e22);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardProduction { 
-  background: linear-gradient(135deg, #2d3748, #4a5568);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardInventory { 
-  background: linear-gradient(135deg, #1abc9c, #16a085);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardFulfillment { 
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardCustomers { 
-  background: linear-gradient(135deg, #5f27cd, #a55eea);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 .cardAnalytics { 
-  background: linear-gradient(135deg, #34495e, #2c3e50);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 
 /* Sequential positioning in grid */
 .card-1 { grid-column: 1; grid-row: 1; } /* Lead Pipeline */
 .card-2 { grid-column: 2; grid-row: 1; } /* Quotations */
 .card-3 { grid-column: 3; grid-row: 1; } /* Advance Payments */
-.card-4 { grid-column: 1; grid-row: 2; } /* Production */
-.card-5 { grid-column: 2; grid-row: 2; } /* Inventory */
-.card-6 { grid-column: 3; grid-row: 2; } /* Fulfillment */
-.card-7 { grid-column: 1; grid-row: 3; } /* Customers */
-.card-8 { grid-column: 2; grid-row: 3; } /* Analytics */
+.card-4 { grid-column: 4; grid-row: 1; } /* Production */
+.card-5 { grid-column: 1; grid-row: 2; } /* Inventory */
+.card-6 { grid-column: 2; grid-row: 2; } /* Fulfillment */
+.card-7 { grid-column: 3; grid-row: 2; } /* Customers */
+.card-8 { grid-column: 4; grid-row: 2; } /* Analytics */
 
 /* Process Stage Visual Indicators */
 .stageIndicator {
@@ -4481,20 +4744,20 @@
 /* Mobile Responsiveness for Smart Cards */
 @media (max-width: 768px) {
   .smartCardsGrid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(8, auto);
+    gap: 16px;
   }
   
-  /* Mobile responsive grid positioning */
+  /* Mobile responsive grid positioning - single column */
   .card-1 { grid-column: 1; grid-row: 1; }
-  .card-2 { grid-column: 2; grid-row: 1; }
-  .card-3 { grid-column: 1; grid-row: 2; }
-  .card-4 { grid-column: 2; grid-row: 2; }
-  .card-5 { grid-column: 1; grid-row: 3; }
-  .card-6 { grid-column: 2; grid-row: 3; }
-  .card-7 { grid-column: 1; grid-row: 4; }
-  .card-8 { grid-column: 2; grid-row: 4; }
+  .card-2 { grid-column: 1; grid-row: 2; }
+  .card-3 { grid-column: 1; grid-row: 3; }
+  .card-4 { grid-column: 1; grid-row: 4; }
+  .card-5 { grid-column: 1; grid-row: 5; }
+  .card-6 { grid-column: 1; grid-row: 6; }
+  .card-7 { grid-column: 1; grid-row: 7; }
+  .card-8 { grid-column: 1; grid-row: 8; }
   
   /* Hide arrows on mobile */
   .processFlowArrow {
@@ -4503,5 +4766,7 @@
   
   .smartCard {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
   }
 }
