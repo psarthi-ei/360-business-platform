@@ -36,9 +36,9 @@ function App() {
   const [invoiceFilter, setInvoiceFilter] = useState('all');
   const [customerSearch, setCustomerSearch] = useState('');
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
-  const [profileLinkId, setProfileLinkId] = useState('');
-  const [profileQuoteId, setProfileQuoteId] = useState('');
-  const [profileCompanyName, setProfileCompanyName] = useState('');
+  const [profileLinkId] = useState('');
+  const [profileQuoteId] = useState('');
+  const [profileCompanyName] = useState('');
 
 
 
