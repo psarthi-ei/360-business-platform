@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/HomePage.module.css';
 
@@ -22,7 +22,11 @@ function HomePage({
   onPlatformShowcase
 }: HomePageProps) {
   const { t } = useTranslation();
-  // Removed unused animation code
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   // Circular business cycle - complete end-to-end flow (10 steps)
   const businessCycle = [
@@ -50,6 +54,7 @@ function HomePage({
             <span className={styles.logoText}>ElevateIdea</span>
           </div>
           
+          {/* Desktop Navigation */}
           <nav className={styles.navigation}>
             <div className={styles.navMenu}>
               <div className={styles.navItem}>
@@ -112,6 +117,54 @@ function HomePage({
             <button className={styles.ctaButton} onClick={onDemoMode}>
               Demo Platform
             </button>
+          </div>
+          
+          {/* Mobile Hamburger Menu */}
+          <button 
+            className={styles.hamburgerButton}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
+            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
+            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
+          </button>
+        </div>
+        
+        {/* Mobile Menu */}
+        <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+          <div className={styles.mobileMenuContent}>
+            <button onClick={() => { onDemoMode(); setIsMobileMenuOpen(false); }} className={styles.mobileMenuItem}>
+              ElevateBusiness 360°
+            </button>
+            <a href="#consulting" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
+              Consulting Services
+            </a>
+            <a href="#blog" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
+              365 Days Blog
+            </a>
+            <a href="#about" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
+              About Us
+            </a>
+            
+            <div className={styles.mobileMenuControls}>
+              <select 
+                value={currentLanguage} 
+                onChange={(e) => onLanguageChange(e.target.value)}
+                className={styles.mobileLanguageSelector}
+              >
+                <option value="en">English</option>
+                <option value="gu">ગુજરાતી</option>
+                <option value="hi">हिंदी</option>
+              </select>
+              
+              <button 
+                className={styles.mobileCtaButton} 
+                onClick={() => { onDemoMode(); setIsMobileMenuOpen(false); }}
+              >
+                Demo Platform
+              </button>
+            </div>
           </div>
         </div>
       </header>
