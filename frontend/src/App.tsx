@@ -490,7 +490,7 @@ function App() {
             onContextNavigation={showHomePage}
             contextNavigationText="Home"
             contextNavigationIcon="🏠"
-            showContextNavigation={true}
+            showContextNavigation={currentScreen !== 'homepage'}
             onLogin={showLogin}
             onSignUp={showSignUp}
             onGuestMode={handleGuestMode}
@@ -504,8 +504,6 @@ function App() {
             onBlogHome={showBlogHome}
             onAbout={showAbout}
             onContact={showContact}
-            // Homepage uses ProductHeader too now - single header everywhere
-            showContextNavigation={currentScreen !== 'homepage'}
           />
         {currentScreen === 'homepage' && renderHomePage()}
         {(currentScreen === 'login' || currentScreen === 'signup') && renderAuthentication()}
