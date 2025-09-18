@@ -169,41 +169,6 @@ function App() {
     setCurrentScreen('analytics');
   }
 
-  function showProfileCompletion(linkId: string, quoteId: string, companyName: string) {
-    setProfileLinkId(linkId);
-    setProfileQuoteId(quoteId);
-    setProfileCompanyName(companyName);
-    setCurrentScreen('profilecompletion');
-  }
-
-  function handleVoiceCommand(command: string) {
-    const lowerCommand = command.toLowerCase();
-    
-    // Navigation commands
-    if (lowerCommand.includes('dashboard') || lowerCommand.includes('डैशबोर्ड') || lowerCommand.includes('ડેશબોર્ડ')) {
-      showDashboard();
-    } else if (lowerCommand.includes('home') || lowerCommand.includes('होम') || lowerCommand.includes('હોમ')) {
-      showHomePage();
-    } else if (lowerCommand.includes('lead') || lowerCommand.includes('लीड') || lowerCommand.includes('લીડ')) {
-      showLeadManagement();
-    } else if (lowerCommand.includes('quote') || lowerCommand.includes('कोटेशन') || lowerCommand.includes('કોટેશન')) {
-      showQuotationOrders();
-    } else if (lowerCommand.includes('order') || lowerCommand.includes('ऑर्डर') || lowerCommand.includes('ઓર્ડર')) {
-      showSalesOrders();
-    } else if (lowerCommand.includes('payment') || lowerCommand.includes('भुगतान') || lowerCommand.includes('પેમેન્ટ')) {
-      showPayments();
-    } else if (lowerCommand.includes('invoice') || lowerCommand.includes('इनवॉइस') || lowerCommand.includes('ઇન્વૉઇસ')) {
-      showInvoices();
-    } else if (lowerCommand.includes('customer') || lowerCommand.includes('ग्राहक') || lowerCommand.includes('ગ્રાહક')) {
-      showCustomerList();
-    } else if (lowerCommand.includes('inventory') || lowerCommand.includes('इन्वेंटरी') || lowerCommand.includes('ઇન્વેન્ટરી')) {
-      showInventory();
-    } else if (lowerCommand.includes('fulfillment') || lowerCommand.includes('dispatch') || lowerCommand.includes('डिस्पैच') || lowerCommand.includes('ડિસ્પેચ')) {
-      showFulfillment();
-    } else if (lowerCommand.includes('analytics') || lowerCommand.includes('विश्लेषण') || lowerCommand.includes('વિશ્લેષણ')) {
-      showAnalytics();
-    }
-  }
 
   function renderDashboard() {
     return (

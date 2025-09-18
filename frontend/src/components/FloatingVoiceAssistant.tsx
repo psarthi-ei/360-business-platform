@@ -145,7 +145,7 @@ function FloatingVoiceAssistant({
         return;
       }
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToFulfillment, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
 
   // Voice recognition setup
   useEffect(() => {
