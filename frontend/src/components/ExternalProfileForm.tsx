@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from '../contexts/TranslationContext';
 import { mockBusinessProfiles, mockQuotes } from '../data/mockData';
 import styles from '../styles/ExternalProfileForm.module.css';
 

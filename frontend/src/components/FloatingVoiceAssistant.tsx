@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
@@ -36,7 +36,6 @@ function FloatingVoiceAssistant({
   
   // Voice command state
   const [isListening, setIsListening] = useState(false);
-  const [voiceCommand, setVoiceCommand] = useState('');
   const [voiceResponse, setVoiceResponse] = useState('');
   const [showVoiceResponse, setShowVoiceResponse] = useState(false);
   const [showVoicePanel, setShowVoicePanel] = useState(false);
@@ -103,7 +102,7 @@ function FloatingVoiceAssistant({
   };
 
   // Enhanced voice command processing
-  const processVoiceCommand = (command: string) => {
+  const processVoiceCommand = useCallback((command: string) => {
     const lowerCommand = command.toLowerCase();
     let response = '';
     
@@ -146,7 +145,7 @@ function FloatingVoiceAssistant({
         return;
       }
     }
-  };
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToFulfillment, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
 
   // Voice recognition setup
   useEffect(() => {
@@ -159,7 +158,6 @@ function FloatingVoiceAssistant({
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
-        setVoiceCommand(transcript);
         processVoiceCommand(transcript);
         setIsListening(false);
       };
@@ -176,7 +174,7 @@ function FloatingVoiceAssistant({
         recognition.start();
       }
     }
-  }, [isListening, currentLanguage]);
+  }, [isListening, currentLanguage, processVoiceCommand]);
 
   const startVoiceRecognition = () => {
     setIsListening(true);

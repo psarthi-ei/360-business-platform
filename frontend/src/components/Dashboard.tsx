@@ -52,10 +52,7 @@ function Dashboard({
   // Use translation hook - no more props needed!
   const { currentLanguage, setLanguage } = useTranslation();
   
-  // Swipe navigation state (reserved for future implementation)
-  // const [currentProcess, setCurrentProcess] = useState(0);
-  // const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  // const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  // Swipe navigation state will be implemented in future
   
   // Current process stage for voice assistant
   const [currentProcessStage, setCurrentProcessStage] = useState('dashboard');
@@ -493,13 +490,7 @@ function Dashboard({
   const repeatCustomerOpportunities = Math.floor(totalCustomers * 0.4);
   
 
-  // Process navigation array (reserved for future swipe navigation)
-  // const processes = [
-  //   { key: 'inquiries', name: 'NEW INQUIRIES', handler: onShowLeadManagement },
-  //   { key: 'business', name: 'ACTIVE BUSINESS', handler: onShowSalesOrders },
-  //   { key: 'money', name: 'MONEY MATTERS', handler: onShowPayments },
-  //   { key: 'customers', name: 'CUSTOMERS', handler: onShowCustomerList }
-  // ];
+  // Process navigation will be implemented for future swipe functionality
 
 
 
@@ -598,17 +589,7 @@ function Dashboard({
     setShowSearchResults(false);
   };
 
-  // Utility function for dynamic date (reserved for future use)
-  // const getCurrentDateString = () => {
-  //   const today = new Date();
-  //   const options: Intl.DateTimeFormatOptions = { 
-  //     weekday: 'long', 
-  //     year: 'numeric', 
-  //     month: 'long', 
-  //     day: 'numeric' 
-  //   };
-  //   return today.toLocaleDateString('en-US', options);
-  // };
+  // Date formatting utilities will be added when needed
 
   
 

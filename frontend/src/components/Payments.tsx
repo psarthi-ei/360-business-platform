@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProductHeader from './ProductHeader';
 import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById } from '../data/mockData';
-import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Payments.module.css';
 
 interface PaymentsProps {
@@ -52,7 +51,8 @@ function Payments({
   filterState,
   onFilterChange
 }: PaymentsProps) {
-  const { t } = useTranslation();
+  // Translation hook available for future multilingual features
+  // const { t } = useTranslation();
   
   // Payment type filter state
   const [paymentType, setPaymentType] = useState<'advance' | 'final' | 'all'>('all');
