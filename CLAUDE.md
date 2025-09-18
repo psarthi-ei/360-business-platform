@@ -1,7 +1,7 @@
 # ElevateBusiness 360° Platform - Complete Project Context
 
 ## 🚀 CURRENT ACTIVE WORK
-**Current Todos**: Always check `/docs/TODO.md` for persistent todo list across sessions
+**Current Todos**: Always check `/TODO.md` for persistent todo list across sessions
 **Session Tracking**: Use TodoWrite tool for real-time progress within sessions
 
 ## Company & Product Identity
