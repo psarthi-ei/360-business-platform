@@ -82,6 +82,219 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Professional Navigation Structure */
+.navigation {
+  flex: 1;
+  margin: 0 40px;
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  justify-content: center;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #2c3e50;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
+.navLabel {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.navProminence {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Visual hierarchy based on prominence */
+.navItem:first-child .navLabel {
+  font-size: 16px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.navItem:first-child .navProminence {
+  color: #667eea;
+}
+
+.navItem:nth-child(2) .navLabel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navItem:nth-child(3) .navLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.navItem:nth-child(4) .navLabel {
+  font-size: 12px;
+  font-weight: 400;
+  color: #868e96;
+}
+
+/* Navigation Dropdowns */
+.navDropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 16px 0;
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navItem:hover .navDropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(4px);
+}
+
+.dropdownLink {
+  display: block;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.dropdownLink:hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-left-color: #667eea;
+  color: #667eea;
+}
+
+/* Header Controls Enhancement */
+.languageSelector {
+  padding: 8px 12px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.languageSelector:hover {
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.ctaButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* Mobile Navigation */
+@media (max-width: 1024px) {
+  .navigation {
+    margin: 0 20px;
+  }
+  
+  .navMenu {
+    gap: 20px;
+  }
+  
+  .navLabel {
+    font-size: 12px !important;
+  }
+  
+  .navProminence {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .navigation {
+    order: 3;
+    width: 100%;
+    margin: 16px 0 0 0;
+  }
+  
+  .navMenu {
+    gap: 16px;
+    overflow-x: auto;
+    padding: 0 20px;
+  }
+  
+  .navItem {
+    flex-shrink: 0;
+  }
+  
+  .navDropdown {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    min-width: auto;
+  }
+  
+  .dropdownLink {
+    padding: 4px 0;
+    font-size: 12px;
+    border-left: none;
+  }
+}
+
 /* Hero Section - Consistent with other sections */
 .hero {
   margin-top: 60px;
@@ -116,6 +329,77 @@
 .heroCta {
   margin-top: 40px;
   text-align: center;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryCta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.primaryCta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+}
+
+.secondaryCta {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.secondaryCta:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.valueProps {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.valueProp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 12px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.propIcon {
+  font-size: 20px;
+}
+
+.propText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
 }
 
 .watchDemoBtn {
@@ -453,6 +737,320 @@
 }
 
 /* Remove old phone demo styles - no longer needed */
+
+/* Product Showcase Section */
+.productShowcase {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  margin: 0;
+}
+
+/* Business Benefits Grid - Focused on outcomes */
+.businessBenefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
+  margin: 50px 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.benefitCard {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.97) 0%, 
+    rgba(102, 126, 234, 0.02) 50%, 
+    rgba(248, 250, 252, 0.97) 100%
+  );
+  backdrop-filter: blur(8px);
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefitCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.benefitCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(102, 126, 234, 0.01) 0%, 
+    rgba(255, 255, 255, 0.02) 50%, 
+    rgba(118, 75, 162, 0.01) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 20px;
+}
+
+.benefitCard:hover::after {
+  opacity: 1;
+}
+
+.benefitCard:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 24px 60px rgba(102, 126, 234, 0.2), 
+              0 0 40px rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(102, 126, 234, 0.05) 50%, 
+    rgba(248, 250, 252, 0.95) 100%
+  );
+}
+
+.benefitIconLarge {
+  font-size: 76px;
+  margin-bottom: 28px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  filter: drop-shadow(0 6px 12px rgba(102, 126, 234, 0.15));
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.benefitCard:hover .benefitIconLarge {
+  transform: scale(1.05);
+}
+
+.benefitTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2332;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+  position: relative;
+  letter-spacing: -0.02em;
+}
+
+.benefitDescription {
+  font-size: 17px;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0 0 28px 0;
+  font-weight: 400;
+}
+
+.benefitFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.feature {
+  font-size: 15px;
+  color: #4f46e5;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.customerPain {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  font-style: italic;
+  color: #1f2937;
+  line-height: 1.6;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.customerPain strong {
+  color: #1a2332;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.metricsShowcase {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  margin: 40px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.metricsTitle {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+  text-align: center;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metricNumber {
+  font-size: 36px;
+  font-weight: 700;
+  color: #667eea;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.metricLabel {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricCustomer {
+  font-size: 12px;
+  color: #667eea;
+  font-weight: 500;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.testimonials {
+  margin-top: 60px;
+}
+
+.testimonialsTitle {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 32px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.testimonial {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #667eea;
+}
+
+.testimonialText {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #495057;
+  margin: 0 0 16px 0;
+  font-style: italic;
+}
+
+.testimonialAuthor {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.testimonialAuthor strong {
+  color: #2c3e50;
+}
+
+/* Mobile responsiveness for Product Showcase */
+@media (max-width: 768px) {
+  .productShowcase {
+    padding: 60px 16px;
+  }
+  
+  .businessBenefitsGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  
+  .benefitCard {
+    padding: 24px;
+  }
+  
+  .benefitIconLarge {
+    font-size: 48px;
+    height: 60px;
+  }
+  
+  .benefitTitle {
+    font-size: 20px;
+  }
+  
+  .benefitDescription {
+    font-size: 15px;
+  }
+  
+  .metricsShowcase {
+    padding: 24px;
+    margin: 32px auto;
+  }
+  
+  .metricsRow {
+    gap: 16px;
+  }
+  
+  .metricNumber {
+    font-size: 28px;
+  }
+  
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .testimonial {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modulesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metricsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 /* Impact Section Separator */
 .impactSection {
@@ -939,40 +1537,9 @@
   margin-right: auto;
 }
 
-.primaryCta {
-  background: white;
-  color: #667eea;
-  border: none;
-  padding: 15px 40px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
+/* Duplicate .primaryCta definition removed - using the earlier definition for consistent styling */
 
-.primaryCta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
-}
-
-.secondaryCta {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
-  padding: 15px 40px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.secondaryCta:hover {
-  background: white;
-  color: #667eea;
-}
+/* Duplicate .secondaryCta definition removed - using the earlier definition for proper visibility */
 
 .guestCta {
   background: rgba(255, 255, 255, 0.1);
@@ -1341,5 +1908,159 @@
 
   .demoDescription {
     font-size: 13px;
+  }
+}
+
+/* Detailed Workflow Section */
+.workflowSection {
+  padding: 80px 20px;
+  background: #f8f9fa;
+}
+
+.workflowCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.workflowCard {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.workflowCard:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.cardNumber {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cardIcon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+  text-align: center;
+}
+
+.cardTitleGujarati {
+  font-size: 12px;
+  color: #667eea;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.cardDescription {
+  font-size: 13px;
+  color: #495057;
+  line-height: 1.4;
+  margin: 0;
+  text-align: center;
+}
+
+.cardConnector {
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #667eea;
+  font-weight: 600;
+  z-index: 10;
+}
+
+/* Mobile Responsiveness for Workflow Cards */
+@media (max-width: 1024px) {
+  .workflowCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .workflowCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 400px;
+  }
+  
+  .workflowCard {
+    min-height: 160px;
+    padding: 16px;
+  }
+  
+  .cardIcon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  
+  .cardTitle {
+    font-size: 14px;
+  }
+  
+  .cardTitleGujarati {
+    font-size: 11px;
+  }
+  
+  .cardDescription {
+    font-size: 12px;
+  }
+  
+  .cardNumber {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .cardConnector {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflowCardsGrid {
+    grid-template-columns: 1fr;
+    max-width: 280px;
   }
 }
