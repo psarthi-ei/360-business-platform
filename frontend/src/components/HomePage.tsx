@@ -9,6 +9,7 @@ interface HomePageProps {
   onSignUp: () => void;
   onGuestMode: () => void;
   onDemoMode: () => void;
+  onPlatformShowcase: () => void;
 }
 
 function HomePage({ 
@@ -17,7 +18,8 @@ function HomePage({
   onLogin,
   onSignUp,
   onGuestMode,
-  onDemoMode
+  onDemoMode,
+  onPlatformShowcase
 }: HomePageProps) {
   const { t } = useTranslation();
   const [animatedStats, setAnimatedStats] = useState({
@@ -97,24 +99,96 @@ function HomePage({
 
   return (
     <div className={styles.homePage}>
+      {/* Professional Header Navigation */}
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>ElevateIdea</span>
+          </div>
+          
+          <nav className={styles.navigation}>
+            <div className={styles.navMenu}>
+              <div className={styles.navItem}>
+                <button onClick={onDemoMode} className={styles.navLink}>
+                  <span className={styles.navLabel}>ElevateBusiness 360°</span>
+                  <span className={styles.navProminence}>Primary</span>
+                </button>
+              </div>
+              
+              <div className={styles.navItem}>
+                <a href="#consulting" className={styles.navLink}>
+                  <span className={styles.navLabel}>Consulting Services</span>
+                  <span className={styles.navProminence}>Secondary</span>
+                </a>
+                <div className={styles.navDropdown}>
+                  <a href="#strategic-acceleration" className={styles.dropdownLink}>Strategic Project Acceleration</a>
+                  <a href="#scalability" className={styles.dropdownLink}>Scalability for Growth</a>
+                  <a href="#agile-systems" className={styles.dropdownLink}>Agile Systems Implementation</a>
+                  <a href="#success-stories" className={styles.dropdownLink}>Success Stories</a>
+                </div>
+              </div>
+              
+              <div className={styles.navItem}>
+                <a href="#blog" className={styles.navLink}>
+                  <span className={styles.navLabel}>365 Days Blog</span>
+                  <span className={styles.navProminence}>Tertiary</span>
+                </a>
+                <div className={styles.navDropdown}>
+                  <a href="#latest-stories" className={styles.dropdownLink}>Latest Stories</a>
+                  <a href="#entrepreneurship" className={styles.dropdownLink}>Entrepreneurship Journey</a>
+                  <a href="#business-insights" className={styles.dropdownLink}>Business Building Insights</a>
+                </div>
+              </div>
+              
+              <div className={styles.navItem}>
+                <a href="#about" className={styles.navLink}>
+                  <span className={styles.navLabel}>About Us</span>
+                  <span className={styles.navProminence}>Support</span>
+                </a>
+                <div className={styles.navDropdown}>
+                  <a href="#company-story" className={styles.dropdownLink}>Company Story</a>
+                  <a href="#founder-journey" className={styles.dropdownLink}>Founder Journey</a>
+                  <a href="#contact" className={styles.dropdownLink}>Contact</a>
+                </div>
+              </div>
+            </div>
+          </nav>
+          
+          <div className={styles.headerControls}>
+            <select 
+              value={currentLanguage} 
+              onChange={(e) => onLanguageChange(e.target.value)}
+              className={styles.languageSelector}
+            >
+              <option value="en">English</option>
+              <option value="gu">ગુજરાતી</option>
+              <option value="hi">हिंदी</option>
+            </select>
+            
+            <button className={styles.ctaButton} onClick={onDemoMode}>
+              Demo Platform
+            </button>
+          </div>
+        </div>
+      </header>
       {/* Hero Section - 360° Business View */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.purposeStatement}>
             <h1 className={styles.heroTitle}>
-              {t('transformationTitle') || "360° Business Visibility Drives Results"}
+              ElevateBusiness 360° - Complete Business Platform for Textile Manufacturers
             </h1>
             <p className={styles.heroSubtitle}>
-              {t('transformationSubtitle') || "Complete visibility across your entire business cycle improves efficiency, saves costs, enhances customer satisfaction, and grows revenue"}
+              Voice-first, multilingual business platform providing 360° visibility across your entire textile manufacturing workflow. From leads to final payment - streamline every step with intelligent automation. Gujarat textile manufacturers are already seeing 30% profit increases.
             </p>
           
           {/* Circular Business Flow Visualization */}
           <div className={styles.storyFlowContainer}>
             <div className={styles.storyCenter}>
               <div className={styles.storyCenterContent}>
-                <h3 className={styles.storyCenterTitle}>{t('businessVisibility') || "Complete Business"}</h3>
-                <h4 className={styles.storyCenterTitle}>{t('visibility') || "Visibility"}</h4>
-                <p className={styles.storyCenterSubtitle}>{t('drivesResults') || "Drives Results"}</p>
+                <h3 className={styles.storyCenterTitle}>ElevateBusiness</h3>
+                <h4 className={styles.storyCenterTitle}>360°</h4>
+                <p className={styles.storyCenterSubtitle}>Textile Manufacturing</p>
               </div>
             </div>
             {(() => {
@@ -225,116 +299,234 @@ function HomePage({
           
           {/* Hero CTA */}
           <div className={styles.heroCta}>
-            <button className={styles.watchDemoBtn} onClick={onDemoMode}>
-              {t('watchDemo') || "Watch Demo"} 📹
+            <button className={styles.primaryCta} onClick={onDemoMode}>
+              Start Demo 🚀
+            </button>
+            <button className={styles.secondaryCta} onClick={onGuestMode}>
+              Try as Guest 📱
             </button>
           </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Business Benefits - Detailed Impact */}
-      <section className={styles.impactSection}>
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>
-            {t('heroTitle') || "Business Benefits"}
-          </h2>
           
-          <div className={styles.businessBenefits}>
-            <div className={styles.benefitCard}>
-              <h4>⚡ {t('efficiencyBenefit') || "Improved Efficiency"}</h4>
-              <p>{t('efficiencyDetail') || "360° visibility eliminates manual tracking and duplicate work"}</p>
-            </div>
-            <div className={styles.benefitCard}>
-              <h4>₹ {t('costBenefit') || "Reduced Costs"}</h4>
-              <p>{t('costDetail') || "Complete visibility prevents waste and optimizes resources"}</p>
-            </div>
-            <div className={styles.benefitCard}>
-              <h4>😊 {t('satisfactionBenefit') || "Higher Customer Satisfaction"}</h4>
-              <p>{t('satisfactionDetail') || "End-to-end visibility ensures on-time delivery and quality"}</p>
-            </div>
-            <div className={styles.benefitCard}>
-              <h4>📈 {t('revenueBenefit') || "Increased Revenue"}</h4>
-              <p>{t('revenueDetail') || "360° insights help identify opportunities and optimize pricing"}</p>
-            </div>
-          </div>
-
-          {/* Impact Statistics */}
-          <div className={styles.statsContainer}>
-            <h3 className={styles.statsTitle}>
-              {t('impactTitle') || "Real Business Impact"}
-            </h3>
-            <div className={styles.statsGrid}>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{animatedStats.timeSaved}+</div>
-                <div className={styles.statLabel}>{t('hoursDaily') || "Hours Saved Daily"}</div>
-                <div className={styles.statDesc}>{t('hoursDesc') || "Automate manual tasks"}</div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{animatedStats.accuracy}%</div>
-                <div className={styles.statLabel}>{t('voiceAccuracy') || "Voice Accuracy"}</div>
-                <div className={styles.statDesc}>{t('accuracyDesc') || "In Gujarati & Hindi"}</div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{animatedStats.efficiency}%</div>
-                <div className={styles.statLabel}>{t('efficiency') || "Efficiency Gain"}</div>
-                <div className={styles.statDesc}>{t('efficiencyDesc') || "Faster order processing"}</div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statValue}>{animatedStats.satisfaction}%</div>
-                <div className={styles.statLabel}>{t('satisfaction') || "User Satisfaction"}</div>
-                <div className={styles.statDesc}>{t('satisfactionDesc') || "Love the simplicity"}</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Key Benefits */}
-      <section className={styles.benefits}>
+      {/* Detailed Textile Workflow Section */}
+      <section className={styles.workflowSection}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>
-            {t('benefitsTitle') || "Built for Indian MSME Textile Manufacturers"}
+            Complete Textile Manufacturing Workflow
           </h2>
-          <div className={styles.benefitsGrid}>
-            {benefits.map((benefit) => (
-              <div 
-                key={benefit.titleKey} 
-                className={styles.benefitCard}
-                style={{ background: benefit.gradient }}
-              >
-                <div className={styles.benefitIcon}>{benefit.icon}</div>
-                <h3 className={styles.benefitTitle}>
-                  {t(benefit.titleKey) || benefit.titleKey}
-                </h3>
-                <p className={styles.benefitDesc}>
-                  {t(benefit.descKey) || benefit.descKey}
-                </p>
+          <p className={styles.sectionSubtitle}>
+            Every step of your textile business process - from first inquiry to final payment and customer satisfaction
+          </p>
+
+          <div className={styles.workflowCardsGrid}>
+            {[
+              {
+                id: 'leads',
+                icon: '🎯',
+                title: 'Lead Capture',
+                description: 'Multi-source lead tracking',
+                gujaratiTitle: 'લીડ કેપ્ચર'
+              },
+              {
+                id: 'quotes',
+                icon: '📋',
+                title: 'Quotations',
+                description: 'Professional fabric quotes',
+                gujaratiTitle: 'ભાવ પત્રક'
+              },
+              {
+                id: 'advance',
+                icon: '💳',
+                title: 'Advance Payment',
+                description: 'Secure cash flow protection',
+                gujaratiTitle: 'એડવાન્સ પેમેન્ટ'
+              },
+              {
+                id: 'production',
+                icon: '🏭',
+                title: 'Production',
+                description: 'Real-time tracking',
+                gujaratiTitle: 'ઉત્પાદન ટ્રેકિંગ'
+              },
+              {
+                id: 'delivery',
+                icon: '🚚',
+                title: 'Delivery',
+                description: 'On-time completion',
+                gujaratiTitle: 'ડિલિવરી'
+              }
+            ].map((step, index) => (
+              <div key={step.id} className={styles.workflowCard}>
+                <div className={styles.cardNumber}>{index + 1}</div>
+                <div className={styles.cardIcon}>{step.icon}</div>
+                <div className={styles.cardContent}>
+                  <h4 className={styles.cardTitle}>{step.title}</h4>
+                  <p className={styles.cardTitleGujarati}>{step.gujaratiTitle}</p>
+                  <p className={styles.cardDescription}>{step.description}</p>
+                </div>
+                {index < 4 && (
+                  <div className={styles.cardConnector}>→</div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Product Showcase Section - 13 Modules Overview */}
+      <section className={styles.productShowcase}>
+        <div className={styles.sectionContent}>
+          <h2 className={styles.sectionTitle}>
+            Why Textile Manufacturers Choose ElevateBusiness 360°
+          </h2>
+          <p className={styles.sectionSubtitle}>
+            Stop losing money on orders. Start growing your textile business with complete visibility and control. Join Gujarat manufacturers who are already transforming their operations.
+          </p>
+          
+          {/* 3 Core Business Benefits */}
+          <div className={styles.businessBenefitsGrid}>
+            <div className={styles.benefitCard}>
+              <div className={styles.benefitIconLarge}>👁️</div>
+              <h3 className={styles.benefitTitle}>Complete Visibility</h3>
+              <p className={styles.benefitDescription}>
+                See your entire business at a glance. Know exactly where every order is, how much money you're making, and what needs attention.
+              </p>
+              <div className={styles.benefitFeatures}>
+                <span className={styles.feature}>✓ Real-time order tracking</span>
+                <span className={styles.feature}>✓ Live profit & loss</span>
+                <span className={styles.feature}>✓ Customer payment status</span>
+                <span className={styles.feature}>✓ Production progress</span>
+              </div>
+              <div className={styles.customerPain}>
+                <strong>"પહેલાં મને ખબર જ નહોતી કે મારા બિઝનેસમાં શું ચાલે છે"</strong>
+                <br />- Ramesh Patel, Surat Cotton Mills
+              </div>
+            </div>
+
+            <div className={styles.benefitCard}>
+              <div className={styles.benefitIconLarge}>🎤</div>
+              <h3 className={styles.benefitTitle}>Effortless Management</h3>
+              <p className={styles.benefitDescription}>
+                Run your entire textile business from your phone. Speak in Gujarati, Hindi, or English to update orders, check inventory, and manage customers.
+              </p>
+              <div className={styles.benefitFeatures}>
+                <span className={styles.feature}>✓ Voice commands in Gujarati</span>
+                <span className={styles.feature}>✓ Mobile-first design</span>
+                <span className={styles.feature}>✓ No complicated software</span>
+                <span className={styles.feature}>✓ Works in noisy factories</span>
+              </div>
+              <div className={styles.customerPain}>
+                <strong>"હવે કારખાનામાં ફોન પરથી બધું મેનેજ કરી શકું છું"</strong>
+                <br />- Priya Shah, Ahmedabad Textiles
+              </div>
+            </div>
+
+            <div className={styles.benefitCard}>
+              <div className={styles.benefitIconLarge}>📈</div>
+              <h3 className={styles.benefitTitle}>Guaranteed Growth</h3>
+              <p className={styles.benefitDescription}>
+                Never lose money on orders again. Always deliver on time. Keep customers happy and grow your business with confidence.
+              </p>
+              <div className={styles.benefitFeatures}>
+                <span className={styles.feature}>✓ Advance payment tracking</span>
+                <span className={styles.feature}>✓ On-time delivery alerts</span>
+                <span className={styles.feature}>✓ Customer satisfaction tracking</span>
+                <span className={styles.feature}>✓ Profit optimization</span>
+              </div>
+              <div className={styles.customerPain}>
+                <strong>"મારો પ્રોફિટ 30% વધ્યો અને કસ્ટમર ખુશ રહે છે"</strong>
+                <br />- Kiran Modi, Vadodara Fabrics
+              </div>
+            </div>
+          </div>
+
+          {/* Success Metrics Display */}
+          <div className={styles.metricsShowcase}>
+            <h3 className={styles.metricsTitle}>
+              Real Business Impact
+            </h3>
+            <div className={styles.metricsRow}>
+              <div className={styles.metric}>
+                <span className={styles.metricNumber}>30%</span>
+                <span className={styles.metricLabel}>Profit Increase</span>
+                <span className={styles.metricCustomer}>Kiran Modi, Vadodara</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricNumber}>3</span>
+                <span className={styles.metricLabel}>Hours Saved Daily</span>
+                <span className={styles.metricCustomer}>Ramesh Patel, Surat</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricNumber}>95%</span>
+                <span className={styles.metricLabel}>On-Time Delivery</span>
+                <span className={styles.metricCustomer}>Priya Shah, Ahmedabad</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricNumber}>₹2L+</span>
+                <span className={styles.metricLabel}>Monthly Revenue Growth</span>
+                <span className={styles.metricCustomer}>Hitesh Joshi, Rajkot</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Customer Testimonials */}
+          <div className={styles.testimonials}>
+            <h3 className={styles.testimonialsTitle}>
+              Textile Manufacturers Are Already Transforming Their Business
+            </h3>
+            <div className={styles.testimonialsGrid}>
+              <div className={styles.testimonial}>
+                <p className={styles.testimonialText}>
+                  "અમારા કારખાનામાં આવો સિસ્ટમ જોઈતો હતો. હવે બધું ફોનમાં જ મેનેજ થાય છે."
+                </p>
+                <div className={styles.testimonialAuthor}>
+                  <strong>Ramesh Patel</strong> - Surat Cotton Mills
+                </div>
+              </div>
+              <div className={styles.testimonial}>
+                <p className={styles.testimonialText}>
+                  "From lead to payment, everything is visible. No more confusion about orders and deliveries."
+                </p>
+                <div className={styles.testimonialAuthor}>
+                  <strong>Priya Shah</strong> - Ahmedabad Textiles
+                </div>
+              </div>
+              <div className={styles.testimonial}>
+                <p className={styles.testimonialText}>
+                  "Voice commands work perfectly in Gujarati. My workers can update production status easily."
+                </p>
+                <div className={styles.testimonialAuthor}>
+                  <strong>Kiran Modi</strong> - Vadodara Fabrics
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
       {/* Call to Action */}
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>
-            {t('ctaTitle') || "Ready for 360° View of Your Business?"}
+            Ready for 360° View of Your Business?
           </h2>
           <p className={styles.ctaSubtitle}>
-            {t('ctaSubtitle') || "Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility"}
+            Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility
           </p>
           <div className={styles.ctaButtons}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              {t('watchDemo') || "Explore Demo"} 🎬
+              Start Demo 🎬
             </button>
             <button className={styles.secondaryCta} onClick={onGuestMode}>
-              {t('tryAsGuest') || "Try as Guest"} 👤
+              Try as Guest 👤
             </button>
           </div>
           <p className={styles.ctaNote}>
-            {t('ctaNote') || "Rich demo data included • No sign-up required • Full Gujarat textile business showcase"}
+            Rich demo data included • No sign-up required • Full Gujarat textile business showcase
           </p>
         </div>
       </section>
