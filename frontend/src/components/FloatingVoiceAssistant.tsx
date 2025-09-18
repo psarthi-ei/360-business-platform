@@ -145,7 +145,7 @@ function FloatingVoiceAssistant({
         return;
       }
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToFulfillment, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
 
   // Voice recognition setup
   useEffect(() => {
@@ -158,7 +158,7 @@ function FloatingVoiceAssistant({
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
-        processVoiceCommand(transcript);
+        processVoiceCommand(transcript); 
         setIsListening(false);
       };
 

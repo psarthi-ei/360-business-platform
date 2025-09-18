@@ -16,6 +16,7 @@ import FulfillmentManagement from './components/FulfillmentManagement';
 import AnalyticsManagement from './components/AnalyticsManagement';
 import ProductHeader from './components/ProductHeader';
 import Authentication from './components/Authentication';
+import PlatformShowcase from './components/PlatformShowcase';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
@@ -167,6 +168,10 @@ function App() {
 
   function showAnalytics() {
     setCurrentScreen('analytics');
+  }
+
+  function showPlatformShowcase() {
+    setCurrentScreen('platform');
   }
 
 
@@ -328,6 +333,7 @@ function App() {
         onSignUp={showSignUp}
         onGuestMode={handleGuestMode}
         onDemoMode={handleDemoMode}
+        onPlatformShowcase={showPlatformShowcase}
       />
     );
   }
@@ -382,6 +388,17 @@ function App() {
     );
   }
 
+  function renderPlatformShowcase() {
+    return (
+      <PlatformShowcase
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onDemoMode={handleDemoMode}
+        onGuestMode={handleGuestMode}
+      />
+    );
+  }
+
   return (
     <TranslationProvider defaultLanguage={currentLanguage}>
       <div className="App">
@@ -429,6 +446,7 @@ function App() {
         {currentScreen === 'inventory' && renderInventoryManagement()}
         {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
         {currentScreen === 'analytics' && renderAnalyticsManagement()}
+        {currentScreen === 'platform' && renderPlatformShowcase()}
         
         </div>
       </div>

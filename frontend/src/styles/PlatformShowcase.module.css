@@ -1,0 +1,470 @@
+/* PlatformShowcase.module.css - Dedicated platform showcase page */
+
+.platformShowcase {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* Header */
+.header {
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 4px 0 0 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.languageSelector {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #495057;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.demoButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demoButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.heroDescription {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0 0 40px 0;
+  opacity: 0.9;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: white;
+  color: #667eea;
+  transform: translateY(-3px);
+}
+
+/* Section Styling */
+.sectionContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sectionTitle {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+  margin: 0 0 16px 0;
+}
+
+.sectionDescription {
+  font-size: 18px;
+  color: #6c757d;
+  text-align: center;
+  margin: 0 0 60px 0;
+  line-height: 1.6;
+}
+
+/* Business Workflow Section */
+.workflowSection {
+  padding: 80px 20px;
+  background: white;
+}
+
+.workflowSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.workflowStep {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.workflowStep:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.stepIcon {
+  font-size: 48px;
+  background: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+}
+
+.stepTitleGujarati {
+  font-size: 16px;
+  color: #667eea;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+}
+
+.stepDescription {
+  font-size: 16px;
+  color: #495057;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.stepBenefits {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.benefit {
+  font-size: 14px;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.stepConnector {
+  font-size: 32px;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0 20px;
+}
+
+/* Platform Features Section */
+.featuresSection {
+  padding: 80px 20px;
+  background: #f8f9fa;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.featureCard {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.featureIcon {
+  font-size: 56px;
+  margin-bottom: 20px;
+}
+
+.featureTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+}
+
+.featureDescription {
+  font-size: 16px;
+  color: #495057;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.featureDemo {
+  background: rgba(102, 126, 234, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  color: #667eea;
+  font-size: 14px;
+}
+
+/* Success Section */
+.successSection {
+  padding: 80px 20px;
+  background: white;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+}
+
+.metricCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 32px;
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.metricCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.3);
+}
+
+.metricValue {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.metricLabel {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.metricDescription {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+  opacity: 0.8;
+}
+
+.metricCustomer {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* CTA Section */
+.ctaSection {
+  padding: 80px 20px;
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+}
+
+.ctaContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.ctaDescription {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 40px 0;
+  opacity: 0.9;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.ctaNote {
+  font-size: 14px;
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .heroTitle {
+    font-size: 32px;
+  }
+  
+  .heroDescription {
+    font-size: 18px;
+  }
+  
+  .heroButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .workflowStep {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .stepConnector {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+  
+  .sectionTitle {
+    font-size: 28px;
+  }
+  
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ctaButtons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 26px;
+  }
+  
+  .sectionTitle {
+    font-size: 24px;
+  }
+  
+  .workflowStep {
+    padding: 20px;
+  }
+  
+  .featureCard {
+    padding: 24px;
+  }
+  
+  .metricCard {
+    padding: 24px;
+  }
+}
