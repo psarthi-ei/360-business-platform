@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/HomePage.module.css';
 
@@ -22,37 +22,7 @@ function HomePage({
   onPlatformShowcase
 }: HomePageProps) {
   const { t } = useTranslation();
-  const [animatedStats, setAnimatedStats] = useState({
-    timeSaved: 0,
-    accuracy: 0,
-    efficiency: 0,
-    satisfaction: 0
-  });
-
-  // Animate statistics on component mount
-  useEffect(() => {
-    const animateValue = (start: number, end: number, duration: number, key: string) => {
-      const increment = (end - start) / (duration / 16);
-      let current = start;
-      
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= end) {
-          current = end;
-          clearInterval(timer);
-        }
-        setAnimatedStats(prev => ({ ...prev, [key]: Math.floor(current) }));
-      }, 16);
-    };
-
-    // Start animations after a short delay
-    setTimeout(() => {
-      animateValue(0, 3, 1500, 'timeSaved');
-      animateValue(0, 95, 1500, 'accuracy');
-      animateValue(0, 70, 1500, 'efficiency');
-      animateValue(0, 98, 1500, 'satisfaction');
-    }, 500);
-  }, []);
+  // Removed unused animation code
 
   // Circular business cycle - complete end-to-end flow (10 steps)
   const businessCycle = [
@@ -68,33 +38,7 @@ function HomePage({
     { icon: '🔄', key: 'repeatOrder', title: 'Repeat', color: '#54a0ff', angle: 324 }
   ];
 
-  // Key benefits for textile manufacturers
-  const benefits = [
-    {
-      icon: '🎤',
-      titleKey: 'voiceBenefitTitle',
-      descKey: 'voiceBenefitDesc',
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    },
-    {
-      icon: '🌐',
-      titleKey: 'multilingualBenefitTitle',
-      descKey: 'multilingualBenefitDesc',
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-    },
-    {
-      icon: '📱',
-      titleKey: 'mobileBenefitTitle',
-      descKey: 'mobileBenefitDesc',
-      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-    },
-    {
-      icon: '⚡',
-      titleKey: 'speedBenefitTitle',
-      descKey: 'speedBenefitDesc',
-      gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
-    }
-  ];
+  // Removed unused benefits array
 
 
   return (

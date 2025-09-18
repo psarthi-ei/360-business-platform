@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useTranslation } from '../contexts/TranslationContext';
+import React from 'react';
 import styles from '../styles/PlatformShowcase.module.css';
 
 interface PlatformShowcaseProps {
@@ -15,8 +14,7 @@ function PlatformShowcase({
   onDemoMode, 
   onGuestMode 
 }: PlatformShowcaseProps) {
-  const { t } = useTranslation();
-  const [activeWorkflow, setActiveWorkflow] = useState('overview');
+  // Removed unused translation and state variables
 
   // Complete textile business workflow
   const businessWorkflow = [
