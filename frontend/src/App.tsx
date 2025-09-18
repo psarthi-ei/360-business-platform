@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import LanguageSwitcher from './components/LanguageSwitcher';
-import HomePage from './components/HomePage';
+import HomePage from './website/components/HomePage';
 import Dashboard from './components/Dashboard';
 import LeadManagement from './components/LeadManagement';
 import QuotationOrders from './components/QuotationOrders';
@@ -16,7 +16,10 @@ import FulfillmentManagement from './components/FulfillmentManagement';
 import AnalyticsManagement from './components/AnalyticsManagement';
 import ProductHeader from './components/ProductHeader';
 import Authentication from './components/Authentication';
-import PlatformShowcase from './components/PlatformShowcase';
+import ServicesHub from './website/components/ServicesHub';
+import BlogHome from './website/components/BlogHome';
+import AboutPage from './website/components/AboutPage';
+import ContactPage from './website/components/ContactPage';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
@@ -170,8 +173,29 @@ function App() {
     setCurrentScreen('analytics');
   }
 
-  function showPlatformShowcase() {
-    setCurrentScreen('platform');
+
+  function showServicesHub() {
+    setCurrentScreen('services-hub');
+  }
+
+  function showServicePage() {
+    setCurrentScreen('service-page');
+  }
+
+  function showBlogHome() {
+    setCurrentScreen('blog-home');
+  }
+
+  function showBlogPost() {
+    setCurrentScreen('blog-post');
+  }
+
+  function showAbout() {
+    setCurrentScreen('about');
+  }
+
+  function showContact() {
+    setCurrentScreen('contact');
   }
 
 
@@ -333,7 +357,10 @@ function App() {
         onSignUp={showSignUp}
         onGuestMode={handleGuestMode}
         onDemoMode={handleDemoMode}
-        onPlatformShowcase={showPlatformShowcase}
+        onServicesHub={showServicesHub}
+        onBlogHome={showBlogHome}
+        onAbout={showAbout}
+        onContact={showContact}
       />
     );
   }
@@ -388,13 +415,65 @@ function App() {
     );
   }
 
-  function renderPlatformShowcase() {
+
+  function renderServicesHub() {
     return (
-      <PlatformShowcase
+      <ServicesHub
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onDemoMode={handleDemoMode}
-        onGuestMode={handleGuestMode}
+        onHomePage={showHomePage}
+      />
+    );
+  }
+
+  function renderServicePage() {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h1>Individual Service Page - Coming Soon</h1>
+        <button onClick={showServicesHub} style={{ padding: '1rem', marginTop: '1rem' }}>
+          Back to Services Hub
+        </button>
+      </div>
+    );
+  }
+
+  function renderBlogHome() {
+    return (
+      <BlogHome
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onHomePage={showHomePage}
+      />
+    );
+  }
+
+  function renderBlogPost() {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h1>Individual Blog Post - Coming Soon</h1>
+        <button onClick={showBlogHome} style={{ padding: '1rem', marginTop: '1rem' }}>
+          Back to Blog Home
+        </button>
+      </div>
+    );
+  }
+
+  function renderAbout() {
+    return (
+      <AboutPage
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onHomePage={showHomePage}
+      />
+    );
+  }
+
+  function renderContact() {
+    return (
+      <ContactPage
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onHomePage={showHomePage}
       />
     );
   }
@@ -404,34 +483,30 @@ function App() {
       <div className="App">
         <div className="App-content">
         <ProductHeader
-          currentLanguage={currentLanguage}
-          onLanguageChange={switchLanguage}
-          currentTheme={currentTheme}
-          onThemeChange={switchTheme}
-          // Context-aware navigation: Homepage -> Dashboard when demo/authenticated, Dashboard/Pages -> Homepage
-          onContextNavigation={
-            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? showDashboard :
-            currentScreen !== 'homepage' ? showHomePage : 
-            undefined
-          }
-          contextNavigationText={
-            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? "Dashboard" : "Home"
-          }
-          contextNavigationIcon={
-            currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated) ? "📊" : "🏠"
-          }
-          showContextNavigation={
-            (currentScreen === 'homepage' && (userMode === 'demo' || isAuthenticated)) ||
-            currentScreen !== 'homepage'
-          }
-          onLogin={showLogin}
-          onSignUp={showSignUp}
-          onGuestMode={handleGuestMode}
-          onDemoMode={handleDemoMode}
-          onLogout={handleLogout}
-          isAuthenticated={isAuthenticated}
-          userMode={userMode}
-        />
+            currentLanguage={currentLanguage}
+            onLanguageChange={switchLanguage}
+            currentTheme={currentTheme}
+            onThemeChange={switchTheme}
+            onContextNavigation={showHomePage}
+            contextNavigationText="Home"
+            contextNavigationIcon="🏠"
+            showContextNavigation={true}
+            onLogin={showLogin}
+            onSignUp={showSignUp}
+            onGuestMode={handleGuestMode}
+            onDemoMode={handleDemoMode}
+            onLogout={handleLogout}
+            isAuthenticated={isAuthenticated}
+            userMode={userMode}
+            // Website Navigation Props
+            showWebsiteNavigation={['homepage', 'services-hub', 'service-page', 'blog-home', 'blog-post', 'about', 'contact'].includes(currentScreen)}
+            onServicesHub={showServicesHub}
+            onBlogHome={showBlogHome}
+            onAbout={showAbout}
+            onContact={showContact}
+            // Homepage uses ProductHeader too now - single header everywhere
+            showContextNavigation={currentScreen !== 'homepage'}
+          />
         {currentScreen === 'homepage' && renderHomePage()}
         {(currentScreen === 'login' || currentScreen === 'signup') && renderAuthentication()}
         {currentScreen === 'dashboard' && renderDashboard()}
@@ -446,7 +521,12 @@ function App() {
         {currentScreen === 'inventory' && renderInventoryManagement()}
         {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
         {currentScreen === 'analytics' && renderAnalyticsManagement()}
-        {currentScreen === 'platform' && renderPlatformShowcase()}
+        {currentScreen === 'services-hub' && renderServicesHub()}
+        {currentScreen === 'service-page' && renderServicePage()}
+        {currentScreen === 'blog-home' && renderBlogHome()}
+        {currentScreen === 'blog-post' && renderBlogPost()}
+        {currentScreen === 'about' && renderAbout()}
+        {currentScreen === 'contact' && renderContact()}
         
         </div>
       </div>

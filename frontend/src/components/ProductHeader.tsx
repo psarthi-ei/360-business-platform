@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderDropdown from './HeaderDropdown';
 import styles from '../styles/ProductHeader.module.css';
 import logoImage from '../assets/images/logo.png';
@@ -20,6 +20,12 @@ interface ProductHeaderProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
+  // Website Navigation Props
+  showWebsiteNavigation?: boolean;
+  onServicesHub?: () => void;
+  onBlogHome?: () => void;
+  onAbout?: () => void;
+  onContact?: () => void;
 }
 
 function ProductHeader({
@@ -38,48 +44,108 @@ function ProductHeader({
   onDemoMode,
   onLogout,
   isAuthenticated = false,
-  userMode = 'guest'
+  userMode = 'guest',
+  // Website Navigation Props
+  showWebsiteNavigation = false,
+  onServicesHub,
+  onBlogHome,
+  onAbout,
+  onContact
 }: ProductHeaderProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className={styles.productHeader}>
-      {/* Logo Section - Always visible */}
-      <div className={styles.logoSection}>
-        <div className={styles.logo}>
-          <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
-          <span className={styles.logoText}>ElevateIdea</span>
+      <div className={styles.headerContent}>
+        {/* Logo Section - Always visible */}
+        <div className={styles.logoSection}>
+          <div className={styles.logo}>
+            <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
+            <span className={styles.logoText}>ElevateIdea</span>
+          </div>
         </div>
-      </div>
-      
-      {/* Navigation Section - Empty for center spacing */}
-      <div className={styles.navigationSection}>
-      </div>
-      
-      {/* Controls Section - Context Navigation and Options Dropdown */}
-      <div className={styles.controlsSection}>
-        {showContextNavigation && onContextNavigation && (
-          <button 
-            className={styles.contextButton}
-            onClick={onContextNavigation}
-            title={`Go to ${contextNavigationText}`}
-          >
-            {contextNavigationIcon}
-          </button>
-        )}
         
-        <HeaderDropdown
-          currentLanguage={currentLanguage}
-          onLanguageChange={onLanguageChange}
-          currentTheme={currentTheme}
-          onThemeChange={onThemeChange}
-          showThemeSelector={showThemeSelector}
-          onLogin={onLogin}
-          onSignUp={onSignUp}
-          onGuestMode={onGuestMode}
-          onDemoMode={onDemoMode}
-          onLogout={onLogout}
-          isAuthenticated={isAuthenticated}
-          userMode={userMode}
-        />
+        {/* Navigation Section - Website Navigation or Empty for center spacing */}
+        <div className={styles.navigationSection}>
+          {showWebsiteNavigation && (
+            <nav className={styles.websiteNavigation}>
+              <button onClick={onDemoMode} className={styles.navButton}>
+                <span className={styles.navLabel}>ElevateBusiness 360°</span>
+              </button>
+              
+              <button onClick={onServicesHub} className={styles.navButton}>
+                <span className={styles.navLabel}>Consulting Services</span>
+              </button>
+              
+              <button onClick={onBlogHome} className={styles.navButton}>
+                <span className={styles.navLabel}>365 Days Blog</span>
+              </button>
+              
+              <button onClick={onAbout} className={styles.navButton}>
+                <span className={styles.navLabel}>About Us</span>
+              </button>
+              
+              <button onClick={onContact} className={styles.navButton}>
+                <span className={styles.navLabel}>Contact</span>
+              </button>
+            </nav>
+          )}
+        </div>
+        
+        {/* Controls Section - Language, Context Navigation and User Menu */}
+        <div className={styles.controlsSection}>
+          {/* Desktop Language Selector */}
+          <select 
+            value={currentLanguage} 
+            onChange={(e) => onLanguageChange(e.target.value)}
+            className={styles.languageSelector}
+          >
+            <option value="en">English</option>
+            <option value="gu">ગુજરાતી</option>
+            <option value="hi">हिंदी</option>
+          </select>
+          
+          {showContextNavigation && onContextNavigation && (
+            <button 
+              className={styles.contextButton}
+              onClick={onContextNavigation}
+              title={`Go to ${contextNavigationText}`}
+            >
+              {contextNavigationIcon}
+            </button>
+          )}
+          
+          <HeaderDropdown
+            currentLanguage={currentLanguage}
+            onLanguageChange={onLanguageChange}
+            currentTheme={currentTheme}
+            onThemeChange={onThemeChange}
+            showThemeSelector={showThemeSelector}
+            onLogin={onLogin}
+            onSignUp={onSignUp}
+            onGuestMode={onGuestMode}
+            onDemoMode={onDemoMode}
+            onLogout={onLogout}
+            isAuthenticated={isAuthenticated}
+            userMode={userMode}
+            isMobile={isMobile}
+            onServicesHub={onServicesHub}
+            onBlogHome={onBlogHome}
+            onAbout={onAbout}
+            onContact={onContact}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from '../contexts/TranslationContext';
+import { useTranslation } from '../../contexts/TranslationContext';
 import styles from '../styles/HomePage.module.css';
 
 interface HomePageProps {
@@ -9,7 +9,10 @@ interface HomePageProps {
   onSignUp: () => void;
   onGuestMode: () => void;
   onDemoMode: () => void;
-  onPlatformShowcase: () => void;
+  onServicesHub: () => void;
+  onBlogHome: () => void;
+  onAbout: () => void;
+  onContact: () => void;
 }
 
 function HomePage({ 
@@ -19,7 +22,10 @@ function HomePage({
   onSignUp,
   onGuestMode,
   onDemoMode,
-  onPlatformShowcase
+  onServicesHub,
+  onBlogHome,
+  onAbout,
+  onContact
 }: HomePageProps) {
   const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,127 +53,6 @@ function HomePage({
 
   return (
     <div className={styles.homePage}>
-      {/* Professional Header Navigation */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.logo}>
-            <span className={styles.logoText}>ElevateIdea</span>
-          </div>
-          
-          {/* Desktop Navigation */}
-          <nav className={styles.navigation}>
-            <div className={styles.navMenu}>
-              <div className={styles.navItem}>
-                <button onClick={onDemoMode} className={styles.navLink}>
-                  <span className={styles.navLabel}>ElevateBusiness 360°</span>
-                  <span className={styles.navProminence}>Primary</span>
-                </button>
-              </div>
-              
-              <div className={styles.navItem}>
-                <a href="#consulting" className={styles.navLink}>
-                  <span className={styles.navLabel}>Consulting Services</span>
-                  <span className={styles.navProminence}>Secondary</span>
-                </a>
-                <div className={styles.navDropdown}>
-                  <a href="#strategic-acceleration" className={styles.dropdownLink}>Strategic Project Acceleration</a>
-                  <a href="#scalability" className={styles.dropdownLink}>Scalability for Growth</a>
-                  <a href="#agile-systems" className={styles.dropdownLink}>Agile Systems Implementation</a>
-                  <a href="#success-stories" className={styles.dropdownLink}>Success Stories</a>
-                </div>
-              </div>
-              
-              <div className={styles.navItem}>
-                <a href="#blog" className={styles.navLink}>
-                  <span className={styles.navLabel}>365 Days Blog</span>
-                  <span className={styles.navProminence}>Tertiary</span>
-                </a>
-                <div className={styles.navDropdown}>
-                  <a href="#latest-stories" className={styles.dropdownLink}>Latest Stories</a>
-                  <a href="#entrepreneurship" className={styles.dropdownLink}>Entrepreneurship Journey</a>
-                  <a href="#business-insights" className={styles.dropdownLink}>Business Building Insights</a>
-                </div>
-              </div>
-              
-              <div className={styles.navItem}>
-                <a href="#about" className={styles.navLink}>
-                  <span className={styles.navLabel}>About Us</span>
-                  <span className={styles.navProminence}>Support</span>
-                </a>
-                <div className={styles.navDropdown}>
-                  <a href="#company-story" className={styles.dropdownLink}>Company Story</a>
-                  <a href="#founder-journey" className={styles.dropdownLink}>Founder Journey</a>
-                  <a href="#contact" className={styles.dropdownLink}>Contact</a>
-                </div>
-              </div>
-            </div>
-          </nav>
-          
-          <div className={styles.headerControls}>
-            <select 
-              value={currentLanguage} 
-              onChange={(e) => onLanguageChange(e.target.value)}
-              className={styles.languageSelector}
-            >
-              <option value="en">English</option>
-              <option value="gu">ગુજરાતી</option>
-              <option value="hi">हिंदी</option>
-            </select>
-            
-            <button className={styles.ctaButton} onClick={onDemoMode}>
-              Demo Platform
-            </button>
-          </div>
-          
-          {/* Mobile Hamburger Menu */}
-          <button 
-            className={styles.hamburgerButton}
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-          >
-            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
-            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
-            <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}></span>
-          </button>
-        </div>
-        
-        {/* Mobile Menu */}
-        <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
-          <div className={styles.mobileMenuContent}>
-            <button onClick={() => { onDemoMode(); setIsMobileMenuOpen(false); }} className={styles.mobileMenuItem}>
-              ElevateBusiness 360°
-            </button>
-            <a href="#consulting" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
-              Consulting Services
-            </a>
-            <a href="#blog" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
-              365 Days Blog
-            </a>
-            <a href="#about" className={styles.mobileMenuItem} onClick={() => setIsMobileMenuOpen(false)}>
-              About Us
-            </a>
-            
-            <div className={styles.mobileMenuControls}>
-              <select 
-                value={currentLanguage} 
-                onChange={(e) => onLanguageChange(e.target.value)}
-                className={styles.mobileLanguageSelector}
-              >
-                <option value="en">English</option>
-                <option value="gu">ગુજરાતી</option>
-                <option value="hi">हिंदी</option>
-              </select>
-              
-              <button 
-                className={styles.mobileCtaButton} 
-                onClick={() => { onDemoMode(); setIsMobileMenuOpen(false); }}
-              >
-                Demo Platform
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
       {/* Hero Section - 360° Business View */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>

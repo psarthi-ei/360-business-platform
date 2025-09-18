@@ -1,41 +1,43 @@
-/* Common Product Header Styles */
+/* Single Header - Styled to match HomePage design exactly */
 .productHeader {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: var(--color-background, rgba(255, 255, 255, 0.98));
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
-  padding: 12px 20px;
-  display: grid;
-  grid-template-columns: 200px 1fr auto;
-  align-items: center;
-  gap: 20px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  min-height: 60px;
+  padding: 15px 0;
 }
 
-/* Logo Section - Fixed width, left side */
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo Section - Matches HomePage styling exactly */
 .logoSection {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
+  gap: 10px;
+  font-size: 24px;
   font-weight: bold;
-  white-space: nowrap;
 }
 
 .logoImage {
-  height: 28px;
+  height: 32px;
   width: auto;
+  margin-right: 8px;
 }
 
 .logoText {
@@ -43,49 +45,118 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: #333; /* Fallback for browsers that don't support background-clip */
 }
 
-/* Navigation Section - Center, flexible */
+/* Navigation Section - Matches HomePage navigation exactly */
 .navigationSection {
+  flex: 1;
+  margin: 0 40px;
+}
+
+/* Professional Navigation Structure - Exactly like HomePage */
+.websiteNavigation {
   display: flex;
   align-items: center;
+  gap: 40px;
   justify-content: center;
-  gap: 12px;
 }
 
-/* Controls Section - Right side, auto width */
+.navButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #2c3e50;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.navButton:hover {
+  background: none;
+  transform: translateY(-1px);
+}
+
+.navButton:hover .navLabel {
+  color: #667eea;
+}
+
+.navLabel {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #2c3e50;
+}
+
+/* Professional consistent navigation with subtle primary emphasis */
+.navButton:first-child .navLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* All other navigation items - consistent professional styling */
+.navButton:not(:first-child) .navLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Header Controls - Matches HomePage styling exactly */
 .controlsSection {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
+  gap: 15px;
 }
 
-.backButton, .contextButton {
+.contextButton, .dashboardButton {
   background: var(--gradient-card, rgba(102, 126, 234, 0.1));
   color: var(--color-primary, #667eea);
   border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
-  padding: 8px;
+  padding: 8px 12px;
+  border-radius: 50%;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
+  justify-content: center;
   min-width: 40px;
   width: 40px;
   height: 40px;
-  justify-content: center;
 }
 
-.backButton:hover, .contextButton:hover {
+.contextButton:hover, .dashboardButton:hover {
   background: var(--gradient-card-hover, rgba(102, 126, 234, 0.2));
   border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Language Selector - Matches HomePage styling */
+.languageSelector {
+  padding: 8px 12px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 20px;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.languageSelector:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.15);
 }
 
 .homeButton {
@@ -203,45 +274,52 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Matches HomePage exactly */
 @media (max-width: 768px) {
   .productHeader {
-    padding: 10px 15px;
-    grid-template-columns: 150px 1fr auto;
-    gap: 10px;
+    padding: 12px 0;
+  }
+  
+  .headerContent {
+    padding: 0 15px;
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .logoSection {
+    flex: 1;
   }
   
   .logo {
-    font-size: 14px;
+    font-size: 20px;
   }
   
   .logoImage {
-    height: 24px;
+    height: 28px;
   }
+  
+  .navigationSection {
+    display: none;
+  }
+  
   
   .controlsSection {
-    gap: 8px;
+    gap: 12px;
+    display: flex;
+    align-items: center;
   }
   
-  .backButton, .homeButton, .contextButton {
+  /* Hide language selector on mobile */
+  .languageSelector {
+    display: none;
+  }
+  
+  .contextButton, .dashboardButton {
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
     padding: 6px;
     font-size: 14px;
   }
   
-  .authButtons {
-    gap: 4px;
-  }
-  
-  .loginButton, .signupButton {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-  
-  .guestButton, .demoButton {
-    padding: 4px 8px;
-    font-size: 11px;
-    min-width: 36px;
-    width: 36px;
-    height: 36px;
-  }
 }

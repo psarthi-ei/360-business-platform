@@ -15,6 +15,12 @@ interface HeaderDropdownProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
+  // Mobile Navigation Props (only for mobile)
+  isMobile?: boolean;
+  onServicesHub?: () => void;
+  onBlogHome?: () => void;
+  onAbout?: () => void;
+  onContact?: () => void;
 }
 
 function HeaderDropdown({
@@ -30,7 +36,13 @@ function HeaderDropdown({
   onDemoMode,
   onLogout,
   isAuthenticated = false,
-  userMode = 'guest'
+  userMode = 'guest',
+  // Mobile Navigation Props
+  isMobile = false,
+  onServicesHub,
+  onBlogHome,
+  onAbout,
+  onContact
 }: HeaderDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -157,25 +169,84 @@ function HeaderDropdown({
             )}
           </div>
 
-          {/* Language Section */}
-          <div className={styles.menuSection}>
-            <div className={styles.sectionTitle}>
-              Language: {currentLang?.flag} {currentLang?.name}
-            </div>
-            {languages.map(lang => (
+          {/* Mobile Navigation Section */}
+          {isMobile && (
+            <div className={styles.menuSection}>
+              <div className={styles.sectionTitle}>Navigation</div>
               <button
-                key={lang.code}
-                className={`${styles.menuItem} ${currentLanguage === lang.code ? styles.activeItem : ''}`}
-                onClick={() => handleLanguageSelect(lang.code)}
+                className={styles.menuItem}
+                onClick={() => {
+                  onDemoMode?.();
+                  setIsOpen(false);
+                }}
               >
-                <span className={styles.itemIcon}>{lang.flag}</span>
-                <span className={styles.itemText}>{lang.name}</span>
-                {currentLanguage === lang.code && (
-                  <span className={styles.checkmark}>✓</span>
-                )}
+                <span className={styles.itemIcon}>⚡</span>
+                <span className={styles.itemText}>ElevateBusiness 360°</span>
               </button>
-            ))}
-          </div>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onServicesHub?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🎯</span>
+                <span className={styles.itemText}>Consulting Services</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onBlogHome?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📝</span>
+                <span className={styles.itemText}>365 Days Blog</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onAbout?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>ℹ️</span>
+                <span className={styles.itemText}>About Us</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onContact?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📞</span>
+                <span className={styles.itemText}>Contact</span>
+              </button>
+            </div>
+          )}
+
+          {/* Language Section - Mobile Only */}
+          {isMobile && (
+            <div className={styles.menuSection}>
+              <div className={styles.sectionTitle}>
+                Language: {currentLang?.flag} {currentLang?.name}
+              </div>
+              {languages.map(lang => (
+                <button
+                  key={lang.code}
+                  className={`${styles.menuItem} ${currentLanguage === lang.code ? styles.activeItem : ''}`}
+                  onClick={() => handleLanguageSelect(lang.code)}
+                >
+                  <span className={styles.itemIcon}>{lang.flag}</span>
+                  <span className={styles.itemText}>{lang.name}</span>
+                  {currentLanguage === lang.code && (
+                    <span className={styles.checkmark}>✓</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
 
 
           {/* Theme Section */}

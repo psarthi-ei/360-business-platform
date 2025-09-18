@@ -91,7 +91,7 @@
 .navMenu {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 40px;
   justify-content: center;
 }
 
@@ -105,21 +105,29 @@
   align-items: center;
   text-decoration: none;
   color: #2c3e50;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
   transition: all 0.3s ease;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .navLink:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: none;
   transform: translateY(-1px);
+}
+
+.navLink:hover .navLabel {
+  color: #667eea;
 }
 
 .navLabel {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 2px;
+  margin-bottom: 0;
+  color: #2c3e50;
 }
 
 .navProminence {
@@ -130,32 +138,18 @@
   font-weight: 500;
 }
 
-/* Visual hierarchy based on prominence */
+/* Professional consistent navigation with subtle primary emphasis */
 .navItem:first-child .navLabel {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #667eea;
 }
 
-.navItem:first-child .navProminence {
-  color: #667eea;
-}
-
-.navItem:nth-child(2) .navLabel {
+/* All other navigation items - consistent professional styling */
+.navItem:not(:first-child) .navLabel {
   font-size: 14px;
   font-weight: 600;
-}
-
-.navItem:nth-child(3) .navLabel {
-  font-size: 13px;
-  font-weight: 500;
-  color: #6c757d;
-}
-
-.navItem:nth-child(4) .navLabel {
-  font-size: 12px;
-  font-weight: 400;
-  color: #868e96;
+  color: #2c3e50;
 }
 
 /* Navigation Dropdowns */
