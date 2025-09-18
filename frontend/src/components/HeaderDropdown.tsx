@@ -15,8 +15,8 @@ interface HeaderDropdownProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
-  // Mobile Navigation Props (only for mobile)
-  isMobile?: boolean;
+  // Website Navigation Props
+  showWebsiteNavigation?: boolean;
   onServicesHub?: () => void;
   onBlogHome?: () => void;
   onAbout?: () => void;
@@ -37,8 +37,8 @@ function HeaderDropdown({
   onLogout,
   isAuthenticated = false,
   userMode = 'guest',
-  // Mobile Navigation Props
-  isMobile = false,
+  // Website Navigation Props
+  showWebsiteNavigation = false,
   onServicesHub,
   onBlogHome,
   onAbout,
@@ -169,8 +169,8 @@ function HeaderDropdown({
             )}
           </div>
 
-          {/* Mobile Navigation Section */}
-          {isMobile && (
+          {/* Website Navigation Section */}
+          {showWebsiteNavigation && (
             <div className={styles.menuSection}>
               <div className={styles.sectionTitle}>Navigation</div>
               <button
@@ -226,27 +226,25 @@ function HeaderDropdown({
             </div>
           )}
 
-          {/* Language Section - Mobile Only */}
-          {isMobile && (
-            <div className={styles.menuSection}>
-              <div className={styles.sectionTitle}>
-                Language: {currentLang?.flag} {currentLang?.name}
-              </div>
-              {languages.map(lang => (
-                <button
-                  key={lang.code}
-                  className={`${styles.menuItem} ${currentLanguage === lang.code ? styles.activeItem : ''}`}
-                  onClick={() => handleLanguageSelect(lang.code)}
-                >
-                  <span className={styles.itemIcon}>{lang.flag}</span>
-                  <span className={styles.itemText}>{lang.name}</span>
-                  {currentLanguage === lang.code && (
-                    <span className={styles.checkmark}>✓</span>
-                  )}
-                </button>
-              ))}
+          {/* Language Section - Available on All Devices */}
+          <div className={styles.menuSection}>
+            <div className={styles.sectionTitle}>
+              Language: {currentLang?.flag} {currentLang?.name}
             </div>
-          )}
+            {languages.map(lang => (
+              <button
+                key={lang.code}
+                className={`${styles.menuItem} ${currentLanguage === lang.code ? styles.activeItem : ''}`}
+                onClick={() => handleLanguageSelect(lang.code)}
+              >
+                <span className={styles.itemIcon}>{lang.flag}</span>
+                <span className={styles.itemText}>{lang.name}</span>
+                {currentLanguage === lang.code && (
+                  <span className={styles.checkmark}>✓</span>
+                )}
+              </button>
+            ))}
+          </div>
 
 
           {/* Theme Section */}

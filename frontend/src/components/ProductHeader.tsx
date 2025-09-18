@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import HeaderDropdown from './HeaderDropdown';
 import styles from '../styles/ProductHeader.module.css';
 import logoImage from '../assets/images/logo.png';
@@ -52,19 +52,6 @@ function ProductHeader({
   onAbout,
   onContact
 }: ProductHeaderProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   return (
     <div className={styles.productHeader}>
       <div className={styles.headerContent}>
@@ -103,19 +90,8 @@ function ProductHeader({
           )}
         </div>
         
-        {/* Controls Section - Language, Context Navigation and User Menu */}
+        {/* Controls Section - Context Navigation and User Menu */}
         <div className={styles.controlsSection}>
-          {/* Desktop Language Selector */}
-          <select 
-            value={currentLanguage} 
-            onChange={(e) => onLanguageChange(e.target.value)}
-            className={styles.languageSelector}
-          >
-            <option value="en">English</option>
-            <option value="gu">ગુજરાતી</option>
-            <option value="hi">हिंदी</option>
-          </select>
-          
           {showContextNavigation && onContextNavigation && (
             <button 
               className={styles.contextButton}
@@ -139,7 +115,7 @@ function ProductHeader({
             onLogout={onLogout}
             isAuthenticated={isAuthenticated}
             userMode={userMode}
-            isMobile={isMobile}
+            showWebsiteNavigation={showWebsiteNavigation}
             onServicesHub={onServicesHub}
             onBlogHome={onBlogHome}
             onAbout={onAbout}
