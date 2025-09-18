@@ -52,10 +52,10 @@ function Dashboard({
   // Use translation hook - no more props needed!
   const { currentLanguage, setLanguage } = useTranslation();
   
-  // Swipe navigation state
-  const [currentProcess, setCurrentProcess] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  // Swipe navigation state (reserved for future implementation)
+  // const [currentProcess, setCurrentProcess] = useState(0);
+  // const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  // const [touchEndX, setTouchEndX] = useState<number | null>(null);
   
   // Current process stage for voice assistant
   const [currentProcessStage, setCurrentProcessStage] = useState('dashboard');
@@ -493,13 +493,13 @@ function Dashboard({
   const repeatCustomerOpportunities = Math.floor(totalCustomers * 0.4);
   
 
-  // Process navigation array for swipe navigation
-  const processes = [
-    { key: 'inquiries', name: 'NEW INQUIRIES', handler: onShowLeadManagement },
-    { key: 'business', name: 'ACTIVE BUSINESS', handler: onShowSalesOrders },
-    { key: 'money', name: 'MONEY MATTERS', handler: onShowPayments },
-    { key: 'customers', name: 'CUSTOMERS', handler: onShowCustomerList }
-  ];
+  // Process navigation array (reserved for future swipe navigation)
+  // const processes = [
+  //   { key: 'inquiries', name: 'NEW INQUIRIES', handler: onShowLeadManagement },
+  //   { key: 'business', name: 'ACTIVE BUSINESS', handler: onShowSalesOrders },
+  //   { key: 'money', name: 'MONEY MATTERS', handler: onShowPayments },
+  //   { key: 'customers', name: 'CUSTOMERS', handler: onShowCustomerList }
+  // ];
 
 
 
@@ -598,17 +598,17 @@ function Dashboard({
     setShowSearchResults(false);
   };
 
-  // Utility function for dynamic date
-  const getCurrentDateString = () => {
-    const today = new Date();
-    const options: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    };
-    return today.toLocaleDateString('en-US', options);
-  };
+  // Utility function for dynamic date (reserved for future use)
+  // const getCurrentDateString = () => {
+  //   const today = new Date();
+  //   const options: Intl.DateTimeFormatOptions = { 
+  //     weekday: 'long', 
+  //     year: 'numeric', 
+  //     month: 'long', 
+  //     day: 'numeric' 
+  //   };
+  //   return today.toLocaleDateString('en-US', options);
+  // };
 
   
 
@@ -776,7 +776,7 @@ function Dashboard({
                 <div className={`${styles.stageIndicator} ${styles['stage-2']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>📋</span>
-                  <h4>QUOTATIONS</h4>
+                  <h4>QUOTATIONS & ORDERS</h4>
                 </div>
                 <div className={styles.cardMetrics}>
                   <span className={styles.businessHealth}>Quote Conversion: {Math.round((approvedQuotes / Math.max(1, mockQuotes.length)) * 100)}%</span>

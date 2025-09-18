@@ -4469,11 +4469,11 @@
 
 .cardHeader {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   margin-bottom: 16px;
   min-height: 44px;
-  /* Consistent header height across all cards - left aligned */
+  /* Consistent header height across all cards - center aligned for better balance */
 }
 
 .cardIcon {
@@ -4489,9 +4489,13 @@
 
 .cardHeader h4 {
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #2c3e50;
   margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .cardMetrics {
