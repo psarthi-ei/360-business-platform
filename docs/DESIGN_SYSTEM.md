@@ -1,11 +1,61 @@
 # Design System - ElevateIdea 360° Platform
 
-## Overview
-This document captures key UI/UX design decisions made during the Lead Management screen development. These decisions establish visual patterns, user experience standards, and business context guidelines for all future screens.
+---
+
+## 📚 **TABLE OF CONTENTS**
+
+## **PART 1: 🎯 DESIGN PHILOSOPHY & STRATEGY**
+### **Foundation Principles**
+- [**OVERVIEW**](#overview)
+- [**DESIGN PHILOSOPHY**](#design-philosophy)
+  - [Business-First Visual Design](#1-business-first-visual-design)
+  - [Professional Manufacturing Aesthetics](#2-professional-manufacturing-aesthetics)
+- [**MULTILINGUAL USER EXPERIENCE**](#multilingual-user-experience)
+  - [Smart Translation Strategy](#3-smart-translation-strategy)
+  - [Global Language Accessibility](#4-global-language-accessibility)
+
+## **PART 2: 📱 MOBILE & RESPONSIVE DESIGN**
+### **Device Experience**
+- [**MOBILE-FIRST EXPERIENCE DESIGN**](#mobile-first-experience-design)
+  - [Factory-Friendly Mobile Interface](#5-factory-friendly-mobile-interface)
+  - [One-Handed Operation Support](#6-one-handed-operation-support)
+  - [Comprehensive Mobile Touch Interface](#7-comprehensive-mobile-touch-interface-design)
+  - [Mobile Performance Optimization](#8-mobile-performance-optimization-standards)
+  - [Mobile Accessibility Standards](#9-mobile-accessibility-standards-for-factory-environments)
+
+## **PART 3: 🎨 VISUAL DESIGN & COMPONENTS**
+### **Look & Feel**
+- [**INFORMATION ARCHITECTURE**](#information-architecture)
+  - [Lead Card Information Hierarchy](#10-lead-card-information-hierarchy)
+  - [Textile Industry Data Fields](#11-textile-industry-data-fields)
+- [**VISUAL FEEDBACK & STATUS INDICATORS**](#visual-feedback-and-status-indicators)
+- [**COMPONENT DESIGN PATTERNS**](#component-design-patterns)
+
+## **PART 4: 🔄 NAVIGATION & INTERACTION**
+### **User Flow & Behavior**
+- [**NAVIGATION AND USER FLOW**](#navigation-and-user-flow)
+  - [Simplified Navigation Pattern](#12-simplified-navigation-pattern)
+  - [Context-Aware Quick Actions](#13-context-aware-quick-actions)
+- [**VOICE INTEGRATION DESIGN**](#voice-integration-design)
+- [**ACCESSIBILITY STANDARDS**](#accessibility-standards)
+
+## **PART 5: 🚀 IMPLEMENTATION & STANDARDS**
+### **Development Guidelines**
+- [**TECHNICAL IMPLEMENTATION**](#technical-implementation)
+- [**PERFORMANCE STANDARDS**](#performance-standards)
+- [**TESTING & VALIDATION**](#testing--validation)
+- [**BRAND CONSISTENCY GUIDELINES**](#brand-consistency-guidelines)
 
 ---
 
-## Design Philosophy
+## **PART 1: 🎯 DESIGN PHILOSOPHY & STRATEGY**
+
+### **Foundation Principles**
+
+## **OVERVIEW**
+This document captures key UI/UX design decisions made during the Lead Management screen development. These decisions establish visual patterns, user experience standards, and business context guidelines for all future screens.
+
+## **DESIGN PHILOSOPHY**
 
 ### **1. Business-First Visual Design**
 **Decision**: Prioritize textile business context over generic software aesthetics
@@ -81,7 +131,13 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ---
 
-## Mobile-First Experience Design
+---
+
+## **PART 2: 📱 MOBILE & RESPONSIVE DESIGN**
+
+### **Device Experience**
+
+## **MOBILE-FIRST EXPERIENCE DESIGN**
 
 ### **5. Factory-Friendly Mobile Interface**
 **Decision**: Mobile experience optimized for textile factory environments
@@ -504,7 +560,13 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ---
 
-## Information Architecture
+---
+
+## **PART 3: 🎨 VISUAL DESIGN & COMPONENTS**
+
+### **Look & Feel**
+
+## **INFORMATION ARCHITECTURE**
 
 ### **10. Lead Card Information Hierarchy**
 **Decision**: Structured lead cards with clear visual priority
@@ -536,7 +598,13 @@ Hindi UI: "सामग्री: 500 meters Bandhani Cotton Fabric"
 
 ---
 
-## Navigation and User Flow
+---
+
+## **PART 4: 🔄 NAVIGATION & INTERACTION**
+
+### **User Flow & Behavior**
+
+## **NAVIGATION AND USER FLOW**
 
 ### **12. Simplified Navigation Pattern**
 **Decision**: Clear back navigation instead of complex menu systems

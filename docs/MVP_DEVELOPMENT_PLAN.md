@@ -3,6 +3,41 @@
 
 ---
 
+## 📚 **TABLE OF CONTENTS**
+
+## **PART 1: 🎯 DEVELOPMENT STRATEGY**
+### **Approach & Planning**
+- [**DEVELOPMENT APPROACH**](#development-approach)
+- [**13 CORE MVP MODULES**](#13-core-mvp-modules)
+
+## **PART 2: 🏗️ PHASE 1: UI PROTOTYPE**
+### **Frontend Foundation**
+- [**UI PROTOTYPE DEVELOPMENT**](#phase-1-ui-prototype)
+- [**Milestone Progress**](#milestone-progress)
+
+## **PART 3: 🔧 PHASE 2: BACKEND INTEGRATION**
+### **API & Database**
+- [**BACKEND DEVELOPMENT**](#phase-2-backend-integration)
+- [**Module Integration**](#module-integration)
+
+## **PART 4: 🎤 PHASE 3: ADVANCED FEATURES**
+### **Voice & Integration**
+- [**VOICE COMMANDS**](#phase-3-voice-commands)
+- [**WHATSAPP INTEGRATION**](#whatsapp-integration)
+- [**DEPLOYMENT**](#deployment)
+
+## **PART 5: 🚀 DELIVERY & TIMELINE**
+### **Launch Planning**
+- [**OVERALL TIMELINE**](#overall-timeline)
+- [**SUCCESS METRICS**](#success-metrics)
+- [**POST-MVP ROADMAP**](#post-mvp-roadmap)
+
+---
+
+## **PART 1: 🎯 DEVELOPMENT STRATEGY**
+
+### **Approach & Planning**
+
 ## **DEVELOPMENT APPROACH**
 **Phase 1**: Build complete UI prototype (all screens, mock data)  
 **Phase 2**: Build backend + integrate module-by-module  
@@ -26,6 +61,12 @@
 13. Analytics Dashboard with Leads & Sales Insights
 
 ---
+
+---
+
+## **PART 2: 🏩️ PHASE 1: UI PROTOTYPE**
+
+### **Frontend Foundation**
 
 ## **PHASE 1: UI PROTOTYPE**
 ### Timeline: 12 days
@@ -117,6 +158,12 @@
 
 ---
 
+---
+
+## **PART 3: 🔧 PHASE 2: BACKEND INTEGRATION**
+
+### **API & Database**
+
 ## **PHASE 2: BACKEND + INTEGRATION**
 ### Timeline: 18 days
 ### Goal: Working system with real data
@@ -152,6 +199,12 @@
 **Phase 2 Complete**: All 12 modules working end-to-end
 
 ---
+
+---
+
+## **PART 4: 🎤 PHASE 3: ADVANCED FEATURES**
+
+### **Voice & Integration**
 
 ## **PHASE 3: VOICE & DEPLOYMENT**
 ### Timeline: 10 days

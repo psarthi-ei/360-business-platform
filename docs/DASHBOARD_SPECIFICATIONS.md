@@ -4,12 +4,20 @@
 
 ## 📚 **TABLE OF CONTENTS**
 
-### **🎯 OVERVIEW & CORE DESIGN**
+## **PART 1: 📋 OVERVIEW & DESIGN STRATEGY**
+### **Dashboard Foundation**
 - [**DASHBOARD OVERVIEW**](#dashboard-overview)
+  - [Core Design Principles](#core-design-principles)
 - [**CURRENT IMPLEMENTATION STATUS**](#current-implementation-status)
-- [**TEXTILE BUSINESS PIPELINE HEADER**](#textile-business-pipeline-header)
+  - [Implemented Features](#implemented-features)
+  - [Textile Business Pipeline Header](#textile-business-pipeline-header)
+- [**3-LEVEL DASHBOARD ARCHITECTURE**](#3-level-information-architecture)
+  - [Level 1: Executive Dashboard](#level-1-executive-dashboard-business-wide-overview)
+  - [Level 2: Module Navigation](#level-2-module-navigation-business-process-focus)
+  - [Level 3: Operational Interface](#level-3-operational-interface-full-functionality)
 
-### **📊 8-STAGE BUSINESS PROCESS CARDS**
+## **PART 2: 🎯 BUSINESS PROCESS DESIGN**
+### **8-Stage Business Cards**
 - [**SEQUENTIAL CARD STRUCTURE**](#sequential-card-structure)
   - [Card 1: Lead Pipeline](#card-1-lead-pipeline)
   - [Card 2: Quotations & Orders](#card-2-quotations--orders)
@@ -20,22 +28,19 @@
   - [Card 7: Customers](#card-7-customers)
   - [Card 8: Business Analytics](#card-8-business-analytics)
 
-### **🔄 TAB NAVIGATION SYSTEM**
-- [**TABNAVIGATION COMPONENT SPECIFICATIONS**](#tabnavigation-component-specifications)
+## **PART 3: 🎨 USER EXPERIENCE & NAVIGATION**
+### **How Users Interact**
+- [**TAB NAVIGATION SYSTEM**](#tabnavigation-component-specifications)
   - [Current Architecture](#current-architecture)
   - [Unified Card Layout](#unified-card-layout)
   - [Dynamic Action Button Grid](#dynamic-action-button-grid)
-  - [Scroll Detection & Fade Gradients](#scroll-detection--fade-gradients)
   - [Auto-Scroll Active Tab](#auto-scroll-active-tab)
+- [**NAVIGATION & USER FLOWS**](#navigation--user-flows)
+  - [Cross-Process Navigation](#cross-process-navigation)
+  - [User Journey Mapping](#user-journey-mapping)
 
-### **🎨 VISUAL DESIGN SYSTEM**
-- [**PROFESSIONAL STYLING STANDARDS**](#professional-styling-standards)
-  - [Brand Colors & Gradients](#brand-colors--gradients)
-  - [Typography Hierarchy](#typography-hierarchy)
-  - [Component Styling](#component-styling)
-  - [Mobile Responsiveness](#mobile-responsiveness)
-
-### **⚙️ TECHNICAL IMPLEMENTATION**
+## **PART 4: 🔧 TECHNICAL IMPLEMENTATION**
+### **How It's Built**
 - [**COMPONENT ARCHITECTURE**](#component-architecture)
   - [Dashboard.tsx Structure](#dashboardtsx-structure)
   - [TabNavigation.tsx Features](#tabnavigationtsx-features)
@@ -45,9 +50,15 @@
   - [Dynamic Grid Systems](#dynamic-grid-systems)
   - [Mobile-First Breakpoints](#mobile-first-breakpoints)
 
-### **🎯 3-LEVEL DASHBOARD ARCHITECTURE**
-- [**3-LEVEL INFORMATION ARCHITECTURE**](#3-level-information-architecture)
-  - [Level 1: Executive Dashboard](#level-1-executive-dashboard-business-wide-overview)
+## **PART 5: 🎨 VISUAL DESIGN & STANDARDS**
+### **Design System**
+- [**PROFESSIONAL STYLING STANDARDS**](#professional-styling-standards)
+  - [Brand Colors & Gradients](#brand-colors--gradients)
+  - [Typography Hierarchy](#typography-hierarchy)
+  - [Component Styling](#component-styling)
+  - [Mobile Responsiveness](#mobile-responsiveness)
+- [**DATA & ANALYTICS FRAMEWORK**](#data--analytics-framework)
+- [**DESIGN DECISIONS & RATIONALE**](#design-decisions--rationale)
   - [Level 2: Process Area Management](#level-2-process-area-management-process-specific-operations)
   - [Level 3: Module Interface](#level-3-module-interface-detailed-operations)
 - [**3-LEVEL DATA PATTERN SPECIFICATIONS**](#3-level-data-pattern-specifications)
@@ -80,7 +91,11 @@
 
 ---
 
-## Dashboard Overview
+## **PART 1: 📋 OVERVIEW & DESIGN STRATEGY**
+
+### **Dashboard Foundation**
+
+## **DASHBOARD OVERVIEW**
 
 The ElevateIdea 360° Platform dashboard is designed as a **digital mirror of textile business reality**, organizing all functionality around the natural 8-stage business process flow that MSME textile manufacturers follow daily.
 
@@ -129,7 +144,13 @@ The main dashboard header now displays **"🔄 Textile Business Pipeline"** inst
 
 ---
 
-## Sequential Card Structure
+---
+
+## **PART 2: 🎯 BUSINESS PROCESS DESIGN**
+
+### **8-Stage Business Cards**
+
+## **SEQUENTIAL CARD STRUCTURE**
 
 The dashboard displays 8 sequential business process cards arranged in logical business flow:
 
@@ -191,7 +212,13 @@ The dashboard displays 8 sequential business process cards arranged in logical b
 
 ---
 
-## TabNavigation Component Specifications
+---
+
+## **PART 3: 🎨 USER EXPERIENCE & NAVIGATION**
+
+### **How Users Interact**
+
+## **TABNAVIGATION COMPONENT SPECIFICATIONS**
 
 ### Current Architecture
 The TabNavigation component provides a sophisticated modal interface for each business process card with the following features:
@@ -249,7 +276,13 @@ The TabNavigation component provides a sophisticated modal interface for each bu
 
 ---
 
-## Professional Styling Standards
+---
+
+## **PART 5: 🎨 VISUAL DESIGN & STANDARDS**
+
+### **Design System**
+
+## **PROFESSIONAL STYLING STANDARDS**
 
 ### Brand Colors & Gradients
 ```css
@@ -278,7 +311,13 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
 ---
 
-## Component Architecture
+---
+
+## **PART 4: 🔧 TECHNICAL IMPLEMENTATION**
+
+### **How It's Built**
+
+## **COMPONENT ARCHITECTURE**
 
 ### Dashboard.tsx Structure
 - **Executive Metrics**: KPIs and business health indicators at the top

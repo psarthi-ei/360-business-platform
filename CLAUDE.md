@@ -1,7 +1,8 @@
 # ElevateBusiness 360° Platform - Complete Project Context
 
 ## 🚀 CURRENT ACTIVE WORK
-**Current Plan**: See `/docs/CURRENT_PLAN.md` for detailed current work status and next steps
+**Current Todos**: Always check `/docs/TODO.md` for persistent todo list across sessions
+**Session Tracking**: Use TodoWrite tool for real-time progress within sessions
 
 ## Company & Product Identity
 - **Company**: ElevateIdea Technologies Private Limited

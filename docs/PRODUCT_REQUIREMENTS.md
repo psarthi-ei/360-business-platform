@@ -5,7 +5,8 @@
 
 ## 📚 **TABLE OF CONTENTS**
 
-### **🎯 OVERVIEW & STRATEGY**
+## **PART 1: 📋 PRODUCT OVERVIEW & STRATEGY**
+### **Business Foundation**
 - [**EXECUTIVE SUMMARY**](#executive-summary)
   - [Business Vision](#business-vision)
   - [Target Market](#target-market)
@@ -15,29 +16,16 @@
 - [**MARKET STRATEGY & INDUSTRY SELECTION**](#market-strategy--industry-selection)
   - [Why MSMEs?](#why-msmes)
   - [Industry Expansion Roadmap](#industry-expansion-roadmap)
+- [**COMPETITIVE ADVANTAGE**](#competitive-advantage)
+- [**TARGET CUSTOMERS**](#target-customers)
+- [**LONG-TERM VISION**](#long-term-vision)
 
-### **🚀 ROADMAP & DEVELOPMENT**
-- [**POST-MVP ROADMAP (PHASE 2-4)**](#post-mvp-roadmap-phase-2-4)
-  - [PHASE 2: Enhanced Operations](#phase-2-enhanced-operations-month-4-6)
-  - [PHASE 3: Customer Intelligence](#phase-3-customer-intelligence-month-7-9)
-  - [PHASE 4: Scale & Expansion](#phase-4-scale--expansion-month-10-12)
+## **PART 2: 🎯 MVP SCOPE & FEATURES**
+### **What We're Building**
 - [**MVP SCOPE - SOLO FOUNDER VERSION**](#mvp-scope---solo-founder-version)
-
-### **📊 DASHBOARD & BUSINESS PROCESSES**
 - [**BUSINESS PROCESS-DRIVEN MODULE ORGANIZATION**](#business-process-driven-module-organization)
   - [Dashboard Structure: 8 Sequential Business Process Cards](#dashboard-structure-8-sequential-business-process-cards)
-  - [Implementation Status](#implementation-status-process-based-organization)
   - [Process-Driven Design Principles](#process-driven-design-principles)
-- [**DASHBOARD BUSINESS REQUIREMENTS**](#dashboard-business-requirements)
-  - [Business Process Mapping](#business-process-mapping)
-  - [User Experience Goals](#user-experience-goals)
-
-### **⚙️ IMPLEMENTATION REFERENCE**
-- [**TECHNICAL IMPLEMENTATION**](#technical-implementation-reference)
-  - [Dashboard Technical Specifications](#dashboard-technical-specifications)
-  - [Business Process Implementation](#business-process-implementation)
-
-### **🔧 CORE MODULES & FEATURES**
 - [**MVP CORE MODULES & FEATURES**](#mvp-core-modules--features)
   - [1. Lead Management](#1-lead-management-with-analytics)
   - [2. Quotation & Sales Order](#2-quotation--sales-order-with-stock-integration)
@@ -52,8 +40,10 @@
   - [11. Customer Feedback](#11-customer-feedback--basic-loyalty)
   - [12. Multilingual & Voice](#12-multilingual-interface--voice)
   - [13. Analytics Dashboard](#13-analytics-dashboard-with-leads--sales-insights)
+- [**KEY BUSINESS LOGIC**](#key-business-logic---inventory-intelligence)
 
-### **📱 USER EXPERIENCE & INTERFACE**
+## **PART 3: 🎨 USER EXPERIENCE & DESIGN**
+### **How Users Interact**
 - [**ULTRA-SIMPLE USER EXPERIENCE DESIGN**](#ultra-simple-user-experience-design)
   - [Home Screen Design](#home-screen---like-whatsapp-main-screen)
   - [Dashboard Layout](#dashboard-layout---3-business-categories)
@@ -62,19 +52,28 @@
   - [Guest Mode](#1-guest-mode-)
   - [Demo Mode](#2-demo-mode-)
   - [Authenticated Mode](#3-authenticated-user-mode-)
+- [**DASHBOARD BUSINESS REQUIREMENTS**](#dashboard-business-requirements)
+  - [Business Process Mapping](#business-process-mapping)
+  - [User Experience Goals](#user-experience-goals)
 
-### **⏰ EXECUTION & DELIVERY**
+## **PART 4: 🔧 TECHNICAL IMPLEMENTATION**
+### **How It's Built**
+- [**TECHNICAL IMPLEMENTATION REFERENCE**](#technical-implementation-reference)
+  - [Dashboard Technical Specifications](#dashboard-technical-specifications)
+  - [Business Process Implementation](#business-process-implementation)
+  - [Design System Implementation](#design-system-implementation)
+
+## **PART 5: 🚀 EXECUTION & ROADMAP**
+### **How We Deliver**
 - [**30-DAY DEVELOPMENT TIMELINE**](#30-day-development-timeline)
   - [Week 1: Foundation](#week-1-foundation--core-flow-days-1-7)
   - [Week 2: Production & Inventory](#week-2-production--inventory-core-days-8-14)
   - [Week 3: Financial & Dispatch](#week-3-financial--dispatch-days-15-21)
   - [Week 4: Polish & Integration](#week-4-polish--gujarati-integration-days-22-30)
-
-### **🎯 BUSINESS STRATEGY**
-- [**KEY BUSINESS LOGIC**](#key-business-logic---inventory-intelligence)
-- [**COMPETITIVE ADVANTAGE**](#competitive-advantage)
-- [**TARGET CUSTOMERS**](#target-customers)
-- [**LONG-TERM VISION**](#long-term-vision)
+- [**POST-MVP ROADMAP (PHASE 2-4)**](#post-mvp-roadmap-phase-2-4)
+  - [PHASE 2: Enhanced Operations](#phase-2-enhanced-operations-month-4-6)
+  - [PHASE 3: Customer Intelligence](#phase-3-customer-intelligence-month-7-9)
+  - [PHASE 4: Scale & Expansion](#phase-4-scale--expansion-month-10-12)
 
 ---
 
@@ -84,6 +83,10 @@
 > - Each major section has subsection links for deeper navigation
 
 ---
+
+## **PART 1: 📋 PRODUCT OVERVIEW & STRATEGY**
+
+### **Business Foundation**
 
 ## **EXECUTIVE SUMMARY**
 
@@ -215,6 +218,10 @@ Successful manufacturers will want to scale operations, add team members, and ex
 **Key Principle**: We'll only add features when customers ask for them. Each phase is driven by real user feedback, not assumptions.
 
 ---
+
+## **PART 2: 🎯 MVP SCOPE & FEATURES**
+
+### **What We're Building**
 
 ## **MVP SCOPE - SOLO FOUNDER VERSION**
 ### *What YOU can build in 30-45 days as a single developer*
@@ -555,6 +562,10 @@ The dashboard serves as a **digital mirror of textile business reality**, organi
 
 ---
 
+## **PART 4: 🔧 TECHNICAL IMPLEMENTATION**
+
+### **How It's Built**
+
 ## **TECHNICAL IMPLEMENTATION REFERENCE**
 
 ### **Dashboard Technical Specifications**
@@ -796,6 +807,12 @@ For visual design patterns and UI specifications:
 - "कौन सा कपड़ा ज्यादा बिकता है?" (Which fabric sells more?)
 - "conversion rate क्या है?" (What's the conversion rate?)
 
+---
+
+## **PART 3: 🎨 USER EXPERIENCE & DESIGN**
+
+### **How Users Interact**
+
 ## **ULTRA-SIMPLE USER EXPERIENCE DESIGN**
 
 ### **HOME SCREEN - LIKE WHATSAPP MAIN SCREEN**
@@ -908,6 +925,12 @@ Sales & Customer Management
 3. 📱 Visual summary shown
 4. ✅ DONE!
 ```
+
+---
+
+## **PART 5: 🚀 EXECUTION & ROADMAP**
+
+### **How We Deliver**
 
 ## **30-DAY DEVELOPMENT TIMELINE**
 
