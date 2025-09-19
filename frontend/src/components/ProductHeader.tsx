@@ -68,8 +68,8 @@ function ProductHeader({
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
               <button 
-                onClick={onDemoMode} 
-                className={`${styles.navButton} ${currentScreen === 'homepage' ? styles.activeNavButton : ''}`}
+                onClick={isAuthenticated || userMode !== 'guest' ? onDashboard : onDemoMode} 
+                className={`${styles.navButton} ${['dashboard', 'leads', 'quotations', 'salesorders', 'advancepayment', 'invoices', 'customerprofile', 'customerlist', 'inventory', 'fulfillment', 'analytics'].includes(currentScreen) ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>ElevateBusiness 360°</span>
               </button>

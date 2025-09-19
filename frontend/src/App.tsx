@@ -478,6 +478,7 @@ function App() {
             currentTheme={currentTheme}
             onThemeChange={switchTheme}
             onHome={showHomePage}
+            onDashboard={showDashboard}
             onLogin={showLogin}
             onSignUp={showSignUp}
             onGuestMode={handleGuestMode}
@@ -485,8 +486,8 @@ function App() {
             onLogout={handleLogout}
             isAuthenticated={isAuthenticated}
             userMode={userMode}
-            // Website Navigation Props
-            showWebsiteNavigation={['homepage', 'services-hub', 'blog-home', 'blog-post', 'about', 'contact'].includes(currentScreen)}
+            // Website Navigation Props - Always show for consistent UX
+            showWebsiteNavigation={true}
             currentScreen={currentScreen}
             onServicesHub={showServicesHub}
             onBlogHome={showBlogHome}

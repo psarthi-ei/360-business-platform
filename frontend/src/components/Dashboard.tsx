@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
-import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Dashboard.module.css';
 
 interface DashboardProps {
@@ -49,8 +47,8 @@ function Dashboard({
   isAuthenticated,
   userMode
 }: DashboardProps) {
-  // Use translation hook - no more props needed!
-  const { currentLanguage, setLanguage } = useTranslation();
+  // Translation hook available if needed in future
+  // const { currentLanguage, setLanguage } = useTranslation();
   
   // Swipe navigation state will be implemented in future
   
@@ -596,21 +594,6 @@ function Dashboard({
   return (
     <>
       <div className={styles.dashboard}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={setLanguage}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        showThemeSelector={true}
-        onLogin={onLogin}
-        onSignUp={onSignUp}
-        onGuestMode={onGuestMode}
-        onDemoMode={onDemoMode}
-        onLogout={onLogout}
-        isAuthenticated={isAuthenticated}
-        userMode={userMode}
-      />
       
       <div className={styles.dashboardContainer}>
 
