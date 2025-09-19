@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from '../styles/HomePage.module.css';
 
@@ -28,11 +28,8 @@ function HomePage({
   onContact
 }: HomePageProps) {
   const { t } = useTranslation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  // Note: Mobile menu functionality to be implemented when needed
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Circular business cycle - complete end-to-end flow (10 steps)
   const businessCycle = [
@@ -58,10 +55,10 @@ function HomePage({
         <div className={styles.heroContent}>
           <div className={styles.purposeStatement}>
             <h1 className={styles.heroTitle}>
-              ElevateBusiness 360° - Complete Business Platform for Textile Manufacturers
+              Developing ElevateBusiness 360° - Complete Business Platform for Textile Manufacturers
             </h1>
             <p className={styles.heroSubtitle}>
-              Voice-first, multilingual business platform providing 360° visibility across your entire textile manufacturing workflow. From leads to final payment - streamline every step with intelligent automation. Gujarat textile manufacturers are already seeing 30% profit increases.
+              Voice-first, multilingual business platform under development to provide 360° visibility across textile manufacturing workflows. From leads to final payment - we're building intelligent automation for the textile industry. Launching soon in Gujarat for early access partners.
             </p>
           
           {/* Circular Business Flow Visualization */}
@@ -182,13 +179,70 @@ function HomePage({
           {/* Hero CTA */}
           <div className={styles.heroCta}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              Start Demo 🚀
+              Experience Platform 🚀
             </button>
-            <button className={styles.secondaryCta} onClick={onGuestMode}>
-              Try as Guest 📱
+            <button 
+              className={styles.secondaryCta} 
+              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeyiENxr2NrgyYDh6iOQT_BL057RqFje_bXUyePQQtegA_HCA/viewform?usp=header', '_blank')}
+            >
+              Sign Up for Beta 📱
             </button>
           </div>
           
+          </div>
+        </div>
+      </section>
+
+      {/* AI Development Story Section - PRIMARY ATTENTION GRABBER */}
+      <section className={styles.aiStory}>
+        <div className={styles.sectionContent}>
+          <h2 className={styles.sectionTitle}>
+            Building WITH AI - Our Development Journey
+          </h2>
+          <p className={styles.sectionSubtitle}>
+            We're developing ElevateBusiness 360° with AI as our team member, demonstrating how modern businesses can leverage AI effectively. 
+            This is our real-time development story - not replacing experience, but amplifying it to build 10X faster.
+          </p>
+          
+          <div className={styles.aiStoryGrid}>
+            <div className={styles.aiStoryCard}>
+              <div className={styles.aiStoryIcon}>🤖</div>
+              <h3 className={styles.aiStoryTitle}>AI as Team Member</h3>
+              <p className={styles.aiStoryDescription}>
+                We're developing ElevateBusiness 360° with AI as our "Aladdin ka chirag" - a powerful team member that helps us create 10X faster. 
+                Haven't written a single line of code manually, yet developing enterprise-grade software.
+              </p>
+              <div className={styles.aiStoryProof}>
+                <span className={styles.proofBadge}>PROOF</span>
+                <span className={styles.proofText}>Haven't written single line of code, building 10X faster</span>
+              </div>
+            </div>
+
+            <div className={styles.aiStoryCard}>
+              <div className={styles.aiStoryIcon}>🧠</div>
+              <h3 className={styles.aiStoryTitle}>Experience Guides AI</h3>
+              <p className={styles.aiStoryDescription}>
+                Our 20+ years of industry experience helps us guide AI in the right direction. 
+                AI makes building faster, but you need deep business understanding to know what to build and how to build it right.
+              </p>
+              <div className={styles.aiStoryProof}>
+                <span className={styles.proofBadge}>EDGE</span>
+                <span className={styles.proofText}>20+ years industry experience guides strategic AI decisions</span>
+              </div>
+            </div>
+
+            <div className={styles.aiStoryCard}>
+              <div className={styles.aiStoryIcon}>🚀</div>
+              <h3 className={styles.aiStoryTitle}>AI-Era Development</h3>
+              <p className={styles.aiStoryDescription}>
+                This is the new reality - small teams building enterprise-level products in weeks instead of years. 
+                We're demonstrating how strategic AI implementation transforms business development through our own product journey.
+              </p>
+              <div className={styles.aiStoryProof}>
+                <span className={styles.proofBadge}>RESULT</span>
+                <span className={styles.proofText}>Enterprise platform development in months, not years</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -357,31 +411,31 @@ function HomePage({
           {/* Customer Testimonials */}
           <div className={styles.testimonials}>
             <h3 className={styles.testimonialsTitle}>
-              Textile Manufacturers Are Already Transforming Their Business
+              What Gujarat Textile Manufacturers Can Expect
             </h3>
             <div className={styles.testimonialsGrid}>
               <div className={styles.testimonial}>
                 <p className={styles.testimonialText}>
-                  "અમારા કારખાનામાં આવો સિસ્ટમ જોઈતો હતો. હવે બધું ફોનમાં જ મેનેજ થાય છે."
+                  Complete factory management through voice commands in Gujarati - from your phone, on the production floor.
                 </p>
                 <div className={styles.testimonialAuthor}>
-                  <strong>Ramesh Patel</strong> - Surat Cotton Mills
+                  <strong>Voice-First Interface</strong> - Mobile Factory Management
                 </div>
               </div>
               <div className={styles.testimonial}>
                 <p className={styles.testimonialText}>
-                  "From lead to payment, everything is visible. No more confusion about orders and deliveries."
+                  360° visibility from lead to final payment - never lose track of orders, payments, or customer communications.
                 </p>
                 <div className={styles.testimonialAuthor}>
-                  <strong>Priya Shah</strong> - Ahmedabad Textiles
+                  <strong>Complete Visibility</strong> - End-to-End Business View
                 </div>
               </div>
               <div className={styles.testimonial}>
                 <p className={styles.testimonialText}>
-                  "Voice commands work perfectly in Gujarati. My workers can update production status easily."
+                  Intelligent automation that understands textile business - GSM tracking, fabric specifications, advance payments.
                 </p>
                 <div className={styles.testimonialAuthor}>
-                  <strong>Kiran Modi</strong> - Vadodara Fabrics
+                  <strong>Industry Intelligence</strong> - Built for Textile Manufacturing
                 </div>
               </div>
             </div>
@@ -394,21 +448,24 @@ function HomePage({
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>
-            Ready for 360° View of Your Business?
+            Be Among the First to Experience ElevateBusiness 360°
           </h2>
           <p className={styles.ctaSubtitle}>
-            Join MSME textile manufacturers who improved efficiency, saved costs, and grew revenue with complete business visibility
+            We're launching soon in Gujarat for early access partners. Join the development journey and help shape the future of textile business management.
           </p>
           <div className={styles.ctaButtons}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              Start Demo 🎬
+              Experience Platform 🚀
             </button>
-            <button className={styles.secondaryCta} onClick={onGuestMode}>
-              Try as Guest 👤
+            <button 
+              className={styles.secondaryCta} 
+              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeyiENxr2NrgyYDh6iOQT_BL057RqFje_bXUyePQQtegA_HCA/viewform?usp=header', '_blank')}
+            >
+              Sign Up for Beta 📱
             </button>
           </div>
           <p className={styles.ctaNote}>
-            Rich demo data included • No sign-up required • Full Gujarat textile business showcase
+            Gujarat textile manufacturers • Early access program • Shape the product with us
           </p>
         </div>
       </section>
