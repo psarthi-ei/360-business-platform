@@ -4,13 +4,11 @@ import styles from '../styles/ContactPage.module.css';
 interface ContactPageProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  onHomePage: () => void;
 }
 
 function ContactPage({ 
   currentLanguage, 
-  onLanguageChange, 
-  onHomePage 
+  onLanguageChange
 }: ContactPageProps) {
   const [demoForm, setDemoForm] = useState({
     name: '',
@@ -103,9 +101,6 @@ function ContactPage({
   return (
     <div className={styles.contactPage}>
       <div className={styles.container}>
-        <button onClick={onHomePage} className={styles.backButton}>
-          ← Back to Homepage
-        </button>
 
         {/* Hero Section */}
         <section className={styles.hero}>

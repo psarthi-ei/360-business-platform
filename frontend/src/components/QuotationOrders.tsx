@@ -156,10 +156,9 @@ function QuotationOrders({
         onLanguageChange={onLanguageChange}
         currentTheme={currentTheme}
         onThemeChange={onThemeChange}
-        onContextNavigation={onNavigateBack}
-        contextNavigationText="Dashboard"
-        contextNavigationIcon="📊"
-        showContextNavigation={true}
+        onHome={onNavigateHome}
+        onDashboard={onNavigateBack}
+        showDashboardButton={true}
         showThemeSelector={true}
       />
       

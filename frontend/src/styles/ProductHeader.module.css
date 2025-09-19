@@ -32,6 +32,15 @@
   gap: 10px;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.logo:hover {
+  opacity: 0.8;
+  background-color: rgba(102, 126, 234, 0.1);
 }
 
 .logoImage {
@@ -113,26 +122,26 @@
   gap: 15px;
 }
 
-.contextButton, .dashboardButton {
+.dashboardButton {
   background: var(--gradient-card, rgba(102, 126, 234, 0.1));
   color: var(--color-primary, #667eea);
   border: 1px solid var(--color-primary, rgba(102, 126, 234, 0.3));
-  padding: 8px 12px;
-  border-radius: 50%;
-  font-size: 16px;
-  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  width: 40px;
+  min-width: 80px;
   height: 40px;
+  white-space: nowrap;
 }
 
-.contextButton:hover, .dashboardButton:hover {
+.dashboardButton:hover {
   background: var(--gradient-card-hover, rgba(102, 126, 234, 0.2));
   border-color: var(--color-primary, rgba(102, 126, 234, 0.6));
   transform: translateY(-1px);
@@ -291,12 +300,12 @@
   }
   
   
-  .contextButton, .dashboardButton {
-    min-width: 36px;
-    width: 36px;
-    height: 36px;
-    padding: 6px;
+  .dashboardButton {
+    min-width: 80px;
+    height: 44px;
+    padding: 10px 16px;
     font-size: 14px;
+    font-weight: 600;
   }
   
 }

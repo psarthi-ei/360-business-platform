@@ -243,6 +243,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowCustomerProfile={showCustomerProfile}
         onShowQuoteFromLead={showQuoteFromLead}
         onShowQuotationOrders={showQuotationOrders}
@@ -259,6 +260,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowSalesOrders={showSalesOrders}
         onShowCustomerProfile={showCustomerProfile}
         onShowLeadManagement={showLeadManagement}
@@ -274,6 +276,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowLeadManagement={showLeadManagement}
         onShowQuotationOrders={showQuotationOrders}
         onShowPayments={showPayments}
@@ -289,6 +292,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowSalesOrders={showSalesOrders}
         onShowCustomerProfile={showCustomerProfile}
         filterState={paymentFilter}
@@ -303,6 +307,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowQuotationOrders={showQuotationOrders}
         onShowPayments={showPayments}
         onShowCustomerProfile={showCustomerProfile}
@@ -318,6 +323,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         customerId={selectedCustomerId}
       />
     );
@@ -329,6 +335,7 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onShowCustomerProfile={showCustomerProfile}
         customerSearch={customerSearch}
         onCustomerSearchChange={setCustomerSearch}
@@ -421,7 +428,6 @@ function App() {
       <ServicesHub
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onHomePage={showHomePage}
       />
     );
   }
@@ -442,7 +448,6 @@ function App() {
       <BlogHome
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onHomePage={showHomePage}
       />
     );
   }
@@ -463,7 +468,6 @@ function App() {
       <AboutPage
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onHomePage={showHomePage}
       />
     );
   }
@@ -473,7 +477,6 @@ function App() {
       <ContactPage
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onHomePage={showHomePage}
       />
     );
   }
@@ -487,10 +490,7 @@ function App() {
             onLanguageChange={switchLanguage}
             currentTheme={currentTheme}
             onThemeChange={switchTheme}
-            onContextNavigation={showHomePage}
-            contextNavigationText="Home"
-            contextNavigationIcon="🏠"
-            showContextNavigation={currentScreen !== 'homepage'}
+            onHome={showHomePage}
             onLogin={showLogin}
             onSignUp={showSignUp}
             onGuestMode={handleGuestMode}

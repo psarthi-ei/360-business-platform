@@ -4,13 +4,11 @@ import styles from '../styles/BlogHome.module.css';
 interface BlogHomeProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  onHomePage: () => void;
 }
 
 function BlogHome({ 
   currentLanguage, 
-  onLanguageChange, 
-  onHomePage 
+  onLanguageChange
 }: BlogHomeProps) {
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -114,9 +112,6 @@ function BlogHome({
   return (
     <div className={styles.blogHome}>
       <div className={styles.container}>
-        <button onClick={onHomePage} className={styles.backButton}>
-          ← Back to Homepage
-        </button>
 
         {/* Hero Section */}
         <section className={styles.hero}>

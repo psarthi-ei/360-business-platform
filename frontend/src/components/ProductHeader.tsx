@@ -8,10 +8,9 @@ interface ProductHeaderProps {
   onLanguageChange: (language: string) => void;
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
-  onContextNavigation?: () => void;
-  contextNavigationText?: string;
-  contextNavigationIcon?: string;
-  showContextNavigation?: boolean;
+  onHome?: () => void;
+  onDashboard?: () => void;
+  showDashboardButton?: boolean;
   showThemeSelector?: boolean;
   onLogin?: () => void;
   onSignUp?: () => void;
@@ -33,10 +32,9 @@ function ProductHeader({
   onLanguageChange,
   currentTheme,
   onThemeChange,
-  onContextNavigation,
-  contextNavigationText = "Home",
-  contextNavigationIcon = "🏠",
-  showContextNavigation = false,
+  onHome,
+  onDashboard,
+  showDashboardButton = false,
   showThemeSelector = true,
   onLogin,
   onSignUp,
@@ -55,9 +53,9 @@ function ProductHeader({
   return (
     <div className={styles.productHeader}>
       <div className={styles.headerContent}>
-        {/* Logo Section - Always visible */}
+        {/* Logo Section - Always visible and clickable */}
         <div className={styles.logoSection}>
-          <div className={styles.logo}>
+          <div className={styles.logo} onClick={onHome}>
             <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
             <span className={styles.logoText}>ElevateIdea</span>
           </div>
@@ -90,15 +88,15 @@ function ProductHeader({
           )}
         </div>
         
-        {/* Controls Section - Context Navigation and User Menu */}
+        {/* Controls Section - Dashboard Button and User Menu */}
         <div className={styles.controlsSection}>
-          {showContextNavigation && onContextNavigation && (
+          {showDashboardButton && onDashboard && (
             <button 
-              className={styles.contextButton}
-              onClick={onContextNavigation}
-              title={`Go to ${contextNavigationText}`}
+              className={styles.dashboardButton}
+              onClick={onDashboard}
+              title="Go to Dashboard"
             >
-              {contextNavigationIcon}
+              Dashboard
             </button>
           )}
           

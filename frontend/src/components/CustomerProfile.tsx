@@ -36,11 +36,10 @@ function CustomerProfile({
           onLanguageChange={onLanguageChange}
           currentTheme={currentTheme}
           onThemeChange={onThemeChange}
-          onContextNavigation={onNavigateBack}
-          contextNavigationText="Dashboard"
-          contextNavigationIcon="📊"
-          showContextNavigation={true}
-          showThemeSelector={true}
+          onHome={onNavigateHome}
+        onDashboard={onNavigateBack}
+        showDashboardButton={true}
+        showThemeSelector={true}
         />
         <div className={styles.pageContent}>
           <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
@@ -71,10 +70,9 @@ function CustomerProfile({
         onLanguageChange={onLanguageChange}
         currentTheme={currentTheme}
         onThemeChange={onThemeChange}
-        onContextNavigation={onNavigateBack}
-        contextNavigationText="Dashboard"
-        contextNavigationIcon="📊"
-        showContextNavigation={true}
+        onHome={onNavigateHome}
+        onDashboard={onNavigateBack}
+        showDashboardButton={true}
         showThemeSelector={true}
       />
       

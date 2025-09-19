@@ -4,13 +4,11 @@ import styles from '../styles/AboutPage.module.css';
 interface AboutPageProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  onHomePage: () => void;
 }
 
 function AboutPage({ 
   currentLanguage, 
-  onLanguageChange, 
-  onHomePage 
+  onLanguageChange
 }: AboutPageProps) {
   const companyTimeline = [
     {
@@ -71,9 +69,6 @@ function AboutPage({
   return (
     <div className={styles.aboutPage}>
       <div className={styles.container}>
-        <button onClick={onHomePage} className={styles.backButton}>
-          ← Back to Homepage
-        </button>
 
         {/* Hero Section */}
         <section className={styles.hero}>

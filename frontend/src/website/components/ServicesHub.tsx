@@ -5,13 +5,11 @@ import styles from '../styles/ServicesHub.module.css';
 interface ServicesHubProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
-  onHomePage: () => void;
 }
 
 function ServicesHub({ 
   currentLanguage, 
-  onLanguageChange, 
-  onHomePage 
+  onLanguageChange
 }: ServicesHubProps) {
   const [services, setServices] = useState<any[]>([]);
 
@@ -45,9 +43,6 @@ function ServicesHub({
   return (
     <div className={styles.servicesHub}>
       <div className={styles.container}>
-        <button onClick={onHomePage} className={styles.backButton}>
-          ← Back to Homepage
-        </button>
 
         {/* Hero Section */}
         <section className={styles.hero}>

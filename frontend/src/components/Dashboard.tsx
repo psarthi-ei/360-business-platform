@@ -601,10 +601,7 @@ function Dashboard({
         onLanguageChange={setLanguage}
         currentTheme={currentTheme}
         onThemeChange={onThemeChange}
-        onContextNavigation={onNavigateHome}
-        contextNavigationText="Home"
-        contextNavigationIcon="🏠"
-        showContextNavigation={true}
+        onHome={onNavigateHome}
         showThemeSelector={true}
         onLogin={onLogin}
         onSignUp={onSignUp}
