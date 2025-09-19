@@ -1574,8 +1574,207 @@ showWebsiteNavigation={false} showContextNavigation={false}
 - ✅ Better architectural foundation for scaling
 - ⚠️ Requires careful implementation to preserve homepage design quality
 
+## 🔄 **UNIFIED MARKDOWN CONTENT SYSTEM**
+
+### **Strategic Decision: Markdown-First Content Management**
+
+**Decision Date**: September 19, 2025  
+**Context**: Service detail pages implementation and future blog system  
+**Decision**: Implement unified markdown content system for all content types
+
+#### **Content Strategy Philosophy**
+
+**Single Content System Approach**:
+- **Unified Parser**: Simple markdown parser for services, blogs, case studies, documentation
+- **Content Files**: All content stored as .md files in version control
+- **Consistent Display**: Same parsing and rendering system across all content types
+- **Content Team Friendly**: Non-technical team members can edit content without touching code
+
+#### **Technical Implementation**
+
+**Markdown Parser Architecture**:
+```javascript
+// Simple lightweight parser for common markdown syntax
+const parseMarkdown = (markdown) => {
+  return markdown
+    // Headers (# ## ###)
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>') 
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    // Bold and emphasis
+    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    // Lists
+    .replace(/^\- (.*$)/gim, '<li>$1</li>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^\)]+)\)/gim, '<a href="$2">$1</a>')
+    // Paragraphs and line breaks
+    .replace(/\n\n/gim, '</p><p>')
+    .replace(/\n/gim, '<br/>');
+};
+```
+
+**Content Loading Architecture**:
+```javascript
+// Unified content loader for all markdown files
+export const loadMarkdownContent = async (contentPath) => {
+  try {
+    const response = await fetch(`/content/${contentPath}.md`);
+    const markdownText = await response.text();
+    const htmlContent = parseMarkdown(markdownText);
+    return { 
+      html: htmlContent,
+      raw: markdownText 
+    };
+  } catch (error) {
+    console.error('Content loading error:', error);
+    return null;
+  }
+};
+
+// Usage examples:
+// Services: loadMarkdownContent('services/strategic-project-acceleration')
+// Blogs: loadMarkdownContent('blog/scaling-textile-business')  
+// Case Studies: loadMarkdownContent('case-studies/gujarat-manufacturer')
+```
+
+#### **Content Organization Structure**
+
+**File Organization**:
+```
+frontend/src/website/content/
+├── services/
+│   ├── strategic-project-acceleration.md
+│   ├── scalability-for-growth.md
+│   └── agile-systems-for-rapid-innovation.md
+├── blog/
+│   ├── 365-days-stories/
+│   │   ├── entrepreneurship-journey-day-1.md
+│   │   └── business-building-insights-day-2.md
+│   └── thought-leadership/
+│       ├── scaling-msme-businesses.md
+│       └── technology-transformation.md
+├── case-studies/
+│   ├── textile-manufacturer-success.md
+│   └── startup-scalability-story.md
+└── documentation/
+    ├── api-documentation.md
+    └── user-guides.md
+```
+
+#### **Component Architecture**
+
+**Universal Content Display Component**:
+```typescript
+// ContentPage.tsx - Universal component for all markdown content
+interface ContentPageProps {
+  contentPath: string;
+  contentType: 'service' | 'blog' | 'case-study' | 'documentation';
+  onBack?: () => void;
+  backButtonText?: string;
+}
+
+const ContentPage: React.FC<ContentPageProps> = ({ 
+  contentPath, 
+  contentType, 
+  onBack, 
+  backButtonText = "← Back"
+}) => {
+  const [content, setContent] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const loadContent = async () => {
+      const data = await loadMarkdownContent(contentPath);
+      setContent(data?.html || '');
+      setLoading(false);
+    };
+    loadContent();
+  }, [contentPath]);
+  
+  return (
+    <div className={styles.contentPage}>
+      {onBack && (
+        <button onClick={onBack} className={styles.backButton}>
+          {backButtonText}
+        </button>
+      )}
+      <div 
+        className={`${styles.content} ${styles[contentType]}`}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    </div>
+  );
+};
+```
+
+#### **Benefits of Unified Markdown System**
+
+**Development Benefits**:
+- ✅ **Single Parser**: One codebase for all content types
+- ✅ **Consistent Styling**: Same CSS applies to all parsed content
+- ✅ **Reduced Complexity**: No need for multiple content management approaches
+- ✅ **Future-Ready**: Easy to add new content types
+
+**Content Management Benefits**:
+- ✅ **Version Control**: All content changes tracked in git
+- ✅ **Content Team Friendly**: Markdown is easy to learn and edit
+- ✅ **Portable Content**: Can migrate content to other systems easily
+- ✅ **SEO Friendly**: Clean HTML structure from markdown
+
+**Business Benefits**:
+- ✅ **Faster Content Updates**: No code changes needed for content edits
+- ✅ **Scalable Content Strategy**: Same system works for any content volume
+- ✅ **Professional Presentation**: Consistent formatting across all content
+- ✅ **Cost Effective**: Reduces development time for content features
+
+#### **Migration Strategy**
+
+**Phase 1: Services Content System**
+1. Implement simple markdown parser utility
+2. Create universal ContentPage component
+3. Update service navigation to use markdown files
+4. Test with existing service content
+
+**Phase 2: Blog Content Integration**
+1. Migrate 55+ existing blog posts to markdown format
+2. Implement blog listing and navigation
+3. Add blog categories and search functionality
+4. Test complete blog system
+
+**Phase 3: Content System Expansion**
+1. Add case studies content
+2. Implement documentation system
+3. Add content search across all types
+4. Optimize performance for large content volumes
+
+#### **Implementation Considerations**
+
+**Performance Optimization**:
+- Content caching for frequently accessed markdown files
+- Lazy loading for large content pieces
+- Progressive rendering for better user experience
+
+**SEO Optimization**:
+- Proper HTML structure from markdown parsing
+- Meta tags extraction from markdown frontmatter
+- Clean URLs for content pages
+
+**Security Considerations**:
+- Sanitize parsed HTML content
+- Validate markdown input for XSS prevention
+- Secure content loading mechanisms
+
+### **Conclusion**
+
+The **Unified Markdown Content System** provides a scalable, maintainable foundation for all content management needs while keeping development simple and content editing accessible to non-technical team members.
+
+**Implementation Status**: 🎯 **READY FOR IMPLEMENTATION** - Decision documented, ready for development execution
+
+**Next Steps**: Implement markdown parser utility and ContentPage component for service detail pages
+
 ---
 
-**Document Version**: 10.0 (Single Header Architecture Decision Added)  
-**Last Updated**: September 16, 2025  
+**Document Version**: 11.0 (Unified Markdown Content System Added)  
+**Last Updated**: September 19, 2025  
 **Philosophy**: Ship fast, iterate based on customer feedback, keep it simple, test core functionality

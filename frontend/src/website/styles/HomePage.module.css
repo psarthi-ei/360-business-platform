@@ -2366,3 +2366,274 @@
     max-width: 280px;
   }
 }
+
+/* AI Development Story Section */
+.aiStory {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  position: relative;
+}
+
+.aiStory::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+.aiStoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto 50px;
+}
+
+.aiStoryCard {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.aiStoryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.aiStoryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.aiStoryIcon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+  text-align: center;
+}
+
+.aiStoryTitle {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.aiStoryDescription {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.aiStoryProof {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.proofBadge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.proofText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.aiStoryConclusion {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.aiStoryConclusion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.aiConclusionContent {
+  text-align: center;
+}
+
+.aiConclusionTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.aiConclusionText {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.aiConclusionCta {
+  display: flex;
+  justify-content: center;
+}
+
+.consultingCta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.consultingCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* AI Story Mobile Responsiveness */
+@media (max-width: 768px) {
+  .aiStory {
+    padding: 60px 16px;
+  }
+  
+  .aiStoryGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .aiStoryCard {
+    padding: 24px;
+  }
+  
+  .aiStoryIcon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+  
+  .aiStoryTitle {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .aiStoryDescription {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .aiStoryProof {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .proofBadge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .proofText {
+    font-size: 12px;
+  }
+  
+  .aiStoryConclusion {
+    padding: 30px 20px;
+  }
+  
+  .aiConclusionTitle {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .aiConclusionText {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .consultingCta {
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .aiStory {
+    padding: 50px 12px;
+  }
+  
+  .aiStoryCard {
+    padding: 20px;
+  }
+  
+  .aiStoryIcon {
+    font-size: 36px;
+    margin-bottom: 14px;
+  }
+  
+  .aiStoryTitle {
+    font-size: 18px;
+  }
+  
+  .aiStoryDescription {
+    font-size: 13px;
+  }
+  
+  .aiStoryConclusion {
+    padding: 25px 16px;
+  }
+  
+  .aiConclusionTitle {
+    font-size: 18px;
+  }
+  
+  .aiConclusionText {
+    font-size: 13px;
+  }
+}

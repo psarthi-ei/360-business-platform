@@ -43,6 +43,7 @@ function App() {
   const [profileLinkId] = useState('');
   const [profileQuoteId] = useState('');
   const [profileCompanyName] = useState('');
+  const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
 
 
 
@@ -176,19 +177,14 @@ function App() {
 
   function showServicesHub() {
     setCurrentScreen('services-hub');
+    setServicesHubResetKey(prev => prev + 1); // Force ServicesHub to reset to overview
   }
 
-  function showServicePage() {
-    setCurrentScreen('service-page');
-  }
 
   function showBlogHome() {
     setCurrentScreen('blog-home');
   }
 
-  function showBlogPost() {
-    setCurrentScreen('blog-post');
-  }
 
   function showAbout() {
     setCurrentScreen('about');
@@ -428,20 +424,11 @@ function App() {
       <ServicesHub
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
+        resetKey={servicesHubResetKey}
       />
     );
   }
 
-  function renderServicePage() {
-    return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>Individual Service Page - Coming Soon</h1>
-        <button onClick={showServicesHub} style={{ padding: '1rem', marginTop: '1rem' }}>
-          Back to Services Hub
-        </button>
-      </div>
-    );
-  }
 
   function renderBlogHome() {
     return (
@@ -499,7 +486,8 @@ function App() {
             isAuthenticated={isAuthenticated}
             userMode={userMode}
             // Website Navigation Props
-            showWebsiteNavigation={['homepage', 'services-hub', 'service-page', 'blog-home', 'blog-post', 'about', 'contact'].includes(currentScreen)}
+            showWebsiteNavigation={['homepage', 'services-hub', 'blog-home', 'blog-post', 'about', 'contact'].includes(currentScreen)}
+            currentScreen={currentScreen}
             onServicesHub={showServicesHub}
             onBlogHome={showBlogHome}
             onAbout={showAbout}
@@ -520,7 +508,6 @@ function App() {
         {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
         {currentScreen === 'analytics' && renderAnalyticsManagement()}
         {currentScreen === 'services-hub' && renderServicesHub()}
-        {currentScreen === 'service-page' && renderServicePage()}
         {currentScreen === 'blog-home' && renderBlogHome()}
         {currentScreen === 'blog-post' && renderBlogPost()}
         {currentScreen === 'about' && renderAbout()}

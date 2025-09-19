@@ -1,4 +1,198 @@
 /* Global App Styles */
+
+/* Markdown Content Styling - Global styles for ReactMarkdown */
+.markdown-content {
+  line-height: 1.8;
+  color: #333;
+  font-size: 1.1rem;
+  text-align: left;
+  max-width: 100%;
+}
+
+.markdown-content h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 2rem 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #667eea;
+}
+
+.markdown-content h2 {
+  color: #34495e;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1.5rem 0;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.markdown-content h2::before {
+  content: '';
+  position: absolute;
+  left: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 2rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+.markdown-content h3 {
+  color: #667eea;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+}
+
+.markdown-content h4 {
+  color: #4a5568;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.markdown-content p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  line-height: 1.8;
+}
+
+.markdown-content ul {
+  margin: 1.5rem 0;
+  padding-left: 0;
+}
+
+.markdown-content li {
+  list-style: none;
+  margin-bottom: 0.75rem;
+  padding-left: 2rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.markdown-content li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Nested lists */
+.markdown-content ul ul {
+  margin: 0.5rem 0;
+  padding-left: 2rem;
+}
+
+.markdown-content ul ul li {
+  padding-left: 1.5rem;
+}
+
+.markdown-content ul ul li::before {
+  content: '•';
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+/* Content sections with better spacing */
+.markdown-content h3 + p {
+  margin-top: 0.75rem;
+}
+
+.markdown-content h3 + p + ul {
+  margin-top: 0.5rem;
+}
+
+/* Better spacing for requirement/activity sections */
+.markdown-content p + ul {
+  margin-top: 0.5rem;
+}
+
+/* Preserve structure for indented content */
+.markdown-content blockquote {
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-left: 4px solid #667eea;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Code blocks for better formatting */
+.markdown-content pre {
+  background: #f1f5f9;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.markdown-content code {
+  background: #e2e8f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.markdown-content strong {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.markdown-content em {
+  color: #667eea;
+  font-style: italic;
+}
+
+/* Section organization */
+.markdown-content h2 + h3 {
+  margin-top: 1.5rem;
+}
+
+.markdown-content h3 + h3 {
+  margin-top: 1.5rem;
+}
+
+/* Timeline and phase sections */
+.markdown-content h3[id*="phase"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border-left: 5px solid #667eea;
+  margin: 2rem 0 1.5rem 0;
+}
+
+/* Key-value pairs formatting */
+.markdown-content p strong:first-child {
+  display: inline-block;
+  min-width: 120px;
+  color: #4a5568;
+}
+
+/* Better visual separation between sections */
+.markdown-content h2 {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 2rem;
+  margin-top: 3rem;
+}
+
+.markdown-content h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* Timeline formatting */
+.markdown-content li strong {
+  color: #667eea;
+}
+
+/* Enhanced spacing for better readability */
+.markdown-content > * + * {
+  margin-top: 1rem;
+}
 .App {
   text-align: center;
 }

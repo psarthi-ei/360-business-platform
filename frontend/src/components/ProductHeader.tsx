@@ -21,6 +21,7 @@ interface ProductHeaderProps {
   userMode?: string;
   // Website Navigation Props
   showWebsiteNavigation?: boolean;
+  currentScreen?: string;
   onServicesHub?: () => void;
   onBlogHome?: () => void;
   onAbout?: () => void;
@@ -45,6 +46,7 @@ function ProductHeader({
   userMode = 'guest',
   // Website Navigation Props
   showWebsiteNavigation = false,
+  currentScreen = '',
   onServicesHub,
   onBlogHome,
   onAbout,
@@ -65,23 +67,38 @@ function ProductHeader({
         <div className={styles.navigationSection}>
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
-              <button onClick={onDemoMode} className={styles.navButton}>
+              <button 
+                onClick={onDemoMode} 
+                className={`${styles.navButton} ${currentScreen === 'homepage' ? styles.activeNavButton : ''}`}
+              >
                 <span className={styles.navLabel}>ElevateBusiness 360°</span>
               </button>
               
-              <button onClick={onServicesHub} className={styles.navButton}>
+              <button 
+                onClick={onServicesHub} 
+                className={`${styles.navButton} ${currentScreen === 'services-hub' ? styles.activeNavButton : ''}`}
+              >
                 <span className={styles.navLabel}>Consulting Services</span>
               </button>
               
-              <button onClick={onBlogHome} className={styles.navButton}>
+              <button 
+                onClick={onBlogHome} 
+                className={`${styles.navButton} ${currentScreen === 'blog-home' || currentScreen === 'blog-post' ? styles.activeNavButton : ''}`}
+              >
                 <span className={styles.navLabel}>365 Days Blog</span>
               </button>
               
-              <button onClick={onAbout} className={styles.navButton}>
+              <button 
+                onClick={onAbout} 
+                className={`${styles.navButton} ${currentScreen === 'about' ? styles.activeNavButton : ''}`}
+              >
                 <span className={styles.navLabel}>About Us</span>
               </button>
               
-              <button onClick={onContact} className={styles.navButton}>
+              <button 
+                onClick={onContact} 
+                className={`${styles.navButton} ${currentScreen === 'contact' ? styles.activeNavButton : ''}`}
+              >
                 <span className={styles.navLabel}>Contact</span>
               </button>
             </nav>
