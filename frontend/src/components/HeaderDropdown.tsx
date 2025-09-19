@@ -107,7 +107,7 @@ function HeaderDropdown({
 
           {/* Website Navigation Section - Top Priority for Mobile */}
           {showWebsiteNavigation && (
-            <div className={styles.menuSection}>
+            <div className={`${styles.menuSection} ${styles.websiteNavigationSection}`}>
               <div className={styles.sectionTitle}>Navigation</div>
               <button
                 className={styles.menuItem}

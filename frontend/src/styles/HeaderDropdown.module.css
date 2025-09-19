@@ -147,8 +147,17 @@
   font-size: 14px;
 }
 
+/* Hide website navigation on desktop (already shown in header) */
+.websiteNavigationSection {
+  display: none;
+}
+
 /* Professional Mobile Design */
 @media (max-width: 768px) {
+  /* Show website navigation on mobile only */
+  .websiteNavigationSection {
+    display: block;
+  }
   .dropdownTrigger {
     padding: 8px;
     font-size: 18px;
