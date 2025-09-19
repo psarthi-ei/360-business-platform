@@ -26,9 +26,16 @@
 │   └─ Pricing & Plans
 │
 ├─ Consulting Services [SUPPORTING - 25% prominence]
-│   ├─ Strategic Project Acceleration (existing content)
-│   ├─ Scalability for Growth (existing content)
-│   ├─ Agile Systems Implementation (existing content)
+│   ├─ Services Overview (Hub Page) [NEW]
+│   │   ├─ What We Do: Consulting & technology transformation overview
+│   │   ├─ Why We Do It: Mission, vision, approach philosophy
+│   │   ├─ Our Services: Cards for 3 main services with navigation
+│   │   ├─ Our Frameworks: Overview of methodology approach
+│   │   ├─ Success Stories: Preview cards with "View More" functionality
+│   │   └─ Call to Action: Contact form or consultation booking
+│   ├─ Strategic Project Acceleration (individual service page)
+│   ├─ Scalability for Growth (individual service page)
+│   ├─ Agile Systems Implementation (individual service page)
 │   ├─ Success Stories (6 existing case studies)
 │   └─ Custom Technology Solutions
 │
@@ -96,21 +103,59 @@
    - Add textile manufacturer testimonials
    - ROI metrics and efficiency improvements
 
-#### **B. Consulting Services Integration:**
-1. **Main Consulting Page**
-   - Migrate existing content from current website:
-     - Strategic Project Acceleration
-     - Scalability for Growth  
-     - Agile Systems for Innovation
-   - Keep language broad and flexible
-   - Position as secondary offering
+#### **B. Services Navigation Architecture Implementation:**
 
-2. **Case Studies Page**
+**⚠️ UPDATED APPROACH - Professional Consulting Structure:**
+
+1. **Services Hub Page Creation** (Main services landing page)
+   - **What We Do**: Consulting & technology transformation overview
+   - **Why We Do It**: Mission, vision, approach philosophy
+   - **Our Services**: Interactive cards for 3 main services with navigation
+   - **Our Frameworks**: Overview of methodology approach
+   - **Success Stories**: Preview cards with "View More" functionality
+   - **Client Testimonials**: Social proof section
+   - **Call to Action**: Contact form or consultation booking
+
+2. **Generic Service Page Component** (Replace individual service components)
+   - **Dynamic Content Loading**: Uses content loader from markdown files
+   - **Consistent Layout**: Same structure across all services
+   - **Complete Framework Details**: Phases, timelines, deliverables, outcomes
+   - **Navigation**: Back to services hub and homepage
+   - **Content Source**: Existing strategic-project-acceleration.md, scalability-for-growth.md, agile-systems-for-rapid-innovation.md
+
+3. **Navigation Flow Update**
+   ```
+   Homepage → Consulting Services Dropdown
+   ├─ Services Overview (Hub) ← NEW ENTRY POINT
+   ├─ Strategic Project Acceleration (Individual service)
+   ├─ Scalability for Growth (Individual service)  
+   ├─ Agile Systems Implementation (Individual service)
+   └─ Success Stories (Case studies)
+   ```
+
+4. **Technical Implementation**
+   - **Remove Redundant Components**: Delete StrategicProjectAcceleration.tsx, ScalabilityForGrowth.tsx, AgileSystemsForRapidInnovation.tsx
+   - **Create ServicesHub.tsx**: Main services landing page
+   - **Create ServicePage.tsx**: Generic component for individual services
+   - **Update App.tsx**: Add routing for services hub and service pages
+   - **Fix HomePage.tsx**: Replace href="#..." with onClick handlers
+   - **Content Management**: services-hub.md + existing service markdown files
+
+**Benefits of New Architecture:**
+- Professional consulting website structure
+- Better user discovery flow (overview → specific service)
+- Scalable - easy to add new services
+- Content-driven approach using markdown files
+- Eliminates code duplication
+
+#### **C. Case Studies Integration:**
+1. **Case Studies Page**
    - Migrate 6 existing case studies
    - Professional formatting with results metrics
    - Client testimonials and project outcomes
+   - Integration with Services Hub preview section
 
-#### **C. Blog Integration:**
+#### **D. Blog Integration:**
 1. **365 Days Blog System**
    - Migrate 55+ existing blog posts
    - Categories: Entrepreneurship, Business Building, Tech Leadership
@@ -140,9 +185,64 @@
    - Entrepreneurship journey
    - Product development expertise
 
-### **Phase 4: Technical Implementation (Week 4)**
+### **Phase 4: Frontend Architecture Restructuring (Week 4)**
 
-#### **React Component Integration:**
+#### **Frontend Folder Restructuring Strategy:**
+
+**Architectural Decision**: Move website components to dedicated `/website` folder while keeping platform components in existing `/components` structure.
+
+**Current Challenge**: Website and platform components mixed together, making deployment boundaries unclear.
+
+**Solution - Simplified Restructuring**:
+```
+frontend/src/
+├── website/                   # NEW - Website components only
+│   ├── components/
+│   │   ├── HomePage.tsx              # Move from /components/
+│   │   ├── PlatformShowcase.tsx      # Move from /components/
+│   │   ├── ServicesHub.tsx           # Create new
+│   │   ├── BlogHome.tsx              # Create new
+│   │   ├── AboutPage.tsx             # Create new
+│   │   └── ContactPage.tsx           # Create new
+│   ├── styles/
+│   │   ├── HomePage.module.css       # Move from /styles/
+│   │   └── PlatformShowcase.module.css # Move from /styles/
+│   └── content/
+│       └── services/                 # Move from /src/content/
+│
+├── components/                # UNCHANGED - Platform + shared components
+│   ├── ProductHeader.tsx             # Shared component (stays)
+│   ├── Authentication.tsx            # Shared component (stays)
+│   ├── Dashboard.tsx                 # Platform component
+│   ├── LeadManagement.tsx            # Platform component
+│   └── [all other platform components remain here]
+│
+└── [styles/, contexts/, utils/ remain unchanged]
+```
+
+**Implementation Benefits**:
+- **Clear Deployment Boundaries**: Vercel = `/website` + shared, GCP = `/components` + shared
+- **Minimal Disruption**: Only ~6 website files need moving vs restructuring everything
+- **Deployment Optimization**: Each target includes only relevant components
+- **Code Sharing**: ProductHeader, Authentication remain shared in `/components`
+
+**Migration Steps**:
+1. Create `/src/website/components/` and `/src/website/styles/` folders
+2. Move HomePage.tsx and PlatformShowcase.tsx to website folder
+3. Move content folder to `/src/website/content/`
+4. Update import statements in App.tsx
+5. Create placeholder website components (ServicesHub, BlogHome, etc.)
+6. Test both website and platform functionality
+
+**Deployment Architecture Alignment**:
+- **Website Deployment (Vercel)**: Includes `/website` + shared components
+- **Platform Deployment (GCP)**: Includes `/components` + shared components  
+- **Single Codebase**: Environment-based builds determine which components to include
+- **Build Optimization**: Each deployment gets only relevant code
+
+### **Phase 5: React Component Integration (Week 5)**
+
+#### **Website Component Development:**
 1. **Homepage Component Updates**
    - Enhance existing HomePage.tsx with product focus
    - Integrate blog preview section
@@ -217,22 +317,95 @@
 
 ## 🎯 **EXECUTION PRIORITIES**
 
-### **Immediate Tasks (This Week):**
-1. Homepage hero section redesign (product-first)
-2. Navigation structure update
-3. Product showcase page creation
-4. Consulting services page (broad positioning)
+### **✅ COMPLETED PHASES:**
+1. **Content Analysis & Extraction** - All existing content from elevateidea_mirror
+2. **Service Content Migration** - Complete framework content in markdown files  
+3. **React Components with Content Loader** - Dynamic content loading system
+4. **Website Redesign Plan Update** - Services navigation architecture documented
 
-### **Next Week:**
-1. Blog integration with existing content
-2. About us page rewrite
-3. Case studies migration
-4. Mobile optimization
+### **🎯 CURRENT UNDERSTANDING - Perfect Foundation:**
+**Homepage (App Landing Page)** - ✅ PERFECT AS-IS
+- Professional product showcase for ElevateBusiness 360°
+- Demo Mode and Guest Mode buttons working perfectly
+- Navigation menu present (Consulting, Blog, About, Contact)
 
-### **Following Week:**
-1. Demo environment setup
-2. Content organization and SEO
-3. Contact form integration
-4. Final design polish
+**Platform Experience** - ✅ PERFECT AS-IS  
+- Dashboard with complete SaaS platform functionality
+- All business modules working (leads, quotations, sales, etc.)
+- User can fully experience the product
+
+### **🚨 URGENT ISSUE: Header Inconsistency Problem**
+
+**Critical UX Issue Discovered:**
+- **Homepage & Website Pages**: Use full navigation header from HomePage.tsx (Services, Blog, About, Contact)
+- **Platform Pages**: Use minimal ProductHeader.tsx (just logo + context navigation + dropdown)
+- **User Impact**: Jarring navigation inconsistency when moving between website and platform sections
+
+**Root Cause Analysis:**
+```
+App.tsx Conditional Logic:
+{currentScreen !== 'homepage' && (
+  <ProductHeader ... />
+)}
+
+Result:
+- Homepage: Uses integrated header with full navigation
+- Services/Blog/About/Contact: Should use same header as homepage for consistency
+- Dashboard/Platform: Should use ProductHeader but with navigation context
+```
+
+### **🎯 CURRENT STATUS - 95% COMPLETE:**
+
+**✅ Phase 4: Frontend Architecture Restructuring (100% COMPLETE)**
+- [x] Frontend folder restructuring completed - website components in `/src/website/` folder
+- [x] Import statements updated in App.tsx
+- [x] Deployment boundaries prepared for Vercel + GCP strategy
+
+**✅ Phase 5: Build Missing Pages (100% COMPLETE)**
+- [x] Navigation system fixed - clean onClick handlers, dropdowns removed
+- [x] Consulting Services Section - ServicesHub and dynamic content system built
+- [x] Blog Section - BlogHome with categories and professional design completed
+- [x] About Us Page - Company story and founder journey implemented
+- [x] Contact Page - Professional contact forms and information built
+
+**✅ Phase 6: Single Header Architecture Implementation (COMPLETED - CLICKABLE LOGO SOLUTION)**
+
+### **🎯 ARCHITECTURAL DECISION: Clickable Logo Navigation**
+
+**Decision Date**: September 19, 2025  
+**Final Solution**: Implemented clickable logo navigation for universal homepage access across all pages
+
+**Benefits Achieved**: 
+- ✅ Universal navigation pattern (clickable logo = standard business convention)
+- ✅ Simplified codebase (removed complex context navigation system)
+- ✅ Professional appearance (enterprise B2B standard)
+- ✅ Mobile-friendly (large touch target with hover effects)
+- ✅ Consistent user experience across website and platform
+
+**Implementation Completed**:
+- [x] **Phase 6A**: Made ElevateIdea logo clickable with onHome navigation
+- [x] **Phase 6B**: Removed all "← Back to Homepage" buttons from website pages
+- [x] **Phase 6C**: Eliminated context navigation system (🏠 home icon)
+- [x] **Phase 6D**: Updated component interfaces and simplified props
+- [x] **Phase 6E**: Cleaned up CSS and validated navigation consistency
+
+**Final Navigation Architecture**:
+1. **Clickable Logo**: ElevateIdea logo serves as universal home navigation
+2. **Standard Convention**: Follows enterprise SaaS and business website patterns
+3. **Clean Design**: No redundant navigation elements or confusing icons
+4. **Mobile Optimized**: Adequate touch target size with visual feedback
+5. **Universal Availability**: Logo visible and clickable on every page of the application
+
+### **📋 REMAINING PHASES (After Header Fix):**
+**Phase 7**: Content Enhancement - Hero section copy refinement and product showcase details
+**Phase 8**: Blog Integration - 55+ existing posts migration with categories and search  
+**Phase 9**: Performance Optimization - Mobile responsiveness and loading optimization
+**Phase 10**: Demo Environment - Interactive product showcase enhancement
+
+### **🚀 FINAL PHASES:**
+1. **Demo Environment** - Interactive product showcase
+2. **Mobile Optimization** - Responsive design polish  
+3. **SEO & Performance** - Content organization and loading optimization
+4. **Contact Integration** - Demo requests and consultation booking
 
 This plan creates a professional website that positions ElevateIdea as a product company while preserving and enhancing all existing consulting content, blog posts, and company assets.

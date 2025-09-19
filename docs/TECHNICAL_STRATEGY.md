@@ -254,6 +254,249 @@ content/
 
 ---
 
+## **SINGLE CODEBASE, MULTIPLE DEPLOYMENT STRATEGY (September 18, 2025)**
+
+### **Strategic Architecture Decision**
+
+Deploy both **marketing website** and **business platform** from the same React codebase to different hosting providers, optimizing each deployment for its specific purpose while maintaining unified development workflow.
+
+#### **Deployment Architecture Overview**
+```
+Single Repository: /frontend
+├── Website Deployment (Vercel)
+│   ├── Target: Marketing, content, lead generation
+│   ├── Routes: /, /services, /blog, /about, /contact  
+│   ├── Build: REACT_APP_DEPLOY_TARGET=website
+│   └── Optimization: Static content, CDN, SEO
+└── Platform Deployment (GCP)
+    ├── Target: Business application, user dashboard
+    ├── Routes: /dashboard, /leads, /quotations, /orders
+    ├── Build: REACT_APP_DEPLOY_TARGET=platform
+    └── Optimization: Dynamic features, database, backend
+```
+
+### **Implementation Strategy: Environment-Based Builds**
+
+#### **Option A: Environment-Based Builds (RECOMMENDED)**
+```javascript
+// App.tsx - Conditional rendering based on deployment target
+const isWebsiteDeployment = process.env.REACT_APP_DEPLOY_TARGET === 'website';
+const isPlatformDeployment = process.env.REACT_APP_DEPLOY_TARGET === 'platform';
+
+return (
+  <div className="App">
+    <ProductHeader {...headerProps} />
+    
+    {/* Website Deployment - Marketing Content */}
+    {isWebsiteDeployment && (
+      <>
+        {currentScreen === 'homepage' && renderHomePage()}
+        {currentScreen === 'services-hub' && renderServicesHub()}
+        {currentScreen === 'blog-home' && renderBlogHome()}
+        {currentScreen === 'about' && renderAbout()}
+        {currentScreen === 'contact' && renderContact()}
+      </>
+    )}
+    
+    {/* Platform Deployment - Business Application */}
+    {isPlatformDeployment && (
+      <>
+        {currentScreen === 'dashboard' && renderDashboard()}
+        {currentScreen === 'leads' && renderLeadManagement()}
+        {currentScreen === 'quotations' && renderQuotationOrders()}
+        {currentScreen === 'salesorders' && renderSalesOrders()}
+        {/* ... all business modules */}
+      </>
+    )}
+  </div>
+);
+```
+
+#### **Build Commands Configuration**
+```bash
+# Vercel Deployment (Website)
+REACT_APP_DEPLOY_TARGET=website npm run build
+
+# GCP Deployment (Platform)  
+REACT_APP_DEPLOY_TARGET=platform npm run build
+```
+
+#### **Deployment Configuration Files**
+
+**Vercel Configuration (`vercel.json`)**:
+```json
+{
+  "build": {
+    "env": {
+      "REACT_APP_DEPLOY_TARGET": "website"
+    }
+  },
+  "routes": [
+    { "src": "/(services|blog|about|contact)", "dest": "/index.html" },
+    { "src": "/", "dest": "/index.html" }
+  ]
+}
+```
+
+**GCP Configuration (`cloudbuild.yaml`)**:
+```yaml
+steps:
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        npm install
+        REACT_APP_DEPLOY_TARGET=platform npm run build
+```
+
+### **Shared Component Architecture**
+
+#### **Universal Components (Used by Both Deployments)**
+- **ProductHeader**: Adaptive navigation based on deployment context
+- **Design System**: Colors, fonts, styling constants
+- **Translation System**: Multilingual support for both website and platform
+- **Authentication**: Login/signup flows work in both contexts
+- **Utilities**: Helper functions, content loaders, API services
+
+#### **Header Component Adaptation**
+```typescript
+// ProductHeader.tsx - Context-aware navigation
+interface ProductHeaderProps {
+  // Standard props
+  currentLanguage: string;
+  onLanguageChange: (language: string) => void;
+  
+  // Website-specific navigation
+  onServicesHub?: () => void;
+  onBlogHome?: () => void; 
+  onAbout?: () => void;
+  onContact?: () => void;
+  
+  // Platform-specific navigation  
+  onDashboard?: () => void;
+  showContextNavigation?: boolean;
+  contextNavigationText?: string;
+}
+
+// Conditional navigation rendering based on available props
+{onServicesHub && ( // Website deployment
+  <nav className={styles.websiteNavigation}>
+    <button onClick={onServicesHub}>Services</button>
+    <button onClick={onBlogHome}>Blog</button>
+    <button onClick={onAbout}>About</button>
+    <button onClick={onContact}>Contact</button>
+  </nav>
+)}
+
+{showContextNavigation && ( // Platform deployment
+  <button onClick={onDashboard}>Dashboard</button>
+)}
+```
+
+### **Technical Benefits**
+
+#### **1. Development Efficiency**
+- **Single Codebase**: No duplication of design system, components, or utilities
+- **Unified Workflow**: Same development environment for both website and platform
+- **Shared Dependencies**: Single package.json, consistent library versions
+- **Code Reuse**: Maximum sharing of React components and business logic
+
+#### **2. Deployment Optimization**
+- **Website (Vercel)**: Optimized for static content, global CDN, fast SEO performance
+- **Platform (GCP)**: Optimized for dynamic features, database connectivity, backend integration
+- **Build Optimization**: Each deployment only includes relevant code and assets
+- **Performance**: Right hosting solution for each use case
+
+#### **3. Maintenance Benefits**
+- **Design Consistency**: Changes to header, styling, branding automatically apply to both
+- **Feature Sharing**: Authentication, language switching, user management work everywhere
+- **Security Updates**: Single codebase means single security update process
+- **Testing**: Same test suite covers both deployment scenarios
+
+#### **4. Cost Optimization**
+- **Vercel**: Free/low-cost static hosting for marketing website
+- **GCP**: Pay for dynamic features only where needed (platform)
+- **Resource Efficiency**: No duplicate infrastructure for shared functionality
+- **Scaling Economics**: Each deployment scales independently based on usage patterns
+
+### **Implementation Considerations**
+
+#### **Environment Variables Strategy**
+```javascript
+// Development - Show both website and platform (local testing)
+REACT_APP_DEPLOY_TARGET=development
+
+// Production - Deploy specific target
+REACT_APP_DEPLOY_TARGET=website    // Vercel
+REACT_APP_DEPLOY_TARGET=platform   // GCP
+```
+
+#### **Routing Strategy**
+```javascript
+// Website deployment - Marketing routes only
+const websiteRoutes = ['/', '/services', '/blog', '/about', '/contact'];
+
+// Platform deployment - Business application routes
+const platformRoutes = ['/dashboard', '/leads', '/quotations', '/orders', ...];
+
+// Route filtering based on deployment target
+const allowedRoutes = isWebsiteDeployment ? websiteRoutes : platformRoutes;
+```
+
+#### **Asset Optimization**
+- **Website Deployment**: Include marketing images, blog content, service documentation
+- **Platform Deployment**: Include business icons, dashboard assets, application resources
+- **Shared Assets**: Logo, brand elements, common UI components included in both
+
+### **Migration Path from Current Architecture**
+
+#### **Phase 1: Implement Environment-Based Routing**
+1. Add deployment target environment variable handling
+2. Implement conditional rendering in App.tsx
+3. Test both deployment modes locally
+4. Verify component sharing works correctly
+
+#### **Phase 2: Configure Deployment Pipelines**
+1. Set up Vercel deployment with website environment
+2. Configure GCP deployment with platform environment  
+3. Test independent deployments
+4. Verify routing and functionality in both environments
+
+#### **Phase 3: Optimize for Each Deployment**
+1. Asset optimization for each target
+2. Route-specific build optimizations
+3. Performance tuning for each hosting platform
+4. SEO optimization for website deployment
+
+### **Future Evolution Strategy**
+
+#### **Expansion Scenarios**
+- **New Regions**: Same codebase deploys to different regions (India, Southeast Asia)
+- **White Label**: Customer-specific deployments with same core platform
+- **Industry Variants**: Manufacturing vs textile vs food processing versions
+- **Feature Flagging**: A/B testing across both website and platform
+
+#### **Technology Evolution**
+- **Monorepo Migration**: Can evolve to Nx/Lerna structure while maintaining deployment strategy
+- **Micro-Frontend**: Future option to split into micro-frontends if needed
+- **Full-Stack Framework**: Can migrate to Next.js while preserving deployment architecture
+
+### **Conclusion**
+
+The **Single Codebase, Multiple Deployment Strategy** provides optimal balance of:
+- **Development Efficiency**: Unified codebase with maximum code sharing
+- **Deployment Optimization**: Right hosting solution for each use case
+- **Operational Simplicity**: Single development workflow and maintenance process
+- **Cost Effectiveness**: Optimal hosting costs for website vs platform requirements
+- **Scalability**: Clear path for future expansion and technology evolution
+
+**Implementation Status**: ✅ **READY FOR IMPLEMENTATION** - Architecture documented, ready for development team execution
+
+**Next Steps**: Implement environment-based conditional rendering in App.tsx and ProductHeader components
+
+---
+
 ### **FUTURE EXPANSION (When Customers Ask)**
 
 #### **Adding New Industries**
@@ -1256,6 +1499,83 @@ Voice commands are implemented as a **universal platform feature** available acr
 
 ---
 
-**Document Version**: 9.0 (CRM Architecture & Universal Voice Integration Added)  
+## 🎨 **SINGLE HEADER ARCHITECTURE DECISION**
+
+### **Strategic Decision: Unified Header Component System**
+
+**Decision Date**: September 18, 2025  
+**Context**: Website redesign and platform integration  
+**Decision**: Implement single ProductHeader component across entire application
+
+#### **Architecture Approach**
+
+**Single Component Strategy**:
+- **One Header Component**: ProductHeader handles all navigation contexts
+- **Universal Design**: Consistent visual design across homepage, website, and platform
+- **Context-Aware Navigation**: Adapts navigation options based on current screen/context
+- **Maintainable Codebase**: Single source of truth for header functionality
+
+#### **Implementation Benefits**
+
+**Long-Term Scalability**:
+```
+✅ Single codebase = easier maintenance
+✅ Design consistency = stronger brand perception  
+✅ Feature additions = automatic app-wide deployment
+✅ Testing efficiency = one component to test
+✅ Developer velocity = no duplicate header logic
+```
+
+**MVP Benefits**:
+```
+✅ Simpler architecture from start
+✅ Faster feature development
+✅ Consistent user experience
+✅ Reduced technical debt
+✅ Better performance (no duplicate CSS/logic)
+```
+
+#### **Technical Implementation**
+
+**Component Structure**:
+- **ProductHeader.tsx**: Single header component with navigation props
+- **Context-Aware Props**: Website navigation vs platform navigation vs minimal context
+- **Conditional Rendering**: Shows appropriate navigation based on screen type
+- **Design Consistency**: Matches beautiful HomePage header design across all pages
+
+**Navigation Contexts**:
+```typescript
+// Website pages: Full navigation menu
+showWebsiteNavigation={true}
+onServicesHub={...} onBlogHome={...} onAbout={...} onContact={...}
+
+// Platform pages: Minimal navigation with context
+showContextNavigation={true} 
+contextNavigationText="Home" contextNavigationIcon="🏠"
+
+// Authentication pages: Clean minimal header
+showWebsiteNavigation={false} showContextNavigation={false}
+```
+
+#### **Architectural Decision Record**
+
+**Problem**: Two different header designs causing navigation inconsistency and maintenance overhead
+
+**Solution**: Single ProductHeader component with context-aware navigation and unified design
+
+**Alternatives Considered**:
+1. Keep dual headers (rejected: maintenance overhead)
+2. Enhance ProductHeader for specific contexts (rejected: still dual codebase)
+3. True single header with adaptive design (selected: optimal long-term)
+
+**Consequences**:
+- ✅ Consistent user experience across entire app
+- ✅ Easier maintenance and feature development  
+- ✅ Better architectural foundation for scaling
+- ⚠️ Requires careful implementation to preserve homepage design quality
+
+---
+
+**Document Version**: 10.0 (Single Header Architecture Decision Added)  
 **Last Updated**: September 16, 2025  
 **Philosophy**: Ship fast, iterate based on customer feedback, keep it simple, test core functionality
