@@ -105,7 +105,64 @@ function HeaderDropdown({
       {isOpen && (
         <div className={styles.dropdownMenu}>
 
-          {/* Authentication Section - Top Priority */}
+          {/* Website Navigation Section - Top Priority for Mobile */}
+          {showWebsiteNavigation && (
+            <div className={styles.menuSection}>
+              <div className={styles.sectionTitle}>Navigation</div>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onDemoMode?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>⚡</span>
+                <span className={styles.itemText}>ElevateBusiness 360°</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onServicesHub?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🎯</span>
+                <span className={styles.itemText}>Consulting Services</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onBlogHome?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📝</span>
+                <span className={styles.itemText}>365 Days Blog</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onAbout?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>ℹ️</span>
+                <span className={styles.itemText}>About Us</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onContact?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📞</span>
+                <span className={styles.itemText}>Contact</span>
+              </button>
+            </div>
+          )}
+
+          {/* Authentication Section */}
           <div className={styles.menuSection}>
             <div className={styles.sectionTitle}>
               {isAuthenticated ? `Account: ${userMode === 'guest' ? '👤 Guest' : userMode === 'demo' ? '🎬 Demo User' : '👤 User'}` : 'Access'}
@@ -168,63 +225,6 @@ function HeaderDropdown({
               </button>
             )}
           </div>
-
-          {/* Website Navigation Section */}
-          {showWebsiteNavigation && (
-            <div className={styles.menuSection}>
-              <div className={styles.sectionTitle}>Navigation</div>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onDemoMode?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>⚡</span>
-                <span className={styles.itemText}>ElevateBusiness 360°</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onServicesHub?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>🎯</span>
-                <span className={styles.itemText}>Consulting Services</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onBlogHome?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>📝</span>
-                <span className={styles.itemText}>365 Days Blog</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onAbout?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>ℹ️</span>
-                <span className={styles.itemText}>About Us</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onContact?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>📞</span>
-                <span className={styles.itemText}>Contact</span>
-              </button>
-            </div>
-          )}
 
           {/* Language Section - Available on All Devices */}
           <div className={styles.menuSection}>
