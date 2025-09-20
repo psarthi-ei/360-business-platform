@@ -179,14 +179,13 @@ function TurnaroundStories({
       <div className={styles.header}>
         <h1 className={styles.title}>🔄 Turnaround Stories</h1>
         <p className={styles.subtitle}>
-          In my last 10 years in corporate, I've led major turnarounds across large banks, growing startups, government projects, and major retailers. 
-          These turnarounds were not just crucial for the engagements, but pivotal for the companies' next growth phase.
+          Sharing my corporate turnaround experiences that are helping me build ElevateIdea - hoping these real stories and lessons may help other entrepreneurs and businesses as well.
+        </p>
+        <p className={styles.contextText}>
+          During 8 years of corporate turnaround experience (2016-2023) within my 20+ year career, I've led major turnarounds across large banks, growing startups, government projects, and major retailers. 
+          These experiences taught me how to identify failing systems, rally teams under pressure, and deliver results when everything is on the line.
         </p>
         <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statNumber}>10</div>
-            <div className={styles.statLabel}>Years Experience</div>
-          </div>
           <div className={styles.statCard}>
             <div className={styles.statNumber}>6</div>
             <div className={styles.statLabel}>Major Turnarounds</div>

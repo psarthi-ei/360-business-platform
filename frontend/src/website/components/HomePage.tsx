@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from '../../contexts/TranslationContext';
 import { openBetaSignup } from '../../utils/contactUtils';
 import styles from '../styles/HomePage.module.css';
 
@@ -28,7 +27,6 @@ function HomePage({
   onAbout,
   onContact
 }: HomePageProps) {
-  const { t } = useTranslation();
   // Note: Mobile menu functionality to be implemented when needed
   // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
