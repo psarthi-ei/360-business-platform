@@ -34,6 +34,39 @@
   background-clip: text;
 }
 
+.heroVision {
+  font-size: 1.5rem;
+  color: #1e293b;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+}
+
+.heroMissionSection {
+  margin-top: 40px;
+}
+
+.heroMissionTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.heroMission {
+  font-size: 1.2rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 50px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .heroSubtitle {
   font-size: 1.4rem;
   color: #64748b;
@@ -167,31 +200,327 @@
   font-size: 1.1rem;
 }
 
-/* Mission & Vision Section */
-.missionVision {
+/* Founder Profile Section */
+.founderProfile {
   margin-bottom: 80px;
 }
 
-.missionVisionGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 40px;
+.founderContent {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.missionCard, .visionCard {
+.founderBio {
   background: white;
-  padding: 40px;
+  padding: 50px;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.missionCard {
+.founderName {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.founderTitle {
+  font-size: 1.2rem;
+  color: #667eea;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.bioSection {
+  margin-bottom: 40px;
+  text-align: justify;
+}
+
+.bioSection p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.notableRoles {
+  text-align: justify;
+}
+
+.notableRoles h4 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.notableRoles p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.notableRoles strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Entrepreneurship Journey Section */
+.entrepreneurshipJourney {
+  margin-bottom: 80px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  padding: 80px 40px;
+  border-radius: 20px;
+}
+
+.journeyContent {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.journeyText {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: justify;
+}
+
+.journeyText p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.journeyText p:last-child {
+  margin-bottom: 0;
+}
+
+/* Why MSMEs Section */
+.whyMsmes {
+  margin-bottom: 80px;
+}
+
+.whyMsmesContent {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.storyCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.storyCard:hover {
+  transform: translateY(-5px);
+}
+
+.storyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.storyCard h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.storyCard p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Problem Section */
+.problemSection {
+  margin-bottom: 80px;
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.05) 0%, rgba(255, 165, 2, 0.05) 100%);
+  padding: 80px 40px;
+  border-radius: 20px;
+}
+
+.problemContent {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.problemIntro {
+  font-size: 1.2rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 50px;
+  line-height: 1.6;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.problemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.problemCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.problemCard:hover {
+  transform: translateY(-5px);
+}
+
+.problemIcon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.problemCard h3 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.problemCard p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.currentReality {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.currentReality h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.currentReality p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Solution Section */
+.solutionSection {
+  margin-bottom: 80px;
+}
+
+.solutionIntro {
+  font-size: 1.2rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.6;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.solutionFlow {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.solutionFlow h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.solutionFlow p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.solutionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.solutionCard {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.solutionCard:hover {
+  transform: translateY(-5px);
+}
+
+.solutionCard:nth-child(1) {
   border-top: 5px solid #667eea;
 }
 
-.visionCard {
+.solutionCard:nth-child(2) {
   border-top: 5px solid #764ba2;
+}
+
+.solutionCard:nth-child(3) {
+  border-top: 5px solid #ffd700;
+}
+
+.solutionIcon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.solutionCard h3 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.solutionCard p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 .cardIcon {
@@ -299,21 +628,22 @@
 .cta {
   text-align: center;
   padding: 80px 40px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.8) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;
   margin-bottom: 60px;
+  color: white;
 }
 
 .ctaTitle {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #1e293b;
+  color: white;
 }
 
 .ctaSubtitle {
   font-size: 1.2rem;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 40px;
   max-width: 600px;
   margin-left: auto;
@@ -328,36 +658,43 @@
   flex-wrap: wrap;
 }
 
-.primaryCta, .secondaryCta {
-  padding: 15px 30px;
-  border-radius: 30px;
-  font-size: 1.1rem;
+.primaryCta {
+  background: #ffd700;
+  color: #333;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.primaryCta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .primaryCta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+  background: #ffed4e;
 }
 
 .secondaryCta {
-  background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: white;
+  color: #0077b5;
+  border: 2px solid white;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .secondaryCta:hover {
-  background: #667eea;
+  background: #0077b5;
   color: white;
-  transform: translateY(-2px);
+  border-color: #0077b5;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 119, 181, 0.3);
 }
 
 /* Responsive Design */
@@ -366,8 +703,28 @@
     font-size: 2.5rem;
   }
   
+  .heroVision {
+    font-size: 1.3rem;
+  }
+  
+  .heroMission {
+    font-size: 1.1rem;
+  }
+  
   .heroSubtitle {
     font-size: 1.2rem;
+  }
+  
+  .problemGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .solutionGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .problemSection {
+    padding: 60px 25px;
   }
   
   .heroFounder {
@@ -404,6 +761,26 @@
   
   .valuesGrid {
     grid-template-columns: 1fr;
+  }
+  
+  .storyGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .founderBio {
+    padding: 30px;
+  }
+  
+  .founderName {
+    font-size: 1.8rem;
+  }
+  
+  .entrepreneurshipJourney {
+    padding: 60px 25px;
+  }
+  
+  .journeyText {
+    padding: 30px;
   }
   
   .metricsGrid {
@@ -451,5 +828,21 @@
   
   .ctaTitle {
     font-size: 2rem;
+  }
+  
+  .founderBio {
+    padding: 20px;
+  }
+  
+  .founderName {
+    font-size: 1.6rem;
+  }
+  
+  .entrepreneurshipJourney {
+    padding: 40px 15px;
+  }
+  
+  .journeyText {
+    padding: 20px;
   }
 }
