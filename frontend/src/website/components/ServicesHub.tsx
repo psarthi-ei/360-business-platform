@@ -197,6 +197,53 @@ function ServicesHub({
         keywords="ElevateIdea services, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery"
         canonical="/services-hub"
         type="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": "Technology Consulting",
+          "provider": {
+            "@type": "Organization",
+            "name": "ElevateIdea Technologies Private Limited",
+            "url": "https://elevateidea.com"
+          },
+          "name": "Strategic Technology Partnership for Early-Stage Startups",
+          "description": "AI-era strategic technology partnership for early-stage startups. MVP development, project acceleration, and scalability solutions.",
+          "areaServed": "India",
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Early-stage startups and MSME manufacturers"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "ElevateIdea Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "MVP Development",
+                  "description": "30-day AI-accelerated MVP development for early-stage startups"
+                }
+              },
+              {
+                "@type": "Offer", 
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Strategic Project Acceleration",
+                  "description": "Rescue stuck projects and accelerate delivery with experienced guidance"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service", 
+                  "name": "Scalability Solutions",
+                  "description": "Fix existing products struggling with scale using AI-powered solutions"
+                }
+              }
+            ]
+          }
+        }}
       />
       <div className={styles.servicesHub}>
       <div className={styles.container}>

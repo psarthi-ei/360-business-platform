@@ -9,6 +9,7 @@ interface SEOProps {
   type?: 'website' | 'article' | 'profile';
   image?: string;
   author?: string;
+  structuredData?: object;
 }
 
 function SEO({ 
@@ -18,7 +19,8 @@ function SEO({
   canonical,
   type = 'website',
   image = '/logo192.png',
-  author = 'ElevateIdea Technologies'
+  author = 'ElevateIdea Technologies',
+  structuredData
 }: SEOProps) {
   const siteUrl = 'https://elevateidea.com';
   const fullTitle = title.includes('ElevateIdea') ? title : `${title} | ElevateIdea Technologies`;
@@ -59,6 +61,13 @@ function SEO({
       <meta name="application-name" content="ElevateIdea Technologies" />
       <meta name="msapplication-TileColor" content="#667eea" />
       <meta name="theme-color" content="#667eea" />
+
+      {/* Structured Data (JSON-LD) */}
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
     </Helmet>
   );
 }

@@ -192,6 +192,41 @@ function TurnaroundStories({
         keywords="ElevateIdea founder turnaround stories, corporate turnaround expert India, business crisis management, $15M recovery, transformation specialist, 6 major turnarounds"
         canonical="/turnaround-stories"
         type="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "Partha Sarthi",
+          "jobTitle": "Founder & CEO, ElevateIdea Technologies",
+          "description": "Corporate turnaround specialist with 20+ years experience. Led 6 major turnarounds with $15M+ recovery value across banks, government projects, startups, and retailers.",
+          "url": "https://elevateidea.com/turnaround-stories",
+          "image": "https://elevateidea.com/logo192.png",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "ElevateIdea Technologies Private Limited",
+            "url": "https://elevateidea.com"
+          },
+          "knowsAbout": [
+            "Corporate Turnarounds",
+            "Business Crisis Management", 
+            "Technology Transformation",
+            "MSME Digitization",
+            "Strategic Project Recovery",
+            "Banking Technology",
+            "Government Project Management"
+          ],
+          "hasCredential": {
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "Professional Experience",
+            "description": "6 major corporate turnarounds with $15M+ recovery value (2016-2023)"
+          },
+          "alumniOf": [
+            "IBM",
+            "Aadhaar UIDAI Government of India"
+          ],
+          "sameAs": [
+            "https://www.linkedin.com/in/parthasarthi/"
+          ]
+        }}
       />
       <div className={styles.turnaroundStoriesContainer}>
       <div className={styles.header}>

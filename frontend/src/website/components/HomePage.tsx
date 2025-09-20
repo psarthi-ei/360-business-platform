@@ -56,6 +56,35 @@ function HomePage({
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
         canonical="/"
         type="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "ElevateIdea Technologies Private Limited",
+          "alternateName": "ElevateIdea",
+          "url": "https://elevateidea.com",
+          "logo": "https://elevateidea.com/logo192.png",
+          "description": "Complete 360° Business Platform for India's Textile Manufacturers. Empowering MSMEs with voice-first, multilingual business solutions.",
+          "foundingDate": "2023",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "India"
+          },
+          "founder": {
+            "@type": "Person",
+            "name": "Partha Sarthi",
+            "jobTitle": "Founder & CEO",
+            "description": "20+ years technology veteran with 6 major corporate turnarounds, $15M+ recovery value",
+            "url": "https://www.linkedin.com/in/parthasarthi/"
+          },
+          "industry": "Software Technology",
+          "numberOfEmployees": "1-10",
+          "areaServed": "India",
+          "knowsAbout": ["MSME Digitization", "Textile Manufacturing", "Business Platforms", "Corporate Turnarounds", "AI-Accelerated Development"],
+          "sameAs": [
+            "https://www.linkedin.com/in/parthasarthi/",
+            "https://github.com/psarthi-ei"
+          ]
+        }}
       />
       <div className={styles.homePage}>
       {/* Hero Section - 360° Business View */}
