@@ -770,7 +770,7 @@ export const companyBankDetails: BankDetails = {
   bankName: 'State Bank of India',
   accountNumber: '38472951627',
   ifscCode: 'SBIN0001234',
-  accountName: 'ElevateBusiness Manufacturing Pvt Ltd',
+  accountName: 'ElevateIdea Technologies Private Limited',
   branch: 'Surat Main Branch, Gujarat'
 };
 

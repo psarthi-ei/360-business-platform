@@ -337,10 +337,6 @@ function HomePage({
                 <span className={styles.feature}>✓ Customer payment status</span>
                 <span className={styles.feature}>✓ Production progress</span>
               </div>
-              <div className={styles.customerPain}>
-                <strong>"પહેલાં મને ખબર જ નહોતી કે મારા બિઝનેસમાં શું ચાલે છે"</strong>
-                <br />- Ramesh Patel, Surat Cotton Mills
-              </div>
             </div>
 
             <div className={styles.benefitCard}>
@@ -354,10 +350,6 @@ function HomePage({
                 <span className={styles.feature}>✓ Mobile-first design</span>
                 <span className={styles.feature}>✓ No complicated software</span>
                 <span className={styles.feature}>✓ Works in noisy factories</span>
-              </div>
-              <div className={styles.customerPain}>
-                <strong>"હવે કારખાનામાં ફોન પરથી બધું મેનેજ કરી શકું છું"</strong>
-                <br />- Priya Shah, Ahmedabad Textiles
               </div>
             </div>
 
@@ -373,46 +365,13 @@ function HomePage({
                 <span className={styles.feature}>✓ Customer satisfaction tracking</span>
                 <span className={styles.feature}>✓ Profit optimization</span>
               </div>
-              <div className={styles.customerPain}>
-                <strong>"મારો પ્રોફિટ 30% વધ્યો અને કસ્ટમર ખુશ રહે છે"</strong>
-                <br />- Kiran Modi, Vadodara Fabrics
-              </div>
             </div>
           </div>
 
-          {/* Success Metrics Display */}
-          <div className={styles.metricsShowcase}>
-            <h3 className={styles.metricsTitle}>
-              Real Business Impact
-            </h3>
-            <div className={styles.metricsRow}>
-              <div className={styles.metric}>
-                <span className={styles.metricNumber}>30%</span>
-                <span className={styles.metricLabel}>Profit Increase</span>
-                <span className={styles.metricCustomer}>Kiran Modi, Vadodara</span>
-              </div>
-              <div className={styles.metric}>
-                <span className={styles.metricNumber}>3</span>
-                <span className={styles.metricLabel}>Hours Saved Daily</span>
-                <span className={styles.metricCustomer}>Ramesh Patel, Surat</span>
-              </div>
-              <div className={styles.metric}>
-                <span className={styles.metricNumber}>95%</span>
-                <span className={styles.metricLabel}>On-Time Delivery</span>
-                <span className={styles.metricCustomer}>Priya Shah, Ahmedabad</span>
-              </div>
-              <div className={styles.metric}>
-                <span className={styles.metricNumber}>₹2L+</span>
-                <span className={styles.metricLabel}>Monthly Revenue Growth</span>
-                <span className={styles.metricCustomer}>Hitesh Joshi, Rajkot</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Customer Testimonials */}
+          {/* Platform Capabilities */}
           <div className={styles.testimonials}>
             <h3 className={styles.testimonialsTitle}>
-              What Gujarat Textile Manufacturers Can Expect
+              How ElevateBusiness 360° Works
             </h3>
             <div className={styles.testimonialsGrid}>
               <div className={styles.testimonial}>
@@ -470,29 +429,6 @@ function HomePage({
           </p>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerSection}>
-            <h4>ElevateIdea</h4>
-            <p>{t('footerTagline') || "360° Business Platform for MSME Textile Manufacturers"}</p>
-          </div>
-          <div className={styles.footerSection}>
-            <h4>{t('contactTitle') || "Contact"}</h4>
-            <p>📧 support@elevateidea.com</p>
-            <p>📱 +91 98765 43210</p>
-            <p>📍 Bangalore, India</p>
-          </div>
-          <div className={styles.footerSection}>
-            <h4>{t('linkedinTitle') || "Connect"}</h4>
-            <p>💼 Connect with us on LinkedIn</p>
-          </div>
-        </div>
-        <div className={styles.footerBottom}>
-          <p>© 2025 ElevateIdea Technologies Private Limited. {t('allRights') || "All rights reserved."}</p>
-        </div>
-      </footer>
     </div>
   );
 }

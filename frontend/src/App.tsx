@@ -22,6 +22,7 @@ import BlogHome from './website/components/BlogHome';
 import BlogPost from './website/components/BlogPost';
 import AboutPage from './website/components/AboutPage';
 import ContactPage from './website/components/ContactPage';
+import Footer from './website/components/Footer';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { UserProvider } from './contexts/UserContext';
 import { themes, applyTheme } from './styles/themes';
@@ -558,6 +559,14 @@ function App() {
         {currentScreen === 'blog-post' && renderBlogPost()}
         {currentScreen === 'about' && renderAbout()}
         {currentScreen === 'contact' && renderContact()}
+        
+        {/* Single Footer for All Pages */}
+        <Footer
+          currentLanguage={currentLanguage}
+          onLanguageChange={switchLanguage}
+          onAbout={showAbout}
+          onContact={showContact}
+        />
         
           </div>
         </div>

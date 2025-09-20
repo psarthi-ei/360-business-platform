@@ -40,7 +40,7 @@ function ServicesHub({
       key: 'mvp-development',
       title: 'MVP Development',
       filename: '', // No framework document yet - key offering only
-      gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+      gradient: 'linear-gradient(135deg, #2980b9 0%, #3498db 100%)'
     },
     {
       key: 'strategic-project-acceleration',
