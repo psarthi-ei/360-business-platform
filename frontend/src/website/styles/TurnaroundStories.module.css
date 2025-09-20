@@ -1,0 +1,683 @@
+/* TurnaroundStories.module.css - Professional turnaround stories showcase with enhanced accessibility */
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .storyCard {
+    border: 2px solid #000;
+  }
+  
+  .storyHighlight {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  
+  .storySectionHeading {
+    border: 2px solid #000;
+  }
+}
+
+.turnaroundStoriesContainer {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  overflow-x: hidden;
+  padding: 80px 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section - Aligned with HomePage/ServicesHub */
+.header {
+  text-align: center;
+  padding: 60px 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.8) 100%);
+  border-radius: 20px;
+  margin-bottom: 60px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Stats Grid - Brand Color Aligned */
+.statsGrid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.statCard {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  min-width: 120px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 5px;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Stories Grid - Professional 2-Column Layout */
+.storiesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Story Cards - Professional with Unique Gradients */
+.storyCard {
+  border-radius: 20px;
+  padding: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.storyCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.storyCard:focus {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+}
+
+.storyCard:focus-within {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+.storyCard:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+}
+
+/* Individual Card Gradients - 6 Unique Professional Gradients */
+.storyCard:nth-child(1) {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+}
+
+.storyCard:nth-child(2) {
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+}
+
+.storyCard:nth-child(3) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.storyCard:nth-child(4) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.storyCard:nth-child(5) {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.storyCard:nth-child(6) {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+.storyCardContent {
+  position: relative;
+  z-index: 2;
+  color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Story Card Typography */
+.storyTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.3;
+}
+
+.storyPreview {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+}
+
+/* Industry Badge */
+.industryBadge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  backdrop-filter: blur(10px);
+}
+
+/* Key Metrics */
+.keyMetrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.metric {
+  text-align: center;
+  flex: 1;
+  min-width: 80px;
+}
+
+.metricValue {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* Read More Button */
+.readMore {
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  margin-top: auto;
+}
+
+.storyCard:hover .readMore {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Story Content View - Individual Story Detail */
+.storyContent {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.backButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backButton:hover {
+  transform: translateX(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.backButton:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  transform: translateX(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Clean Markdown Content - Preserves Native Formatting */
+.markdownContent {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Liberation Sans', sans-serif;
+  line-height: 1.6;
+  color: #24292f;
+  font-size: 16px;
+  max-width: none;
+  text-align: left;
+}
+
+/* Headings - Clean and Simple */
+.markdownContent h1 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 2em;
+  font-weight: 600;
+  line-height: 1.25;
+  border-bottom: 1px solid #d0d7de;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+.markdownContent h2 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.25;
+  border-bottom: 1px solid #d0d7de;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+.markdownContent h3 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.markdownContent h4 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+}
+
+/* Paragraphs */
+.markdownContent p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Lists */
+.markdownContent ul,
+.markdownContent ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+  text-align: left;
+}
+
+.markdownContent li {
+  margin-bottom: 0.25em;
+  text-align: left;
+}
+
+.markdownContent li + li {
+  margin-top: 0.25em;
+}
+
+/* Strong and Emphasis */
+.markdownContent strong {
+  font-weight: 600;
+}
+
+.markdownContent em {
+  font-style: italic;
+}
+
+/* Horizontal Rules */
+.markdownContent hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #d0d7de;
+  border: 0;
+}
+
+/* Code */
+.markdownContent code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(175, 184, 193, 0.2);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.markdownContent pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.markdownContent pre code {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  border-radius: 0;
+}
+
+/* Blockquotes */
+.markdownContent blockquote {
+  padding: 0 1em;
+  color: #656d76;
+  border-left: 0.25em solid #d0d7de;
+  margin: 0 0 16px 0;
+}
+
+.markdownContent blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdownContent blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Tables */
+.markdownContent table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.markdownContent table th,
+.markdownContent table td {
+  padding: 6px 13px;
+  border: 1px solid #d0d7de;
+}
+
+.markdownContent table th {
+  font-weight: 600;
+  background-color: #f6f8fa;
+}
+
+.markdownContent table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .turnaroundStoriesContainer {
+    padding: 80px 15px 20px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .statsGrid {
+    gap: 20px;
+  }
+
+  .statCard {
+    min-width: 100px;
+    padding: 15px;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+
+  /* Single Column Layout on Mobile */
+  .storiesGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .storyCard {
+    padding: 25px;
+    min-height: 250px;
+  }
+
+  .storyTitle {
+    font-size: 1.2rem;
+  }
+
+  .storyPreview {
+    font-size: 0.9rem;
+  }
+
+  .keyMetrics {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .metricValue {
+    font-size: 1rem;
+  }
+
+  .storyContent {
+    padding: 25px 20px;
+    max-width: 100%;
+  }
+
+  /* Mobile Markdown Content */
+  .markdownContent {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .markdownContent h1 {
+    font-size: 1.75em;
+    margin-bottom: 12px;
+  }
+
+  .markdownContent h2 {
+    font-size: 1.4em;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  .markdownContent h3 {
+    font-size: 1.2em;
+    margin-top: 18px;
+    margin-bottom: 12px;
+  }
+
+  .markdownContent p {
+    margin-bottom: 12px;
+  }
+
+  .markdownContent ul,
+  .markdownContent ol {
+    margin-bottom: 12px;
+    padding-left: 1.5em;
+  }
+
+  .markdownContent pre {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .markdownContent table th,
+  .markdownContent table td {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .header {
+    padding: 40px 20px;
+  }
+
+  .statsGrid {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .statCard {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .storyCard {
+    padding: 20px;
+    min-height: 220px;
+  }
+
+  .storyTitle {
+    font-size: 1.1rem;
+  }
+
+  /* Extra Small Mobile - Story Content */
+  .storyContent {
+    padding: 20px 15px;
+    border-radius: 15px;
+  }
+
+  /* Extra Small Mobile - Markdown Content */
+  .markdownContent {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .markdownContent h1 {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+  }
+
+  .markdownContent h2 {
+    font-size: 1.3em;
+    margin-top: 16px;
+    margin-bottom: 10px;
+  }
+
+  .markdownContent h3 {
+    font-size: 1.1em;
+    margin-top: 14px;
+    margin-bottom: 8px;
+  }
+
+  .markdownContent p {
+    margin-bottom: 10px;
+  }
+
+  .markdownContent ul,
+  .markdownContent ol {
+    margin-bottom: 10px;
+    padding-left: 1.2em;
+  }
+
+  .markdownContent li {
+    margin-bottom: 0.2em;
+  }
+
+  .markdownContent pre {
+    padding: 10px;
+    font-size: 11px;
+  }
+
+  .markdownContent code {
+    font-size: 11px;
+    padding: 0.1em 0.3em;
+  }
+
+  .markdownContent table {
+    font-size: 11px;
+  }
+
+  .markdownContent table th,
+  .markdownContent table td {
+    padding: 3px 6px;
+  }
+}

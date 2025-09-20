@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from '../../contexts/TranslationContext';
+import { openBetaSignup } from '../../utils/contactUtils';
 import styles from '../styles/HomePage.module.css';
 
 interface HomePageProps {
@@ -183,7 +184,7 @@ function HomePage({
             </button>
             <button 
               className={styles.secondaryCta} 
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeyiENxr2NrgyYDh6iOQT_BL057RqFje_bXUyePQQtegA_HCA/viewform?usp=header', '_blank')}
+              onClick={openBetaSignup}
             >
               Sign Up for Beta 📱
             </button>
@@ -459,7 +460,7 @@ function HomePage({
             </button>
             <button 
               className={styles.secondaryCta} 
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeyiENxr2NrgyYDh6iOQT_BL057RqFje_bXUyePQQtegA_HCA/viewform?usp=header', '_blank')}
+              onClick={openBetaSignup}
             >
               Sign Up for Beta 📱
             </button>

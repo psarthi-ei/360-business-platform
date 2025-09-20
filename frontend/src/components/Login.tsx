@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../styles/Login.module.css';
 import CompactLanguageSelector from './CompactLanguageSelector';
 import { useTranslation } from '../contexts/TranslationContext';
+import { useUser } from '../contexts/UserContext';
 
 interface LoginProps {
   onSwitchToSignup: () => void;
@@ -20,6 +21,7 @@ function Login(props: LoginProps) {
   const currentLanguage = props.currentLanguage;
   const onLanguageChange = props.onLanguageChange;
   const { t: translations } = useTranslation();
+  const { login } = useUser();
   
   // Form state management
   const [formData, setFormData] = useState({
@@ -59,11 +61,10 @@ function Login(props: LoginProps) {
       return;
     }
 
-    // For MVP: Simple demo authentication
-    // In production: This will call actual authentication API
+    // Use UserContext login function
     setTimeout(() => {
-      // Demo credentials for textile manufacturer
-      if (formData.email === 'demo@suratextiles.com' && formData.password === 'demo123') {
+      const success = login(formData.email, formData.password);
+      if (success) {
         setIsLoading(false);
         onLoginSuccess();
       } else {

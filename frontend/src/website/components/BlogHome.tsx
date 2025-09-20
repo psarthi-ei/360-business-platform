@@ -1,112 +1,114 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/BlogHome.module.css';
+import BlogCategoryManager from './BlogCategoryManager';
+import { useUser } from '../../contexts/UserContext';
+import { 
+  getBlogPostsByDayNumber,
+  getBlogPostsByCategoryDayOrder,
+  getBlogCategories, 
+  getFeaturedPost,
+  searchBlogPosts,
+  formatDate,
+  getCategoryIcon,
+  BlogPost,
+  BlogCategory 
+} from '../../utils/blogUtils';
 
 interface BlogHomeProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
+  onBlogPostClick?: (day: number) => void;
 }
 
 function BlogHome({ 
   currentLanguage, 
-  onLanguageChange
+  onLanguageChange,
+  onBlogPostClick
 }: BlogHomeProps) {
+  const { isAdmin } = useUser();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
 
-  const categories = [
-    { id: 'all', name: 'All Stories', count: 55 },
-    { id: 'entrepreneurship', name: 'Entrepreneurship', count: 18 },
-    { id: 'business-building', name: 'Business Building', count: 22 },
-    { id: 'tech-leadership', name: 'Tech Leadership', count: 15 }
-  ];
+  // Load blog data on component mount
+  useEffect(() => {
+    loadBlogData();
+  }, []);
 
-  // Sample blog posts - in real implementation, these would come from a CMS or API
-  const featuredPost = {
-    id: 1,
-    title: "From Consulting to Product: The ElevateBusiness 360° Journey",
-    excerpt: "How we transformed from a consulting company to building India's first voice-first, multilingual business platform for MSME textile manufacturers. A story of pivoting, learning, and building something that truly matters.",
-    category: "entrepreneurship",
-    categoryName: "Entrepreneurship",
-    date: "2025-01-15",
-    readTime: "8 min read",
-    icon: "🚀"
-  };
+  // Filter posts by category and search
+  useEffect(() => {
+    const loadFilteredPosts = async () => {
+      console.log('Search effect triggered. searchQuery:', searchQuery, 'activeCategory:', activeCategory);
+      if (searchQuery.trim()) {
+        console.log('Performing search for:', searchQuery);
+        setIsSearching(true);
+        const searchResults = await searchBlogPosts(searchQuery);
+        console.log('Search results:', searchResults.length, 'posts found');
+        // Sort search results by day number (latest first)
+        const sortedResults = searchResults.sort((a, b) => b.day - a.day);
+        setBlogPosts(sortedResults);
+        setIsSearching(false);
+      } else if (categories.length > 0) {
+        console.log('Loading posts for category:', activeCategory);
+        const posts = await getBlogPostsByCategoryDayOrder(activeCategory);
+        console.log('Category posts loaded:', posts.length);
+        setBlogPosts(posts);
+        setIsSearching(false);
+      }
+    };
+    
+    loadFilteredPosts();
+  }, [activeCategory, categories, searchQuery]);
 
-  const blogPosts = [
-    {
-      id: 2,
-      title: "The Voice-First Revolution in Indian Manufacturing",
-      excerpt: "Why voice commands in Gujarati and Hindi are changing how textile manufacturers manage their business. Real stories from Gujarat factories.",
-      category: "tech-leadership",
-      categoryName: "Tech Leadership",
-      date: "2025-01-12",
-      readTime: "5 min read",
-      icon: "🎤"
-    },
-    {
-      id: 3,
-      title: "Understanding MSME Cash Flow: The 30% Advance Payment Strategy",
-      excerpt: "How advance payment tracking can transform your textile business profitability. Lessons learned from 100+ customer conversations.",
-      category: "business-building",
-      categoryName: "Business Building",
-      date: "2025-01-10",
-      readTime: "6 min read",
-      icon: "💰"
-    },
-    {
-      id: 4,
-      title: "Building for 500M+ Users: Technical Architecture Decisions",
-      excerpt: "The engineering decisions behind scaling a platform for India's entire MSME ecosystem. React PWA to Flutter, GCP deployment strategies.",
-      category: "tech-leadership",
-      categoryName: "Tech Leadership",
-      date: "2025-01-08",
-      readTime: "10 min read",
-      icon: "⚙️"
-    },
-    {
-      id: 5,
-      title: "365 Days of Learning: Why I Document Every Day",
-      excerpt: "The discipline of daily learning and sharing. How 365 days of consistent content creation shaped our product strategy and market understanding.",
-      category: "entrepreneurship",
-      categoryName: "Entrepreneurship",
-      date: "2025-01-05",
-      readTime: "4 min read",
-      icon: "📚"
-    },
-    {
-      id: 6,
-      title: "Customer Discovery in Gujarat: Textile Industry Insights",
-      excerpt: "What we learned talking to 200+ textile manufacturers in Surat, Ahmedabad, and Vadodara. Real problems, real solutions.",
-      category: "business-building",
-      categoryName: "Business Building",
-      date: "2025-01-03",
-      readTime: "7 min read",
-      icon: "🏭"
-    },
-    {
-      id: 7,
-      title: "The Multilingual Challenge: Building for Gujarati, Hindi, English",
-      excerpt: "Technical and UX challenges in building truly multilingual software. How we handle voice commands, UI translation, and cultural nuances.",
-      category: "tech-leadership",
-      categoryName: "Tech Leadership",
-      date: "2024-12-28",
-      readTime: "8 min read",
-      icon: "🌐"
+  // Filter posts for display
+  const filteredPosts = blogPosts;
+
+  const handlePostClick = (day: number) => {
+    if (onBlogPostClick) {
+      onBlogPostClick(day);
+    } else {
+      console.log('Navigate to blog post:', day);
     }
-  ];
-
-  const filteredPosts = activeCategory === 'all' 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === activeCategory);
-
-  const handlePostClick = (postId: number) => {
-    console.log('Navigate to blog post:', postId);
-    // In future, this will navigate to individual blog post
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Newsletter signup');
-    // Handle newsletter signup
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('Search input changed:', e.target.value);
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchClear = () => {
+    setSearchQuery('');
+    setActiveCategory('all');
+  };
+
+
+  const handleCategoryUpdated = () => {
+    // Reload data when categories are updated
+    loadBlogData();
+  };
+
+  const loadBlogData = async () => {
+    setLoading(true);
+    try {
+      const [posts, cats, featured] = await Promise.all([
+        getBlogPostsByDayNumber(),
+        getBlogCategories(),
+        getFeaturedPost()
+      ]);
+      
+      setBlogPosts(posts);
+      setCategories(cats);
+      setFeaturedPost(featured);
+    } catch (error) {
+      console.error('Error loading blog data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -119,49 +121,105 @@ function BlogHome({
             365 Days of Stories
           </h1>
           <p className={styles.heroSubtitle}>
-            Daily insights from building India's first voice-first business platform. 
-            Entrepreneurship lessons, technical deep-dives, and real stories from the journey 
-            of transforming MSME textile manufacturing through technology.
+            My complete entrepreneurship evolution - sharing 365 raw stories from corporate life, 
+            personal reflections, first startup venture, and my current second entrepreneurial stint. 
+            Authentic stories of struggle, failure, learning, and growth across multiple chapters.
           </p>
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <span className={styles.statNumber}>55+</span>
+              <span className={styles.statNumber}>{blogPosts.length}</span>
               <span className={styles.statLabel}>Stories Published</span>
             </div>
             <div className={styles.heroStat}>
               <span className={styles.statNumber}>365</span>
-              <span className={styles.statLabel}>Days of Writing</span>
-            </div>
-            <div className={styles.heroStat}>
-              <span className={styles.statNumber}>3</span>
-              <span className={styles.statLabel}>Main Categories</span>
+              <span className={styles.statLabel}>Target Stories</span>
             </div>
           </div>
         </section>
 
-        {/* Featured Post */}
-        <section className={styles.featuredSection}>
-          <h2 className={styles.sectionTitle}>Featured Story</h2>
-          <div className={styles.featuredPost} onClick={() => handlePostClick(featuredPost.id)}>
-            <div className={styles.featuredContent}>
-              <div className={styles.featuredText}>
-                <span className={styles.featuredCategory}>{featuredPost.categoryName}</span>
-                <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
-                <p className={styles.featuredExcerpt}>{featuredPost.excerpt}</p>
-                <div className={styles.featuredMeta}>
-                  <span className={styles.postDate}>{featuredPost.date}</span> • <span className={styles.readTime}>{featuredPost.readTime}</span>
+        {/* Featured Story */}
+        {featuredPost && (
+          <section className={styles.featuredSection}>
+            <h2 className={styles.sectionTitle}>Featured Story</h2>
+            <div className={styles.featuredPostContainer}>
+              <div 
+                className={styles.featuredPost}
+                onClick={() => handlePostClick(featuredPost.day)}
+              >
+                <div className={styles.featuredContent}>
+                  <div className={styles.featuredText}>
+                    <span className={styles.featuredCategory}>
+                      ⭐ {featuredPost.primaryCategory}
+                    </span>
+                    <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
+                    <p className={styles.featuredExcerpt}>
+                      {featuredPost.content ? 
+                        featuredPost.content
+                          .split('\n')
+                          .filter(line => !line.includes('365 Days of Stories') && !line.includes('💔') && line.trim().length > 0)
+                          .slice(0, 15)
+                          .join(' ')
+                          .replace(/[💔🚀🤯⚡🏗️❤️❌✅👉💬🎨💻⚙️🧪🛡️📐💡🧭]/g, '')
+                          .substring(0, 800) + '...' 
+                        : featuredPost.excerpt
+                      }
+                    </p>
+                    <div className={styles.featuredMeta}>
+                      <span className={styles.postDate}>{formatDate(featuredPost.publishedDate)}</span> • <span className={styles.readTime}>{featuredPost.readTime}</span>
+                    </div>
+                  </div>
+                  <div className={styles.featuredImage}>
+                    {featuredPost.imagePath ? (
+                      <img src={featuredPost.imagePath} alt={featuredPost.title} className={styles.featuredImageImg} />
+                    ) : (
+                      <div className={styles.featuredImageFallback}>
+                        {getCategoryIcon(featuredPost.primaryCategory)}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className={styles.featuredImage}>
-                {featuredPost.icon}
-              </div>
             </div>
+          </section>
+        )}
+
+        {/* Search */}
+        <section className={styles.searchSection}>
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              placeholder="Search stories by title, content, or hashtags..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className={styles.searchInput}
+            />
+            {searchQuery && (
+              <button onClick={handleSearchClear} className={styles.searchClear}>
+                ✕ Clear
+              </button>
+            )}
           </div>
+          {searchQuery && (
+            <div className={styles.searchInfo}>
+              {isSearching ? 'Searching...' : `Found ${filteredPosts.length} stories matching "${searchQuery}"`}
+            </div>
+          )}
         </section>
 
         {/* Categories */}
         <section className={styles.categories}>
-          <h2 className={styles.sectionTitle}>Browse by Category</h2>
+          <div className={styles.categoriesHeader}>
+            <h2 className={styles.sectionTitle}>Browse by Category</h2>
+            {isAdmin && (
+              <button 
+                onClick={() => setShowCategoryManager(true)}
+                className={styles.manageButton}
+                title="Manage Categories"
+              >
+                ⚙️ Manage Categories
+              </button>
+            )}
+          </div>
           <div className={styles.categoryTabs}>
             {categories.map(category => (
               <button
@@ -178,26 +236,36 @@ function BlogHome({
         {/* Blog Posts */}
         <section className={styles.postsSection}>
           <div className={styles.postsGrid}>
-            {filteredPosts.map(post => (
-              <div 
-                key={post.id} 
-                className={styles.postCard}
-                onClick={() => handlePostClick(post.id)}
-              >
-                <div className={styles.postImage}>
-                  {post.icon}
-                </div>
-                <div className={styles.postContent}>
-                  <span className={styles.postCategory}>{post.categoryName}</span>
-                  <h3 className={styles.postTitle}>{post.title}</h3>
-                  <p className={styles.postExcerpt}>{post.excerpt}</p>
-                  <div className={styles.postMeta}>
-                    <span className={styles.postDate}>{post.date}</span>
-                    <span className={styles.readTime}>{post.readTime}</span>
+            {loading ? (
+              <div className={styles.loading}>Loading stories...</div>
+            ) : filteredPosts.length > 0 ? (
+              filteredPosts.map(post => (
+                <div 
+                  key={post.id} 
+                  className={styles.postCard}
+                  onClick={() => handlePostClick(post.day)}
+                >
+                  <div className={styles.postImage}>
+                    {post.imagePath ? (
+                      <img src={post.imagePath} alt={post.title} className={styles.postImageImg} />
+                    ) : (
+                      getCategoryIcon(post.primaryCategory)
+                    )}
+                  </div>
+                  <div className={styles.postContent}>
+                    <span className={styles.postCategory}>{post.primaryCategory}</span>
+                    <h3 className={styles.postTitle}>{post.title}</h3>
+                    <p className={styles.postExcerpt}>{post.excerpt}</p>
+                    <div className={styles.postMeta}>
+                      <span className={styles.postDate}>{formatDate(post.publishedDate)}</span>
+                      <span className={styles.readTime}>{post.readTime}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className={styles.noPosts}>No stories found in this category.</div>
+            )}
           </div>
         </section>
 
@@ -205,22 +273,32 @@ function BlogHome({
         <section className={styles.newsletter}>
           <h2 className={styles.newsletterTitle}>Stay Updated</h2>
           <p className={styles.newsletterSubtitle}>
-            Get the latest insights from our 365-day journey of building ElevateBusiness 360°. 
-            Weekly updates on entrepreneurship, technology, and business building.
+            Follow my ongoing entrepreneurship journey! From corporate to first venture to current startup experiments - 
+            raw, authentic stories as I navigate my second entrepreneurial stint. Real experiences and lessons I'm learning along the way.
           </p>
-          <form className={styles.newsletterForm} onSubmit={handleNewsletterSubmit}>
-            <input 
-              type="email" 
-              placeholder="Enter your email address"
-              className={styles.newsletterInput}
-              required
-            />
-            <button type="submit" className={styles.newsletterButton}>
-              Subscribe
-            </button>
-          </form>
+          <div className={styles.comingSoonContainer}>
+            <p className={styles.comingSoonText}>
+              📧 Newsletter coming soon - follow my LinkedIn for real-time updates on this entrepreneurship journey
+            </p>
+            <a 
+              href="https://linkedin.com/in/parthasarthi" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={styles.linkedinButton}
+            >
+              Follow on LinkedIn
+            </a>
+          </div>
         </section>
       </div>
+
+      {/* Category Manager Modal */}
+      {showCategoryManager && (
+        <BlogCategoryManager
+          onClose={() => setShowCategoryManager(false)}
+          onCategoryUpdated={handleCategoryUpdated}
+        />
+      )}
     </div>
   );
 }

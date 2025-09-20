@@ -17,12 +17,16 @@ import AnalyticsManagement from './components/AnalyticsManagement';
 import ProductHeader from './components/ProductHeader';
 import Authentication from './components/Authentication';
 import ServicesHub from './website/components/ServicesHub';
+import TurnaroundStories from './website/components/TurnaroundStories';
 import BlogHome from './website/components/BlogHome';
+import BlogPost from './website/components/BlogPost';
 import AboutPage from './website/components/AboutPage';
 import ContactPage from './website/components/ContactPage';
 import { TranslationProvider } from './contexts/TranslationContext';
+import { UserProvider } from './contexts/UserContext';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
+import { scrollToTop } from './utils/scrollUtils';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -44,6 +48,7 @@ function App() {
   const [profileQuoteId] = useState('');
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
+  const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
 
 
 
@@ -68,12 +73,28 @@ function App() {
     applyTheme(theme);
   }, [currentTheme]);
 
-  // Scroll to top when screen changes
+  // Global scroll to top when screen changes
   useEffect(() => {
+    // Immediate scroll to top when screen changes
+    scrollToTop({ behavior: 'auto' });
+    
+    // Follow up with smooth scroll after content renders
     setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 0);
+      scrollToTop({ behavior: 'smooth' });
+    }, 200);
   }, [currentScreen]);
+
+  // Additional scroll effect for dynamic content changes within the same screen
+  useEffect(() => {
+    if (currentBlogPostSlug) {
+      // Immediate scroll for blog post changes
+      scrollToTop({ behavior: 'auto' });
+      
+      setTimeout(() => {
+        scrollToTop({ behavior: 'smooth' });
+      }, 200);
+    }
+  }, [currentBlogPostSlug]);
 
   function showHomePage() {
     setCurrentScreen('homepage');
@@ -180,9 +201,18 @@ function App() {
     setServicesHubResetKey(prev => prev + 1); // Force ServicesHub to reset to overview
   }
 
+  function showTurnaroundStories() {
+    setCurrentScreen('turnaround-stories');
+  }
+
 
   function showBlogHome() {
     setCurrentScreen('blog-home');
+  }
+
+  function showBlogPost(slug: string) {
+    setCurrentBlogPostSlug(slug);
+    setCurrentScreen('blog-post');
   }
 
 
@@ -425,6 +455,16 @@ function App() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         resetKey={servicesHubResetKey}
+        onAbout={showAbout}
+      />
+    );
+  }
+
+  function renderTurnaroundStories() {
+    return (
+      <TurnaroundStories
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
       />
     );
   }
@@ -435,18 +475,20 @@ function App() {
       <BlogHome
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
+        onBlogPostClick={(day: number) => showBlogPost(`day${day}`)}
       />
     );
   }
 
   function renderBlogPost() {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>Individual Blog Post - Coming Soon</h1>
-        <button onClick={showBlogHome} style={{ padding: '1rem', marginTop: '1rem' }}>
-          Back to Blog Home
-        </button>
-      </div>
+      <BlogPost
+        slug={currentBlogPostSlug}
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onBackClick={showBlogHome}
+        onNavigateToPost={showBlogPost}
+      />
     );
   }
 
@@ -470,8 +512,9 @@ function App() {
 
   return (
     <TranslationProvider defaultLanguage={currentLanguage}>
-      <div className="App">
-        <div className="App-content">
+      <UserProvider>
+        <div className="App">
+          <div className="App-content">
         <ProductHeader
             currentLanguage={currentLanguage}
             onLanguageChange={switchLanguage}
@@ -490,6 +533,7 @@ function App() {
             showWebsiteNavigation={true}
             currentScreen={currentScreen}
             onServicesHub={showServicesHub}
+            onTurnaroundStories={showTurnaroundStories}
             onBlogHome={showBlogHome}
             onAbout={showAbout}
             onContact={showContact}
@@ -509,13 +553,15 @@ function App() {
         {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
         {currentScreen === 'analytics' && renderAnalyticsManagement()}
         {currentScreen === 'services-hub' && renderServicesHub()}
+        {currentScreen === 'turnaround-stories' && renderTurnaroundStories()}
         {currentScreen === 'blog-home' && renderBlogHome()}
         {currentScreen === 'blog-post' && renderBlogPost()}
         {currentScreen === 'about' && renderAbout()}
         {currentScreen === 'contact' && renderContact()}
         
+          </div>
         </div>
-      </div>
+      </UserProvider>
     </TranslationProvider>
   );
 }

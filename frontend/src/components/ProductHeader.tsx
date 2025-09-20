@@ -23,6 +23,7 @@ interface ProductHeaderProps {
   showWebsiteNavigation?: boolean;
   currentScreen?: string;
   onServicesHub?: () => void;
+  onTurnaroundStories?: () => void;
   onBlogHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
@@ -48,6 +49,7 @@ function ProductHeader({
   showWebsiteNavigation = false,
   currentScreen = '',
   onServicesHub,
+  onTurnaroundStories,
   onBlogHome,
   onAbout,
   onContact
@@ -82,17 +84,24 @@ function ProductHeader({
               </button>
               
               <button 
-                onClick={onBlogHome} 
-                className={`${styles.navButton} ${currentScreen === 'blog-home' || currentScreen === 'blog-post' ? styles.activeNavButton : ''}`}
-              >
-                <span className={styles.navLabel}>365 Days Blog</span>
-              </button>
-              
-              <button 
                 onClick={onAbout} 
                 className={`${styles.navButton} ${currentScreen === 'about' ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>About Us</span>
+              </button>
+              
+              <button 
+                onClick={onTurnaroundStories} 
+                className={`${styles.navButton} ${currentScreen === 'turnaround-stories' ? styles.activeNavButton : ''}`}
+              >
+                <span className={styles.navLabel}>Turnaround Stories</span>
+              </button>
+              
+              <button 
+                onClick={onBlogHome} 
+                className={`${styles.navButton} ${currentScreen === 'blog-home' || currentScreen === 'blog-post' ? styles.activeNavButton : ''}`}
+              >
+                <span className={styles.navLabel}>365 Days of Stories</span>
               </button>
               
               <button 
@@ -132,6 +141,7 @@ function ProductHeader({
             userMode={userMode}
             showWebsiteNavigation={showWebsiteNavigation}
             onServicesHub={onServicesHub}
+            onTurnaroundStories={onTurnaroundStories}
             onBlogHome={onBlogHome}
             onAbout={onAbout}
             onContact={onContact}

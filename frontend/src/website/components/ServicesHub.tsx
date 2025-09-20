@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { scrollToTop } from '../../utils/scrollUtils';
+import { openConsultationForm } from '../../utils/contactUtils';
 import styles from '../styles/ServicesHub.module.css';
 
 interface ServicesHubProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   resetKey?: number; // Force component reset when this changes
+  onAbout?: () => void;
 }
 
 interface ServiceInfo {
@@ -18,7 +21,8 @@ interface ServiceInfo {
 function ServicesHub({ 
   currentLanguage, 
   onLanguageChange,
-  resetKey
+  resetKey,
+  onAbout
 }: ServicesHubProps) {
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
@@ -72,6 +76,9 @@ function ServicesHub({
         setMarkdownContent('# MVP Development\n\nComing soon - detailed framework documentation.\n\nFor now, contact us to discuss your 30-day AI-accelerated MVP development needs.');
         setSelectedService(serviceName);
         setLoading(false);
+        
+        // Scroll to top for MVP Development
+        setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
         return;
       }
 
@@ -85,10 +92,16 @@ function ServicesHub({
       console.log('Setting markdown content for service:', serviceName);
       setMarkdownContent(markdown);
       setSelectedService(serviceName);
+      
+      // Scroll to top after content loads
+      setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
     } catch (error) {
       console.error('Error loading service content:', error);
       setMarkdownContent('# Error\n\nUnable to load service content. Please try again.');
       setSelectedService(serviceName);
+      
+      // Scroll to top even on error
+      setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
     } finally {
       setLoading(false);
     }
@@ -96,6 +109,8 @@ function ServicesHub({
 
   // Handle service selection
   const handleServiceClick = (serviceKey: string) => {
+    // Immediate scroll to top when user clicks on a service
+    scrollToTop({ behavior: 'auto' });
     loadServiceContent(serviceKey);
   };
 
@@ -103,7 +118,11 @@ function ServicesHub({
   const handleBackToServices = () => {
     setSelectedService(null);
     setMarkdownContent('');
+    
+    // Scroll to top when going back to services list
+    setTimeout(() => scrollToTop({ behavior: 'smooth' }), 100);
   };
+
 
   // Show service detail view
   if (selectedService) {
@@ -129,7 +148,7 @@ function ServicesHub({
                   <p>Loading service content...</p>
                 </div>
               ) : (
-                <div className="markdown-content">
+                <div className={styles.markdownContent}>
                   <ReactMarkdown>{markdownContent}</ReactMarkdown>
                 </div>
               )}
@@ -145,11 +164,11 @@ function ServicesHub({
                 and accelerate your business growth.
               </p>
               <div className={styles.ctaButtons}>
-                <button className={styles.primaryCta}>
+                <button 
+                  className={styles.primaryCta}
+                  onClick={openConsultationForm}
+                >
                   Schedule Consultation
-                </button>
-                <button className={styles.secondaryCta}>
-                  Download Framework Guide
                 </button>
               </div>
             </div>
@@ -280,7 +299,7 @@ function ServicesHub({
             <div className={styles.mvpAction}>
               <button 
                 className={styles.primaryActionButton}
-                onClick={() => alert('Contact us for MVP Development consultation')}
+                onClick={openConsultationForm}
               >
                 Start Your MVP Journey →
               </button>
@@ -336,11 +355,17 @@ function ServicesHub({
             your startup's technology development while making strategic decisions that matter.
           </p>
           <div className={styles.ctaButtons}>
-            <button className={styles.primaryCta}>
+            <button 
+              className={styles.primaryCta}
+              onClick={openConsultationForm}
+            >
               Schedule Startup Assessment
             </button>
-            <button className={styles.secondaryCta}>
-              View Success Stories
+            <button 
+              className={styles.secondaryCta}
+              onClick={() => onAbout?.()}
+            >
+              Our Experience
             </button>
           </div>
         </section>

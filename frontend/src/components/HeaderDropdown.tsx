@@ -18,6 +18,7 @@ interface HeaderDropdownProps {
   // Website Navigation Props
   showWebsiteNavigation?: boolean;
   onServicesHub?: () => void;
+  onTurnaroundStories?: () => void;
   onBlogHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
@@ -40,6 +41,7 @@ function HeaderDropdown({
   // Website Navigation Props
   showWebsiteNavigation = false,
   onServicesHub,
+  onTurnaroundStories,
   onBlogHome,
   onAbout,
   onContact
@@ -132,22 +134,32 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  onBlogHome?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>📝</span>
-                <span className={styles.itemText}>365 Days Blog</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
                   onAbout?.();
                   setIsOpen(false);
                 }}
               >
                 <span className={styles.itemIcon}>ℹ️</span>
                 <span className={styles.itemText}>About Us</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onTurnaroundStories?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🔄</span>
+                <span className={styles.itemText}>Turnaround Stories</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onBlogHome?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📝</span>
+                <span className={styles.itemText}>365 Days of Stories</span>
               </button>
               <button
                 className={styles.menuItem}
