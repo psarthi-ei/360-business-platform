@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- ElevateIdea Technologies Homepage -->
+  <url>
+    <loc>https://elevateidea.com/</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- About ElevateIdea -->
+  <url>
+    <loc>https://elevateidea.com/about</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- ElevateIdea Services -->
+  <url>
+    <loc>https://elevateidea.com/services-hub</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- ElevateIdea Founder's Turnaround Stories -->
+  <url>
+    <loc>https://elevateidea.com/turnaround-stories</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- ElevateIdea Blog - 365 Days of Stories -->
+  <url>
+    <loc>https://elevateidea.com/blog-home</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact ElevateIdea -->
+  <url>
+    <loc>https://elevateidea.com/contact</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+</urlset>

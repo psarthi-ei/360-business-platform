@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles/AboutPage.module.css';
 import { openConsultationForm } from '../../utils/contactUtils';
+import SEO from '../../components/SEO';
 
 interface AboutPageProps {
   currentLanguage: string;
@@ -48,7 +49,15 @@ function AboutPage({
   };
 
   return (
-    <div className={styles.aboutPage}>
+    <>
+      <SEO
+        title="About ElevateIdea Technologies - Empowering MSMEs Through Technology"
+        description="ElevateIdea's vision: empower small & medium businesses to scale and innovate. Founded by 20+ year technology veteran with 6 major turnarounds. Digitizing Manufacturing MSMEs with 360° Business Platform."
+        keywords="About ElevateIdea Technologies, MSME empowerment, small business technology, manufacturing digitization, 20+ years experience, technology veteran India"
+        canonical="/about"
+        type="website"
+      />
+      <div className={styles.aboutPage}>
       <div className={styles.container}>
 
         {/* Hero Section */}
@@ -293,7 +302,8 @@ function AboutPage({
           </div>
         </section>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

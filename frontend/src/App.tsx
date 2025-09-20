@@ -25,6 +25,7 @@ import ContactPage from './website/components/ContactPage';
 import Footer from './website/components/Footer';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { UserProvider } from './contexts/UserContext';
+import { HelmetProvider } from 'react-helmet-async';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
 import { scrollToTop } from './utils/scrollUtils';
@@ -512,9 +513,10 @@ function App() {
   }
 
   return (
-    <TranslationProvider defaultLanguage={currentLanguage}>
-      <UserProvider>
-        <div className="App">
+    <HelmetProvider>
+      <TranslationProvider defaultLanguage={currentLanguage}>
+        <UserProvider>
+          <div className="App">
           <div className="App-content">
         <ProductHeader
             currentLanguage={currentLanguage}
@@ -570,8 +572,9 @@ function App() {
         
           </div>
         </div>
-      </UserProvider>
-    </TranslationProvider>
+        </UserProvider>
+      </TranslationProvider>
+    </HelmetProvider>
   );
 }
 

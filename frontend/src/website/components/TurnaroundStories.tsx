@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { scrollToTop } from '../../utils/scrollUtils';
+import SEO from '../../components/SEO';
 import styles from '../styles/TurnaroundStories.module.css';
 
 interface TurnaroundStoriesProps {
@@ -152,7 +153,15 @@ function TurnaroundStories({
 
   if (selectedStory && markdownContent) {
     return (
-      <div className={styles.turnaroundStoriesContainer}>
+      <>
+        <SEO
+          title="ElevateIdea Founder's Corporate Turnaround Story"
+          description="Real corporate turnaround experience from ElevateIdea founder. Detailed case study from 20+ years experience across banks, government, startups, retailers."
+          keywords="ElevateIdea founder, corporate turnaround, business transformation, crisis management, turnaround specialist India"
+          canonical="/turnaround-stories"
+          type="article"
+        />
+        <div className={styles.turnaroundStoriesContainer}>
         <div className={styles.storyContent}>
           <button 
             className={styles.backButton}
@@ -170,12 +179,21 @@ function TurnaroundStories({
             </article>
           )}
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className={styles.turnaroundStoriesContainer}>
+    <>
+      <SEO
+        title="ElevateIdea Founder's Corporate Turnaround Stories - 6 Major Turnarounds, $15M+ Recovery"
+        description="Real corporate turnaround experiences from ElevateIdea founder. 20+ years experience across banks, government projects, startups, retailers. 6 major turnarounds, $15M+ recovery value."
+        keywords="ElevateIdea founder turnaround stories, corporate turnaround expert India, business crisis management, $15M recovery, transformation specialist, 6 major turnarounds"
+        canonical="/turnaround-stories"
+        type="website"
+      />
+      <div className={styles.turnaroundStoriesContainer}>
       <div className={styles.header}>
         <h1 className={styles.title}>🔄 Turnaround Stories</h1>
         <p className={styles.subtitle}>
@@ -251,7 +269,8 @@ function TurnaroundStories({
         ))}
       </div>
 
-    </div>
+      </div>
+    </>
   );
 }
 

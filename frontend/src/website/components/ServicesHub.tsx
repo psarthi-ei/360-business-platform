@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { scrollToTop } from '../../utils/scrollUtils';
 import { openConsultationForm } from '../../utils/contactUtils';
+import SEO from '../../components/SEO';
 import styles from '../styles/ServicesHub.module.css';
 
 interface ServicesHubProps {
@@ -127,7 +128,15 @@ function ServicesHub({
   // Show service detail view
   if (selectedService) {
     return (
-      <div className={styles.servicesHub}>
+      <>
+        <SEO
+          title="ElevateIdea Services - AI-Accelerated Development & Startup Consulting"
+          description="ElevateIdea provides AI-era business building services for early-stage startups and MSME manufacturers. MVP development, project acceleration, scalability solutions."
+          keywords="ElevateIdea services, AI-accelerated MVP development, startup consulting India, early-stage startup services, MSME business solutions"
+          canonical="/services-hub"
+          type="website"
+        />
+        <div className={styles.servicesHub}>
         <div className={styles.container}>
           {/* Navigation */}
           <div className={styles.navigation}>
@@ -174,13 +183,22 @@ function ServicesHub({
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 
   // Show services list view
   return (
-    <div className={styles.servicesHub}>
+    <>
+      <SEO
+        title="ElevateIdea Services - AI-Era Strategic Technology Partner for Early-Stage Startups"
+        description="ElevateIdea provides strategic technology partnership for early-stage startups. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Strategic project acceleration and scalability solutions."
+        keywords="ElevateIdea services, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery"
+        canonical="/services-hub"
+        type="website"
+      />
+      <div className={styles.servicesHub}>
       <div className={styles.container}>
 
         {/* Hero Section */}
@@ -370,7 +388,8 @@ function ServicesHub({
           </div>
         </section>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

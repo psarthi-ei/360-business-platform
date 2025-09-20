@@ -1,3 +1,29 @@
+# ElevateIdea Technologies - 360° Business Platform for India's Textile Manufacturers
 # https://www.robotstxt.org/robotstxt.html
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Main website pages - ElevateIdea brand focus
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /services-hub
+Allow: /turnaround-stories
+Allow: /blog-home
+
+# Disallow internal business platform pages
+Disallow: /dashboard
+Disallow: /leads
+Disallow: /quotations
+Disallow: /salesorders
+Disallow: /advancepayment
+Disallow: /invoices
+Disallow: /customerprofile
+Disallow: /customerlist
+Disallow: /inventory
+Disallow: /fulfillment
+Disallow: /analytics
+
+# Sitemap location
+Sitemap: https://elevateidea.com/sitemap.xml
