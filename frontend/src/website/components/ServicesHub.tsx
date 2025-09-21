@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { scrollToTop } from '../../utils/scrollUtils';
 import { openConsultationForm } from '../../utils/contactUtils';
@@ -25,6 +26,8 @@ function ServicesHub({
   resetKey,
   onAbout
 }: ServicesHubProps) {
+  const { framework } = useParams<{ framework: string }>();
+  const navigate = useNavigate();
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -34,6 +37,22 @@ function ServicesHub({
     setSelectedService(null);
     setMarkdownContent('');
   }, [resetKey]);
+
+  // Load specific framework when URL parameter is present
+  useEffect(() => {
+    // Add small delay to ensure component is fully mounted in development
+    const timer = setTimeout(() => {
+      if (framework) {
+        loadServiceContent(framework);
+      } else {
+        setSelectedService(null);
+        setMarkdownContent('');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [framework]);
 
   // Service configuration - 4 core offerings (MVP Development as key offering, others have frameworks)
   const services: ServiceInfo[] = [
@@ -83,14 +102,15 @@ function ServicesHub({
         return;
       }
 
-      const response = await fetch(`/content/services/${service.filename}`);
+      const url = `/content/services/${service.filename}`;
+      
+      const response = await fetch(url);
+      
       if (!response.ok) {
-        throw new Error(`Failed to load ${service.filename}`);
+        throw new Error(`Failed to load ${service.filename}, status: ${response.status}`);
       }
       
       const markdown = await response.text();
-      console.log('Loaded markdown content:', markdown.substring(0, 200) + '...');
-      console.log('Setting markdown content for service:', serviceName);
       setMarkdownContent(markdown);
       setSelectedService(serviceName);
       
@@ -110,18 +130,14 @@ function ServicesHub({
 
   // Handle service selection
   const handleServiceClick = (serviceKey: string) => {
-    // Immediate scroll to top when user clicks on a service
-    scrollToTop({ behavior: 'auto' });
-    loadServiceContent(serviceKey);
+    // Navigate to the service URL instead of loading content directly
+    navigate(`/services/${serviceKey}`);
   };
 
   // Handle back to services list
   const handleBackToServices = () => {
-    setSelectedService(null);
-    setMarkdownContent('');
-    
-    // Scroll to top when going back to services list
-    setTimeout(() => scrollToTop({ behavior: 'smooth' }), 100);
+    // Navigate back to services overview
+    navigate('/services');
   };
 
 

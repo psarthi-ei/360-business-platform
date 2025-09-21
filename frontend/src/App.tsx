@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
 import Dashboard from './components/Dashboard';
@@ -34,7 +35,9 @@ import { scrollToTop } from './utils/scrollUtils';
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [currentTheme, setCurrentTheme] = useState('light');
@@ -76,6 +79,32 @@ function App() {
     applyTheme(theme);
   }, [currentTheme]);
 
+  // Sync currentScreen with URL path
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/') setCurrentScreen('homepage');
+    else if (path === '/login') setCurrentScreen('login');
+    else if (path === '/signup') setCurrentScreen('signup');
+    else if (path === '/dashboard') setCurrentScreen('dashboard');
+    else if (path === '/leads') setCurrentScreen('leads');
+    else if (path === '/quotes') setCurrentScreen('quotations');
+    else if (path === '/orders') setCurrentScreen('salesorders');
+    else if (path === '/payments') setCurrentScreen('advancepayment');
+    else if (path === '/invoices') setCurrentScreen('invoices');
+    else if (path.startsWith('/customers/')) setCurrentScreen('customerprofile');
+    else if (path === '/customers') setCurrentScreen('customerlist');
+    else if (path === '/inventory') setCurrentScreen('inventory');
+    else if (path === '/fulfillment') setCurrentScreen('fulfillment');
+    else if (path === '/analytics') setCurrentScreen('analytics');
+    else if (path === '/services') setCurrentScreen('services-hub');
+    else if (path === '/turnaround-stories') setCurrentScreen('turnaround-stories');
+    else if (path === '/blog') setCurrentScreen('blog-home');
+    else if (path.startsWith('/blog/')) setCurrentScreen('blog-post');
+    else if (path === '/about') setCurrentScreen('about');
+    else if (path === '/contact') setCurrentScreen('contact');
+    else if (path === '/profile-completion') setCurrentScreen('profilecompletion');
+  }, [location.pathname]);
+
   // Global scroll to top when screen changes
   useEffect(() => {
     // Immediate scroll to top when screen changes
@@ -86,6 +115,18 @@ function App() {
       scrollToTop({ behavior: 'smooth' });
     }, 200);
   }, [currentScreen]);
+
+  // Extract blog slug and customer ID from URL
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.startsWith('/blog/')) {
+      const slug = path.replace('/blog/', '');
+      setCurrentBlogPostSlug(slug);
+    } else if (path.startsWith('/customers/')) {
+      const customerId = path.replace('/customers/', '');
+      setSelectedCustomerId(customerId);
+    }
+  }, [location.pathname]);
 
   // Additional scroll effect for dynamic content changes within the same screen
   useEffect(() => {
@@ -100,131 +141,131 @@ function App() {
   }, [currentBlogPostSlug]);
 
   function showHomePage() {
-    setCurrentScreen('homepage');
+    navigate('/');
   }
 
   function showLogin() {
-    setCurrentScreen('login');
+    navigate('/login');
   }
 
   function showSignUp() {
-    setCurrentScreen('signup');
+    navigate('/signup');
   }
 
   function handleAuthSuccess() {
     setIsAuthenticated(true);
     setUserMode('authenticated');
-    setCurrentScreen('dashboard');
+    navigate('/dashboard');
   }
 
   function handleGuestMode() {
     setUserMode('guest');
     setIsAuthenticated(false);
-    setCurrentScreen('dashboard');
+    navigate('/dashboard');
   }
 
   function handleDemoMode() {
     setUserMode('demo');
     setIsAuthenticated(false);
-    setCurrentScreen('dashboard');
+    navigate('/dashboard');
   }
 
   function handleLogout() {
     setIsAuthenticated(false);
     setUserMode('guest');
-    setCurrentScreen('homepage');
+    navigate('/');
   }
 
   function showDashboard() {
-    setCurrentScreen('dashboard');
+    navigate('/dashboard');
   }
 
   function showLeadManagement() {
-    setCurrentScreen('leads');
+    navigate('/leads');
   }
 
   function showQuotationOrders() {
-    setCurrentScreen('quotations');
+    navigate('/quotes');
   }
 
   function showQuoteFromLead(leadId: string) {
     // In a real app, this would pass the lead ID to create a new quote
-    setCurrentScreen('quotations');
+    navigate('/quotes');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function showLeadFromQuote(leadId: string) {
     // In a real app, this would highlight the specific lead
-    setCurrentScreen('leads');
+    navigate('/leads');
   }
 
   function showSalesOrders() {
-    setCurrentScreen('salesorders');
+    navigate('/orders');
   }
 
   function showPayments() {
-    setCurrentScreen('advancepayment');
+    navigate('/payments');
   }
 
   function showInvoices() {
-    setCurrentScreen('invoices');
+    navigate('/invoices');
   }
 
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
     // In a real app, this would convert quote to customer and create sales order
-    setCurrentScreen('salesorders');
+    navigate('/orders');
   }
 
   function showCustomerProfile(customerId: string) {
     setSelectedCustomerId(customerId);
-    setCurrentScreen('customerprofile');
+    navigate('/customers/' + customerId);
   }
 
   function showCustomerList() {
-    setCurrentScreen('customerlist');
+    navigate('/customers');
   }
 
   function showInventory() {
-    setCurrentScreen('inventory');
+    navigate('/inventory');
   }
 
   function showFulfillment() {
-    setCurrentScreen('fulfillment');
+    navigate('/fulfillment');
   }
 
   function showAnalytics() {
-    setCurrentScreen('analytics');
+    navigate('/analytics');
   }
 
 
   function showServicesHub() {
-    setCurrentScreen('services-hub');
+    navigate('/services');
     setServicesHubResetKey(prev => prev + 1); // Force ServicesHub to reset to overview
   }
 
   function showTurnaroundStories() {
-    setCurrentScreen('turnaround-stories');
+    navigate('/turnaround-stories');
   }
 
 
   function showBlogHome() {
-    setCurrentScreen('blog-home');
+    navigate('/blog');
   }
 
   function showBlogPost(slug: string) {
     setCurrentBlogPostSlug(slug);
-    setCurrentScreen('blog-post');
+    navigate('/blog/' + slug);
   }
 
 
   function showAbout() {
-    setCurrentScreen('about');
+    navigate('/about');
   }
 
   function showContact() {
-    setCurrentScreen('contact');
+    navigate('/contact');
   }
 
 
@@ -542,26 +583,31 @@ function App() {
             onAbout={showAbout}
             onContact={showContact}
           />
-        {currentScreen === 'homepage' && renderHomePage()}
-        {(currentScreen === 'login' || currentScreen === 'signup') && renderAuthentication()}
-        {currentScreen === 'dashboard' && renderDashboard()}
-        {currentScreen === 'leads' && renderLeadManagement()}
-        {currentScreen === 'quotations' && renderQuotationOrders()}
-        {currentScreen === 'salesorders' && renderSalesOrders()}
-        {currentScreen === 'advancepayment' && renderPayments()}
-        {currentScreen === 'invoices' && renderInvoices()}
-        {currentScreen === 'customerprofile' && renderCustomerProfile()}
-        {currentScreen === 'customerlist' && renderCustomerList()}
-        {currentScreen === 'profilecompletion' && renderProfileCompletion()}
-        {currentScreen === 'inventory' && renderInventoryManagement()}
-        {currentScreen === 'fulfillment' && renderFulfillmentManagement()}
-        {currentScreen === 'analytics' && renderAnalyticsManagement()}
-        {currentScreen === 'services-hub' && renderServicesHub()}
-        {currentScreen === 'turnaround-stories' && renderTurnaroundStories()}
-        {currentScreen === 'blog-home' && renderBlogHome()}
-        {currentScreen === 'blog-post' && renderBlogPost()}
-        {currentScreen === 'about' && renderAbout()}
-        {currentScreen === 'contact' && renderContact()}
+        <Routes>
+          <Route path="/" element={renderHomePage()} />
+          <Route path="/login" element={renderAuthentication()} />
+          <Route path="/signup" element={renderAuthentication()} />
+          <Route path="/dashboard" element={renderDashboard()} />
+          <Route path="/leads" element={renderLeadManagement()} />
+          <Route path="/quotes" element={renderQuotationOrders()} />
+          <Route path="/orders" element={renderSalesOrders()} />
+          <Route path="/payments" element={renderPayments()} />
+          <Route path="/invoices" element={renderInvoices()} />
+          <Route path="/customers/:customerId" element={renderCustomerProfile()} />
+          <Route path="/customers" element={renderCustomerList()} />
+          <Route path="/profile-completion" element={renderProfileCompletion()} />
+          <Route path="/inventory" element={renderInventoryManagement()} />
+          <Route path="/fulfillment" element={renderFulfillmentManagement()} />
+          <Route path="/analytics" element={renderAnalyticsManagement()} />
+          <Route path="/services" element={renderServicesHub()} />
+          <Route path="/services/:framework" element={renderServicesHub()} />
+          <Route path="/turnaround-stories" element={renderTurnaroundStories()} />
+          <Route path="/turnaround-stories/:story" element={renderTurnaroundStories()} />
+          <Route path="/blog" element={renderBlogHome()} />
+          <Route path="/blog/:slug" element={renderBlogPost()} />
+          <Route path="/about" element={renderAbout()} />
+          <Route path="/contact" element={renderContact()} />
+        </Routes>
         
         {/* Single Footer for All Pages */}
         <Footer
@@ -577,6 +623,14 @@ function App() {
       </TranslationProvider>
       <Analytics />
     </HelmetProvider>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

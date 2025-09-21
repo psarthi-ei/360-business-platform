@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { scrollToTop } from '../../utils/scrollUtils';
 import SEO from '../../components/SEO';
 import styles from '../styles/TurnaroundStories.module.css';
 
@@ -26,6 +26,8 @@ function TurnaroundStories({
   onLanguageChange,
   resetKey
 }: TurnaroundStoriesProps) {
+  const { story } = useParams<{ story: string }>();
+  const navigate = useNavigate();
   const [selectedStory, setSelectedStory] = useState<string | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -100,6 +102,51 @@ function TurnaroundStories({
     }
   ];
 
+  // Story URL mapping (story1 -> actual story key)
+  const storyMapping: { [key: string]: string } = {
+    'story1': 'government-project-revival',
+    'story2': 'international-bank-expansion', 
+    'story3': 'international-bank-turnaround',
+    'story4': 'major-bank-transformation',
+    'story5': 'major-retailer-engineering',
+    'story6': 'startup-company-unification'
+  };
+
+  // Reverse mapping (actual story key -> story1, story2, etc.)
+  const reverseStoryMapping: { [key: string]: string } = {
+    'government-project-revival': 'story1',
+    'international-bank-expansion': 'story2',
+    'international-bank-turnaround': 'story3',
+    'major-bank-transformation': 'story4',
+    'major-retailer-engineering': 'story5',
+    'startup-company-unification': 'story6'
+  };
+
+  // Load specific story when URL parameter is present
+  useEffect(() => {
+    // Add small delay to ensure component is fully mounted in development
+    const timer = setTimeout(() => {
+      if (story && storyMapping[story]) {
+        const actualStoryKey = storyMapping[story];
+        const storyInfo = stories.find(s => s.key === actualStoryKey);
+        if (storyInfo) {
+          setSelectedStory(actualStoryKey);
+          loadStoryContent(storyInfo.filename);
+        }
+      } else if (story && !storyMapping[story]) {
+        // Invalid story parameter, reset to overview
+        setSelectedStory(null);
+        setMarkdownContent('');
+      } else if (!story) {
+        // No story parameter, show overview
+        setSelectedStory(null);
+        setMarkdownContent('');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [story]);
 
   const loadStoryContent = async function(filename: string) {
     setLoading(true);
@@ -107,6 +154,7 @@ function TurnaroundStories({
       // Add cache busting parameter to prevent caching issues
       const timestamp = new Date().getTime();
       const url = `/content/turnaround-stories/${filename}?v=${timestamp}`;
+      
       const response = await fetch(url, {
         cache: 'no-cache',
         headers: {
@@ -114,10 +162,13 @@ function TurnaroundStories({
           'Pragma': 'no-cache'
         }
       });
+      
+      
       if (response.ok) {
         const content = await response.text();
         setMarkdownContent(content);
       } else {
+        console.error('Response not OK, status:', response.status);
         setMarkdownContent('# Story content not found\n\nThis turnaround story is currently being prepared.');
       }
     } catch (error) {
@@ -129,24 +180,16 @@ function TurnaroundStories({
   };
 
   function handleStorySelect(storyKey: string) {
-    const story = stories.find(s => s.key === storyKey);
-    if (story && story.filename) {
-      setSelectedStory(storyKey);
-      loadStoryContent(story.filename);
-      // Scroll to top when story is selected
-      setTimeout(() => {
-        scrollToTop({ behavior: 'smooth' });
-      }, 200);
+    // Navigate to the story URL instead of loading content directly
+    const storyNumber = reverseStoryMapping[storyKey];
+    if (storyNumber) {
+      navigate(`/turnaround-stories/${storyNumber}`);
     }
   }
 
   function handleBackToOverview() {
-    setSelectedStory(null);
-    setMarkdownContent('');
-    // Scroll to top when returning to overview
-    setTimeout(() => {
-      scrollToTop({ behavior: 'smooth' });
-    }, 100);
+    // Navigate back to stories overview
+    navigate('/turnaround-stories');
   }
 
 
