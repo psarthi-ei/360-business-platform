@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { scrollToTop } from '../../utils/scrollUtils';
 import SEO from '../../components/SEO';
 import styles from '../styles/TurnaroundStories.module.css';
 
@@ -37,6 +38,11 @@ function TurnaroundStories({
     setSelectedStory(null);
     setMarkdownContent('');
   }, [resetKey]);
+
+  // Scroll to top when component initially mounts
+  useEffect(() => {
+    setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
+  }, []);
 
   // Turnaround stories configuration
   const stories: StoryInfo[] = [
@@ -167,13 +173,22 @@ function TurnaroundStories({
       if (response.ok) {
         const content = await response.text();
         setMarkdownContent(content);
+        
+        // Scroll to top after content loads
+        setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       } else {
         console.error('Response not OK, status:', response.status);
         setMarkdownContent('# Story content not found\n\nThis turnaround story is currently being prepared.');
+        
+        // Scroll to top even on error
+        setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       }
     } catch (error) {
       console.error('Error loading story content:', error);
       setMarkdownContent('# Error loading story\n\nPlease try again later.');
+      
+      // Scroll to top even on error
+      setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
     } finally {
       setLoading(false);
     }

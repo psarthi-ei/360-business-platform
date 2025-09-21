@@ -38,6 +38,11 @@ function ServicesHub({
     setMarkdownContent('');
   }, [resetKey]);
 
+  // Scroll to top when component initially mounts
+  useEffect(() => {
+    setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
+  }, []);
+
   // Load specific framework when URL parameter is present
   useEffect(() => {
     // Add small delay to ensure component is fully mounted in development
