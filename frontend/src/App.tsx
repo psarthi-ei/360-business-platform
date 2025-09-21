@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { Analytics } from '@vercel/analytics/react';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
 import Dashboard from './components/Dashboard';
@@ -574,6 +575,7 @@ function App() {
         </div>
         </UserProvider>
       </TranslationProvider>
+      <Analytics />
     </HelmetProvider>
   );
 }
