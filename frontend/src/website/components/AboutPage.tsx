@@ -26,7 +26,8 @@ function AboutPage({
     {
       year: "2016-18",
       title: "Head of Technology, Aadhaar (UIDAI)",
-      description: "Served as Head of Technology at Aadhaar, Government of India, contributing to the world's largest digital identity program."
+      description: "Served as Head of Technology at Aadhaar, Government of India, contributing to the world's largest digital identity program.",
+      isHighlighted: true
     },
     {
       year: "2016-23",
@@ -234,7 +235,7 @@ function AboutPage({
           
           <div className={styles.storyTimeline}>
             {founderTimeline.map((item, index) => (
-              <div key={index} className={styles.timelineItem}>
+              <div key={index} className={`${styles.timelineItem} ${item.isHighlighted ? styles.highlightedTimelineItem : ''}`}>
                 <div className={styles.timelineYear}>{item.year}</div>
                 <div className={styles.timelineContent}>
                   <h3 className={styles.timelineTitle}>{item.title}</h3>

@@ -61,7 +61,10 @@ function ProductHeader({
         <div className={styles.logoSection}>
           <div className={styles.logo} onClick={onHome}>
             <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
-            <span className={styles.logoText}>ElevateIdea</span>
+            <div className={styles.logoTextContainer}>
+              <span className={styles.logoText}>ElevateIdea</span>
+              <span className={styles.logoTagline}>Scaling Business with Technology</span>
+            </div>
           </div>
         </div>
         

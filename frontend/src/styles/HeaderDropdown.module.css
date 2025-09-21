@@ -75,6 +75,15 @@
   }
 }
 
+@keyframes menuPulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+  }
+  50% {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4), 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+}
+
 /* Menu Sections - Easily Extensible */
 .menuSection {
   padding: 12px 0;
@@ -159,19 +168,23 @@
     display: block;
   }
   .dropdownTrigger {
-    padding: 8px;
-    font-size: 18px;
-    min-width: 40px;
-    width: 40px;
-    height: 40px;
+    padding: 10px;
+    font-size: 20px;
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
-    background: rgba(102, 126, 234, 0.12);
-    border: 1px solid rgba(102, 126, 234, 0.25);
+    background: rgba(102, 126, 234, 0.15);
+    border: 2px solid rgba(102, 126, 234, 0.35);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    animation: menuPulse 2s infinite;
   }
   
   .dropdownTrigger:hover {
-    background: rgba(102, 126, 234, 0.18);
-    border-color: rgba(102, 126, 234, 0.4);
+    background: rgba(102, 126, 234, 0.25);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
   }
   
   .triggerText {
@@ -226,7 +239,8 @@
   }
   
   .triggerIcon {
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: bold;
   }
   
   .itemIcon {
@@ -241,15 +255,17 @@
 
 @media (max-width: 480px) {
   .dropdownTrigger {
-    padding: 4px 6px;
-    font-size: 14px;
-    min-width: 32px;
-    width: 32px;
-    height: 32px;
+    padding: 8px;
+    font-size: 18px;
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+    border: 2px solid rgba(102, 126, 234, 0.4);
   }
   
   .triggerIcon {
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .dropdownMenu {
