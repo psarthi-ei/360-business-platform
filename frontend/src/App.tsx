@@ -607,6 +607,7 @@ function AppContent() {
           <Route path="/blog/:slug" element={renderBlogPost()} />
           <Route path="/about" element={renderAbout()} />
           <Route path="/contact" element={renderContact()} />
+          <Route path="*" element={renderHomePage()} />
         </Routes>
         
         {/* Single Footer for All Pages */}
