@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SEO from '../../components/SEO';
 import styles from '../styles/BlogHome.module.css';
 import BlogCategoryManager from './BlogCategoryManager';
 import { useUser } from '../../contexts/UserContext';
@@ -112,8 +113,15 @@ function BlogHome({
   };
 
   return (
-    <div className={styles.blogHome}>
-      <div className={styles.container}>
+    <>
+      <SEO
+        title="ElevateIdea Blog - AI-Era Business Insights & MSME Growth Strategies"
+        description="Discover AI-powered business insights, MSME growth strategies, and technology transformation tips from ElevateIdea. Expert perspectives on scaling textile manufacturing businesses."
+        keywords="ElevateIdea blog, MSME growth strategies, AI business insights, textile manufacturing technology, business transformation"
+        canonical="/blog"
+      />
+      <div className={styles.blogHome}>
+        <div className={styles.container}>
 
         {/* Hero Section */}
         <section className={styles.hero}>
@@ -255,7 +263,12 @@ function BlogHome({
                   <div className={styles.postContent}>
                     <span className={styles.postCategory}>{post.primaryCategory}</span>
                     <h3 className={styles.postTitle}>{post.title}</h3>
-                    <p className={styles.postExcerpt}>{post.excerpt}</p>
+                    <p className={styles.postExcerpt}>
+                      {post.excerpt.length > 120 ? 
+                        `${post.excerpt.substring(0, 120)}...` : 
+                        post.excerpt
+                      }
+                    </p>
                     <div className={styles.postMeta}>
                       <span className={styles.postDate}>{formatDate(post.publishedDate)}</span>
                       <span className={styles.readTime}>{post.readTime}</span>
@@ -299,7 +312,8 @@ function BlogHome({
           onCategoryUpdated={handleCategoryUpdated}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

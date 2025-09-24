@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import SEO from '../../components/SEO';
 import { scrollToTop } from '../../utils/scrollUtils';
 import styles from '../styles/BlogPost.module.css';
 import { 
@@ -130,7 +131,16 @@ function BlogPost({
   }
 
   return (
-    <div className={styles.blogPost}>
+    <>
+      <SEO
+        title={post ? `${post.title} | ElevateIdea Blog` : "Blog Post | ElevateIdea Blog"}
+        description={post ? `${post.excerpt || post.content.substring(0, 160)}...` : "Read the latest business insights and strategies from ElevateIdea."}
+        keywords={post ? `ElevateIdea blog, ${post.title}, ${post.primaryCategory}, business insights, MSME growth` : "ElevateIdea blog, business insights, MSME growth strategies"}
+        canonical={`/blog/${slug}`}
+        type="article"
+        author="ElevateIdea Technologies"
+      />
+      <div className={styles.blogPost}>
       <div className={styles.container}>
         
         {/* Header Navigation */}
@@ -236,6 +246,7 @@ function BlogPost({
 
       </div>
     </div>
+    </>
   );
 }
 
