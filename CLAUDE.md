@@ -4,6 +4,39 @@
 **Current Todos**: Always check `/TODO.md` for persistent todo list across sessions
 **Session Tracking**: Use TodoWrite tool for real-time progress within sessions
 
+## 🕐 **SESSION INITIALIZATION PROTOCOL**
+
+### **MANDATORY FIRST STEP - DATE VERIFICATION**
+**ALWAYS start every session by running the `date` command before any other actions.**
+
+**Example Session Start:**
+```bash
+# First command in every session - MANDATORY
+date
+```
+
+**Why This Matters:**
+- Ensures accurate project timeline tracking
+- Prevents incorrect date references in documentation
+- Validates project milestone calculations  
+- Maintains consistency across all document updates
+
+**Project Timeline Reference (Auto-Update After Date Check):**
+- **Project Started**: August 27, 2025
+- **Current Phase**: Phase 2 (Backend Integration) 
+- **Phase 1 Completed**: September 25, 2025
+- **Phase 2 Target**: October-December 2025
+- **MVP Target**: January 2026
+
+**After Date Verification Protocol:**
+1. Update any "Last Updated" fields with accurate system date
+2. Cross-reference milestone dates with current timeline
+3. Calculate actual project days elapsed since Aug 27, 2025
+4. Proceed with development tasks using verified date context
+5. Flag any timeline discrepancies immediately
+
+---
+
 ## Company & Product Identity
 - **Company**: ElevateIdea Technologies Private Limited
 - **Product**: ElevateBusiness 360°
@@ -16,7 +49,7 @@
 - **Go-to-Market**: Gujarat first (Surat, Ahmedabad, Vadodara) for validation & customer acquisition
 - **Users**: MSME business owners (non-technical, prefer voice commands)
 - **Languages**: Gujarati, Hindi, English (all three are MVP core requirements, not phased)
-- **Timeline**: Started Aug 27, 2025 | Development since Sep 3 | Current: Sep 11, 2025 | MVP Target: End Oct 2025
+- **Timeline**: Started Aug 27, 2025 | Phase 1 Complete: Sep 25, 2025 | Current Phase 2: Oct-Dec 2025 | MVP Target: Jan 2026
 
 ## Business Process Understanding
 **8-Stage Textile Business Flow**: Lead → Quote → **30% Advance Payment** → Work Order → Production → Quality → Delivery → Final Payment
