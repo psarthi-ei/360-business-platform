@@ -157,9 +157,9 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(screen.getByText('Story Not Found')).toBeInTheDocument();
-        expect(screen.getByText('Blog post not found')).toBeInTheDocument();
-        expect(screen.getByText('← Back to Stories')).toBeInTheDocument();
       });
+      expect(screen.getByText('Blog post not found')).toBeInTheDocument();
+      expect(screen.getByText('← Back to Stories')).toBeInTheDocument();
     });
 
     test('renders error state when getBlogPost throws', async () => {
@@ -170,8 +170,8 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(screen.getByText('Story Not Found')).toBeInTheDocument();
-        expect(screen.getByText('Error loading blog post')).toBeInTheDocument();
       });
+      expect(screen.getByText('Error loading blog post')).toBeInTheDocument();
     });
   });
 
@@ -181,10 +181,10 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(screen.getByText('Test Blog Post Title')).toBeInTheDocument();
-        expect(screen.getByText('This is a test blog post excerpt for testing purposes.')).toBeInTheDocument();
-        // ReactMarkdown is mocked and renders as text content
-        expect(screen.getByText(/Test Content/)).toBeInTheDocument();
       });
+      expect(screen.getByText('This is a test blog post excerpt for testing purposes.')).toBeInTheDocument();
+      // ReactMarkdown is mocked and renders as text content
+      expect(screen.getByText(/Test Content/)).toBeInTheDocument();
     });
 
     test('renders post metadata correctly', async () => {
@@ -192,10 +192,10 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(screen.getByText('Business Strategy')).toBeInTheDocument();
-        expect(screen.getByText('5 min read')).toBeInTheDocument();
-        // Check that metadata section is rendered
-        expect(screen.getByText('Test Blog Post Title')).toBeInTheDocument();
       });
+      expect(screen.getByText('5 min read')).toBeInTheDocument();
+      // Check that metadata section is rendered
+      expect(screen.getByText('Test Blog Post Title')).toBeInTheDocument();
     });
 
     test('renders back button', async () => {
@@ -212,8 +212,9 @@ describe('BlogPost Component', () => {
       await waitFor(() => {
         const image = screen.getByAltText('Test Blog Post Title');
         expect(image).toBeInTheDocument();
-        expect(image).toHaveAttribute('src', '/images/test-post.jpg');
       });
+      const image = screen.getByAltText('Test Blog Post Title');
+      expect(image).toHaveAttribute('src', '/images/test-post.jpg');
     });
 
     test('renders SEO component with blog post data', async () => {
@@ -221,8 +222,8 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(container.firstChild).toBeInTheDocument();
-        expect(container.textContent?.length).toBeGreaterThan(0);
       });
+      expect(container.textContent?.length).toBeGreaterThan(0);
     });
   });
 
@@ -233,8 +234,8 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(props.onBackClick).toBeDefined();
-        expect(typeof props.onBackClick).toBe('function');
       });
+      expect(typeof props.onBackClick).toBe('function');
     });
 
     test('handles navigation to other posts', async () => {
@@ -243,8 +244,8 @@ describe('BlogPost Component', () => {
       
       await waitFor(() => {
         expect(props.onNavigateToPost).toBeDefined();
-        expect(typeof props.onNavigateToPost).toBe('function');
       });
+      expect(typeof props.onNavigateToPost).toBe('function');
     });
   });
 

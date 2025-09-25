@@ -82,6 +82,11 @@ function Login(props: LoginProps) {
     });
   }
 
+  // Handle direct demo mode (bypasses login form)
+  function handleDirectDemoMode() {
+    onDemoMode();
+  }
+
   // Handle guest login
   function handleGuestLogin() {
     setIsLoading(true);
@@ -139,13 +144,22 @@ function Login(props: LoginProps) {
         <div className={styles.demoInfo}>
           <h3>{translations('demoAccount')}</h3>
           <p>{translations('demoInstructions')}</p>
-          <button 
-            type="button"
-            className={styles.demoButton}
-            onClick={handleDemoLogin}
-          >
-            {translations('fillDemoCredentials')}
-          </button>
+          <div className={styles.demoButtons}>
+            <button 
+              type="button"
+              className={styles.demoButton}
+              onClick={handleDemoLogin}
+            >
+              {translations('fillDemoCredentials')}
+            </button>
+            <button 
+              type="button"
+              className={styles.directDemoButton}
+              onClick={handleDirectDemoMode}
+            >
+              Quick Demo ⚡
+            </button>
+          </div>
         </div>
 
         {/* Login Form */}

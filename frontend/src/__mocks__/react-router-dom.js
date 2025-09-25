@@ -1,3 +1,5 @@
+const React = require('react');
+
 const mockNavigate = jest.fn();
 const mockLocation = { pathname: '/', search: '', hash: '', state: null };
 
@@ -10,7 +12,7 @@ module.exports = {
   Link: ({ children, to, ...props }) => {
     return React.createElement('a', { href: to, ...props }, children);
   },
-  Navigate: ({ to, replace }) => null,
+  Navigate: () => null,
   Outlet: () => null,
   useParams: () => ({}),
   useSearchParams: () => [new URLSearchParams(), jest.fn()],
