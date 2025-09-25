@@ -107,7 +107,7 @@ This is the master navigation document that guides you to all project informatio
 
 ## Documentation Files Structure
 
-**🎉 STREAMLINED: 9 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
+**🎉 STREAMLINED: 8 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
 
 ### **CORE BUSINESS & REQUIREMENTS**
 
@@ -130,11 +130,12 @@ This is the master navigation document that guides you to all project informatio
 **Purpose**: Complete domain knowledge and business workflow documentation (HOW BUSINESS WORKS)
 
 **Contains**:
-- Complete 8-stage textile manufacturing business workflow
+- Complete 8-stage textile manufacturing business workflow  
 - Lead-to-customer conversion automation and business logic
 - Daily workflow patterns and business mental models
 - Industry context and textile manufacturing domain knowledge
 - Critical business rules and data integrity requirements
+- **Note**: Detailed use cases moved to USE_CASES_MASTER.md for single source of truth
 
 **Update Schedule**: When business processes are refined, quarterly review for accuracy
 
@@ -169,21 +170,21 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **5. MVP_PROGRESS.md** - Complete Development Progress & Strategy
-**Purpose**: Comprehensive MVP development tracking including detailed use cases, strategy, milestones, and daily progress
+### **5. USE_CASES_MASTER.md** - Complete Use Case Specifications & Implementation Tracking
+**Purpose**: Single source of truth for all use case specifications, implementation status, and development strategy
 
 **Contains**:
-- **Development Strategy**: 3-phase approach, module dependencies, risk mitigation
-- **13 Core MVP Modules**: Complete list with descriptions and dependencies
-- **Executive Summary**: Progress metrics across 273 use cases
-- **Development Phases**: Detailed phase timelines, milestones, and success criteria
-- **Detailed Use Case Tracking**: All use cases with status, priority, sprint assignments
-- **Sprint Planning**: Capacity management and timeline tracking
-- **Personal Progress**: Daily updates, achievements, challenges
+- **Executive Dashboard**: Overall progress metrics and phase status
+- **Development Strategy**: 3-phase approach, 13 core modules, timeline milestones
+- **Complete Use Case Library**: All 272 use cases across 8 business stages
+- **Implementation Status**: Real functional status based on code analysis (Status & Notes columns)
+- **Progress Summaries**: Module-level and stage-level completion tracking
+- **Business Context Integration**: Use cases linked to textile manufacturing workflows
 
 **Update Schedule**: 
-- **DAILY** - Use TodoWrite tool for real-time progress tracking
-- **WEEKLY** - Progress summaries and sprint planning updates
+- **REAL-TIME** - Use TodoWrite tool during development sessions
+- **DAILY** - Update implementation status after completing features
+- **WEEKLY** - Progress summaries and milestone tracking
 
 ---
 
@@ -270,9 +271,9 @@ This is the master navigation document that guides you to all project informatio
 | "Why are we building this?" | **PRODUCT_REQUIREMENTS.md** | Strategic rationale and market context |
 | "How does textile business work?" | **BUSINESS_PROCESSES.md** | Domain knowledge and workflow details |
 | "What's the business logic behind this workflow?" | **BUSINESS_PROCESSES.md** | Business rules and process automation |
-| "What's the status of UC-L01?" | **MVP_PROGRESS.md** | Implementation progress and sprint tracking |
-| "Which use cases are in Sprint 2?" | **MVP_PROGRESS.md** | Sprint planning and capacity management |
-| "How many use cases are completed?" | **MVP_PROGRESS.md** | Progress metrics and completion tracking |
+| "What's the status of UC-L01?" | **USE_CASES_MASTER.md** | Implementation progress and status tracking |
+| "Which use cases are MVP priority?" | **USE_CASES_MASTER.md** | Use case priority and completion tracking |
+| "How many use cases are completed?" | **USE_CASES_MASTER.md** | Progress metrics and completion tracking |
 | "How do I implement the dashboard?" | **DASHBOARD_SPECIFICATIONS.md** | Technical implementation guide |
 | "What are the component specifications?" | **DASHBOARD_SPECIFICATIONS.md** | UI architecture and styling standards |
 | "When is the deadline?" | **PRODUCT_REQUIREMENTS.md** | Timeline and delivery milestones |
@@ -288,7 +289,7 @@ PRODUCT_REQUIREMENTS.md (WHAT & WHY)
         ↓
 BUSINESS_PROCESSES.md (HOW BUSINESS WORKS) 
         ↓
-USE_CASES_TRACKER.md (WHAT'S THE STATUS)
+USE_CASES_MASTER.md (WHAT'S THE STATUS)
         ↓
 DASHBOARD_SPECIFICATIONS.md (HOW TO BUILD)
         ↓
@@ -298,12 +299,12 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **Role-Based Document Usage**
 
 #### **👨‍💼 Product Managers**
-**Primary**: PRODUCT_REQUIREMENTS.md, USE_CASES_TRACKER.md
+**Primary**: PRODUCT_REQUIREMENTS.md, USE_CASES_MASTER.md
 **Secondary**: BUSINESS_PROCESSES.md (for domain context)
 **Reference**: DASHBOARD_SPECIFICATIONS.md (for technical feasibility)
 
 #### **👨‍💻 Frontend Developers**
-**Primary**: USE_CASES_TRACKER.md, DASHBOARD_SPECIFICATIONS.md  
+**Primary**: USE_CASES_MASTER.md, DASHBOARD_SPECIFICATIONS.md  
 **Secondary**: BUSINESS_PROCESSES.md (for business logic)
 **Reference**: PRODUCT_REQUIREMENTS.md (for acceptance criteria)
 
@@ -314,11 +315,11 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 
 #### **🧪 QA Engineers**
 **Primary**: BUSINESS_PROCESSES.md (for test scenarios)
-**Secondary**: USE_CASES_TRACKER.md (for implementation status), PRODUCT_REQUIREMENTS.md (for acceptance criteria)
+**Secondary**: USE_CASES_MASTER.md (for implementation status), PRODUCT_REQUIREMENTS.md (for acceptance criteria)
 **Reference**: DASHBOARD_SPECIFICATIONS.md (for UI validation)
 
 #### **📚 New Team Members**
-**Start Here**: DOCUMENTATION_INDEX.md → PRODUCT_REQUIREMENTS.md → BUSINESS_PROCESSES.md → USE_CASES_TRACKER.md
+**Start Here**: DOCUMENTATION_INDEX.md → PRODUCT_REQUIREMENTS.md → BUSINESS_PROCESSES.md → USE_CASES_MASTER.md
 **Then**: DASHBOARD_SPECIFICATIONS.md → DEVELOPMENT_GUIDE.md
 
 ---
@@ -327,7 +328,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 
 ### **Daily Updates Required**
 - ✅ **PROGRESS_LOG.md** - Every development session
-- ✅ **USE_CASES_TRACKER.md** - During active development (use TodoWrite tool for real-time tracking)
+- ✅ **USE_CASES_MASTER.md** - During active development (use TodoWrite tool for real-time tracking)
 
 ### **Weekly Updates (Active Development)**
 - ✅ **DEVELOPMENT_GUIDE.md** - When completing technical milestones
@@ -353,16 +354,16 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
    - Any challenges faced and solutions found
    - Tomorrow's planned focus
    - Current motivation/energy level
-2. Update **USE_CASES_TRACKER.md**:
-   - Mark completed use cases as ✅ COMPLETED
+2. Update **USE_CASES_MASTER.md**:
+   - Mark completed use cases as ✅ FUNCTIONAL
    - Update progress percentages in summary tables
-   - Note any blockers or changes in sprint assignments
+   - Note any implementation details in Notes column
 
 ### **After Completing Major Feature**
-1. Update **USE_CASES_TRACKER.md**:
-   - Mark all related use cases as completed
-   - Update module progress percentages
-   - Review sprint assignments for upcoming work
+1. Update **USE_CASES_MASTER.md**:
+   - Mark all related use cases as ✅ FUNCTIONAL
+   - Update module progress percentages in Executive Dashboard
+   - Add implementation notes in Notes column
 2. Update **DEVELOPMENT_GUIDE.md** with any new setup steps
 3. Update **PROGRESS_LOG.md** with milestone completion
 4. Consider if **README.md** needs status update
@@ -370,32 +371,31 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **When Adding New Business Feature**
 1. Update **PRODUCT_REQUIREMENTS.md** with feature specification
 2. Update **BUSINESS_PROCESSES.md** if new business processes are involved  
-3. Add new use cases to **USE_CASES_TRACKER.md**:
+3. Add new use cases to **USE_CASES_MASTER.md**:
    - Assign use case IDs following existing patterns
-   - Set priority levels (P0-MVP, P1-Important, P2-Future)
-   - Assign to appropriate sprints
+   - Set priority levels (MVP, Post-MVP)
+   - Add to appropriate business stage section
 4. Consider if **TECHNICAL_STRATEGY.md** needs architecture updates
 5. Update **README.md** if it's a major feature addition
 
 ### **Sprint Planning Sessions**
-1. Review **USE_CASES_TRACKER.md**:
-   - Update sprint assignments based on capacity
-   - Mark targeted use cases as IN-PROGRESS  
-   - Estimate completion timelines
-2. Sync with **MVP_DEVELOPMENT_PLAN.md** for milestone alignment
-3. Update **PROGRESS_LOG.md** with sprint goals and focus areas
+1. Review **USE_CASES_MASTER.md**:
+   - Review implementation status and priorities
+   - Identify next features to develop
+   - Update Executive Dashboard metrics
+2. Update **PROGRESS_LOG.md** with focus areas and goals
 
 ### **When Use Case Status Changes**
 1. **IMMEDIATE**: Use TodoWrite tool during development sessions
-2. **DAILY**: Transfer TodoWrite progress to **USE_CASES_TRACKER.md**
-3. **WEEKLY**: Review overall progress and adjust sprint planning
-4. **CRITICAL**: Always maintain single source of truth in tracker
+2. **DAILY**: Transfer TodoWrite progress to **USE_CASES_MASTER.md**
+3. **WEEKLY**: Review overall progress in Executive Dashboard
+4. **CRITICAL**: Always maintain single source of truth in USE_CASES_MASTER.md
 
 ### **When Changing Technology Stack**
 1. Update **TECHNICAL_STRATEGY.md** with decision rationale
 2. Update **DEVELOPMENT_GUIDE.md** with new setup procedures
 3. Update **README.md** with new technology information
-4. Review **USE_CASES_TRACKER.md** for impacted use cases and timeline adjustments
+4. Review **USE_CASES_MASTER.md** for impacted use cases and timeline adjustments
 
 ---
 
@@ -408,7 +408,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **What You Want to Document** | **Goes In** | **Why** |
 |---|---|---|
 | **Daily Development Progress (features built, challenges, motivation)** | PROGRESS_LOG.md | Personal daily tracking |
-| **Use Case Implementation Status (UC-L01 completed, Sprint 2 assignments)** | USE_CASES_TRACKER.md | Implementation progress tracking |
+| **Use Case Implementation Status (UC-L01 completed, MVP priorities)** | USE_CASES_MASTER.md | Implementation progress tracking |
 | **Business Context for Use Cases (workflow logic, business rules)** | BUSINESS_PROCESSES.md | Business domain knowledge |
 | **Visual Design Philosophy & Standards** | DESIGN_SYSTEM.md | Design principles and patterns |
 | **Dashboard Technical Implementation** | DASHBOARD_SPECIFICATIONS.md | UI component architecture |
@@ -425,9 +425,9 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **🔄 Critical Synchronization Rules**
 
 **NEVER put implementation status in BUSINESS_PROCESSES.md** - Business processes document contains only business context  
-**ALWAYS use USE_CASES_TRACKER.md for status** - Single source of truth for all implementation tracking  
-**UPDATE BOTH when adding use cases** - Add business context to BUSINESS_PROCESSES.md AND tracking entry to USE_CASES_TRACKER.md  
-**USE TodoWrite for real-time tracking** - Transfer to USE_CASES_TRACKER.md daily  
+**ALWAYS use USE_CASES_MASTER.md for status** - Single source of truth for all implementation tracking  
+**UPDATE BOTH when adding use cases** - Add business context to BUSINESS_PROCESSES.md AND tracking entry to USE_CASES_MASTER.md  
+**USE TodoWrite for real-time tracking** - Transfer to USE_CASES_MASTER.md daily  
 **CROSS-REFERENCE documents** - Each document links to others for navigation
 
 ### **Common Confusion - Examples**
@@ -447,7 +447,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **Quick Decision Guide**
 
 **Ask yourself**: 
-1. **Is it use case implementation status?** → USE_CASES_TRACKER.md
+1. **Is it use case implementation status?** → USE_CASES_MASTER.md
 2. **Is it about business processes?** → BUSINESS_PROCESSES.md
 3. **Is it dashboard/UI implementation?** → DASHBOARD_SPECIFICATIONS.md
 4. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
@@ -577,6 +577,6 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ---
 
 **Created**: Sep 3, 2025  
-**Updated**: Sep 9, 2025 (renamed to DOCUMENTATION_INDEX for clarity)  
+**Updated**: Sep 25, 2025 (consolidated USE_CASES_MASTER.md, retired MVP_PROGRESS.md)  
 **Purpose**: Master navigation hub - always read this first to understand project structure  
-**Next Review**: After authentication system implementation
+**Next Review**: After backend integration phase
