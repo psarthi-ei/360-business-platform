@@ -53,11 +53,11 @@
 | **Metric** | **Current** | **Target** | **%** |
 |------------|-------------|------------|-------|
 | **Total Use Cases** | 273 | 273 | 100% |
-| **Completed (Functional)** | 54 | 273 | **20%** |
+| **Completed (Functional)** | 50 | 273 | **18%** |
 | **In Progress** | 0 | - | 0% |
-| **TODO/Planned** | 219 | - | 80% |
-| **P0-MVP Critical** | 55 | 55 | - |
-| **P0-MVP Completed** | 30 | 55 | **55%** |
+| **TODO/Planned** | 223 | - | 82% |
+| **P0-MVP Critical** | 51 | 51 | - |
+| **P0-MVP Completed** | 26 | 51 | **51%** |
 
 ### **Current Phase Status**
 
@@ -88,13 +88,13 @@
 **3-Phase Development Approach**:
 - **Phase 1**: Build complete UI prototype (all screens, mock data) ✅ **COMPLETE**
 - **Phase 2**: Build backend + integrate module-by-module 🎯 **CURRENT**
-- **Phase 3**: Voice commands, WhatsApp integration, deployment 📅 **PLANNED**
+- **Phase 3**: Voice enhancement, WhatsApp API integration, deployment 📅 **PLANNED**
 
 ### **13 Core Modules**
-1. **Lead Management with Analytics** ✅ (54% functional)
-2. **Quotation & Sales Order with Stock Integration** ✅ (37% functional)  
+1. **Lead Management with Analytics** ✅ (46% functional)
+2. **Quotation & Sales Order with Stock Integration** ✅ (35% functional)  
 3. **CRM - 360° Customer View** ✅ (22% functional)
-4. **Advance Payment Management** ✅ (55% functional)
+4. **Advance Payment Management** ✅ (48% functional)
 5. **Intelligent Work Order System** 📋 (0% - not implemented)
 6. **Smart Procurement System with GRN** 📋 (0% - not implemented)
 7. **Three-tier Inventory Management** 📋 (0% - not implemented)
@@ -148,13 +148,14 @@
 - **Milestone 10**: End-to-End Workflow Testing (Dec 2024)
 
 #### **PHASE 3: VOICE & DEPLOYMENT - 📅 PLANNED**
-**Timeline**: January 2025 | **Goal**: Production-ready MVP
+**Timeline**: January 2025 | **Goal**: Production-ready MVP with external integrations
 
 **Planned Deliverables**:
 🎯 Enhanced voice commands (already 70% complete)  
-🎯 WhatsApp Business API integration  
+🎯 WhatsApp Business API integration (P2-Future features)  
 🎯 Production deployment and optimization  
 🎯 Customer demo and feedback integration
+🎯 External website form integrations
 
 ### **Critical Milestone Timeline**
 
@@ -183,9 +184,9 @@
 
 | **Process** | **Use Cases** | **P0-MVP** | **Completed** | **In Progress** | **TODO** | **Progress %** |
 |-------------|---------------|------------|---------------|-----------------|----------|----------------|
-| **🔥 Lead Pipeline** | 26 | 16 | 14 | 0 | 12 | **54%** |
-| **📋 Quotations & Orders** | 43 | 18 | 16 | 0 | 27 | **37%** |
-| **💰 Payments** | 29 | 16 | 16 | 0 | 13 | **55%** |
+| **🔥 Lead Pipeline** | 26 | 14 | 12 | 0 | 14 | **46%** |
+| **📋 Quotations & Orders** | 43 | 17 | 15 | 0 | 28 | **35%** |
+| **💰 Payments** | 29 | 14 | 14 | 0 | 15 | **48%** |
 | **🏭 Production** | 34 | 0 | 0 | 0 | 34 | **0%** |
 | **📦 Inventory** | 33 | 20 | 0 | 0 | 33 | **0%** |
 | **🚚 Fulfillment** | 37 | 0 | 0 | 0 | 37 | **0%** |
@@ -194,28 +195,31 @@
 
 ### **Priority Breakdown**
 
-#### **P0-MVP Critical for Launch (55 use cases)**
+#### **P0-MVP Critical for Launch (51 use cases)**
 **Must complete for MVP launch - Target: December 2024**
+*Note: WhatsApp API integrations moved to P2-Future*
 
 | Module | Count | Completed | TODO | Progress |
 |--------|-------|-----------|------|----------|
-| Lead Management | 16 | 14 | 2 | 88% |
-| Quotations & Orders | 18 | 16 | 2 | 89% |
-| Payments | 16 | 16 | 0 | 100% |
+| Lead Management | 14 | 12 | 2 | 86% |
+| Quotations & Orders | 17 | 15 | 2 | 88% |
+| Payments | 14 | 14 | 0 | 100% |
 | Inventory (Basic) | 5 | 0 | 5 | 0% |
-| **TOTAL P0** | **55** | **46** | **9** | **84%** |
+| Customer Profile (Basic) | 1 | 1 | 0 | 100% |
+| **TOTAL P0** | **51** | **42** | **9** | **82%** |
 
 #### **P1-Important for MVP Success (88 use cases)**
 **Important features that enhance MVP value - Target: January 2025**
 
-#### **P2-Future Enhancements (130 use cases)**
+#### **P2-Future Enhancements (134 use cases)**
 **Advanced features for post-MVP phases**
+*Includes WhatsApp API integrations and external website forms*
 
 ### **Module Status Summary**
 
 | Module | Status | Components | Functionality Level |
 |--------|--------|------------|-------------------|
-| **Lead Management** | ✅ Functional | LeadManagement.tsx | Priority filtering, display, WhatsApp integration |
+| **Lead Management** | ✅ Functional | LeadManagement.tsx | Priority filtering, display, call integration |
 | **Quotations** | ✅ Functional | QuotationOrders.tsx | Quote workflow, profile collection, approval system |
 | **Sales Orders** | ✅ Functional | SalesOrders.tsx | Order display with mock data |
 | **Payments** | ✅ Functional | Payments.tsx | Advanced payment tracking, customer conversion |
@@ -235,8 +239,8 @@
 | UC ID | Priority | Status | Description | Sprint | Notes |
 |-------|----------|--------|-------------|---------|-------|
 | UC-L01 | P0-MVP | ✅ FUNCTIONAL | Create new lead from phone inquiry | S1 | Lead form working with mock data |
-| UC-L02 | P0-MVP | 📋 NOT-IMPLEMENTED | Create lead from WhatsApp message | S2 | WhatsApp API not integrated |
-| UC-L03 | P0-MVP | 📋 NOT-IMPLEMENTED | Create lead from website form | S3 | Web form not implemented |
+| UC-L02 | P2-Future | 📋 NOT-IMPLEMENTED | Create lead from WhatsApp message | S2 | WhatsApp API deferred to P2-Future |
+| UC-L03 | P2-Future | 📋 NOT-IMPLEMENTED | Create lead from website form | S3 | External website integration deferred to P2-Future |
 | UC-L04 | P0-MVP | ✅ FUNCTIONAL | Add fabric requirements to lead | S1 | Mock data shows fabric specs |
 | UC-L05 | P0-MVP | ✅ FUNCTIONAL | Set lead priority (Hot/Warm/Cold) | S1 | Priority system fully working |
 | UC-L06 | P0-MVP | ✅ FUNCTIONAL | Add follow-up notes to lead | S1 | Notes displayed in mock data |
@@ -259,11 +263,11 @@
 | UC ID | Priority | Status | Description | Sprint | Notes |
 |-------|----------|--------|-------------|---------|-------|
 | UC-L17 | P1-Important | ✅ FUNCTIONAL | Call lead from platform | S1 | Call button working with tel: links |
-| UC-L18 | P1-Important | ✅ FUNCTIONAL | Send WhatsApp to lead | S1 | WhatsApp deep linking working |
+| UC-L18 | P2-Future | 📋 NOT-IMPLEMENTED | Send WhatsApp to lead | S1 | WhatsApp API deferred to P2-Future |
 | UC-L19 | P1-Important | 📋 NOT-IMPLEMENTED | Send email to lead | S3 | Email not implemented |
 | UC-L20 | P1-Important | 📋 NOT-IMPLEMENTED | Log communication history | S2 | Logging not implemented |
 | UC-L21 | P1-Important | 📋 NOT-IMPLEMENTED | View complete interaction history | S1 | Timeline not implemented |
-| UC-L22 | P1-Important | 📋 NOT-IMPLEMENTED | Send fabric catalog to lead | S3 | PDF sharing not implemented |
+| UC-L22 | P2-Future | 📋 NOT-IMPLEMENTED | Send fabric catalog to lead | S3 | WhatsApp sharing deferred to P2-Future |
 
 #### **Lead Conversion Preparation (4 use cases)**
 | UC ID | Priority | Status | Description | Sprint | Notes |
@@ -306,7 +310,7 @@
 #### **Quote Communication (6 use cases)**
 | UC ID | Priority | Status | Description | Sprint | Notes |
 |-------|----------|--------|-------------|---------|-------|
-| UC-Q19 | P0-MVP | 📋 NOT-IMPLEMENTED | Send quote via WhatsApp | S2 | WhatsApp share functionality not implemented |
+| UC-Q19 | P2-Future | 📋 NOT-IMPLEMENTED | Send quote via WhatsApp | S2 | WhatsApp API deferred to P2-Future |
 | UC-Q20 | P1-Important | 📋 NOT-IMPLEMENTED | Send quote via email | S2 | Email functionality not implemented |
 | UC-Q21 | P0-MVP | 📋 NOT-IMPLEMENTED | Generate quote PDF | S2 | PDF generation not implemented |
 | UC-Q22 | P1-Important | 📋 NOT-IMPLEMENTED | Print quote | S3 | Print functionality not implemented |
@@ -329,7 +333,7 @@
 | UC-Q27 | P0-MVP | ✅ FUNCTIONAL | Manual: Add GST/PAN details | S2 | GST/PAN workflow implemented |
 | UC-Q28 | P0-MVP | ✅ FUNCTIONAL | Manual: Add billing address | S2 | Address collection working |
 | UC-Q29 | P0-MVP | ✅ FUNCTIONAL | Manual: Add business contact details | S2 | Contact details workflow functional |
-| UC-Q30 | P1-Important | ✅ FUNCTIONAL | Send profile completion link | S3 | Link generation with WhatsApp share |
+| UC-Q30 | P2-Future | ✅ FUNCTIONAL | Send profile completion link | S3 | Link generation working, WhatsApp share deferred to P2-Future |
 | UC-Q31 | P1-Important | ✅ FUNCTIONAL | Track link status | S3 | Link status tracking implemented |
 | UC-Q32 | P1-Important | 📋 NOT-IMPLEMENTED | Customer submits profile | S3 | External form not implemented |
 | UC-Q33 | P0-MVP | ✅ FUNCTIONAL | Auto-generate proforma on submission | S2 | Proforma generation workflow working |
@@ -355,7 +359,7 @@
 | UC-P02 | P0-MVP | 📋 NOT-IMPLEMENTED | Create manual proforma invoice | S2 | Manual proforma creation not implemented |
 | UC-P03 | P0-MVP | 📋 NOT-IMPLEMENTED | Edit proforma invoice details | S2 | Proforma editing not implemented |
 | UC-P04 | P0-MVP | 📋 NOT-IMPLEMENTED | Preview proforma invoice | S2 | PDF preview not implemented |
-| UC-P05 | P0-MVP | 📋 NOT-IMPLEMENTED | Send proforma via WhatsApp | S2 | WhatsApp PDF sharing not implemented |
+| UC-P05 | P2-Future | 📋 NOT-IMPLEMENTED | Send proforma via WhatsApp | S2 | WhatsApp API deferred to P2-Future |
 | UC-P06 | P1-Important | 📋 NOT-IMPLEMENTED | Send proforma via email | S3 | Email attachment not implemented |
 | UC-P07 | P0-MVP | ✅ FUNCTIONAL | Set payment due date | S2 | Due dates tracked in payment records |
 | UC-P08 | P0-MVP | 📋 NOT-IMPLEMENTED | Add bank details to proforma | S2 | Bank details not integrated |
@@ -370,7 +374,7 @@
 | UC-P13 | P1-Important | 📋 NOT-IMPLEMENTED | Send payment confirmation | S2 | Auto-confirmation not implemented |
 | UC-P14 | P1-Important | ✅ FUNCTIONAL | Handle partial payment | S3 | Partial payment status tracking working |
 | UC-P15 | P1-Important | ✅ FUNCTIONAL | Set payment reminder | S2 | Reminder functionality implemented |
-| UC-P16 | P0-MVP | ✅ FUNCTIONAL | Follow up on pending payment | S2 | WhatsApp payment follow-up working |
+| UC-P16 | P2-Future | 📋 NOT-IMPLEMENTED | Follow up on pending payment | S2 | WhatsApp follow-up deferred to P2-Future |
 
 #### **Final Payment Management (6 use cases)**
 | UC ID | Priority | Status | Description | Sprint | Notes |
@@ -454,6 +458,49 @@
 | UC-A11 - UC-A20 | Financial Analytics | 📋 NOT-IMPLEMENTED | S6-S7 | P1-Important |
 | UC-A21 - UC-A30 | Operational Analytics | 📋 NOT-IMPLEMENTED | S7-S8 | P2-Future |
 | UC-A31 - UC-A33 | Custom Dashboards | 📋 NOT-IMPLEMENTED | S8 | P2-Future |
+
+---
+
+## 🚀 **P2-FUTURE INTEGRATIONS (Deferred)**
+
+### **📱 WhatsApp Business API Integration (12 use cases)**
+*Deferred to Phase 3 - requires external API integration*
+
+| UC ID | Module | Description | Reason for Deferral |
+|-------|--------|-------------|-------------------|
+| UC-L02 | Lead Management | Create lead from WhatsApp message | WhatsApp Business API complex integration |
+| UC-L18 | Lead Management | Send WhatsApp to lead | WhatsApp Business API required |
+| UC-L22 | Lead Management | Send fabric catalog via WhatsApp | WhatsApp Business API required |
+| UC-Q19 | Quotations | Send quote via WhatsApp | WhatsApp Business API required |
+| UC-Q30 | Quotations | Send profile completion link (WhatsApp share) | WhatsApp sharing functionality |
+| UC-P05 | Payments | Send proforma via WhatsApp | WhatsApp Business API required |
+| UC-P16 | Payments | Follow up on pending payment via WhatsApp | WhatsApp Business API required |
+| UC-F17 | Fulfillment | Send dispatch notification via WhatsApp | WhatsApp Business API required |
+| UC-C22 | Customers | Send WhatsApp to customer | WhatsApp Business API required |
+| UC-C24 | Customers | Send promotional material via WhatsApp | WhatsApp Business API required |
+| UC-C25 | Customers | Send festival greetings via WhatsApp | WhatsApp Business API required |
+
+### **🌐 External Website Integration (1 use case)**
+*Deferred to Phase 3 - customer website dependency*
+
+| UC ID | Module | Description | Reason for Deferral |
+|-------|--------|-------------|-------------------|
+| UC-L03 | Lead Management | Create lead from website form | Customer doesn't have website initially |
+
+### **🛠️ P2-Future Implementation Strategy**
+
+**WhatsApp Business API Integration:**
+- Account verification and setup
+- API authentication and webhooks
+- Message template approval process
+- PDF sharing via WhatsApp Web API
+- Automated notification system
+
+**Alternative P0-MVP Solutions (Manual Workarounds):**
+- Generate PDFs for manual WhatsApp sharing
+- Provide shareable links for manual distribution
+- Phone-based follow-up instead of automated WhatsApp
+- Email notifications as primary communication method
 
 ---
 
