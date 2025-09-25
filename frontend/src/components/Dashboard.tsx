@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
-import GlobalSearch from './GlobalSearch/GlobalSearch';
+import GlobalSearch from './GlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import styles from '../styles/Dashboard.module.css';
 

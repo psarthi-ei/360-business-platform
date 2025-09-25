@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from './useGlobalSearch';
 import SearchResults from './SearchResults';
-import styles from './GlobalSearch.module.css';
+import styles from '../styles/GlobalSearch.module.css';
 
 interface GlobalSearchProps {
   dataSources: SearchDataSources;

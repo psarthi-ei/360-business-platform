@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchResult } from './useGlobalSearch';
-import styles from './GlobalSearch.module.css';
+import styles from '../styles/GlobalSearch.module.css';
 
 interface SearchResultsProps {
   results: SearchResult[];
