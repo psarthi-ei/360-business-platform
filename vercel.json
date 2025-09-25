@@ -1,6 +1,8 @@
 {
   "name": "360-business-platform",
   "version": 2,
+  "buildCommand": "cd frontend && npm run lint && npm test -- --coverage --watchAll=false && npm run build",
+  "installCommand": "cd frontend && npm ci",
   "builds": [
     {
       "src": "frontend/package.json",
