@@ -105,7 +105,7 @@
 
 | UC-ID | Priority | User Action | System Response | Voice Command | Status | Notes |
 |-------|----------|-------------|-----------------|---------------|--------|-------|
-| UC-L01 | MVP | Create new lead from phone inquiry | Lead created with unique ID | "नया लीड जोड़ें" | ✅ **FUNCTIONAL** | Lead creation form working |
+| UC-L01 | MVP | Create new lead from phone inquiry | Lead created with unique ID | "नया लीड जोड़ें" | ✅ **COMPLETE** | Full modal-based lead creation with validation, textile context, and success messaging |
 | UC-L02 | Post-MVP | Create lead from WhatsApp message | Auto-fill contact details | "WhatsApp से लीड बनाएं" | 📋 **NOT-IMPLEMENTED** | WhatsApp API integration needed |
 | UC-L03 | Post-MVP | Create lead from website form | Lead created with source tracking | N/A (automated) | 📋 **NOT-IMPLEMENTED** | External form integration needed |
 | UC-L04 | MVP | Add fabric requirements to lead | Specification details saved | "requirements add करें" | ✅ **FUNCTIONAL** | Requirements field implemented |

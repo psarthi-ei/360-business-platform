@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import ProductHeader from './ProductHeader';
-import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency } from '../data/mockData';
+import AddLeadModal from './AddLeadModal';
+import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency, Lead } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/LeadManagement.module.css';
 
@@ -34,6 +36,52 @@ function LeadManagement({
   onFilterChange
 }: LeadManagementProps) {
   const { t } = useTranslation();
+  const location = useLocation();
+  
+  // State for modal and leads
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [leads, setLeads] = useState<Lead[]>(mockLeads);
+  const [successMessage, setSuccessMessage] = useState<string>('');
+
+  // Auto-open modal based on URL parameter
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('action') === 'add-lead') {
+      setShowAddModal(true);
+    }
+  }, [location]);
+
+  // Generate unique lead ID
+  const generateLeadId = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const timestamp = now.toTimeString().slice(0, 8).replace(/:/g, '');
+    const random = Math.random().toString(36).substr(2, 3).toUpperCase();
+    return `LEAD-${year}-${timestamp}-${random}`;
+  };
+
+  // Handle adding new lead
+  const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => {
+    const newLead: Lead = {
+      ...leadData,
+      id: generateLeadId(),
+      lastContact: new Date().toLocaleDateString(),
+      conversionStatus: 'active_lead',
+      convertedToCustomerDate: undefined
+    };
+
+    // Add new lead to the beginning of the list
+    setLeads(prev => [newLead, ...prev]);
+    
+    // Show success message
+    setSuccessMessage(`Lead "${newLead.companyName}" has been successfully added!`);
+    
+    // Clear success message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+  };
+
   return (
     <div className={styles.leadManagementScreen}>
       <ProductHeader
@@ -50,8 +98,20 @@ function LeadManagement({
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
           <h1 className={styles.centeredHeading}>📋 {t('leadManagement')}</h1>
-          <button className={styles.addButton}>{t('addNewLead')}</button>
+          <button 
+            className={styles.addButton}
+            onClick={() => setShowAddModal(true)}
+          >
+            {t('addNewLead')}
+          </button>
         </div>
+
+        {/* Success Message */}
+        {successMessage && (
+          <div className={styles.successMessage}>
+            ✅ {successMessage}
+          </div>
+        )}
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>
@@ -83,7 +143,7 @@ function LeadManagement({
       </div>
 
       <div className={styles.leadsContainer}>
-        {mockLeads.map(lead => {
+        {leads.map(lead => {
           // Filter logic
           const shouldShow = (
             filterState === 'all' ||
@@ -191,6 +251,13 @@ function LeadManagement({
         </p>
       </div>
       </div>
+
+      {/* Add Lead Modal */}
+      <AddLeadModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAddLead={handleAddLead}
+      />
     </div>
   );
 }

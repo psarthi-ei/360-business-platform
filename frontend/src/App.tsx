@@ -180,8 +180,12 @@ function AppContent() {
     navigate('/dashboard');
   }
 
-  function showLeadManagement() {
-    navigate('/leads');
+  function showLeadManagement(autoAction?: string) {
+    if (autoAction === 'add-lead') {
+      navigate('/leads?action=add-lead');
+    } else {
+      navigate('/leads');
+    }
   }
 
   function showQuotationOrders() {

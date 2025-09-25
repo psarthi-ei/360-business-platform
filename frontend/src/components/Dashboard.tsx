@@ -8,7 +8,7 @@ interface DashboardProps {
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
-  onShowLeadManagement: () => void;
+  onShowLeadManagement: (autoAction?: string) => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
   onShowPayments: () => void;
@@ -114,7 +114,7 @@ function Dashboard({
             quickStats: `${totalLeads} active leads • ${hotLeads} high priority • ${warmLeads} warm follow-ups • ${totalLeads - hotLeads - warmLeads} cold leads`,
             actions: [
               { label: 'View All Leads', action: onShowLeadManagement, primary: true },
-              { label: 'Add New Lead', action: () => {} },
+              { label: 'Add New Lead', action: () => onShowLeadManagement('add-lead') },
               { label: 'Export Leads', action: () => {} },
               { label: 'Lead Analytics', action: () => {} }
             ]
@@ -138,14 +138,6 @@ function Dashboard({
             icon: '📊',
             purpose: 'Lead insights',
             quickStats: 'Conversion insights and performance metrics',
-            disabled: true
-          },
-          { 
-            id: 'futureModule', 
-            label: '[Future Module]', 
-            icon: '⭐',
-            purpose: 'Advanced features',
-            quickStats: 'Enhanced capabilities coming soon',
             disabled: true
           }
         ],
@@ -597,12 +589,6 @@ function Dashboard({
       
       <div className={styles.dashboardContainer}>
 
-        {/* Dashboard Header */}
-        <div className={styles.dashboardHeader}>
-          <h1 data-testid="dashboard-title">360° Business Dashboard</h1>
-          <h2 data-testid="dashboard-subtitle">Surat Textiles Pvt. Ltd.</h2>
-        </div>
-
         {/* Integrated Search - TOP PRIORITY */}
         <div className={styles.integratedSearch}>
           <div className={styles.searchInputWrapper}>
@@ -733,7 +719,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => { handleCardClick('leads'); onShowLeadManagement(); }} className={styles.cardButton} data-testid="lead-management-button">
+                <button onClick={() => handleCardClick('leads')} className={styles.cardButton} data-testid="lead-management-button">
                   Manage Leads →
                 </button>
               </div>
