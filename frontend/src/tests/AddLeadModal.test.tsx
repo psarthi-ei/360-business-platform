@@ -79,7 +79,7 @@ describe('AddLeadModal - UC-L01: Create New Lead from Phone Inquiry', () => {
       expect(screen.getByLabelText('Company Name *')).toHaveAttribute('type', 'text');
       expect(screen.getByLabelText('Phone Number *')).toHaveAttribute('type', 'tel');
       expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email');
-      expect(screen.getByLabelText('Company Name *')).toHaveAttribute('autoFocus');
+      expect(screen.getByLabelText('Company Name *')).toHaveFocus();
     });
   });
 
@@ -93,7 +93,7 @@ describe('AddLeadModal - UC-L01: Create New Lead from Phone Inquiry', () => {
       expect(screen.getByRole('option', { name: 'Vadodara' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'Rajkot' })).toBeInTheDocument();
       expect(screen.getByRole('option', { name: 'Bhavnagar' })).toBeInTheDocument();
-      expect(screen.getByRole('option', { name: 'Other' })).toBeInTheDocument();
+      expect(screen.getAllByRole('option', { name: 'Other' })).toHaveLength(2);
     });
 
     test('includes textile business types in dropdown', () => {

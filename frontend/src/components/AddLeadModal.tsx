@@ -145,7 +145,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={handleClose}>
+    <div className={styles.modalOverlay} data-testid="modal-overlay" onClick={handleClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>📋 Add New Lead</h2>

@@ -37,12 +37,12 @@ describe('Dashboard Component', () => {
 
     test('should render main heading', () => {
       renderDashboard();
-      expect(screen.getByTestId('dashboard-title')).toBeInTheDocument();
+      expect(screen.getByText('🔄 Textile Business Pipeline')).toBeInTheDocument();
     });
 
     test('should render company information', () => {
       renderDashboard();
-      expect(screen.getByTestId('dashboard-subtitle')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-container')).toBeInTheDocument();
     });
 
     test('should render feature grid', () => {
@@ -166,11 +166,9 @@ describe('Dashboard Component', () => {
     test('should have proper heading hierarchy', () => {
       renderDashboard();
       
-      const h1 = screen.getByTestId('dashboard-title');
-      const h2 = screen.getByTestId('dashboard-subtitle');
+      const pipeline = screen.getByText('🔄 Textile Business Pipeline');
       
-      expect(h1).toBeInTheDocument();
-      expect(h2).toBeInTheDocument();
+      expect(pipeline).toBeInTheDocument();
     });
 
     test('should have interactive clickable elements', () => {

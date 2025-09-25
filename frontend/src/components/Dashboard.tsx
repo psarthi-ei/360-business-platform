@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
+import GlobalSearch from './GlobalSearch/GlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import styles from '../styles/Dashboard.module.css';
 
@@ -60,10 +61,6 @@ function Dashboard({
   const [activeCardType, setActiveCardType] = useState<string | null>(null);
   
   
-  // Global search state
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
   
   // Calculate business metrics from mock data
   const totalLeads = mockLeads.length;
@@ -486,99 +483,6 @@ function Dashboard({
 
 
 
-  // Global search functionality
-  const performGlobalSearch = (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setShowSearchResults(false);
-      return;
-    }
-
-    const results: any[] = [];
-    const lowerQuery = query.toLowerCase();
-
-    // Search in leads
-    mockLeads.forEach(lead => {
-      if (lead.companyName.toLowerCase().includes(lowerQuery) ||
-          lead.contactPerson.toLowerCase().includes(lowerQuery) ||
-          lead.inquiry.toLowerCase().includes(lowerQuery) ||
-          lead.priority.toLowerCase().includes(lowerQuery)) {
-        results.push({
-          type: 'lead',
-          title: lead.companyName,
-          subtitle: `${lead.contactPerson} - ${lead.inquiry}`,
-          priority: lead.priority,
-          action: () => onShowLeadManagement(),
-          category: 'NEW INQUIRIES'
-        });
-      }
-    });
-
-    // Search in quotes
-    mockQuotes.forEach(quote => {
-      if (quote.companyName.toLowerCase().includes(lowerQuery) ||
-          quote.items.toLowerCase().includes(lowerQuery) ||
-          quote.status.toLowerCase().includes(lowerQuery)) {
-        results.push({
-          type: 'quote',
-          title: quote.companyName,
-          subtitle: `${quote.items.split(' - ')[0]} - ${formatCurrency(quote.totalAmount)}`,
-          status: quote.status,
-          action: () => onShowQuotationOrders(),
-          category: 'ACTIVE BUSINESS'
-        });
-      }
-    });
-
-    // Search in sales orders
-    mockSalesOrders.forEach(order => {
-      const customer = getBusinessProfileById(order.businessProfileId);
-      const customerName = customer?.companyName || 'Unknown Customer';
-      if (customerName.toLowerCase().includes(lowerQuery) ||
-          order.items.toLowerCase().includes(lowerQuery) ||
-          order.status.toLowerCase().includes(lowerQuery) ||
-          (order.paymentStatus && order.paymentStatus.toLowerCase().includes(lowerQuery))) {
-        results.push({
-          type: 'order',
-          title: customerName,
-          subtitle: `${order.items.split(' - ')[0]} - ${formatCurrency(order.totalAmount)}`,
-          status: order.status,
-          action: () => onShowSalesOrders(),
-          category: 'ACTIVE BUSINESS'
-        });
-      }
-    });
-
-    // Search in customers
-    mockBusinessProfiles.forEach(profile => {
-      if (profile.companyName.toLowerCase().includes(lowerQuery) ||
-          profile.contactPerson.toLowerCase().includes(lowerQuery) ||
-          profile.businessType.toLowerCase().includes(lowerQuery)) {
-        results.push({
-          type: 'customer',
-          title: profile.companyName,
-          subtitle: `${profile.contactPerson} - ${profile.businessType}`,
-          status: profile.customerStatus,
-          action: () => onShowCustomerList(),
-          category: 'CUSTOMERS'
-        });
-      }
-    });
-
-    setSearchResults(results.slice(0, 8)); // Limit to 8 results
-    setShowSearchResults(true);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    performGlobalSearch(query);
-  };
-
-  const closeSearchResults = () => {
-    setShowSearchResults(false);
-  };
-
   // Date formatting utilities will be added when needed
 
   
@@ -589,58 +493,24 @@ function Dashboard({
       
       <div className={styles.dashboardContainer}>
 
-        {/* Integrated Search - TOP PRIORITY */}
-        <div className={styles.integratedSearch}>
-          <div className={styles.searchInputWrapper}>
-            <span className={styles.searchIcon}>🔍</span>
-            <input
-              type="text"
-              placeholder="Search or try voice commands..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className={styles.searchInput}
-            />
-            {searchQuery && (
-              <button className={styles.clearSearch} onClick={() => {
-                setSearchQuery('');
-                setSearchResults([]);
-                setShowSearchResults(false);
-              }}>
-                ✕
-              </button>
-            )}
-          </div>
-          
-          {/* Voice-Enhanced Search Results */}
-          {showSearchResults && searchResults.length > 0 && (
-            <div className={styles.searchResults}>
-              <div className={styles.searchResultsHeader}>
-                <span>Found {searchResults.length} results</span>
-                <div className={styles.voiceSearchSuggestion}>
-                  🎤 Try: "Show me {searchQuery}"
-                </div>
-              </div>
-              <div className={styles.searchResultsList}>
-                {searchResults.slice(0, 4).map((result, index) => (
-                  <div 
-                    key={index}
-                    className={styles.searchResultItem}
-                    onClick={() => {
-                      result.action();
-                      closeSearchResults();
-                    }}
-                  >
-                    <div className={styles.resultContent}>
-                      <div className={styles.resultTitle}>{result.title}</div>
-                      <div className={styles.resultSubtitle}>{result.subtitle}</div>
-                    </div>
-                    <span className={styles.voiceHint}>🎤</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Integrated Global Search */}
+        <GlobalSearch
+          dataSources={{
+            leads: mockLeads,
+            quotes: mockQuotes,
+            salesOrders: mockSalesOrders,
+            customers: mockBusinessProfiles
+          }}
+          navigationHandlers={{
+            onShowLeadManagement,
+            onShowQuotationOrders,
+            onShowSalesOrders,
+            onShowCustomerList,
+            formatCurrency,
+            getBusinessProfileById
+          }}
+          placeholder="Search or try voice commands..."
+        />
 
         {/* Compact Business Intelligence Metrics Bar */}
         <div className={styles.compactMetricsBar}>
@@ -719,7 +589,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => handleCardClick('leads')} className={styles.cardButton} data-testid="lead-management-button">
+                <button onClick={() => { handleCardClick('leads'); onShowLeadManagement(); }} className={styles.cardButton} data-testid="lead-management-button">
                   Manage Leads →
                 </button>
               </div>
