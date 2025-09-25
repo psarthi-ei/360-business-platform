@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from '../components/Login';
 import { TranslationProvider } from '../contexts/TranslationContext';
+import { UserProvider } from '../contexts/UserContext';
 
 // Mock props
 const mockProps = {
@@ -35,11 +36,13 @@ const mockProps = {
   } as any
 };
 
-// Helper function to render Login with TranslationProvider
+// Helper function to render Login with all required providers
 const renderLogin = (props = mockProps) => {
   return render(
     <TranslationProvider defaultLanguage="en">
-      <Login {...props} />
+      <UserProvider>
+        <Login {...props} />
+      </UserProvider>
     </TranslationProvider>
   );
 };
@@ -69,8 +72,8 @@ describe('Login Component', () => {
     test('should render demo info banner', () => {
       renderLogin();
       
-      expect(screen.getByText(/demo account available/i)).toBeInTheDocument();
-      expect(screen.getByText(/use demo credentials/i)).toBeInTheDocument();
+      expect(screen.getByText(/demo account/i)).toBeInTheDocument();
+      expect(screen.getByText(/use demo@suratextiles.com with password demo123/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /fill demo credentials/i })).toBeInTheDocument();
     });
 
@@ -84,7 +87,7 @@ describe('Login Component', () => {
     test('should render business context', () => {
       renderLogin();
       
-      expect(screen.getByText(/built for gujarat textile manufacturers/i)).toBeInTheDocument();
+      expect(screen.getByText(/for textile manufacturers across india/i)).toBeInTheDocument();
     });
   });
 
@@ -226,7 +229,7 @@ describe('Login Component', () => {
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(screen.getByText(/invalid email or password/i)).toBeInTheDocument();
+        expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
       }, { timeout: 2000 });
       
       // Should not call onLoginSuccess

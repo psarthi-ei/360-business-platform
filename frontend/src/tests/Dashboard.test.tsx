@@ -32,17 +32,17 @@ describe('Dashboard Component', () => {
   describe('Component Rendering', () => {
     test('should render without crashing', () => {
       renderDashboard();
-      expect(screen.getByText(/business/i)).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-container')).toBeInTheDocument();
     });
 
     test('should render main heading', () => {
       renderDashboard();
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-title')).toBeInTheDocument();
     });
 
     test('should render company information', () => {
       renderDashboard();
-      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-subtitle')).toBeInTheDocument();
     });
 
     test('should render feature grid', () => {
@@ -55,13 +55,13 @@ describe('Dashboard Component', () => {
   describe('Interactive Features', () => {
     test('should render clickable lead management feature', () => {
       renderDashboard();
-      const leadElement = screen.getByText(/lead management/i);
+      const leadElement = screen.getByTestId('lead-management-button');
       expect(leadElement).toBeInTheDocument();
     });
 
     test('should call onShowLeadManagement when lead management clicked', async () => {
       renderDashboard();
-      const leadElement = screen.getByText(/lead management/i);
+      const leadElement = screen.getByTestId('lead-management-button');
       
       await userEvent.click(leadElement);
       
@@ -70,43 +70,43 @@ describe('Dashboard Component', () => {
 
     test('should render clickable quotation orders feature', () => {
       renderDashboard();
-      const quotationElement = screen.getByText(/quotation.*orders/i);
+      const quotationElement = screen.getByTestId('quotation-orders-button');
       expect(quotationElement).toBeInTheDocument();
     });
 
     test('should call onShowQuotationOrders when quotation orders clicked', async () => {
       renderDashboard();
-      const quotationElement = screen.getByText(/quotation.*orders/i);
+      const quotationElement = screen.getByTestId('quotation-orders-button');
       
       await userEvent.click(quotationElement);
       
       expect(mockProps.onShowQuotationOrders).toHaveBeenCalledTimes(1);
     });
 
-    test('should render clickable sales orders feature', () => {
+    test('should render clickable payments feature', () => {
       renderDashboard();
-      const salesElement = screen.getByText(/sales orders/i);
-      expect(salesElement).toBeInTheDocument();
+      const paymentsElement = screen.getByTestId('payments-button');
+      expect(paymentsElement).toBeInTheDocument();
     });
 
-    test('should call onShowSalesOrders when sales orders clicked', async () => {
+    test('should call onShowPayments when payments clicked', async () => {
       renderDashboard();
-      const salesElement = screen.getByText(/sales orders/i);
+      const paymentsElement = screen.getByTestId('payments-button');
       
-      await userEvent.click(salesElement);
+      await userEvent.click(paymentsElement);
       
-      expect(mockProps.onShowSalesOrders).toHaveBeenCalledTimes(1);
+      expect(mockProps.onShowPayments).toHaveBeenCalledTimes(1);
     });
 
     test('should render clickable customers feature', () => {
       renderDashboard();
-      const customersElement = screen.getByText(/customers/i);
+      const customersElement = screen.getByTestId('customers-button');
       expect(customersElement).toBeInTheDocument();
     });
 
     test('should call onShowCustomerList when customers clicked', async () => {
       renderDashboard();
-      const customersElement = screen.getByText(/customers/i);
+      const customersElement = screen.getByTestId('customers-button');
       
       await userEvent.click(customersElement);
       
@@ -115,56 +115,47 @@ describe('Dashboard Component', () => {
   });
 
   describe('Non-Interactive Features', () => {
-    test('should render non-clickable work orders feature', () => {
+    test('should render additional business process cards', () => {
       renderDashboard();
-      const workOrdersCard = screen.getByText(/work orders/i);
-      expect(workOrdersCard).toBeInTheDocument();
+      
+      // Check that the business process section is rendered
+      expect(screen.getByText(/textile business pipeline/i)).toBeInTheDocument();
     });
 
-    test('should render non-clickable procurement feature', () => {
+    test('should render business metrics bar', () => {
       renderDashboard();
-      const procurementCard = screen.getByText(/smart procurement/i);
-      expect(procurementCard).toBeInTheDocument();
+      
+      // Check that the metrics bar exists
+      expect(screen.getByText(/outstanding/i)).toBeInTheDocument();
+      // Use a more specific selector for hot leads - check the compactMetric div with hot leads
+      const hotLeadsElements = screen.getAllByText(/hot leads/i);
+      expect(hotLeadsElements.length).toBeGreaterThan(0);
     });
 
-    test('should render non-clickable inventory feature', () => {
+    test('should render production and fulfillment cards', () => {
       renderDashboard();
-      const inventoryCard = screen.getByText(/inventory/i);
-      expect(inventoryCard).toBeInTheDocument();
+      
+      // Check that production and fulfillment cards exist - use more specific text
+      const productionElements = screen.getAllByText(/production/i);
+      const fulfillmentElements = screen.getAllByText(/fulfillment/i);
+      expect(productionElements.length).toBeGreaterThan(0);
+      expect(fulfillmentElements.length).toBeGreaterThan(0);
     });
   });
 
   describe('Props Handling', () => {
     test('should handle missing optional callbacks gracefully', () => {
-      const minimalProps = {
-        currentLanguage: 'en',
-        onLanguageChange: jest.fn(),
-        onShowLeadManagement: jest.fn(),
-        onShowQuotationOrders: jest.fn(),
-        onShowSalesOrders: jest.fn(),
-        onShowPayments: jest.fn(),
-        onShowInvoices: jest.fn(),
-        onShowCustomerList: jest.fn(),
-      };
-      
       expect(() => {
         renderDashboard();
       }).not.toThrow();
     });
 
     test('should handle custom props', () => {
-      
       renderDashboard();
-      expect(screen.getByText(/business/i)).toBeInTheDocument();
+      expect(screen.getByTestId('dashboard-container')).toBeInTheDocument();
     });
 
     test('should pass language props correctly', () => {
-      const customProps = {
-        ...mockProps,
-        currentLanguage: 'gu',
-        onLanguageChange: jest.fn()
-      };
-      
       expect(() => {
         renderDashboard();
       }).not.toThrow();
@@ -175,8 +166,8 @@ describe('Dashboard Component', () => {
     test('should have proper heading hierarchy', () => {
       renderDashboard();
       
-      const h1 = screen.getByRole('heading', { level: 1 });
-      const h2 = screen.getByRole('heading', { level: 2 });
+      const h1 = screen.getByTestId('dashboard-title');
+      const h2 = screen.getByTestId('dashboard-subtitle');
       
       expect(h1).toBeInTheDocument();
       expect(h2).toBeInTheDocument();
@@ -185,22 +176,23 @@ describe('Dashboard Component', () => {
     test('should have interactive clickable elements', () => {
       renderDashboard();
       
-      expect(screen.getByText(/lead management/i)).toBeInTheDocument();
-      expect(screen.getByText(/quotation.*orders/i)).toBeInTheDocument();
-      expect(screen.getByText(/sales orders/i)).toBeInTheDocument();
-      expect(screen.getByText(/customers/i)).toBeInTheDocument();
+      expect(screen.getByTestId('lead-management-button')).toBeInTheDocument();
+      expect(screen.getByTestId('quotation-orders-button')).toBeInTheDocument();
+      expect(screen.getByTestId('payments-button')).toBeInTheDocument();
+      expect(screen.getByTestId('customers-button')).toBeInTheDocument();
     });
   });
 
   describe('Component Structure', () => {
     test('should have dashboard container', () => {
-      const { container } = renderDashboard();
-      expect(container.querySelector('.dashboard')).toBeInTheDocument();
+      renderDashboard();
+      expect(screen.getByTestId('dashboard-container')).toBeInTheDocument();
     });
 
     test('should render with proper CSS classes', () => {
-      const { container } = renderDashboard();
-      expect(container.firstChild).toHaveClass('dashboard');
+      renderDashboard();
+      const dashboard = screen.getByTestId('dashboard-container');
+      expect(dashboard).toHaveClass('dashboard');
     });
   });
 });

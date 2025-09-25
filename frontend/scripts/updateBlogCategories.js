@@ -29,7 +29,7 @@ async function saveMetadata(metadata) {
   try {
     const jsonString = JSON.stringify(metadata, null, 2);
     await fs.writeFile(path.resolve(__dirname, METADATA_PATH), jsonString, 'utf8');
-    console.log('✅ Metadata updated successfully!');
+    
   } catch (error) {
     console.error('Error saving metadata:', error);
     process.exit(1);
@@ -50,7 +50,7 @@ async function updatePostCategory(postId, newCategory) {
   post.categories = [newCategory];
   
   await saveMetadata(metadata);
-  console.log(`✅ Updated ${postId}: "${oldCategory}" → "${newCategory}"`);
+  
 }
 
 async function updateMultiplePosts(postIds, newCategory) {
@@ -63,16 +63,16 @@ async function updateMultiplePosts(postIds, newCategory) {
       const oldCategory = post.primaryCategory;
       post.primaryCategory = newCategory;
       post.categories = [newCategory];
-      console.log(`✅ Updated ${postId}: "${oldCategory}" → "${newCategory}"`);
+      
       updated++;
     } else {
-      console.log(`❌ Post ${postId} not found`);
+      
     }
   }
   
   if (updated > 0) {
     await saveMetadata(metadata);
-    console.log(`\n🎉 Successfully updated ${updated} posts!`);
+    
   }
 }
 
@@ -94,9 +94,9 @@ async function renameCategoryGlobally(fromCategory, toCategory) {
   
   if (updated > 0) {
     await saveMetadata(metadata);
-    console.log(`✅ Renamed "${fromCategory}" to "${toCategory}" in ${updated} posts`);
+    
   } else {
-    console.log(`❌ No posts found with category "${fromCategory}"`);
+    
   }
 }
 
@@ -110,11 +110,11 @@ async function listCategories() {
     });
   });
   
-  console.log('\n📊 Current Categories:');
+  
   Object.entries(categoryCount)
     .sort(([,a], [,b]) => b - a)
     .forEach(([category, count]) => {
-      console.log(`  ${category}: ${count} posts`);
+      
     });
 }
 
@@ -171,7 +171,7 @@ Examples:
   } else if (fromCategory && toCategory) {
     await renameCategoryGlobally(fromCategory, toCategory);
   } else {
-    console.log('❌ Invalid arguments. Use --help for usage information.');
+    
   }
 }
 

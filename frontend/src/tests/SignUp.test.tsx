@@ -67,7 +67,7 @@ describe('SignUp Component', () => {
       renderSignUp();
       
       expect(screen.getByText(/create account/i)).toBeInTheDocument();
-      expect(screen.getByText(/join thousands of manufacturers/i)).toBeInTheDocument();
+      expect(screen.getByText(/join thousands of textile manufacturers/i)).toBeInTheDocument();
       expect(screen.getByText(/tell us about your business/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/owner name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/company name/i)).toBeInTheDocument();
@@ -95,7 +95,7 @@ describe('SignUp Component', () => {
     test('should render business context', () => {
       renderSignUp();
       
-      expect(screen.getByText(/trusted by manufacturers/i)).toBeInTheDocument();
+      expect(screen.getByText(/trusted by textile manufacturers across gujarat/i)).toBeInTheDocument();
     });
   });
 
@@ -235,7 +235,7 @@ describe('SignUp Component', () => {
       const createButton = screen.getByRole('button', { name: /create account/i });
       await userEvent.click(createButton);
       
-      expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument();
+      expect(screen.getByText(/passwords don't match/i)).toBeInTheDocument();
     });
 
     test('should successfully create account with valid data', async () => {

@@ -82,6 +82,34 @@ function Login(props: LoginProps) {
     });
   }
 
+  // Handle guest login
+  function handleGuestLogin() {
+    setIsLoading(true);
+    setErrorMessage('');
+
+    // Create guest user data
+    const guestUser = {
+      id: 'guest-' + Date.now(),
+      name: translations('guestUser'),
+      email: 'guest@demo.com',
+      role: 'guest',
+      companyName: translations('guestCompany'),
+      permissions: ['view-leads', 'view-quotes', 'view-orders', 'view-customers']
+    };
+
+    // Set guest mode in localStorage  
+    setTimeout(() => {
+      localStorage.setItem('userMode', 'guest');
+      localStorage.setItem('guestUser', JSON.stringify(guestUser));
+      
+      // Use UserContext login for guest
+      login('guest@demo.com', 'guest-password');
+      
+      setIsLoading(false);
+      onLoginSuccess();
+    }, 500);
+  }
+
 
   return (
     <div className={styles.loginContainer}>
@@ -177,7 +205,7 @@ function Login(props: LoginProps) {
         <button
           type="button"
           className={styles.guestButton}
-          onClick={onDemoMode}
+          onClick={handleGuestLogin}
           disabled={isLoading}
         >
           {translations('tryAsGuest')} 🚀

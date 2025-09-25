@@ -88,33 +88,87 @@ describe('Translation Context System', () => {
     console.error = originalError;
   });
   
-  test('core business translations exist in all languages', () => {
+  test('core business translations exist in English', () => {
     const coreKeys = ['title', 'leadManagement', 'quotationOrders', 'customers', 'salesOrder'];
     
-    ['en', 'gu', 'hi'].forEach(language => {
-      const TestComponent = () => {
-        const { t } = useTranslation();
-        return (
-          <div>
-            {coreKeys.map(key => (
-              <div key={key} data-testid={key}>{t(key)}</div>
-            ))}
-          </div>
-        );
-      };
-      
-      const { getByTestId } = render(
-        <TranslationProvider defaultLanguage={language}>
-          <TestComponent />
-        </TranslationProvider>
+    const TestComponent = () => {
+      const { t } = useTranslation();
+      return (
+        <div>
+          {coreKeys.map(key => (
+            <div key={key} data-testid={key}>{t(key)}</div>
+          ))}
+        </div>
       );
-      
-      coreKeys.forEach(key => {
-        const element = getByTestId(key);
-        expect(element).toBeInTheDocument();
-        expect(element.textContent).toBeTruthy();
-        expect(element.textContent?.trim()).not.toBe('');
-      });
+    };
+    
+    const { getByTestId } = render(
+      <TranslationProvider defaultLanguage="en">
+        <TestComponent />
+      </TranslationProvider>
+    );
+    
+    coreKeys.forEach(key => {
+      const element = getByTestId(key);
+      expect(element).toBeInTheDocument();
+      expect(element.textContent).toBeTruthy();
+      expect(element.textContent?.trim()).not.toBe('');
+    });
+  });
+
+  test('core business translations exist in Gujarati', () => {
+    const coreKeys = ['title', 'leadManagement', 'quotationOrders', 'customers', 'salesOrder'];
+    
+    const TestComponent = () => {
+      const { t } = useTranslation();
+      return (
+        <div>
+          {coreKeys.map(key => (
+            <div key={key} data-testid={key}>{t(key)}</div>
+          ))}
+        </div>
+      );
+    };
+    
+    const { getByTestId } = render(
+      <TranslationProvider defaultLanguage="gu">
+        <TestComponent />
+      </TranslationProvider>
+    );
+    
+    coreKeys.forEach(key => {
+      const element = getByTestId(key);
+      expect(element).toBeInTheDocument();
+      expect(element.textContent).toBeTruthy();
+      expect(element.textContent?.trim()).not.toBe('');
+    });
+  });
+
+  test('core business translations exist in Hindi', () => {
+    const coreKeys = ['title', 'leadManagement', 'quotationOrders', 'customers', 'salesOrder'];
+    
+    const TestComponent = () => {
+      const { t } = useTranslation();
+      return (
+        <div>
+          {coreKeys.map(key => (
+            <div key={key} data-testid={key}>{t(key)}</div>
+          ))}
+        </div>
+      );
+    };
+    
+    const { getByTestId } = render(
+      <TranslationProvider defaultLanguage="hi">
+        <TestComponent />
+      </TranslationProvider>
+    );
+    
+    coreKeys.forEach(key => {
+      const element = getByTestId(key);
+      expect(element).toBeInTheDocument();
+      expect(element.textContent).toBeTruthy();
+      expect(element.textContent?.trim()).not.toBe('');
     });
   });
 });

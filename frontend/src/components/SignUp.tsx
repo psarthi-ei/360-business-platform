@@ -102,7 +102,7 @@ function SignUp(props: SignUpProps) {
       const saved = safeLocalStorageSetItem('userData', userData);
       
       if (!saved) {
-        console.warn('Failed to save complete user data, but registration will continue');
+        // Failed to save complete user data, but registration will continue
       }
       onSignUpSuccess();
     }, 1500);

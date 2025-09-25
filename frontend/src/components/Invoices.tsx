@@ -140,12 +140,12 @@ function Invoices({
   const filteredInvoices = getFilteredInvoices();
 
   const handleSendInvoice = (invoiceId: string, customerName: string, contactInfo: string) => {
-    console.log(`Sending invoice ${invoiceId} to ${customerName} at ${contactInfo}`);
+    
     // Implementation: Send invoice via WhatsApp/Email
   };
 
   const handleFollowUp = (invoiceId: string, customerName: string, contactInfo: string) => {
-    console.log(`Following up on invoice ${invoiceId} with ${customerName}`);
+    
     // Implementation: Send follow-up reminder
   };
 
@@ -424,7 +424,7 @@ function Invoices({
                   <div className={styles.actionButtons}>
                     <button 
                       className={styles.viewBtn}
-                      onClick={() => console.log(`Viewing invoice ${invoice.invoiceNumber}`)}
+                      onClick={() => {}}
                     >
                       📄 View PDF
                     </button>

@@ -73,17 +73,17 @@ function ProformaInvoiceManagement({
 
   // Handle proforma invoice actions
   function handleViewInvoice(invoiceId: string) {
-    console.log('View proforma invoice:', invoiceId);
+    
     // Implementation for viewing invoice details
   }
 
   function handleDownloadInvoice(invoiceId: string) {
-    console.log('Download proforma invoice:', invoiceId);
+    
     // Implementation for downloading invoice
   }
 
   function handleViewQuote(quoteId: string) {
-    console.log('View related quote:', quoteId);
+    
     if (onShowQuotationOrders) {
       onShowQuotationOrders();
     }

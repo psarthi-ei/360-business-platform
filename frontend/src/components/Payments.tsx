@@ -145,19 +145,15 @@ function Payments({
   const filteredPayments = getFilteredPayments();
 
   const handleRecordPayment = (paymentId: string, amount: number) => {
-    console.log(`Recording payment: ${paymentId}, Amount: ₹${amount.toLocaleString()}`);
-    
     // Find the payment record to get customer information
     const paymentRecord = allPaymentRecords.find(p => p.id === paymentId);
     if (!paymentRecord) {
-      console.error('Payment record not found');
       return;
     }
 
     // Find associated business profile
     const businessProfile = getBusinessProfileById(paymentRecord.businessProfileId);
     if (!businessProfile) {
-      console.error('Business profile not found for customer:', paymentRecord.customerName);
       return;
     }
 
@@ -166,8 +162,6 @@ function Payments({
 
     // If this is an advance payment and customer is still a prospect, convert to customer
     if (isProspectConversion) {
-      console.log('🎉 Converting prospect to customer:', businessProfile.companyName);
-      
       // Update business profile to customer status
       businessProfile.customerStatus = 'customer';
       businessProfile.becameCustomerDate = new Date().toLocaleDateString('en-US', {
@@ -176,12 +170,9 @@ function Payments({
         day: 'numeric'
       });
       businessProfile.firstPaymentProjectId = paymentRecord.quoteId || paymentRecord.salesOrderId || paymentRecord.invoiceId;
-      
-      console.log('✅ Customer conversion completed for:', businessProfile.companyName);
     }
 
     // Update payment status to received (in a real app, this would update the backend)
-    console.log('💰 Payment recorded successfully - Status updated to received');
     alert(`Payment of ${formatCurrency(amount)} recorded successfully!${isProspectConversion ? '\n\n🎉 Customer has been converted from prospect to customer!' : ''}`);
     
     // In a real application, this would trigger:
@@ -192,13 +183,14 @@ function Payments({
   };
 
   const handleSendReminder = (paymentId: string, customerName: string, contactInfo: string) => {
-    console.log(`Sending payment reminder to ${customerName} at ${contactInfo}`);
     // Implementation: Send WhatsApp reminder, update last reminder date
+    alert(`Payment reminder sent to ${customerName} at ${contactInfo}`);
   };
 
   const handleWhatsAppPayment = (customerName: string, contactInfo: string, advanceAmount: number) => {
     const phone = contactInfo.replace(/[^\d]/g, '').slice(-10);
-    console.log(`Opening WhatsApp to ${phone} for payment request of ₹${advanceAmount.toLocaleString()}`);
+    const whatsappUrl = `https://wa.me/91${phone}?text=Hello ${customerName}, requesting payment of ${formatCurrency(advanceAmount)} for your order. Thank you!`;
+    window.open(whatsappUrl, '_blank');
     // Implementation: Open WhatsApp with payment request message
   };
 
@@ -473,7 +465,7 @@ function Payments({
                   <div className={styles.actionButtons}>
                     <button 
                       className={styles.callBtn}
-                      onClick={() => console.log(`Calling ${payment.customerName} at ${payment.contactInfo}`)}
+                      onClick={() => window.open(`tel:${payment.contactInfo}`, '_self')}
                     >
                       📞 Call
                     </button>

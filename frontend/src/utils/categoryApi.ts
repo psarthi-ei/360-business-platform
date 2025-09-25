@@ -16,8 +16,6 @@ export interface CategoryUpdateResponse {
 // Simulate API call for updating categories
 // In a real implementation, this would call your backend API
 export async function updatePostCategories(request: CategoryUpdateRequest): Promise<CategoryUpdateResponse> {
-  console.log('Updating categories for posts:', request);
-  
   try {
     // Load current metadata
     const response = await fetch('/content/blog-metadata.json');
@@ -46,12 +44,6 @@ export async function updatePostCategories(request: CategoryUpdateRequest): Prom
     
     // In a real application, you would send this to your backend API
     // For now, we'll simulate the update and show what would be changed
-    console.log('Updated metadata in cache:', {
-      totalPosts: metadata.length,
-      updatedPosts: updatedCount,
-      newCategory: request.newCategory,
-      affectedPostIds: request.postIds
-    });
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 800));
@@ -68,7 +60,7 @@ export async function updatePostCategories(request: CategoryUpdateRequest): Prom
     };
     
   } catch (error) {
-    console.error('Error updating categories:', error);
+    // Error updating categories
     return {
       success: false,
       message: 'Failed to update categories. Please try again.',
@@ -101,7 +93,7 @@ export async function getCategoryStats() {
         .sort((a, b) => b.count - a.count)
     };
   } catch (error) {
-    console.error('Error loading category stats:', error);
+    // Error loading category stats
     return {
       totalPosts: 0,
       categories: []
@@ -132,8 +124,6 @@ export function validateCategoryName(categoryName: string): { valid: boolean; er
 
 // Mark post as featured with priority (1, 2, or 3)
 export async function markPostAsFeatured(postId: string, priority: number = 1): Promise<CategoryUpdateResponse> {
-  console.log('Marking post as featured:', postId);
-  
   try {
     // Load current metadata
     const response = await fetch('/content/blog-metadata.json');
@@ -145,21 +135,13 @@ export async function markPostAsFeatured(postId: string, priority: number = 1): 
     
     // Find the post and update its featured status
     let updatedCount = 0;
-    const updatedMetadata = metadata.map(post => {
+    metadata.forEach(post => {
       if (post.id === postId) {
         updatedCount++;
-        return { ...post, featured: true };
       }
-      // Clear featured flag from other posts (only one featured post at a time)
-      return { ...post, featured: false };
     });
     
     // In a real application, you would send this to your backend API
-    console.log('Would update metadata:', {
-      totalPosts: metadata.length,
-      featuredPostId: postId,
-      updatedMetadata: updatedMetadata.filter(p => p.featured)
-    });
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 600));
@@ -177,7 +159,7 @@ export async function markPostAsFeatured(postId: string, priority: number = 1): 
     };
     
   } catch (error) {
-    console.error('Error marking post as featured:', error);
+    // Error marking post as featured
     return {
       success: false,
       message: 'Failed to mark post as featured. Please try again.',
@@ -188,8 +170,6 @@ export async function markPostAsFeatured(postId: string, priority: number = 1): 
 
 // Remove featured status from post
 export async function unmarkFeaturedPost(postId: string): Promise<CategoryUpdateResponse> {
-  console.log('Removing featured status from post:', postId);
-  
   try {
     // Load current metadata
     const response = await fetch('/content/blog-metadata.json');
@@ -223,7 +203,7 @@ export async function unmarkFeaturedPost(postId: string): Promise<CategoryUpdate
     };
     
   } catch (error) {
-    console.error('Error removing featured status:', error);
+    // Error removing featured status
     return {
       success: false,
       message: 'Failed to remove featured status. Please try again.',

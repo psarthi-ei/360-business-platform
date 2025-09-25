@@ -132,7 +132,7 @@ describe('SalesOrders Component', () => {
     });
 
     test('supports prop changes without errors', () => {
-      const { rerender } = renderWithTranslation(<SalesOrders {...mockProps} />);
+      renderWithTranslation(<SalesOrders {...mockProps} />);
       const updatedProps = { 
         ...mockProps, 
         currentLanguage: 'hi',
@@ -147,7 +147,7 @@ describe('SalesOrders Component', () => {
     });
 
     test('manages multiple re-renders gracefully', () => {
-      const { rerender } = renderWithTranslation(<SalesOrders {...mockProps} />);
+      renderWithTranslation(<SalesOrders {...mockProps} />);
       
       // Test multiple prop changes
       const changes = [

@@ -70,7 +70,7 @@ function BlogPost({
         setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       } catch (err) {
         setError('Error loading blog post');
-        console.error('Error loading blog post:', err);
+        // Debug statement removed
       } finally {
         setLoading(false);
       }

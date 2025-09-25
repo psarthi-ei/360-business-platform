@@ -122,7 +122,7 @@ function ServicesHub({
       // Scroll to top after content loads
       setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
     } catch (error) {
-      console.error('Error loading service content:', error);
+      // Debug statement removed
       setMarkdownContent('# Error\n\nUnable to load service content. Please try again.');
       setSelectedService(serviceName);
       

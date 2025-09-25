@@ -444,7 +444,7 @@ function AppContent() {
 
   function renderProfileCompletion() {
     function handleProfileSubmit(profileData: any) {
-      console.log('Profile submitted:', profileData);
+      // Profile submitted successfully
       // Show success message and redirect to homepage
       setTimeout(() => {
         alert('Profile created successfully! Our team will contact you soon.');
@@ -453,7 +453,7 @@ function AppContent() {
     }
 
     function handleProfileSuccess(businessProfileId: string) {
-      console.log('Business profile created:', businessProfileId);
+      // Business profile created successfully
     }
 
     return (

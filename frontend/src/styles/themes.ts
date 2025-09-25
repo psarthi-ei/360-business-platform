@@ -139,7 +139,7 @@ export const applyTheme = (theme: Theme) => {
   });
   
   // Debug logging
-  console.log(`Applied theme: ${theme.name}`);
-  console.log(`--color-text set to: ${theme.colors.text}`);
-  console.log(`--color-textSecondary set to: ${theme.colors.textSecondary}`);
+  
+  
+  
 };

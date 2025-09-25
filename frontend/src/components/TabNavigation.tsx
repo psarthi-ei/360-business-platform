@@ -68,7 +68,7 @@ function TabNavigation({
     if (!tabBarRef.current) return;
     
     const activeTabElement = tabBarRef.current.querySelector(`[data-tab-id="${tabId}"]`) as HTMLElement;
-    if (activeTabElement) {
+    if (activeTabElement && typeof activeTabElement.scrollIntoView === 'function') {
       activeTabElement.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',

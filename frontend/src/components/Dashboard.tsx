@@ -114,9 +114,9 @@ function Dashboard({
             quickStats: `${totalLeads} active leads • ${hotLeads} high priority • ${warmLeads} warm follow-ups • ${totalLeads - hotLeads - warmLeads} cold leads`,
             actions: [
               { label: 'View All Leads', action: onShowLeadManagement, primary: true },
-              { label: 'Add New Lead', action: () => console.log('Add New Lead') },
-              { label: 'Export Leads', action: () => console.log('Export Leads') },
-              { label: 'Lead Analytics', action: () => console.log('Lead Analytics') }
+              { label: 'Add New Lead', action: () => {} },
+              { label: 'Export Leads', action: () => {} },
+              { label: 'Lead Analytics', action: () => {} }
             ]
           },
           { 
@@ -127,9 +127,9 @@ function Dashboard({
             quickStats: `${totalCustomers} active customers • ${Math.floor(totalCustomers * 0.6)} returning clients • ${Math.floor(totalCustomers * 1.3)} total contacts • Average order ₹${Math.floor(totalRevenue/totalCustomers/1000)}K`,
             actions: [
               { label: 'View Customer List', action: onShowCustomerList, primary: true },
-              { label: 'Add New Customer', action: () => console.log('Add New Customer') },
-              { label: 'Customer Insights', action: () => console.log('Customer Insights') },
-              { label: 'Relationship Mapping', action: () => console.log('Relationship Mapping') }
+              { label: 'Add New Customer', action: () => {} },
+              { label: 'Customer Insights', action: () => {} },
+              { label: 'Relationship Mapping', action: () => {} }
             ]
           },
           { 
@@ -593,9 +593,15 @@ function Dashboard({
 
   return (
     <>
-      <div className={styles.dashboard}>
+      <div className={styles.dashboard} data-testid="dashboard-container">
       
       <div className={styles.dashboardContainer}>
+
+        {/* Dashboard Header */}
+        <div className={styles.dashboardHeader}>
+          <h1 data-testid="dashboard-title">360° Business Dashboard</h1>
+          <h2 data-testid="dashboard-subtitle">Surat Textiles Pvt. Ltd.</h2>
+        </div>
 
         {/* Integrated Search - TOP PRIORITY */}
         <div className={styles.integratedSearch}>
@@ -704,7 +710,7 @@ function Dashboard({
               <div className={`${styles.processFlowArrow} ${styles['arrow-7-8']}`}>→</div>
               
               {/* Card 1: Lead Pipeline (Business Entry Point) */}
-              <div className={`${styles.smartCard} ${styles.cardSales} ${styles['card-1']}`}>
+              <div className={`${styles.smartCard} ${styles.cardSales} ${styles['card-1']}`} data-testid="lead-management-card">
                 <div className={`${styles.stageIndicator} ${styles['stage-1']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>🔥</span>
@@ -727,13 +733,13 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => handleCardClick('leads')} className={styles.cardButton}>
+                <button onClick={() => { handleCardClick('leads'); onShowLeadManagement(); }} className={styles.cardButton} data-testid="lead-management-button">
                   Manage Leads →
                 </button>
               </div>
 
               {/* Card 2: Quotations & Orders (Conversion Stage) */}
-              <div className={`${styles.smartCard} ${styles.cardQuotes} ${styles['card-2']}`}>
+              <div className={`${styles.smartCard} ${styles.cardQuotes} ${styles['card-2']}`} data-testid="quotation-orders-card">
                 <div className={`${styles.stageIndicator} ${styles['stage-2']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>📋</span>
@@ -756,13 +762,13 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => handleCardClick('quotes')} className={styles.cardButton}>
+                <button onClick={() => { handleCardClick('quotes'); onShowQuotationOrders(); }} className={styles.cardButton} data-testid="quotation-orders-button">
                   Manage Quotes →
                 </button>
               </div>
 
               {/* Card 3: Payments (Complete Financial Workflow Hub) */}
-              <div className={`${styles.smartCard} ${styles.cardFinancials} ${styles['card-3']}`}>
+              <div className={`${styles.smartCard} ${styles.cardFinancials} ${styles['card-3']}`} data-testid="payments-card">
                 <div className={`${styles.stageIndicator} ${styles['stage-3']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>💰</span>
@@ -785,7 +791,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => handleCardClick('payments')} className={styles.cardButton}>
+                <button onClick={() => { handleCardClick('payments'); onShowPayments(); }} className={styles.cardButton} data-testid="payments-button">
                   Manage Payments →
                 </button>
               </div>
@@ -878,7 +884,7 @@ function Dashboard({
               </div>
 
               {/* Card 7: Customers (Relationship Management) */}
-              <div className={`${styles.smartCard} ${styles.cardCustomers} ${styles['card-7']}`}>
+              <div className={`${styles.smartCard} ${styles.cardCustomers} ${styles['card-7']}`} data-testid="customers-card">
                 <div className={`${styles.stageIndicator} ${styles['stage-7']}`}></div>
                 <div className={styles.cardHeader}>
                   <span className={styles.cardIcon}>🤝</span>
@@ -901,7 +907,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => handleCardClick('customers')} className={styles.cardButton}>
+                <button onClick={() => { handleCardClick('customers'); onShowCustomerList(); }} className={styles.cardButton} data-testid="customers-button">
                   Manage Relations →
                 </button>
               </div>

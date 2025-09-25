@@ -13,7 +13,7 @@ export function openConsultationForm(): void {
   try {
     window.open(CONSULTATION_FORM_URL, '_blank');
   } catch (error) {
-    console.error('Error opening consultation form:', error);
+    // Debug statement removed
     // Fallback: try to navigate in same window
     window.location.href = CONSULTATION_FORM_URL;
   }

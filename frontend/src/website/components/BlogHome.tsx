@@ -44,20 +44,20 @@ function BlogHome({
   // Filter posts by category and search
   useEffect(() => {
     const loadFilteredPosts = async () => {
-      console.log('Search effect triggered. searchQuery:', searchQuery, 'activeCategory:', activeCategory);
+      
       if (searchQuery.trim()) {
-        console.log('Performing search for:', searchQuery);
+        
         setIsSearching(true);
         const searchResults = await searchBlogPosts(searchQuery);
-        console.log('Search results:', searchResults.length, 'posts found');
+        
         // Sort search results by day number (latest first)
         const sortedResults = searchResults.sort((a, b) => b.day - a.day);
         setBlogPosts(sortedResults);
         setIsSearching(false);
       } else if (categories.length > 0) {
-        console.log('Loading posts for category:', activeCategory);
+        
         const posts = await getBlogPostsByCategoryDayOrder(activeCategory);
-        console.log('Category posts loaded:', posts.length);
+        
         setBlogPosts(posts);
         setIsSearching(false);
       }
@@ -73,12 +73,12 @@ function BlogHome({
     if (onBlogPostClick) {
       onBlogPostClick(day);
     } else {
-      console.log('Navigate to blog post:', day);
+      
     }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Search input changed:', e.target.value);
+    
     setSearchQuery(e.target.value);
   };
 
@@ -106,7 +106,7 @@ function BlogHome({
       setCategories(cats);
       setFeaturedPost(featured);
     } catch (error) {
-      console.error('Error loading blog data:', error);
+      // Debug statement removed
     } finally {
       setLoading(false);
     }

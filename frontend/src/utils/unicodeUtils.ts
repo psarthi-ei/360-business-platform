@@ -21,7 +21,7 @@ export function safeJsonParse(jsonString: string): any {
   try {
     return JSON.parse(jsonString);
   } catch (error) {
-    console.error('JSON parse error:', error);
+    // Debug statement removed
     // Return empty object as fallback
     return {};
   }
@@ -70,17 +70,17 @@ export function safeLocalStorageSetItem(key: string, value: any): boolean {
     localStorage.setItem(key, jsonString);
     return true;
   } catch (error) {
-    console.error(`Failed to save to localStorage (${key}):`, error);
+    // Debug statement removed
     
     // Fallback: try to save a simplified version
     try {
       const simplifiedValue = simplifyObjectForStorage(value);
       const jsonString = safeJsonStringify(simplifiedValue);
       localStorage.setItem(key, jsonString);
-      console.warn(`Saved simplified version to localStorage (${key})`);
+      // Debug statement removed
       return true;
     } catch (fallbackError) {
-      console.error(`Even fallback failed for localStorage (${key}):`, fallbackError);
+      // Debug statement removed
       return false;
     }
   }
@@ -94,7 +94,7 @@ export function safeLocalStorageGetItem(key: string, defaultValue: any = null): 
     }
     return safeJsonParse(item);
   } catch (error) {
-    console.error(`Failed to get from localStorage (${key}):`, error);
+    // Debug statement removed
     return defaultValue;
   }
 }
@@ -146,7 +146,7 @@ export function debugUnicodeIssues(obj: any, path: string = 'root'): void {
 
   if (typeof obj === 'string') {
     if (hasProblematicUnicode(obj)) {
-      console.warn(`Unicode issue detected at ${path}:`, obj);
+      // Debug statement removed
     }
   } else if (Array.isArray(obj)) {
     obj.forEach((item, index) => {

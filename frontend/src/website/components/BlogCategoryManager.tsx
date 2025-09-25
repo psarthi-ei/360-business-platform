@@ -41,7 +41,7 @@ function BlogCategoryManager({ onClose, onCategoryUpdated }: BlogCategoryManager
       setPosts(allPosts.sort((a, b) => b.day - a.day));
       setCategories(allCategories);
     } catch (error) {
-      console.error('Error loading data:', error);
+      // Debug statement removed
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ function BlogCategoryManager({ onClose, onCategoryUpdated }: BlogCategoryManager
         alert(result.message);
       }
     } catch (error) {
-      console.error('Error updating categories:', error);
+      // Debug statement removed
       alert('Error updating categories. Please try again.');
     } finally {
       setIsUpdating(false);
@@ -152,7 +152,7 @@ function BlogCategoryManager({ onClose, onCategoryUpdated }: BlogCategoryManager
         alert(result.message);
       }
     } catch (error) {
-      console.error('Error marking post as featured:', error);
+      // Debug statement removed
       alert('Error marking post as featured. Please try again.');
     } finally {
       setIsFeaturedUpdating(false);
@@ -173,7 +173,7 @@ function BlogCategoryManager({ onClose, onCategoryUpdated }: BlogCategoryManager
         alert(result.message);
       }
     } catch (error) {
-      console.error('Error removing featured status:', error);
+      // Debug statement removed
       alert('Error removing featured status. Please try again.');
     } finally {
       setIsFeaturedUpdating(false);

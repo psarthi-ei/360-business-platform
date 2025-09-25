@@ -112,10 +112,10 @@ function parseBlogCSV() {
       }
     }
     
-    console.log(`📊 Found ${Object.keys(blogDates).length} dates in CSV`);
+    // Parsed CSV dates successfully
     return blogDates;
   } catch (error) {
-    console.error('Error parsing blog CSV:', error.message);
+    // Debug statement removed
     return {};
   }
 }
@@ -127,13 +127,10 @@ function getDateFromCSV(dayNumber, csvDates) {
 
 // Main function to generate blog metadata
 function generateBlogMetadata() {
-  console.log('🚀 Starting blog metadata extraction...');
-  
   const blogDir = path.join(__dirname, '../../public/content/blog');
   const metadata = [];
   
   // Parse CSV file first to get dates
-  console.log('📡 Parsing CSV file for dates...');
   const csvDates = parseBlogCSV();
   
   // Process each day (1-56)
@@ -142,7 +139,7 @@ function generateBlogMetadata() {
     const markdownPath = path.join(blogDir, markdownFile);
     
     if (!fs.existsSync(markdownPath)) {
-      console.warn(`⚠️  Missing markdown file: ${markdownFile}`);
+      // Debug statement removed
       continue;
     }
     
@@ -206,10 +203,10 @@ function generateBlogMetadata() {
       };
       
       metadata.push(postMetadata);
-      console.log(`✅ Processed Day ${day}: ${title.substring(0, 50)}...`);
+      // Post metadata processed successfully
       
     } catch (error) {
-      console.error(`❌ Error processing day ${day}:`, error.message);
+      // Debug statement removed
     }
   }
   
@@ -220,10 +217,6 @@ function generateBlogMetadata() {
   const outputPath = path.join(__dirname, '../../public/content/blog-metadata.json');
   fs.writeFileSync(outputPath, JSON.stringify(metadata, null, 2));
   
-  console.log(`🎉 Blog metadata generated successfully!`);
-  console.log(`📊 Total posts processed: ${metadata.length}`);
-  console.log(`📁 Metadata saved to: ${outputPath}`);
-  
   // Log category distribution
   const categoryStats = {};
   metadata.forEach(post => {
@@ -231,10 +224,7 @@ function generateBlogMetadata() {
     categoryStats[category] = (categoryStats[category] || 0) + 1;
   });
   
-  console.log('\n📈 Category Distribution:');
-  Object.entries(categoryStats).forEach(([category, count]) => {
-    console.log(`   ${category}: ${count} posts`);
-  });
+  // Category statistics processed
   
   return metadata;
 }

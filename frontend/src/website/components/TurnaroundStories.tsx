@@ -177,14 +177,14 @@ function TurnaroundStories({
         // Scroll to top after content loads
         setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       } else {
-        console.error('Response not OK, status:', response.status);
+        // Debug statement removed
         setMarkdownContent('# Story content not found\n\nThis turnaround story is currently being prepared.');
         
         // Scroll to top even on error
         setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       }
     } catch (error) {
-      console.error('Error loading story content:', error);
+      // Debug statement removed
       setMarkdownContent('# Error loading story\n\nPlease try again later.');
       
       // Scroll to top even on error

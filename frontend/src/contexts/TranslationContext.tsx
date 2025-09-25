@@ -635,7 +635,7 @@ export function TranslationProvider({ children, defaultLanguage = 'en' }: Transl
     if (currentLangTranslation) {
       // Check for Unicode issues in development
       if (process.env.NODE_ENV === 'development' && hasProblematicUnicode(currentLangTranslation)) {
-        console.warn(`Unicode issue in translation "${key}" for language "${currentLanguage}":`, currentLangTranslation);
+        // Unicode issue detected in translation
       }
       return currentLangTranslation;
     }
@@ -645,14 +645,14 @@ export function TranslationProvider({ children, defaultLanguage = 'en' }: Transl
     if (englishTranslation) {
       // Log missing translation in development
       if (process.env.NODE_ENV === 'development' && currentLanguage !== 'en') {
-        console.warn(`Translation missing for key "${key}" in language "${currentLanguage}". Using English fallback.`);
+        // Translation missing, using English fallback
       }
       return englishTranslation;
     }
 
     // Last resort: return the key itself
     if (process.env.NODE_ENV === 'development') {
-      console.warn(`Translation missing for key "${key}" in all languages.`);
+      // Translation missing for key in all languages
     }
     return key;
   };
@@ -675,7 +675,7 @@ export function TranslationProvider({ children, defaultLanguage = 'en' }: Transl
     if (translations[language]) {
       setCurrentLanguage(language);
     } else {
-      console.warn(`Language "${language}" not supported. Available languages:`, Object.keys(translations));
+      // Language not supported
     }
   };
 
@@ -707,13 +707,8 @@ export function useTranslation() {
 // Development helper: log language coverage
 export function logLanguageCoverage() {
   if (process.env.NODE_ENV === 'development') {
-    const coverage = Object.keys(translations).reduce((acc, lang) => {
-      const englishKeys = Object.keys(translations.en || {});
-      const langKeys = Object.keys(translations[lang] || {});
-      acc[lang] = `${Math.round((langKeys.length / englishKeys.length) * 100)}% (${langKeys.length}/${englishKeys.length})`;
-      return acc;
-    }, {} as { [key: string]: string });
+    // Language coverage calculation removed for production
     
-    console.table(coverage);
+    // Language coverage data available
   }
 }

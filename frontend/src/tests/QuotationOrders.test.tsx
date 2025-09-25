@@ -143,7 +143,7 @@ describe('QuotationOrders Component', () => {
     });
 
     test('supports prop changes without errors', () => {
-      const { rerender } = renderWithTranslation(<QuotationOrders {...mockProps} />);
+      renderWithTranslation(<QuotationOrders {...mockProps} />);
       const updatedProps = { 
         ...mockProps, 
         currentLanguage: 'gu',

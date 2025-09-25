@@ -73,7 +73,7 @@ export async function loadBlogMetadata(): Promise<BlogPost[]> {
     blogMetadataCache = metadata;
     return metadata;
   } catch (error) {
-    console.error('Error loading blog metadata:', error);
+    // Error loading blog metadata
     return [];
   }
 }
@@ -134,9 +134,8 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
 // Search blog posts by title, content, or hashtags
 export async function searchBlogPosts(query: string): Promise<BlogPost[]> {
-  console.log('searchBlogPosts called with query:', query);
   const allPosts = await getAllBlogPosts();
-  console.log('Total posts available for search:', allPosts.length);
+  
   const searchTerm = query.toLowerCase();
   
   const results = allPosts.filter(post => 
@@ -145,7 +144,6 @@ export async function searchBlogPosts(query: string): Promise<BlogPost[]> {
     post.hashtags.some(tag => tag.toLowerCase().includes(searchTerm))
   );
   
-  console.log('Search filtering completed. Results:', results.length);
   return results;
 }
 
@@ -236,10 +234,6 @@ export async function getBlogPostsByDayNumber(): Promise<BlogPost[]> {
 export async function getBlogPostsByCategoryDayOrder(category: string): Promise<BlogPost[]> {
   const allPosts = await getBlogPostsByDayNumber(); // This gives us day-sorted posts
   
-  console.log('Filtering posts for category:', category);
-  console.log('Sample post categories:', allPosts.length > 0 ? allPosts[0].categories : 'no posts');
-  console.log('Sample post primaryCategory:', allPosts.length > 0 ? allPosts[0].primaryCategory : 'no posts');
-  
   if (category === 'all') {
     return allPosts;
   }
@@ -249,12 +243,9 @@ export async function getBlogPostsByCategoryDayOrder(category: string): Promise<
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(' ');
   
-  console.log('Converted category name:', categoryName);
-  
   const filtered = allPosts.filter(post => 
     post.primaryCategory === categoryName || post.categories.includes(categoryName)
   );
   
-  console.log('Filtered posts count:', filtered.length);
   return filtered;
 }
