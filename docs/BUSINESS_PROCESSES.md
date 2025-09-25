@@ -1,5 +1,9 @@
 # Business Processes - ElevateIdea 360° Platform
 
+> **📋 USE CASE TRACKING**: For detailed implementation status of all 273 use cases, see **[USE_CASES_TRACKER.md](/docs/USE_CASES_TRACKER.md)**  
+> **🔄 This Document**: Provides complete business context and workflow details  
+> **⚡ Quick Updates**: Use the tracker for status updates, this document for business understanding
+
 ---
 
 ## 📚 **TABLE OF CONTENTS**
@@ -1448,8 +1452,11 @@ Voice commands automatically adapt to the current business area:
 
 ## **COMPLETE USE CASE MATRIX BY STAGE**
 
+> **📊 IMPLEMENTATION TRACKING**: All use cases below are tracked in **[USE_CASES_TRACKER.md](/docs/USE_CASES_TRACKER.md)** with current status, sprint assignments, and progress updates. Use the tracker for quick status scanning and this section for detailed business context.
+
 ### **Stage 1: 🔥 LEAD PIPELINE - Complete Use Cases**
 **Module**: Lead Management + CRM (Prospect View)
+**MVP Status**: **P0 CRITICAL** - Must complete UC-L01 to UC-L16 for launch
 
 #### **Lead Capture & Entry Use Cases**
 | Use Case | User Action | UI Component | System Response | Voice Command |
@@ -1495,6 +1502,7 @@ Voice commands automatically adapt to the current business area:
 
 ### **Stage 2: 📋 QUOTATIONS & ORDERS - Complete Use Cases**
 **Modules**: Quotation Management + Sales Order Management + Commercial Analytics
+**MVP Status**: **P0 CRITICAL** - Must complete UC-Q01 to UC-Q18 for launch
 
 #### **Quote Creation Use Cases**
 | Use Case | User Action | UI Component | System Response | Voice Command |

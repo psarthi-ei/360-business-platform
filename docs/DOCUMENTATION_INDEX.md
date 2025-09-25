@@ -107,25 +107,11 @@ This is the master navigation document that guides you to all project informatio
 
 ## Documentation Files Structure
 
-### **1. README.md** - Project Overview
-**Purpose**: First impression for GitHub visitors, investors, potential team members
+**🎉 STREAMLINED: 9 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
 
-**Contains**:
-- Project description (360° Business Platform for textile manufacturers)
-- Company info (ElevateIdea Technologies, Partha Sarthi)
-- Current status (MVP, Beta, Production)
-- Key technologies (React PWA, multilingual, voice-first)
-- How to get started
+### **CORE BUSINESS & REQUIREMENTS**
 
-**Update Schedule**: 
-- ✅ **Milestone-based** - When project status changes
-- ✅ When reaching major milestones (first customer, launch, funding)
-- ✅ When adding significant features or pivoting
-- ❌ **NOT for**: Daily development progress or technical details
-
----
-
-### **2. PRODUCT_REQUIREMENTS.md** - What We're Building & Why
+### **1. PRODUCT_REQUIREMENTS.md** - What We're Building & Why
 **Purpose**: Business requirements, feature specifications, and strategic context (WHAT & WHY)
 
 **Contains**:
@@ -134,24 +120,27 @@ This is the master navigation document that guides you to all project informatio
 - Target market and competitive advantage
 - Post-MVP roadmap (phases 2-4) 
 - User access modes and authentication flow
-- 30-day development timeline
 - Success criteria and business metrics
 
-**Use For**:
-- **Product Managers**: Feature requirements and business justification
-- **Stakeholders**: Understanding business value and strategic goals
-- **Project Planning**: Timeline, milestones, MVP scope
-
-**Update Schedule**:
-- ✅ **Feature-driven** - When adding new features to scope
-- ✅ When customer feedback changes requirements
-- ✅ When expanding to new industries or markets
-- ✅ When pivoting or major scope changes
-- ❌ **NOT for**: Technical implementation details or business workflow specifics
+**Update Schedule**: When features change, customer feedback, or market expansion
 
 ---
 
-### **3. TECHNICAL_STRATEGY.md** - How We're Building
+### **2. BUSINESS_PROCESSES.md** - How Business Actually Works
+**Purpose**: Complete domain knowledge and business workflow documentation (HOW BUSINESS WORKS)
+
+**Contains**:
+- Complete 8-stage textile manufacturing business workflow
+- Lead-to-customer conversion automation and business logic
+- Daily workflow patterns and business mental models
+- Industry context and textile manufacturing domain knowledge
+- Critical business rules and data integrity requirements
+
+**Update Schedule**: When business processes are refined, quarterly review for accuracy
+
+---
+
+### **3. TECHNICAL_STRATEGY.md** - Architecture Decisions & Rationale
 **Purpose**: Technology decisions and architecture rationale
 
 **Contains**:
@@ -161,192 +150,113 @@ This is the master navigation document that guides you to all project informatio
 - Integration approaches (voice, WhatsApp, payments)
 - Future technical roadmap
 
-**Update Schedule**:
-- ✅ **Architecture-driven** - When changing major technology decisions
-- ✅ When adding significant integrations or services
-- ✅ When scaling architecture (database, hosting, infrastructure changes)
-- ✅ When learning from production usage (performance issues, user behavior)
-- ❌ **NOT for**: Daily code changes or minor dependency updates
+**Update Schedule**: When major technology decisions change or infrastructure scales
 
 ---
 
-### **4. DEVELOPMENT_GUIDE.md** - Step-by-Step Instructions
-**Purpose**: Exact commands and procedures for development setup and processes
+### **DEVELOPMENT & IMPLEMENTATION**
+
+### **4. CLAUDE_WORKING_GUIDE.md** - How Claude and Partha Work Together
+**Purpose**: Proven methods for effective Claude-human collaboration based on successful working patterns
 
 **Contains**:
-- Environment setup commands (Node.js, npm, git configuration)
-- Step-by-step development procedures
-- Troubleshooting common issues and solutions
-- Code organization standards and naming conventions
-- Development workflow and best practices
+- **Working Style**: Java background advantages, proven effective methods, learning preferences  
+- **Communication Methods**: Code explanation patterns, feedback integration, development workflow
+- **Project Navigation**: Key documents for developers, decision framework, session management
+- **Quality Standards**: Session structure, business context integration, continuous improvement
 
-**Update Schedule**:
-- ✅ **Process-driven** - After completing major setup steps
-- ✅ When encountering and solving new technical problems
-- ✅ When establishing new development patterns or workflows
-- ✅ When adding new tools, dependencies, or build processes
-- ✅ **Regularly** - This is the active "how-to" reference guide
+**Update Schedule**: When collaboration patterns evolve or new effective methods are discovered
 
 ---
 
-### **5. PROGRESS_LOG.md** - Daily Development Journal
-**Purpose**: Track daily progress, maintain motivation, record decisions
+### **5. MVP_PROGRESS.md** - Complete Development Progress & Strategy
+**Purpose**: Comprehensive MVP development tracking including detailed use cases, strategy, milestones, and daily progress
 
 **Contains**:
-- Daily accomplishments and challenges faced
-- Weekly milestone tracking and goals
-- Motivation levels and energy tracking
-- Technical blockers and solutions discovered
-- Key decisions made and their rationale
+- **Development Strategy**: 3-phase approach, module dependencies, risk mitigation
+- **13 Core MVP Modules**: Complete list with descriptions and dependencies
+- **Executive Summary**: Progress metrics across 273 use cases
+- **Development Phases**: Detailed phase timelines, milestones, and success criteria
+- **Detailed Use Case Tracking**: All use cases with status, priority, sprint assignments
+- **Sprint Planning**: Capacity management and timeline tracking
+- **Personal Progress**: Daily updates, achievements, challenges
 
-**Update Schedule**:
-- ✅ **DAILY** - End of each development session (most important!)
-- ✅ When completing major milestones or breakthroughs
-- ✅ When facing significant challenges or making important discoveries
-- ✅ When changing development plans or priorities
-- 📝 **This is your daily habit for success**
+**Update Schedule**: 
+- **DAILY** - Use TodoWrite tool for real-time progress tracking
+- **WEEKLY** - Progress summaries and sprint planning updates
 
 ---
 
-### **6. COLLABORATION_GUIDE.md** - Working Style & Learning Approach
-**Purpose**: Document effective collaboration methods and maintain consistency in learning approach
+### **DESIGN & USER EXPERIENCE**
+
+### **6. DASHBOARD_SPECIFICATIONS.md** - UI Implementation Guide
+**Purpose**: Complete technical implementation guide for dashboard and UI components
 
 **Contains**:
-- Learning preferences (Java background, verbose code style)
-- Working style protocols (explain-first, TodoWrite usage, incremental approach)
-- Effective teaching patterns (Java analogies, explicit examples)
-- Communication strategies that work (business context first, concrete examples)
-- Code style guidelines (avoid JavaScript shorthand initially)
-- Business context preferences (textile manufacturing examples)
+- 3-level dashboard architecture (Executive → Process → Module)
+- Technical component specifications and styling standards
+- Navigation framework and user flow patterns
+- Mobile-first design requirements for factory environments
+- Data patterns and KPI calculation logic
 
-**Update Schedule**:
-- ✅ **Collaboration-driven** - When discovering new effective working methods
-- ✅ When learning preferences or comfort level changes
-- ✅ When establishing new code patterns or standards
-- ✅ After major concept breakthroughs or challenges
-- ✅ When working style protocols need adjustment
-- ⚠️ **As needed** - When collaboration approach requires refinement
+**Update Schedule**: After major UI components, new design patterns, or architecture changes
 
 ---
 
 ### **7. DESIGN_SYSTEM.md** - Visual Design Standards
-**Purpose**: UI/UX design patterns and business context guidelines established from Lead Management screen
+**Purpose**: UI/UX design patterns and business context guidelines
 
 **Contains**:
 - Visual design philosophy (business-first, professional manufacturing aesthetics)
 - Multilingual user experience strategy (smart translation approach)
 - Mobile-first responsive design patterns for textile factory environments
-- Information architecture for textile business data (lead cards, priority coding)
-- Navigation patterns and user flow decisions
+- Information architecture for textile business data
 - Business context integration (Gujarat textile examples, cultural sensitivity)
-- Consistency guidelines and checklists for future screens
 
-**Update Schedule**:
-- ✅ **Design-driven** - After completing each major screen implementation
-- ✅ When establishing new visual patterns or UI components
-- ✅ When user feedback changes design approach or business context
-- ✅ When adding new device support or responsive breakpoints
-- ⚠️ **After major screens** - Lead Management, Quotation, Orders, Production
+**Update Schedule**: After major screen implementations, new UI patterns, or user feedback
 
 ---
 
-### **8. DASHBOARD_SPECIFICATIONS.md** - How to Build the Dashboard
-**Purpose**: Complete technical implementation guide for dashboard and UI components (HOW TO BUILD)
+### **MARKETING & STRATEGY**
+
+### **8. MARKETING_STRATEGY.md** - Brand Strategy & Customer Acquisition
+**Purpose**: Complete marketing strategy focusing on brand positioning, competitive positioning, and customer acquisition
 
 **Contains**:
-- Complete 3-level dashboard architecture (Executive → Process → Module)
-- Technical component specifications and styling standards
-- Navigation framework and user flow patterns
-- Mobile-first design requirements for factory environments
-- Data patterns and KPI calculation logic
-- Cross-process analytics intelligence specifications
-- Recent improvements log and design rationale
+- **Brand Architecture**: Company and product positioning, value propositions
+- **Market Strategy**: Target audiences, go-to-market approach, competitive positioning
+- **Customer Acquisition**: Dual-track approach for website/consulting vs. product customers
+- **Pricing & Business Model**: Value-based pricing and revenue strategies
 
-**Use For**:
-- **Frontend Developers**: Component architecture and UI implementation
-- **Designers**: Technical design patterns and responsive requirements
-- **Mobile Developers**: Mobile-first specifications and touch interactions
-- **UI/UX**: Information architecture and navigation patterns
-
-**Update Schedule**:
-- ✅ **Implementation-driven** - After completing major UI components
-- ✅ When establishing new design patterns or technical standards
-- ✅ When mobile or responsive requirements change
-- ✅ When dashboard architecture evolves
-- ⚠️ **After major dashboard changes** - Component updates, new features
+**Update Schedule**: Quarterly for market strategy updates and performance assessment
 
 ---
 
-### **9. BUSINESS_PROCESSES.md** - How Business Actually Works
-**Purpose**: Complete domain knowledge and business workflow documentation (HOW BUSINESS WORKS)
+### **9. WEBSITE_REDESIGN_PLAN.md** - Website Strategy & Implementation
+**Purpose**: Comprehensive website redesign strategy including architecture, content planning, and implementation
 
 **Contains**:
-- Complete 8-stage textile manufacturing business workflow
-- Lead-to-customer conversion automation and business logic
-- Daily workflow patterns and business mental models
-- Industry context and textile manufacturing domain knowledge
-- CRM module architecture and data flow specifications
-- Critical business rules and data integrity requirements
-- Cross-process intelligence and workflow integration
+- **Website Architecture**: Navigation structure, information architecture, user experience design
+- **Content Strategy**: Homepage strategy, product positioning, consulting services content
+- **Implementation Plan**: Development phases, technical requirements, timeline & milestones
+- **Success Metrics**: Website performance, business impact, technical performance metrics
 
-**Use For**:
-- **Developers**: Understanding domain logic and business rules
-- **Designers**: User mental models and workflow patterns  
-- **QA**: Business logic validation and edge cases
-- **Training**: How textile manufacturers actually work
-
-**Update Schedule**:
-- ✅ **Business-driven** - When business processes are refined based on user feedback
-- ✅ When new payment methods or business practices are adopted
-- ✅ When expanding to new textile segments or industries
-- ✅ After major customer onboarding and process learning
-- ⚠️ **Quarterly** - Regular review to ensure accuracy with real business operations
+**Update Schedule**: After implementation phases and performance analysis
 
 ---
 
-### **10. MVP_DEVELOPMENT_PLAN.md** - Development Roadmap & Milestones
-**Purpose**: High-level development plan with clear milestones and timeline tracking
+### **MASTER INDEX**
 
-**Contains**:
-- 13 core MVP modules with logical business flow
-- 3-phase development approach (UI → Backend → Integration)  
-- Milestone tracking with completion status
-- Current progress visibility and next steps
-- 40-day timeline with realistic deliverables
-
-**Update Schedule**:
-- ✅ **Milestone-driven** - When completing major milestones
-- ✅ When module completion status changes
-- ✅ When timeline or approach needs adjustment
-- ⚠️ **Weekly** - Regular progress updates and status tracking
-
-### **11. CODING_STANDARDS.md** - Code Writing Standards & Patterns
-**Purpose**: Java-style JavaScript patterns and code quality standards for consistent development
-
-**Contains**:
-- Core philosophy and coding patterns
-- Component structure and naming conventions
-- Props management and state handling
-- Code organization and best practices
-
-**Update Schedule**:
-- ✅ When new coding patterns are introduced
-- ✅ When code review reveals inconsistencies  
-
-### **12. DOCUMENTATION_INDEX.md** - Master Documentation Directory
+### **DOCUMENTATION_INDEX.md** - Master Documentation Directory (This Document)
 **Purpose**: Central navigation hub and index for all project documentation
 
 **Contains**:
 - Purpose and scope of each documentation file
 - Update schedules and triggers for each file
-- Practical examples and guidelines
+- Practical examples and workflow guidelines
 - Documentation maintenance best practices
 
-**Update Schedule**:
-- ✅ **Meta-driven** - When adding new documentation files
-- ✅ When changing documentation structure or approach
-- ✅ When documentation processes evolve
-- ⚠️ **Rarely** - Only when documentation strategy changes
+**Update Schedule**: When documentation structure changes or processes evolve
 
 ---
 
@@ -360,13 +270,15 @@ This is the master navigation document that guides you to all project informatio
 | "Why are we building this?" | **PRODUCT_REQUIREMENTS.md** | Strategic rationale and market context |
 | "How does textile business work?" | **BUSINESS_PROCESSES.md** | Domain knowledge and workflow details |
 | "What's the business logic behind this workflow?" | **BUSINESS_PROCESSES.md** | Business rules and process automation |
+| "What's the status of UC-L01?" | **MVP_PROGRESS.md** | Implementation progress and sprint tracking |
+| "Which use cases are in Sprint 2?" | **MVP_PROGRESS.md** | Sprint planning and capacity management |
+| "How many use cases are completed?" | **MVP_PROGRESS.md** | Progress metrics and completion tracking |
 | "How do I implement the dashboard?" | **DASHBOARD_SPECIFICATIONS.md** | Technical implementation guide |
 | "What are the component specifications?" | **DASHBOARD_SPECIFICATIONS.md** | UI architecture and styling standards |
 | "When is the deadline?" | **PRODUCT_REQUIREMENTS.md** | Timeline and delivery milestones |
 | "How do textile manufacturers think?" | **BUSINESS_PROCESSES.md** | User mental models and daily patterns |
 | "What does this button do?" | **DASHBOARD_SPECIFICATIONS.md** | Component behavior and interactions |
-| "How do I set up development?" | **DEVELOPMENT_GUIDE.md** | Step-by-step setup instructions |
-| "What coding patterns should I use?" | **CODING_STANDARDS.md** | Code quality and consistency standards |
+| "How should Claude and I work together?" | **CLAUDE_WORKING_GUIDE.md** | Proven collaboration patterns and communication methods |
 | "What's our technology strategy?" | **TECHNICAL_STRATEGY.md** | Architecture decisions and rationale |
 
 ### **Document Purpose Framework**
@@ -376,6 +288,8 @@ PRODUCT_REQUIREMENTS.md (WHAT & WHY)
         ↓
 BUSINESS_PROCESSES.md (HOW BUSINESS WORKS) 
         ↓
+USE_CASES_TRACKER.md (WHAT'S THE STATUS)
+        ↓
 DASHBOARD_SPECIFICATIONS.md (HOW TO BUILD)
         ↓
 DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
@@ -384,12 +298,12 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **Role-Based Document Usage**
 
 #### **👨‍💼 Product Managers**
-**Primary**: PRODUCT_REQUIREMENTS.md
+**Primary**: PRODUCT_REQUIREMENTS.md, USE_CASES_TRACKER.md
 **Secondary**: BUSINESS_PROCESSES.md (for domain context)
 **Reference**: DASHBOARD_SPECIFICATIONS.md (for technical feasibility)
 
 #### **👨‍💻 Frontend Developers**
-**Primary**: DASHBOARD_SPECIFICATIONS.md  
+**Primary**: USE_CASES_TRACKER.md, DASHBOARD_SPECIFICATIONS.md  
 **Secondary**: BUSINESS_PROCESSES.md (for business logic)
 **Reference**: PRODUCT_REQUIREMENTS.md (for acceptance criteria)
 
@@ -400,11 +314,11 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 
 #### **🧪 QA Engineers**
 **Primary**: BUSINESS_PROCESSES.md (for test scenarios)
-**Secondary**: PRODUCT_REQUIREMENTS.md (for acceptance criteria)
+**Secondary**: USE_CASES_TRACKER.md (for implementation status), PRODUCT_REQUIREMENTS.md (for acceptance criteria)
 **Reference**: DASHBOARD_SPECIFICATIONS.md (for UI validation)
 
 #### **📚 New Team Members**
-**Start Here**: DOCUMENTATION_INDEX.md → PRODUCT_REQUIREMENTS.md → BUSINESS_PROCESSES.md
+**Start Here**: DOCUMENTATION_INDEX.md → PRODUCT_REQUIREMENTS.md → BUSINESS_PROCESSES.md → USE_CASES_TRACKER.md
 **Then**: DASHBOARD_SPECIFICATIONS.md → DEVELOPMENT_GUIDE.md
 
 ---
@@ -413,6 +327,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 
 ### **Daily Updates Required**
 - ✅ **PROGRESS_LOG.md** - Every development session
+- ✅ **USE_CASES_TRACKER.md** - During active development (use TodoWrite tool for real-time tracking)
 
 ### **Weekly Updates (Active Development)**
 - ✅ **DEVELOPMENT_GUIDE.md** - When completing technical milestones
@@ -438,22 +353,49 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
    - Any challenges faced and solutions found
    - Tomorrow's planned focus
    - Current motivation/energy level
+2. Update **USE_CASES_TRACKER.md**:
+   - Mark completed use cases as ✅ COMPLETED
+   - Update progress percentages in summary tables
+   - Note any blockers or changes in sprint assignments
 
 ### **After Completing Major Feature**
-1. Update **DEVELOPMENT_GUIDE.md** with any new setup steps
-2. Update **PROGRESS_LOG.md** with milestone completion
-3. Consider if **README.md** needs status update
+1. Update **USE_CASES_TRACKER.md**:
+   - Mark all related use cases as completed
+   - Update module progress percentages
+   - Review sprint assignments for upcoming work
+2. Update **DEVELOPMENT_GUIDE.md** with any new setup steps
+3. Update **PROGRESS_LOG.md** with milestone completion
+4. Consider if **README.md** needs status update
 
 ### **When Adding New Business Feature**
 1. Update **PRODUCT_REQUIREMENTS.md** with feature specification
-2. Consider if **TECHNICAL_STRATEGY.md** needs architecture updates
-3. Update **BUSINESS_PROCESSES.md** if new business processes are involved
-4. Update **README.md** if it's a major feature addition
+2. Update **BUSINESS_PROCESSES.md** if new business processes are involved  
+3. Add new use cases to **USE_CASES_TRACKER.md**:
+   - Assign use case IDs following existing patterns
+   - Set priority levels (P0-MVP, P1-Important, P2-Future)
+   - Assign to appropriate sprints
+4. Consider if **TECHNICAL_STRATEGY.md** needs architecture updates
+5. Update **README.md** if it's a major feature addition
+
+### **Sprint Planning Sessions**
+1. Review **USE_CASES_TRACKER.md**:
+   - Update sprint assignments based on capacity
+   - Mark targeted use cases as IN-PROGRESS  
+   - Estimate completion timelines
+2. Sync with **MVP_DEVELOPMENT_PLAN.md** for milestone alignment
+3. Update **PROGRESS_LOG.md** with sprint goals and focus areas
+
+### **When Use Case Status Changes**
+1. **IMMEDIATE**: Use TodoWrite tool during development sessions
+2. **DAILY**: Transfer TodoWrite progress to **USE_CASES_TRACKER.md**
+3. **WEEKLY**: Review overall progress and adjust sprint planning
+4. **CRITICAL**: Always maintain single source of truth in tracker
 
 ### **When Changing Technology Stack**
 1. Update **TECHNICAL_STRATEGY.md** with decision rationale
 2. Update **DEVELOPMENT_GUIDE.md** with new setup procedures
 3. Update **README.md** with new technology information
+4. Review **USE_CASES_TRACKER.md** for impacted use cases and timeline adjustments
 
 ---
 
@@ -466,6 +408,8 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **What You Want to Document** | **Goes In** | **Why** |
 |---|---|---|
 | **Daily Development Progress (features built, challenges, motivation)** | PROGRESS_LOG.md | Personal daily tracking |
+| **Use Case Implementation Status (UC-L01 completed, Sprint 2 assignments)** | USE_CASES_TRACKER.md | Implementation progress tracking |
+| **Business Context for Use Cases (workflow logic, business rules)** | BUSINESS_PROCESSES.md | Business domain knowledge |
 | **Visual Design Philosophy & Standards** | DESIGN_SYSTEM.md | Design principles and patterns |
 | **Dashboard Technical Implementation** | DASHBOARD_SPECIFICATIONS.md | UI component architecture |
 | **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
@@ -477,6 +421,14 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **3-Level Dashboard Architecture** | DASHBOARD_SPECIFICATIONS.md | Technical implementation |
 | **Mobile-First Design Requirements** | DASHBOARD_SPECIFICATIONS.md | Factory environment specs |
 | **Component Styling & Responsive Design** | DASHBOARD_SPECIFICATIONS.md | UI implementation guide |
+
+### **🔄 Critical Synchronization Rules**
+
+**NEVER put implementation status in BUSINESS_PROCESSES.md** - Business processes document contains only business context  
+**ALWAYS use USE_CASES_TRACKER.md for status** - Single source of truth for all implementation tracking  
+**UPDATE BOTH when adding use cases** - Add business context to BUSINESS_PROCESSES.md AND tracking entry to USE_CASES_TRACKER.md  
+**USE TodoWrite for real-time tracking** - Transfer to USE_CASES_TRACKER.md daily  
+**CROSS-REFERENCE documents** - Each document links to others for navigation
 
 ### **Common Confusion - Examples**
 
@@ -495,16 +447,17 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **Quick Decision Guide**
 
 **Ask yourself**: 
-1. **Is it about business processes?** → BUSINESS_PROCESSES.md
-2. **Is it dashboard/UI implementation?** → DASHBOARD_SPECIFICATIONS.md
-3. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
-4. **Is it visual design philosophy?** → DESIGN_SYSTEM.md
-5. **Is it daily progress?** → PROGRESS_LOG.md
-6. **Is it setup instructions?** → DEVELOPMENT_GUIDE.md
-7. **Is it what features to build?** → PRODUCT_REQUIREMENTS.md
-8. **Is it working style/learning approach?** → COLLABORATION_GUIDE.md
-9. **Is it code patterns/standards?** → CODING_STANDARDS.md
-10. **Is it project overview?** → README.md
+1. **Is it use case implementation status?** → USE_CASES_TRACKER.md
+2. **Is it about business processes?** → BUSINESS_PROCESSES.md
+3. **Is it dashboard/UI implementation?** → DASHBOARD_SPECIFICATIONS.md
+4. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
+5. **Is it visual design philosophy?** → DESIGN_SYSTEM.md
+6. **Is it daily progress?** → PROGRESS_LOG.md
+7. **Is it setup instructions?** → DEVELOPMENT_GUIDE.md
+8. **Is it what features to build?** → PRODUCT_REQUIREMENTS.md
+9. **Is it working style/learning approach?** → COLLABORATION_GUIDE.md
+10. **Is it code patterns/standards?** → CODING_STANDARDS.md
+11. **Is it project overview?** → README.md
 
 ### **Keep It Simple Rule**
 - **Each document = Single clear purpose**

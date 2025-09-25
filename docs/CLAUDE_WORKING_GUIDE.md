@@ -1,10 +1,10 @@
-# ElevateIdea Development - Collaboration Guide
+# CLAUDE WORKING GUIDE
+## How Claude and Partha Work Together Effectively
 
-## Project Overview
-**Company**: ElevateIdea Technologies Private Limited  
-**Founder**: Partha Sarthi (Java background, learning web development)  
-**Project**: 360° Business Platform for Gujarat textile manufacturers  
-**Goal**: Complete MVP in 30-40 days using voice-first, multilingual approach
+> **Purpose**: Proven methods for effective Claude-human collaboration based on successful working patterns  
+> **Audience**: Claude AI sessions and Partha (founder with Java background learning web development)  
+> **Scope**: Communication patterns → Learning approaches → Development workflow → Session management  
+> **Last Updated**: January 2025
 
 ---
 
