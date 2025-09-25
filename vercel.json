@@ -1,17 +1,9 @@
 {
   "name": "360-business-platform",
   "version": 2,
-  "buildCommand": "cd frontend && npm run lint && npm test -- --coverage --watchAll=false && npm run build",
+  "buildCommand": "cd frontend && echo '🚀 Starting Vercel build with quality gates...' && npm run vercel:build && echo '✅ Build completed successfully!'",
   "installCommand": "cd frontend && npm ci",
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
+  "outputDirectory": "frontend/build",
   "routes": [
     {
       "src": "/static/(.*)",
