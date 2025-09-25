@@ -589,7 +589,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => { handleCardClick('leads'); onShowLeadManagement(); }} className={styles.cardButton} data-testid="lead-management-button">
+                <button onClick={() => handleCardClick('leads')} className={styles.cardButton} data-testid="lead-management-button">
                   Manage Leads →
                 </button>
               </div>
@@ -618,7 +618,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => { handleCardClick('quotes'); onShowQuotationOrders(); }} className={styles.cardButton} data-testid="quotation-orders-button">
+                <button onClick={() => handleCardClick('quotes')} className={styles.cardButton} data-testid="quotation-orders-button">
                   Manage Quotes →
                 </button>
               </div>
@@ -647,7 +647,7 @@ function Dashboard({
                 ) : (
                   <div className={styles.cardSpacer}></div>
                 )}
-                <button onClick={() => { handleCardClick('payments'); onShowPayments(); }} className={styles.cardButton} data-testid="payments-button">
+                <button onClick={() => handleCardClick('payments')} className={styles.cardButton} data-testid="payments-button">
                   Manage Payments →
                 </button>
               </div>

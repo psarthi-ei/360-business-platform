@@ -59,13 +59,16 @@ describe('Dashboard Component', () => {
       expect(leadElement).toBeInTheDocument();
     });
 
-    test('should call onShowLeadManagement when lead management clicked', async () => {
+    test('should show tab navigation when lead management clicked', async () => {
       renderDashboard();
       const leadElement = screen.getByTestId('lead-management-button');
       
       await userEvent.click(leadElement);
       
-      expect(mockProps.onShowLeadManagement).toHaveBeenCalledTimes(1);
+      // Should show tab navigation overlay with close button
+      expect(screen.getByLabelText('Close')).toBeInTheDocument();
+      // Should show Lead Management tab
+      expect(screen.getByText('Lead Management')).toBeInTheDocument();
     });
 
     test('should render clickable quotation orders feature', () => {
@@ -74,13 +77,16 @@ describe('Dashboard Component', () => {
       expect(quotationElement).toBeInTheDocument();
     });
 
-    test('should call onShowQuotationOrders when quotation orders clicked', async () => {
+    test('should show tab navigation when quotation orders clicked', async () => {
       renderDashboard();
       const quotationElement = screen.getByTestId('quotation-orders-button');
       
       await userEvent.click(quotationElement);
       
-      expect(mockProps.onShowQuotationOrders).toHaveBeenCalledTimes(1);
+      // Should show tab navigation overlay with close button
+      expect(screen.getByLabelText('Close')).toBeInTheDocument();
+      // Should show Quotation Management tab
+      expect(screen.getByText('Quotation Management')).toBeInTheDocument();
     });
 
     test('should render clickable payments feature', () => {
@@ -89,13 +95,16 @@ describe('Dashboard Component', () => {
       expect(paymentsElement).toBeInTheDocument();
     });
 
-    test('should call onShowPayments when payments clicked', async () => {
+    test('should show tab navigation when payments clicked', async () => {
       renderDashboard();
       const paymentsElement = screen.getByTestId('payments-button');
       
       await userEvent.click(paymentsElement);
       
-      expect(mockProps.onShowPayments).toHaveBeenCalledTimes(1);
+      // Should show tab navigation overlay with close button
+      expect(screen.getByLabelText('Close')).toBeInTheDocument();
+      // Should show Advance Payment Management tab
+      expect(screen.getByText('Advance Payment Management')).toBeInTheDocument();
     });
 
     test('should render clickable customers feature', () => {
