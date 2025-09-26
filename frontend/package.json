@@ -35,6 +35,7 @@
     "build:fast": "react-scripts build",
     "build:production": "CI=true npm run build",
     "deploy": "npm run validate && npm run build",
+    "vercel:build": "npm run validate && npm run build",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "lint:quiet": "eslint src --ext .ts,.tsx,.js,.jsx --quiet",
     "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
