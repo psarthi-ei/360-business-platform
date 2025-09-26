@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { nlpService } from '../services/nlp/NLPService';
+import { NLPResult } from '../services/nlp/types';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
 // TypeScript declarations for Speech Recognition API
@@ -150,7 +151,7 @@ function FloatingVoiceAssistant({
   };
 
   // Extract search query from NLP payload (replaces custom extraction logic)
-  const extractSearchQuery = useCallback((result: any): string | null => {
+  const extractSearchQuery = useCallback((result: NLPResult): string | null => {
     // Use new structured payload from Universal Command Processor
     if (result.payload && result.payload.query) {
       return result.payload.query;
@@ -166,7 +167,7 @@ function FloatingVoiceAssistant({
   }, []);
 
   // Execute actions based on detected intent and NLP result
-  const executeVoiceAction = useCallback(async (nlpResult: any) => {
+  const executeVoiceAction = useCallback(async (nlpResult: NLPResult) => {
     const { intent } = nlpResult;
     // eslint-disable-next-line no-console
     console.log('🎯 executeVoiceAction called with intent:', intent, 'full result:', nlpResult);

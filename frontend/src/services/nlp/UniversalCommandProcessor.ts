@@ -11,7 +11,7 @@ import {
   getAllFilterWords,
   detectPrimaryLanguage
 } from './LanguageConfig';
-import { VoiceIntent, VoiceCommandPayload } from './types';
+import { VoiceIntent, VoiceCommandPayload, DebugExtractionResult } from './types';
 
 export class UniversalCommandProcessor {
   
@@ -261,7 +261,7 @@ export class UniversalCommandProcessor {
   /**
    * Debug method to show extraction process (for development only)
    */
-  public debugExtraction(text: string): { input: string; result: any } {
+  public debugExtraction(text: string): DebugExtractionResult {
     const result = this.processCommand(text);
     return { input: text, result };
   }

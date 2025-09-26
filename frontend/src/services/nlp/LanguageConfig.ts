@@ -180,7 +180,7 @@ export function detectPrimaryLanguage(text: string): 'en' | 'hi' | 'gu' | 'mixed
 
 /**
  * Helper function to add new language support
- * Example: addLanguageSupport('ta', { SEARCH: ['தேடு', 'கண்டுபிடி'] })
+ * Example: addLanguageSupport('ta', { SEARCH: ['தேடু', 'கண்டுபிடி'] })
  */
 export function addLanguageSupport(
   languageCode: string, 
@@ -189,7 +189,9 @@ export function addLanguageSupport(
   // Add new language to existing action types
   Object.entries(vocabulary).forEach(([actionType, words]) => {
     if (actionType in VOICE_ACTIONS) {
-      (VOICE_ACTIONS[actionType as keyof typeof VOICE_ACTIONS] as any)[languageCode] = words;
+      const actionKey = actionType as keyof typeof VOICE_ACTIONS;
+      const actionConfig = VOICE_ACTIONS[actionKey] as Record<string, string[]>;
+      actionConfig[languageCode] = words || [];
     }
   });
   

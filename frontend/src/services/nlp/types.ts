@@ -50,6 +50,18 @@ export interface ProcessingResult {
   cost: number;
 }
 
+// NLP Service Result Interface
+export interface NLPResult {
+  intent: BusinessIntent;
+  response: string;
+  confidence: number;
+  processingMethod: string;
+  cost: number;
+  payload?: VoiceCommandPayload;
+  originalText?: string;
+  language?: string;
+}
+
 // Business Intent Types (Enhanced with Universal Commands)
 export type BusinessIntent = 
   | 'SEARCH_COMMAND'        // Universal search: "search Mumbai", "find cotton"
@@ -75,4 +87,28 @@ export interface BusinessContext {
   readyToShip: number;
   totalCustomers: number;
   currentModule?: string;
+}
+
+// Language Configuration Interfaces (Simple structure for existing config)
+export interface SimpleLanguageConfig {
+  en: string[];
+  hi: string[];
+  gu: string[];
+}
+
+export interface DebugExtractionResult {
+  input: string;
+  result: VoiceIntent;
+}
+
+// NLP Service Configuration Interface
+export interface NLPServiceConfig {
+  usageStats: {
+    monthlyAICalls: number;
+    totalCost: number;
+    lastReset: Date;
+    remainingBudget: number;
+    budgetUtilization: number;
+  };
+  debugMode: boolean;
 }

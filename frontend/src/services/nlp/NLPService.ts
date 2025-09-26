@@ -2,7 +2,7 @@
 // Integrates hybrid NLP processor with existing voice assistant
 
 import { HybridNLPProcessor } from './HybridNLPProcessor';
-import { NLPConfig, BusinessContext, BusinessIntent, VoiceIntent } from './types';
+import { NLPConfig, BusinessContext, BusinessIntent, VoiceIntent, NLPResult, NLPServiceConfig } from './types';
 
 export class NLPService {
   private static instance: NLPService;
@@ -36,16 +36,7 @@ export class NLPService {
     transcript: string, 
     businessContext?: BusinessContext,
     currentStage?: string
-  ): Promise<{
-    intent: BusinessIntent;
-    response: string;
-    confidence: number;
-    processingMethod: string;
-    cost: number;
-    payload?: any;
-    originalText?: string;
-    language?: string;
-  }> {
+  ): Promise<NLPResult> {
     // Processing start time for performance tracking
     // eslint-disable-next-line no-console
     console.log('🚀 NLPService.processVoiceCommand called with:', transcript);
@@ -266,8 +257,7 @@ export class NLPService {
   }
 
   // Get current configuration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getCurrentConfig(): { usageStats: any; debugMode: boolean } {
+  getCurrentConfig(): NLPServiceConfig {
     return {
       usageStats: this.getUsageStats(),
       debugMode: this.isDebugMode

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from './useGlobalSearch';
+import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers, SearchResult } from './useGlobalSearch';
 import SearchResults from './SearchResults';
 import styles from '../styles/GlobalSearch.module.css';
 
@@ -11,7 +11,7 @@ interface GlobalSearchProps {
   // Optional search state - if provided, use external state instead of internal
   searchState?: {
     searchQuery: string;
-    searchResults: any[];
+    searchResults: SearchResult[];
     showSearchResults: boolean;
     handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     closeSearchResults: () => void;
