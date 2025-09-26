@@ -41,7 +41,7 @@
     "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
     "validate": "CI=true npm run lint && npm run test:ci && CI=true npm run build",
     "validate:lenient": "npm run lint && npm run test:ci && npm run build", 
-    "pre-commit": "npm run validate:lenient",
+    "pre-commit": "npm run validate",
     "prebuild": "npm run lint",
     "eject": "react-scripts eject"
   },
