@@ -1,27 +1,29 @@
-/* Floating Voice Assistant - WhatsApp Style */
+/* Floating Voice Assistant - Enhanced Prominent Style */
 .floatingVoiceAssistant {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #FFC107, #FF8F00);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
   transition: all 0.3s ease;
   z-index: 1000;
-  border: none;
+  border: 3px solid #ffffff;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  animation: breathe 3s ease-in-out infinite;
 }
 
 .floatingVoiceAssistant:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+  transform: scale(1.15);
+  box-shadow: 0 12px 35px rgba(255, 193, 7, 0.9);
+  background: linear-gradient(135deg, #FFD54F, #E65100);
 }
 
 .floatingVoiceAssistant.listening {
@@ -47,6 +49,15 @@
   100% {
     transform: scale(1);
     box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 35px rgba(255, 193, 7, 0.9);
   }
 }
 
@@ -217,9 +228,9 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .floatingVoiceAssistant {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
     bottom: 15px;
     right: 15px;
   }

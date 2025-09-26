@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from '../contexts/TranslationContext';
+import { nlpService } from '../services/nlp/NLPService';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
 interface FloatingVoiceAssistantProps {
@@ -32,7 +32,7 @@ function FloatingVoiceAssistant({
   onNavigateToAnalytics,
   businessData
 }: FloatingVoiceAssistantProps) {
-  const { currentLanguage } = useTranslation();
+  // const { t } = useTranslation(); // Translation available if needed
   
   // Voice command state
   const [isListening, setIsListening] = useState(false);
@@ -47,13 +47,17 @@ function FloatingVoiceAssistant({
         'Show business overview',
         'What needs attention today',
         'Go to hot leads',
-        'Check payment status'
+        'Check payment status',
+        'बिजनेस ओवरव्यू दिखाएं',
+        'आज क्या attention चाहिए'
       ],
       'leads': [
         'Show hot leads',
         'Add new lead',
         'Call next lead',
-        'Lead conversion rate'
+        'Lead conversion rate',
+        'हॉट लीड्स दिखाएं',
+        'नया लीड जोड़ें'
       ],
       'quotes': [
         'Create quote',
@@ -101,60 +105,83 @@ function FloatingVoiceAssistant({
     return commands[stage as keyof typeof commands] || commands.dashboard;
   };
 
-  // Enhanced voice command processing
-  const processVoiceCommand = useCallback((command: string) => {
-    const lowerCommand = command.toLowerCase();
-    let response = '';
-    
-    // Business intelligence queries
-    if (businessData && (lowerCommand.includes('what needs attention') || lowerCommand.includes('શું attention') || lowerCommand.includes('क्या attention'))) {
-      response = `Today's priorities: ${businessData.hotLeads} hot leads need calls, ${businessData.overduePayments} overdue payments, ${businessData.readyToShip} orders ready to ship`;
-      setVoiceResponse(response);
-      setShowVoiceResponse(true);
-      return;
-    }
-    
-    // Process-specific navigation commands
-    if (lowerCommand.includes('go to') || lowerCommand.includes('show') || lowerCommand.includes('જાઓ') || lowerCommand.includes('બતાવો')) {
-      if (lowerCommand.includes('lead') || lowerCommand.includes('લીડ')) {
-        onNavigateToLeads?.();
-        response = 'Opening Lead Pipeline management';
-      } else if (lowerCommand.includes('quote') || lowerCommand.includes('કોટ')) {
-        onNavigateToQuotes?.();
-        response = 'Opening Quotations management';
-      } else if (lowerCommand.includes('payment') || lowerCommand.includes('પેમેન્ટ')) {
-        onNavigateToPayments?.();
-        response = 'Opening Payment management';
-      } else if (lowerCommand.includes('production') || lowerCommand.includes('પ્રોડક્શન')) {
-        onNavigateToProduction?.();
-        response = 'Opening Production management';
-      } else if (lowerCommand.includes('inventory') || lowerCommand.includes('સ્ટોક')) {
-        onNavigateToInventory?.();
-        response = 'Opening Inventory management';
-      } else if (lowerCommand.includes('customer') || lowerCommand.includes('ગ્રાહક')) {
-        onNavigateToCustomers?.();
-        response = 'Opening Customer management';
-      } else if (lowerCommand.includes('analytics') || lowerCommand.includes('રિપોર્ટ')) {
-        onNavigateToAnalytics?.();
-        response = 'Opening Business Analytics';
-      }
+  // Enhanced voice command processing with NLP
+  const processVoiceCommand = useCallback(async (command: string) => {
+    try {
+      // Use new NLP service for command processing
+      const result = await nlpService.processVoiceCommand(command, businessData, currentProcessStage);
       
-      if (response) {
-        setVoiceResponse(response);
+      // Debug information in development mode
+      // Voice command processed successfully
+      
+      // Execute the appropriate action based on intent
+      await executeVoiceAction(result.intent);
+      
+      // Only show popup for unknown intents and errors
+      if (result.intent === 'UNKNOWN_INTENT') {
+        setVoiceResponse(result.response);
         setShowVoiceResponse(true);
-        return;
       }
+      // For successful commands: just execute action silently
+      
+    } catch (error) {
+      // Voice command processing error occurred
+      setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
+      setShowVoiceResponse(true);
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, businessData]);
+  }, [businessData]);
 
-  // Voice recognition setup
+  // Execute actions based on detected intent
+  const executeVoiceAction = useCallback(async (intent: string) => {
+    // Execute action based on detected intent
+    
+    switch (intent) {
+      case 'OPEN_LEADS':
+        onNavigateToLeads?.();
+        break;
+      case 'OPEN_PAYMENTS':
+        onNavigateToPayments?.();
+        break;
+      case 'OPEN_CUSTOMERS':
+        onNavigateToCustomers?.();
+        break;
+      case 'OPEN_INVENTORY':
+        onNavigateToInventory?.();
+        break;
+      case 'OPEN_ORDERS':
+        onNavigateToQuotes?.(); // Using quotes for orders
+        break;
+      case 'OPEN_ANALYTICS':
+        onNavigateToAnalytics?.();
+        break;
+      case 'OPEN_PRODUCTION':
+        onNavigateToProduction?.();
+        break;
+      case 'SHOW_BUSINESS_OVERVIEW':
+        // Could navigate to dashboard overview or show summary
+        break;
+      case 'SHOW_PRIORITIES':
+        // Already handled in response generation
+        break;
+      case 'HELP_COMMAND':
+        // Help response already generated
+        break;
+      default:
+        // UNKNOWN_INTENT - no action needed, response already set
+        break;
+    }
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics]);
+
+  // Voice recognition setup - Language Agnostic
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = currentLanguage === 'gu' ? 'gu-IN' : currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
+      // Use English-India as primary language for best multilingual support
+      // The NLP service will handle multilingual command processing
+      recognition.lang = 'en-IN';
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -174,11 +201,12 @@ function FloatingVoiceAssistant({
         recognition.start();
       }
     }
-  }, [isListening, currentLanguage, processVoiceCommand]);
+  }, [isListening, processVoiceCommand]);
 
   const startVoiceRecognition = () => {
     setIsListening(true);
   };
+
 
   // Auto-hide voice response after 5 seconds
   useEffect(() => {
@@ -208,13 +236,14 @@ function FloatingVoiceAssistant({
 
   return (
     <>
+
       {/* Voice Response Display */}
       {showVoiceResponse && (
         <div className={styles.voiceResponsePanel}>
           <div className={styles.voiceResponseContent}>
             <span className={styles.voiceResponseIcon}>💬</span>
             <div className={styles.voiceResponseText}>
-              <strong>Business Assistant:</strong> {voiceResponse}
+              {voiceResponse}
             </div>
           </div>
           <button 
@@ -271,7 +300,7 @@ function FloatingVoiceAssistant({
           </ul>
           
           <div className={styles.voiceCommandHint}>
-            Try: "Go to production" or "Show hot leads"
+            Try: "Go to production" • "Show hot leads" • "लीड्स दिखाएं" • "पेमेंट्स दिखाएं"
           </div>
         </div>
       )}

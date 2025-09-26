@@ -60,7 +60,14 @@
           "testing-library/no-node-access": "off",
           "testing-library/no-container": "off",
           "testing-library/prefer-screen-queries": "off",
-          "jest/no-conditional-expect": "off"
+          "jest/no-conditional-expect": "off",
+          "no-restricted-syntax": "off"
+        }
+      },
+      {
+        "files": ["src/components/FloatingVoiceAssistant.tsx"],
+        "rules": {
+          "no-console": "off"
         }
       }
     ]
@@ -73,13 +80,17 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      "chrome >= 60",
+      "and_chr >= 60",
+      "samsung >= 6",
+      "android >= 60",
+      "> 0.5% in IN",
       "not dead",
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
+      "last 2 chrome versions",
+      "last 2 firefox versions",
       "last 1 safari version"
     ]
   }
