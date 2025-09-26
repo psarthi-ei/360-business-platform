@@ -2,6 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { nlpService } from '../services/nlp/NLPService';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
+// TypeScript declarations for Speech Recognition API
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare global {
+  interface Window {
+    webkitSpeechRecognition: any; // Browser API
+    SpeechRecognition: any; // Browser API
+  }
+}
+
 interface FloatingVoiceAssistantProps {
   currentProcessStage?: string;
   onNavigateToLeads?: () => void;
@@ -18,6 +27,7 @@ interface FloatingVoiceAssistantProps {
     readyToShip: number;
     totalCustomers: number;
   };
+  onPerformSearch?: (query: string) => void;
 }
 
 function FloatingVoiceAssistant({
@@ -30,7 +40,8 @@ function FloatingVoiceAssistant({
   onNavigateToFulfillment,
   onNavigateToCustomers,
   onNavigateToAnalytics,
-  businessData
+  businessData,
+  onPerformSearch
 }: FloatingVoiceAssistantProps) {
   // const { t } = useTranslation(); // Translation available if needed
   
@@ -105,37 +116,54 @@ function FloatingVoiceAssistant({
     return commands[stage as keyof typeof commands] || commands.dashboard;
   };
 
-  // Enhanced voice command processing with NLP
-  const processVoiceCommand = useCallback(async (command: string) => {
-    try {
-      // Use new NLP service for command processing
-      const result = await nlpService.processVoiceCommand(command, businessData, currentProcessStage);
-      
-      // Debug information in development mode
-      // Voice command processed successfully
-      
-      // Execute the appropriate action based on intent
-      await executeVoiceAction(result.intent);
-      
-      // Only show popup for unknown intents and errors
-      if (result.intent === 'UNKNOWN_INTENT') {
-        setVoiceResponse(result.response);
-        setShowVoiceResponse(true);
-      }
-      // For successful commands: just execute action silently
-      
-    } catch (error) {
-      // Voice command processing error occurred
-      setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
-      setShowVoiceResponse(true);
+  // Extract search term from voice command
+  const extractSearchTerm = useCallback((command: string): string => {
+    const lowerCommand = command.toLowerCase().trim();
+    
+    // English patterns
+    if (lowerCommand.includes('search for ')) {
+      return command.substring(command.toLowerCase().indexOf('search for ') + 11).trim();
     }
-  }, [businessData]);
+    if (lowerCommand.includes('find ')) {
+      return command.substring(command.toLowerCase().indexOf('find ') + 5).trim();
+    }
+    if (lowerCommand.includes('look for ')) {
+      return command.substring(command.toLowerCase().indexOf('look for ') + 9).trim();
+    }
+    if (lowerCommand.includes('locate ')) {
+      return command.substring(command.toLowerCase().indexOf('locate ') + 7).trim();
+    }
+    
+    // Hindi patterns
+    if (lowerCommand.includes(' खोजें')) {
+      return command.replace(/\s+खोजें.*$/i, '').trim();
+    }
+    if (lowerCommand.includes(' ढूंढें')) {
+      return command.replace(/\s+ढूंढें.*$/i, '').trim();
+    }
+    
+    // Gujarati patterns  
+    if (lowerCommand.includes(' શોધો')) {
+      return command.replace(/\s+શોધો.*$/i, '').trim();
+    }
+    
+    // If no specific pattern found, use the whole command as search term
+    return command.trim();
+  }, []);
 
   // Execute actions based on detected intent
-  const executeVoiceAction = useCallback(async (intent: string) => {
+  const executeVoiceAction = useCallback(async (intent: string, originalCommand?: string) => {
     // Execute action based on detected intent
     
     switch (intent) {
+      case 'SEARCH_COMMAND':
+        if (onPerformSearch && originalCommand) {
+          const searchTerm = extractSearchTerm(originalCommand);
+          if (searchTerm) {
+            onPerformSearch(searchTerm);
+          }
+        }
+        break;
       case 'OPEN_LEADS':
         onNavigateToLeads?.();
         break;
@@ -170,12 +198,38 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics]);
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, onPerformSearch, extractSearchTerm]);
+
+  // Enhanced voice command processing with NLP
+  const processVoiceCommand = useCallback(async (command: string) => {
+    try {
+      // Use new NLP service for command processing
+      const result = await nlpService.processVoiceCommand(command, businessData, currentProcessStage);
+      
+      // Debug information in development mode
+      // Voice command processed successfully
+      
+      // Execute the appropriate action based on intent
+      await executeVoiceAction(result.intent, command);
+      
+      // Only show popup for unknown intents and errors
+      if (result.intent === 'UNKNOWN_INTENT') {
+        setVoiceResponse(result.response);
+        setShowVoiceResponse(true);
+      }
+      // For successful commands: just execute action silently
+      
+    } catch (error) {
+      // Voice command processing error occurred
+      setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
+      setShowVoiceResponse(true);
+    }
+  }, [businessData, currentProcessStage, executeVoiceAction]);
 
   // Voice recognition setup - Language Agnostic
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
@@ -183,6 +237,7 @@ function FloatingVoiceAssistant({
       // The NLP service will handle multilingual command processing
       recognition.lang = 'en-IN';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         processVoiceCommand(transcript); 

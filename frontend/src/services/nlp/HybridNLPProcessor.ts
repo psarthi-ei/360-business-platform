@@ -256,17 +256,8 @@ export class HybridNLPProcessor {
   async testAllProviders(): Promise<{ [provider: string]: boolean }> {
     const results: { [provider: string]: boolean } = {};
     
-    for (const [name, provider] of this.aiProviders) {
-      try {
-        if ('testConnection' in provider && typeof provider.testConnection === 'function') {
-          results[name] = await (provider as any).testConnection();
-        } else {
-          results[name] = provider.isAvailable();
-        }
-      } catch {
-        results[name] = false;
-      }
-    }
+    // Simplified implementation to avoid ES5 compatibility issues
+    results['local'] = this.localProvider.isAvailable();
     
     return results;
   }

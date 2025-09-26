@@ -29,7 +29,7 @@ export class GoogleNLPProvider implements NLPProvider {
     }
   }
 
-  private async classifyText(text: string): Promise<any> {
+  private async classifyText(text: string): Promise<{ intent: string; confidence: number }> {
     // This is a simplified implementation
     // In production, you would use Google's classification or entity analysis
     const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {

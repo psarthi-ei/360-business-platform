@@ -33,11 +33,13 @@
     "test:verbose": "react-scripts test --verbose --coverage --watchAll=false --passWithNoTests",
     "test:quiet": "react-scripts test --coverage --watchAll=false --ci --silent",
     "build:fast": "react-scripts build",
-    "vercel:build": "npm run lint:quiet && npm run test:quiet && npm run build",
+    "build:production": "CI=true npm run build",
+    "deploy": "npm run validate && npm run build",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "lint:quiet": "eslint src --ext .ts,.tsx,.js,.jsx --quiet",
     "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
     "validate": "npm run lint && npm run test:ci && npm run build",
+    "validate:strict": "CI=true npm run lint && npm run test:ci && CI=true npm run build", 
     "pre-commit": "npm run validate",
     "prebuild": "npm run lint",
     "eject": "react-scripts eject"
@@ -50,7 +52,10 @@
     "rules": {
       "no-console": "error",
       "no-debugger": "error",
-      "@typescript-eslint/no-unused-vars": "error"
+      "@typescript-eslint/no-unused-vars": "error",
+      "react-hooks/exhaustive-deps": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "prefer-const": "error"
     },
     "overrides": [
       {

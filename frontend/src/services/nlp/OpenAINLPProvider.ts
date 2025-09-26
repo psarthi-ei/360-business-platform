@@ -29,7 +29,7 @@ export class OpenAINLPProvider implements NLPProvider {
     }
   }
 
-  private async callOpenAI(text: string): Promise<any> {
+  private async callOpenAI(text: string): Promise<string> {
     const prompt = `You are a voice assistant for ElevateBusiness 360°, a textile manufacturing business platform. 
 
 Analyze this voice command and classify the user's intent. The platform has these main functions:

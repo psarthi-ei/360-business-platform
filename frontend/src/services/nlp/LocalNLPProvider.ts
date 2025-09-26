@@ -77,6 +77,15 @@ export class LocalNLPProvider implements NLPProvider {
       actions: ['show', 'what', 'needs', 'requires'],
       phrases: ['what needs attention', 'show priorities', 'urgent items', 'क्या attention चाहिए'],
       confidence: 0.8
+    },
+    
+    // Search Command Patterns
+    {
+      intent: 'SEARCH_COMMAND',
+      keywords: ['search', 'find', 'look', 'locate', 'खोजें', 'શોધો', 'ढूंढें', 'ढूंढो', 'લોકેટ', 'पता'],
+      actions: ['for', 'में', 'માં', 'करें', 'કરો'],
+      phrases: ['search for', 'find company', 'look for', 'locate customer', 'खोजें कंपनी', 'શોધો કંપની', 'ढूंढें कस्टमर'],
+      confidence: 0.9
     }
   ];
 
@@ -184,6 +193,13 @@ export class LocalNLPProvider implements NLPProvider {
 
   // Get all supported intents
   getSupportedIntents(): string[] {
-    return [...new Set(this.patterns.map(p => p.intent))];
+    const intents = this.patterns.map(p => p.intent);
+    const uniqueIntents: string[] = [];
+    for (const intent of intents) {
+      if (uniqueIntents.indexOf(intent) === -1) {
+        uniqueIntents.push(intent);
+      }
+    }
+    return uniqueIntents;
   }
 }

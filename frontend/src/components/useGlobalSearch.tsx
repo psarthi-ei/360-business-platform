@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Lead, Quote, SalesOrder, BusinessProfile } from '../data/mockData';
 
 // Types for search functionality
 export interface SearchResult {
@@ -12,10 +13,10 @@ export interface SearchResult {
 }
 
 export interface SearchDataSources {
-  leads?: any[];
-  quotes?: any[];
-  salesOrders?: any[];
-  customers?: any[];
+  leads?: Lead[];
+  quotes?: Quote[];
+  salesOrders?: SalesOrder[];
+  customers?: BusinessProfile[];
 }
 
 export interface SearchNavigationHandlers {
@@ -24,7 +25,7 @@ export interface SearchNavigationHandlers {
   onShowSalesOrders: () => void;
   onShowCustomerList: () => void;
   formatCurrency: (amount: number) => string;
-  getBusinessProfileById: (id: string) => any;
+  getBusinessProfileById: (id: string) => BusinessProfile | undefined;
 }
 
 export function useGlobalSearch(

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
 import GlobalSearch from './GlobalSearch';
+import { useGlobalSearch } from './useGlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import styles from '../styles/Dashboard.module.css';
 
@@ -59,6 +60,23 @@ function Dashboard({
   // Tab navigation state
   const [showTabNavigation, setShowTabNavigation] = useState(false);
   const [activeCardType, setActiveCardType] = useState<string | null>(null);
+  
+  // Global search functionality for voice commands
+  const navigationHandlers = {
+    onShowLeadManagement: () => { setCurrentProcessStage('leads'); onShowLeadManagement(); },
+    onShowQuotationOrders: () => { setCurrentProcessStage('quotes'); onShowQuotationOrders(); },
+    onShowSalesOrders: () => { setCurrentProcessStage('production'); onShowSalesOrders(); },
+    onShowCustomerList: () => { setCurrentProcessStage('customers'); onShowCustomerList(); },
+    formatCurrency,
+    getBusinessProfileById
+  };
+
+  const { performGlobalSearch } = useGlobalSearch({
+    leads: mockLeads,
+    quotes: mockQuotes,
+    salesOrders: mockSalesOrders,
+    customers: mockBusinessProfiles
+  }, navigationHandlers);
   
   
   
@@ -820,6 +838,7 @@ function Dashboard({
         onNavigateToCustomers={() => { setCurrentProcessStage('customers'); onShowCustomerList(); }}
         onNavigateToAnalytics={() => { setCurrentProcessStage('analytics'); onShowAnalytics?.(); }}
         businessData={businessData}
+        onPerformSearch={performGlobalSearch}
       />
 
       {/* Tab Navigation Overlay */}

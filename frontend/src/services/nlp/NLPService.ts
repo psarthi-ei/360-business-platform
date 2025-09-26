@@ -2,7 +2,7 @@
 // Integrates hybrid NLP processor with existing voice assistant
 
 import { HybridNLPProcessor } from './HybridNLPProcessor';
-import { NLPConfig, BusinessContext, BusinessIntent } from './types';
+import { NLPConfig, BusinessContext, BusinessIntent, VoiceIntent } from './types';
 
 export class NLPService {
   private static instance: NLPService;
@@ -77,7 +77,7 @@ export class NLPService {
     }
   }
 
-  private generateResponse(intent: any, businessContext?: BusinessContext, currentStage?: string): string {
+  private generateResponse(intent: VoiceIntent, businessContext?: BusinessContext, currentStage?: string): string {
     const intentType = intent.intent;
     const language = intent.language || 'en';
 
@@ -148,7 +148,8 @@ export class NLPService {
 
     const intentResponses = responses[intentType as keyof typeof responses];
     if (intentResponses) {
-      return intentResponses[language as keyof typeof intentResponses] || intentResponses['en'] || 'Processing your request...';
+      const languageResponse = intentResponses[language as keyof typeof intentResponses] || intentResponses['en'];
+      return languageResponse || 'Processing your request...';
     }
     return 'Processing your request...';
   }
@@ -156,14 +157,14 @@ export class NLPService {
   private getContextualSuggestions(stage: string, language: 'en' | 'hi' | 'gu'): string {
     const suggestions = {
       'dashboard': {
-        'en': "I didn't catch that. Try: 'Show business overview', 'What needs attention', or 'Go to leads'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'बिजनेस ओवरव्यू दिखाएं', 'क्या attention चाहिए', या 'लीड्स पर जाएं'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'બિઝનેસ ઓવરવ્યુ બતાવો', 'શું ધ્યાન જોઈએ', અથવા 'લીડ્સ પર જાઓ'"
+        'en': "I didn't catch that. Try: 'Show business overview', 'Search for company name', or 'Find pending orders'",
+        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'बिजनेस ओवरव्यू दिखाएं', 'कंपनी नाम खोजें', या 'pending orders ढूंढें'",
+        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'બિઝનેસ ઓવરવ્યુ બતાવો', 'કંપની નામ શોધો', અથવા 'પેન્ડિંગ ઓર્ડર્સ શોધો'"
       },
       'leads': {
-        'en': "I didn't catch that. On this page you can say: 'Show hot leads', 'Add new lead', or 'Call next lead'",
-        'hi': "मैं समझ नहीं पाया। इस page पर आप कह सकते हैं: 'हॉट लीड्स दिखाएं', 'नया लीड जोड़ें', या 'अगला लीड call करें'",
-        'gu': "મને સમજાયું નહીં. આ પેજ પર તમે કહી શકો: 'હૉટ લીડ્સ બતાવો', 'નવો લીડ ઉમેરો', અથવા 'આગળનો લીડ કૉલ કરો'"
+        'en': "I didn't catch that. On this page you can say: 'Show hot leads', 'Search for lead', or 'Find prospects'",
+        'hi': "मैं समझ नहीं पाया। इस page पर आप कह सकते हैं: 'हॉट लीड्स दिखाएं', 'लीड खोजें', या 'prospects ढूंढें'",
+        'gu': "મને સમજાયું નહીં. આ પેજ પર તમે કહી શકો: 'હૉટ લીડ્સ બતાવો', 'લીડ શોધો', અથવા 'પ્રોસ્પેક્ટ્સ શોધો'"
       },
       'payments': {
         'en': "I didn't catch that. Try: 'Outstanding payments', 'Record payment', or 'Payment status'",
@@ -171,9 +172,9 @@ export class NLPService {
         'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'બાકી પેમેન્ટ્સ', 'પેમેન્ટ રેકૉર્ડ કરો', અથવા 'પેમેન્ટ સ્ટેટસ'"
       },
       'customers': {
-        'en': "I didn't catch that. Try: 'Customer profile', 'VIP customers', or 'Customer feedback'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'customer profile', 'VIP customers', या 'customer feedback'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'કસ્ટમર પ્રોફાઇલ', 'VIP કસ્ટમર્સ', અથવા 'કસ્ટમર ફીડબેક'"
+        'en': "I didn't catch that. Try: 'Search for customer', 'Find VIP clients', or 'Customer profile'",
+        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'customer खोजें', 'VIP clients ढूंढें', या 'customer profile'",
+        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'કસ્ટમર શોધો', 'VIP ક્લાઇન્ટ્સ શોધો', અથવા 'કસ્ટમર પ્રોફાઇલ'"
       },
       'inventory': {
         'en': "I didn't catch that. Try: 'Stock check', 'Material order', or 'Stock status'", 
@@ -249,7 +250,8 @@ export class NLPService {
   }
 
   // Get current configuration
-  getCurrentConfig(): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getCurrentConfig(): { usageStats: any; debugMode: boolean } {
     return {
       usageStats: this.getUsageStats(),
       debugMode: this.isDebugMode
