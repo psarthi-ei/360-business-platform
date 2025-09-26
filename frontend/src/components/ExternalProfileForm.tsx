@@ -11,7 +11,7 @@ interface ExternalProfileFormProps {
   onSuccess?: (businessProfileId: string) => void;
 }
 
-interface BusinessProfileFormData {
+export interface BusinessProfileFormData {
   companyName: string;
   gstNumber: string;
   panNumber: string;
@@ -258,7 +258,7 @@ function ExternalProfileForm({ quoteId, companyName, linkId, onSubmit, onCancel,
       setFormData(prev => ({
         ...prev,
         [parent]: {
-          ...(prev as any)[parent],
+          ...(prev as unknown as Record<string, unknown>)[parent] as Record<string, unknown>,
           [child]: value
         }
       }));

@@ -52,7 +52,7 @@ export class GoogleNLPProvider implements NLPProvider {
     return await response.json();
   }
 
-  private mapToBusinessIntent(text: string, classification: any): VoiceIntent {
+  private mapToBusinessIntent(text: string, classification: { intent?: string; confidence?: number }): VoiceIntent {
     // Simplified mapping logic
     // In production, this would be more sophisticated
     const lowerText = text.toLowerCase();

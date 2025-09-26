@@ -33,7 +33,7 @@ const mockProps = {
     invalidCredentials: 'Invalid email or password',
     guestUser: 'Guest User',
     guestCompany: 'Demo Textiles Ltd.'
-  } as any
+  } as Record<string, string>
 };
 
 // Helper function to render Login with all required providers

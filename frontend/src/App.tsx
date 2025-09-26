@@ -12,7 +12,7 @@ import Payments from './components/Payments';
 import Invoices from './components/Invoices';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
-import ExternalProfileForm from './components/ExternalProfileForm';
+import ExternalProfileForm, { BusinessProfileFormData } from './components/ExternalProfileForm';
 import InventoryManagement from './components/InventoryManagement';
 import FulfillmentManagement from './components/FulfillmentManagement';
 import AnalyticsManagement from './components/AnalyticsManagement';
@@ -68,7 +68,7 @@ function AppContent() {
   }
 
   useEffect(() => {
-    const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light');
+    const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light') as string;
     setCurrentTheme(savedTheme);
     const theme = themes[savedTheme] || themes['light'];
     applyTheme(theme);
@@ -447,7 +447,7 @@ function AppContent() {
   }
 
   function renderProfileCompletion() {
-    function handleProfileSubmit(profileData: any) {
+    function handleProfileSubmit(profileData: BusinessProfileFormData) {
       // Profile submitted successfully
       // Show success message and redirect to homepage
       setTimeout(() => {

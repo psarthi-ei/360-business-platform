@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockProformaInvoices, formatCurrency, getBusinessProfileById } from '../data/mockData';
+import { mockProformaInvoices, formatCurrency, getBusinessProfileById, ProformaInvoice } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/ProformaInvoiceManagement.module.css';
 
@@ -50,7 +50,7 @@ function ProformaInvoiceManagement({
   const filteredInvoices = getFilteredProformaInvoices();
 
   // Get business profile details for display
-  function getInvoiceDisplayData(invoice: any) {
+  function getInvoiceDisplayData(invoice: ProformaInvoice) {
     const businessProfile = getBusinessProfileById(invoice.businessProfileId);
     return {
       companyName: businessProfile?.companyName || 'Unknown Company',

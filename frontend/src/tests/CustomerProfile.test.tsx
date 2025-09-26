@@ -9,7 +9,7 @@ const mockProps = {
   onLanguageChange: jest.fn(),
   onNavigateBack: jest.fn(),
   customerId: 'test-customer-id',
-  translations: {} as any
+  translations: {} as Record<string, string>
 };
 
 const renderWithTranslation = (component: React.ReactElement) => {

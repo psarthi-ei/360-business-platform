@@ -5,7 +5,7 @@
  */
 
 // Safe JSON.stringify that handles Unicode surrogate pairs
-export function safeJsonStringify(data: any): string {
+export function safeJsonStringify(data: unknown): string {
   try {
     // First attempt normal JSON.stringify
     return JSON.stringify(data);
@@ -17,7 +17,7 @@ export function safeJsonStringify(data: any): string {
 }
 
 // Safe JSON.parse that handles potential encoding issues
-export function safeJsonParse(jsonString: string): any {
+export function safeJsonParse(jsonString: string): unknown {
   try {
     return JSON.parse(jsonString);
   } catch (error) {
@@ -28,16 +28,17 @@ export function safeJsonParse(jsonString: string): any {
 }
 
 // Recursively sanitize an object for safe JSON serialization
-function sanitizeUnicodeForJson(obj: any): any {
+function sanitizeUnicodeForJson(obj: unknown): unknown {
   if (typeof obj === 'string') {
     return sanitizeUnicodeString(obj);
   } else if (Array.isArray(obj)) {
     return obj.map(item => sanitizeUnicodeForJson(item));
   } else if (obj !== null && typeof obj === 'object') {
-    const sanitizedObj: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        sanitizedObj[key] = sanitizeUnicodeForJson(obj[key]);
+    const sanitizedObj: Record<string, unknown> = {};
+    const objRecord = obj as Record<string, unknown>;
+    for (const key in objRecord) {
+      if (objRecord.hasOwnProperty(key)) {
+        sanitizedObj[key] = sanitizeUnicodeForJson(objRecord[key]);
       }
     }
     return sanitizedObj;
@@ -64,7 +65,7 @@ function sanitizeUnicodeString(str: string): string {
 }
 
 // Safe localStorage operations with Unicode support
-export function safeLocalStorageSetItem(key: string, value: any): boolean {
+export function safeLocalStorageSetItem(key: string, value: unknown): boolean {
   try {
     const jsonString = safeJsonStringify(value);
     localStorage.setItem(key, jsonString);
@@ -86,7 +87,7 @@ export function safeLocalStorageSetItem(key: string, value: any): boolean {
   }
 }
 
-export function safeLocalStorageGetItem(key: string, defaultValue: any = null): any {
+export function safeLocalStorageGetItem(key: string, defaultValue: unknown = null): unknown {
   try {
     const item = localStorage.getItem(key);
     if (item === null) {
@@ -100,7 +101,7 @@ export function safeLocalStorageGetItem(key: string, defaultValue: any = null): 
 }
 
 // Simplify an object by removing potentially problematic Unicode content
-function simplifyObjectForStorage(obj: any): any {
+function simplifyObjectForStorage(obj: unknown): unknown {
   if (typeof obj === 'string') {
     // Convert complex Unicode to safe ASCII alternatives for storage
     return obj
@@ -111,12 +112,13 @@ function simplifyObjectForStorage(obj: any): any {
   } else if (Array.isArray(obj)) {
     return obj.map(item => simplifyObjectForStorage(item));
   } else if (obj !== null && typeof obj === 'object') {
-    const simplifiedObj: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+    const simplifiedObj: Record<string, unknown> = {};
+    const objRecord = obj as Record<string, unknown>;
+    for (const key in objRecord) {
+      if (objRecord.hasOwnProperty(key)) {
         // Only keep essential fields for simplified storage
         if (['name', 'company', 'email', 'phone', 'businessType', 'location', 'role'].includes(key)) {
-          simplifiedObj[key] = simplifyObjectForStorage(obj[key]);
+          simplifiedObj[key] = simplifyObjectForStorage(objRecord[key]);
         }
       }
     }
@@ -139,7 +141,7 @@ export function hasProblematicUnicode(str: string): boolean {
 }
 
 // Development helper: log Unicode issues
-export function debugUnicodeIssues(obj: any, path: string = 'root'): void {
+export function debugUnicodeIssues(obj: unknown, path: string = 'root'): void {
   if (process.env.NODE_ENV !== 'development') {
     return;
   }
@@ -153,9 +155,10 @@ export function debugUnicodeIssues(obj: any, path: string = 'root'): void {
       debugUnicodeIssues(item, `${path}[${index}]`);
     });
   } else if (obj !== null && typeof obj === 'object') {
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        debugUnicodeIssues(obj[key], `${path}.${key}`);
+    const objRecord = obj as Record<string, unknown>;
+    for (const key in objRecord) {
+      if (objRecord.hasOwnProperty(key)) {
+        debugUnicodeIssues(objRecord[key], `${path}.${key}`);
       }
     }
   }

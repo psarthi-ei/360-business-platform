@@ -3,11 +3,44 @@ import { nlpService } from '../services/nlp/NLPService';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
 // TypeScript declarations for Speech Recognition API
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface SpeechRecognitionInterface {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  addEventListener(type: string, listener: (event: SpeechRecognitionEvent) => void): void;
+  removeEventListener(type: string, listener: (event: SpeechRecognitionEvent) => void): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionEvent) => void) | null;
+  onend: ((event: Event) => void) | null;
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+  error?: { message: string };
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
 declare global {
   interface Window {
-    webkitSpeechRecognition: any; // Browser API
-    SpeechRecognition: any; // Browser API
+    webkitSpeechRecognition: new () => SpeechRecognitionInterface;
+    SpeechRecognition: new () => SpeechRecognitionInterface;
   }
 }
 
@@ -237,8 +270,7 @@ function FloatingVoiceAssistant({
       // The NLP service will handle multilingual command processing
       recognition.lang = 'en-IN';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         processVoiceCommand(transcript); 
         setIsListening(false);

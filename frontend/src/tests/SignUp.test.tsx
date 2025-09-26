@@ -44,7 +44,7 @@ const mockProps = {
     pleaseFillAllFields: 'Please fill all required fields',
     pleaseFillRequiredFields: 'Please fill all required fields',
     passwordsDontMatch: 'Passwords do not match'
-  } as any
+  } as Record<string, string>
 };
 
 // Helper function to render SignUp with TranslationProvider
