@@ -8,14 +8,27 @@ interface GlobalSearchProps {
   navigationHandlers: SearchNavigationHandlers;
   placeholder?: string;
   className?: string;
+  // Optional search state - if provided, use external state instead of internal
+  searchState?: {
+    searchQuery: string;
+    searchResults: any[];
+    showSearchResults: boolean;
+    handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    closeSearchResults: () => void;
+    clearSearch: () => void;
+    performGlobalSearch: (query: string) => void;
+  };
 }
 
 function GlobalSearch({ 
   dataSources, 
   navigationHandlers, 
   placeholder = "Search or try voice commands...",
-  className = ""
+  className = "",
+  searchState
 }: GlobalSearchProps) {
+  // Use external search state if provided, otherwise create internal state
+  const internalSearchState = useGlobalSearch(dataSources, navigationHandlers);
   const {
     searchQuery,
     searchResults,
@@ -23,7 +36,7 @@ function GlobalSearch({
     handleSearchChange,
     closeSearchResults,
     clearSearch
-  } = useGlobalSearch(dataSources, navigationHandlers);
+  } = searchState || internalSearchState;
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -65,6 +78,14 @@ function GlobalSearch({
     }
     // TODO: Add arrow key navigation for search results
   };
+
+  // Debug logging
+  // eslint-disable-next-line no-console
+  console.log('GlobalSearch rendered with:', { searchQuery, searchResults: searchResults.length, showSearchResults });
+  
+  // Additional debug: Check if SearchResults should render
+  // eslint-disable-next-line no-console
+  console.log('Should render SearchResults?', showSearchResults && searchResults.length > 0);
 
   return (
     <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef}>

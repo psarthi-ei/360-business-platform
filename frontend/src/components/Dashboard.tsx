@@ -71,7 +71,7 @@ function Dashboard({
     getBusinessProfileById
   };
 
-  const { performGlobalSearch } = useGlobalSearch({
+  const globalSearchState = useGlobalSearch({
     leads: mockLeads,
     quotes: mockQuotes,
     salesOrders: mockSalesOrders,
@@ -503,7 +503,14 @@ function Dashboard({
 
   // Date formatting utilities will be added when needed
 
-  
+  // Debug: Log GlobalSearch data
+  // eslint-disable-next-line no-console
+  console.log('Dashboard: Rendering GlobalSearch with data:', {
+    leadsCount: mockLeads?.length || 0,
+    quotesCount: mockQuotes?.length || 0,
+    salesOrdersCount: mockSalesOrders?.length || 0,
+    customersCount: mockBusinessProfiles?.length || 0
+  });
 
   return (
     <>
@@ -528,6 +535,7 @@ function Dashboard({
             getBusinessProfileById
           }}
           placeholder="Search or try voice commands..."
+          searchState={globalSearchState}
         />
 
         {/* Compact Business Intelligence Metrics Bar */}
@@ -838,7 +846,7 @@ function Dashboard({
         onNavigateToCustomers={() => { setCurrentProcessStage('customers'); onShowCustomerList(); }}
         onNavigateToAnalytics={() => { setCurrentProcessStage('analytics'); onShowAnalytics?.(); }}
         businessData={businessData}
-        onPerformSearch={performGlobalSearch}
+        onPerformSearch={globalSearchState.performGlobalSearch}
       />
 
       {/* Tab Navigation Overlay */}

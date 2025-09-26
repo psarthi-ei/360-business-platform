@@ -1,10 +1,20 @@
 // NLP Service Types and Interfaces
 // Provides abstraction layer for multiple AI providers
 
+// Enhanced Voice Command Payload Structure
+export interface VoiceCommandPayload {
+  action?: string;          // Extracted action: 'search', 'show', 'open', etc.
+  target?: string;          // Business target: 'leads', 'customers', 'payments', etc.
+  query?: string;           // Search/filter query: 'Mumbai', 'Cotton Mills', etc.
+  filters?: string[];       // Additional filters: ['hot', 'pending', 'gujarat']
+  parameters?: { [key: string]: string }; // Extra structured data
+}
+
 export interface VoiceIntent {
   intent: string;
   confidence: number;
-  entities?: { [key: string]: string };
+  payload?: VoiceCommandPayload; // NEW: Structured command data
+  entities?: { [key: string]: string }; // Legacy support
   originalText: string;
   language?: 'en' | 'hi' | 'gu' | 'mixed';
 }
@@ -40,15 +50,20 @@ export interface ProcessingResult {
   cost: number;
 }
 
-// Business Intent Types
+// Business Intent Types (Enhanced with Universal Commands)
 export type BusinessIntent = 
-  | 'OPEN_LEADS'
-  | 'OPEN_PAYMENTS' 
-  | 'OPEN_CUSTOMERS'
-  | 'OPEN_INVENTORY'
-  | 'OPEN_ORDERS'
-  | 'OPEN_ANALYTICS'
-  | 'OPEN_PRODUCTION'
+  | 'SEARCH_COMMAND'        // Universal search: "search Mumbai", "find cotton"
+  | 'SHOW_COMMAND'          // Universal show: "show leads", "display payments"
+  | 'OPEN_COMMAND'          // Universal open: "open customers", "navigate to orders"
+  | 'CREATE_COMMAND'        // Universal create: "create lead", "add customer" 
+  | 'CHECK_COMMAND'         // Universal check: "check status", "verify payment"
+  | 'OPEN_LEADS'           // Legacy support
+  | 'OPEN_PAYMENTS'        // Legacy support
+  | 'OPEN_CUSTOMERS'       // Legacy support
+  | 'OPEN_INVENTORY'       // Legacy support
+  | 'OPEN_ORDERS'          // Legacy support
+  | 'OPEN_ANALYTICS'       // Legacy support
+  | 'OPEN_PRODUCTION'      // Legacy support
   | 'SHOW_BUSINESS_OVERVIEW'
   | 'SHOW_PRIORITIES'
   | 'UNKNOWN_INTENT'

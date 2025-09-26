@@ -149,54 +149,76 @@ function FloatingVoiceAssistant({
     return commands[stage as keyof typeof commands] || commands.dashboard;
   };
 
-  // Extract search term from voice command
-  const extractSearchTerm = useCallback((command: string): string => {
-    const lowerCommand = command.toLowerCase().trim();
-    
-    // English patterns
-    if (lowerCommand.includes('search for ')) {
-      return command.substring(command.toLowerCase().indexOf('search for ') + 11).trim();
-    }
-    if (lowerCommand.includes('find ')) {
-      return command.substring(command.toLowerCase().indexOf('find ') + 5).trim();
-    }
-    if (lowerCommand.includes('look for ')) {
-      return command.substring(command.toLowerCase().indexOf('look for ') + 9).trim();
-    }
-    if (lowerCommand.includes('locate ')) {
-      return command.substring(command.toLowerCase().indexOf('locate ') + 7).trim();
+  // Extract search query from NLP payload (replaces custom extraction logic)
+  const extractSearchQuery = useCallback((result: any): string | null => {
+    // Use new structured payload from Universal Command Processor
+    if (result.payload && result.payload.query) {
+      return result.payload.query;
     }
     
-    // Hindi patterns
-    if (lowerCommand.includes(' खोजें')) {
-      return command.replace(/\s+खोजें.*$/i, '').trim();
-    }
-    if (lowerCommand.includes(' ढूंढें')) {
-      return command.replace(/\s+ढूंढें.*$/i, '').trim();
+    // Fallback for legacy results without payload
+    if (result.originalText) {
+      // This should rarely happen with the new architecture
+      return result.originalText.trim();
     }
     
-    // Gujarati patterns  
-    if (lowerCommand.includes(' શોધો')) {
-      return command.replace(/\s+શોધો.*$/i, '').trim();
-    }
-    
-    // If no specific pattern found, use the whole command as search term
-    return command.trim();
+    return null;
   }, []);
 
-  // Execute actions based on detected intent
-  const executeVoiceAction = useCallback(async (intent: string, originalCommand?: string) => {
-    // Execute action based on detected intent
+  // Execute actions based on detected intent and NLP result
+  const executeVoiceAction = useCallback(async (nlpResult: any) => {
+    const { intent } = nlpResult;
+    // eslint-disable-next-line no-console
+    console.log('🎯 executeVoiceAction called with intent:', intent, 'full result:', nlpResult);
     
     switch (intent) {
       case 'SEARCH_COMMAND':
-        if (onPerformSearch && originalCommand) {
-          const searchTerm = extractSearchTerm(originalCommand);
-          if (searchTerm) {
-            onPerformSearch(searchTerm);
+        if (onPerformSearch) {
+          const searchQuery = extractSearchQuery(nlpResult);
+          // eslint-disable-next-line no-console
+          console.log('🔍 Extracted search query:', searchQuery, 'from result:', nlpResult);
+          if (searchQuery) {
+            // eslint-disable-next-line no-console
+            console.log('🚀 Calling onPerformSearch with query:', searchQuery);
+            onPerformSearch(searchQuery);
+          } else {
+            // eslint-disable-next-line no-console
+            console.log('❌ No search query extracted - search not executed');
           }
         }
         break;
+      
+      // Universal command support
+      case 'SHOW_COMMAND':
+      case 'OPEN_COMMAND':
+        // Determine target from payload
+        const target = nlpResult.payload?.target;
+        switch (target) {
+          case 'leads':
+            onNavigateToLeads?.();
+            break;
+          case 'payments':
+            onNavigateToPayments?.();
+            break;
+          case 'customers':
+            onNavigateToCustomers?.();
+            break;
+          case 'orders':
+            onNavigateToQuotes?.(); // Map to quotes/sales orders
+            break;
+          case 'inventory':
+            onNavigateToInventory?.();
+            break;
+          case 'analytics':
+            onNavigateToAnalytics?.();
+            break;
+          default:
+            // Handle unknown target
+            break;
+        }
+        break;
+      
+      // Legacy intent support (backward compatibility)
       case 'OPEN_LEADS':
         onNavigateToLeads?.();
         break;
@@ -231,19 +253,28 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, onPerformSearch, extractSearchTerm]);
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, onPerformSearch, extractSearchQuery]);
 
   // Enhanced voice command processing with NLP
   const processVoiceCommand = useCallback(async (command: string) => {
+    // eslint-disable-next-line no-console
+    console.log('🧠 Processing voice command:', command);
+    
     try {
       // Use new NLP service for command processing
+      // eslint-disable-next-line no-console
+      console.log('🔥 About to call nlpService.processVoiceCommand with:', command, 'nlpService:', nlpService);
       const result = await nlpService.processVoiceCommand(command, businessData, currentProcessStage);
       
-      // Debug information in development mode
-      // Voice command processed successfully
+      // eslint-disable-next-line no-console
+      console.log('🧠 NLP result:', result);
       
-      // Execute the appropriate action based on intent
-      await executeVoiceAction(result.intent, command);
+      // Execute the appropriate action based on intent (pass full result)
+      // eslint-disable-next-line no-console
+      console.log('⚡ About to call executeVoiceAction with result:', result);
+      await executeVoiceAction(result);
+      // eslint-disable-next-line no-console
+      console.log('✅ executeVoiceAction completed successfully');
       
       // Only show popup for unknown intents and errors
       if (result.intent === 'UNKNOWN_INTENT') {
@@ -272,19 +303,27 @@ function FloatingVoiceAssistant({
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
+        // eslint-disable-next-line no-console
+        console.log('🎤 Voice recognition result:', transcript);
         processVoiceCommand(transcript); 
         setIsListening(false);
       };
 
-      recognition.onerror = () => {
+      recognition.onerror = (event: SpeechRecognitionEvent) => {
+        // eslint-disable-next-line no-console
+        console.log('🎤 Voice recognition error:', event.error);
         setIsListening(false);
       };
 
       recognition.onend = () => {
+        // eslint-disable-next-line no-console
+        console.log('🎤 Voice recognition ended');
         setIsListening(false);
       };
 
       if (isListening) {
+        // eslint-disable-next-line no-console
+        console.log('🎤 Starting voice recognition...');
         recognition.start();
       }
     }

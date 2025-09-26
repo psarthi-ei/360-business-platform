@@ -1,7 +1,9 @@
 // Local NLP Provider - Fast, Free Pattern Matching
 // Handles common voice commands without AI API calls
+// Enhanced with Universal Command Processing
 
 import { NLPProvider, VoiceIntent, LocalPattern } from './types';
+import { universalCommandProcessor } from './UniversalCommandProcessor';
 
 export class LocalNLPProvider implements NLPProvider {
   name = 'local';
@@ -90,6 +92,32 @@ export class LocalNLPProvider implements NLPProvider {
   ];
 
   async processCommand(text: string): Promise<VoiceIntent> {
+    // Use Universal Command Processor for modern extraction
+    const universalResult = universalCommandProcessor.processCommand(text);
+    // eslint-disable-next-line no-console
+    console.log('🌍 Universal Command Processor result:', universalResult);
+    
+    // If universal processor found a good match, use it
+    if (universalResult.confidence >= 0.7) {
+      // eslint-disable-next-line no-console
+      console.log('✅ Using Universal Command Processor result (confidence >= 0.7)');
+      return universalResult;
+    }
+    
+    // Fallback to legacy pattern matching for backward compatibility
+    const legacyResult = this.legacyProcessCommand(text);
+    // eslint-disable-next-line no-console
+    console.log('🔄 Legacy pattern matching result:', legacyResult);
+    
+    // Return the result with higher confidence
+    const finalResult = universalResult.confidence > legacyResult.confidence ? universalResult : legacyResult;
+    // eslint-disable-next-line no-console
+    console.log('🎯 Final LocalNLPProvider result:', finalResult, 'chosen from universal:', universalResult.confidence, 'vs legacy:', legacyResult.confidence);
+    return finalResult;
+  }
+
+  // Legacy pattern matching for backward compatibility
+  private legacyProcessCommand(text: string): VoiceIntent {
     const normalizedText = text.toLowerCase().trim();
     let bestMatch: VoiceIntent | null = null;
     let highestScore = 0;

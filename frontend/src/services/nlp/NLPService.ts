@@ -42,12 +42,22 @@ export class NLPService {
     confidence: number;
     processingMethod: string;
     cost: number;
+    payload?: any;
+    originalText?: string;
+    language?: string;
   }> {
     // Processing start time for performance tracking
+    // eslint-disable-next-line no-console
+    console.log('🚀 NLPService.processVoiceCommand called with:', transcript);
     
     try {
       // Process the command using hybrid NLP
       const result = await this.processor.processVoiceCommand(transcript, businessContext);
+      
+      // eslint-disable-next-line no-console
+      console.log('🔧 HybridNLPProcessor result:', result);
+      // eslint-disable-next-line no-console
+      console.log('🔧 result.intent:', result.intent);
       
       // Generate user-friendly response
       const response = this.generateResponse(result.intent, businessContext, currentStage);
@@ -62,7 +72,10 @@ export class NLPService {
         response,
         confidence: result.intent.confidence,
         processingMethod: result.processingMethod,
-        cost: result.cost
+        cost: result.cost,
+        payload: result.intent.payload,
+        originalText: result.intent.originalText,
+        language: result.intent.language
       };
 
     } catch (error) {
@@ -72,7 +85,10 @@ export class NLPService {
         response: 'Sorry, I couldn\'t understand that command. Please try again.',
         confidence: 0,
         processingMethod: 'error',
-        cost: 0
+        cost: 0,
+        payload: undefined,
+        originalText: transcript,
+        language: 'en'
       };
     }
   }

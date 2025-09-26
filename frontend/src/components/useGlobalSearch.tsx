@@ -37,7 +37,19 @@ export function useGlobalSearch(
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const performGlobalSearch = useCallback((query: string) => {
+    // eslint-disable-next-line no-console
+    console.log('performGlobalSearch called with:', query, 'dataSources:', {
+      leads: dataSources.leads?.length || 0,
+      quotes: dataSources.quotes?.length || 0,
+      salesOrders: dataSources.salesOrders?.length || 0,
+      customers: dataSources.customers?.length || 0
+    });
+
+    // Note: Voice command cleaning is now handled by Universal Command Processor
+    // This function receives clean search queries (e.g., "Mumbai" not "search Mumbai")
     if (!query.trim()) {
+      // eslint-disable-next-line no-console
+      console.log('performGlobalSearch called with empty query - clearing results');
       setSearchResults([]);
       setShowSearchResults(false);
       return;
@@ -122,21 +134,34 @@ export function useGlobalSearch(
       });
     }
 
-    setSearchResults(results.slice(0, 8)); // Limit to 8 results
+    const finalResults = results.slice(0, 8); // Limit to 8 results
+    // eslint-disable-next-line no-console
+    console.log('Search completed. Found results:', finalResults.length, finalResults);
+    setSearchResults(finalResults);
     setShowSearchResults(true);
+    // eslint-disable-next-line no-console
+    console.log('setShowSearchResults(true) called with results:', finalResults.length);
   }, [dataSources, navigationHandlers]);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
+    // eslint-disable-next-line no-console
+    console.log('Search query changed:', query);
+    // eslint-disable-next-line no-console
+    console.log('Raw input event:', e.target.value, 'type:', typeof e.target.value);
     setSearchQuery(query);
     performGlobalSearch(query);
   }, [performGlobalSearch]);
 
   const closeSearchResults = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('closeSearchResults called - hiding search results');
     setShowSearchResults(false);
   }, []);
 
   const clearSearch = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('clearSearch called - clearing all search state');
     setSearchQuery('');
     setSearchResults([]);
     setShowSearchResults(false);
