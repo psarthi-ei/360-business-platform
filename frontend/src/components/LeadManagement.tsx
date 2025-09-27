@@ -46,6 +46,7 @@ function LeadManagement({
   const [showAddModal, setShowAddModal] = useState(false);
   const [leads, setLeads] = useState<Lead[]>(mockLeads);
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [editingLead, setEditingLead] = useState<Lead | null>(null);
 
   // Auto-open modal based on URL parameter
   useEffect(() => {
@@ -95,6 +96,54 @@ function LeadManagement({
     setTimeout(() => {
       setSuccessMessage('');
     }, 3000);
+  };
+
+  // Handle updating existing lead
+  const handleUpdateLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => {
+    if (!editingLead) return;
+
+    const updatedLead: Lead = {
+      ...leadData,
+      id: editingLead.id,
+      lastContact: `Updated on ${new Date().toLocaleDateString()}`,
+      conversionStatus: editingLead.conversionStatus,
+      convertedToCustomerDate: editingLead.convertedToCustomerDate
+    };
+
+    // Update the lead in the list
+    setLeads(prev => prev.map(lead => 
+      lead.id === editingLead.id ? updatedLead : lead
+    ));
+    
+    // Show success message
+    setSuccessMessage(`Lead "${updatedLead.companyName}" has been updated!`);
+    
+    // Clear editing state
+    setEditingLead(null);
+    
+    // Clear success message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+  };
+
+  // Handle edit lead action
+  const handleEditLead = (lead: Lead) => {
+    setEditingLead(lead);
+    setShowAddModal(true);
+  };
+
+  // Handle add requirements action
+  const handleAddRequirements = (lead: Lead) => {
+    setEditingLead(lead);
+    setShowAddModal(true);
+    // The modal will auto-expand fabric requirements section
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setShowAddModal(false);
+    setEditingLead(null);
   };
 
   return (
@@ -209,6 +258,67 @@ function LeadManagement({
                 <p><strong>Last Contact:</strong> {lead.lastContact}</p>
               </div>
 
+              {/* UC-L04: Fabric Requirements Display */}
+              {lead.fabricRequirements && (
+                lead.fabricRequirements.fabricType || 
+                lead.fabricRequirements.gsm || 
+                lead.fabricRequirements.quantity
+              ) ? (
+                <div className={styles.fabricRequirements}>
+                  <div className={styles.fabricRequirementsHeader}>
+                    <p><strong>🧵 Fabric Requirements:</strong></p>
+                    <button 
+                      className={styles.editRequirementsBtn}
+                      onClick={() => handleAddRequirements(lead)}
+                      title="Edit fabric requirements"
+                    >
+                      ✏️ Edit
+                    </button>
+                  </div>
+                  <div className={styles.fabricDetails}>
+                    {lead.fabricRequirements.fabricType && (
+                      <span className={styles.fabricTag}>{lead.fabricRequirements.fabricType}</span>
+                    )}
+                    {lead.fabricRequirements.gsm && (
+                      <span className={styles.fabricTag}>{lead.fabricRequirements.gsm} GSM</span>
+                    )}
+                    {lead.fabricRequirements.width && (
+                      <span className={styles.fabricTag}>{lead.fabricRequirements.width}</span>
+                    )}
+                    {lead.fabricRequirements.weaveType && (
+                      <span className={styles.fabricTag}>{lead.fabricRequirements.weaveType}</span>
+                    )}
+                    {lead.fabricRequirements.quantity && (
+                      <span className={styles.fabricTag}>
+                        {lead.fabricRequirements.quantity} {lead.fabricRequirements.unit || 'units'}
+                      </span>
+                    )}
+                    {lead.fabricRequirements.qualityGrade && (
+                      <span className={styles.fabricTag}>{lead.fabricRequirements.qualityGrade}</span>
+                    )}
+                  </div>
+                  {lead.fabricRequirements.colors && (
+                    <p className={styles.fabricColors}><strong>Colors:</strong> {lead.fabricRequirements.colors}</p>
+                  )}
+                  {lead.fabricRequirements.specialProcessing && (
+                    <p className={styles.fabricProcessing}><strong>Processing:</strong> {lead.fabricRequirements.specialProcessing}</p>
+                  )}
+                </div>
+              ) : (
+                <div className={styles.missingFabricRequirements}>
+                  <div className={styles.missingRequirementsHeader}>
+                    <p><strong>🧵 Fabric Requirements:</strong> <span className={styles.incompleteInfo}>Not specified</span></p>
+                    <button 
+                      className={styles.addRequirementsBtn}
+                      onClick={() => handleAddRequirements(lead)}
+                      title="Add fabric requirements"
+                    >
+                      + Add Details
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Related Quote and Order Information */}
               <div className={styles.leadMapping}>
                 {relatedQuotes.length > 0 ? (
@@ -249,6 +359,13 @@ function LeadManagement({
                 <button className={`${styles.actionBtn} ${styles.quoteBtn}`} onClick={() => onShowQuoteFromLead?.(lead.id)}>
                   ₹ {relatedQuotes.length > 0 ? `View Quotes (${relatedQuotes.length})` : 'Send Quote'}
                 </button>
+                <button 
+                  className={`${styles.actionBtn} ${styles.editBtn}`} 
+                  onClick={() => handleEditLead(lead)}
+                  title="Edit lead details"
+                >
+                  ✏️ Edit Lead
+                </button>
               </div>
               
               <div className={styles.leadNotes}>
@@ -267,11 +384,12 @@ function LeadManagement({
       </div>
       </div>
 
-      {/* Add Lead Modal */}
+      {/* Add/Edit Lead Modal */}
       <AddLeadModal
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onAddLead={handleAddLead}
+        onClose={handleModalClose}
+        onAddLead={editingLead ? handleUpdateLead : handleAddLead}
+        editingLead={editingLead}
       />
     </div>
   );

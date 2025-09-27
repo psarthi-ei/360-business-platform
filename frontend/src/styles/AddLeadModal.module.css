@@ -290,3 +290,84 @@
 .formGroup select[value="cold"] {
   color: #2563eb;
 }
+
+/* Fabric Requirements Section - UC-L04 */
+.fabricRequirementsSection {
+  margin: 20px 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sectionHeader:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggleIcon {
+  font-size: 14px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.fabricFields {
+  padding: 20px;
+  background: #fafbfc;
+  border-top: 1px solid #e5e7eb;
+}
+
+.fabricFields .formRow {
+  margin-bottom: 16px;
+}
+
+.fabricFields .formGroup label {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.fabricFields .formGroup input,
+.fabricFields .formGroup select {
+  background: white;
+  border: 1px solid #d1d5db;
+}
+
+.fabricFields .formGroup input:focus,
+.fabricFields .formGroup select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Mobile responsive for fabric section */
+@media (max-width: 768px) {
+  .sectionHeader {
+    padding: 12px 16px;
+  }
+  
+  .sectionHeader h3 {
+    font-size: 15px;
+  }
+  
+  .fabricFields {
+    padding: 16px;
+  }
+}

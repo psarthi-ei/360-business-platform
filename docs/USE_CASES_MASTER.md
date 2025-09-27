@@ -2,7 +2,7 @@
 
 > **📊 Complete Use Case Repository & Implementation Tracker**: All 272 use cases with development status across 8 business stages  
 > **Purpose**: Single source of truth for use case specifications AND implementation progress tracking  
-> **Last Updated**: 2025-09-25
+> **Last Updated**: 2025-09-27
 
 ## 📚 **TABLE OF CONTENTS**
 
@@ -108,7 +108,7 @@
 | UC-L01 | MVP | Create new lead from phone inquiry | Lead created with unique ID | "नया लीड जोड़ें" | ✅ **COMPLETE** | Full modal-based lead creation with validation, textile context, and success messaging |
 | UC-L02 | Post-MVP | Create lead from WhatsApp message | Auto-fill contact details | "WhatsApp से लीड बनाएं" | 📋 **NOT-IMPLEMENTED** | WhatsApp API integration needed |
 | UC-L03 | Post-MVP | Create lead from website form | Lead created with source tracking | N/A (automated) | 📋 **NOT-IMPLEMENTED** | External form integration needed |
-| UC-L04 | MVP | Add fabric requirements to lead | Specification details saved | "requirements add करें" | ✅ **FUNCTIONAL** | Requirements field implemented |
+| UC-L04 | MVP | Add fabric requirements to lead | Specification details saved | ⚠️ **VOICE EXCLUDED FROM MVP** | ✅ **COMPLETE** | Full structured fabric requirements: create & edit modes, GSM/width/weave/quantity fields, visual tags, progress indicators |
 | UC-L05 | MVP | Set lead priority (Hot/Warm/Cold) | Visual priority badge updated | "इस लीड को hot बनाएं" | ✅ **FUNCTIONAL** | Priority badges working |
 | UC-L06 | MVP | Add follow-up notes to lead | Note timestamped and saved | "नोट जोड़ें" | ✅ **FUNCTIONAL** | Note functionality complete |
 | UC-L07 | MVP | Schedule follow-up for lead | Reminder created in calendar | "कल follow-up सेट करें" | ✅ **FUNCTIONAL** | Calendar integration working |
@@ -687,6 +687,16 @@
 - **Total Voice Commands**: 249 out of 272 use cases (91.5% coverage)
 - **Automated Actions**: 23 use cases (system-triggered, no voice command needed)
 - **Primary Languages**: Gujarati, Hindi, English (trilingual support)
+
+### Voice Command Implementation Strategy (MVP Phase)
+
+**Current MVP Approach**: Voice commands are excluded for data entry/update operations to keep MVP simple and focused.
+
+- **✅ Included in MVP**: Voice commands for retrieval and navigation ("show hot leads", "display dashboard")
+- **⚠️ Excluded from MVP**: Voice commands for form filling and data updates ("requirements add करें")
+- **📅 Post-MVP**: Voice data entry will be added after core functionality is stable
+
+**Rationale**: Data entry via voice requires complex natural language processing and validation logic that would significantly delay MVP delivery. Focus remains on core business workflow completion.
 
 ### Business Flow Integration
 

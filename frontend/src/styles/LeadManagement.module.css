@@ -492,3 +492,144 @@
     margin-top: 10px;
   }
 }
+
+/* UC-L04: Fabric Requirements Display Styles */
+.fabricRequirements {
+  margin: 15px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.fabricDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.fabricTag {
+  display: inline-block;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fabricColors,
+.fabricProcessing {
+  margin: 4px 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.missingFabricRequirements {
+  margin: 15px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.incompleteInfo {
+  color: #fbbf24;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Fabric Requirements Action Buttons */
+.fabricRequirementsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.missingRequirementsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.editRequirementsBtn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.editRequirementsBtn:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  transform: translateY(-1px);
+}
+
+.addRequirementsBtn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.addRequirementsBtn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  transform: translateY(-1px);
+}
+
+.editBtn {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.editBtn:hover {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile responsive for fabric requirements */
+@media (max-width: 768px) {
+  .fabricTag {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+  
+  .fabricColors,
+  .fabricProcessing {
+    font-size: 0.8rem;
+  }
+
+  .fabricRequirementsHeader,
+  .missingRequirementsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .editRequirementsBtn,
+  .addRequirementsBtn {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    min-width: 50px;
+  }
+
+  .editBtn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}

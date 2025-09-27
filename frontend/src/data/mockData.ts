@@ -1,6 +1,19 @@
 // Centralized Mock Data for 360° Business Platform
 // This file contains all sample data used across components to ensure consistency
 
+export interface FabricRequirements {
+  fabricType: string; // Cotton, Silk, Polyester, etc.
+  gsm?: number; // Grams per Square Meter
+  width?: string; // Fabric width (44", 58", etc.)
+  weaveType?: string; // Plain, Twill, Satin, etc.
+  quantity?: number; // Required quantity
+  unit?: 'meters' | 'yards'; // Unit of measurement
+  colors?: string; // Color specifications
+  qualityGrade?: 'A-Grade' | 'B-Grade' | 'Export-Grade' | 'Industrial'; // Quality requirement
+  specialProcessing?: string; // Dyeing, printing, finishing requirements
+  deliveryTimeline?: string; // When fabric is needed
+}
+
 export interface Lead {
   id: string;
   businessProfileId?: string; // Links to company when BusinessProfile created
@@ -23,6 +36,9 @@ export interface Lead {
   budget: string;
   timeline: string;
   priority: 'hot' | 'warm' | 'cold';
+  
+  // UC-L04: Structured Fabric Requirements
+  fabricRequirements?: FabricRequirements;
   
   // Relationship Tracking
   lastContact: string;
@@ -462,6 +478,18 @@ export const mockLeads: Lead[] = [
     budget: '₹12-15 lakhs',
     timeline: '45 days',
     priority: 'hot',
+    fabricRequirements: {
+      fabricType: 'Cotton',
+      gsm: 180,
+      width: '44 inches',
+      weaveType: 'Plain',
+      quantity: 8000,
+      unit: 'yards',
+      colors: 'Natural white, dye-ready',
+      qualityGrade: 'Industrial',
+      specialProcessing: 'Pre-shrunk, ready for industrial use',
+      deliveryTimeline: '45 days'
+    },
     lastContact: 'Today 10:30 AM - "Very interested, send samples"',
     notes: 'New potential customer. Quick decision maker. Needs samples by Friday.',
     conversionStatus: 'active_lead'
@@ -481,6 +509,18 @@ export const mockLeads: Lead[] = [
     budget: '₹10-14 lakhs',
     timeline: '60 days',
     priority: 'warm',
+    fabricRequirements: {
+      fabricType: 'Cotton Blend',
+      gsm: 150,
+      width: '44 inches',
+      weaveType: 'Twill',
+      quantity: 6000,
+      unit: 'yards',
+      colors: 'Navy blue, forest green, burgundy',
+      qualityGrade: 'A-Grade',
+      specialProcessing: 'Soft finish, color-fast dyeing',
+      deliveryTimeline: '60 days'
+    },
     lastContact: 'Yesterday - "Comparing suppliers, will decide soon"',
     notes: 'Price-sensitive buyer. Interested in long-term partnership.',
     conversionStatus: 'quote_sent'

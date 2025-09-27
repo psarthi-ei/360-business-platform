@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Lead } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { Lead, FabricRequirements } from '../data/mockData';
 import styles from '../styles/AddLeadModal.module.css';
 
 interface AddLeadModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddLead: (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => void;
+  editingLead?: Lead | null;
 }
 
-function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
+function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalProps) {
 
   const [formData, setFormData] = useState({
     companyName: '',
@@ -24,11 +25,98 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
     notes: '',
     contact: '', // Combined phone/email field
     designation: '',
-    department: ''
+    department: '',
+    // Fabric Requirements
+    fabricRequirements: {
+      fabricType: '',
+      gsm: undefined,
+      width: '',
+      weaveType: '',
+      quantity: undefined,
+      unit: 'meters',
+      colors: '',
+      qualityGrade: undefined,
+      specialProcessing: '',
+      deliveryTimeline: ''
+    } as FabricRequirements
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showFabricRequirements, setShowFabricRequirements] = useState(false);
+
+  // Pre-populate form when editing
+  useEffect(() => {
+    if (editingLead) {
+      setFormData({
+        companyName: editingLead.companyName || '',
+        contactPerson: editingLead.contactPerson || '',
+        phone: editingLead.phone || '',
+        email: editingLead.email || '',
+        location: editingLead.location || '',
+        business: editingLead.business || '',
+        inquiry: editingLead.inquiry || '',
+        budget: editingLead.budget || '',
+        timeline: editingLead.timeline || '',
+        priority: editingLead.priority || 'warm',
+        notes: editingLead.notes || '',
+        contact: editingLead.contact || '',
+        designation: editingLead.designation || '',
+        department: editingLead.department || '',
+        fabricRequirements: editingLead.fabricRequirements || {
+          fabricType: '',
+          gsm: undefined,
+          width: '',
+          weaveType: '',
+          quantity: undefined,
+          unit: 'meters',
+          colors: '',
+          qualityGrade: undefined,
+          specialProcessing: '',
+          deliveryTimeline: ''
+        } as FabricRequirements
+      });
+      
+      // Auto-expand fabric requirements if editing and there are existing requirements
+      const hasExistingRequirements = editingLead.fabricRequirements && (
+        editingLead.fabricRequirements.fabricType ||
+        editingLead.fabricRequirements.gsm ||
+        editingLead.fabricRequirements.quantity
+      );
+      setShowFabricRequirements(!!hasExistingRequirements);
+    } else {
+      // Reset form for new lead
+      setFormData({
+        companyName: '',
+        contactPerson: '',
+        phone: '',
+        email: '',
+        location: '',
+        business: '',
+        inquiry: '',
+        budget: '',
+        timeline: '',
+        priority: 'warm',
+        notes: '',
+        contact: '',
+        designation: '',
+        department: '',
+        fabricRequirements: {
+          fabricType: '',
+          gsm: undefined,
+          width: '',
+          weaveType: '',
+          quantity: undefined,
+          unit: 'meters',
+          colors: '',
+          qualityGrade: undefined,
+          specialProcessing: '',
+          deliveryTimeline: ''
+        } as FabricRequirements
+      });
+      setShowFabricRequirements(false);
+    }
+  }, [editingLead]);
 
   // Gujarat textile cities for location dropdown
   const gujaratCities = [
@@ -55,13 +143,43 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
     'Planned (2-3 months)', 'Future (3-6 months)', 'Long-term (6+ months)'
   ];
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-      // Auto-populate contact field with phone for compatibility
-      contact: field === 'phone' ? value : prev.contact
-    }));
+  // Fabric specification options
+  const fabricTypes = [
+    'Cotton', 'Silk', 'Polyester', 'Cotton Blend', 'Silk Blend', 'Viscose', 
+    'Linen', 'Georgette', 'Chiffon', 'Canvas', 'Denim', 'Other'
+  ];
+
+  const widthOptions = [
+    '36 inches', '44 inches', '58 inches', '60 inches', '72 inches'
+  ];
+
+  const weaveTypes = [
+    'Plain', 'Twill', 'Satin', 'Jacquard', 'Dobby', 'Herringbone', 'Other'
+  ];
+
+  const qualityGrades = [
+    'A-Grade', 'B-Grade', 'Export-Grade', 'Industrial'
+  ];
+
+  const handleInputChange = (field: string, value: string | number) => {
+    // Handle fabric requirements fields
+    if (field.startsWith('fabric.')) {
+      const fabricField = field.replace('fabric.', '');
+      setFormData(prev => ({
+        ...prev,
+        fabricRequirements: {
+          ...prev.fabricRequirements,
+          [fabricField]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value,
+        // Auto-populate contact field with phone for compatibility
+        contact: field === 'phone' ? String(value) : prev.contact
+      }));
+    }
 
     // Clear error when user starts typing
     if (errors[field]) {
@@ -130,7 +248,19 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
       notes: '',
       contact: '',
       designation: '',
-      department: ''
+      department: '',
+      fabricRequirements: {
+        fabricType: '',
+        gsm: undefined,
+        width: '',
+        weaveType: '',
+        quantity: undefined,
+        unit: 'meters',
+        colors: '',
+        qualityGrade: undefined,
+        specialProcessing: '',
+        deliveryTimeline: ''
+      } as FabricRequirements
     });
     
     setIsSubmitting(false);
@@ -148,7 +278,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
     <div className={styles.modalOverlay} data-testid="modal-overlay" onClick={handleClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>📋 Add New Lead</h2>
+          <h2>{editingLead ? '✏️ Edit Lead' : '📋 Add New Lead'}</h2>
           <button className={styles.closeButton} onClick={handleClose}>×</button>
         </div>
 
@@ -296,6 +426,149 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
             {errors.inquiry && <span className={styles.errorText}>{errors.inquiry}</span>}
           </div>
 
+          {/* Fabric Requirements Section - UC-L04 */}
+          <div className={styles.fabricRequirementsSection}>
+            <div className={styles.sectionHeader} onClick={() => setShowFabricRequirements(!showFabricRequirements)}>
+              <h3>🧵 Fabric Requirements (Optional)</h3>
+              <span className={styles.toggleIcon}>{showFabricRequirements ? '▼' : '▶'}</span>
+            </div>
+            
+            {showFabricRequirements && (
+              <div className={styles.fabricFields}>
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="fabricType">Fabric Type</label>
+                    <select
+                      id="fabricType"
+                      value={formData.fabricRequirements.fabricType}
+                      onChange={(e) => handleInputChange('fabric.fabricType', e.target.value)}
+                    >
+                      <option value="">Select Fabric Type</option>
+                      {fabricTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="gsm">GSM (Weight)</label>
+                    <input
+                      id="gsm"
+                      type="number"
+                      value={formData.fabricRequirements.gsm || ''}
+                      onChange={(e) => handleInputChange('fabric.gsm', e.target.value ? parseInt(e.target.value) : '')}
+                      placeholder="e.g., 150"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="width">Fabric Width</label>
+                    <select
+                      id="width"
+                      value={formData.fabricRequirements.width}
+                      onChange={(e) => handleInputChange('fabric.width', e.target.value)}
+                    >
+                      <option value="">Select Width</option>
+                      {widthOptions.map(width => (
+                        <option key={width} value={width}>{width}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="weaveType">Weave Type</label>
+                    <select
+                      id="weaveType"
+                      value={formData.fabricRequirements.weaveType}
+                      onChange={(e) => handleInputChange('fabric.weaveType', e.target.value)}
+                    >
+                      <option value="">Select Weave</option>
+                      {weaveTypes.map(weave => (
+                        <option key={weave} value={weave}>{weave}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="quantity">Quantity</label>
+                    <input
+                      id="quantity"
+                      type="number"
+                      value={formData.fabricRequirements.quantity || ''}
+                      onChange={(e) => handleInputChange('fabric.quantity', e.target.value ? parseInt(e.target.value) : '')}
+                      placeholder="e.g., 5000"
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="unit">Unit</label>
+                    <select
+                      id="unit"
+                      value={formData.fabricRequirements.unit}
+                      onChange={(e) => handleInputChange('fabric.unit', e.target.value)}
+                    >
+                      <option value="meters">Meters</option>
+                      <option value="yards">Yards</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="colors">Colors</label>
+                    <input
+                      id="colors"
+                      type="text"
+                      value={formData.fabricRequirements.colors}
+                      onChange={(e) => handleInputChange('fabric.colors', e.target.value)}
+                      placeholder="e.g., Navy blue, White, Red"
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="qualityGrade">Quality Grade</label>
+                    <select
+                      id="qualityGrade"
+                      value={formData.fabricRequirements.qualityGrade || ''}
+                      onChange={(e) => handleInputChange('fabric.qualityGrade', e.target.value)}
+                    >
+                      <option value="">Select Quality</option>
+                      {qualityGrades.map(grade => (
+                        <option key={grade} value={grade}>{grade}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="specialProcessing">Special Processing</label>
+                  <input
+                    id="specialProcessing"
+                    type="text"
+                    value={formData.fabricRequirements.specialProcessing}
+                    onChange={(e) => handleInputChange('fabric.specialProcessing', e.target.value)}
+                    placeholder="e.g., Pre-shrunk, mercerized, dye-ready"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="deliveryTimeline">Fabric Delivery Timeline</label>
+                  <input
+                    id="deliveryTimeline"
+                    type="text"
+                    value={formData.fabricRequirements.deliveryTimeline}
+                    onChange={(e) => handleInputChange('fabric.deliveryTimeline', e.target.value)}
+                    placeholder="e.g., Within 30 days"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className={styles.formGroup}>
             <label htmlFor="notes">Additional Notes</label>
             <textarea
@@ -321,7 +594,10 @@ function AddLeadModal({ isOpen, onClose, onAddLead }: AddLeadModalProps) {
               className={styles.submitButton}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding Lead...' : 'Add Lead'}
+              {isSubmitting ? 
+                (editingLead ? 'Updating Lead...' : 'Adding Lead...') : 
+                (editingLead ? 'Update Lead' : 'Add Lead')
+              }
             </button>
           </div>
         </form>
