@@ -119,71 +119,66 @@ function FloatingVoiceAssistant({
     const commands = {
       'dashboard': [
         'Search Mumbai cotton mills',
-        'Find hot leads',
-        'Show business overview',
-        'What needs attention today',
-        'Go to hot leads',
-        'Check payment status',
-        'Mumbai में cotton mills खोजें',
-        'बिजनेस ओवरव्यू दिखाएं'
+        'કોટન ઓર્ડર શોધો',
+        'Show hot leads',
+        'Pending orders दिखाएं',
+        'Check payment status'
       ],
       'leads': [
-        'Search cotton customers',
-        'Find Gujarat leads',
-        'Show hot leads',
-        'Add new lead',
-        'Call next lead',
-        'Lead conversion rate',
+        'Search Surat textile leads',
         'गुजरात के लीड्स खोजें',
-        'हॉट लीड्स दिखाएं'
+        'Show hot leads',
+        'Find cotton customers',
+        'Add new lead'
       ],
       'quotes': [
-        'Search pending orders',
-        'Find high value quotes',
-        'Create quote',
-        'Show pending quotes',
-        'Quote approval status',
-        'Send quote to customer'
+        'Search pending quotes',
+        'હાઈ વેલ્યુ ક્વોટ્સ શોધો',
+        'Create new quote',
+        'Outstanding orders दिखाएं',
+        'Quote approval status'
       ],
       'payments': [
         'Search overdue payments',
-        'Find large payments',
-        'Record payment',
-        'Outstanding payments',
-        'Customer conversion',
-        'Payment reminders'
+        'બકાયા પેમેન્ટ શોધો',
+        'Show pending payments',
+        'Large payments ढूंढें',
+        'Record payment'
       ],
       'production': [
-        'Production status',
+        'Search production orders',
+        'ઉત્પાદન સ્ટેટસ બતાવો',
+        'Quality check करें',
         'Start production',
-        'Quality check',
         'Production report'
       ],
       'inventory': [
-        'Stock check',
-        'Material order',
-        'Stock allocation',
-        'Inventory report'
+        'Search cotton stock',
+        'સ્ટોક ચેક કરો',
+        'Material order दें',
+        'Inventory status',
+        'Stock allocation'
       ],
       'fulfillment': [
+        'Search ready orders',
+        'શિપિંગ સ્ટેટસ બતાવો',
+        'Dispatch tracking करें',
         'Ready to ship',
-        'Dispatch status',
-        'Delivery tracking',
-        'Confirm delivery'
+        'Delivery confirmation'
       ],
       'customers': [
         'Search VIP customers',
-        'Find repeat customers',
+        'વીઆઈપી ગ્રાહકો શોધો',
+        'Repeat customers ढूंढें',
         'Customer profile',
-        'VIP customers',
-        'Customer feedback',
-        'Repeat opportunities'
+        'Customer feedback'
       ],
       'analytics': [
-        'Business performance',
-        'Monthly sales',
-        'Process efficiency',
-        'Show KPIs'
+        'Search business reports',
+        'મંથલી સેલ્સ બતાવો',
+        'Performance metrics दिखाएं',
+        'Show KPIs',
+        'Business analytics'
       ]
     };
     return commands[stage as keyof typeof commands] || commands.dashboard;
