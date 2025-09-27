@@ -372,15 +372,33 @@ function FloatingVoiceAssistant({
     }
   }, [businessData, currentProcessStage, executeVoiceAction]);
 
+  // Browser/app context detection (used across multiple functions)
+  const isGoogleApp = /GoogleApp/.test(navigator.userAgent);
+  const isWebView = (window.navigator as any).standalone === false && /Mobile|Android/.test(navigator.userAgent);
+  const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
+  const confidenceThreshold = isGoogleApp || isWebView ? 0.4 : 0.6;
+
   // Initialize speech recognition instance once
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
       
+      // Enhanced recognition settings for better mobile compatibility
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-IN';
+      
+      // Try to set maxAlternatives if supported
+      try {
+        (recognition as any).maxAlternatives = 3;
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log('maxAlternatives not supported in this browser');
+      }
+      
+      // eslint-disable-next-line no-console
+      console.log('🎤 Voice recognition config - GoogleApp:', isGoogleApp, 'WebView:', isWebView, 'Desktop:', isDesktop, 'Confidence threshold:', confidenceThreshold);
 
       recognition.onstart = () => {
         // eslint-disable-next-line no-console
@@ -389,9 +407,32 @@ function FloatingVoiceAssistant({
       };
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
-        const transcript = event.results[0][0].transcript;
+        // Get all alternatives and find the best one
+        const results = event.results[0];
+        let bestTranscript = '';
+        let bestConfidence = 0;
+        const allAlternatives: Array<{transcript: string, confidence: number}> = [];
+        
+        // Collect all alternatives with confidence scores
+        for (let i = 0; i < results.length; i++) {
+          const alternative = results[i];
+          allAlternatives.push({
+            transcript: alternative.transcript,
+            confidence: alternative.confidence
+          });
+          
+          if (alternative.confidence > bestConfidence) {
+            bestConfidence = alternative.confidence;
+            bestTranscript = alternative.transcript;
+          }
+        }
+        
         // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition result:', transcript);
+        console.log('🎤 Voice recognition results:', {
+          best: { transcript: bestTranscript, confidence: bestConfidence },
+          all: allAlternatives,
+          threshold: confidenceThreshold
+        });
         
         // Clear timeout
         if (timeoutRef.current) {
@@ -399,13 +440,34 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
-        // Process the command
-        processVoiceCommand(transcript); 
+        // Check if confidence meets threshold
+        if (bestConfidence >= confidenceThreshold) {
+          // High confidence - process command
+          processVoiceCommand(bestTranscript);
+        } else if (allAlternatives.length > 1) {
+          // Low confidence but multiple alternatives - try the next best
+          const secondBest = allAlternatives.sort((a, b) => b.confidence - a.confidence)[1];
+          if (secondBest && secondBest.confidence >= (confidenceThreshold * 0.8)) {
+            // eslint-disable-next-line no-console
+            console.log('🎤 Using second-best alternative:', secondBest);
+            processVoiceCommand(secondBest.transcript);
+          } else {
+            // Show suggestions for unclear speech
+            setVoiceResponse(`I didn't catch that clearly. Try: "Search Mumbai", "Show leads", or "Add new lead"`);
+            setShowVoiceResponse(true);
+            setVoiceState('ERROR');
+          }
+        } else {
+          // Single low-confidence result - show suggestions
+          setVoiceResponse(`Please speak clearly. Try: "Search [company]", "Show [leads/payments]", or "Add new lead"`);
+          setShowVoiceResponse(true);
+          setVoiceState('ERROR');
+        }
       };
 
       recognition.onerror = (event: SpeechRecognitionEvent) => {
         // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition error:', event.error);
+        console.log('🎤 Voice recognition error:', event.error, 'Context:', { isGoogleApp, isWebView });
         
         // Clear timeout
         if (timeoutRef.current) {
@@ -413,14 +475,49 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
-        // Don't show error UI for "aborted" errors (natural after processing commands)
-        if (event.error && typeof event.error === 'string' && event.error === 'aborted') {
-          // Just reset to idle for aborted errors
-          setVoiceState('IDLE');
-          return;
+        // Handle different error types based on context
+        if (event.error && typeof event.error === 'string') {
+          switch (event.error) {
+            case 'aborted':
+              // Natural abort after processing - just reset
+              setVoiceState('IDLE');
+              return;
+              
+            case 'no-speech':
+              // Common in Google App - provide helpful feedback
+              if (isGoogleApp || isWebView) {
+                setVoiceResponse('No speech detected. Please speak closer to the microphone and try again.');
+              } else {
+                setVoiceResponse('Please speak into the microphone. Try saying "Search Mumbai" or "Show leads".');
+              }
+              setShowVoiceResponse(true);
+              setVoiceState('ERROR');
+              return;
+              
+            case 'audio-capture':
+              // Microphone access issues
+              setVoiceResponse('Microphone access required. Please check your browser permissions.');
+              setShowVoiceResponse(true);
+              setVoiceState('ERROR');
+              return;
+              
+            case 'network':
+              // Network issues - more common in WebViews
+              setVoiceResponse('Network error. Please check your connection and try again.');
+              setShowVoiceResponse(true);
+              setVoiceState('ERROR');
+              return;
+              
+            default:
+              // Other errors - show generic but helpful message
+              setVoiceResponse('Voice recognition unavailable. Try typing your search or refresh the page.');
+              setShowVoiceResponse(true);
+              setVoiceState('ERROR');
+              return;
+          }
         }
         
-        // Show error UI only for real errors
+        // Fallback for unknown errors
         setVoiceState('ERROR');
         setVoiceResponse(`Voice recognition error: ${event.error || 'Unknown error'}`);
         setShowVoiceResponse(true);
@@ -470,15 +567,22 @@ function FloatingVoiceAssistant({
         // eslint-disable-next-line no-console
         console.log('🎤 Starting voice recognition...');
         
+        // Adaptive timeout based on browser context
+        const adaptiveTimeout = (() => {
+          if (isGoogleApp || isWebView) return 12000; // 12s for Google App/WebView (often slower)
+          if (isDesktop) return 6000; // 6s for desktop (usually faster)
+          return 8000; // 8s for mobile Chrome (default)
+        })();
+        
         // Set timeout for recognition
         timeoutRef.current = setTimeout(() => {
           // eslint-disable-next-line no-console
-          console.log('⏰ Voice recognition timeout');
+          console.log('⏰ Voice recognition timeout after', adaptiveTimeout + 'ms');
           if (recognitionRef.current) {
             recognitionRef.current.abort();
           }
           setVoiceState('IDLE');
-        }, 8000); // 8 second timeout
+        }, adaptiveTimeout);
         
         recognitionRef.current.start();
       } catch (error) {
