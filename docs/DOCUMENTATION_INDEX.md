@@ -155,9 +155,54 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
+### **3A. NLP_ARCHITECTURE_COMPLETE.md** - Voice Command Engine Architecture
+**Purpose**: Complete technical documentation for the multilingual NLP system powering voice commands
+
+**Contains**:
+- **System Architecture**: Hybrid local/AI processing for cost-effective voice command handling
+- **Multilingual Support**: English, Hindi, Gujarati voice command processing patterns
+- **Business Context Integration**: Textile industry terminology and workflow understanding
+- **Cost Management**: Local pattern matching (80%+ commands) with AI fallback for complex queries
+- **Implementation Details**: File structure, interfaces, testing patterns, integration points
+
+**Update Schedule**: When NLP capabilities expand, new languages added, or processing logic changes
+
+---
+
+### **3B. SEARCH_ARCHITECTURE.md** - Global Search System Architecture
+**Purpose**: Technical architecture for universal search functionality across all business data
+
+**Contains**:
+- **Search Architecture**: Multi-source data integration and search result ranking
+- **Data Flow Design**: How search queries process leads, customers, orders, inventory, and analytics
+- **Interface Definitions**: SearchProvider, SearchResult, and integration patterns
+- **Performance Strategy**: Real-time search, caching, and database optimization approaches
+- **Voice Integration**: How voice commands trigger global search functionality
+
+**Update Schedule**: When search capabilities expand, new data sources added, or performance optimizations implemented
+
+---
+
 ### **DEVELOPMENT & IMPLEMENTATION**
 
-### **4. CLAUDE_WORKING_GUIDE.md** - How Claude and Partha Work Together
+### **4. DAILY_PROGRESS_LOG.md** - Development Progress & Timeline Tracking
+**Purpose**: Complete development timeline, productivity metrics, and daily work tracking
+
+**Contains**:
+- **Project Timeline Overview**: 32+ days of development with commit history analysis
+- **Daily Work Analysis**: Week-by-week breakdown of development activities and hours
+- **Productivity Metrics**: Commits per day, active vs off days, development velocity
+- **Milestone Tracking**: Major feature completions and technical achievements
+- **Development Patterns**: Learning curve analysis and productivity insights
+
+**Update Schedule**: 
+- **DAILY** - Add new entries for each development session
+- **WEEKLY** - Weekly summaries and productivity analysis
+- **MILESTONE** - Major achievement tracking and timeline updates
+
+---
+
+### **5. CLAUDE_WORKING_GUIDE.md** - How Claude and Partha Work Together
 **Purpose**: Proven methods for effective Claude-human collaboration based on successful working patterns
 
 **Contains**:
@@ -170,7 +215,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **5. USE_CASES_MASTER.md** - Complete Use Case Specifications & Implementation Tracking
+### **6. USE_CASES_MASTER.md** - Complete Use Case Specifications & Implementation Tracking
 **Purpose**: Single source of truth for all use case specifications, implementation status, and development strategy
 
 **Contains**:
@@ -190,7 +235,7 @@ This is the master navigation document that guides you to all project informatio
 
 ### **DESIGN & USER EXPERIENCE**
 
-### **6. DASHBOARD_SPECIFICATIONS.md** - UI Implementation Guide
+### **8. DASHBOARD_SPECIFICATIONS.md** - UI Implementation Guide
 **Purpose**: Complete technical implementation guide for dashboard and UI components
 
 **Contains**:
@@ -204,7 +249,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **7. DESIGN_SYSTEM.md** - Visual Design Standards
+### **9. DESIGN_SYSTEM.md** - Visual Design Standards
 **Purpose**: UI/UX design patterns and business context guidelines
 
 **Contains**:
@@ -220,7 +265,7 @@ This is the master navigation document that guides you to all project informatio
 
 ### **MARKETING & STRATEGY**
 
-### **8. MARKETING_STRATEGY.md** - Brand Strategy & Customer Acquisition
+### **10. MARKETING_STRATEGY.md** - Brand Strategy & Customer Acquisition
 **Purpose**: Complete marketing strategy focusing on brand positioning, competitive positioning, and customer acquisition
 
 **Contains**:
@@ -233,7 +278,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **9. WEBSITE_REDESIGN_PLAN.md** - Website Strategy & Implementation
+### **11. WEBSITE_REDESIGN_PLAN.md** - Website Strategy & Implementation
 **Purpose**: Comprehensive website redesign strategy including architecture, content planning, and implementation
 
 **Contains**:
@@ -281,6 +326,10 @@ This is the master navigation document that guides you to all project informatio
 | "What does this button do?" | **DASHBOARD_SPECIFICATIONS.md** | Component behavior and interactions |
 | "How should Claude and I work together?" | **CLAUDE_WORKING_GUIDE.md** | Proven collaboration patterns and communication methods |
 | "What's our technology strategy?" | **TECHNICAL_STRATEGY.md** | Architecture decisions and rationale |
+| "How does voice command processing work?" | **NLP_ARCHITECTURE_COMPLETE.md** | Voice command engine architecture and multilingual processing |
+| "How does global search work?" | **SEARCH_ARCHITECTURE.md** | Search system architecture and data integration |
+| "What's our development velocity?" | **DAILY_PROGRESS_LOG.md** | Development timeline, productivity metrics, and progress tracking |
+| "How many commits per day are we doing?" | **DAILY_PROGRESS_LOG.md** | Daily work analysis and development patterns |
 
 ### **Document Purpose Framework**
 
@@ -327,7 +376,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ## Update Schedule Quick Reference
 
 ### **Daily Updates Required**
-- ✅ **PROGRESS_LOG.md** - Every development session
+- ✅ **DAILY_PROGRESS_LOG.md** - Every development session
 - ✅ **USE_CASES_MASTER.md** - During active development (use TodoWrite tool for real-time tracking)
 
 ### **Weekly Updates (Active Development)**
@@ -339,17 +388,18 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 - ✅ **TECHNICAL_STRATEGY.md** - When architecture decisions change
 
 ### **As Needed Updates**
-- ✅ **LEARNING_CONTEXT.md** - When learning approach evolves
 - ✅ **DESIGN_SYSTEM.md** - After major screen implementations
 - ✅ **BUSINESS_PROCESSES.md** - When business processes are refined
-- ✅ **DOCUMENTATION_GUIDE.md** - When documentation strategy changes
+- ✅ **NLP_ARCHITECTURE_COMPLETE.md** - When voice capabilities expand or processing logic changes
+- ✅ **SEARCH_ARCHITECTURE.md** - When search capabilities expand or performance optimizations implemented
+- ✅ **DOCUMENTATION_INDEX.md** - When documentation strategy changes
 
 ---
 
 ## Practical Workflow Examples
 
 ### **End of Daily Development Session**
-1. Update **PROGRESS_LOG.md** with:
+1. Update **DAILY_PROGRESS_LOG.md** with:
    - What was accomplished today
    - Any challenges faced and solutions found
    - Tomorrow's planned focus
@@ -365,7 +415,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
    - Update module progress percentages in Executive Dashboard
    - Add implementation notes in Notes column
 2. Update **DEVELOPMENT_GUIDE.md** with any new setup steps
-3. Update **PROGRESS_LOG.md** with milestone completion
+3. Update **DAILY_PROGRESS_LOG.md** with milestone completion
 4. Consider if **README.md** needs status update
 
 ### **When Adding New Business Feature**
@@ -383,7 +433,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
    - Review implementation status and priorities
    - Identify next features to develop
    - Update Executive Dashboard metrics
-2. Update **PROGRESS_LOG.md** with focus areas and goals
+2. Update **DAILY_PROGRESS_LOG.md** with focus areas and goals
 
 ### **When Use Case Status Changes**
 1. **IMMEDIATE**: Use TodoWrite tool during development sessions
@@ -407,20 +457,22 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 
 | **What You Want to Document** | **Goes In** | **Why** |
 |---|---|---|
-| **Daily Development Progress (features built, challenges, motivation)** | PROGRESS_LOG.md | Personal daily tracking |
+| **Daily Development Progress (features built, challenges, motivation)** | DAILY_PROGRESS_LOG.md | Personal daily tracking and productivity metrics |
 | **Use Case Implementation Status (UC-L01 completed, MVP priorities)** | USE_CASES_MASTER.md | Implementation progress tracking |
 | **Business Context for Use Cases (workflow logic, business rules)** | BUSINESS_PROCESSES.md | Business domain knowledge |
 | **Visual Design Philosophy & Standards** | DESIGN_SYSTEM.md | Design principles and patterns |
 | **Dashboard Technical Implementation** | DASHBOARD_SPECIFICATIONS.md | UI component architecture |
 | **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
 | **Business Process (Lead→Quote→Order)** | BUSINESS_PROCESSES.md | Industry workflows |
-| **Code Commands & Setup Steps** | DEVELOPMENT_GUIDE.md | How-to instructions |
 | **Feature Requirements (Voice Commands)** | PRODUCT_REQUIREMENTS.md | What to build |
-| **Working Style & Learning Approach** | COLLABORATION_GUIDE.md | Our collaboration methods |
+| **Working Style & Learning Approach** | CLAUDE_WORKING_GUIDE.md | Our collaboration methods |
 | **Project Status (MVP ready, beta launch)** | README.md | Public overview |
 | **3-Level Dashboard Architecture** | DASHBOARD_SPECIFICATIONS.md | Technical implementation |
 | **Mobile-First Design Requirements** | DASHBOARD_SPECIFICATIONS.md | Factory environment specs |
 | **Component Styling & Responsive Design** | DASHBOARD_SPECIFICATIONS.md | UI implementation guide |
+| **Voice Command Processing Logic (NLP, multilingual)** | NLP_ARCHITECTURE_COMPLETE.md | Voice engine technical architecture |
+| **Global Search Implementation (data sources, algorithms)** | SEARCH_ARCHITECTURE.md | Search system technical architecture |
+| **Development Timeline & Velocity (commits per day, productivity)** | DAILY_PROGRESS_LOG.md | Development analytics and tracking |
 
 ### **🔄 Critical Synchronization Rules**
 
@@ -577,6 +629,6 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ---
 
 **Created**: Sep 3, 2025  
-**Updated**: Sep 25, 2025 (consolidated USE_CASES_MASTER.md, retired MVP_PROGRESS.md)  
+**Updated**: Sep 27, 2025 (added NLP_ARCHITECTURE_COMPLETE.md, SEARCH_ARCHITECTURE.md, renamed PROGRESS_LOG.md to DAILY_PROGRESS_LOG.md)  
 **Purpose**: Master navigation hub - always read this first to understand project structure  
 **Next Review**: After backend integration phase
