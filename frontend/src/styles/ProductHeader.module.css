@@ -298,6 +298,7 @@
   .logoSection {
     flex: 1;
     min-width: 0; /* Allow shrinking */
+    max-width: calc(100% - 120px); /* Reserve space for controls */
   }
   
   .logo {
@@ -312,6 +313,7 @@
   .logoTextContainer {
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Prevent overflow but don't truncate */
   }
   
   .logoText {
@@ -320,11 +322,9 @@
   }
   
   .logoTagline {
-    font-size: 9px;
+    font-size: 10px;
     margin-top: -1px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   
   .navigationSection {
@@ -364,8 +364,8 @@
   }
   
   .logoTagline {
-    font-size: 8px;
-    max-width: 120px;
+    font-size: 9px;
+    letter-spacing: 0.1px;
   }
   
   .dashboardButton {

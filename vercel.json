@@ -1,25 +1,10 @@
 {
-  "name": "360-business-platform",
-  "version": 2,
-  "buildCommand": "cd frontend && echo '🚀 Starting Vercel build with quality gates...' && npm run vercel:build && echo '✅ Build completed successfully!'",
-  "installCommand": "cd frontend && npm ci",
+  "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/build",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/static/(.*)",
-      "dest": "frontend/static/$1"
-    },
-    {
-      "src": "/content/(.*)",
-      "dest": "frontend/content/$1"
-    },
-    {
-      "src": "/(favicon\\.ico|logo192\\.png|logo512\\.png|manifest\\.json|robots\\.txt|sitemap\\.xml)",
-      "dest": "frontend/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "frontend/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
