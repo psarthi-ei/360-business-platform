@@ -246,6 +246,58 @@
   font-size: 0.9rem;
 }
 
+/* Zero Search Results Styles */
+.noResultsMessage {
+  padding: 40px 20px;
+  text-align: center;
+  background: rgba(236, 240, 241, 0.3);
+  margin: 0 20px 20px;
+  border-radius: 12px;
+}
+
+.noResultsIcon {
+  font-size: 3rem;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.noResultsText {
+  color: #7f8c8d;
+  line-height: 1.6;
+}
+
+.searchedKeyword {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.searchedKeyword strong {
+  color: #3498db;
+  background: rgba(52, 152, 219, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.noResultsSuggestion {
+  margin-bottom: 20px;
+  text-align: left;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.noResultsSuggestion ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.noResultsSuggestion li {
+  margin: 8px 0;
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
   .integratedSearch {

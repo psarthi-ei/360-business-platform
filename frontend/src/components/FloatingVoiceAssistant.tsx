@@ -84,33 +84,70 @@ function FloatingVoiceAssistant({
   const [voiceResponse, setVoiceResponse] = useState('');
   const [showVoiceResponse, setShowVoiceResponse] = useState(false);
   const [showVoicePanel, setShowVoicePanel] = useState(false);
+  
+  // Click outside detection
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      if (showVoicePanel && !target.closest(`.${styles.voiceCommandPanel}`) && !target.closest(`.${styles.floatingVoiceAssistant}`)) {
+        setShowVoicePanel(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showVoicePanel]);
+
+  // Escape key detection
+  useEffect(() => {
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === 'Escape' && showVoicePanel) {
+        setShowVoicePanel(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [showVoicePanel]);
 
   // Process-aware voice command suggestions
   const getProcessVoiceCommands = (stage: string) => {
     const commands = {
       'dashboard': [
+        'Search Mumbai cotton mills',
+        'Find hot leads',
         'Show business overview',
         'What needs attention today',
         'Go to hot leads',
         'Check payment status',
-        'बिजनेस ओवरव्यू दिखाएं',
-        'आज क्या attention चाहिए'
+        'Mumbai में cotton mills खोजें',
+        'बिजनेस ओवरव्यू दिखाएं'
       ],
       'leads': [
+        'Search cotton customers',
+        'Find Gujarat leads',
         'Show hot leads',
         'Add new lead',
         'Call next lead',
         'Lead conversion rate',
-        'हॉट लीड्स दिखाएं',
-        'नया लीड जोड़ें'
+        'गुजरात के लीड्स खोजें',
+        'हॉट लीड्स दिखाएं'
       ],
       'quotes': [
+        'Search pending orders',
+        'Find high value quotes',
         'Create quote',
         'Show pending quotes',
         'Quote approval status',
         'Send quote to customer'
       ],
       'payments': [
+        'Search overdue payments',
+        'Find large payments',
         'Record payment',
         'Outstanding payments',
         'Customer conversion',
@@ -135,6 +172,8 @@ function FloatingVoiceAssistant({
         'Confirm delivery'
       ],
       'customers': [
+        'Search VIP customers',
+        'Find repeat customers',
         'Customer profile',
         'VIP customers',
         'Customer feedback',
@@ -182,6 +221,8 @@ function FloatingVoiceAssistant({
             // eslint-disable-next-line no-console
             console.log('🚀 Calling onPerformSearch with query:', searchQuery);
             onPerformSearch(searchQuery);
+            // Close voice panel to show search results
+            setShowVoicePanel(false);
           } else {
             // eslint-disable-next-line no-console
             console.log('❌ No search query extracted - search not executed');
@@ -276,6 +317,9 @@ function FloatingVoiceAssistant({
       await executeVoiceAction(result);
       // eslint-disable-next-line no-console
       console.log('✅ executeVoiceAction completed successfully');
+      
+      // Close suggestion panel after any voice command
+      setShowVoicePanel(false);
       
       // Only show popup for unknown intents and errors
       if (result.intent === 'UNKNOWN_INTENT') {
@@ -427,7 +471,7 @@ function FloatingVoiceAssistant({
           </ul>
           
           <div className={styles.voiceCommandHint}>
-            Try: "Go to production" • "Show hot leads" • "लीड्स दिखाएं" • "पेमेंट्स दिखाएं"
+            Try: "Search Mumbai cotton" • "Find hot leads" • "Show payments" • "Mumbai cotton खोजें"
           </div>
         </div>
       )}

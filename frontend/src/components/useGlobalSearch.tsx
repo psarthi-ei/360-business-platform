@@ -45,6 +45,9 @@ export function useGlobalSearch(
       customers: dataSources.customers?.length || 0
     });
 
+    // Update search query state to show in input field
+    setSearchQuery(query);
+
     // Note: Voice command cleaning is now handled by Universal Command Processor
     // This function receives clean search queries (e.g., "Mumbai" not "search Mumbai")
     if (!query.trim()) {

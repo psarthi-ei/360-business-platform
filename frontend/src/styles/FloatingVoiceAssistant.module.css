@@ -132,16 +132,18 @@
   bottom: 90px;
   right: 20px;
   width: 280px;
+  max-height: 400px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  z-index: 999;
+  z-index: 998;
   border: 1px solid rgba(255, 255, 255, 0.3);
   transform: translateY(20px);
   opacity: 0;
   transition: all 0.3s ease;
+  overflow-y: auto;
 }
 
 .voiceCommandPanel.visible {
@@ -183,11 +185,68 @@
   font-size: 0.8rem;
   color: #667eea;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   padding: 4px 8px;
   background: rgba(102, 126, 234, 0.1);
   border-radius: 4px;
   text-align: center;
+}
+
+/* Start Voice Recording Section */
+.startVoiceSection {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.startVoiceButton {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.startVoiceButton:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+.startVoiceButton:disabled {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.voiceCommandDivider {
+  text-align: center;
+  margin: 16px 0 12px;
+  position: relative;
+}
+
+.voiceCommandDivider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.voiceCommandDivider span {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 12px;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  font-style: italic;
 }
 
 .voiceCommandSuggestions {
@@ -240,6 +299,8 @@
     right: 20px;
     left: 20px;
     bottom: 75px;
+    max-height: 300px;
+    z-index: 998;
   }
   
   .voiceResponsePanel {

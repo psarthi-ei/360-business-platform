@@ -10,7 +10,37 @@ interface SearchResultsProps {
 
 function SearchResults({ results, searchQuery, onClose }: SearchResultsProps) {
   if (results.length === 0) {
-    return null;
+    return (
+      <div className={styles.searchResults}>
+        <div className={styles.searchResultsHeader}>
+          <span>No results found</span>
+          <button className={styles.closeResults} onClick={onClose} aria-label="Close search results">
+            ×
+          </button>
+        </div>
+        
+        <div className={styles.noResultsMessage}>
+          <div className={styles.noResultsIcon}>🔍</div>
+          <div className={styles.noResultsText}>
+            <div className={styles.searchedKeyword}>
+              Searched for: "<strong>{searchQuery}</strong>"
+            </div>
+            <div className={styles.noResultsSuggestion}>
+              Try searching for:
+              <ul>
+                <li>Customer names (e.g., "Mumbai Cotton Mills")</li>
+                <li>Material types (e.g., "cotton", "silk", "polyester")</li>
+                <li>Lead priorities (e.g., "hot leads", "warm leads")</li>
+                <li>Payment status (e.g., "overdue", "pending")</li>
+              </ul>
+            </div>
+            <div className={styles.voiceSearchSuggestion}>
+              🎤 Try voice commands: "Show hot leads" • "Find cotton orders"
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
