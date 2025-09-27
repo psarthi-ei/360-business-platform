@@ -372,11 +372,178 @@ function FloatingVoiceAssistant({
     }
   }, [businessData, currentProcessStage, executeVoiceAction]);
 
-  // Browser/app context detection (used across multiple functions)
-  const isGoogleApp = /GoogleApp/.test(navigator.userAgent);
-  const isWebView = (window.navigator as unknown as { standalone?: boolean }).standalone === false && /Mobile|Android/.test(navigator.userAgent);
-  const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
-  const confidenceThreshold = isGoogleApp || isWebView ? 0.4 : 0.6;
+  // Debug logging state
+  const [showDebugPanel, setShowDebugPanel] = useState(false);
+  const [debugLogs, setDebugLogs] = useState<string[]>([]);
+  const [debugFilter, setDebugFilter] = useState<'all' | 'capability' | 'permission' | 'voice' | 'audio'>('all');
+  
+  // Enhanced debug logger with capability detection
+  const addDebugLog = useCallback((type: string, message: string) => {
+    const time = new Date().toLocaleTimeString();
+    const log = `[${time}] ${type}: ${message}`;
+    setDebugLogs(prev => [...prev.slice(-49), log]); // Keep more logs for filtering
+    // eslint-disable-next-line no-console
+    console.log(log);
+  }, []);
+
+  // Filter logs by category
+  const getFilteredLogs = useCallback(() => {
+    if (debugFilter === 'all') return debugLogs;
+    
+    const categoryKeywords = {
+      capability: ['System', 'Browser', 'Platform', 'SpeechAPI', 'SR-Props', 'SR-Error', 'AudioAPI', 'Device'],
+      permission: ['Mic-Perm', 'Audio-Dev'],
+      voice: ['Voice', 'Voice-Init', 'Voice-Result', 'Voice-Alt', 'Voice-Analysis', 'Voice-Decision'],
+      audio: ['Mic-Test', 'Audio-Test', 'Audio-Level']
+    };
+    
+    const keywords = categoryKeywords[debugFilter] || [];
+    return debugLogs.filter(log => 
+      keywords.some(keyword => log.includes(`] ${keyword}:`))
+    );
+  }, [debugLogs, debugFilter]);
+
+  // Capability detection function
+  const detectCapabilities = useCallback(() => {
+    addDebugLog('System', '=== CAPABILITY DETECTION ===');
+    
+    // Browser and version detection
+    const ua = navigator.userAgent;
+    const isGoogleApp = /GoogleApp/.test(ua);
+    const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+    const isChrome = /Chrome/.test(ua);
+    const isIOS = /iPhone|iPad|iPod/.test(ua);
+    const iosVersion = ua.match(/OS (\d+)_(\d+)/);
+    
+    addDebugLog('Browser', `GoogleApp: ${isGoogleApp}, Safari: ${isSafari}, Chrome: ${isChrome}`);
+    addDebugLog('Platform', `iOS: ${isIOS}${iosVersion ? ` v${iosVersion[1]}.${iosVersion[2]}` : ''}`);
+    
+    // Speech Recognition API detection
+    const hasWebkitSR = 'webkitSpeechRecognition' in window;
+    const hasStandardSR = 'SpeechRecognition' in window;
+    const srConstructor = hasWebkitSR ? 'webkitSpeechRecognition' : hasStandardSR ? 'SpeechRecognition' : 'none';
+    
+    addDebugLog('SpeechAPI', `Webkit: ${hasWebkitSR}, Standard: ${hasStandardSR}, Using: ${srConstructor}`);
+    
+    // Test Speech Recognition instance creation
+    try {
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+      const testRecognition = new SpeechRecognition();
+      
+      // Test property availability
+      const supportsContinuous = 'continuous' in testRecognition;
+      const supportsInterimResults = 'interimResults' in testRecognition;
+      const supportsMaxAlternatives = 'maxAlternatives' in testRecognition;
+      const supportsServiceURI = 'serviceURI' in testRecognition;
+      
+      addDebugLog('SR-Props', `continuous: ${supportsContinuous}, interim: ${supportsInterimResults}, maxAlts: ${supportsMaxAlternatives}, serviceURI: ${supportsServiceURI}`);
+      
+      // Clean up test instance
+      testRecognition.abort();
+    } catch (error) {
+      addDebugLog('SR-Error', `Failed to create SpeechRecognition: ${error}`);
+    }
+    
+    // Audio/Media API detection
+    const hasGetUserMedia = navigator.mediaDevices && 'getUserMedia' in navigator.mediaDevices;
+    const hasAudioContext = 'AudioContext' in window || 'webkitAudioContext' in window;
+    const hasMediaRecorder = 'MediaRecorder' in window;
+    
+    addDebugLog('AudioAPI', `getUserMedia: ${hasGetUserMedia}, AudioContext: ${hasAudioContext}, MediaRecorder: ${hasMediaRecorder}`);
+    
+    // Screen and device info
+    const screenInfo = `${window.screen.width}x${window.screen.height}, pixelRatio: ${window.devicePixelRatio}`;
+    const isStandalone = (window.navigator as unknown as { standalone?: boolean }).standalone;
+    
+    addDebugLog('Device', `Screen: ${screenInfo}, Standalone: ${isStandalone}`);
+    
+  }, [addDebugLog]);
+
+  // Microphone permission and audio testing
+  const testMicrophoneCapabilities = useCallback(async () => {
+    addDebugLog('Mic-Test', '=== MICROPHONE TESTING ===');
+    
+    // Check microphone permission
+    try {
+      if ('permissions' in navigator) {
+        const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+        addDebugLog('Mic-Perm', `Permission state: ${micPermission.state}`);
+      } else {
+        addDebugLog('Mic-Perm', 'Permissions API not available');
+      }
+    } catch (error) {
+      addDebugLog('Mic-Perm', `Permission check failed: ${error}`);
+    }
+    
+    // Test audio device enumeration
+    try {
+      if ('mediaDevices' in navigator && 'enumerateDevices' in navigator.mediaDevices) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputs = devices.filter(device => device.kind === 'audioinput');
+        addDebugLog('Audio-Dev', `Found ${audioInputs.length} audio input devices`);
+        
+        audioInputs.forEach((device, index) => {
+          addDebugLog('Audio-Dev', `${index + 1}: ${device.label || 'Unnamed'} (${device.deviceId.substring(0, 8)}...)`);
+        });
+      } else {
+        addDebugLog('Audio-Dev', 'Device enumeration not available');
+      }
+    } catch (error) {
+      addDebugLog('Audio-Dev', `Device enumeration failed: ${error}`);
+    }
+    
+    // Test getUserMedia access
+    try {
+      if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        addDebugLog('Audio-Test', 'Testing microphone access...');
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          } 
+        });
+        
+        if (stream) {
+          const track = stream.getAudioTracks()[0];
+          if (track) {
+            const settings = track.getSettings();
+            const sampleRate = (settings as unknown as { sampleRate?: number }).sampleRate || 'unknown';
+            const channelCount = (settings as unknown as { channelCount?: number }).channelCount || 'unknown';
+            addDebugLog('Audio-Test', `Success! Sample rate: ${sampleRate}, Channels: ${channelCount}`);
+            addDebugLog('Audio-Test', `Echo cancel: ${settings.echoCancellation}, Noise suppress: ${settings.noiseSuppression}`);
+            
+            // Test audio levels
+            const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+            
+            analyser.fftSize = 256;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            
+            // Quick audio level check
+            setTimeout(() => {
+              analyser.getByteFrequencyData(dataArray);
+              const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+              addDebugLog('Audio-Level', `Audio input level: ${average.toFixed(2)} (0-255 scale)`);
+              
+              // Cleanup
+              stream.getTracks().forEach(track => track.stop());
+              audioContext.close();
+            }, 1000);
+          } else {
+            addDebugLog('Audio-Test', 'Stream created but no audio track found');
+          }
+        }
+      } else {
+        addDebugLog('Audio-Test', 'getUserMedia not available');
+      }
+    } catch (error) {
+      addDebugLog('Audio-Test', `Microphone test failed: ${error}`);
+    }
+  }, [addDebugLog]);
 
   // Initialize speech recognition instance once
   useEffect(() => {
@@ -384,25 +551,18 @@ function FloatingVoiceAssistant({
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
       
-      // Enhanced recognition settings for better mobile compatibility
+      // Simple, universal recognition settings
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-IN';
       
-      // Try to set maxAlternatives if supported
-      try {
-        (recognition as unknown as { maxAlternatives?: number }).maxAlternatives = 3;
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log('maxAlternatives not supported in this browser');
-      }
-      
-      // eslint-disable-next-line no-console
-      console.log('🎤 Voice recognition config - GoogleApp:', isGoogleApp, 'WebView:', isWebView, 'Desktop:', isDesktop, 'Confidence threshold:', confidenceThreshold);
+      // Enhanced device and configuration logging
+      addDebugLog('Voice-Init', '=== VOICE RECOGNITION SETUP ===');
+      detectCapabilities();
+      addDebugLog('Config', 'Language: en-IN, Continuous: false, Timeout: 10s');
 
       recognition.onstart = () => {
-        // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition started');
+        addDebugLog('Voice', 'Started');
         setVoiceState('LISTENING');
       };
       
@@ -416,61 +576,49 @@ function FloatingVoiceAssistant({
         };
         
         extendedRecognition.onaudiostart = () => {
-          // eslint-disable-next-line no-console
-          console.log('🔊 Audio input detected');
+          addDebugLog('Voice', 'Audio detected');
         };
         
         extendedRecognition.onspeechstart = () => {
-          // eslint-disable-next-line no-console
-          console.log('🗣️ Speech detected');
+          addDebugLog('Voice', 'Speech detected');
         };
         
         extendedRecognition.onspeechend = () => {
-          // eslint-disable-next-line no-console
-          console.log('🤐 Speech ended');
+          addDebugLog('Voice', 'Speech ended');
         };
         
         extendedRecognition.onaudioend = () => {
-          // eslint-disable-next-line no-console
-          console.log('🔇 Audio input ended');
+          addDebugLog('Voice', 'Audio ended');
         };
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log('Some audio events not supported in this browser');
+        addDebugLog('Warning', 'Some audio events not supported');
       }
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
-        // Get all alternatives and find the best one
+        // Enhanced result analysis
         const results = event.results[0];
-        let bestTranscript = '';
-        let bestConfidence = 0;
-        const allAlternatives: Array<{transcript: string, confidence: number}> = [];
+        const transcript = results[0]?.transcript || '';
+        const confidence = results[0]?.confidence || 0;
         
-        // Collect all alternatives with confidence scores
+        // Log detailed result information
+        addDebugLog('Voice-Result', `=== RECOGNITION RESULT ===`);
+        addDebugLog('Voice-Result', `Transcript: "${transcript}" (length: ${transcript.length})`);
+        addDebugLog('Voice-Result', `Confidence: ${confidence.toFixed(3)} (${confidence === 0 ? 'unreliable' : confidence < 0.5 ? 'low' : confidence < 0.8 ? 'medium' : 'high'})`);
+        const isFinal = (event.results[0] as unknown as { isFinal?: boolean }).isFinal ?? 'unknown';
+        addDebugLog('Voice-Result', `Final: ${isFinal}, Results count: ${event.results.length}`);
+        
+        // Log all alternatives if available
         for (let i = 0; i < results.length; i++) {
-          const alternative = results[i];
-          allAlternatives.push({
-            transcript: alternative.transcript,
-            confidence: alternative.confidence
-          });
-          
-          // Use >= to handle confidence=0 cases and prefer first result if all have same confidence
-          if (alternative.confidence >= bestConfidence) {
-            bestConfidence = alternative.confidence;
-            bestTranscript = alternative.transcript;
-          }
+          const alt = results[i];
+          addDebugLog('Voice-Alt', `${i + 1}: "${alt.transcript}" (conf: ${alt.confidence.toFixed(3)})`);
         }
         
-        // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition results:', {
-          best: { transcript: bestTranscript, confidence: bestConfidence },
-          all: allAlternatives,
-          threshold: confidenceThreshold
-        });
+        // Analyze result quality
+        const hasText = transcript && transcript.trim().length > 0;
+        const hasReliableConfidence = confidence > 0;
+        const isLikelyValid = hasText && (confidence > 0.3 || confidence === 0);
         
-        // Debug: Log the values directly
-        // eslint-disable-next-line no-console
-        console.log('🔍 Debug transcript:', `"${bestTranscript}"`, 'confidence:', bestConfidence, 'length:', bestTranscript.length);
+        addDebugLog('Voice-Analysis', `HasText: ${hasText}, ReliableConf: ${hasReliableConfidence}, LikelyValid: ${isLikelyValid}`);
         
         // Clear timeout
         if (timeoutRef.current) {
@@ -478,51 +626,26 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
-        // Handle desktop browsers that often return confidence = 0
-        const hasValidTranscript = bestTranscript && bestTranscript.trim().length > 0;
-        const isConfidenceReliable = bestConfidence > 0; // Confidence scores of 0 are often unreliable
-        
-        // Debug the condition logic
-        // eslint-disable-next-line no-console
-        console.log('🔍 Condition check:', {
-          hasValidTranscript,
-          bestConfidence,
-          confidenceThreshold,
-          isConfidenceReliable,
-          meetsThreshold: bestConfidence >= confidenceThreshold,
-          usesFallback: !isConfidenceReliable,
-          willProcess: hasValidTranscript && (bestConfidence >= confidenceThreshold || !isConfidenceReliable)
-        });
-        
-        if (hasValidTranscript && (bestConfidence >= confidenceThreshold || !isConfidenceReliable)) {
-          // High confidence OR any browser with valid transcript when confidence=0 (common browser behavior)
-          // eslint-disable-next-line no-console
-          console.log('🎤 Processing command:', bestTranscript, 'confidence:', bestConfidence, 'confidence=0 fallback:', !isConfidenceReliable);
-          processVoiceCommand(bestTranscript);
-        } else if (allAlternatives.length > 1) {
-          // Low confidence but multiple alternatives - try the next best
-          const secondBest = allAlternatives.sort((a, b) => b.confidence - a.confidence)[1];
-          if (secondBest && (secondBest.confidence >= (confidenceThreshold * 0.8) || (!isConfidenceReliable && isDesktop && secondBest.transcript.trim().length > 0))) {
-            // eslint-disable-next-line no-console
-            console.log('🎤 Using second-best alternative:', secondBest);
-            processVoiceCommand(secondBest.transcript);
-          } else {
-            // Show suggestions for unclear speech
-            setVoiceResponse(`I didn't catch that clearly. Try: "Search Mumbai", "Show leads", or "Add new lead"`);
-            setShowVoiceResponse(true);
-            setVoiceState('ERROR');
-          }
+        // Decision logic with detailed logging
+        if (hasText && isLikelyValid) {
+          addDebugLog('Voice-Decision', 'PROCESSING - Valid transcript detected');
+          processVoiceCommand(transcript.trim());
+        } else if (hasText && !isLikelyValid) {
+          addDebugLog('Voice-Decision', 'REJECTED - Low confidence transcript');
+          setVoiceResponse('Speech unclear. Please speak more clearly and try again.');
+          setShowVoiceResponse(true);
+          setVoiceState('ERROR');
         } else {
-          // Single low-confidence result - show suggestions
-          setVoiceResponse(`Please speak clearly. Try: "Search [company]", "Show [leads/payments]", or "Add new lead"`);
+          addDebugLog('Voice-Decision', 'REJECTED - No valid transcript');
+          setVoiceResponse('No speech detected. Please speak clearly and try again.');
           setShowVoiceResponse(true);
           setVoiceState('ERROR');
         }
       };
 
       recognition.onerror = (event: SpeechRecognitionEvent) => {
-        // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition error:', event.error, 'Context:', { isGoogleApp, isWebView });
+        const errorType = event.error || 'unknown';
+        addDebugLog('Voice', `Error - ${errorType}`);
         
         // Clear timeout
         if (timeoutRef.current) {
@@ -530,60 +653,34 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
-        // Handle different error types based on context
-        if (event.error && typeof event.error === 'string') {
-          switch (event.error) {
-            case 'aborted':
-              // Natural abort after processing - just reset
-              setVoiceState('IDLE');
-              return;
-              
-            case 'no-speech':
-              // Common in Google App - provide helpful feedback
-              if (isGoogleApp || isWebView) {
-                setVoiceResponse('No speech detected. Please speak closer to the microphone and try again.');
-              } else {
-                setVoiceResponse('Please speak into the microphone. Try saying "Search Mumbai" or "Show leads".');
-              }
-              setShowVoiceResponse(true);
-              setVoiceState('ERROR');
-              return;
-              
-            case 'audio-capture':
-              // Microphone access issues
-              setVoiceResponse('Microphone access required. Please check your browser permissions.');
-              setShowVoiceResponse(true);
-              setVoiceState('ERROR');
-              return;
-              
-            case 'network':
-              // Network issues - more common in WebViews
-              setVoiceResponse('Network error. Please check your connection and try again.');
-              setShowVoiceResponse(true);
-              setVoiceState('ERROR');
-              return;
-              
-            default:
-              // Other errors - show generic but helpful message
-              setVoiceResponse('Voice recognition unavailable. Try typing your search or refresh the page.');
-              setShowVoiceResponse(true);
-              setVoiceState('ERROR');
-              return;
-          }
+        // Simple error handling
+        switch (errorType) {
+          case 'not-allowed':
+            setVoiceResponse('Microphone access denied. Please enable microphone permissions.');
+            break;
+          case 'no-speech':
+            setVoiceResponse('No speech detected. Please speak clearly and try again.');
+            break;
+          case 'network':
+            setVoiceResponse('Network error. Please check your connection and try again.');
+            break;
+          case 'aborted':
+            // Don't show error for user-initiated abort
+            return;
+          default:
+            setVoiceResponse('Voice recognition error. Please try again.');
+            break;
         }
         
-        // Fallback for unknown errors
-        setVoiceState('ERROR');
-        setVoiceResponse(`Voice recognition error: ${event.error || 'Unknown error'}`);
         setShowVoiceResponse(true);
+        setVoiceState('ERROR');
         
         // Reset to idle after error
         setTimeout(() => setVoiceState('IDLE'), 2000);
       };
 
       recognition.onend = () => {
-        // eslint-disable-next-line no-console
-        console.log('🎤 Voice recognition ended');
+        addDebugLog('Voice', 'Ended');
         
         // Clear timeout
         if (timeoutRef.current) {
@@ -591,17 +688,7 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
-        // Check if we ended without getting any results (possible permission issue)
-        if (voiceState === 'LISTENING') {
-          // eslint-disable-next-line no-console
-          console.log('⚠️ Voice recognition ended without results - possible microphone permission issue');
-          setVoiceResponse('Microphone access may be blocked. Please check browser permissions and try again.');
-          setShowVoiceResponse(true);
-          setVoiceState('ERROR');
-          return;
-        }
-        
-        // Reset to idle (no need to check state as this is end)
+        // Reset to idle
         setVoiceState('IDLE');
       };
 
@@ -617,42 +704,30 @@ function FloatingVoiceAssistant({
         }
       };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Create recognition instance once, no dependencies (processVoiceCommand omitted intentionally to prevent abort)
+  }, [addDebugLog, detectCapabilities, processVoiceCommand]); // Dependencies for debug logging
 
   const startVoiceRecognition = () => {
     if (voiceState !== 'IDLE') {
-      // eslint-disable-next-line no-console
-      console.log('🚫 Voice recognition already active, state:', voiceState);
+      addDebugLog('Voice', `Already active, state: ${voiceState}`);
       return;
     }
     
     if (recognitionRef.current) {
       try {
-        // eslint-disable-next-line no-console
-        console.log('🎤 Starting voice recognition...');
+        addDebugLog('Voice', 'Starting...');
         
-        // Adaptive timeout based on browser context - increased for better user experience
-        const adaptiveTimeout = (() => {
-          if (isGoogleApp || isWebView) return 15000; // 15s for Google App/WebView (often slower)
-          if (isDesktop) return 10000; // 10s for desktop (give more time to speak)
-          return 12000; // 12s for mobile Chrome (default)
-        })();
-        
-        // Set timeout for recognition
+        // Simple 10 second timeout for all devices
         timeoutRef.current = setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log('⏰ Voice recognition timeout after', adaptiveTimeout + 'ms');
+          addDebugLog('Voice', 'Timeout after 10s');
           if (recognitionRef.current) {
             recognitionRef.current.abort();
           }
           setVoiceState('IDLE');
-        }, adaptiveTimeout);
+        }, 10000);
         
         recognitionRef.current.start();
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('❌ Error starting voice recognition:', error);
+        addDebugLog('Voice', `Start error: ${error}`);
         setVoiceState('ERROR');
         setVoiceResponse('Could not start voice recognition. Please try again.');
         setShowVoiceResponse(true);
@@ -722,6 +797,16 @@ function FloatingVoiceAssistant({
         {voiceState === 'PROCESSING' ? '⚡' : voiceState === 'LISTENING' ? '🎙️' : voiceState === 'ERROR' ? '❌' : '🎤'}
       </button>
 
+      {/* Debug Toggle Button */}
+      <button 
+        className={`${styles.debugToggleButton} ${showDebugPanel ? styles.active : ''}`}
+        onClick={() => setShowDebugPanel(!showDebugPanel)}
+        aria-label="Toggle Debug Panel"
+        title="Toggle Voice Debug Panel"
+      >
+        🐛
+      </button>
+
       {/* Voice Command Suggestions Panel */}
       {showVoicePanel && (
         <div className={`${styles.voiceCommandPanel} ${showVoicePanel ? styles.visible : ''}`}>
@@ -756,6 +841,85 @@ function FloatingVoiceAssistant({
           
           <div className={styles.voiceCommandHint}>
             Try: "Search Mumbai cotton" • "Find hot leads" • "Show payments" • "Mumbai cotton खोजें"
+          </div>
+        </div>
+      )}
+
+      {/* Debug Panel */}
+      {showDebugPanel && (
+        <div className={styles.debugPanel}>
+          <div className={styles.debugPanelHeader}>
+            <span className={styles.debugTitle}>🐛 Voice Debug</span>
+            <div className={styles.debugControls}>
+              <button 
+                className={styles.testButton}
+                onClick={detectCapabilities}
+                title="Run Capability Detection"
+              >
+                🔍
+              </button>
+              <button 
+                className={styles.testButton}
+                onClick={testMicrophoneCapabilities}
+                title="Test Microphone"
+              >
+                🎤
+              </button>
+              <button 
+                className={styles.clearLogsButton}
+                onClick={() => setDebugLogs([])}
+                title="Clear Logs"
+              >
+                🗑️
+              </button>
+              <button 
+                className={styles.closeDebugPanel}
+                onClick={() => setShowDebugPanel(false)}
+                title="Close Debug Panel"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          
+          {/* Filter Tabs */}
+          <div className={styles.debugFilterTabs}>
+            {[
+              { key: 'all', label: 'All', icon: '📋' },
+              { key: 'capability', label: 'Capability', icon: '🔧' },
+              { key: 'permission', label: 'Permission', icon: '🔐' },
+              { key: 'voice', label: 'Voice', icon: '🎙️' },
+              { key: 'audio', label: 'Audio', icon: '🔊' }
+            ].map(filter => (
+              <button
+                key={filter.key}
+                className={`${styles.filterTab} ${debugFilter === filter.key ? styles.activeFilter : ''}`}
+                onClick={() => setDebugFilter(filter.key as any)}
+                title={`Filter ${filter.label} logs`}
+              >
+                {filter.icon} {filter.label}
+              </button>
+            ))}
+          </div>
+          
+          <div className={styles.debugLogContainer}>
+            {(() => {
+              const filteredLogs = getFilteredLogs();
+              return filteredLogs.length === 0 ? (
+                <div className={styles.debugEmptyState}>
+                  {debugLogs.length === 0 
+                    ? "No debug logs yet. Try voice recognition or click test buttons..."
+                    : `No ${debugFilter} logs found. Try a different filter or run tests.`
+                  }
+                </div>
+              ) : (
+                filteredLogs.map((log, index) => (
+                  <div key={index} className={styles.debugLogEntry}>
+                    {log}
+                  </div>
+                ))
+              );
+            })()}
           </div>
         </div>
       )}
