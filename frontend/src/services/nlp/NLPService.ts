@@ -88,124 +88,27 @@ export class NLPService {
     const intentType = intent.intent;
     const language = intent.language || 'en';
 
-    // Business intelligence responses with real data
-    if (intentType === 'SHOW_PRIORITIES' && businessContext) {
-      if (language === 'hi') {
-        return `आज के प्राथमिकताएं: ${businessContext.hotLeads} हॉट लीड्स, ${businessContext.overduePayments} बकाया पेमेंट्स, ${businessContext.readyToShip} शिपमेंट तैयार`;
-      }
-      if (language === 'gu') {
-        return `આજની પ્રાથમિકતાઓ: ${businessContext.hotLeads} હૉટ લીડ્સ, ${businessContext.overduePayments} બાકી પેમેન્ટ્સ, ${businessContext.readyToShip} શિપમેન્ટ તૈયાર`;
-      }
-      return `Today's priorities: ${businessContext.hotLeads} hot leads need calls, ${businessContext.overduePayments} overdue payments, ${businessContext.readyToShip} orders ready to ship`;
+
+    // Only UNKNOWN_INTENT responses are actually shown to users
+    if (intentType === 'UNKNOWN_INTENT') {
+      return this.getContextualSuggestions(currentStage || 'dashboard', language as 'en' | 'hi' | 'gu', intent.originalText);
     }
 
-    // Navigation responses by language
-    const responses = {
-      'OPEN_LEADS': {
-        'en': 'Opening Lead Management',
-        'hi': 'लीड मैनेजमेंट खोल रहे हैं',
-        'gu': 'લીડ મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_PAYMENTS': {
-        'en': 'Opening Payment Management', 
-        'hi': 'पेमेंट मैनेजमेंट खोल रहे हैं',
-        'gu': 'પેમેન્ટ મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_CUSTOMERS': {
-        'en': 'Opening Customer Management',
-        'hi': 'ग्राहक मैनेजमेंट खोल रहे हैं', 
-        'gu': 'કસ્ટમર મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_INVENTORY': {
-        'en': 'Opening Inventory Management',
-        'hi': 'इन्वेंटरी मैनेजमेंट खोल रहे हैं',
-        'gu': 'ઇન્વેન્ટરી મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_ORDERS': {
-        'en': 'Opening Order Management',
-        'hi': 'ऑर्डर मैनेजमेंट खोल रहे हैं',
-        'gu': 'ઓર્ડર મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_ANALYTICS': {
-        'en': 'Opening Business Analytics',
-        'hi': 'बिजनेस एनालिटिक्स खोल रहे हैं',
-        'gu': 'બિઝનેસ એનાલિટિક્સ ખોલી રહ્યા છીએ'
-      },
-      'OPEN_PRODUCTION': {
-        'en': 'Opening Production Management',
-        'hi': 'प्रोडक्शन मैनेजमेंट खोल रहे हैं',
-        'gu': 'પ્રોડક્શન મેનેજમેન્ટ ખોલી રહ્યા છીએ'
-      },
-      'SHOW_BUSINESS_OVERVIEW': {
-        'en': 'Showing Business Overview',
-        'hi': 'बिजनेस ओवरव्यू दिखा रहे हैं',
-        'gu': 'બિઝનેસ ઓવરવ્યુ બતાવી રહ્યા છીએ'
-      },
-      'HELP_COMMAND': {
-        'en': 'Available commands: Show leads, Open payments, Customer list, Inventory check, Order status, Business analytics',
-        'hi': 'उपलब्ध कमांड्स: लीड्स दिखाएं, पेमेंट्स खोलें, ग्राहक सूची, स्टॉक चेक, ऑर्डर स्टेटस, बिजनेस एनालिटिक्स',
-        'gu': 'ઉપલબ્ધ કમાન્ડ્સ: લીડ્સ બતાવો, પેમેન્ટ્સ ખોલો, કસ્ટમર લિસ્ટ, સ્ટોક ચેક, ઓર્ડર સ્ટેટસ, બિઝનેસ એનાલિટિક્સ'
-      },
-      'UNKNOWN_INTENT': {
-        'en': this.getContextualSuggestions(currentStage || 'dashboard', 'en'),
-        'hi': this.getContextualSuggestions(currentStage || 'dashboard', 'hi'), 
-        'gu': this.getContextualSuggestions(currentStage || 'dashboard', 'gu')
-      }
-    };
-
-    const intentResponses = responses[intentType as keyof typeof responses];
-    if (intentResponses) {
-      const languageResponse = intentResponses[language as keyof typeof intentResponses] || intentResponses['en'];
-      return languageResponse || 'Processing your request...';
-    }
+    // All other commands (OPEN_*, SEARCH_*, etc.) are processed directly without showing response messages
     return 'Processing your request...';
   }
 
-  private getContextualSuggestions(stage: string, language: 'en' | 'hi' | 'gu'): string {
+  private getContextualSuggestions(stage: string, language: 'en' | 'hi' | 'gu', originalText?: string): string {
+    const voiceCommandText = originalText ? ` (You said: "${originalText}")` : '';
+    
+    // Simple universal suggestions that work across all contexts
     const suggestions = {
-      'dashboard': {
-        'en': "I didn't catch that. Try: 'Show business overview', 'Search for company name', or 'Find pending orders'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'बिजनेस ओवरव्यू दिखाएं', 'कंपनी नाम खोजें', या 'pending orders ढूंढें'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'બિઝનેસ ઓવરવ્યુ બતાવો', 'કંપની નામ શોધો', અથવા 'પેન્ડિંગ ઓર્ડર્સ શોધો'"
-      },
-      'leads': {
-        'en': "I didn't catch that. On this page you can say: 'Show hot leads', 'Search for lead', or 'Find prospects'",
-        'hi': "मैं समझ नहीं पाया। इस page पर आप कह सकते हैं: 'हॉट लीड्स दिखाएं', 'लीड खोजें', या 'prospects ढूंढें'",
-        'gu': "મને સમજાયું નહીં. આ પેજ પર તમે કહી શકો: 'હૉટ લીડ્સ બતાવો', 'લીડ શોધો', અથવા 'પ્રોસ્પેક્ટ્સ શોધો'"
-      },
-      'payments': {
-        'en': "I didn't catch that. Try: 'Outstanding payments', 'Record payment', or 'Payment status'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'बकाया payments', 'payment record करें', या 'payment status'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'બાકી પેમેન્ટ્સ', 'પેમેન્ટ રેકૉર્ડ કરો', અથવા 'પેમેન્ટ સ્ટેટસ'"
-      },
-      'customers': {
-        'en': "I didn't catch that. Try: 'Search for customer', 'Find VIP clients', or 'Customer profile'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'customer खोजें', 'VIP clients ढूंढें', या 'customer profile'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'કસ્ટમર શોધો', 'VIP ક્લાઇન્ટ્સ શોધો', અથવા 'કસ્ટમર પ્રોફાઇલ'"
-      },
-      'inventory': {
-        'en': "I didn't catch that. Try: 'Stock check', 'Material order', or 'Stock status'", 
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'stock check', 'material order', या 'stock status'",
-        'gu': "મને સમજાયું નહીં। પ્રયાસ કરો: 'સ્ટોક ચેક', 'મટીરિયલ ઓર્ડર', અથવા 'સ્ટોક સ્ટેટસ'"
-      },
-      'quotes': {
-        'en': "I didn't catch that. Try: 'Create quote', 'Show pending quotes', or 'Quote approval status'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'quote बनाएं', 'pending quotes दिखाएं', या 'quote approval status'",
-        'gu': "મને સમજાયું નહીં. પ્રયાસ કરો: 'ક્વોટ બનાવો', 'પેન્ડિંગ ક્વોટ્સ બતાવો', અથવા 'ક્વોટ એપ્રૂવલ સ્ટેટસ'"
-      },
-      'production': {
-        'en': "I didn't catch that. Try: 'Production status', 'Start production', or 'Quality check'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'production status', 'production शुरू करें', या 'quality check'",
-        'gu': "મને સમજાયું નહીં. પ્રયાસ કરો: 'પ્રોડક્શન સ્ટેટસ', 'પ્રોડક્શન શરૂ કરો', અથવા 'ક્વોલિટી ચેક'"
-      },
-      'analytics': {
-        'en': "I didn't catch that. Try: 'Business performance', 'Monthly sales', or 'Show KPIs'",
-        'hi': "मैं समझ नहीं पाया। कोशिश करें: 'business performance', 'monthly sales', या 'KPIs दिखाएं'",
-        'gu': "મને સમજાયું નહીં. પ્રયાસ કરો: 'બિઝનેસ પર્ફોર્મન્સ', 'માસિક સેલ્સ', અથવા 'KPIs બતાવો'"
-      }
+      'en': `I didn't catch that${voiceCommandText}. Try: 'Search for [company]', 'Show [leads/payments/orders]', or 'Add new lead'`,
+      'hi': `मैं समझ नहीं पाया${voiceCommandText}। कोशिश करें: '[कंपनी] खोजें', '[लीड्स/payments/orders] दिखाएं', या 'नया लीड बनाएं'`,
+      'gu': `મને સમજાયું નહીં${voiceCommandText}। પ્રયાસ કરો: '[કંપની] શોધો', '[લીડ્સ/payments/orders] બતાવો', અથવા 'નવો લીડ ઉમેરો'`
     };
     
-    return suggestions[stage as keyof typeof suggestions]?.[language] || suggestions.dashboard[language];
+    return suggestions[language];
   }
 
   // Configuration methods

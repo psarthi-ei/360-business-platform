@@ -30,7 +30,8 @@ export interface SearchNavigationHandlers {
 
 export function useGlobalSearch(
   dataSources: SearchDataSources,
-  navigationHandlers: SearchNavigationHandlers
+  navigationHandlers: SearchNavigationHandlers,
+  onSearchTriggered?: () => void
 ) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -144,7 +145,21 @@ export function useGlobalSearch(
     setShowSearchResults(true);
     // eslint-disable-next-line no-console
     console.log('setShowSearchResults(true) called with results:', finalResults.length);
-  }, [dataSources, navigationHandlers]);
+    
+    // Trigger scroll callback if provided (for voice search)
+    if (onSearchTriggered && finalResults.length > 0) {
+      // Add small delay to ensure DOM updates before scrolling
+      setTimeout(() => {
+        // Only scroll if user is not already near the top of the page
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const isNearTop = scrollTop < 100; // Consider top 100px as "near top"
+        
+        if (!isNearTop) {
+          onSearchTriggered();
+        }
+      }, 100);
+    }
+  }, [dataSources, navigationHandlers, onSearchTriggered]);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;

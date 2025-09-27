@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers, SearchResult } from './useGlobalSearch';
 import SearchResults from './SearchResults';
 import styles from '../styles/GlobalSearch.module.css';
@@ -20,13 +20,19 @@ interface GlobalSearchProps {
   };
 }
 
-function GlobalSearch({ 
+// Ref interface for parent components to control scrolling
+export interface GlobalSearchRef {
+  scrollToSearch: () => void;
+  focusSearch: () => void;
+}
+
+const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({ 
   dataSources, 
   navigationHandlers, 
   placeholder = "Search or try voice commands...",
   className = "",
   searchState
-}: GlobalSearchProps) {
+}, ref) => {
   // Use external search state if provided, otherwise create internal state
   const internalSearchState = useGlobalSearch(dataSources, navigationHandlers);
   const {
@@ -40,6 +46,24 @@ function GlobalSearch({
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Expose scroll and focus methods to parent components
+  useImperativeHandle(ref, () => ({
+    scrollToSearch: () => {
+      if (searchContainerRef.current) {
+        searchContainerRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+    },
+    focusSearch: () => {
+      if (searchInputRef.current) {
+        searchInputRef.current.focus();
+      }
+    }
+  }), []);
 
   // Handle click outside to close search results
   useEffect(() => {
@@ -127,6 +151,8 @@ function GlobalSearch({
       </div>
     </div>
   );
-}
+});
+
+GlobalSearch.displayName = 'GlobalSearch';
 
 export default GlobalSearch;

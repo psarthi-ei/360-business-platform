@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { nlpService } from '../services/nlp/NLPService';
 import { NLPResult } from '../services/nlp/types';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
@@ -16,6 +16,7 @@ interface SpeechRecognitionInterface {
   onresult: ((event: SpeechRecognitionEvent) => void) | null;
   onerror: ((event: SpeechRecognitionEvent) => void) | null;
   onend: ((event: Event) => void) | null;
+  onstart: ((event: Event) => void) | null;
 }
 
 interface SpeechRecognitionEvent {
@@ -81,11 +82,16 @@ function FloatingVoiceAssistant({
 }: FloatingVoiceAssistantProps) {
   // const { t } = useTranslation(); // Translation available if needed
   
-  // Voice command state
-  const [isListening, setIsListening] = useState(false);
+  // Voice recognition state machine
+  type VoiceState = 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR';
+  const [voiceState, setVoiceState] = useState<VoiceState>('IDLE');
   const [voiceResponse, setVoiceResponse] = useState('');
   const [showVoiceResponse, setShowVoiceResponse] = useState(false);
   const [showVoicePanel, setShowVoicePanel] = useState(false);
+  
+  // Speech recognition instance ref to prevent multiple instances
+  const recognitionRef = useRef<SpeechRecognitionInterface | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Click outside detection
   useEffect(() => {
@@ -187,6 +193,63 @@ function FloatingVoiceAssistant({
   };
 
   // Extract search query from NLP payload (replaces custom extraction logic)
+  // Unified target router - handles both navigation and creation
+  const routeToTarget = useCallback((target: string | undefined, action: 'navigate' | 'create' = 'navigate') => {
+    // Normalize target (handle both singular and plural)
+    const normalizedTarget = target?.toLowerCase();
+    
+    switch (normalizedTarget) {
+      case 'lead':
+      case 'leads':
+        if (action === 'create' && onOpenAddLeadModal) {
+          onOpenAddLeadModal();
+        } else {
+          onNavigateToLeads?.();
+        }
+        break;
+        
+      case 'payment':
+      case 'payments':
+        onNavigateToPayments?.();
+        break;
+        
+      case 'customer':
+      case 'customers':
+        onNavigateToCustomers?.();
+        break;
+        
+      case 'order':
+      case 'orders':
+      case 'quote':
+      case 'quotes':
+        onNavigateToQuotes?.();
+        break;
+        
+      case 'inventory':
+        onNavigateToInventory?.();
+        break;
+        
+      case 'analytics':
+        onNavigateToAnalytics?.();
+        break;
+        
+      case 'production':
+        onNavigateToProduction?.();
+        break;
+        
+      case 'fulfillment':
+        onNavigateToFulfillment?.();
+        break;
+        
+      default:
+        // For unrecognized targets in CREATE mode, default to add lead
+        if (action === 'create' && onOpenAddLeadModal) {
+          onOpenAddLeadModal();
+        }
+        break;
+    }
+  }, [onNavigateToLeads, onNavigateToPayments, onNavigateToCustomers, onNavigateToQuotes, onNavigateToInventory, onNavigateToAnalytics, onNavigateToProduction, onNavigateToFulfillment, onOpenAddLeadModal]);
+
   const extractSearchQuery = useCallback((result: NLPResult): string | null => {
     // Use new structured payload from Universal Command Processor
     if (result.payload && result.payload.query) {
@@ -232,71 +295,26 @@ function FloatingVoiceAssistant({
       case 'OPEN_COMMAND':
         // Determine target from payload
         const target = nlpResult.payload?.target;
-        switch (target) {
-          case 'leads':
-            onNavigateToLeads?.();
-            break;
-          case 'payments':
-            onNavigateToPayments?.();
-            break;
-          case 'customers':
-            onNavigateToCustomers?.();
-            break;
-          case 'orders':
-          case 'quotes':
-            onNavigateToQuotes?.();
-            break;
-          case 'inventory':
-            onNavigateToInventory?.();
-            break;
-          case 'analytics':
-            onNavigateToAnalytics?.();
-            break;
-          case 'production':
-            onNavigateToProduction?.();
-            break;
-          case 'fulfillment':
-            onNavigateToFulfillment?.();
-            break;
-          default:
-            // Handle unknown target
-            break;
+        const query = nlpResult.payload?.query;
+        
+        // If no specific target but has query, treat as search command
+        if (!target && query && onPerformSearch) {
+          // eslint-disable-next-line no-console
+          console.log('🔍 SHOW_COMMAND with query but no target - treating as search:', query);
+          onPerformSearch(query);
+          setShowVoicePanel(false);
+          break;
         }
+        
+        // Use unified router for navigation
+        routeToTarget(target, 'navigate');
         break;
       
       // Create/Add command support
       case 'CREATE_COMMAND':
         const createTarget = nlpResult.payload?.target;
-        switch (createTarget) {
-          case 'lead':
-          case 'leads':
-            // Open Add Lead Modal directly
-            if (onOpenAddLeadModal) {
-              onOpenAddLeadModal();
-            } else {
-              // Fallback to leads page if modal handler not available
-              onNavigateToLeads?.();
-            }
-            break;
-          case 'quote':
-          case 'quotes':
-          case 'order':
-          case 'orders':
-            onNavigateToQuotes?.();
-            break;
-          case 'customer':
-          case 'customers':
-            onNavigateToCustomers?.();
-            break;
-          default:
-            // For generic "add new lead" without target detection
-            if (onOpenAddLeadModal) {
-              onOpenAddLeadModal();
-            } else {
-              onNavigateToLeads?.();
-            }
-            break;
-        }
+        // Use unified router for creation
+        routeToTarget(createTarget, 'create');
         break;
       case 'HELP_COMMAND':
         // Help response already generated
@@ -305,12 +323,14 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToFulfillment, onNavigateToCustomers, onNavigateToAnalytics, onOpenAddLeadModal, onPerformSearch, extractSearchQuery]);
+  }, [onPerformSearch, extractSearchQuery, routeToTarget]);
 
   // Enhanced voice command processing with NLP
   const processVoiceCommand = useCallback(async (command: string) => {
     // eslint-disable-next-line no-console
     console.log('🧠 Processing voice command:', command);
+    
+    setVoiceState('PROCESSING'); // Show processing state
     
     try {
       // Use new NLP service for command processing
@@ -335,57 +355,137 @@ function FloatingVoiceAssistant({
       if (result.intent === 'UNKNOWN_INTENT') {
         setVoiceResponse(result.response);
         setShowVoiceResponse(true);
+        setVoiceState('ERROR');
+      } else {
+        setVoiceState('IDLE');
       }
-      // For successful commands: just execute action silently
       
     } catch (error) {
       // Voice command processing error occurred
       setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
       setShowVoiceResponse(true);
+      setVoiceState('ERROR');
     }
   }, [businessData, currentProcessStage, executeVoiceAction]);
 
-  // Voice recognition setup - Language Agnostic
+  // Initialize speech recognition instance once
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
+      
       recognition.continuous = false;
       recognition.interimResults = false;
-      // Use English-India as primary language for best multilingual support
-      // The NLP service will handle multilingual command processing
       recognition.lang = 'en-IN';
+
+      recognition.onstart = () => {
+        // eslint-disable-next-line no-console
+        console.log('🎤 Voice recognition started');
+        setVoiceState('LISTENING');
+      };
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         // eslint-disable-next-line no-console
         console.log('🎤 Voice recognition result:', transcript);
+        
+        // Clear timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
+        // Process the command
         processVoiceCommand(transcript); 
-        setIsListening(false);
       };
 
       recognition.onerror = (event: SpeechRecognitionEvent) => {
         // eslint-disable-next-line no-console
         console.log('🎤 Voice recognition error:', event.error);
-        setIsListening(false);
+        
+        // Clear timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
+        // Don't show error UI for "aborted" errors (natural after processing commands)
+        if (event.error && typeof event.error === 'string' && event.error === 'aborted') {
+          // Just reset to idle for aborted errors
+          setVoiceState('IDLE');
+          return;
+        }
+        
+        // Show error UI only for real errors
+        setVoiceState('ERROR');
+        setVoiceResponse(`Voice recognition error: ${event.error || 'Unknown error'}`);
+        setShowVoiceResponse(true);
+        
+        // Reset to idle after error
+        setTimeout(() => setVoiceState('IDLE'), 2000);
       };
 
       recognition.onend = () => {
         // eslint-disable-next-line no-console
         console.log('🎤 Voice recognition ended');
-        setIsListening(false);
+        
+        // Clear timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
+        // Reset to idle (no need to check state as this is end)
+        setVoiceState('IDLE');
       };
 
-      if (isListening) {
-        // eslint-disable-next-line no-console
-        console.log('🎤 Starting voice recognition...');
-        recognition.start();
-      }
+      recognitionRef.current = recognition;
+      
+      // Cleanup function
+      return () => {
+        if (recognitionRef.current) {
+          recognitionRef.current.abort();
+        }
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
     }
-  }, [isListening, processVoiceCommand]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Create recognition instance once, no dependencies (processVoiceCommand omitted intentionally to prevent abort)
 
   const startVoiceRecognition = () => {
-    setIsListening(true);
+    if (voiceState !== 'IDLE') {
+      // eslint-disable-next-line no-console
+      console.log('🚫 Voice recognition already active, state:', voiceState);
+      return;
+    }
+    
+    if (recognitionRef.current) {
+      try {
+        // eslint-disable-next-line no-console
+        console.log('🎤 Starting voice recognition...');
+        
+        // Set timeout for recognition
+        timeoutRef.current = setTimeout(() => {
+          // eslint-disable-next-line no-console
+          console.log('⏰ Voice recognition timeout');
+          if (recognitionRef.current) {
+            recognitionRef.current.abort();
+          }
+          setVoiceState('IDLE');
+        }, 8000); // 8 second timeout
+        
+        recognitionRef.current.start();
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('❌ Error starting voice recognition:', error);
+        setVoiceState('ERROR');
+        setVoiceResponse('Could not start voice recognition. Please try again.');
+        setShowVoiceResponse(true);
+        setTimeout(() => setVoiceState('IDLE'), 2000);
+      }
+    }
   };
 
 
@@ -438,14 +538,15 @@ function FloatingVoiceAssistant({
 
       {/* Floating Voice Assistant - WhatsApp Style */}
       <button 
-        className={`${styles.floatingVoiceAssistant} ${isListening ? styles.listening : ''}`}
+        className={`${styles.floatingVoiceAssistant} ${voiceState === 'LISTENING' ? styles.listening : ''} ${voiceState === 'PROCESSING' ? styles.processing : ''} ${voiceState === 'ERROR' ? styles.error : ''}`}
         onClick={startVoiceRecognition}
         onMouseEnter={() => setShowVoicePanel(true)}
         onMouseLeave={() => setShowVoicePanel(false)}
-        disabled={isListening}
+        disabled={voiceState !== 'IDLE'}
         aria-label="Voice Assistant"
+        title={`Voice Assistant - ${voiceState}`}
       >
-        {isListening ? '🎙️' : '🎤'}
+        {voiceState === 'PROCESSING' ? '⚡' : voiceState === 'LISTENING' ? '🎙️' : voiceState === 'ERROR' ? '❌' : '🎤'}
       </button>
 
       {/* Voice Command Suggestions Panel */}

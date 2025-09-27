@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
-import GlobalSearch from './GlobalSearch';
+import GlobalSearch, { GlobalSearchRef } from './GlobalSearch';
 import { useGlobalSearch } from './useGlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import styles from '../styles/Dashboard.module.css';
@@ -63,6 +63,9 @@ function Dashboard({
   const [showTabNavigation, setShowTabNavigation] = useState(false);
   const [activeCardType, setActiveCardType] = useState<string | null>(null);
   
+  // Ref for GlobalSearch component to control scrolling
+  const globalSearchRef = useRef<GlobalSearchRef>(null);
+  
   // Global search functionality for voice commands
   const navigationHandlers = {
     onShowLeadManagement: () => { setCurrentProcessStage('leads'); onShowLeadManagement(); },
@@ -73,12 +76,19 @@ function Dashboard({
     getBusinessProfileById
   };
 
+  // Callback for when search is triggered via voice command
+  const handleSearchTriggered = useCallback(() => {
+    if (globalSearchRef.current) {
+      globalSearchRef.current.scrollToSearch();
+    }
+  }, []);
+
   const globalSearchState = useGlobalSearch({
     leads: mockLeads,
     quotes: mockQuotes,
     salesOrders: mockSalesOrders,
     customers: mockBusinessProfiles
-  }, navigationHandlers);
+  }, navigationHandlers, handleSearchTriggered);
   
   
   
@@ -522,6 +532,7 @@ function Dashboard({
 
         {/* Integrated Global Search */}
         <GlobalSearch
+          ref={globalSearchRef}
           dataSources={{
             leads: mockLeads,
             quotes: mockQuotes,
