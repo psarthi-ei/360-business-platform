@@ -211,13 +211,6 @@ function Invoices({
       />
       
       <div className={styles.pageContent}>
-        {/* Navigation Breadcrumb */}
-        <div className={styles.breadcrumb}>
-          <span onClick={onNavigateBack} className={styles.breadcrumbLink}>Dashboard</span>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <span className={styles.breadcrumbCurrent}>Invoices</span>
-        </div>
-
         <h1 className={styles.centeredHeading}>📄 {t('invoices')}</h1>
 
         {/* Invoice Type Filter */}

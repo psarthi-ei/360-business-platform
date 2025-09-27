@@ -282,53 +282,101 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Mobile Responsive - Matches HomePage exactly */
+/* Mobile Responsive - Improved layout */
 @media (max-width: 768px) {
   .productHeader {
-    padding: 12px 0;
+    padding: 10px 0;
   }
   
   .headerContent {
-    padding: 0 15px;
+    padding: 0 10px;
     flex-direction: row;
-    gap: 15px;
+    gap: 8px;
+    position: relative;
   }
   
   .logoSection {
     flex: 1;
+    min-width: 0; /* Allow shrinking */
   }
   
   .logo {
-    font-size: 20px;
+    font-size: 18px;
+    padding: 4px;
   }
   
   .logoImage {
-    height: 28px;
+    height: 24px;
+  }
+  
+  .logoTextContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logoText {
+    font-size: 18px;
+    line-height: 1.1;
   }
   
   .logoTagline {
-    font-size: 10px;
+    font-size: 9px;
     margin-top: -1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .navigationSection {
     display: none;
   }
   
-  
   .controlsSection {
     gap: 12px;
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
   }
   
+  .dashboardButton {
+    min-width: 70px;
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  .headerContent {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  
+  .logoText {
+    font-size: 16px;
+  }
+  
+  .logoImage {
+    height: 22px;
+  }
+  
+  .logoTagline {
+    font-size: 8px;
+    max-width: 120px;
+  }
   
   .dashboardButton {
-    min-width: 80px;
-    height: 44px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 600;
+    min-width: 60px;
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .controlsSection {
+    gap: 8px;
   }
   
 }

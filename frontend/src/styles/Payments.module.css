@@ -1,44 +1,14 @@
 /* Advance Payment Management Styles */
 .advancePaymentScreen {
   min-height: 100vh;
+  padding: 100px 10px 20px 10px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
 .pageContent {
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-/* Breadcrumb Navigation */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.breadcrumbLink {
-  color: #ffd700;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.breadcrumbLink:hover {
-  color: white;
-  text-decoration: underline;
-}
-
-.breadcrumbSeparator {
-  margin: 0 8px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.breadcrumbCurrent {
-  color: white;
-  font-weight: 500;
 }
 
 .centeredHeading {
@@ -50,85 +20,93 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Filter Section - Modern Card Design */
+/* Filter Section - Dropdown Design */
 .filtersSection {
   margin-bottom: 30px;
   padding: 0 20px;
 }
 
-.filterLabel {
-  color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-align: center;
-  margin-bottom: 15px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.filterButtons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
+.filterRow {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
   max-width: 800px;
   margin: 0 auto;
 }
 
-.filterBtn {
+.filterGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.filterLabel {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+.filterSelect {
   background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
   border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 15px;
-  padding: 18px 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  min-height: 80px;
   backdrop-filter: blur(10px);
-  color: #2c3e50;
-  font-weight: 600;
-  font-size: 0.95rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  min-height: 45px;
 }
 
-.filterBtn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-  opacity: 0;
-  transition: all 0.3s ease;
+.filterSelect:focus {
+  outline: none;
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
-.filterBtn:hover::before {
-  opacity: 1;
-}
-
-.filterBtn:hover {
-  transform: translateY(-5px);
+.filterSelect:hover {
   border-color: rgba(102, 126, 234, 0.4);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.filterBtn.active {
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
-  color: #333;
-  border-color: #ffd700;
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+/* Mobile responsiveness for filters */
+@media (max-width: 768px) {
+  .filterRow {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .filterGroup {
+    min-width: unset;
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .filterLabel {
+    min-width: unset;
+  }
+  
+  .filterSelect {
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    width: 100%;
+  }
 }
 
-.filterBtn.active::before {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-  opacity: 1;
-}
 
 /* Summary Section */
 .summarySection {
@@ -480,8 +458,12 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .advancePaymentScreen {
+    padding: 70px 10px 20px 10px;
+  }
+  
   .pageContent {
-    padding: 15px;
+    padding: 0 15px;
   }
   
   .centeredHeading {

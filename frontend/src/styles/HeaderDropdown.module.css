@@ -168,12 +168,12 @@
     display: block;
   }
   .dropdownTrigger {
-    padding: 10px;
-    font-size: 20px;
-    min-width: 48px;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    padding: 6px;
+    font-size: 16px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     background: rgba(102, 126, 234, 0.15);
     border: 2px solid rgba(102, 126, 234, 0.35);
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
@@ -185,6 +185,18 @@
     border-color: rgba(102, 126, 234, 0.5);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  .dropdownTrigger {
+    padding: 4px;
+    font-size: 14px;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
   }
   
   .triggerText {

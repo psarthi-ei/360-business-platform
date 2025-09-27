@@ -248,68 +248,40 @@ function Payments({
       />
       
       <div className={styles.pageContent}>
-        {/* Navigation Breadcrumb */}
-        <div className={styles.breadcrumb}>
-          <span onClick={onNavigateBack} className={styles.breadcrumbLink}>Dashboard</span>
-          <span className={styles.breadcrumbSeparator}>→</span>
-          <span className={styles.breadcrumbCurrent}>Payments & Invoices</span>
-        </div>
-
         <h1 className={styles.centeredHeading}>💰 Payments</h1>
 
-        {/* Payment Type Filter */}
+        {/* Filter Section */}
         <div className={styles.filtersSection}>
-          <div className={styles.filterLabel}>Payment Type:</div>
-          <div className={styles.filterButtons}>
-            <button 
-              className={paymentType === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setPaymentType('all')}
-            >
-              All Payments
-            </button>
-            <button 
-              className={paymentType === 'advance' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setPaymentType('advance')}
-            >
-              💳 Advance
-            </button>
-            <button 
-              className={paymentType === 'final' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setPaymentType('final')}
-            >
-              💰 Final
-            </button>
-          </div>
-        </div>
-
-        {/* Status Filter Section */}
-        <div className={styles.filtersSection}>
-          <div className={styles.filterLabel}>Payment Status:</div>
-          <div className={styles.filterButtons}>
-            <button 
-              className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('all')}
-            >
-              Show All
-            </button>
-            <button 
-              className={filterState === 'overdue' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('overdue')}
-            >
-              🔴 Overdue
-            </button>
-            <button 
-              className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('pending')}
-            >
-              ⏳ Pending
-            </button>
-            <button 
-              className={filterState === 'received' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('received')}
-            >
-              ✅ Received
-            </button>
+          <div className={styles.filterRow}>
+            <div className={styles.filterGroup}>
+              <label htmlFor="paymentType" className={styles.filterLabel}>Payment Type:</label>
+              <select 
+                id="paymentType"
+                className={styles.filterSelect}
+                value={paymentType} 
+                onChange={(e) => setPaymentType(e.target.value as 'advance' | 'final' | 'all')}
+              >
+                <option value="all">All Payments</option>
+                <option value="advance">💳 Advance</option>
+                <option value="final">💰 Final</option>
+              </select>
+            </div>
+            
+            <div className={styles.filterGroup}>
+              <label htmlFor="paymentStatus" className={styles.filterLabel}>Payment Status:</label>
+              <select 
+                id="paymentStatus"
+                className={styles.filterSelect}
+                value={filterState} 
+                onChange={(e) => onFilterChange(e.target.value)}
+              >
+                <option value="all">Show All</option>
+                <option value="overdue">🔴 Overdue</option>
+                <option value="pending">⏳ Pending</option>
+                <option value="partial">⚠️ Partial</option>
+                <option value="received">✅ Received</option>
+              </select>
+            </div>
           </div>
         </div>
 
