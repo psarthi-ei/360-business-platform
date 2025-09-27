@@ -375,7 +375,7 @@ function FloatingVoiceAssistant({
   // Debug logging state
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
-  const [debugFilter, setDebugFilter] = useState<'all' | 'capability' | 'permission' | 'voice' | 'audio'>('all');
+  const [debugFilter, setDebugFilter] = useState<'all' | 'voice' | 'audio' | 'permission' | 'capability'>('all');
   
   // Enhanced debug logger with capability detection
   const addDebugLog = useCallback((type: string, message: string) => {
@@ -558,7 +558,6 @@ function FloatingVoiceAssistant({
       
       // Enhanced device and configuration logging
       addDebugLog('Voice-Init', '=== VOICE RECOGNITION SETUP ===');
-      detectCapabilities();
       addDebugLog('Config', 'Language: en-IN, Continuous: false, Timeout: 10s');
 
       recognition.onstart = () => {
@@ -886,15 +885,15 @@ function FloatingVoiceAssistant({
           <div className={styles.debugFilterTabs}>
             {[
               { key: 'all', label: 'All', icon: '📋' },
-              { key: 'capability', label: 'Capability', icon: '🔧' },
-              { key: 'permission', label: 'Permission', icon: '🔐' },
               { key: 'voice', label: 'Voice', icon: '🎙️' },
-              { key: 'audio', label: 'Audio', icon: '🔊' }
+              { key: 'audio', label: 'Audio', icon: '🔊' },
+              { key: 'permission', label: 'Permission', icon: '🔐' },
+              { key: 'capability', label: 'Capability', icon: '🔧' }
             ].map(filter => (
               <button
                 key={filter.key}
                 className={`${styles.filterTab} ${debugFilter === filter.key ? styles.activeFilter : ''}`}
-                onClick={() => setDebugFilter(filter.key as 'all' | 'capability' | 'permission' | 'voice' | 'audio')}
+                onClick={() => setDebugFilter(filter.key as 'all' | 'voice' | 'audio' | 'permission' | 'capability')}
                 title={`Filter ${filter.label} logs`}
               >
                 {filter.icon} {filter.label}
