@@ -148,16 +148,35 @@ export function useGlobalSearch(
     
     // Trigger scroll callback if provided (for voice search)
     if (onSearchTriggered && finalResults.length > 0) {
-      // Add small delay to ensure DOM updates before scrolling
+      // Detect device type for optimal scroll behavior
+      const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
+      const delay = isDesktop ? 300 : 200; // Longer delay for desktop
+      
+      // Add delay to ensure DOM updates before scrolling
       setTimeout(() => {
-        // Only scroll if user is not already near the top of the page
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const isNearTop = scrollTop < 100; // Consider top 100px as "near top"
+        // Cross-browser scroll position detection
+        const scrollTop = window.pageYOffset || 
+                         document.documentElement.scrollTop || 
+                         document.body.scrollTop || 
+                         0;
+        
+        // Adjust threshold based on device type
+        const scrollThreshold = isDesktop ? 150 : 100; // Larger threshold for desktop
+        const isNearTop = scrollTop < scrollThreshold;
+        
+        // eslint-disable-next-line no-console
+        console.log('🎯 Voice search scroll check - Device:', isDesktop ? 'Desktop' : 'Mobile', 
+                   'scrollTop:', scrollTop, 'threshold:', scrollThreshold, 'isNearTop:', isNearTop, 'will scroll:', !isNearTop);
         
         if (!isNearTop) {
+          // eslint-disable-next-line no-console
+          console.log('🚀 Triggering scroll to search results');
           onSearchTriggered();
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('⏭️  User already near top - skipping scroll');
         }
-      }, 100);
+      }, delay);
     }
   }, [dataSources, navigationHandlers, onSearchTriggered]);
 

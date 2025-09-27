@@ -307,14 +307,18 @@ function FloatingVoiceAssistant({
         }
         
         // Use unified router for navigation
-        routeToTarget(target, 'navigate');
+        if (target) {
+          routeToTarget(target, 'navigate');
+        }
         break;
       
       // Create/Add command support
       case 'CREATE_COMMAND':
         const createTarget = nlpResult.payload?.target;
         // Use unified router for creation
-        routeToTarget(createTarget, 'create');
+        if (createTarget) {
+          routeToTarget(createTarget, 'create');
+        }
         break;
       case 'HELP_COMMAND':
         // Help response already generated

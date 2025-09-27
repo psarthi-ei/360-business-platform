@@ -50,12 +50,46 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   // Expose scroll and focus methods to parent components
   useImperativeHandle(ref, () => ({
     scrollToSearch: () => {
+      // eslint-disable-next-line no-console
+      console.log('🎯 scrollToSearch called, searchContainer exists:', !!searchContainerRef.current);
+      
       if (searchContainerRef.current) {
-        searchContainerRef.current.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'nearest'
-        });
+        try {
+          // First try modern scrollIntoView with smooth behavior
+          searchContainerRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+          // eslint-disable-next-line no-console
+          console.log('✅ scrollIntoView executed successfully');
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log('⚠️ scrollIntoView failed, trying fallback method:', error);
+          
+          // Fallback: Use getBoundingClientRect + window.scrollTo
+          try {
+            const rect = searchContainerRef.current.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = rect.top + scrollTop - 20; // 20px offset from top
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+            // eslint-disable-next-line no-console
+            console.log('✅ Fallback scroll executed to position:', targetPosition);
+          } catch (fallbackError) {
+            // eslint-disable-next-line no-console
+            console.log('❌ Both scroll methods failed:', fallbackError);
+            
+            // Last resort: Instant scroll
+            const rect = searchContainerRef.current.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = rect.top + scrollTop - 20;
+            window.scrollTo(0, targetPosition);
+          }
+        }
       }
     },
     focusSearch: () => {
