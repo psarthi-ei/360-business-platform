@@ -158,7 +158,9 @@ export function useGlobalSearch(
 
   const closeSearchResults = useCallback(() => {
     // eslint-disable-next-line no-console
-    console.log('closeSearchResults called - hiding search results');
+    console.log('closeSearchResults called - clearing search query and hiding results');
+    setSearchQuery('');
+    setSearchResults([]);
     setShowSearchResults(false);
   }, []);
 
