@@ -894,7 +894,7 @@ function FloatingVoiceAssistant({
               <button
                 key={filter.key}
                 className={`${styles.filterTab} ${debugFilter === filter.key ? styles.activeFilter : ''}`}
-                onClick={() => setDebugFilter(filter.key as any)}
+                onClick={() => setDebugFilter(filter.key as 'all' | 'capability' | 'permission' | 'voice' | 'audio')}
                 title={`Filter ${filter.label} logs`}
               >
                 {filter.icon} {filter.label}
