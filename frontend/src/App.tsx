@@ -55,6 +55,7 @@ function AppContent() {
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
+  const [shouldOpenAddModal, setShouldOpenAddModal] = useState(false);
 
 
 
@@ -286,6 +287,7 @@ function AppContent() {
           onShowPayments={showPayments}
           onShowInvoices={showInvoices}
           onShowCustomerList={showCustomerList}
+          onOpenAddLeadModal={() => setShouldOpenAddModal(true)}
           onShowInventory={showInventory}
           onShowFulfillment={showFulfillment}
           onShowAnalytics={showAnalytics}
@@ -324,6 +326,8 @@ function AppContent() {
         onShowSalesOrders={showSalesOrders}
         filterState={leadFilter}
         onFilterChange={setLeadFilter}
+        openAddModal={shouldOpenAddModal}
+        onAddModalHandled={() => setShouldOpenAddModal(false)}
       />
     );
   }

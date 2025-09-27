@@ -55,6 +55,7 @@ interface FloatingVoiceAssistantProps {
   onNavigateToFulfillment?: () => void;
   onNavigateToCustomers?: () => void;
   onNavigateToAnalytics?: () => void;
+  onOpenAddLeadModal?: () => void;
   businessData?: {
     hotLeads: number;
     overduePayments: number;
@@ -74,6 +75,7 @@ function FloatingVoiceAssistant({
   onNavigateToFulfillment,
   onNavigateToCustomers,
   onNavigateToAnalytics,
+  onOpenAddLeadModal,
   businessData,
   onPerformSearch
 }: FloatingVoiceAssistantProps) {
@@ -241,7 +243,8 @@ function FloatingVoiceAssistant({
             onNavigateToCustomers?.();
             break;
           case 'orders':
-            onNavigateToQuotes?.(); // Map to quotes/sales orders
+          case 'quotes':
+            onNavigateToQuotes?.();
             break;
           case 'inventory':
             onNavigateToInventory?.();
@@ -249,39 +252,51 @@ function FloatingVoiceAssistant({
           case 'analytics':
             onNavigateToAnalytics?.();
             break;
+          case 'production':
+            onNavigateToProduction?.();
+            break;
+          case 'fulfillment':
+            onNavigateToFulfillment?.();
+            break;
           default:
             // Handle unknown target
             break;
         }
         break;
       
-      // Legacy intent support (backward compatibility)
-      case 'OPEN_LEADS':
-        onNavigateToLeads?.();
-        break;
-      case 'OPEN_PAYMENTS':
-        onNavigateToPayments?.();
-        break;
-      case 'OPEN_CUSTOMERS':
-        onNavigateToCustomers?.();
-        break;
-      case 'OPEN_INVENTORY':
-        onNavigateToInventory?.();
-        break;
-      case 'OPEN_ORDERS':
-        onNavigateToQuotes?.(); // Using quotes for orders
-        break;
-      case 'OPEN_ANALYTICS':
-        onNavigateToAnalytics?.();
-        break;
-      case 'OPEN_PRODUCTION':
-        onNavigateToProduction?.();
-        break;
-      case 'SHOW_BUSINESS_OVERVIEW':
-        // Could navigate to dashboard overview or show summary
-        break;
-      case 'SHOW_PRIORITIES':
-        // Already handled in response generation
+      // Create/Add command support
+      case 'CREATE_COMMAND':
+        const createTarget = nlpResult.payload?.target;
+        switch (createTarget) {
+          case 'lead':
+          case 'leads':
+            // Open Add Lead Modal directly
+            if (onOpenAddLeadModal) {
+              onOpenAddLeadModal();
+            } else {
+              // Fallback to leads page if modal handler not available
+              onNavigateToLeads?.();
+            }
+            break;
+          case 'quote':
+          case 'quotes':
+          case 'order':
+          case 'orders':
+            onNavigateToQuotes?.();
+            break;
+          case 'customer':
+          case 'customers':
+            onNavigateToCustomers?.();
+            break;
+          default:
+            // For generic "add new lead" without target detection
+            if (onOpenAddLeadModal) {
+              onOpenAddLeadModal();
+            } else {
+              onNavigateToLeads?.();
+            }
+            break;
+        }
         break;
       case 'HELP_COMMAND':
         // Help response already generated
@@ -290,7 +305,7 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToCustomers, onNavigateToAnalytics, onPerformSearch, extractSearchQuery]);
+  }, [onNavigateToLeads, onNavigateToQuotes, onNavigateToPayments, onNavigateToProduction, onNavigateToInventory, onNavigateToFulfillment, onNavigateToCustomers, onNavigateToAnalytics, onOpenAddLeadModal, onPerformSearch, extractSearchQuery]);
 
   // Enhanced voice command processing with NLP
   const processVoiceCommand = useCallback(async (command: string) => {

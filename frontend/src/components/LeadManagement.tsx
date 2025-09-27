@@ -19,6 +19,8 @@ interface LeadManagementProps {
   onShowSalesOrders?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  openAddModal?: boolean;
+  onAddModalHandled?: () => void;
 }
 
 function LeadManagement({
@@ -33,7 +35,9 @@ function LeadManagement({
   onShowQuotationOrders,
   onShowSalesOrders,
   filterState,
-  onFilterChange
+  onFilterChange,
+  openAddModal,
+  onAddModalHandled
 }: LeadManagementProps) {
   const { t } = useTranslation();
   const location = useLocation();
@@ -50,6 +54,17 @@ function LeadManagement({
       setShowAddModal(true);
     }
   }, [location]);
+
+  // Auto-open modal based on voice command prop
+  useEffect(() => {
+    if (openAddModal) {
+      setShowAddModal(true);
+      // Notify parent that we handled the prop
+      if (onAddModalHandled) {
+        onAddModalHandled();
+      }
+    }
+  }, [openAddModal, onAddModalHandled]);
 
   // Generate unique lead ID
   const generateLeadId = () => {

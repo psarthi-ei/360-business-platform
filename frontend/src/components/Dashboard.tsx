@@ -26,6 +26,7 @@ interface DashboardProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
+  onOpenAddLeadModal?: () => void;
 }
 
 function Dashboard({ 
@@ -47,7 +48,8 @@ function Dashboard({
   onDemoMode,
   onLogout,
   isAuthenticated,
-  userMode
+  userMode,
+  onOpenAddLeadModal
 }: DashboardProps) {
   // Translation hook available if needed in future
   // const { currentLanguage, setLanguage } = useTranslation();
@@ -845,6 +847,13 @@ function Dashboard({
         onNavigateToFulfillment={() => { setCurrentProcessStage('fulfillment'); onShowFulfillment?.(); }}
         onNavigateToCustomers={() => { setCurrentProcessStage('customers'); onShowCustomerList(); }}
         onNavigateToAnalytics={() => { setCurrentProcessStage('analytics'); onShowAnalytics?.(); }}
+        onOpenAddLeadModal={() => { 
+          setCurrentProcessStage('leads'); 
+          if (onOpenAddLeadModal) {
+            onOpenAddLeadModal();
+          }
+          onShowLeadManagement();
+        }}
         businessData={businessData}
         onPerformSearch={globalSearchState.performGlobalSearch}
       />

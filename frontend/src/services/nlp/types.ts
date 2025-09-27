@@ -62,24 +62,15 @@ export interface NLPResult {
   language?: string;
 }
 
-// Business Intent Types (Enhanced with Universal Commands)
+// Business Intent Types (Universal Command System)
 export type BusinessIntent = 
   | 'SEARCH_COMMAND'        // Universal search: "search Mumbai", "find cotton"
   | 'SHOW_COMMAND'          // Universal show: "show leads", "display payments"
   | 'OPEN_COMMAND'          // Universal open: "open customers", "navigate to orders"
   | 'CREATE_COMMAND'        // Universal create: "create lead", "add customer" 
   | 'CHECK_COMMAND'         // Universal check: "check status", "verify payment"
-  | 'OPEN_LEADS'           // Legacy support
-  | 'OPEN_PAYMENTS'        // Legacy support
-  | 'OPEN_CUSTOMERS'       // Legacy support
-  | 'OPEN_INVENTORY'       // Legacy support
-  | 'OPEN_ORDERS'          // Legacy support
-  | 'OPEN_ANALYTICS'       // Legacy support
-  | 'OPEN_PRODUCTION'      // Legacy support
-  | 'SHOW_BUSINESS_OVERVIEW'
-  | 'SHOW_PRIORITIES'
-  | 'UNKNOWN_INTENT'
-  | 'HELP_COMMAND';
+  | 'UNKNOWN_INTENT'        // Fallback for unrecognized commands
+  | 'HELP_COMMAND';         // Help and assistance requests
 
 export interface BusinessContext {
   hotLeads: number;
