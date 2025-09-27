@@ -374,7 +374,7 @@ function FloatingVoiceAssistant({
 
   // Browser/app context detection (used across multiple functions)
   const isGoogleApp = /GoogleApp/.test(navigator.userAgent);
-  const isWebView = (window.navigator as any).standalone === false && /Mobile|Android/.test(navigator.userAgent);
+  const isWebView = (window.navigator as unknown as { standalone?: boolean }).standalone === false && /Mobile|Android/.test(navigator.userAgent);
   const isDesktop = window.innerWidth >= 768 && !('ontouchstart' in window);
   const confidenceThreshold = isGoogleApp || isWebView ? 0.4 : 0.6;
 
@@ -391,7 +391,7 @@ function FloatingVoiceAssistant({
       
       // Try to set maxAlternatives if supported
       try {
-        (recognition as any).maxAlternatives = 3;
+        (recognition as unknown as { maxAlternatives?: number }).maxAlternatives = 3;
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log('maxAlternatives not supported in this browser');
@@ -408,22 +408,29 @@ function FloatingVoiceAssistant({
       
       // Add audio start event to detect when speech is detected (with type assertion)
       try {
-        (recognition as any).onaudiostart = () => {
+        const extendedRecognition = recognition as unknown as {
+          onaudiostart?: () => void;
+          onspeechstart?: () => void;
+          onspeechend?: () => void;
+          onaudioend?: () => void;
+        };
+        
+        extendedRecognition.onaudiostart = () => {
           // eslint-disable-next-line no-console
           console.log('🔊 Audio input detected');
         };
         
-        (recognition as any).onspeechstart = () => {
+        extendedRecognition.onspeechstart = () => {
           // eslint-disable-next-line no-console
           console.log('🗣️ Speech detected');
         };
         
-        (recognition as any).onspeechend = () => {
+        extendedRecognition.onspeechend = () => {
           // eslint-disable-next-line no-console
           console.log('🤐 Speech ended');
         };
         
-        (recognition as any).onaudioend = () => {
+        extendedRecognition.onaudioend = () => {
           // eslint-disable-next-line no-console
           console.log('🔇 Audio input ended');
         };
