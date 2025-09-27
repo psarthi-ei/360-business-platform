@@ -405,6 +405,32 @@ function FloatingVoiceAssistant({
         console.log('🎤 Voice recognition started');
         setVoiceState('LISTENING');
       };
+      
+      // Add audio start event to detect when speech is detected (with type assertion)
+      try {
+        (recognition as any).onaudiostart = () => {
+          // eslint-disable-next-line no-console
+          console.log('🔊 Audio input detected');
+        };
+        
+        (recognition as any).onspeechstart = () => {
+          // eslint-disable-next-line no-console
+          console.log('🗣️ Speech detected');
+        };
+        
+        (recognition as any).onspeechend = () => {
+          // eslint-disable-next-line no-console
+          console.log('🤐 Speech ended');
+        };
+        
+        (recognition as any).onaudioend = () => {
+          // eslint-disable-next-line no-console
+          console.log('🔇 Audio input ended');
+        };
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log('Some audio events not supported in this browser');
+      }
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         // Get all alternatives and find the best one
@@ -421,7 +447,8 @@ function FloatingVoiceAssistant({
             confidence: alternative.confidence
           });
           
-          if (alternative.confidence > bestConfidence) {
+          // Use >= to handle confidence=0 cases and prefer first result if all have same confidence
+          if (alternative.confidence >= bestConfidence) {
             bestConfidence = alternative.confidence;
             bestTranscript = alternative.transcript;
           }
@@ -434,20 +461,41 @@ function FloatingVoiceAssistant({
           threshold: confidenceThreshold
         });
         
+        // Debug: Log the values directly
+        // eslint-disable-next-line no-console
+        console.log('🔍 Debug transcript:', `"${bestTranscript}"`, 'confidence:', bestConfidence, 'length:', bestTranscript.length);
+        
         // Clear timeout
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
         
-        // Check if confidence meets threshold
-        if (bestConfidence >= confidenceThreshold) {
-          // High confidence - process command
+        // Handle desktop browsers that often return confidence = 0
+        const hasValidTranscript = bestTranscript && bestTranscript.trim().length > 0;
+        const isConfidenceReliable = bestConfidence > 0; // Confidence scores of 0 are often unreliable
+        
+        // Debug the condition logic
+        // eslint-disable-next-line no-console
+        console.log('🔍 Condition check:', {
+          hasValidTranscript,
+          bestConfidence,
+          confidenceThreshold,
+          isConfidenceReliable,
+          meetsThreshold: bestConfidence >= confidenceThreshold,
+          usesFallback: !isConfidenceReliable,
+          willProcess: hasValidTranscript && (bestConfidence >= confidenceThreshold || !isConfidenceReliable)
+        });
+        
+        if (hasValidTranscript && (bestConfidence >= confidenceThreshold || !isConfidenceReliable)) {
+          // High confidence OR any browser with valid transcript when confidence=0 (common browser behavior)
+          // eslint-disable-next-line no-console
+          console.log('🎤 Processing command:', bestTranscript, 'confidence:', bestConfidence, 'confidence=0 fallback:', !isConfidenceReliable);
           processVoiceCommand(bestTranscript);
         } else if (allAlternatives.length > 1) {
           // Low confidence but multiple alternatives - try the next best
           const secondBest = allAlternatives.sort((a, b) => b.confidence - a.confidence)[1];
-          if (secondBest && secondBest.confidence >= (confidenceThreshold * 0.8)) {
+          if (secondBest && (secondBest.confidence >= (confidenceThreshold * 0.8) || (!isConfidenceReliable && isDesktop && secondBest.transcript.trim().length > 0))) {
             // eslint-disable-next-line no-console
             console.log('🎤 Using second-best alternative:', secondBest);
             processVoiceCommand(secondBest.transcript);
@@ -536,6 +584,16 @@ function FloatingVoiceAssistant({
           timeoutRef.current = null;
         }
         
+        // Check if we ended without getting any results (possible permission issue)
+        if (voiceState === 'LISTENING') {
+          // eslint-disable-next-line no-console
+          console.log('⚠️ Voice recognition ended without results - possible microphone permission issue');
+          setVoiceResponse('Microphone access may be blocked. Please check browser permissions and try again.');
+          setShowVoiceResponse(true);
+          setVoiceState('ERROR');
+          return;
+        }
+        
         // Reset to idle (no need to check state as this is end)
         setVoiceState('IDLE');
       };
@@ -567,11 +625,11 @@ function FloatingVoiceAssistant({
         // eslint-disable-next-line no-console
         console.log('🎤 Starting voice recognition...');
         
-        // Adaptive timeout based on browser context
+        // Adaptive timeout based on browser context - increased for better user experience
         const adaptiveTimeout = (() => {
-          if (isGoogleApp || isWebView) return 12000; // 12s for Google App/WebView (often slower)
-          if (isDesktop) return 6000; // 6s for desktop (usually faster)
-          return 8000; // 8s for mobile Chrome (default)
+          if (isGoogleApp || isWebView) return 15000; // 15s for Google App/WebView (often slower)
+          if (isDesktop) return 10000; // 10s for desktop (give more time to speak)
+          return 12000; // 12s for mobile Chrome (default)
         })();
         
         // Set timeout for recognition
