@@ -12,37 +12,37 @@ export const VOICE_ACTIONS = {
   // Search/Find Actions
   SEARCH: {
     en: ['search', 'find', 'look', 'locate', 'seek'],
-    hi: ['खोजें', 'ढूंढें', 'देखें', 'पता', 'करो', 'ढूंढो'],
-    gu: ['શોધો', 'લોકેટ', 'જુઓ', 'કરો', 'મળવા'],
+    hi: ['khojo', 'dhundo', 'dekho', 'pata', 'karo', 'dhundo'],
+    gu: ['shodho', 'locate', 'juo', 'karo', 'malva'],
     // Easy to extend: ta: ['தேடு', 'கண்டுபிடி', 'பார்'], te: ['వెతుకు', 'కనుగొను']
   },
 
   // Show/Display Actions  
   SHOW: {
     en: ['show', 'display', 'view', 'see', 'list'],
-    hi: ['दिखाओ', 'दिखाएं', 'देखें', 'लिस्ट', 'सूची'],
-    gu: ['બતાવો', 'દર્શાવો', 'જુઓ', 'યાદી', 'બતાવ'],
+    hi: ['dikhao', 'dikhaye', 'dekhe', 'list', 'suchi'],
+    gu: ['batavo', 'darshavo', 'juo', 'yadi', 'batav'],
   },
 
   // Open/Navigate Actions
   OPEN: {
     en: ['open', 'go', 'navigate', 'goto', 'access'],
-    hi: ['खोलो', 'खोलें', 'जाओ', 'चलो', 'पहुंचो'],
-    gu: ['ખોલો', 'જાઓ', 'નેવિગેટ', 'પહોંચો', 'ઍક્સેસ'],
+    hi: ['kholo', 'khole', 'jao', 'chalo', 'pahuncho'],
+    gu: ['kholo', 'jao', 'navigate', 'pahoncho', 'access'],
   },
 
   // Create/Add Actions
   CREATE: {
     en: ['create', 'add', 'new', 'make', 'generate'],
-    hi: ['बनाओ', 'जोड़ो', 'नया', 'क्रिएट', 'बनाएं'],
-    gu: ['બનાવો', 'ઉમેરો', 'નવું', 'ક્રિએટ', 'બનાવ'],
+    hi: ['banao', 'jodo', 'naya', 'create', 'banaye'],
+    gu: ['banavo', 'umero', 'navu', 'create', 'banav'],
   },
 
   // Check/Verify Actions
   CHECK: {
     en: ['check', 'verify', 'validate', 'confirm', 'status'],
-    hi: ['चेक', 'जांच', 'स्टेटस', 'पुष्टि', 'वेरिफाई'],
-    gu: ['ચેક', 'તપાસ', 'સ્ટેટસ', 'પુષ્ટિ', 'વેરિફાય'],
+    hi: ['check', 'janch', 'status', 'pushti', 'verify'],
+    gu: ['check', 'tapas', 'status', 'pushti', 'verify'],
   }
 };
 
@@ -50,44 +50,44 @@ export const VOICE_ACTIONS = {
 export const BUSINESS_TARGETS = {
   LEADS: {
     en: ['lead', 'leads', 'prospect', 'prospects', 'customer', 'client'],
-    hi: ['लीड', 'लीड्स', 'ग्राहक', 'क्लाइंट', 'संभावना'],
-    gu: ['લીડ', 'લીડ્સ', 'ગ્રાહક', 'ક્લાઇન્ટ', 'સંભાવના'],
+    hi: ['lead', 'leads', 'grahak', 'client', 'sambhavna'],
+    gu: ['lead', 'leads', 'grahak', 'client', 'sambhavna'],
   },
 
   PAYMENTS: {
     en: ['payment', 'payments', 'money', 'due', 'outstanding', 'paid'],
-    hi: ['पेमेंट', 'पेमेंट्स', 'पैसा', 'बकाया', 'भुगतान'],
-    gu: ['પેમેન્ટ', 'પેમેન્ટ્સ', 'પૈસા', 'બાકી', 'ભુગતાન'],
+    hi: ['payment', 'payments', 'paisa', 'bakaya', 'bhugtan'],
+    gu: ['payment', 'payments', 'paisa', 'baki', 'bhugtan'],
   },
 
   CUSTOMERS: {
     en: ['customer', 'customers', 'client', 'clients', 'buyer'],
-    hi: ['कस्टमर', 'ग्राहक', 'खरीदार', 'क्लाइंट'],
-    gu: ['કસ્ટમર', 'ગ્રાહક', 'ખરીદદાર', 'ક્લાઇન્ટ'],
+    hi: ['customer', 'grahak', 'kharidar', 'client'],
+    gu: ['customer', 'grahak', 'kharidar', 'client'],
   },
 
   ORDERS: {
     en: ['order', 'orders', 'sales', 'booking', 'purchase'],
-    hi: ['ऑर्डर', 'ऑर्डर्स', 'सेल्स', 'बुकिंग', 'खरीद'],
-    gu: ['ઓર્ડર', 'ઓર્ડર્સ', 'સેલ્સ', 'બુકિંગ', 'ખરીદ'],
+    hi: ['order', 'orders', 'sales', 'booking', 'kharid'],
+    gu: ['order', 'orders', 'sales', 'booking', 'kharid'],
   },
 
   INVENTORY: {
     en: ['inventory', 'stock', 'material', 'fabric', 'goods'],
-    hi: ['इन्वेंटरी', 'स्टॉक', 'मटेरियल', 'कपड़ा', 'सामान'],
-    gu: ['ઇન્વેન્ટરી', 'સ્ટોક', 'મટેરિયલ', 'કાપડ', 'સામાન'],
+    hi: ['inventory', 'stock', 'material', 'kapda', 'saman'],
+    gu: ['inventory', 'stock', 'material', 'kapad', 'saman'],
   },
 
   ANALYTICS: {
     en: ['analytics', 'report', 'reports', 'performance', 'data', 'insights'],
-    hi: ['एनालिटिक्स', 'रिपोर्ट', 'परफॉर्मेंस', 'डेटा', 'जानकारी'],
-    gu: ['એનાલિટિક્સ', 'રિપોર્ટ', 'પર્ફોર્મન્સ', 'ડેટા', 'માહિતી'],
+    hi: ['analytics', 'report', 'performance', 'data', 'jankari'],
+    gu: ['analytics', 'report', 'performance', 'data', 'mahiti'],
   },
 
   DASHBOARD: {
     en: ['dashboard', 'home', 'main', 'overview', 'summary'],
-    hi: ['डैशबोर्ड', 'होम', 'मुख्य', 'ओवरव्यू', 'सारांश'],
-    gu: ['ડેશબોર્ડ', 'હોમ', 'મુખ્ય', 'ઓવરવ્યૂ', 'સારાંશ'],
+    hi: ['dashboard', 'home', 'mukhya', 'overview', 'saransh'],
+    gu: ['dashboard', 'home', 'mukhya', 'overview', 'saransh'],
   }
 };
 
@@ -95,14 +95,14 @@ export const BUSINESS_TARGETS = {
 export const CONTEXTUAL_MARKERS = {
   POSSESSIVE: {
     en: ['of', 'from', 'in', 'at', 'with', 'by', 'on', 'under', 'over', 'through', 'across', 'behind', 'beside', 'below', 'above', 'around', 'between', 'among', 'within', 'without'],
-    hi: ['का', 'की', 'के', 'में', 'से', 'वाला', 'वाले', 'वाली', 'पर', 'तक', 'साथ', 'द्वारा', 'अंदर', 'बाहर', 'ऊपर', 'नीचे', 'आसपास', 'बीच', 'तरफ', 'जरिए', 'माध्यम', 'वजह', 'कारण'],
-    gu: ['ના', 'નું', 'ની', 'માં', 'થી', 'વાળા', 'વાળું', 'વાળી', 'પર', 'સુધી', 'સાથે', 'દ્વારા', 'અંદર', 'બહાર', 'ઉપર', 'નીચે', 'આસપાસ', 'વચ્ચે', 'તરફ', 'મારફતે', 'માધ્યમ', 'વજહ', 'કારણ'],
+    hi: ['ka', 'ki', 'ke', 'mein', 'se', 'vala', 'vale', 'vali', 'par', 'tak', 'sath', 'dwara', 'andar', 'bahar', 'upar', 'niche', 'aaspas', 'bich', 'taraf', 'jariye', 'madhyam', 'vajah', 'karan'],
+    gu: ['na', 'nu', 'ni', 'ma', 'thi', 'vala', 'valu', 'vali', 'par', 'sudhi', 'sathe', 'dwara', 'andar', 'bahar', 'upar', 'niche', 'aaspas', 'vacche', 'taraf', 'marfate', 'madhyam', 'vajah', 'karan'],
   },
 
   CONNECTORS: {
     en: ['for', 'to', 'and', 'or', 'with', 'about', 'but', 'also', 'then', 'now', 'here', 'there', 'while', 'since', 'until', 'before', 'after', 'during', 'except', 'unless'],
-    hi: ['के लिए', 'को', 'और', 'या', 'के साथ', 'के बारे में', 'लेकिन', 'भी', 'फिर', 'अब', 'यहाँ', 'वहाँ', 'जबकि', 'जब से', 'तब तक', 'पहले', 'बाद', 'दौरान', 'सिवाय', 'जब तक'],
-    gu: ['માટે', 'ને', 'અને', 'અથવા', 'સાથે', 'વિશે', 'પરંતુ', 'પણ', 'પછી', 'હવે', 'અહીં', 'ત્યાં', 'જ્યારે', 'ત્યારથી', 'ત્યાં સુધી', 'પહેલાં', 'પછી', 'દરમિયાન', 'સિવાય', 'જ્યાં સુધી']
+    hi: ['ke liye', 'ko', 'aur', 'ya', 'ke sath', 'ke bare mein', 'lekin', 'bhi', 'phir', 'ab', 'yaha', 'vaha', 'jabki', 'jab se', 'tab tak', 'pahle', 'baad', 'dauran', 'sivay', 'jab tak'],
+    gu: ['mate', 'ne', 'ane', 'athva', 'sathe', 'vishe', 'parantu', 'pan', 'pachhi', 'have', 'ahi', 'tya', 'jyare', 'tyarthi', 'tya sudhi', 'pahela', 'pachhi', 'daramiyan', 'sivay', 'jya sudhi']
   }
 };
 
@@ -110,20 +110,20 @@ export const CONTEXTUAL_MARKERS = {
 export const CONVERSATION_FILLERS = {
   ACTION_EMPHASIS: {
     en: ['please', 'can', 'you', 'will', 'would', 'could', 'should', 'just', 'now', 'then', 'okay', 'ok', 'well', 'right', 'sure', 'maybe', 'perhaps'],
-    hi: ['करो', 'कर', 'कीजिए', 'प्लीज', 'अब', 'तो', 'फिर', 'जरा', 'थोड़ा', 'जल्दी', 'धीरे', 'ठीक', 'अच्छा', 'हाँ', 'शायद', 'संभव', 'जरूर'],
-    gu: ['કરો', 'કર', 'કરજે', 'પ્લીઝ', 'હવે', 'તો', 'પછી', 'જરા', 'થોડું', 'જલ્દી', 'ધીમે', 'ઠીક', 'સારું', 'હા', 'કદાચ', 'શક્ય', 'જરૂર']
+    hi: ['karo', 'kar', 'kijiye', 'please', 'ab', 'to', 'phir', 'jara', 'thoda', 'jaldi', 'dhire', 'thik', 'accha', 'ha', 'shayad', 'sambhav', 'jarur'],
+    gu: ['karo', 'kar', 'karje', 'please', 'have', 'to', 'pachhi', 'jara', 'thodu', 'jaldi', 'dhime', 'thik', 'saru', 'ha', 'kadach', 'shakya', 'jarur']
   },
 
   QUESTION_WORDS: {
     en: ['what', 'how', 'is', 'are', 'was', 'were', 'do', 'does', 'did', 'have', 'has', 'had', 'where', 'when', 'why', 'which', 'who', 'whose', 'whom'],
-    hi: ['क्या', 'कैसे', 'है', 'हैं', 'था', 'थे', 'कर', 'करते', 'किया', 'कुछ', 'कहाँ', 'कब', 'क्यों', 'कौन', 'किसका', 'किसे', 'जो', 'जिस'],
-    gu: ['શું', 'કેવી', 'છે', 'છે', 'હતા', 'હતી', 'કર', 'કરતા', 'કર્યું', 'કંઈ', 'ક્યાં', 'ક્યારે', 'કેમ', 'કોણ', 'કોના', 'કોને', 'જે', 'જેના']
+    hi: ['kya', 'kaise', 'hai', 'hain', 'tha', 'the', 'kar', 'karte', 'kiya', 'kuch', 'kaha', 'kab', 'kyo', 'kaun', 'kiska', 'kise', 'jo', 'jis'],
+    gu: ['shu', 'kevi', 'che', 'che', 'hata', 'hati', 'kar', 'karta', 'karyu', 'kai', 'kya', 'kyare', 'kem', 'kon', 'kona', 'kone', 'je', 'jena']
   },
 
   CONVERSATION_FLOW: {
     en: ['like', 'you know', 'i mean', 'actually', 'basically', 'really', 'very', 'quite', 'pretty', 'sort of', 'kind of', 'a bit', 'a little'],
-    hi: ['जैसे', 'पता', 'मतलब', 'यानी', 'वास्तव', 'सच', 'बहुत', 'काफी', 'थोड़ा', 'कुछ', 'एक तरह', 'जरा सा'],
-    gu: ['જેવું', 'ખબર', 'મતલબ', 'એટલે', 'વાસ્તવ', 'સાચ', 'ખૂબ', 'ઘણું', 'થોડું', 'કંઈક', 'એક પ્રકાર', 'જરા']
+    hi: ['jaise', 'pata', 'matlab', 'yani', 'vastav', 'sach', 'bahut', 'kafi', 'thoda', 'kuch', 'ek tarah', 'jara sa'],
+    gu: ['jevu', 'khabar', 'matlab', 'etle', 'vastav', 'sach', 'khub', 'ghanu', 'thodu', 'kaik', 'ek prakar', 'jara']
   }
 };
 
@@ -131,20 +131,20 @@ export const CONVERSATION_FILLERS = {
 export const FILTER_WORDS = {
   PRIORITY: {
     en: ['hot', 'warm', 'cold', 'urgent', 'high', 'low', 'priority'],
-    hi: ['हॉट', 'गर्म', 'ठंड', 'जरूरी', 'उच्च', 'कम', 'प्राथमिकता'],
-    gu: ['હૉટ', 'ગરમ', 'ઠંડ', 'જરૂરી', 'ઉચ્ચ', 'ઓછું', 'પ્રાથમિકતા'],
+    hi: ['hot', 'garm', 'thand', 'jaruri', 'uchh', 'kam', 'prathmikta'],
+    gu: ['hot', 'garam', 'thand', 'jaruri', 'uchh', 'ochu', 'prathmikta'],
   },
 
   STATUS: {
     en: ['pending', 'approved', 'rejected', 'completed', 'active'],
-    hi: ['पेंडिंग', 'अप्रूवड', 'रिजेक्ट', 'पूरा', 'एक्टिव'],
-    gu: ['પેન્ડિંગ', 'એપ્રુવ્ડ', 'રિજેક્ટ', 'પૂર્ણ', 'એક્ટિવ'],
+    hi: ['pending', 'approved', 'reject', 'pura', 'active'],
+    gu: ['pending', 'approved', 'reject', 'purn', 'active'],
   },
 
   LOCATION: {
     en: ['mumbai', 'delhi', 'bangalore', 'chennai', 'kolkata', 'surat', 'ahmedabad', 'vadodara', 'gujarat', 'maharashtra'],
-    hi: ['मुंबई', 'दिल्ली', 'बेंगलुरु', 'चेन्नई', 'कोलकाता', 'सूरत', 'अहमदाबाद', 'वडोदरा', 'गुजरात', 'महाराष्ट्र'],
-    gu: ['મુંબઈ', 'દિલ્લી', 'બેંગલુરુ', 'ચેન્નઈ', 'કોલકાતા', 'સુરત', 'અમદાવાદ', 'વડોદરા', 'ગુજરાત', 'મહારાષ્ટ્ર'],
+    hi: ['mumbai', 'delhi', 'bengaluru', 'chennai', 'kolkata', 'surat', 'ahmedabad', 'vadodara', 'gujarat', 'maharashtra'],
+    gu: ['mumbai', 'delhi', 'bengaluru', 'chennai', 'kolkata', 'surat', 'ahmedabad', 'vadodara', 'gujarat', 'maharashtra'],
   }
 };
 

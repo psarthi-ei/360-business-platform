@@ -13,6 +13,7 @@ import {
   detectPrimaryLanguage
 } from './LanguageConfig';
 import { VoiceIntent, VoiceCommandPayload, DebugExtractionResult } from './types';
+import { PhoneticMatcher } from './PhoneticMatcher';
 
 export class UniversalCommandProcessor {
   
@@ -122,36 +123,27 @@ export class UniversalCommandProcessor {
   /**
    * Extract clean query by removing action words and contextual markers
    * This is the core fix for "search Mumbai" → "Mumbai"
+   * Now with fuzzy matching for Roman transliteration variations
    */
   private extractCleanQuery(text: string, action: string | null): string | undefined {
     let cleanedText = text;
     
-    // Step 1: Remove action words from all languages
+    // Step 1: Remove action words from all languages (with fuzzy matching)
     if (action) {
       const actionWords = getAllActionWords(action.toUpperCase() as keyof typeof VOICE_ACTIONS);
-      for (const actionWord of actionWords) {
-        const regex = new RegExp(`\\b${this.escapeRegex(actionWord)}\\b`, 'gi');
-        cleanedText = cleanedText.replace(regex, '');
-      }
+      cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, actionWords);
     }
     
     // Step 2: Remove contextual markers and conversation fillers
     const contextualMarkers = getAllContextualMarkers();
     const conversationFillers = getAllConversationFillers();
     const allFillers = [...contextualMarkers, ...conversationFillers];
-    
-    for (const marker of allFillers) {
-      const regex = new RegExp(`\\b${this.escapeRegex(marker)}\\b`, 'gi');
-      cleanedText = cleanedText.replace(regex, '');
-    }
+    cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, allFillers);
     
     // Step 3: Remove business target words (keep the content, not the category)
     for (const targetType of Object.keys(BUSINESS_TARGETS)) {
       const targetWords = getAllTargetWords(targetType as keyof typeof BUSINESS_TARGETS);
-      for (const targetWord of targetWords) {
-        const regex = new RegExp(`\\b${this.escapeRegex(targetWord)}\\b`, 'gi');
-        cleanedText = cleanedText.replace(regex, '');
-      }
+      cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, targetWords);
     }
     
     // Step 4: Clean up whitespace and return
@@ -246,13 +238,66 @@ export class UniversalCommandProcessor {
   }
 
   /**
-   * Helper: Check if text contains any of the given words
+   * Helper: Check if text contains any of the given words (with fuzzy matching)
    */
   private containsAnyWord(text: string, words: string[]): boolean {
-    return words.some(word => {
+    // Extract individual words from text for matching
+    const textWords = text.toLowerCase().match(/\b\w+\b/g) || [];
+    
+    // First try exact matching (fastest)
+    for (const word of words) {
       const regex = new RegExp(`\\b${this.escapeRegex(word)}\\b`, 'i');
-      return regex.test(text);
-    });
+      if (regex.test(text)) {
+        return true;
+      }
+    }
+    
+    // Then try fuzzy matching for Roman transliteration variations
+    for (const textWord of textWords) {
+      if (PhoneticMatcher.fuzzyContains(textWord, words, 0.7)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  /**
+   * Helper: Remove words from text using both exact and fuzzy matching
+   */
+  private removeWordsWithFuzzyMatching(text: string, wordsToRemove: string[]): string {
+    let cleanedText = text;
+    
+    // Step 1: Remove exact matches first (traditional approach)
+    for (const word of wordsToRemove) {
+      const regex = new RegExp(`\\b${this.escapeRegex(word)}\\b`, 'gi');
+      cleanedText = cleanedText.replace(regex, '');
+    }
+    
+    // Step 2: Handle fuzzy matches for remaining words
+    const textWords = cleanedText.match(/\b\w+\b/g) || [];
+    const wordsToKeep: string[] = [];
+    
+    for (const textWord of textWords) {
+      // Check if this word should be removed using fuzzy matching
+      const shouldRemove = PhoneticMatcher.fuzzyContains(textWord, wordsToRemove, 0.7);
+      
+      if (!shouldRemove) {
+        wordsToKeep.push(textWord);
+      }
+    }
+    
+    // Reconstruct text with only the words we want to keep
+    // This preserves word order while removing fuzzy matches
+    let result = cleanedText;
+    for (const textWord of textWords) {
+      if (!wordsToKeep.includes(textWord)) {
+        const wordRegex = new RegExp(`\\b${this.escapeRegex(textWord)}\\b`, 'gi');
+        result = result.replace(wordRegex, '');
+      }
+    }
+    
+    return result;
   }
 
   /**

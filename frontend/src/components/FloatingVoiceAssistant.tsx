@@ -430,6 +430,11 @@ function FloatingVoiceAssistant({
     // eslint-disable-next-line no-console
     console.log('🧠 Processing voice command:', command);
     
+    // Debug logging for NLP processing
+    addDebugLog('NLP-Input', `=== PROCESSING VOICE COMMAND ===`);
+    addDebugLog('NLP-Input', `Original: "${command}" (length: ${command.length})`);
+    addDebugLog('NLP-Input', `Languages detected: ${command.match(/[\u0900-\u097F]/) ? 'Hindi ' : ''}${command.match(/[\u0A80-\u0AFF]/) ? 'Gujarati ' : ''}${command.match(/[a-zA-Z]/) ? 'English' : ''}`.trim());
+    
     setVoiceState('PROCESSING'); // Show processing state
     
     try {
@@ -441,18 +446,60 @@ function FloatingVoiceAssistant({
       // eslint-disable-next-line no-console
       console.log('🧠 NLP result:', result);
       
+      // Detailed NLP result logging
+      addDebugLog('NLP-Result', `Intent: ${result.intent} (confidence: ${result.confidence})`);
+      addDebugLog('NLP-Result', `Language: ${result.language}, Method: ${result.processingMethod || 'local'}`);
+      
+      // Log payload details if available
+      if (result.payload) {
+        const payload = result.payload;
+        addDebugLog('NLP-Payload', `Action: ${payload.action || 'none'}, Target: ${payload.target || 'none'}`);
+        addDebugLog('NLP-Payload', `Query: "${payload.query || 'none'}" (extracted content)`);
+        
+        if (payload.filters && payload.filters.length > 0) {
+          addDebugLog('NLP-Payload', `Filters: [${payload.filters.join(', ')}]`);
+        }
+        
+        if (payload.parameters && Object.keys(payload.parameters).length > 0) {
+          addDebugLog('NLP-Payload', `Parameters: ${JSON.stringify(payload.parameters)}`);
+        }
+      }
+      
+      // Log fuzzy matching usage (inferred from confidence patterns)
+      if (result.confidence === 0.95) {
+        addDebugLog('NLP-Fuzzy', 'Fuzzy matching used - normalized form matched');
+      } else if (result.confidence >= 0.7 && result.confidence < 1.0) {
+        addDebugLog('NLP-Fuzzy', 'Possible fuzzy matching or pattern recognition');
+      } else if (result.confidence === 1.0) {
+        addDebugLog('NLP-Fuzzy', 'Exact match found - no fuzzy processing needed');
+      }
+      
       // Execute the appropriate action based on intent (pass full result)
       // eslint-disable-next-line no-console
       console.log('⚡ About to call executeVoiceAction with result:', result);
+      
+      if (result.intent !== 'UNKNOWN_INTENT') {
+        addDebugLog('NLP-Action', `Executing ${result.intent} with extracted data`);
+        if (result.payload?.query) {
+          addDebugLog('NLP-Action', `Search query: "${result.payload.query}"`);
+        }
+        if (result.payload?.target) {
+          addDebugLog('NLP-Action', `Target system: ${result.payload.target}`);
+        }
+      }
+      
       await executeVoiceAction(result);
       // eslint-disable-next-line no-console
       console.log('✅ executeVoiceAction completed successfully');
+      
+      addDebugLog('NLP-Action', `✅ Command executed successfully`);
       
       // Close suggestion panel after any voice command
       setShowVoicePanel(false);
       
       // Only show popup for unknown intents and errors
       if (result.intent === 'UNKNOWN_INTENT') {
+        addDebugLog('NLP-Result', `❌ Unknown intent - command not recognized`);
         setVoiceResponse(result.response);
         setShowVoiceResponse(true);
         setVoiceState('ERROR');
@@ -462,16 +509,19 @@ function FloatingVoiceAssistant({
       
     } catch (error) {
       // Voice command processing error occurred
+      addDebugLog('NLP-Error', `❌ Processing failed: ${error}`);
+      addDebugLog('NLP-Error', `Command: "${command}"`);
       setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
       setShowVoiceResponse(true);
       setVoiceState('ERROR');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessData, currentProcessStage, executeVoiceAction]);
 
   // Debug logging state
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
-  const [debugFilter, setDebugFilter] = useState<'all' | 'voice' | 'audio' | 'permission' | 'capability'>('all');
+  const [debugFilter, setDebugFilter] = useState<'all' | 'voice' | 'audio' | 'permission' | 'capability' | 'nlp'>('all');
   
   // Enhanced debug logger with capability detection
   const addDebugLog = useCallback((type: string, message: string) => {
@@ -490,12 +540,13 @@ function FloatingVoiceAssistant({
       capability: ['System', 'Browser', 'Platform', 'SpeechAPI', 'SR-Props', 'SR-Error', 'AudioAPI', 'Device'],
       permission: ['Mic-Perm', 'Audio-Dev'],
       voice: ['Voice', 'Voice-Init', 'Voice-Result', 'Voice-Alt', 'Voice-Analysis', 'Voice-Decision'],
-      audio: ['Mic-Test', 'Audio-Test', 'Audio-Level']
-    };
+      audio: ['Mic-Test', 'Audio-Test', 'Audio-Level'],
+      nlp: ['NLP-Input', 'NLP-Result', 'NLP-Payload', 'NLP-Fuzzy', 'NLP-Action', 'NLP-Error']
+    } as const;
     
-    const keywords = categoryKeywords[debugFilter] || [];
+    const keywords = categoryKeywords[debugFilter as keyof typeof categoryKeywords] || [];
     return debugLogs.filter(log => 
-      keywords.some(keyword => log.includes(`] ${keyword}:`))
+      keywords.some((keyword: string) => log.includes(`] ${keyword}:`))
     );
   }, [debugLogs, debugFilter]);
 
@@ -982,6 +1033,7 @@ function FloatingVoiceAssistant({
             {[
               { key: 'all', label: 'All', icon: '📋' },
               { key: 'voice', label: 'Voice', icon: '🎙️' },
+              { key: 'nlp', label: 'NLP', icon: '🧠' },
               { key: 'audio', label: 'Audio', icon: '🔊' },
               { key: 'permission', label: 'Permission', icon: '🔐' },
               { key: 'capability', label: 'Capability', icon: '🔧' }
@@ -989,7 +1041,7 @@ function FloatingVoiceAssistant({
               <button
                 key={filter.key}
                 className={`${styles.filterTab} ${debugFilter === filter.key ? styles.activeFilter : ''}`}
-                onClick={() => setDebugFilter(filter.key as 'all' | 'voice' | 'audio' | 'permission' | 'capability')}
+                onClick={() => setDebugFilter(filter.key as 'all' | 'voice' | 'audio' | 'permission' | 'capability' | 'nlp')}
                 title={`Filter ${filter.label} logs`}
               >
                 {filter.icon} {filter.label}
