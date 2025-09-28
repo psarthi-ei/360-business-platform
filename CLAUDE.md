@@ -35,6 +35,30 @@ date
 4. Proceed with development tasks using verified date context
 5. Flag any timeline discrepancies immediately
 
+## 🔍 **DEVELOPMENT VERIFICATION PROTOCOL**
+
+### **CRITICAL: Always Verify Compilation State**
+**Problem:** Frequently declaring "everything is fine" when actual compilation errors exist in browser
+
+**MANDATORY VERIFICATION STEPS:**
+1. **ALWAYS check npm start output via BashOutput after ANY code change**
+2. **Browser compilation errors = source of truth, not file-level analysis**
+3. **Never declare "fixed" or "working" without verifying compilation succeeds**
+4. **TypeScript cache issues can show false positives - always verify with fresh output**
+5. **ESLint + TypeScript + Webpack all run together - check the combined result**
+
+**Verification Commands:**
+```bash
+# Check real-time compilation status
+BashOutput tool with current npm start process
+
+# If needed, restart compilation
+pkill -f "npm start"
+npm start
+```
+
+**Rule:** File looks correct ≠ Compilation succeeds. Always verify the actual build state.
+
 ---
 
 ## Company & Product Identity
