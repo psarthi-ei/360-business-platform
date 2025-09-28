@@ -3,6 +3,7 @@ import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams, QuoteActionParams } from '../services/nlp/types';
 import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
@@ -17,7 +18,7 @@ interface QuotationOrdersProps {
   onShowLeadManagement?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function QuotationOrders({
@@ -376,13 +377,15 @@ function QuotationOrders({
           // Quote-specific action dispatcher
           switch (actionType) {
             case 'APPROVE_QUOTE':
-              if (params?.quoteId) {
-                handleQuoteApproval(params.quoteId);
+              if (params && 'quoteId' in params) {
+                const quoteParams = params as QuoteActionParams;
+                handleQuoteApproval(quoteParams.quoteId);
               }
               break;
             case 'SEND_PROFILE_LINK':
-              if (params?.quoteId) {
-                handleSendProfileLink(params.quoteId);
+              if (params && 'quoteId' in params) {
+                const quoteParams = params as QuoteActionParams;
+                handleSendProfileLink(quoteParams.quoteId);
               }
               break;
             default:

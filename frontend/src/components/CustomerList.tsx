@@ -3,6 +3,7 @@ import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockBusinessProfiles, mockSalesOrders, formatCurrency, mockLeads } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams, ViewCustomerParams } from '../services/nlp/types';
 import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
@@ -15,7 +16,7 @@ interface CustomerListProps {
   onShowCustomerProfile: (customerId: string) => void;
   customerSearch: string;
   onCustomerSearchChange: (search: string) => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function CustomerList({
@@ -33,12 +34,13 @@ function CustomerList({
   const { t } = useTranslation();
 
   // Action handler for customer-specific commands only
-  function handleAction(actionType: string, params?: any) {
+  function handleAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'VIEW_CUSTOMER_PROFILE':
         // Future: Handle viewing specific customer profile
-        if (params?.customerId) {
-          onShowCustomerProfile(params.customerId);
+        if (params && 'customerId' in params) {
+          const customerParams = params as ViewCustomerParams;
+          onShowCustomerProfile(customerParams.customerId);
         }
         // TODO: Implement view customer profile
         break;

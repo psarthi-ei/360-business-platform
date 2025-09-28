@@ -5,6 +5,7 @@ import AddLeadModal from './AddLeadModal';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency, Lead } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams, SetPriorityParams, EditLeadParams } from '../services/nlp/types';
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
@@ -22,7 +23,7 @@ interface LeadManagementProps {
   onFilterChange: (filter: string) => void;
   openAddModal?: boolean;
   onAddModalHandled?: () => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function LeadManagement({
@@ -452,13 +453,15 @@ function LeadManagement({
               setShowAddModal(true);
               break;
             case 'SET_PRIORITY':
-              if (params?.leadId && params?.priority) {
-                handlePriorityChange(params.leadId, params.priority);
+              if (params && 'leadId' in params && 'priority' in params) {
+                const priorityParams = params as SetPriorityParams;
+                handlePriorityChange(priorityParams.leadId, priorityParams.priority);
               }
               break;
             case 'EDIT_LEAD':
-              if (params?.leadId) {
-                const leadToEdit = leads.find(l => l.id === params.leadId);
+              if (params && 'leadId' in params) {
+                const editParams = params as EditLeadParams;
+                const leadToEdit = leads.find(l => l.id === editParams.leadId);
                 if (leadToEdit) {
                   handleEditLead(leadToEdit);
                 }

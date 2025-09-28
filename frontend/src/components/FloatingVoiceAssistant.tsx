@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { nlpService } from '../services/nlp/NLPService';
-import { NLPResult } from '../services/nlp/types';
+import { NLPResult, ActionParams } from '../services/nlp/types';
 import styles from '../styles/FloatingVoiceAssistant.module.css';
 
 // TypeScript declarations for Speech Recognition API
@@ -49,9 +49,9 @@ declare global {
 interface FloatingVoiceAssistantProps {
   currentProcessStage?: string;
   // Universal action handler for navigation commands (handled by Dashboard)
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
   // Component-specific action handler (handled by individual components)
-  onAction?: (actionType: string, params?: any) => void;
+  onAction?: (actionType: string, params?: ActionParams) => void;
   businessData?: {
     hotLeads: number;
     overduePayments: number;
@@ -104,10 +104,10 @@ function mapStageToContext(stage: string): string {
 // Context-aware action dispatcher - the heart of "say anything anywhere"
 function routeActionWithContext(
   actionType: string, 
-  params: any, 
+  params: ActionParams, 
   currentStage: string,
-  onUniversalAction?: (actionType: string, params?: any) => void,
-  onAction?: (actionType: string, params?: any) => void
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void,
+  onAction?: (actionType: string, params?: ActionParams) => void
 ): void {
   // Determine which context this command belongs to
   const requiredContext = getCommandContext(actionType);
@@ -403,7 +403,7 @@ function FloatingVoiceAssistant({
           }
           
           // Use context-aware routing for all create commands
-          routeActionWithContext(actionType, nlpResult.payload, currentProcessStage, onUniversalAction, onAction);
+          routeActionWithContext(actionType, nlpResult.payload || {}, currentProcessStage, onUniversalAction, onAction);
         }
         break;
       
@@ -412,7 +412,7 @@ function FloatingVoiceAssistant({
         if (nlpResult.payload) {
           // eslint-disable-next-line no-console
           console.log('🎯 Dispatching SET_PRIORITY action with context awareness:', nlpResult.payload);
-          routeActionWithContext('SET_PRIORITY', nlpResult.payload, currentProcessStage, onUniversalAction, onAction);
+          routeActionWithContext('SET_PRIORITY', nlpResult.payload || {}, currentProcessStage, onUniversalAction, onAction);
         }
         break;
         

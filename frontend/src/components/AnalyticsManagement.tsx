@@ -3,6 +3,7 @@ import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface AnalyticsManagementProps {
@@ -13,7 +14,7 @@ interface AnalyticsManagementProps {
   onNavigateBack: () => void;
   onNavigateHome?: () => void;
   onBackToDashboard: () => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function AnalyticsManagement({
@@ -29,7 +30,7 @@ function AnalyticsManagement({
   const { t } = useTranslation();
 
   // Action handler for analytics-specific commands only
-  function handleAction(actionType: string, params?: any) {
+  function handleAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'GENERATE_REPORT':
         // Future: Handle report generation

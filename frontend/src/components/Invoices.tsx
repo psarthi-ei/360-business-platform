@@ -11,6 +11,7 @@ import {
   mockBusinessProfiles
 } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams, FilterInvoiceParams } from '../services/nlp/types';
 import styles from '../styles/Invoices.module.css';
 
 interface InvoicesProps {
@@ -26,7 +27,7 @@ interface InvoicesProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 interface InvoiceRecord {
@@ -146,7 +147,7 @@ function Invoices({
   const filteredInvoices = getFilteredInvoices();
 
   // Action handler for invoice-specific commands only
-  function handleAction(actionType: string, params?: any) {
+  function handleAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'SEND_INVOICE':
         // Future: Handle invoice sending for specific invoices
@@ -158,11 +159,14 @@ function Invoices({
         break;
       case 'FILTER_INVOICES':
         // Future: Handle filtering by type or status
-        if (params?.type) {
-          setInvoiceType(params.type);
-        }
-        if (params?.status) {
-          onFilterChange(params.status);
+        if (params && ('type' in params || 'status' in params)) {
+          const filterParams = params as FilterInvoiceParams;
+          if (filterParams.type) {
+            setInvoiceType(filterParams.type);
+          }
+          if (filterParams.status) {
+            onFilterChange(filterParams.status);
+          }
         }
         // TODO: Display filtered invoices results
         break;

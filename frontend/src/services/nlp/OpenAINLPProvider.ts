@@ -53,7 +53,7 @@ export class OpenAINLPProvider implements NLPProvider {
     }
   }
 
-  private async enhanceWithOpenAI(text: string, baseResult: VoiceIntent): Promise<{ confidence: number; payload?: any }> {
+  private async enhanceWithOpenAI(text: string, baseResult: VoiceIntent): Promise<{ confidence: number; payload?: Record<string, unknown> }> {
     // Use OpenAI to enhance understanding of complex or ambiguous commands
     const prompt = `Analyze this voice command for a textile business: "${text}"
 

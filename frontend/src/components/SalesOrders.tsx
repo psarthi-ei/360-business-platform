@@ -3,6 +3,7 @@ import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
+import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
@@ -17,7 +18,7 @@ interface SalesOrdersProps {
   onShowPayments?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function SalesOrders({
@@ -37,7 +38,7 @@ function SalesOrders({
   const { t } = useTranslation();
   
   // Action handler for sales order-specific commands only
-  function handleAction(actionType: string, params?: any) {
+  function handleAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'UPDATE_ORDER_STATUS':
         // Future: Handle order status updates

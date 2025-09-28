@@ -4,13 +4,14 @@ import TabNavigation from './TabNavigation';
 import GlobalSearch, { GlobalSearchRef } from './GlobalSearch';
 import { useGlobalSearch } from './useGlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
+import { ActionParams, NavigateAndExecuteParams } from '../services/nlp/types';
 import styles from '../styles/Dashboard.module.css';
 
 interface DashboardProps {
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
-  onShowLeadManagement: (autoAction?: string, actionParams?: any) => void;
+  onShowLeadManagement: (autoAction?: string, actionParams?: Record<string, unknown>) => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
   onShowPayments: () => void;
@@ -124,7 +125,7 @@ function Dashboard({
   };
 
   // Universal action handler for all navigation commands
-  const handleUniversalAction = (actionType: string, params?: any) => {
+  const handleUniversalAction = (actionType: string, params?: ActionParams) => {
     // TODO: Log universal action handling
     
     switch (actionType) {
@@ -170,18 +171,20 @@ function Dashboard({
         break;
       case 'NAVIGATE_AND_EXECUTE':
         // Compound action: Navigate to target page + execute business action
-        const { targetContext, action, params: actionParams } = params || {};
+        if (params && 'targetContext' in params && 'action' in params) {
+          const navParams = params as NavigateAndExecuteParams;
+          const { targetContext, action, params: actionParams } = navParams;
         if (targetContext && action) {
           // eslint-disable-next-line no-console
         console.log(`🔗 NAVIGATE_AND_EXECUTE: ${targetContext} → ${action}`, actionParams);
           
           // Navigate to target context
-          setCurrentProcessStage(targetContext);
+          setCurrentProcessStage(targetContext as string);
           
           // Execute appropriate navigation based on target
           switch (targetContext) {
             case 'leads':
-              onShowLeadManagement(action, actionParams); // Pass pending action
+              onShowLeadManagement(action as string, actionParams as Record<string, unknown>); // Pass pending action
               break;
             case 'quotes':
               onShowQuotationOrders();
@@ -222,6 +225,7 @@ function Dashboard({
         } else {
           // eslint-disable-next-line no-console
           console.log('Invalid NAVIGATE_AND_EXECUTE params:', params);
+        }
         }
         break;
       default:

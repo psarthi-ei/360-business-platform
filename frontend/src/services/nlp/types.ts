@@ -1,6 +1,84 @@
 // NLP Service Types and Interfaces
 // Provides abstraction layer for multiple AI providers
 
+// Business Domain Action Parameter Interfaces
+
+// Lead domain actions
+export interface SetPriorityParams {
+  leadId: string;
+  priority: 'hot' | 'warm' | 'cold';
+}
+
+export interface AddNewLeadParams {
+  companyName?: string;
+  location?: string;
+  fabric?: string;
+  priority?: 'hot' | 'warm' | 'cold';
+}
+
+export interface EditLeadParams {
+  leadId: string;
+  companyName?: string;
+  location?: string;
+  fabric?: string;
+}
+
+// Customer domain actions
+export interface ViewCustomerParams {
+  customerId: string;
+}
+
+export interface CallCustomerParams {
+  customerId: string;
+  phoneNumber?: string;
+}
+
+// Invoice domain actions
+export interface FilterInvoiceParams {
+  type?: 'all' | 'final' | 'proforma';
+  status?: string;
+}
+
+// Quote domain actions
+export interface QuoteActionParams {
+  quoteId: string;
+}
+
+// Sales Order domain actions
+export interface SalesOrderActionParams {
+  orderId: string;
+  status?: string;
+}
+
+// Navigation domain actions
+export interface NavigateAndExecuteParams {
+  targetContext: string;
+  action: string;
+  params?: ActionParams;
+}
+
+// Search/Filter actions
+export interface SearchParams {
+  query?: string;
+  location?: string;
+  fabric?: string;
+  filters?: string[];
+}
+
+// Union type for all action parameters
+export type ActionParams = 
+  | SetPriorityParams
+  | AddNewLeadParams
+  | EditLeadParams
+  | ViewCustomerParams
+  | CallCustomerParams
+  | FilterInvoiceParams
+  | QuoteActionParams
+  | SalesOrderActionParams
+  | NavigateAndExecuteParams
+  | SearchParams
+  | Record<string, unknown>; // fallback for unknown actions
+
 // Enhanced Voice Command Payload Structure
 export interface VoiceCommandPayload {
   action?: string;          // Extracted action: 'search', 'show', 'open', etc.

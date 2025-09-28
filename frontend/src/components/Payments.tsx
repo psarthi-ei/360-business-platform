@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById, mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
+import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/Payments.module.css';
 
 interface PaymentsProps {
@@ -16,7 +17,7 @@ interface PaymentsProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: any) => void;
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 interface PaymentRecord {
@@ -148,7 +149,7 @@ function Payments({
   const filteredPayments = getFilteredPayments();
 
   // Action handler for payment-specific commands only
-  function handleAction(actionType: string, params?: any) {
+  function handleAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'SEND_PAYMENT_REMINDER':
         // Future: Handle payment reminders for specific payments

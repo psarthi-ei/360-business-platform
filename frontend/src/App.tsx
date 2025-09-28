@@ -31,6 +31,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
 import { scrollToTop } from './utils/scrollUtils';
+import { ActionParams, NavigateAndExecuteParams } from './services/nlp/types';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -181,7 +182,7 @@ function AppContent() {
   }
 
   // Universal action handler - routes cross-page voice commands
-  function handleUniversalAction(actionType: string, params?: any) {
+  function handleUniversalAction(actionType: string, params?: ActionParams) {
     switch (actionType) {
       case 'NAVIGATE_TO_LEADS':
         showLeadManagement();
@@ -215,11 +216,13 @@ function AppContent() {
         break;
       case 'NAVIGATE_AND_EXECUTE':
         // Handle compound actions from voice commands
-        const { targetContext, action, params: actionParams } = params || {};
-        if (targetContext === 'leads' && action === 'ADD_NEW_LEAD') {
-          showLeadManagement('ADD_NEW_LEAD', actionParams);
-        } else {
-          // TODO: Handle unhandled NAVIGATE_AND_EXECUTE
+        if (params && 'targetContext' in params && 'action' in params) {
+          const navParams = params as NavigateAndExecuteParams;
+          if (navParams.targetContext === 'leads' && navParams.action === 'ADD_NEW_LEAD') {
+            showLeadManagement('ADD_NEW_LEAD', navParams.params);
+          } else {
+            // TODO: Handle unhandled NAVIGATE_AND_EXECUTE
+          }
         }
         break;
       default:
@@ -227,7 +230,7 @@ function AppContent() {
     }
   }
 
-  function showLeadManagement(autoAction?: string, actionParams?: any) {
+  function showLeadManagement(autoAction?: string, actionParams?: ActionParams) {
     if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
       navigate('/leads?action=add-lead');
     } else {
