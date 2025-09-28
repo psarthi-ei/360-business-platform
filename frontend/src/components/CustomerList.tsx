@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockBusinessProfiles, mockSalesOrders, formatCurrency } from '../data/mockData';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import { mockBusinessProfiles, mockSalesOrders, formatCurrency, mockLeads } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerList.module.css';
 
@@ -14,6 +15,7 @@ interface CustomerListProps {
   onShowCustomerProfile: (customerId: string) => void;
   customerSearch: string;
   onCustomerSearchChange: (search: string) => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 function CustomerList({
@@ -25,9 +27,38 @@ function CustomerList({
   onNavigateHome,
   onShowCustomerProfile,
   customerSearch,
-  onCustomerSearchChange
+  onCustomerSearchChange,
+  onUniversalAction
 }: CustomerListProps) {
   const { t } = useTranslation();
+
+  // Action handler for customer-specific commands only
+  function handleAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'VIEW_CUSTOMER_PROFILE':
+        // Future: Handle viewing specific customer profile
+        if (params?.customerId) {
+          onShowCustomerProfile(params.customerId);
+        }
+        // TODO: Implement view customer profile
+        break;
+      case 'CALL_CUSTOMER':
+        // Future: Handle calling customer
+        // TODO: Implement call customer
+        break;
+      case 'CREATE_QUOTE_FOR_CUSTOMER':
+        // Future: Handle creating quote for customer
+        // TODO: Implement create quote for customer
+        break;
+      case 'FILTER_CUSTOMERS':
+        // Future: Handle customer filtering
+        // TODO: Implement customer filtering
+        break;
+      default:
+        // TODO: Handle unhandled customer action
+    }
+  }
+
   return (
     <div className={styles.leadManagementScreen}>
       <ProductHeader
@@ -134,9 +165,27 @@ function CustomerList({
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
           🎤 <strong>{t('voiceCommandsHint')}:</strong> 
-          "Show premium customers" • "Call Rajesh Textiles" • "Search Gujarat Garments"
+          "Show premium customers" • "Call customer" • "Create new quote" • "View customer profile"
         </p>
       </div>
+
+      {/* Voice Assistant for Customer Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="customers"
+        onUniversalAction={onUniversalAction}
+        onAction={handleAction}
+        businessData={{
+          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+          overduePayments: 0, // Mock data - in real app would calculate from payments
+          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
+          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Search customers by company name, city, or contact details
+          onCustomerSearchChange(query);
+          // TODO: Implement customer search
+        }}
+      />
     </div>
   );
 }

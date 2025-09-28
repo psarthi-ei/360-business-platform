@@ -2,6 +2,7 @@
 // Uses ChatGPT for complex voice command interpretation
 
 import { NLPProvider, VoiceIntent } from './types';
+import { universalCommandProcessor } from './UniversalCommandProcessor';
 
 export class OpenAINLPProvider implements NLPProvider {
   name = 'openai';
@@ -16,47 +17,75 @@ export class OpenAINLPProvider implements NLPProvider {
 
   async processCommand(text: string): Promise<VoiceIntent> {
     try {
-      const response = await this.callOpenAI(text);
-      return this.parseOpenAIResponse(text, response);
-    } catch (error) {
-      // OpenAI NLP Error occurred
+      // Step 1: Get base intent from UniversalCommandProcessor
+      const baseResult = universalCommandProcessor.processCommand(text);
+      
+      // Step 2: If we have a strong local match, return it
+      if (baseResult.confidence >= 0.7) {
+        return baseResult;
+      }
+      
+      // Step 3: Use OpenAI to enhance understanding for complex/ambiguous commands
+      const aiEnhancement = await this.enhanceWithOpenAI(text, baseResult);
+      
+      // Step 4: Return enhanced result
       return {
-        intent: 'UNKNOWN_INTENT',
-        confidence: 0.0,
-        originalText: text,
-        language: this.detectLanguage(text)
+        ...baseResult,
+        confidence: Math.max(baseResult.confidence, aiEnhancement.confidence),
+        // If AI provides better payload structure, use it
+        payload: aiEnhancement.payload || baseResult.payload
       };
+    } catch (error) {
+      // OpenAI failed - fallback to universal processor
+      const fallbackResult = universalCommandProcessor.processCommand(text);
+      
+      // If fallback also fails, return unknown intent
+      if (fallbackResult.confidence < 0.3) {
+        return {
+          intent: 'UNKNOWN_INTENT',
+          confidence: 0.0,
+          originalText: text,
+          language: this.detectLanguage(text)
+        };
+      }
+      
+      return fallbackResult;
     }
   }
 
-  private async callOpenAI(text: string): Promise<string> {
-    const prompt = `You are a voice assistant for ElevateBusiness 360°, a textile manufacturing business platform. 
+  private async enhanceWithOpenAI(text: string, baseResult: VoiceIntent): Promise<{ confidence: number; payload?: any }> {
+    // Use OpenAI to enhance understanding of complex or ambiguous commands
+    const prompt = `Analyze this voice command for a textile business: "${text}"
 
-Analyze this voice command and classify the user's intent. The platform has these main functions:
-- OPEN_LEADS: Lead/customer prospect management
-- OPEN_PAYMENTS: Payment tracking and management  
-- OPEN_CUSTOMERS: Customer relationship management
-- OPEN_INVENTORY: Stock/material/fabric inventory
-- OPEN_ORDERS: Sales orders and bookings
-- OPEN_ANALYTICS: Business reports and performance data
-- OPEN_PRODUCTION: Manufacturing and production tracking
-- SHOW_BUSINESS_OVERVIEW: Dashboard overview
-- SHOW_PRIORITIES: Urgent items needing attention
-- HELP_COMMAND: User needs help or instructions
-- UNKNOWN_INTENT: Cannot determine intent
+Base understanding: ${baseResult.intent} with confidence ${baseResult.confidence}
 
-The user might speak in English, Hindi (हिंदी), Gujarati (ગુજરાતી), or mix languages.
+Is this correct? Can you provide better confidence (0.0-1.0) and extract any specific entities like:
+- Location names (Mumbai, Surat, etc.)
+- Fabric types (Cotton, Silk, etc.)
+- Priority levels (hot, warm, cold)
+- Quantities/measurements
 
-User command: "${text}"
-
-Respond with ONLY a JSON object:
+Respond with ONLY JSON:
 {
-  "intent": "INTENT_NAME",
   "confidence": 0.95,
-  "language": "en|hi|gu|mixed",
-  "entities": {"optional": "extracted entities"}
+  "entities": {"location": "Mumbai", "fabric": "Cotton"}
 }`;
 
+    const response = await this.callOpenAI(prompt);
+    
+    try {
+      const parsed = JSON.parse(response);
+      return {
+        confidence: Math.min(Math.max(parsed.confidence || 0.5, 0), 1),
+        payload: parsed.entities ? { ...baseResult.payload, ...parsed.entities } : undefined
+      };
+    } catch {
+      // If OpenAI response is malformed, return moderate confidence
+      return { confidence: 0.6 };
+    }
+  }
+
+  private async callOpenAI(prompt: string): Promise<string> {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -68,15 +97,15 @@ Respond with ONLY a JSON object:
         messages: [
           {
             role: 'system',
-            content: 'You are a precise intent classifier. Always respond with valid JSON only.'
+            content: 'You are a voice command analyzer for textile business. Always respond with valid JSON only.'
           },
           {
             role: 'user', 
             content: prompt
           }
         ],
-        max_tokens: 150,
-        temperature: 0.1, // Low temperature for consistent classification
+        max_tokens: 100,
+        temperature: 0.1, // Low temperature for consistent analysis
       }),
     });
 
@@ -88,33 +117,6 @@ Respond with ONLY a JSON object:
     return data.choices[0]?.message?.content;
   }
 
-  private parseOpenAIResponse(originalText: string, response: string): VoiceIntent {
-    try {
-      // Clean the response to extract JSON
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('No JSON found in response');
-      }
-
-      const parsed = JSON.parse(jsonMatch[0]);
-      
-      return {
-        intent: parsed.intent || 'UNKNOWN_INTENT',
-        confidence: Math.min(Math.max(parsed.confidence || 0.5, 0), 1),
-        entities: parsed.entities || {},
-        originalText,
-        language: parsed.language || this.detectLanguage(originalText)
-      };
-    } catch (error) {
-      // Failed to parse OpenAI response
-      return {
-        intent: 'UNKNOWN_INTENT', 
-        confidence: 0.0,
-        originalText,
-        language: this.detectLanguage(originalText)
-      };
-    }
-  }
 
   private detectLanguage(text: string): 'en' | 'hi' | 'gu' | 'mixed' {
     const hindiChars = /[\u0900-\u097F]/;

@@ -53,10 +53,13 @@ export class HybridNLPProcessor {
     this.resetMonthlyStatsIfNeeded();
     
     try {
+      // Pure orchestration: providers handle their own confidence logic
+      
       // Phase 1: Try local processing first (fast & free)
       const localResult = await this.localProvider.processCommand(text);
       
-      if (localResult.confidence >= this.config.localThreshold) {
+      // If local processing succeeded, use it
+      if (localResult.intent !== 'UNKNOWN_INTENT') {
         return {
           intent: localResult,
           processingMethod: 'local',
@@ -69,7 +72,8 @@ export class HybridNLPProcessor {
       if (this.canUseAI()) {
         const aiResult = await this.tryAIProcessing(text);
         
-        if (aiResult.confidence >= this.config.aiThreshold) {
+        // If AI processing succeeded, use it
+        if (aiResult.intent !== 'UNKNOWN_INTENT') {
           this.trackAIUsage(aiResult);
           return {
             intent: aiResult,
@@ -80,11 +84,9 @@ export class HybridNLPProcessor {
         }
       }
       
-      // Phase 3: Enhanced local processing (fallback)
-      const enhancedResult = await this.enhancedLocalProcessing(text, localResult);
-      
+      // Phase 3: Return local result as fallback (even if unknown)
       return {
-        intent: enhancedResult,
+        intent: localResult,
         processingMethod: 'fallback',
         processingTime: Date.now() - startTime,
         cost: 0
@@ -132,75 +134,9 @@ export class HybridNLPProcessor {
     };
   }
 
-  private async enhancedLocalProcessing(text: string, originalResult: VoiceIntent): Promise<VoiceIntent> {
-    // If we have some confidence from local processing, enhance it
-    if (originalResult.confidence > 0.3) {
-      return {
-        ...originalResult,
-        confidence: Math.min(originalResult.confidence + 0.1, 0.7) // Boost confidence slightly
-      };
-    }
-    
-    // Try fuzzy matching for common typos/variations
-    const fuzzyResult = this.fuzzyMatch(text);
-    if (fuzzyResult.confidence > 0.4) {
-      return fuzzyResult;
-    }
-    
-    // Return helpful unknown intent with suggestions
-    return {
-      intent: 'UNKNOWN_INTENT',
-      confidence: 0,
-      originalText: text,
-      entities: {
-        suggestion: this.generateHelpfulSuggestion(text)
-      }
-    };
-  }
 
-  private fuzzyMatch(text: string): VoiceIntent {
-    const commonVariations = [
-      { original: 'leeds', correct: 'leads', intent: 'OPEN_LEADS' },
-      { original: 'payement', correct: 'payment', intent: 'OPEN_PAYMENTS' },
-      { original: 'costomer', correct: 'customer', intent: 'OPEN_CUSTOMERS' },
-      { original: 'stok', correct: 'stock', intent: 'OPEN_INVENTORY' },
-      { original: 'oder', correct: 'order', intent: 'OPEN_ORDERS' }
-    ];
-    
-    const lowerText = text.toLowerCase();
-    
-    for (const variation of commonVariations) {
-      if (lowerText.includes(variation.original)) {
-        return {
-          intent: variation.intent,
-          confidence: 0.6,
-          originalText: text,
-          entities: { corrected: variation.correct }
-        };
-      }
-    }
-    
-    return { intent: 'UNKNOWN_INTENT', confidence: 0, originalText: text };
-  }
 
-  private generateHelpfulSuggestion(text: string): string {
-    const suggestions = [
-      "Try: 'Show leads', 'Open payments', 'Customer list'",
-      "Available: 'लीड्स दिखाएं', 'पेमेंट्स दिखाओ', 'ग्राहक दिखाएं'",
-      "Commands: 'લીડ્સ બતાવો', 'પેમેન્ટ્સ બતાવો', 'કસ્ટમર બતાવો'"
-    ];
-    
-    const language = this.detectLanguage(text);
-    if (language === 'hi') return suggestions[1];
-    if (language === 'gu') return suggestions[2];
-    return suggestions[0];
-  }
 
-  private detectLanguage(text: string): 'en' | 'hi' | 'gu' {
-    if (/[\u0900-\u097F]/.test(text)) return 'hi';
-    if (/[\u0A80-\u0AFF]/.test(text)) return 'gu';
-    return 'en';
-  }
 
   private getCurrentProvider(): NLPProvider | undefined {
     return this.aiProviders.get(this.config.primaryProvider);
@@ -242,15 +178,6 @@ export class HybridNLPProcessor {
     };
   }
 
-  // Add custom local patterns
-  addLocalPattern(intent: string, keywords: string[], actions: string[]): void {
-    this.localProvider.addPattern({
-      intent,
-      keywords,
-      actions,
-      confidence: 0.8
-    });
-  }
 
   // Test all providers
   async testAllProviders(): Promise<{ [provider: string]: boolean }> {

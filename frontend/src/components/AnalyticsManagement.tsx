@@ -1,20 +1,67 @@
 import React from 'react';
+import ProductHeader from './ProductHeader';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface AnalyticsManagementProps {
+  currentLanguage: string;
+  onLanguageChange: (language: string) => void;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
+  onNavigateBack: () => void;
+  onNavigateHome?: () => void;
   onBackToDashboard: () => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
-function AnalyticsManagement({ onBackToDashboard }: AnalyticsManagementProps) {
+function AnalyticsManagement({
+  currentLanguage,
+  onLanguageChange,
+  currentTheme,
+  onThemeChange,
+  onNavigateBack,
+  onNavigateHome,
+  onBackToDashboard,
+  onUniversalAction
+}: AnalyticsManagementProps) {
   const { t } = useTranslation();
+
+  // Action handler for analytics-specific commands only
+  function handleAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'GENERATE_REPORT':
+        // Future: Handle report generation
+        // TODO: Implement report generation
+        break;
+      case 'SHOW_ANALYTICS':
+        // Future: Handle analytics display
+        // TODO: Implement analytics display
+        break;
+      case 'EXPORT_DATA':
+        // Future: Handle data export
+        // TODO: Implement data export
+        break;
+      default:
+        // TODO: Handle unhandled analytics action
+    }
+  }
 
   return (
     <div className={styles.container}>
+      <ProductHeader
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+        currentTheme={currentTheme}
+        onThemeChange={onThemeChange}
+        onHome={onNavigateHome}
+        onDashboard={onNavigateBack || onBackToDashboard}
+        showDashboardButton={true}
+        showThemeSelector={true}
+      />
+      
       <div className={styles.header}>
-        <button onClick={onBackToDashboard} className={styles.backButton}>
-          ← {t('backToDashboard')}
-        </button>
         <h1 className={styles.title}>
           📊 {t('analyticsCard')} & Business Insights
         </h1>
@@ -64,8 +111,36 @@ function AnalyticsManagement({ onBackToDashboard }: AnalyticsManagementProps) {
             <p>🚧 Implementation in Progress</p>
             <p>This module is part of our comprehensive 13-module MVP covering all textile business operations.</p>
           </div>
+
+          {/* Voice Commands Section */}
+          <div className={styles.voiceSection}>
+            <h3>🎤 Voice Commands</h3>
+            <div className={styles.voiceCommands}>
+              <div className={styles.voiceCommand}>
+                <strong>Commands:</strong> "Generate report" • "Show analytics" • "Export data" • "Go to orders"
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Voice Assistant for Analytics Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="analytics"
+        onUniversalAction={onUniversalAction}
+        onAction={handleAction}
+        businessData={{
+          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+          overduePayments: 0, // Mock data - in real app would calculate from payments
+          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
+          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Search analytics by report name, metric type, or date range
+          // TODO: Implement analytics search
+          // Future: Filter analytics reports based on search query
+        }}
+      />
     </div>
   );
 }

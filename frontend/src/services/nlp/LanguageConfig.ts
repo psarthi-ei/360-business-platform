@@ -82,21 +82,48 @@ export const BUSINESS_TARGETS = {
     en: ['analytics', 'report', 'reports', 'performance', 'data', 'insights'],
     hi: ['एनालिटिक्स', 'रिपोर्ट', 'परफॉर्मेंस', 'डेटा', 'जानकारी'],
     gu: ['એનાલિટિક્સ', 'રિપોર્ટ', 'પર્ફોર્મન્સ', 'ડેટા', 'માહિતી'],
+  },
+
+  DASHBOARD: {
+    en: ['dashboard', 'home', 'main', 'overview', 'summary'],
+    hi: ['डैशबोर्ड', 'होम', 'मुख्य', 'ओवरव्यू', 'सारांश'],
+    gu: ['ડેશબોર્ડ', 'હોમ', 'મુખ્ય', 'ઓવરવ્યૂ', 'સારાંશ'],
   }
 };
 
-// Contextual words and connectors (removed during extraction)
+// Contextual words and connectors (removed during extraction) - Extensive vocabulary
 export const CONTEXTUAL_MARKERS = {
   POSSESSIVE: {
-    en: ['of', 'from', 'in', 'at', 'with'],
-    hi: ['का', 'की', 'के', 'में', 'से', 'वाला', 'वाले', 'वाली'],
-    gu: ['ના', 'નું', 'ની', 'માં', 'થી', 'વાળા', 'વાળું', 'વાળી'],
+    en: ['of', 'from', 'in', 'at', 'with', 'by', 'on', 'under', 'over', 'through', 'across', 'behind', 'beside', 'below', 'above', 'around', 'between', 'among', 'within', 'without'],
+    hi: ['का', 'की', 'के', 'में', 'से', 'वाला', 'वाले', 'वाली', 'पर', 'तक', 'साथ', 'द्वारा', 'अंदर', 'बाहर', 'ऊपर', 'नीचे', 'आसपास', 'बीच', 'तरफ', 'जरिए', 'माध्यम', 'वजह', 'कारण'],
+    gu: ['ના', 'નું', 'ની', 'માં', 'થી', 'વાળા', 'વાળું', 'વાળી', 'પર', 'સુધી', 'સાથે', 'દ્વારા', 'અંદર', 'બહાર', 'ઉપર', 'નીચે', 'આસપાસ', 'વચ્ચે', 'તરફ', 'મારફતે', 'માધ્યમ', 'વજહ', 'કારણ'],
   },
 
   CONNECTORS: {
-    en: ['for', 'to', 'and', 'or', 'with', 'about'],
-    hi: ['के लिए', 'को', 'और', 'या', 'के साथ', 'के बारे में'],
-    gu: ['માટે', 'ને', 'અને', 'અથવા', 'સાથે', 'વિશે'],
+    en: ['for', 'to', 'and', 'or', 'with', 'about', 'but', 'also', 'then', 'now', 'here', 'there', 'while', 'since', 'until', 'before', 'after', 'during', 'except', 'unless'],
+    hi: ['के लिए', 'को', 'और', 'या', 'के साथ', 'के बारे में', 'लेकिन', 'भी', 'फिर', 'अब', 'यहाँ', 'वहाँ', 'जबकि', 'जब से', 'तब तक', 'पहले', 'बाद', 'दौरान', 'सिवाय', 'जब तक'],
+    gu: ['માટે', 'ને', 'અને', 'અથવા', 'સાથે', 'વિશે', 'પરંતુ', 'પણ', 'પછી', 'હવે', 'અહીં', 'ત્યાં', 'જ્યારે', 'ત્યારથી', 'ત્યાં સુધી', 'પહેલાં', 'પછી', 'દરમિયાન', 'સિવાય', 'જ્યાં સુધી']
+  }
+};
+
+// Conversation fillers - Natural speech patterns to remove during processing
+export const CONVERSATION_FILLERS = {
+  ACTION_EMPHASIS: {
+    en: ['please', 'can', 'you', 'will', 'would', 'could', 'should', 'just', 'now', 'then', 'okay', 'ok', 'well', 'right', 'sure', 'maybe', 'perhaps'],
+    hi: ['करो', 'कर', 'कीजिए', 'प्लीज', 'अब', 'तो', 'फिर', 'जरा', 'थोड़ा', 'जल्दी', 'धीरे', 'ठीक', 'अच्छा', 'हाँ', 'शायद', 'संभव', 'जरूर'],
+    gu: ['કરો', 'કર', 'કરજે', 'પ્લીઝ', 'હવે', 'તો', 'પછી', 'જરા', 'થોડું', 'જલ્દી', 'ધીમે', 'ઠીક', 'સારું', 'હા', 'કદાચ', 'શક્ય', 'જરૂર']
+  },
+
+  QUESTION_WORDS: {
+    en: ['what', 'how', 'is', 'are', 'was', 'were', 'do', 'does', 'did', 'have', 'has', 'had', 'where', 'when', 'why', 'which', 'who', 'whose', 'whom'],
+    hi: ['क्या', 'कैसे', 'है', 'हैं', 'था', 'थे', 'कर', 'करते', 'किया', 'कुछ', 'कहाँ', 'कब', 'क्यों', 'कौन', 'किसका', 'किसे', 'जो', 'जिस'],
+    gu: ['શું', 'કેવી', 'છે', 'છે', 'હતા', 'હતી', 'કર', 'કરતા', 'કર્યું', 'કંઈ', 'ક્યાં', 'ક્યારે', 'કેમ', 'કોણ', 'કોના', 'કોને', 'જે', 'જેના']
+  },
+
+  CONVERSATION_FLOW: {
+    en: ['like', 'you know', 'i mean', 'actually', 'basically', 'really', 'very', 'quite', 'pretty', 'sort of', 'kind of', 'a bit', 'a little'],
+    hi: ['जैसे', 'पता', 'मतलब', 'यानी', 'वास्तव', 'सच', 'बहुत', 'काफी', 'थोड़ा', 'कुछ', 'एक तरह', 'जरा सा'],
+    gu: ['જેવું', 'ખબર', 'મતલબ', 'એટલે', 'વાસ્તવ', 'સાચ', 'ખૂબ', 'ઘણું', 'થોડું', 'કંઈક', 'એક પ્રકાર', 'જરા']
   }
 };
 
@@ -155,6 +182,17 @@ export function getAllFilterWords(filterType: keyof typeof FILTER_WORDS): string
 }
 
 /**
+ * Get all conversation filler words across all languages
+ */
+export function getAllConversationFillers(): string[] {
+  const actionEmphasis = Object.values(CONVERSATION_FILLERS.ACTION_EMPHASIS).flat();
+  const questionWords = Object.values(CONVERSATION_FILLERS.QUESTION_WORDS).flat();
+  const conversationFlow = Object.values(CONVERSATION_FILLERS.CONVERSATION_FLOW).flat();
+  
+  return [...actionEmphasis, ...questionWords, ...conversationFlow];
+}
+
+/**
  * Detect the primary language of a text input
  */
 export function detectPrimaryLanguage(text: string): 'en' | 'hi' | 'gu' | 'mixed' {
@@ -177,6 +215,11 @@ export function detectPrimaryLanguage(text: string): 'en' | 'hi' | 'gu' | 'mixed
   if (hasGujarati) return 'gu';
   return 'en';
 }
+
+
+
+
+
 
 /**
  * Helper function to add new language support

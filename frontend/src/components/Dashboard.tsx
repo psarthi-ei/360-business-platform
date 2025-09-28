@@ -10,7 +10,7 @@ interface DashboardProps {
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
-  onShowLeadManagement: (autoAction?: string) => void;
+  onShowLeadManagement: (autoAction?: string, actionParams?: any) => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
   onShowPayments: () => void;
@@ -26,7 +26,6 @@ interface DashboardProps {
   onLogout?: () => void;
   isAuthenticated?: boolean;
   userMode?: string;
-  onOpenAddLeadModal?: () => void;
 }
 
 function Dashboard({ 
@@ -48,8 +47,7 @@ function Dashboard({
   onDemoMode,
   onLogout,
   isAuthenticated,
-  userMode,
-  onOpenAddLeadModal
+  userMode
 }: DashboardProps) {
   // Translation hook available if needed in future
   // const { currentLanguage, setLanguage } = useTranslation();
@@ -100,8 +98,8 @@ function Dashboard({
   const approvedQuotes = mockQuotes.filter(quote => quote.status === 'approved').length;
   const totalRevenue = mockSalesOrders.reduce((sum, order) => sum + order.totalAmount, 0);
   const totalCustomers = mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length;
-  const activeOrders = mockSalesOrders.filter(order => order.status === 'production').length;
-  const readyToShip = mockSalesOrders.filter(order => order.status === 'completed').length;
+  const activeOrders = mockSalesOrders.filter(order => order.status === 'production_started').length;
+  const readyToShip = mockSalesOrders.filter(order => order.status === 'ready_to_ship').length;
   const overduePayments = mockSalesOrders.filter(order => order.paymentStatus && order.paymentStatus.includes('overdue')).length;
   
   // Business data for voice assistant
@@ -123,6 +121,113 @@ function Dashboard({
     setShowTabNavigation(false);
     setActiveCardType(null);
     setCurrentProcessStage('dashboard');
+  };
+
+  // Universal action handler for all navigation commands
+  const handleUniversalAction = (actionType: string, params?: any) => {
+    // TODO: Log universal action handling
+    
+    switch (actionType) {
+      case 'NAVIGATE_TO_LEADS':
+        setCurrentProcessStage('leads');
+        onShowLeadManagement();
+        break;
+      case 'NAVIGATE_TO_QUOTES':
+        setCurrentProcessStage('quotes');
+        onShowQuotationOrders();
+        break;
+      case 'NAVIGATE_TO_ORDERS':
+        setCurrentProcessStage('production');
+        onShowSalesOrders();
+        break;
+      case 'NAVIGATE_TO_PAYMENTS':
+        setCurrentProcessStage('payments');
+        onShowPayments();
+        break;
+      case 'NAVIGATE_TO_INVOICES':
+        setCurrentProcessStage('invoices');
+        onShowInvoices();
+        break;
+      case 'NAVIGATE_TO_CUSTOMERS':
+        setCurrentProcessStage('customers');
+        onShowCustomerList();
+        break;
+      case 'NAVIGATE_TO_INVENTORY':
+        setCurrentProcessStage('inventory');
+        onShowInventory?.();
+        break;
+      case 'NAVIGATE_TO_FULFILLMENT':
+        setCurrentProcessStage('fulfillment');
+        onShowFulfillment?.();
+        break;
+      case 'NAVIGATE_TO_ANALYTICS':
+        setCurrentProcessStage('analytics');
+        onShowAnalytics?.();
+        break;
+      case 'NAVIGATE_TO_DASHBOARD':
+        setCurrentProcessStage('dashboard');
+        // Already on dashboard - no navigation needed
+        break;
+      case 'NAVIGATE_AND_EXECUTE':
+        // Compound action: Navigate to target page + execute business action
+        const { targetContext, action, params: actionParams } = params || {};
+        if (targetContext && action) {
+          // eslint-disable-next-line no-console
+        console.log(`🔗 NAVIGATE_AND_EXECUTE: ${targetContext} → ${action}`, actionParams);
+          
+          // Navigate to target context
+          setCurrentProcessStage(targetContext);
+          
+          // Execute appropriate navigation based on target
+          switch (targetContext) {
+            case 'leads':
+              onShowLeadManagement(action, actionParams); // Pass pending action
+              break;
+            case 'quotes':
+              onShowQuotationOrders();
+              // TODO: Pass pending action to QuotationOrders
+              break;
+            case 'orders':
+              onShowSalesOrders();
+              // TODO: Pass pending action to SalesOrders
+              break;
+            case 'payments':
+              onShowPayments();
+              // TODO: Pass pending action to Payments
+              break;
+            case 'invoices':
+              onShowInvoices();
+              // TODO: Pass pending action to Invoices
+              break;
+            case 'customers':
+              onShowCustomerList();
+              // TODO: Pass pending action to CustomerList
+              break;
+            case 'inventory':
+              onShowInventory?.();
+              // TODO: Pass pending action to InventoryManagement
+              break;
+            case 'fulfillment':
+              onShowFulfillment?.();
+              // TODO: Pass pending action to FulfillmentManagement
+              break;
+            case 'analytics':
+              onShowAnalytics?.();
+              // TODO: Pass pending action to AnalyticsManagement
+              break;
+            default:
+              // eslint-disable-next-line no-console
+              console.log('Unknown target context:', targetContext);
+          }
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('Invalid NAVIGATE_AND_EXECUTE params:', params);
+        }
+        break;
+      default:
+        // eslint-disable-next-line no-console
+        console.log('Unhandled universal action in Dashboard:', actionType, params);
+    }
   };
 
 
@@ -276,7 +381,12 @@ function Dashboard({
             icon: '📋',
             purpose: 'Production tasks',
             quickStats: 'Production workflow and task management',
-            disabled: true
+            actions: [
+              { label: 'View All Orders', action: onShowSalesOrders, primary: true },
+              { label: 'Start Production', action: () => {} },
+              { label: 'Production Status', action: () => {} },
+              { label: 'Work Order Reports', action: () => {} }
+            ]
           },
           { 
             id: 'manufacturingExecution', 
@@ -321,7 +431,12 @@ function Dashboard({
             icon: '📦',
             purpose: 'Track stock',
             quickStats: 'Stock levels, allocation, and reorder management',
-            disabled: true
+            actions: [
+              { label: 'View All Inventory', action: onShowInventory ? onShowInventory : () => {}, primary: true },
+              { label: 'Add New Stock', action: () => {} },
+              { label: 'Check Stock Levels', action: () => {} },
+              { label: 'Stock Reports', action: () => {} }
+            ]
           },
           { 
             id: 'procurement', 
@@ -366,7 +481,12 @@ function Dashboard({
             icon: '📦',
             purpose: 'Ready to ship',
             quickStats: 'Dispatch preparation and shipping coordination',
-            disabled: true
+            actions: [
+              { label: 'View All Fulfillment', action: onShowFulfillment ? onShowFulfillment : () => {}, primary: true },
+              { label: 'Prepare Shipment', action: () => {} },
+              { label: 'Track Delivery', action: () => {} },
+              { label: 'Shipping Reports', action: () => {} }
+            ]
           },
           { 
             id: 'dispatch', 
@@ -456,7 +576,12 @@ function Dashboard({
             icon: '📊',
             purpose: 'Business reports',
             quickStats: 'Executive dashboards and operational reports',
-            disabled: true
+            actions: [
+              { label: 'View All Analytics', action: onShowAnalytics ? onShowAnalytics : () => {}, primary: true },
+              { label: 'Generate Report', action: () => {} },
+              { label: 'Export Data', action: () => {} },
+              { label: 'KPI Dashboard', action: () => {} }
+            ]
           },
           { 
             id: 'financialAnalytics', 
@@ -503,7 +628,7 @@ function Dashboard({
   const leadsReadyForQuotes = warmLeads + Math.floor(hotLeads * 0.7);
   const quotesReadyForAdvance = approvedQuotes;
   const pendingAdvanceAmount = mockSalesOrders.reduce((sum, order) => 
-    sum + (order.status === 'pending' ? order.totalAmount * 0.3 : 0), 0);
+    sum + (order.status === 'order_confirmed' ? order.totalAmount * 0.3 : 0), 0);
   const repeatCustomerOpportunities = Math.floor(totalCustomers * 0.4);
   
 
@@ -850,21 +975,7 @@ function Dashboard({
       {/* Floating Voice Assistant */}
       <FloatingVoiceAssistant
         currentProcessStage={currentProcessStage}
-        onNavigateToLeads={() => { setCurrentProcessStage('leads'); onShowLeadManagement(); }}
-        onNavigateToQuotes={() => { setCurrentProcessStage('quotes'); onShowQuotationOrders(); }}
-        onNavigateToPayments={() => { setCurrentProcessStage('payments'); onShowPayments(); }}
-        onNavigateToProduction={() => { setCurrentProcessStage('production'); onShowSalesOrders(); }}
-        onNavigateToInventory={() => { setCurrentProcessStage('inventory'); onShowInventory?.(); }}
-        onNavigateToFulfillment={() => { setCurrentProcessStage('fulfillment'); onShowFulfillment?.(); }}
-        onNavigateToCustomers={() => { setCurrentProcessStage('customers'); onShowCustomerList(); }}
-        onNavigateToAnalytics={() => { setCurrentProcessStage('analytics'); onShowAnalytics?.(); }}
-        onOpenAddLeadModal={() => { 
-          setCurrentProcessStage('leads'); 
-          if (onOpenAddLeadModal) {
-            onOpenAddLeadModal();
-          }
-          onShowLeadManagement();
-        }}
+        onUniversalAction={handleUniversalAction}
         businessData={businessData}
         onPerformSearch={globalSearchState.performGlobalSearch}
       />

@@ -160,9 +160,17 @@ function CustomerProfile({
           <h4>📦 {t('orderHistory')}</h4>
           {customerOrders.length > 0 ? customerOrders.map(order => {
             const statusIcons = {
-              pending: '⏳',
-              production: '🏭',
-              completed: '✅'
+              order_confirmed: '✅',
+              production_planning: '📋',
+              pending_materials: '📦',
+              production_started: '🏭',
+              quality_check: '🔍',
+              production_completed: '✅',
+              ready_to_ship: '🚚',
+              shipped: '🛫',
+              in_transit: '🚛',
+              delivered: '📍',
+              completed: '🎉'
             };
             
             return (
@@ -172,7 +180,7 @@ function CustomerProfile({
                   <div className={styles.orderMeta}>
                     <span className={styles.orderDate}>{order.orderDate}</span>
                     <span className={`${styles.orderStatus} ${styles[order.status]}`}>
-                      {statusIcons[order.status]} {order.status === 'production' ? 'In Production' : order.status}
+                      {statusIcons[order.status]} {order.status === 'production_started' ? 'In Production' : order.status}
                     </span>
                   </div>
                 </div>
@@ -197,7 +205,7 @@ function CustomerProfile({
                 <div className="order-meta">
                   <span className="order-date">{order.orderDate}</span>
                   <span className={`order-status ${order.status}`}>
-                    {order.status === 'pending' ? '⚠️ Pending' : order.status === 'production' ? '₹ In Progress' : '✅ Completed'}
+                    {order.status === 'order_confirmed' ? '⚠️ Pending' : order.status === 'production_started' ? '₹ In Progress' : '✅ Completed'}
                   </span>
                 </div>
               </div>
@@ -205,7 +213,7 @@ function CustomerProfile({
                 <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)}</p>
                 <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
                 <p><strong>Payment Method:</strong> {customer.preferences.paymentMethod}</p>
-                {order.status === 'pending' && (
+                {order.status === 'order_confirmed' && (
                   <p><strong>Action Required:</strong> Follow up for advance payment</p>
                 )}
               </div>

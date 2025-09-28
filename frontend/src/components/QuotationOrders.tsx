@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProductHeader from './ProductHeader';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/QuotationOrders.module.css';
@@ -16,6 +17,7 @@ interface QuotationOrdersProps {
   onShowLeadManagement?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 function QuotationOrders({
@@ -29,7 +31,8 @@ function QuotationOrders({
   onShowCustomerProfile,
   onShowLeadManagement,
   filterState,
-  onFilterChange
+  onFilterChange,
+  onUniversalAction
 }: QuotationOrdersProps) {
   const { t } = useTranslation();
   
@@ -364,6 +367,46 @@ function QuotationOrders({
           "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "Mark as approved" • "Send profile link"
         </p>
       </div>
+
+      {/* Voice Assistant for Quotation Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="quotes"
+        onUniversalAction={onUniversalAction}
+        onAction={(actionType, params) => {
+          // Quote-specific action dispatcher
+          switch (actionType) {
+            case 'APPROVE_QUOTE':
+              if (params?.quoteId) {
+                handleQuoteApproval(params.quoteId);
+              }
+              break;
+            case 'SEND_PROFILE_LINK':
+              if (params?.quoteId) {
+                handleSendProfileLink(params.quoteId);
+              }
+              break;
+            default:
+              // eslint-disable-next-line no-console
+              console.log('Unhandled quote action:', actionType, params);
+          }
+        }}
+        businessData={{
+          hotLeads: 0,
+          overduePayments: 0,
+          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
+          totalCustomers: mockBusinessProfiles.length
+        }}
+        onPerformSearch={(query) => {
+          // Search quotes by company name or items
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const filteredQuotes = mockQuotes.filter(quote => 
+            quote.companyName.toLowerCase().includes(query.toLowerCase()) ||
+            quote.items.toLowerCase().includes(query.toLowerCase())
+          );
+          // Note: Would need state management to actually filter displayed quotes
+          // TODO: Implement quotes search filter display
+        }}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 // Uses Google Cloud Natural Language API for voice command interpretation
 
 import { NLPProvider, VoiceIntent } from './types';
+import { universalCommandProcessor } from './UniversalCommandProcessor';
 
 export class GoogleNLPProvider implements NLPProvider {
   name = 'google';
@@ -14,24 +15,43 @@ export class GoogleNLPProvider implements NLPProvider {
 
   async processCommand(text: string): Promise<VoiceIntent> {
     try {
-      // For demo purposes, we'll use a simplified classification approach
-      // In production, you would train a custom model or use AutoML
-      const classification = await this.classifyText(text);
-      return this.mapToBusinessIntent(text, classification);
-    } catch (error) {
-      // Google NLP Error occurred
+      // Step 1: Get base intent from UniversalCommandProcessor
+      const baseResult = universalCommandProcessor.processCommand(text);
+      
+      // Step 2: If we have a strong local match, return it
+      if (baseResult.confidence >= 0.7) {
+        return baseResult;
+      }
+      
+      // Step 3: Use Google AI to enhance confidence and accuracy
+      const aiEnhancement = await this.enhanceWithGoogleAI(text, baseResult);
+      
+      // Step 4: Return enhanced result
       return {
-        intent: 'UNKNOWN_INTENT',
-        confidence: 0.0,
-        originalText: text,
-        language: this.detectLanguage(text)
+        ...baseResult,
+        confidence: Math.max(baseResult.confidence, aiEnhancement.confidence)
       };
+    } catch (error) {
+      // Google AI failed - fallback to universal processor
+      const fallbackResult = universalCommandProcessor.processCommand(text);
+      
+      // If fallback also fails, return unknown intent
+      if (fallbackResult.confidence < 0.3) {
+        return {
+          intent: 'UNKNOWN_INTENT',
+          confidence: 0.0,
+          originalText: text,
+          language: this.detectLanguage(text)
+        };
+      }
+      
+      return fallbackResult;
     }
   }
 
-  private async classifyText(text: string): Promise<{ intent: string; confidence: number }> {
-    // This is a simplified implementation
-    // In production, you would use Google's classification or entity analysis
+  private async enhanceWithGoogleAI(text: string, baseResult: VoiceIntent): Promise<{ confidence: number }> {
+    // Use Google Cloud Natural Language API to analyze sentiment and confidence
+    // This helps improve confidence scores for ambiguous commands
     const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
       method: 'POST',
       headers: {
@@ -49,98 +69,15 @@ export class GoogleNLPProvider implements NLPProvider {
       throw new Error(`Google API error: ${response.status} ${response.statusText}`);
     }
 
-    return await response.json();
+    const analysis = await response.json();
+    
+    // Use Google's analysis to enhance confidence
+    // For MVP, we'll use a simple confidence boost if Google understands the text
+    const aiConfidence = analysis.documentSentiment ? 0.8 : 0.4;
+    
+    return { confidence: aiConfidence };
   }
 
-  private mapToBusinessIntent(text: string, classification: { intent?: string; confidence?: number }): VoiceIntent {
-    // Simplified mapping logic
-    // In production, this would be more sophisticated
-    const lowerText = text.toLowerCase();
-    
-    // Business intent mapping based on keywords
-    if (this.containsKeywords(lowerText, ['lead', 'leads', 'लीड', 'લીડ', 'prospect', 'customer'])) {
-      return {
-        intent: 'OPEN_LEADS',
-        confidence: 0.8,
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['payment', 'पेमेंट', 'પેમેન્ટ', 'money', 'due', 'outstanding'])) {
-      return {
-        intent: 'OPEN_PAYMENTS', 
-        confidence: 0.8,
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['customer', 'ग्राहक', 'ગ્રાહક', 'client', 'customers'])) {
-      return {
-        intent: 'OPEN_CUSTOMERS',
-        confidence: 0.8, 
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['inventory', 'stock', 'स्टॉक', 'સ્ટોક', 'material', 'fabric'])) {
-      return {
-        intent: 'OPEN_INVENTORY',
-        confidence: 0.8,
-        originalText: text, 
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['order', 'orders', 'ऑर्डर', 'ઓર્ડર', 'sales', 'booking'])) {
-      return {
-        intent: 'OPEN_ORDERS',
-        confidence: 0.8,
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['analytics', 'report', 'रिपोर्ट', 'રિપોર્ટ', 'performance', 'data'])) {
-      return {
-        intent: 'OPEN_ANALYTICS', 
-        confidence: 0.8,
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['attention', 'priority', 'urgent', 'important'])) {
-      return {
-        intent: 'SHOW_PRIORITIES',
-        confidence: 0.7,
-        originalText: text,
-        language: this.detectLanguage(text) 
-      };
-    }
-    
-    if (this.containsKeywords(lowerText, ['overview', 'dashboard', 'summary', 'status'])) {
-      return {
-        intent: 'SHOW_BUSINESS_OVERVIEW',
-        confidence: 0.7,
-        originalText: text,
-        language: this.detectLanguage(text)
-      };
-    }
-
-    return {
-      intent: 'UNKNOWN_INTENT',
-      confidence: 0.0,
-      originalText: text,
-      language: this.detectLanguage(text)
-    };
-  }
-
-  private containsKeywords(text: string, keywords: string[]): boolean {
-    return keywords.some(keyword => text.includes(keyword.toLowerCase()));
-  }
 
   private detectLanguage(text: string): 'en' | 'hi' | 'gu' | 'mixed' {
     const hindiChars = /[\u0900-\u097F]/;

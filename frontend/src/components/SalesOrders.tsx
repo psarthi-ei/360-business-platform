@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductHeader from './ProductHeader';
-import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById } from '../data/mockData';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/SalesOrders.module.css';
 
@@ -16,6 +17,7 @@ interface SalesOrdersProps {
   onShowPayments?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 function SalesOrders({
@@ -29,9 +31,30 @@ function SalesOrders({
   onShowQuotationOrders,
   onShowPayments,
   filterState,
-  onFilterChange
+  onFilterChange,
+  onUniversalAction
 }: SalesOrdersProps) {
   const { t } = useTranslation();
+  
+  // Action handler for sales order-specific commands only
+  function handleAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'UPDATE_ORDER_STATUS':
+        // Future: Handle order status updates
+        // TODO: Implement update order status
+        break;
+      case 'SEND_PAYMENT_REMINDER':
+        // Future: Handle payment reminders
+        // TODO: Implement send payment reminder
+        break;
+      case 'MARK_READY_FOR_PRODUCTION':
+        // Future: Handle production readiness
+        // TODO: Implement mark ready for production
+        break;
+      default:
+        // TODO: Handle unhandled sales order action
+    }
+  }
   
   // Helper function to calculate payment details for an order
   const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
@@ -89,13 +112,13 @@ function SalesOrders({
             className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('pending')}
           >
-            {t('showPending')}
+            ✅ Order Confirmed
           </button>
           <button 
             className={filterState === 'production' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
             onClick={() => onFilterChange('production')}
           >
-            🏭 {t('readyForProduction')}
+            🏭 In Production
           </button>
         </div>
       </div>
@@ -105,21 +128,37 @@ function SalesOrders({
           // Filter logic
           const shouldShow = (
             filterState === 'all' ||
-            (filterState === 'pending' && order.status === 'pending') ||
-            (filterState === 'production' && order.status === 'production')
+            (filterState === 'pending' && order.status === 'order_confirmed') ||
+            (filterState === 'production' && order.status === 'production_started')
           );
 
           if (!shouldShow) return null;
 
           const statusIcons = {
-            pending: '⏳',
-            production: '🏭',
-            completed: '✅'
+            order_confirmed: '✅',
+            production_planning: '📋',
+            pending_materials: '📦',
+            production_started: '🏭',
+            quality_check: '🔍',
+            production_completed: '✅',
+            ready_to_ship: '🚚',
+            shipped: '🛫',
+            in_transit: '🚛',
+            delivered: '📍',
+            completed: '🎉'
           };
 
           const statusLabels = {
-            pending: t('pending'),
-            production: t('inProduction'),
+            order_confirmed: 'Order Confirmed',
+            production_planning: 'Planning Production',
+            pending_materials: 'Awaiting Materials',
+            production_started: t('inProduction') || 'In Production',
+            quality_check: 'Quality Check',
+            production_completed: 'Production Done',
+            ready_to_ship: 'Ready to Ship',
+            shipped: 'Shipped',
+            in_transit: 'In Transit',
+            delivered: 'Delivered',
             completed: t('completed') || 'Completed'
           };
 
@@ -189,7 +228,7 @@ function SalesOrders({
               
               <div className={styles.orderActions}>
                 <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
-                {order.status === 'pending' && (
+                {order.status === 'order_confirmed' && (
                   <>
                     <button 
                       className={`${styles.actionBtn} ${styles.paymentBtn}`}
@@ -200,7 +239,7 @@ function SalesOrders({
                     <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 {t('readyForProduction')}</button>
                   </>
                 )}
-                {order.status === 'production' && (
+                {order.status === 'production_started' && (
                   <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 Production Status</button>
                 )}
                 {order.status === 'completed' && (
@@ -216,9 +255,35 @@ function SalesOrders({
       <div className={styles.voiceCommands}>
         <p className={styles.voiceHint}>
           🎤 <strong>{t('voiceCommandsHint')}</strong> 
-          "{t('viewPaymentStatus')}" • "{t('sendPaymentReminder')}"
+          "{t('viewPaymentStatus')}" • "{t('sendPaymentReminder')}" • "Mark ready for production"
         </p>
       </div>
+
+      {/* Voice Assistant for Sales Order Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="orders"
+        onUniversalAction={onUniversalAction}
+        onAction={handleAction}
+        businessData={{
+          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+          overduePayments: mockSalesOrders.filter(order => {
+            const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount);
+            return paymentDetails.paymentStatus === 'overdue';
+          }).length,
+          readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
+          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Search orders by customer name or order content
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const filteredOrders = mockSalesOrders.filter(order => {
+            const customer = getBusinessProfileById(order.businessProfileId);
+            return customer?.companyName.toLowerCase().includes(query.toLowerCase()) ||
+                   order.items.toLowerCase().includes(query.toLowerCase());
+          });
+          // TODO: Display filtered orders
+        }}
+      />
     </div>
   );
 }

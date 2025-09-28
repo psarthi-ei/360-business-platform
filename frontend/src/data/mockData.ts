@@ -172,7 +172,7 @@ export interface SalesOrder {
   deliveryDate: string;
   items: string;
   totalAmount: number;
-  status: 'pending' | 'production' | 'completed';
+  status: 'order_confirmed' | 'production_planning' | 'pending_materials' | 'production_started' | 'quality_check' | 'production_completed' | 'ready_to_ship' | 'shipped' | 'in_transit' | 'delivered' | 'completed';
   statusMessage: string;
   paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue';
   productionStatus: string;
@@ -758,8 +758,8 @@ export const mockSalesOrders: SalesOrder[] = [
     deliveryDate: 'April 10, 2024',
     items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
-    status: 'production' as const,
-    statusMessage: 'Auto-created after advance payment - Currently in production (60% done)',
+    status: 'ready_to_ship' as const,
+    statusMessage: 'Production completed - Ready for dispatch to customer',
     paymentStatus: 'partial' as const,
     productionStatus: 'In production - 60% completed',
     balancePaymentDue: 487500

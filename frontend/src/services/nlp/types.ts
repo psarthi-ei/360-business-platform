@@ -7,6 +7,8 @@ export interface VoiceCommandPayload {
   target?: string;          // Business target: 'leads', 'customers', 'payments', etc.
   query?: string;           // Search/filter query: 'Mumbai', 'Cotton Mills', etc.
   filters?: string[];       // Additional filters: ['hot', 'pending', 'gujarat']
+  leadId?: string;          // Lead ID for priority changes (UC-L05)
+  priority?: 'hot' | 'warm' | 'cold'; // Priority level for lead changes (UC-L05)
   parameters?: { [key: string]: string }; // Extra structured data
 }
 
@@ -69,6 +71,7 @@ export type BusinessIntent =
   | 'OPEN_COMMAND'          // Universal open: "open customers", "navigate to orders"
   | 'CREATE_COMMAND'        // Universal create: "create lead", "add customer" 
   | 'CHECK_COMMAND'         // Universal check: "check status", "verify payment"
+  | 'SET_PRIORITY_COMMAND'  // UC-L05: Set lead priority: "इस लीड को hot बनाएं"
   | 'UNKNOWN_INTENT'        // Fallback for unrecognized commands
   | 'HELP_COMMAND';         // Help and assistance requests
 

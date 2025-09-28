@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductHeader from './ProductHeader';
 import AddLeadModal from './AddLeadModal';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency, Lead } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/LeadManagement.module.css';
@@ -21,6 +22,7 @@ interface LeadManagementProps {
   onFilterChange: (filter: string) => void;
   openAddModal?: boolean;
   onAddModalHandled?: () => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 function LeadManagement({
@@ -37,7 +39,8 @@ function LeadManagement({
   filterState,
   onFilterChange,
   openAddModal,
-  onAddModalHandled
+  onAddModalHandled,
+  onUniversalAction
 }: LeadManagementProps) {
   const { t } = useTranslation();
   const location = useLocation();
@@ -146,6 +149,24 @@ function LeadManagement({
     setEditingLead(null);
   };
 
+  // Handle quick priority change - UC-L05
+  const handlePriorityChange = (leadId: string, newPriority: 'hot' | 'warm' | 'cold') => {
+    setLeads(prev => prev.map(lead => 
+      lead.id === leadId 
+        ? { ...lead, priority: newPriority, lastContact: `Priority changed to ${newPriority} on ${new Date().toLocaleDateString()}` }
+        : lead
+    ));
+    
+    // Show success message
+    const leadName = leads.find(l => l.id === leadId)?.companyName || 'Lead';
+    setSuccessMessage(`${leadName} priority updated to ${newPriority.toUpperCase()}!`);
+    
+    // Clear success message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+  };
+
   return (
     <div className={styles.leadManagementScreen}>
       <ProductHeader
@@ -246,9 +267,37 @@ function LeadManagement({
                     {lead.companyName} - {lead.location}
                   </span>
                 </h3>
-                <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
-                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
-                </span>
+                <div className={styles.prioritySection}>
+                  <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
+                    {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
+                  </span>
+                  <div className={styles.priorityQuickActions}>
+                    <button 
+                      className={`${styles.priorityBtn} ${styles.hotBtn} ${lead.priority === 'hot' ? styles.active : ''}`}
+                      onClick={() => handlePriorityChange(lead.id, 'hot')}
+                      title="Mark as Hot Lead"
+                      disabled={lead.priority === 'hot'}
+                    >
+                      🔥
+                    </button>
+                    <button 
+                      className={`${styles.priorityBtn} ${styles.warmBtn} ${lead.priority === 'warm' ? styles.active : ''}`}
+                      onClick={() => handlePriorityChange(lead.id, 'warm')}
+                      title="Mark as Warm Lead"
+                      disabled={lead.priority === 'warm'}
+                    >
+                      🔶
+                    </button>
+                    <button 
+                      className={`${styles.priorityBtn} ${styles.coldBtn} ${lead.priority === 'cold' ? styles.active : ''}`}
+                      onClick={() => handlePriorityChange(lead.id, 'cold')}
+                      title="Mark as Cold Lead"
+                      disabled={lead.priority === 'cold'}
+                    >
+                      🔵
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className={styles.leadDetails}>
                 <p><strong>Contact:</strong> {lead.contact}</p>
@@ -390,6 +439,49 @@ function LeadManagement({
         onClose={handleModalClose}
         onAddLead={editingLead ? handleUpdateLead : handleAddLead}
         editingLead={editingLead}
+      />
+
+      {/* Voice Assistant for Lead Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="leads"
+        onUniversalAction={onUniversalAction}
+        onAction={(actionType, params) => {
+          // Lead-specific action dispatcher only
+          switch (actionType) {
+            case 'ADD_NEW_LEAD':
+              setShowAddModal(true);
+              break;
+            case 'SET_PRIORITY':
+              if (params?.leadId && params?.priority) {
+                handlePriorityChange(params.leadId, params.priority);
+              }
+              break;
+            case 'EDIT_LEAD':
+              if (params?.leadId) {
+                const leadToEdit = leads.find(l => l.id === params.leadId);
+                if (leadToEdit) {
+                  handleEditLead(leadToEdit);
+                }
+              }
+              break;
+            default:
+              // TODO: Handle unhandled lead action
+          }
+        }}
+        businessData={{
+          hotLeads: leads.filter(l => l.priority === 'hot').length,
+          overduePayments: 0,
+          readyToShip: 0,
+          totalCustomers: leads.filter(l => l.conversionStatus === 'converted_to_customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Basic search functionality - filter leads by company name or inquiry
+          const filteredLeads = mockLeads.filter(lead => 
+            lead.companyName.toLowerCase().includes(query.toLowerCase()) ||
+            lead.inquiry.toLowerCase().includes(query.toLowerCase())
+          );
+          setLeads(filteredLeads);
+        }}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import {
   getAllActionWords,
   getAllTargetWords,
   getAllContextualMarkers,
+  getAllConversationFillers,
   getAllFilterWords,
   detectPrimaryLanguage
 } from './LanguageConfig';
@@ -134,9 +135,12 @@ export class UniversalCommandProcessor {
       }
     }
     
-    // Step 2: Remove contextual markers
+    // Step 2: Remove contextual markers and conversation fillers
     const contextualMarkers = getAllContextualMarkers();
-    for (const marker of contextualMarkers) {
+    const conversationFillers = getAllConversationFillers();
+    const allFillers = [...contextualMarkers, ...conversationFillers];
+    
+    for (const marker of allFillers) {
       const regex = new RegExp(`\\b${this.escapeRegex(marker)}\\b`, 'gi');
       cleanedText = cleanedText.replace(regex, '');
     }
@@ -257,6 +261,7 @@ export class UniversalCommandProcessor {
   private escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
+
 
   /**
    * Debug method to show extraction process (for development only)

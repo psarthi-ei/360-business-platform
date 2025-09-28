@@ -48,15 +48,10 @@ declare global {
 
 interface FloatingVoiceAssistantProps {
   currentProcessStage?: string;
-  onNavigateToLeads?: () => void;
-  onNavigateToQuotes?: () => void;
-  onNavigateToPayments?: () => void;
-  onNavigateToProduction?: () => void;
-  onNavigateToInventory?: () => void;
-  onNavigateToFulfillment?: () => void;
-  onNavigateToCustomers?: () => void;
-  onNavigateToAnalytics?: () => void;
-  onOpenAddLeadModal?: () => void;
+  // Universal action handler for navigation commands (handled by Dashboard)
+  onUniversalAction?: (actionType: string, params?: any) => void;
+  // Component-specific action handler (handled by individual components)
+  onAction?: (actionType: string, params?: any) => void;
   businessData?: {
     hotLeads: number;
     overduePayments: number;
@@ -66,17 +61,96 @@ interface FloatingVoiceAssistantProps {
   onPerformSearch?: (query: string) => void;
 }
 
+// Command Classification System - Only FloatingVoiceAssistant knows this
+const COMMAND_CONTEXTS = {
+  leads: ['ADD_NEW_LEAD', 'EDIT_LEAD', 'SET_PRIORITY', 'DELETE_LEAD'],
+  quotes: ['APPROVE_QUOTE', 'SEND_PROFILE_LINK', 'CREATE_QUOTE'],
+  payments: ['SEND_PAYMENT_REMINDER', 'RECORD_PAYMENT', 'MARK_PAYMENT_RECEIVED'],
+  orders: ['UPDATE_ORDER_STATUS', 'MARK_READY_FOR_PRODUCTION', 'CREATE_ORDER'],
+  inventory: ['CHECK_STOCK_LEVELS', 'UPDATE_INVENTORY', 'CREATE_PURCHASE_ORDER'],
+  fulfillment: ['PREPARE_SHIPMENT', 'TRACK_DELIVERY', 'UPDATE_CUSTOMER'],
+  customers: ['VIEW_CUSTOMER_PROFILE', 'CALL_CUSTOMER', 'CREATE_QUOTE_FOR_CUSTOMER', 'ADD_NEW_CUSTOMER', 'FILTER_CUSTOMERS'],
+  invoices: ['SEND_INVOICE', 'FOLLOW_UP_INVOICE', 'FILTER_INVOICES'],
+  analytics: ['GENERATE_REPORT', 'SHOW_ANALYTICS', 'EXPORT_DATA']
+} as const;
+
+// Context detection function - determines which page a command belongs to
+function getCommandContext(actionType: string): string | null {
+  for (const [context, commands] of Object.entries(COMMAND_CONTEXTS)) {
+    if ((commands as readonly string[]).includes(actionType)) {
+      return context;
+    }
+  }
+  return null; // Navigation command or unknown
+}
+
+// Map page stages to context names
+function mapStageToContext(stage: string): string {
+  const stageMapping: Record<string, string> = {
+    'leads': 'leads',
+    'quotes': 'quotes', 
+    'orders': 'orders',
+    'payments': 'payments',
+    'inventory': 'inventory',
+    'fulfillment': 'fulfillment',
+    'customers': 'customers',
+    'invoices': 'invoices',
+    'analytics': 'analytics',
+    'dashboard': 'dashboard'
+  };
+  return stageMapping[stage] || stage;
+}
+
+// Context-aware action dispatcher - the heart of "say anything anywhere"
+function routeActionWithContext(
+  actionType: string, 
+  params: any, 
+  currentStage: string,
+  onUniversalAction?: (actionType: string, params?: any) => void,
+  onAction?: (actionType: string, params?: any) => void
+): void {
+  // Determine which context this command belongs to
+  const requiredContext = getCommandContext(actionType);
+  const currentContext = mapStageToContext(currentStage);
+  
+  // eslint-disable-next-line no-console
+  console.log(`🎯 Context-aware routing: action=${actionType}, required=${requiredContext}, current=${currentContext}`);
+  
+  if (!requiredContext) {
+    // Navigation command or unknown - always route to universal handler
+    // eslint-disable-next-line no-console
+    console.log('📍 Navigation/unknown command - routing to Dashboard');
+    if (onUniversalAction) {
+      onUniversalAction(actionType, params);
+    }
+    return;
+  }
+  
+  if (requiredContext === currentContext) {
+    // Command matches current page context - execute directly
+    // eslint-disable-next-line no-console
+    console.log('✅ Context match - executing locally');
+    if (onAction) {
+      onAction(actionType, params);
+    }
+  } else {
+    // Context mismatch - need to navigate first, then execute
+    // eslint-disable-next-line no-console
+    console.log('🔄 Context mismatch - using NAVIGATE_AND_EXECUTE');
+    if (onUniversalAction) {
+      onUniversalAction('NAVIGATE_AND_EXECUTE', {
+        targetContext: requiredContext,
+        action: actionType,
+        params: params
+      });
+    }
+  }
+}
+
 function FloatingVoiceAssistant({
   currentProcessStage = 'dashboard',
-  onNavigateToLeads,
-  onNavigateToQuotes,
-  onNavigateToPayments,
-  onNavigateToProduction,
-  onNavigateToInventory,
-  onNavigateToFulfillment,
-  onNavigateToCustomers,
-  onNavigateToAnalytics,
-  onOpenAddLeadModal,
+  onUniversalAction,
+  onAction,
   businessData,
   onPerformSearch
 }: FloatingVoiceAssistantProps) {
@@ -122,133 +196,120 @@ function FloatingVoiceAssistant({
     };
   }, [showVoicePanel]);
 
-  // Process-aware voice command suggestions
+  // Context-aware voice command suggestions - shows universal + page-specific commands
   const getProcessVoiceCommands = (stage: string) => {
-    const commands = {
+    // Universal commands that work from any page
+    const universalCommands = [
+      'Go to dashboard',
+      'हॉट लीड्स खोजें',
+      'Add new lead'
+    ];
+    
+    // Page-specific commands for current context
+    const contextCommands = {
       'dashboard': [
         'Search Mumbai cotton mills',
-        'કોટન ઓર્ડર શોધો',
-        'Show hot leads',
-        'Pending orders दिखाएं',
-        'Check payment status'
+        'કોટન ઓર્ડર શોધો'
       ],
       'leads': [
-        'Search Surat textile leads',
-        'गुजरात के लीड्स खोजें',
-        'Show hot leads',
-        'Find cotton customers',
-        'Add new lead'
+        'Set priority to hot',
+        'गुजरात के लीड्स खोजें'
       ],
       'quotes': [
-        'Search pending quotes',
-        'હાઈ વેલ્યુ ક્વોટ્સ શોધો',
-        'Create new quote',
-        'Outstanding orders दिखाएं',
-        'Quote approval status'
+        'Approve this quote',
+        'હાઈ વેલ્યુ ક્વોટ્સ શોધો'
+      ],
+      'orders': [
+        'प्रोडक्शन के लिए तैयार करें',
+        'ઉત્પાદન સ્ટેટસ બતાવો'
       ],
       'payments': [
-        'Search overdue payments',
-        'બકાયા પેમેન્ટ શોધો',
-        'Show pending payments',
-        'Large payments ढूंढें',
-        'Record payment'
-      ],
-      'production': [
-        'Search production orders',
-        'ઉત્પાદન સ્ટેટસ બતાવો',
-        'Quality check करें',
-        'Start production',
-        'Production report'
+        'पेमेंट रिकॉर्ड करें',
+        'બકાયા પેમેન્ટ શોધો'
       ],
       'inventory': [
-        'Search cotton stock',
-        'સ્ટોક ચેક કરો',
-        'Material order दें',
-        'Inventory status',
-        'Stock allocation'
+        'स्टॉक चेक करें',
+        'સ્ટોક ચેક કરો'
       ],
       'fulfillment': [
-        'Search ready orders',
-        'શિપિંગ સ્ટેટસ બતાવો',
-        'Dispatch tracking करें',
-        'Ready to ship',
-        'Delivery confirmation'
+        'शिपमेंट तैयार करें',
+        'શિપિંગ સ્ટેટસ બતાવો'
       ],
       'customers': [
-        'Search VIP customers',
-        'વીઆઈપી ગ્રાહકો શોધો',
-        'Repeat customers ढूंढें',
-        'Customer profile',
-        'Customer feedback'
+        'कस्टमर प्रोफाइल देखें',
+        'વીઆઈપી ગ્રાહકો શોધો'
+      ],
+      'invoices': [
+        'Send invoice',
+        'बकाया इनवॉइस खोजें'
       ],
       'analytics': [
-        'Search business reports',
-        'મંથલી સેલ્સ બતાવો',
-        'Performance metrics दिखाएं',
-        'Show KPIs',
-        'Business analytics'
+        'Generate report',
+        'મંથલી સેલ્સ બતાવો'
       ]
     };
-    return commands[stage as keyof typeof commands] || commands.dashboard;
+    
+    // Combine universal commands with context-specific ones
+    const contextSpecific = contextCommands[stage as keyof typeof contextCommands] || contextCommands.dashboard;
+    return [...universalCommands, ...contextSpecific];
   };
 
-  // Extract search query from NLP payload (replaces custom extraction logic)
-  // Unified target router - handles both navigation and creation
-  const routeToTarget = useCallback((target: string | undefined, action: 'navigate' | 'create' = 'navigate') => {
+  // Modern navigation helper - uses only context-aware routing
+  const navigateToTarget = useCallback((target: string | undefined) => {
+    if (!target || !onUniversalAction) return;
+    
     // Normalize target (handle both singular and plural)
-    const normalizedTarget = target?.toLowerCase();
+    const normalizedTarget = target.toLowerCase();
+    
+    // Convert to universal navigation action type
+    let actionType = '';
     
     switch (normalizedTarget) {
       case 'lead':
       case 'leads':
-        if (action === 'create' && onOpenAddLeadModal) {
-          onOpenAddLeadModal();
-        } else {
-          onNavigateToLeads?.();
-        }
+        actionType = 'NAVIGATE_TO_LEADS';
         break;
-        
       case 'payment':
       case 'payments':
-        onNavigateToPayments?.();
+        actionType = 'NAVIGATE_TO_PAYMENTS';
         break;
-        
       case 'customer':
       case 'customers':
-        onNavigateToCustomers?.();
+        actionType = 'NAVIGATE_TO_CUSTOMERS';
         break;
-        
       case 'order':
       case 'orders':
+        actionType = 'NAVIGATE_TO_ORDERS';
+        break;
       case 'quote':
       case 'quotes':
-        onNavigateToQuotes?.();
+        actionType = 'NAVIGATE_TO_QUOTES';
         break;
-        
+      case 'invoice':
+      case 'invoices':
+        actionType = 'NAVIGATE_TO_INVOICES';
+        break;
       case 'inventory':
-        onNavigateToInventory?.();
+        actionType = 'NAVIGATE_TO_INVENTORY';
         break;
-        
       case 'analytics':
-        onNavigateToAnalytics?.();
+        actionType = 'NAVIGATE_TO_ANALYTICS';
         break;
-        
       case 'production':
-        onNavigateToProduction?.();
+        actionType = 'NAVIGATE_TO_ORDERS'; // Production is handled by orders page
         break;
-        
       case 'fulfillment':
-        onNavigateToFulfillment?.();
+        actionType = 'NAVIGATE_TO_FULFILLMENT';
         break;
-        
+      case 'dashboard':
+        actionType = 'NAVIGATE_TO_DASHBOARD';
+        break;
       default:
-        // For unrecognized targets in CREATE mode, default to add lead
-        if (action === 'create' && onOpenAddLeadModal) {
-          onOpenAddLeadModal();
-        }
-        break;
+        return; // Unknown target
     }
-  }, [onNavigateToLeads, onNavigateToPayments, onNavigateToCustomers, onNavigateToQuotes, onNavigateToInventory, onNavigateToAnalytics, onNavigateToProduction, onNavigateToFulfillment, onOpenAddLeadModal]);
+    
+    onUniversalAction(actionType, { target: normalizedTarget });
+  }, [onUniversalAction]);
 
   const extractSearchQuery = useCallback((result: NLPResult): string | null => {
     // Use new structured payload from Universal Command Processor
@@ -306,20 +367,55 @@ function FloatingVoiceAssistant({
           break;
         }
         
-        // Use unified router for navigation
+        // Use modern navigation for page routing
         if (target) {
-          routeToTarget(target, 'navigate');
+          navigateToTarget(target);
         }
         break;
       
-      // Create/Add command support
+      // Create/Add command support - context-aware routing only
       case 'CREATE_COMMAND':
         const createTarget = nlpResult.payload?.target;
-        // Use unified router for creation
         if (createTarget) {
-          routeToTarget(createTarget, 'create');
+          // Map target to action type for context detection
+          let actionType = '';
+          switch (createTarget.toLowerCase()) {
+            case 'lead':
+            case 'leads':
+              actionType = 'ADD_NEW_LEAD';
+              break;
+            case 'quote':
+            case 'quotes':
+              actionType = 'CREATE_QUOTE';
+              break;
+            case 'order':
+            case 'orders':
+              actionType = 'CREATE_ORDER';
+              break;
+            case 'customer':
+            case 'customers':
+              actionType = 'ADD_NEW_CUSTOMER';
+              break;
+            default:
+              // For unknown create targets, default to lead creation
+              actionType = 'ADD_NEW_LEAD';
+              break;
+          }
+          
+          // Use context-aware routing for all create commands
+          routeActionWithContext(actionType, nlpResult.payload, currentProcessStage, onUniversalAction, onAction);
         }
         break;
+      
+      // Generic action dispatcher - supports all business page actions with context awareness
+      case 'SET_PRIORITY_COMMAND':
+        if (nlpResult.payload) {
+          // eslint-disable-next-line no-console
+          console.log('🎯 Dispatching SET_PRIORITY action with context awareness:', nlpResult.payload);
+          routeActionWithContext('SET_PRIORITY', nlpResult.payload, currentProcessStage, onUniversalAction, onAction);
+        }
+        break;
+        
       case 'HELP_COMMAND':
         // Help response already generated
         break;
@@ -327,7 +423,7 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onPerformSearch, extractSearchQuery, routeToTarget]);
+  }, [onPerformSearch, extractSearchQuery, navigateToTarget, onAction, onUniversalAction, currentProcessStage]);
 
   // Enhanced voice command processing with NLP
   const processVoiceCommand = useCallback(async (command: string) => {
@@ -839,7 +935,7 @@ function FloatingVoiceAssistant({
           </ul>
           
           <div className={styles.voiceCommandHint}>
-            Try: "Search Mumbai cotton" • "Find hot leads" • "Show payments" • "Mumbai cotton खोजें"
+            🔍 <strong>Search anywhere:</strong> "Search Mumbai cotton" • "Search hot leads" • "Add new lead" • "Go to payments"
           </div>
         </div>
       )}

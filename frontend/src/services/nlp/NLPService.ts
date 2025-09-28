@@ -134,14 +134,6 @@ export class NLPService {
     }
   }
 
-  // Add custom business commands
-  addCustomCommand(intent: string, keywords: string[], actions: string[]): void {
-    this.processor.addLocalPattern(intent, keywords, actions);
-    
-    if (this.isDebugMode) {
-      // Custom command added
-    }
-  }
 
   // Get usage statistics
   getUsageStats() {

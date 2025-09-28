@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductHeader from './ProductHeader';
-import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById } from '../data/mockData';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById, mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import styles from '../styles/Payments.module.css';
 
 interface PaymentsProps {
@@ -15,6 +16,7 @@ interface PaymentsProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 interface PaymentRecord {
@@ -49,7 +51,8 @@ function Payments({
   onShowInvoices,
   onShowCustomerProfile,
   filterState,
-  onFilterChange
+  onFilterChange,
+  onUniversalAction
 }: PaymentsProps) {
   // Translation hook available for future multilingual features
   // const { t } = useTranslation();
@@ -143,6 +146,26 @@ function Payments({
   };
 
   const filteredPayments = getFilteredPayments();
+
+  // Action handler for payment-specific commands only
+  function handleAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'SEND_PAYMENT_REMINDER':
+        // Future: Handle payment reminders for specific payments
+        // TODO: Implement send payment reminder functionality
+        break;
+      case 'RECORD_PAYMENT':
+        // Future: Handle payment recording
+        // TODO: Implement record payment functionality
+        break;
+      case 'MARK_PAYMENT_RECEIVED':
+        // Future: Mark payment as received
+        // TODO: Implement mark payment received functionality
+        break;
+      default:
+        // TODO: Handle unhandled payment action
+    }
+  }
 
   const handleRecordPayment = (paymentId: string, amount: number) => {
     // Find the payment record to get customer information
@@ -475,17 +498,34 @@ function Payments({
           <h3>🎤 Voice Commands</h3>
           <div className={styles.voiceCommands}>
             <div className={styles.voiceCommand}>
-              <strong>English:</strong> "Record advance payment from Rajesh Textiles"
-            </div>
-            <div className={styles.voiceCommand}>
-              <strong>Gujarati:</strong> "રાજેશ ટેક્સટાઈલ્સનું એડવાન્સ પેમેન્ટ રેકોર્ડ કરો"
-            </div>
-            <div className={styles.voiceCommand}>
-              <strong>Hindi:</strong> "राजेश टेक्सटाइल्स का एडवांस पेमेंट रिकॉर्ड करें"
+              <strong>Commands:</strong> "Send payment reminder" • "Record payment" • "Show overdue payments" • "Go to orders"
             </div>
           </div>
         </div>
       </div>
+
+      {/* Voice Assistant for Payment Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="payments"
+        onUniversalAction={onUniversalAction}
+        onAction={handleAction}
+        businessData={{
+          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+          overduePayments: allPaymentRecords.filter(payment => payment.paymentStatus === 'overdue').length,
+          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
+          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Search payments by customer name or payment details
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const filteredPayments = allPaymentRecords.filter(payment => 
+            payment.customerName.toLowerCase().includes(query.toLowerCase()) ||
+            payment.invoiceId.toLowerCase().includes(query.toLowerCase()) ||
+            payment.paymentMethod.toLowerCase().includes(query.toLowerCase())
+          );
+          // TODO: Display filtered payment search results
+        }}
+      />
     </div>
   );
 }

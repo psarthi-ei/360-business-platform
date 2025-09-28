@@ -55,7 +55,6 @@ function AppContent() {
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
-  const [shouldOpenAddModal, setShouldOpenAddModal] = useState(false);
 
 
 
@@ -181,12 +180,61 @@ function AppContent() {
     navigate('/dashboard');
   }
 
-  function showLeadManagement(autoAction?: string) {
-    if (autoAction === 'add-lead') {
+  // Universal action handler - routes cross-page voice commands
+  function handleUniversalAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'NAVIGATE_TO_LEADS':
+        showLeadManagement();
+        break;
+      case 'NAVIGATE_TO_QUOTES':
+        showQuotationOrders();
+        break;
+      case 'NAVIGATE_TO_ORDERS':
+        showSalesOrders();
+        break;
+      case 'NAVIGATE_TO_PAYMENTS':
+        showPayments();
+        break;
+      case 'NAVIGATE_TO_INVOICES':
+        showInvoices();
+        break;
+      case 'NAVIGATE_TO_CUSTOMERS':
+        showCustomerList();
+        break;
+      case 'NAVIGATE_TO_INVENTORY':
+        showInventory();
+        break;
+      case 'NAVIGATE_TO_FULFILLMENT':
+        showFulfillment();
+        break;
+      case 'NAVIGATE_TO_ANALYTICS':
+        showAnalytics();
+        break;
+      case 'NAVIGATE_TO_DASHBOARD':
+        showDashboard();
+        break;
+      case 'NAVIGATE_AND_EXECUTE':
+        // Handle compound actions from voice commands
+        const { targetContext, action, params: actionParams } = params || {};
+        if (targetContext === 'leads' && action === 'ADD_NEW_LEAD') {
+          showLeadManagement('ADD_NEW_LEAD', actionParams);
+        } else {
+          // TODO: Handle unhandled NAVIGATE_AND_EXECUTE
+        }
+        break;
+      default:
+        // TODO: Handle unhandled universal action
+    }
+  }
+
+  function showLeadManagement(autoAction?: string, actionParams?: any) {
+    if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
       navigate('/leads?action=add-lead');
     } else {
       navigate('/leads');
     }
+    // TODO: Pass actionParams to LeadManagement for compound actions
+    // console.log('showLeadManagement called with:', autoAction, actionParams);
   }
 
   function showQuotationOrders() {
@@ -287,7 +335,6 @@ function AppContent() {
           onShowPayments={showPayments}
           onShowInvoices={showInvoices}
           onShowCustomerList={showCustomerList}
-          onOpenAddLeadModal={() => setShouldOpenAddModal(true)}
           onShowInventory={showInventory}
           onShowFulfillment={showFulfillment}
           onShowAnalytics={showAnalytics}
@@ -326,8 +373,7 @@ function AppContent() {
         onShowSalesOrders={showSalesOrders}
         filterState={leadFilter}
         onFilterChange={setLeadFilter}
-        openAddModal={shouldOpenAddModal}
-        onAddModalHandled={() => setShouldOpenAddModal(false)}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -344,6 +390,7 @@ function AppContent() {
         onShowLeadManagement={showLeadManagement}
         filterState={quoteFilter}
         onFilterChange={setQuoteFilter}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -360,6 +407,7 @@ function AppContent() {
         onShowPayments={showPayments}
         filterState={orderFilter}
         onFilterChange={setOrderFilter}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -375,6 +423,7 @@ function AppContent() {
         onShowCustomerProfile={showCustomerProfile}
         filterState={paymentFilter}
         onFilterChange={setPaymentFilter}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -391,6 +440,7 @@ function AppContent() {
         onShowCustomerProfile={showCustomerProfile}
         filterState={invoiceFilter}
         onFilterChange={setInvoiceFilter}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -417,6 +467,7 @@ function AppContent() {
         onShowCustomerProfile={showCustomerProfile}
         customerSearch={customerSearch}
         onCustomerSearchChange={setCustomerSearch}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -479,7 +530,14 @@ function AppContent() {
   function renderInventoryManagement() {
     return (
       <InventoryManagement
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        currentTheme={currentTheme}
+        onThemeChange={switchTheme}
+        onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -487,7 +545,14 @@ function AppContent() {
   function renderFulfillmentManagement() {
     return (
       <FulfillmentManagement
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        currentTheme={currentTheme}
+        onThemeChange={switchTheme}
+        onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -495,7 +560,14 @@ function AppContent() {
   function renderAnalyticsManagement() {
     return (
       <AnalyticsManagement
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        currentTheme={currentTheme}
+        onThemeChange={switchTheme}
+        onNavigateBack={showDashboard}
+        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
+        onUniversalAction={handleUniversalAction}
       />
     );
   }

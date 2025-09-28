@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ProductHeader from './ProductHeader';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { 
   mockProformaInvoices, 
   mockFinalInvoices, 
   formatCurrency, 
-  getBusinessProfileById
+  getBusinessProfileById,
+  mockLeads,
+  mockSalesOrders,
+  mockBusinessProfiles
 } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Invoices.module.css';
@@ -22,6 +26,7 @@ interface InvoicesProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  onUniversalAction?: (actionType: string, params?: any) => void;
 }
 
 interface InvoiceRecord {
@@ -53,7 +58,8 @@ function Invoices({
   onShowSalesOrders,
   onShowCustomerProfile,
   filterState,
-  onFilterChange
+  onFilterChange,
+  onUniversalAction
 }: InvoicesProps) {
   const { t } = useTranslation();
   
@@ -138,6 +144,32 @@ function Invoices({
   };
 
   const filteredInvoices = getFilteredInvoices();
+
+  // Action handler for invoice-specific commands only
+  function handleAction(actionType: string, params?: any) {
+    switch (actionType) {
+      case 'SEND_INVOICE':
+        // Future: Handle invoice sending for specific invoices
+        // TODO: Implement send invoice functionality
+        break;
+      case 'FOLLOW_UP_INVOICE':
+        // Future: Handle invoice follow-up
+        // TODO: Implement invoice follow-up functionality
+        break;
+      case 'FILTER_INVOICES':
+        // Future: Handle filtering by type or status
+        if (params?.type) {
+          setInvoiceType(params.type);
+        }
+        if (params?.status) {
+          onFilterChange(params.status);
+        }
+        // TODO: Display filtered invoices results
+        break;
+      default:
+        // TODO: Handle unhandled invoice action
+    }
+  }
 
   const handleSendInvoice = (invoiceId: string, customerName: string, contactInfo: string) => {
     
@@ -452,23 +484,37 @@ function Invoices({
 
         {/* Voice Commands Section */}
         <div className={styles.voiceSection}>
-          <h3>Voice Commands</h3>
+          <h3>🎤 Voice Commands</h3>
           <div className={styles.voiceCommands}>
             <div className={styles.voiceCommand}>
-              <strong>"Show pending invoices"</strong> - Filter to pending payment invoices
-            </div>
-            <div className={styles.voiceCommand}>
-              <strong>"Send invoice to [customer]"</strong> - Quick invoice sending
-            </div>
-            <div className={styles.voiceCommand}>
-              <strong>"Show proforma invoices"</strong> - Filter to proforma invoices only
-            </div>
-            <div className={styles.voiceCommand}>
-              <strong>"Follow up overdue"</strong> - Filter to overdue invoices
+              <strong>Commands:</strong> "Show pending invoices" • "Send invoice" • "Follow up overdue" • "Go to payments"
             </div>
           </div>
         </div>
       </div>
+
+      {/* Voice Assistant for Invoice Management */}
+      <FloatingVoiceAssistant
+        currentProcessStage="invoices"
+        onUniversalAction={onUniversalAction}
+        onAction={handleAction}
+        businessData={{
+          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+          overduePayments: allInvoiceRecords.filter(invoice => invoice.status === 'overdue').length,
+          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
+          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+        }}
+        onPerformSearch={(query) => {
+          // Search invoices by customer name, invoice number, or related IDs
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const filteredInvoices = allInvoiceRecords.filter(invoice => 
+            invoice.customerName.toLowerCase().includes(query.toLowerCase()) ||
+            invoice.invoiceNumber.toLowerCase().includes(query.toLowerCase()) ||
+            (invoice.relatedId && invoice.relatedId.toLowerCase().includes(query.toLowerCase()))
+          );
+          // TODO: Display filtered invoice search results
+        }}
+      />
     </div>
   );
 }
