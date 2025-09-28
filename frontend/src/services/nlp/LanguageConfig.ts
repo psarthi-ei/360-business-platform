@@ -153,7 +153,9 @@ export const FILTER_WORDS = {
  */
 export function getAllActionWords(actionType: keyof typeof VOICE_ACTIONS): string[] {
   const actionConfig = VOICE_ACTIONS[actionType];
-  return Object.values(actionConfig).flat();
+  const allWords = Object.values(actionConfig).flat();
+  // Remove duplicates using Set
+  return [...new Set(allWords)];
 }
 
 /**
@@ -161,7 +163,9 @@ export function getAllActionWords(actionType: keyof typeof VOICE_ACTIONS): strin
  */
 export function getAllTargetWords(targetType: keyof typeof BUSINESS_TARGETS): string[] {
   const targetConfig = BUSINESS_TARGETS[targetType];
-  return Object.values(targetConfig).flat();
+  const allWords = Object.values(targetConfig).flat();
+  // Remove duplicates using Set
+  return [...new Set(allWords)];
 }
 
 /**
@@ -170,7 +174,9 @@ export function getAllTargetWords(targetType: keyof typeof BUSINESS_TARGETS): st
 export function getAllContextualMarkers(): string[] {
   const possessive = Object.values(CONTEXTUAL_MARKERS.POSSESSIVE).flat();
   const connectors = Object.values(CONTEXTUAL_MARKERS.CONNECTORS).flat();
-  return [...possessive, ...connectors];
+  const allMarkers = [...possessive, ...connectors];
+  // Remove duplicates using Set
+  return [...new Set(allMarkers)];
 }
 
 /**
@@ -178,7 +184,9 @@ export function getAllContextualMarkers(): string[] {
  */
 export function getAllFilterWords(filterType: keyof typeof FILTER_WORDS): string[] {
   const filterConfig = FILTER_WORDS[filterType];
-  return Object.values(filterConfig).flat();
+  const allWords = Object.values(filterConfig).flat();
+  // Remove duplicates using Set
+  return [...new Set(allWords)];
 }
 
 /**
@@ -189,7 +197,9 @@ export function getAllConversationFillers(): string[] {
   const questionWords = Object.values(CONVERSATION_FILLERS.QUESTION_WORDS).flat();
   const conversationFlow = Object.values(CONVERSATION_FILLERS.CONVERSATION_FLOW).flat();
   
-  return [...actionEmphasis, ...questionWords, ...conversationFlow];
+  const allFillers = [...actionEmphasis, ...questionWords, ...conversationFlow];
+  // Remove duplicates using Set
+  return [...new Set(allFillers)];
 }
 
 /**

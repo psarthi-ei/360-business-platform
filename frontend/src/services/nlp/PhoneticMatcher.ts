@@ -188,10 +188,55 @@ export class PhoneticMatcher {
   }
 
   /**
-   * Check if input word matches any word in the list using fuzzy matching
+   * Check if input word matches any word in the list using context-aware fuzzy matching
+   * Adjusts threshold based on word length and similarity patterns to reduce false positives
    */
   static fuzzyContains(input: string, wordList: string[], threshold: number = 0.7): boolean {
-    return wordList.some(word => this.calculateSimilarity(input, word) >= threshold);
+    // eslint-disable-next-line no-console
+    console.log(`🔗 [DEBUG] fuzzyContains: input="${input}", wordList=[${wordList.join(', ')}], threshold=${threshold}`);
+    
+    for (const word of wordList) {
+      const similarity = this.calculateSimilarity(input, word);
+      
+      // Calculate context-aware threshold
+      const adjustedThreshold = this.calculateContextAwareThreshold(input, word, threshold);
+      
+      // eslint-disable-next-line no-console
+      console.log(`🔗 [DEBUG] Similarity: "${input}" vs "${word}" = ${similarity.toFixed(3)} (adjusted threshold: ${adjustedThreshold.toFixed(3)})`);
+      
+      if (similarity >= adjustedThreshold) {
+        // eslint-disable-next-line no-console
+        console.log(`🔗 [DEBUG] ✅ FUZZY MATCH: "${input}" vs "${word}" (${similarity.toFixed(3)} >= ${adjustedThreshold.toFixed(3)})`);
+        return true;
+      }
+    }
+    
+    // eslint-disable-next-line no-console
+    console.log(`🔗 [DEBUG] ❌ No fuzzy matches for "${input}" above threshold`);
+    return false;
+  }
+
+  /**
+   * Calculate context-aware threshold to prevent false positives
+   * Higher threshold for short words, lower for longer Roman transliterations
+   */
+  private static calculateContextAwareThreshold(input: string, candidate: string, baseThreshold: number): number {
+    const inputLength = input.length;
+    const candidateLength = candidate.length;
+    const avgLength = (inputLength + candidateLength) / 2;
+    
+    // Higher threshold for very short words to prevent false matches like "surat" vs "sure"
+    if (avgLength <= 4) {
+      return Math.min(baseThreshold + 0.15, 0.95); // Increase by 0.15 for short words
+    }
+    
+    // Moderate threshold for medium words
+    if (avgLength <= 6) {
+      return Math.min(baseThreshold + 0.05, 0.9); // Slight increase for medium words  
+    }
+    
+    // Lower threshold for longer words (Roman transliterations often longer)
+    return baseThreshold; // Use base threshold for longer words
   }
 
   /**

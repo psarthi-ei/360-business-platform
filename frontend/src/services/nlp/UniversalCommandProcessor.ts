@@ -1,14 +1,11 @@
-// Universal Command Processor
-// Core logic for extracting structured payloads from voice commands
-// Handles mixed-language commands and business context naturally
+// Universal Command Processor - Simplified Architecture
+// Exact matching first, minimal fuzzy matching for clear Roman transliterations
+// Clean, maintainable approach for voice command processing
 
 import { 
   VOICE_ACTIONS, 
   BUSINESS_TARGETS, 
-  getAllActionWords,
   getAllTargetWords,
-  getAllContextualMarkers,
-  getAllConversationFillers,
   getAllFilterWords,
   detectPrimaryLanguage
 } from './LanguageConfig';
@@ -18,298 +15,267 @@ import { PhoneticMatcher } from './PhoneticMatcher';
 export class UniversalCommandProcessor {
   
   /**
-   * Main method to process any voice command and extract structured payload
-   * Handles mixed languages naturally: "search करो Mumbai Cotton Mills"
+   * Main method to process voice commands - simplified flow
    */
   public processCommand(text: string): VoiceIntent {
     const normalizedText = text.toLowerCase().trim();
     const language = detectPrimaryLanguage(text);
     
-    // Step 1: Detect intent and action
-    const { intent, action } = this.detectIntentAndAction(normalizedText);
+    // eslint-disable-next-line no-console
+    console.log(`🔄 [NLP] Processing: "${text}"`);
     
-    // Step 2: Extract structured payload based on intent
-    const payload = this.extractPayload(normalizedText, intent, action);
+    // Step 1: Detect action (exact match first, minimal fuzzy fallback)
+    const action = this.detectAction(normalizedText);
+    const intent = action ? `${action.toUpperCase()}_COMMAND` : 'UNKNOWN_INTENT';
     
-    // Step 3: Calculate confidence score
-    const confidence = this.calculateConfidence(normalizedText, intent, payload);
+    // Step 2: Detect business target (exact match first)
+    const target = this.detectTarget(normalizedText);
     
-    return {
+    // Step 3: Extract clean query (remove detected action and target words)
+    const query = this.extractQuery(normalizedText, action, target);
+    
+    // Step 4: Extract filters (exact match only)
+    const filters = this.extractFilters(normalizedText);
+    
+    // Step 5: Calculate simple confidence score
+    const confidence = this.calculateConfidence(action, target, query);
+    
+    const payload: VoiceCommandPayload = {
+      action: action ?? undefined,
+      target: target ?? undefined, 
+      query: query ?? undefined,
+      filters
+    };
+
+    const result: VoiceIntent = {
       intent,
       confidence,
       payload,
       originalText: text,
       language
     };
+    
+    // eslint-disable-next-line no-console
+    console.log(`✅ [NLP] Result:`, result);
+    return result;
   }
 
   /**
-   * Detect the primary intent and action from the command
+   * Detect action using exact matching first, minimal fuzzy for clear variations
    */
-  private detectIntentAndAction(text: string): { intent: string; action: string | null } {
-    // Check for search commands
-    const searchWords = getAllActionWords('SEARCH');
-    if (this.containsAnyWord(text, searchWords)) {
-      return { intent: 'SEARCH_COMMAND', action: 'search' };
+  private detectAction(text: string): string | null {
+    // Try each action type
+    for (const [actionType, actionConfig] of Object.entries(VOICE_ACTIONS)) {
+      const actionWords = Object.values(actionConfig).flat();
+      
+      // First: Exact matching (fast and reliable)
+      if (this.hasExactMatch(text, actionWords)) {
+        // eslint-disable-next-line no-console
+        console.log(`🎬 [ACTION] Exact match found: ${actionType.toLowerCase()}`);
+        return actionType.toLowerCase();
+      }
+      
+      // Second: Minimal fuzzy for clear Roman transliterations only
+      if (this.hasMinimalFuzzyMatch(text, actionWords)) {
+        // eslint-disable-next-line no-console
+        console.log(`🎬 [ACTION] Fuzzy match found: ${actionType.toLowerCase()}`);
+        return actionType.toLowerCase();
+      }
     }
     
-    // Check for show commands
-    const showWords = getAllActionWords('SHOW');
-    if (this.containsAnyWord(text, showWords)) {
-      return { intent: 'SHOW_COMMAND', action: 'show' };
-    }
-    
-    // Check for open commands
-    const openWords = getAllActionWords('OPEN');
-    if (this.containsAnyWord(text, openWords)) {
-      return { intent: 'OPEN_COMMAND', action: 'open' };
-    }
-    
-    // Check for create commands
-    const createWords = getAllActionWords('CREATE');
-    if (this.containsAnyWord(text, createWords)) {
-      return { intent: 'CREATE_COMMAND', action: 'create' };
-    }
-    
-    // Check for check commands
-    const checkWords = getAllActionWords('CHECK');
-    if (this.containsAnyWord(text, checkWords)) {
-      return { intent: 'CHECK_COMMAND', action: 'check' };
-    }
-    
-    return { intent: 'UNKNOWN_INTENT', action: null };
+    // eslint-disable-next-line no-console
+    console.log(`🎬 [ACTION] No action detected`);
+    return null;
   }
 
   /**
-   * Extract structured payload from the command text
+   * Detect business target using exact matching first
    */
-  private extractPayload(text: string, intent: string, action: string | null): VoiceCommandPayload {
-    const payload: VoiceCommandPayload = {};
-    
-    if (action) {
-      payload.action = action;
-    }
-    
-    // Step 1: Detect business target
-    payload.target = this.detectBusinessTarget(text);
-    
-    // Step 2: Extract clean query (remove action words and contextual markers)
-    payload.query = this.extractCleanQuery(text, action);
-    
-    // Step 3: Extract filters
-    payload.filters = this.extractFilters(text);
-    
-    // Step 4: Extract additional parameters
-    payload.parameters = this.extractParameters(text);
-    
-    return payload;
-  }
-
-  /**
-   * Detect business target from the command
-   */
-  private detectBusinessTarget(text: string): string | undefined {
-    // Check for each business target type
-    for (const targetType of Object.keys(BUSINESS_TARGETS)) {
-      const targetWords = getAllTargetWords(targetType as keyof typeof BUSINESS_TARGETS);
-      if (this.containsAnyWord(text, targetWords)) {
+  private detectTarget(text: string): string | null {
+    for (const [targetType, targetConfig] of Object.entries(BUSINESS_TARGETS)) {
+      const targetWords = Object.values(targetConfig).flat();
+      
+      // Exact matching only for business targets (more precise)
+      if (this.hasExactMatch(text, targetWords)) {
+        // eslint-disable-next-line no-console
+        console.log(`🎯 [TARGET] Found: ${targetType.toLowerCase()}`);
         return targetType.toLowerCase();
       }
     }
     
-    return undefined;
+    // eslint-disable-next-line no-console
+    console.log(`🎯 [TARGET] No business target detected`);
+    return null;
   }
 
   /**
-   * Extract clean query by removing action words and contextual markers
-   * This is the core fix for "search Mumbai" → "Mumbai"
-   * Now with fuzzy matching for Roman transliteration variations
+   * Extract query by removing detected action and target words
+   * FIXED: Now removes both exact and fuzzy matches
    */
-  private extractCleanQuery(text: string, action: string | null): string | undefined {
-    let cleanedText = text;
+  private extractQuery(text: string, action: string | null, target: string | null): string | null {
+    let cleanText = text;
     
-    // Step 1: Remove action words from all languages (with fuzzy matching)
+    // Remove action words (including fuzzy matches like "dhundho" for "search")
     if (action) {
-      const actionWords = getAllActionWords(action.toUpperCase() as keyof typeof VOICE_ACTIONS);
-      cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, actionWords);
+      cleanText = this.removeActionWords(cleanText, action);
     }
     
-    // Step 2: Remove contextual markers and conversation fillers
-    const contextualMarkers = getAllContextualMarkers();
-    const conversationFillers = getAllConversationFillers();
-    const allFillers = [...contextualMarkers, ...conversationFillers];
-    cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, allFillers);
-    
-    // Step 3: Remove business target words (keep the content, not the category)
-    for (const targetType of Object.keys(BUSINESS_TARGETS)) {
-      const targetWords = getAllTargetWords(targetType as keyof typeof BUSINESS_TARGETS);
-      cleanedText = this.removeWordsWithFuzzyMatching(cleanedText, targetWords);
+    // Remove target words if target was detected  
+    if (target) {
+      const targetWords = getAllTargetWords(target.toUpperCase() as keyof typeof BUSINESS_TARGETS);
+      cleanText = this.removeExactWords(cleanText, targetWords);
     }
     
-    // Step 4: Clean up whitespace and return
-    const finalQuery = cleanedText.trim().replace(/\s+/g, ' ');
+    // Remove only safe conversation fillers (very conservative)
+    // Include common Hindi/Gujarati postpositions for cleaner queries
+    const safeFillers = ['please', 'can', 'you', 'will', 'would', 'okay', 'ok', 'ko', 'ka', 'ki', 'ke', 'mein', 'se'];
+    cleanText = this.removeExactWords(cleanText, safeFillers);
     
-    // Return undefined if query is empty or too short
-    return finalQuery.length > 0 ? finalQuery : undefined;
+    const finalQuery = cleanText.trim().replace(/\s+/g, ' ');
+    const result = finalQuery.length > 0 ? finalQuery : null;
+    
+    // eslint-disable-next-line no-console
+    console.log(`🧹 [QUERY] Extracted: "${result}"`);
+    return result;
   }
 
   /**
-   * Extract filter words from the command
+   * Remove action words using both exact and fuzzy matching
+   * This fixes the "dhundho Mumbai" -> "Mumbai" issue
+   */
+  private removeActionWords(text: string, action: string): string {
+    const actionWords = Object.values(VOICE_ACTIONS[action.toUpperCase() as keyof typeof VOICE_ACTIONS]).flat();
+    let cleanText = text;
+    
+    // First remove exact matches
+    cleanText = this.removeExactWords(cleanText, actionWords);
+    
+    // Then remove fuzzy matches (for cases like "dhundho" matching "search")
+    const textWords = cleanText.match(/\b\w+\b/g) || [];
+    const wordsToKeep: string[] = [];
+    
+    for (const textWord of textWords) {
+      let shouldKeep = true;
+      
+      // Check if this word fuzzy matches any action word
+      for (const actionWord of actionWords) {
+        if (textWord.length > 4 && actionWord.length > 4) {
+          const similarity = PhoneticMatcher.calculateSimilarity(textWord, actionWord);
+          if (similarity >= 0.8) {
+            shouldKeep = false;
+            // eslint-disable-next-line no-console
+            console.log(`🧹 [REMOVE] Fuzzy match "${textWord}" -> "${actionWord}" (${similarity.toFixed(3)})`);
+            break;
+          }
+        }
+      }
+      
+      if (shouldKeep) {
+        wordsToKeep.push(textWord);
+      }
+    }
+    
+    return wordsToKeep.join(' ');
+  }
+
+  /**
+   * Extract filters using exact matching only
    */
   private extractFilters(text: string): string[] {
     const filters: string[] = [];
     
-    // Check priority filters
-    const priorityWords = getAllFilterWords('PRIORITY');
-    for (const word of priorityWords) {
-      if (text.includes(word)) {
-        filters.push(word);
+    // Check each filter category
+    for (const filterType of ['PRIORITY', 'STATUS', 'LOCATION'] as const) {
+      const filterWords = getAllFilterWords(filterType);
+      
+      for (const word of filterWords) {
+        if (this.hasExactMatch(text, [word])) {
+          filters.push(word);
+        }
       }
     }
     
-    // Check status filters
-    const statusWords = getAllFilterWords('STATUS');
-    for (const word of statusWords) {
-      if (text.includes(word)) {
-        filters.push(word);
-      }
-    }
-    
-    // Check location filters
-    const locationWords = getAllFilterWords('LOCATION');
-    for (const word of locationWords) {
-      if (text.includes(word)) {
-        filters.push(word);
-      }
-    }
-    
-    return filters;
+    // Remove duplicates
+    const uniqueFilters = [...new Set(filters)];
+    // eslint-disable-next-line no-console
+    console.log(`🏷️ [FILTERS] Found: [${uniqueFilters.join(', ')}]`);
+    return uniqueFilters;
   }
 
   /**
-   * Extract additional parameters from the command
+   * Simple confidence calculation
    */
-  private extractParameters(text: string): { [key: string]: string } {
-    const parameters: { [key: string]: string } = {};
-    
-    // Extract date references
-    const dateMatch = text.match(/\b(today|yesterday|tomorrow|last week|this month)\b/i);
-    if (dateMatch) {
-      parameters.timeframe = dateMatch[1];
-    }
-    
-    // Extract number references
-    const numberMatch = text.match(/\b(\d+)\b/);
-    if (numberMatch) {
-      parameters.number = numberMatch[1];
-    }
-    
-    return parameters;
-  }
-
-  /**
-   * Calculate confidence score based on matches and context
-   */
-  private calculateConfidence(text: string, intent: string, payload: VoiceCommandPayload): number {
+  private calculateConfidence(action: string | null, target: string | null, query: string | null): number {
     let confidence = 0.0;
     
-    // Base confidence for intent detection
-    if (intent !== 'UNKNOWN_INTENT') {
-      confidence += 0.6; // 60% base for valid intent
-    }
+    if (action) confidence += 0.6;        // 60% for having an action
+    if (target) confidence += 0.2;        // 20% for having a target  
+    if (query && query.length > 2) confidence += 0.2;  // 20% for meaningful query
     
-    // Bonus for having clear action
-    if (payload.action) {
-      confidence += 0.2; // +20% for action
-    }
-    
-    // Bonus for business target detection
-    if (payload.target) {
-      confidence += 0.1; // +10% for target
-    }
-    
-    // Bonus for meaningful query
-    if (payload.query && payload.query.length > 2) {
-      confidence += 0.1; // +10% for query
-    }
-    
-    // Cap confidence at 1.0
     return Math.min(confidence, 1.0);
   }
 
+  // ============================================================================
+  // Simple Helper Methods
+  // ============================================================================
+
   /**
-   * Helper: Check if text contains any of the given words (with fuzzy matching)
+   * Check for exact word matches (fast and reliable)
    */
-  private containsAnyWord(text: string, words: string[]): boolean {
-    // Extract individual words from text for matching
-    const textWords = text.toLowerCase().match(/\b\w+\b/g) || [];
-    
-    // First try exact matching (fastest)
+  private hasExactMatch(text: string, words: string[]): boolean {
     for (const word of words) {
       const regex = new RegExp(`\\b${this.escapeRegex(word)}\\b`, 'i');
       if (regex.test(text)) {
         return true;
       }
     }
-    
-    // Then try fuzzy matching for Roman transliteration variations
-    for (const textWord of textWords) {
-      if (PhoneticMatcher.fuzzyContains(textWord, words, 0.7)) {
-        return true;
-      }
-    }
-    
     return false;
   }
 
   /**
-   * Helper: Remove words from text using both exact and fuzzy matching
+   * Minimal fuzzy matching only for clear Roman transliteration variations
+   * Higher threshold (0.8) to prevent false matches
    */
-  private removeWordsWithFuzzyMatching(text: string, wordsToRemove: string[]): string {
-    let cleanedText = text;
+  private hasMinimalFuzzyMatch(text: string, words: string[]): boolean {
+    const textWords = text.match(/\b\w+\b/g) || [];
     
-    // Step 1: Remove exact matches first (traditional approach)
+    for (const textWord of textWords) {
+      for (const word of words) {
+        // Only use fuzzy for longer words (>4 chars) to avoid false matches
+        if (textWord.length > 4 && word.length > 4) {
+          const similarity = PhoneticMatcher.calculateSimilarity(textWord, word);
+          if (similarity >= 0.8) {  // High threshold for precision
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Remove exact word matches from text
+   */
+  private removeExactWords(text: string, wordsToRemove: string[]): string {
+    let result = text;
+    
     for (const word of wordsToRemove) {
       const regex = new RegExp(`\\b${this.escapeRegex(word)}\\b`, 'gi');
-      cleanedText = cleanedText.replace(regex, '');
-    }
-    
-    // Step 2: Handle fuzzy matches for remaining words
-    const textWords = cleanedText.match(/\b\w+\b/g) || [];
-    const wordsToKeep: string[] = [];
-    
-    for (const textWord of textWords) {
-      // Check if this word should be removed using fuzzy matching
-      const shouldRemove = PhoneticMatcher.fuzzyContains(textWord, wordsToRemove, 0.7);
-      
-      if (!shouldRemove) {
-        wordsToKeep.push(textWord);
-      }
-    }
-    
-    // Reconstruct text with only the words we want to keep
-    // This preserves word order while removing fuzzy matches
-    let result = cleanedText;
-    for (const textWord of textWords) {
-      if (!wordsToKeep.includes(textWord)) {
-        const wordRegex = new RegExp(`\\b${this.escapeRegex(textWord)}\\b`, 'gi');
-        result = result.replace(wordRegex, '');
-      }
+      result = result.replace(regex, '');
     }
     
     return result;
   }
 
   /**
-   * Helper: Escape special regex characters
+   * Escape special regex characters
    */
   private escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-
   /**
-   * Debug method to show extraction process (for development only)
+   * Debug method for development
    */
   public debugExtraction(text: string): DebugExtractionResult {
     const result = this.processCommand(text);

@@ -59,6 +59,46 @@ npm start
 
 **Rule:** File looks correct ≠ Compilation succeeds. Always verify the actual build state.
 
+### **CRITICAL: TypeScript `any` Type Ban**
+**Problem:** Using `any` types leads to massive refactoring marathons when fixing type safety issues
+
+**MANDATORY TYPESCRIPT RULES:**
+1. **NEVER use `any` type in new code - always define proper business domain types**
+2. **Use existing ActionParams union type system for voice command parameters**
+3. **Create specific interfaces for new business domains (e.g., PaymentParams, OrderParams)**
+4. **Use proper type guards with discriminated unions for parameter handling**
+5. **Vercel treats ESLint warnings as errors - `any` types will break deployment**
+
+**Approved Type Patterns:**
+```typescript
+// ✅ GOOD: Business domain-specific types
+interface SetPriorityParams {
+  leadId: string;
+  priority: 'hot' | 'warm' | 'cold';
+}
+
+// ✅ GOOD: Union type with fallback
+export type ActionParams = 
+  | SetPriorityParams
+  | AddNewLeadParams
+  | Record<string, unknown>; // fallback only
+
+// ✅ GOOD: Proper type guards
+if (params && 'leadId' in params) {
+  const priorityParams = params as SetPriorityParams;
+  handlePriorityChange(priorityParams.leadId, priorityParams.priority);
+}
+
+// ❌ BAD: Generic any types
+function handleAction(actionType: string, params?: any) // NEVER DO THIS
+```
+
+**Why This Matters:**
+- Prevents deployment failures (Vercel treats warnings as errors)
+- Maintains type safety across the entire codebase
+- Avoids massive refactoring sessions when fixing type issues
+- Ensures proper IntelliSense and developer experience
+
 ---
 
 ## Company & Product Identity
