@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -7,23 +6,11 @@ import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface InventoryManagementProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onBackToDashboard: () => void;
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function InventoryManagement({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onBackToDashboard,
   onUniversalAction
 }: InventoryManagementProps) {
@@ -50,18 +37,7 @@ function InventoryManagement({
   }
 
   return (
-    <div className={styles.container}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack || onBackToDashboard}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
+    <div className={styles.container} style={{ paddingTop: '80px' }}>
       <div className={styles.header}>
         <h1 className={styles.title}>
           📦 {t('inventory')} {t('manage')}

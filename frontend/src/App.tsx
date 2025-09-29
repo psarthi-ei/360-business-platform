@@ -365,79 +365,68 @@ function AppContent() {
 
   function renderLeadManagement() {
     return (
-      <LeadManagement
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
-        onShowCustomerProfile={showCustomerProfile}
-        onShowQuoteFromLead={showQuoteFromLead}
-        onShowQuotationOrders={showQuotationOrders}
-        onShowSalesOrders={showSalesOrders}
-        filterState={leadFilter}
-        onFilterChange={setLeadFilter}
-        onUniversalAction={handleUniversalAction}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <LeadManagement
+          onShowCustomerProfile={showCustomerProfile}
+          onShowQuoteFromLead={showQuoteFromLead}
+          onShowQuotationOrders={showQuotationOrders}
+          onShowSalesOrders={showSalesOrders}
+          filterState={leadFilter}
+          onFilterChange={setLeadFilter}
+          onUniversalAction={handleUniversalAction}
+        />
+      </div>
     );
   }
 
   function renderQuotationOrders() {
     return (
-      <QuotationOrders
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
-        onShowSalesOrders={showSalesOrders}
-        onShowCustomerProfile={showCustomerProfile}
-        onShowLeadManagement={showLeadManagement}
-        filterState={quoteFilter}
-        onFilterChange={setQuoteFilter}
-        onUniversalAction={handleUniversalAction}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <QuotationOrders
+          onShowSalesOrders={showSalesOrders}
+          onShowCustomerProfile={showCustomerProfile}
+          onShowLeadManagement={showLeadManagement}
+          filterState={quoteFilter}
+          onFilterChange={setQuoteFilter}
+          onUniversalAction={handleUniversalAction}
+        />
+      </div>
     );
   }
 
   function renderSalesOrders() {
     return (
-      <SalesOrders
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
-        onShowLeadManagement={showLeadManagement}
-        onShowQuotationOrders={showQuotationOrders}
-        onShowPayments={showPayments}
-        filterState={orderFilter}
-        onFilterChange={setOrderFilter}
-        onUniversalAction={handleUniversalAction}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <SalesOrders
+          onShowLeadManagement={showLeadManagement}
+          onShowQuotationOrders={showQuotationOrders}
+          onShowPayments={showPayments}
+          filterState={orderFilter}
+          onFilterChange={setOrderFilter}
+          onUniversalAction={handleUniversalAction}
+        />
+      </div>
     );
   }
 
   function renderPayments() {
     return (
-      <Payments
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
-        onShowSalesOrders={showSalesOrders}
-        onShowCustomerProfile={showCustomerProfile}
-        filterState={paymentFilter}
-        onFilterChange={setPaymentFilter}
-        onUniversalAction={handleUniversalAction}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <Payments
+          onShowSalesOrders={showSalesOrders}
+          onShowInvoices={showInvoices}
+          onShowCustomerProfile={showCustomerProfile}
+          filterState={paymentFilter}
+          onFilterChange={setPaymentFilter}
+          onUniversalAction={handleUniversalAction}
+        />
+      </div>
     );
   }
 
   function renderInvoices() {
     return (
       <Invoices
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
         onShowQuotationOrders={showQuotationOrders}
         onShowPayments={showPayments}
         onShowCustomerProfile={showCustomerProfile}
@@ -451,10 +440,6 @@ function AppContent() {
   function renderCustomerProfile() {
     return (
       <CustomerProfile
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
         customerId={selectedCustomerId}
       />
     );
@@ -462,16 +447,14 @@ function AppContent() {
 
   function renderCustomerList() {
     return (
-      <CustomerList
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
-        onShowCustomerProfile={showCustomerProfile}
-        customerSearch={customerSearch}
-        onCustomerSearchChange={setCustomerSearch}
-        onUniversalAction={handleUniversalAction}
-      />
+      <div style={{ paddingTop: '80px' }}>
+        <CustomerList
+          onShowCustomerProfile={showCustomerProfile}
+          customerSearch={customerSearch}
+          onCustomerSearchChange={setCustomerSearch}
+          onUniversalAction={handleUniversalAction}
+        />
+      </div>
     );
   }
 
@@ -533,12 +516,6 @@ function AppContent() {
   function renderInventoryManagement() {
     return (
       <InventoryManagement
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        currentTheme={currentTheme}
-        onThemeChange={switchTheme}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
         onUniversalAction={handleUniversalAction}
       />
@@ -548,12 +525,6 @@ function AppContent() {
   function renderFulfillmentManagement() {
     return (
       <FulfillmentManagement
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        currentTheme={currentTheme}
-        onThemeChange={switchTheme}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
         onUniversalAction={handleUniversalAction}
       />
@@ -563,12 +534,6 @@ function AppContent() {
   function renderAnalyticsManagement() {
     return (
       <AnalyticsManagement
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        currentTheme={currentTheme}
-        onThemeChange={switchTheme}
-        onNavigateBack={showDashboard}
-        onNavigateHome={showHomePage}
         onBackToDashboard={showDashboard}
         onUniversalAction={handleUniversalAction}
       />

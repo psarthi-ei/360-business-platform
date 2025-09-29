@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -7,12 +6,6 @@ import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowLeadManagement?: () => void;
   onShowQuotationOrders?: () => void;
   onShowPayments?: () => void;
@@ -22,12 +15,6 @@ interface SalesOrdersProps {
 }
 
 function SalesOrders({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowPayments,
@@ -87,17 +74,6 @@ function SalesOrders({
   
   return (
     <div className={styles.salesOrdersScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
       <div className={styles.pageContent}>
         <h1 className={styles.centeredHeading}>💳 {t('salesOrder')}</h1>
 

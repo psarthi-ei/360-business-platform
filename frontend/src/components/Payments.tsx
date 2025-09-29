@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById, mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/Payments.module.css';
 
 interface PaymentsProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowSalesOrders?: () => void;
   onShowInvoices?: () => void;
   onShowCustomerProfile?: (customerId: string) => void;
@@ -42,12 +35,6 @@ interface PaymentRecord {
 }
 
 function Payments({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowSalesOrders,
   onShowInvoices,
   onShowCustomerProfile,
@@ -260,17 +247,6 @@ function Payments({
 
   return (
     <div className={styles.advancePaymentScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
       <div className={styles.pageContent}>
         <h1 className={styles.centeredHeading}>💰 Payments</h1>
 

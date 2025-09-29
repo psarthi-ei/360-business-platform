@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockBusinessProfiles, mockSalesOrders, formatCurrency, mockLeads } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -7,12 +6,6 @@ import { ActionParams, ViewCustomerParams } from '../services/nlp/types';
 import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowCustomerProfile: (customerId: string) => void;
   customerSearch: string;
   onCustomerSearchChange: (search: string) => void;
@@ -20,12 +13,6 @@ interface CustomerListProps {
 }
 
 function CustomerList({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowCustomerProfile,
   customerSearch,
   onCustomerSearchChange,
@@ -63,17 +50,6 @@ function CustomerList({
 
   return (
     <div className={styles.leadManagementScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
       <div className={styles.pageContent}>
         <h1 className={styles.centeredHeading}>👥 Customer List</h1>
 

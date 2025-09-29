@@ -1,26 +1,13 @@
 import React from 'react';
-import ProductHeader from './ProductHeader';
 import { getBusinessProfileById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerProfile.module.css';
 
 interface CustomerProfileProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   customerId: string;
 }
 
 function CustomerProfile({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   customerId
 }: CustomerProfileProps) {
   const { t } = useTranslation();
@@ -31,17 +18,7 @@ function CustomerProfile({
   if (!customer) {
     return (
       <div className={styles.leadManagementScreen}>
-        <ProductHeader
-          currentLanguage={currentLanguage}
-          onLanguageChange={onLanguageChange}
-          currentTheme={currentTheme}
-          onThemeChange={onThemeChange}
-          onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-        />
-        <div className={styles.pageContent}>
+        <div className={styles.pageContent} style={{ paddingTop: '80px' }}>
           <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
         <div className={styles.customerHeader}>
           <h2>Customer not found</h2>
@@ -64,17 +41,7 @@ function CustomerProfile({
     hold: '🛑'
   };
   return (
-    <div className={styles.leadManagementScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
+    <div className={styles.leadManagementScreen} style={{ paddingTop: '80px' }}>
       
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>

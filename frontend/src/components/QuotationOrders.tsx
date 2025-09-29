@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -7,12 +6,6 @@ import { ActionParams, QuoteActionParams } from '../services/nlp/types';
 import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowSalesOrders: () => void;
   onShowCustomerProfile: (customerId: string) => void;
   onShowLeadManagement?: () => void;
@@ -22,12 +15,6 @@ interface QuotationOrdersProps {
 }
 
 function QuotationOrders({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowSalesOrders,
   onShowCustomerProfile,
   onShowLeadManagement,
@@ -155,17 +142,6 @@ function QuotationOrders({
   
   return (
     <div className={styles.quotationOrdersScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
           <h1 className={styles.centeredHeading}>📄 {t('quotationOrders')}</h1>

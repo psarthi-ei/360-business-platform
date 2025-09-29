@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ProductHeader from './ProductHeader';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { 
   mockProformaInvoices, 
@@ -15,12 +14,6 @@ import { ActionParams, FilterInvoiceParams } from '../services/nlp/types';
 import styles from '../styles/Invoices.module.css';
 
 interface InvoicesProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowQuotationOrders?: () => void;
   onShowPayments?: () => void;
   onShowSalesOrders?: () => void;
@@ -48,12 +41,6 @@ interface InvoiceRecord {
 }
 
 function Invoices({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowQuotationOrders,
   onShowPayments,
   onShowSalesOrders,
@@ -234,18 +221,7 @@ function Invoices({
   };
 
   return (
-    <div className={styles.invoicesScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
+    <div className={styles.invoicesScreen} style={{ paddingTop: '80px' }}>
       <div className={styles.pageContent}>
         <h1 className={styles.centeredHeading}>📄 {t('invoices')}</h1>
 

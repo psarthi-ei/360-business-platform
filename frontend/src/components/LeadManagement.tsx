@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import ProductHeader from './ProductHeader';
 import AddLeadModal from './AddLeadModal';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency, Lead } from '../data/mockData';
@@ -9,12 +8,6 @@ import { ActionParams, SetPriorityParams, EditLeadParams } from '../services/nlp
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
-  onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowCustomerProfile?: (customerId: string) => void;
   onShowQuoteFromLead?: (leadId: string) => void;
   onShowQuotationOrders?: () => void;
@@ -27,12 +20,6 @@ interface LeadManagementProps {
 }
 
 function LeadManagement({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
-  onNavigateBack,
-  onNavigateHome,
   onShowCustomerProfile,
   onShowQuoteFromLead,
   onShowQuotationOrders,
@@ -170,17 +157,6 @@ function LeadManagement({
 
   return (
     <div className={styles.leadManagementScreen}>
-      <ProductHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-        onHome={onNavigateHome}
-        onDashboard={onNavigateBack}
-        showDashboardButton={true}
-        showThemeSelector={true}
-      />
-      
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
           <h1 className={styles.centeredHeading}>📋 {t('leadManagement')}</h1>

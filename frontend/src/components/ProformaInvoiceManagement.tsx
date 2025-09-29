@@ -1,16 +1,10 @@
 import React from 'react';
-import ProductHeader from './ProductHeader';
 import { mockProformaInvoices, formatCurrency, getBusinessProfileById, ProformaInvoice } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/ProformaInvoiceManagement.module.css';
 
 interface ProformaInvoiceManagementProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
-  currentTheme?: string;
-  onThemeChange?: (theme: string) => void;
   onNavigateBack: () => void;
-  onNavigateHome?: () => void;
   onShowQuotationOrders?: () => void;
   onShowAdvancePayments?: () => void;
   onShowCustomerProfile?: (customerId: string) => void;
@@ -19,12 +13,7 @@ interface ProformaInvoiceManagementProps {
 }
 
 function ProformaInvoiceManagement({
-  currentLanguage,
-  onLanguageChange,
-  currentTheme,
-  onThemeChange,
   onNavigateBack,
-  onNavigateHome,
   onShowQuotationOrders,
   onShowAdvancePayments,
   onShowCustomerProfile,
@@ -96,15 +85,7 @@ function ProformaInvoiceManagement({
   }
 
   return (
-    <div className={styles.proformaInvoiceScreen}>
-      {/* Header */}
-      <ProductHeader 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        currentTheme={currentTheme}
-        onThemeChange={onThemeChange}
-      />
-
+    <div className={styles.proformaInvoiceScreen} style={{ paddingTop: '80px' }}>
       {/* Screen Header with Navigation */}
       <div className={styles.screenHeader}>
         <h1>{t('proformaInvoiceManagement')}</h1>
