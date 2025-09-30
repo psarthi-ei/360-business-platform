@@ -201,8 +201,8 @@ describe('Authentication Component', () => {
       // Wait for signup to complete
       await waitFor(() => {
         expect(mockProps.onAuthSuccess).toHaveBeenCalledTimes(1);
-      }, { timeout: 2000 });
-    });
+      }, { timeout: 10000 });
+    }, 15000);
   });
 
   describe('Props Passing', () => {

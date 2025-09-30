@@ -166,7 +166,6 @@ function LeadManagement({
     <div className={styles.leadManagementScreen}>
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>📋 {t('leadManagement')}</h1>
           <button 
             className={styles.addButton}
             onClick={() => setShowAddModal(true)}

@@ -19,7 +19,6 @@ function CustomerProfile({
     return (
       <div className={styles.leadManagementScreen}>
         <div className={styles.pageContent} style={{ paddingTop: '80px' }}>
-          <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
         <div className={styles.customerHeader}>
           <h2>Customer not found</h2>
           </div>
@@ -45,7 +44,6 @@ function CustomerProfile({
       
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>👤 {t('customerProfile')}</h1>
           <button className={styles.addButton}>{t('createNewQuote')}</button>
         </div>
 

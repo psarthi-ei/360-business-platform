@@ -225,7 +225,6 @@ function Payments({
   return (
     <div className={styles.advancePaymentScreen}>
       <div className={styles.pageContent}>
-        <h1 className={styles.centeredHeading}>💰 Payments</h1>
 
         {/* Filter Section */}
         <div className={styles.filtersSection}>

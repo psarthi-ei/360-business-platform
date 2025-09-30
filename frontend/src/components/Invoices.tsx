@@ -5,7 +5,6 @@ import {
   formatCurrency, 
   getBusinessProfileById
 } from '../data/mockData';
-import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/Invoices.module.css';
 
 interface InvoicesProps {
@@ -42,7 +41,6 @@ function Invoices({
   filterState,
   onFilterChange
 }: InvoicesProps) {
-  const { t } = useTranslation();
   
   // Invoice type filter state
   const [invoiceType, setInvoiceType] = useState<'proforma' | 'final' | 'all'>('all');
@@ -188,7 +186,6 @@ function Invoices({
   return (
     <div className={styles.invoicesScreen} style={{ paddingTop: '80px' }}>
       <div className={styles.pageContent}>
-        <h1 className={styles.centeredHeading}>📄 {t('invoices')}</h1>
 
         {/* Invoice Type Filter */}
         <div className={styles.filtersSection}>

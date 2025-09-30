@@ -162,7 +162,6 @@ function QuotationOrders({
     <div className={styles.quotationOrdersScreen}>
       <div className={styles.pageContent}>
         <div className={styles.screenHeader}>
-          <h1 className={styles.centeredHeading}>📄 {t('quotationOrders')}</h1>
           <button className={styles.addButton}>{t('addNewQuote')}</button>
         </div>
 

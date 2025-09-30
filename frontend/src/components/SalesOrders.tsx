@@ -52,7 +52,6 @@ function SalesOrders({
   return (
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
-        <h1 className={styles.centeredHeading}>💳 {t('salesOrder')}</h1>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>

@@ -20,17 +20,6 @@ function CustomerList({
   return (
     <div className={styles.leadManagementScreen}>
       <div className={styles.pageContent}>
-        <h1 className={styles.centeredHeading}>👥 Customer List</h1>
-
-      <div className={styles.searchSection}>
-        <input 
-          type="text" 
-          className={styles.searchInput}
-          placeholder={t('searchCustomers')}
-          value={customerSearch}
-          onChange={(e) => onCustomerSearchChange(e.target.value)}
-        />
-      </div>
 
       <div className={styles.filtersSection}>
         <div className={styles.filterButtons}>

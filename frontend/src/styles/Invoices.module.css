@@ -365,14 +365,6 @@
   margin: 0 auto;
 }
 
-.centeredHeading {
-  text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 30px;
-  color: white;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
 
 /* Filter Section */
 .filtersSection {
@@ -770,10 +762,6 @@
     padding: 0 15px;
   }
   
-  .centeredHeading {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-  }
   
   .filterButtons {
     gap: 8px;
@@ -834,9 +822,6 @@
 }
 
 @media (max-width: 480px) {
-  .centeredHeading {
-    font-size: 1.5rem;
-  }
   
   .filterBtn {
     padding: 8px 12px;
