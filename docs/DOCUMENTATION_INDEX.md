@@ -155,31 +155,18 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **3A. NLP_ARCHITECTURE_COMPLETE.md** - Voice Command Engine Architecture
-**Purpose**: Complete technical documentation for the multilingual NLP system powering voice commands
+### **3A. UNIFIED_ARCHITECTURE.md** - Complete Platform Architecture Master Reference
+**Purpose**: Master architecture document explaining how voice, search, NLP, routing, and all platform components work together
 
 **Contains**:
-- **System Architecture**: Hybrid local/AI processing for cost-effective voice command handling
-- **Multilingual Support**: English, Hindi, Gujarati voice command processing patterns
-- **Business Context Integration**: Textile industry terminology and workflow understanding
-- **Cost Management**: Local pattern matching (80%+ commands) with AI fallback for complex queries
-- **Implementation Details**: File structure, interfaces, testing patterns, integration points
+- **Complete Architecture Overview**: How voice, search, NLP, header, footer, App.tsx, and routing service integrate
+- **Component Interaction Flows**: Detailed step-by-step workflows for voice commands, search functionality, and navigation
+- **Universal Routing Pattern**: VoiceCommandRouter service and URL-based action system
+- **Configuration System**: platformConfig.ts and scopeResolver.ts driving behavior
+- **Adding New Functionality**: Step-by-step guides for extending voice commands, search capabilities, and business modules
+- **Real-World Examples**: Complete walkthrough of adding new actions and components
 
-**Update Schedule**: When NLP capabilities expand, new languages added, or processing logic changes
-
----
-
-### **3B. SEARCH_ARCHITECTURE.md** - Global Search System Architecture
-**Purpose**: Technical architecture for universal search functionality across all business data
-
-**Contains**:
-- **Search Architecture**: Multi-source data integration and search result ranking
-- **Data Flow Design**: How search queries process leads, customers, orders, inventory, and analytics
-- **Interface Definitions**: SearchProvider, SearchResult, and integration patterns
-- **Performance Strategy**: Real-time search, caching, and database optimization approaches
-- **Voice Integration**: How voice commands trigger global search functionality
-
-**Update Schedule**: When search capabilities expand, new data sources added, or performance optimizations implemented
+**Update Schedule**: When major architectural changes occur or new integration patterns are established
 
 ---
 
@@ -326,8 +313,8 @@ This is the master navigation document that guides you to all project informatio
 | "What does this button do?" | **DASHBOARD_SPECIFICATIONS.md** | Component behavior and interactions |
 | "How should Claude and I work together?" | **CLAUDE_WORKING_GUIDE.md** | Proven collaboration patterns and communication methods |
 | "What's our technology strategy?" | **TECHNICAL_STRATEGY.md** | Architecture decisions and rationale |
-| "How does voice command processing work?" | **NLP_ARCHITECTURE_COMPLETE.md** | Voice command engine architecture and multilingual processing |
-| "How does global search work?" | **SEARCH_ARCHITECTURE.md** | Search system architecture and data integration |
+| "How does the complete platform architecture work?" | **UNIFIED_ARCHITECTURE.md** | Master architecture reference for voice, search, routing, and component integration |
+| "How do I add new voice commands or search capabilities?" | **UNIFIED_ARCHITECTURE.md** | Step-by-step guides for extending platform functionality |
 | "What's our development velocity?" | **DAILY_PROGRESS_LOG.md** | Development timeline, productivity metrics, and progress tracking |
 | "How many commits per day are we doing?" | **DAILY_PROGRESS_LOG.md** | Daily work analysis and development patterns |
 
@@ -390,8 +377,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **As Needed Updates**
 - ✅ **DESIGN_SYSTEM.md** - After major screen implementations
 - ✅ **BUSINESS_PROCESSES.md** - When business processes are refined
-- ✅ **NLP_ARCHITECTURE_COMPLETE.md** - When voice capabilities expand or processing logic changes
-- ✅ **SEARCH_ARCHITECTURE.md** - When search capabilities expand or performance optimizations implemented
+- ✅ **UNIFIED_ARCHITECTURE.md** - When major architectural changes occur or new integration patterns are established
 - ✅ **DOCUMENTATION_INDEX.md** - When documentation strategy changes
 
 ---
@@ -470,8 +456,8 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **3-Level Dashboard Architecture** | DASHBOARD_SPECIFICATIONS.md | Technical implementation |
 | **Mobile-First Design Requirements** | DASHBOARD_SPECIFICATIONS.md | Factory environment specs |
 | **Component Styling & Responsive Design** | DASHBOARD_SPECIFICATIONS.md | UI implementation guide |
-| **Voice Command Processing Logic (NLP, multilingual)** | NLP_ARCHITECTURE_COMPLETE.md | Voice engine technical architecture |
-| **Global Search Implementation (data sources, algorithms)** | SEARCH_ARCHITECTURE.md | Search system technical architecture |
+| **Complete Platform Architecture (voice, search, routing, components)** | UNIFIED_ARCHITECTURE.md | Master architecture reference and integration patterns |
+| **Adding New Voice Commands or Search Features** | UNIFIED_ARCHITECTURE.md | Step-by-step extension guides and architectural patterns |
 | **Development Timeline & Velocity (commits per day, productivity)** | DAILY_PROGRESS_LOG.md | Development analytics and tracking |
 
 ### **🔄 Critical Synchronization Rules**
@@ -629,6 +615,6 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ---
 
 **Created**: Sep 3, 2025  
-**Updated**: Sep 27, 2025 (added NLP_ARCHITECTURE_COMPLETE.md, SEARCH_ARCHITECTURE.md, renamed PROGRESS_LOG.md to DAILY_PROGRESS_LOG.md)  
+**Updated**: Sep 30, 2025 (added UNIFIED_ARCHITECTURE.md as master architecture reference, removed outdated NLP_ARCHITECTURE.md and SEARCH_ARCHITECTURE.md)  
 **Purpose**: Master navigation hub - always read this first to understand project structure  
 **Next Review**: After backend integration phase
