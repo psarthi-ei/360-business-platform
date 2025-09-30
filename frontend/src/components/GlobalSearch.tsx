@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers, SearchResult } from './useGlobalSearch';
 import SearchResults from './SearchResults';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { ActionParams } from '../services/nlp/types';
+// import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+// import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/GlobalSearch.module.css';
 
 interface GlobalSearchProps {
+  searchScope?: string[];  // ADD: Accept scope from configuration
   dataSources: SearchDataSources;
   navigationHandlers: SearchNavigationHandlers;
   placeholder?: string;
   className?: string;
-  // Voice functionality
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
   // Optional search state - if provided, use external state instead of internal
   searchState?: {
     searchQuery: string;
@@ -32,11 +31,11 @@ export interface GlobalSearchRef {
 }
 
 const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({ 
+  searchScope, // Accept scope from configuration
   dataSources, 
   navigationHandlers, 
-  placeholder = "Search or try voice commands...",
+  placeholder = "Search across platform...",
   className = "",
-  onUniversalAction,
   searchState
 }, ref) => {
   // Use external search state if provided, otherwise create internal state
@@ -205,17 +204,7 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
           </div>
         </div>
         
-        {/* Floating Voice Assistant for voice search */}
-        <FloatingVoiceAssistant
-          currentProcessStage="search"
-          onUniversalAction={onUniversalAction}
-          onPerformSearch={(query: string) => {
-            // eslint-disable-next-line no-console
-            console.log('🎯 Direct voice search handler called with:', query);
-            // Direct call to performGlobalSearch to ensure it works
-            internalSearchState.performGlobalSearch(query);
-          }}
-        />
+        {/* Voice functionality removed - now handled by universal FloatingVoiceAssistant in App.tsx */}
       </div>
     </div>
   );

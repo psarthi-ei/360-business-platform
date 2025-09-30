@@ -33,7 +33,8 @@ import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicod
 import { scrollToTop } from './utils/scrollUtils';
 import { ActionParams, NavigateAndExecuteParams } from './services/nlp/types';
 import GlobalSearch from './components/GlobalSearch';
-// import { getSearchScope, getVoiceScope } from './utils/scopeResolver';
+import FloatingVoiceAssistant from './components/FloatingVoiceAssistant';
+import { getSearchScope /*, getVoiceScope*/ } from './utils/scopeResolver';
 import { 
   mockLeads, 
   mockQuotes, 
@@ -689,6 +690,7 @@ function AppContent() {
         {/* Universal Search Bar - Only on Platform Pages */}
         {isPlatformPage(currentScreen) && (
           <GlobalSearch
+            searchScope={getSearchScope(currentScreen)}
             dataSources={{
               leads: mockLeads,
               quotes: mockQuotes,
@@ -703,8 +705,22 @@ function AppContent() {
               formatCurrency,
               getBusinessProfileById
             }}
+            placeholder="Search across platform..."
+          />
+        )}
+        
+        {/* Universal Voice Assistant - Only on Platform Pages */}
+        {isPlatformPage(currentScreen) && (
+          <FloatingVoiceAssistant
+            currentProcessStage={currentScreen}
             onUniversalAction={handleUniversalAction}
-            placeholder="Search or try voice commands..."
+            onPerformSearch={handleUniversalSearch}
+            businessData={{
+              hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+              overduePayments: 0, // TODO: Calculate from actual payment data
+              readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
+              totalCustomers: mockBusinessProfiles.length
+            }}
           />
         )}
         
