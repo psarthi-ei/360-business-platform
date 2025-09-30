@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
@@ -31,8 +31,9 @@ import { HelmetProvider } from 'react-helmet-async';
 import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
 import { scrollToTop } from './utils/scrollUtils';
-import { ActionParams, NavigateAndExecuteParams } from './services/nlp/types';
-import GlobalSearch from './components/GlobalSearch';
+import { ActionParams } from './services/nlp/types';
+import { createVoiceCommandRouter } from './services/voice/VoiceCommandRouter';
+import GlobalSearch, { GlobalSearchRef } from './components/GlobalSearch';
 import FloatingVoiceAssistant from './components/FloatingVoiceAssistant';
 import { getSearchScope /*, getVoiceScope*/ } from './utils/scopeResolver';
 import { 
@@ -52,12 +53,12 @@ function isPlatformPage(currentScreen: string): boolean {
   const platformPages = [
     'dashboard',
     'leads', 
-    'quotations',
-    'salesorders',
-    'advancepayment',
+    'quotes',
+    'orders',
+    'payments',
     'invoices',
     'customerprofile',
-    'customerlist',
+    'customers',
     'inventory',
     'fulfillment',
     'analytics'
@@ -82,6 +83,9 @@ function AppContent() {
   const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
   const [profileLinkId] = useState('');
   const [profileQuoteId] = useState('');
+  
+  // Ref to GlobalSearch component for direct search calls
+  const globalSearchRef = useRef<GlobalSearchRef>(null);
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
@@ -103,34 +107,52 @@ function AppContent() {
     } else {
       navigate('/leads');
     }
-    // TODO: Pass actionParams to LeadManagement for compound actions
-    // console.log('showLeadManagement called with:', autoAction, actionParams);
   }, [navigate]);
 
-  // Centralized search function for voice commands
+  // Universal search function - Execute search on current page
   const handleUniversalSearch = useCallback((query: string) => {
     // eslint-disable-next-line no-console
     console.log('🔍 Universal search triggered with query:', query);
     
-    // If we're on Dashboard, navigate to Lead Management with search
-    if (currentScreen === 'dashboard') {
-      showLeadManagement('search', { query });
+    // Trigger search on current page via GlobalSearch component
+    if (globalSearchRef.current) {
+      globalSearchRef.current.performSearch(query);
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn('⚠️ GlobalSearch ref not available, search cannot be executed');
+    }
+  }, []);
+
+  // Create VoiceCommandRouter instance
+  const voiceCommandRouter = useMemo(() => 
+    createVoiceCommandRouter(navigate), [navigate]
+  );
+
+  // Navigation functions - defined before handleUniversalAction
+  const showDashboard = useCallback(() => {
+    navigate('/dashboard');
+  }, [navigate]);
+
+  const showQuotationOrders = useCallback(() => {
+    navigate('/quotes');
+  }, [navigate]);
+
+  // Simplified universal action handler - delegates to VoiceCommandRouter service
+  const handleUniversalAction = useCallback((actionType: string, params?: ActionParams) => {
+    // eslint-disable-next-line no-console
+    console.log('🎯 Universal action triggered:', actionType, params);
+    
+    // Handle search commands locally (not routed through VoiceCommandRouter)
+    if (actionType === 'SEARCH' || actionType === 'GLOBAL_SEARCH') {
+      if (params && 'query' in params) {
+        handleUniversalSearch(params.query as string);
+      }
       return;
     }
     
-    // If we're on a platform page with search functionality, trigger search directly
-    const platformPagesWithSearch = ['leads', 'quotes', 'sales-orders', 'customers'];
-    if (platformPagesWithSearch.includes(currentScreen)) {
-      // The GlobalSearch component on these pages will handle the search
-      // We just need to ensure the query gets to the search component
-      // This will be handled by the GlobalSearch component's onPerformSearch
-      // eslint-disable-next-line no-console
-      console.log('🎯 On platform page with search, query will be handled by GlobalSearch');
-    } else {
-      // For other pages, navigate to Lead Management with search
-      showLeadManagement('search', { query });
-    }
-  }, [currentScreen, showLeadManagement]);
+    // Route all other commands through VoiceCommandRouter service
+    voiceCommandRouter.routeVoiceCommand(actionType, params);
+  }, [handleUniversalSearch, voiceCommandRouter]);
 
   useEffect(() => {
     const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light') as string;
@@ -152,12 +174,12 @@ function AppContent() {
     else if (path === '/signup') setCurrentScreen('signup');
     else if (path === '/dashboard') setCurrentScreen('dashboard');
     else if (path === '/leads') setCurrentScreen('leads');
-    else if (path === '/quotes') setCurrentScreen('quotations');
-    else if (path === '/orders') setCurrentScreen('salesorders');
-    else if (path === '/payments') setCurrentScreen('advancepayment');
+    else if (path === '/quotes') setCurrentScreen('quotes');
+    else if (path === '/orders') setCurrentScreen('orders');
+    else if (path === '/payments') setCurrentScreen('payments');
     else if (path === '/invoices') setCurrentScreen('invoices');
     else if (path.startsWith('/customers/')) setCurrentScreen('customerprofile');
-    else if (path === '/customers') setCurrentScreen('customerlist');
+    else if (path === '/customers') setCurrentScreen('customers');
     else if (path === '/inventory') setCurrentScreen('inventory');
     else if (path === '/fulfillment') setCurrentScreen('fulfillment');
     else if (path === '/analytics') setCurrentScreen('analytics');
@@ -241,71 +263,12 @@ function AppContent() {
     navigate('/');
   }
 
-  function showDashboard() {
-    navigate('/dashboard');
-  }
-
-  // Universal action handler - routes cross-page voice commands
-  function handleUniversalAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'NAVIGATE_TO_LEADS':
-        showLeadManagement();
-        break;
-      case 'NAVIGATE_TO_QUOTES':
-        showQuotationOrders();
-        break;
-      case 'NAVIGATE_TO_ORDERS':
-        showSalesOrders();
-        break;
-      case 'NAVIGATE_TO_PAYMENTS':
-        showPayments();
-        break;
-      case 'NAVIGATE_TO_INVOICES':
-        showInvoices();
-        break;
-      case 'NAVIGATE_TO_CUSTOMERS':
-        showCustomerList();
-        break;
-      case 'NAVIGATE_TO_INVENTORY':
-        showInventory();
-        break;
-      case 'NAVIGATE_TO_FULFILLMENT':
-        showFulfillment();
-        break;
-      case 'NAVIGATE_TO_ANALYTICS':
-        showAnalytics();
-        break;
-      case 'NAVIGATE_TO_DASHBOARD':
-        showDashboard();
-        break;
-      case 'NAVIGATE_AND_EXECUTE':
-        // Handle compound actions from voice commands
-        if (params && 'targetContext' in params && 'action' in params) {
-          const navParams = params as NavigateAndExecuteParams;
-          if (navParams.targetContext === 'leads' && navParams.action === 'ADD_NEW_LEAD') {
-            showLeadManagement('ADD_NEW_LEAD', navParams.params);
-          } else {
-            // TODO: Handle unhandled NAVIGATE_AND_EXECUTE
-          }
-        }
-        break;
-      default:
-        // TODO: Handle unhandled universal action
-    }
-  }
-
-  function showQuotationOrders() {
-    navigate('/quotes');
-  }
-
   function showQuoteFromLead(leadId: string) {
-    // In a real app, this would pass the lead ID to create a new quote
     navigate('/quotes');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function showLeadFromQuote(leadId: string) {
-    // In a real app, this would highlight the specific lead
     navigate('/leads');
   }
 
@@ -324,7 +287,6 @@ function AppContent() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
-    // In a real app, this would convert quote to customer and create sales order
     navigate('/orders');
   }
 
@@ -402,7 +364,7 @@ function AppContent() {
           onLogout={handleLogout}
           isAuthenticated={isAuthenticated}
           userMode={userMode}
-          onUniversalSearch={handleUniversalSearch}
+          // onUniversalSearch={handleUniversalSearch}
         />
       </div>
     );
@@ -428,7 +390,6 @@ function AppContent() {
           onShowSalesOrders={showSalesOrders}
           filterState={leadFilter}
           onFilterChange={setLeadFilter}
-          onUniversalAction={handleUniversalAction}
         />
       </div>
     );
@@ -443,7 +404,6 @@ function AppContent() {
           onShowLeadManagement={showLeadManagement}
           filterState={quoteFilter}
           onFilterChange={setQuoteFilter}
-          onUniversalAction={handleUniversalAction}
         />
       </div>
     );
@@ -458,7 +418,6 @@ function AppContent() {
           onShowPayments={showPayments}
           filterState={orderFilter}
           onFilterChange={setOrderFilter}
-          onUniversalAction={handleUniversalAction}
         />
       </div>
     );
@@ -473,7 +432,6 @@ function AppContent() {
           onShowCustomerProfile={showCustomerProfile}
           filterState={paymentFilter}
           onFilterChange={setPaymentFilter}
-          onUniversalAction={handleUniversalAction}
         />
       </div>
     );
@@ -487,7 +445,6 @@ function AppContent() {
         onShowCustomerProfile={showCustomerProfile}
         filterState={invoiceFilter}
         onFilterChange={setInvoiceFilter}
-        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -507,7 +464,6 @@ function AppContent() {
           onShowCustomerProfile={showCustomerProfile}
           customerSearch={customerSearch}
           onCustomerSearchChange={setCustomerSearch}
-          onUniversalAction={handleUniversalAction}
         />
       </div>
     );
@@ -544,8 +500,6 @@ function AppContent() {
 
   function renderProfileCompletion() {
     function handleProfileSubmit(profileData: BusinessProfileFormData) {
-      // Profile submitted successfully
-      // Show success message and redirect to homepage
       setTimeout(() => {
         alert('Profile created successfully! Our team will contact you soon.');
         showHomePage();
@@ -553,7 +507,6 @@ function AppContent() {
     }
 
     function handleProfileSuccess(businessProfileId: string) {
-      // Business profile created successfully
     }
 
     return (
@@ -572,7 +525,6 @@ function AppContent() {
     return (
       <InventoryManagement
         onBackToDashboard={showDashboard}
-        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -581,7 +533,6 @@ function AppContent() {
     return (
       <FulfillmentManagement
         onBackToDashboard={showDashboard}
-        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -590,7 +541,6 @@ function AppContent() {
     return (
       <AnalyticsManagement
         onBackToDashboard={showDashboard}
-        onUniversalAction={handleUniversalAction}
       />
     );
   }
@@ -677,7 +627,6 @@ function AppContent() {
             onLogout={handleLogout}
             isAuthenticated={isAuthenticated}
             userMode={userMode}
-            // Website Navigation Props - Always show for consistent UX
             showWebsiteNavigation={true}
             currentScreen={currentScreen}
             onServicesHub={showServicesHub}
@@ -690,6 +639,7 @@ function AppContent() {
         {/* Universal Search Bar - Only on Platform Pages */}
         {isPlatformPage(currentScreen) && (
           <GlobalSearch
+            ref={globalSearchRef}
             searchScope={getSearchScope(currentScreen)}
             dataSources={{
               leads: mockLeads,

@@ -1,8 +1,6 @@
 import React from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
+import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/SalesOrders.module.css';
 
 interface SalesOrdersProps {
@@ -11,7 +9,6 @@ interface SalesOrdersProps {
   onShowPayments?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function SalesOrders({
@@ -19,30 +16,10 @@ function SalesOrders({
   onShowQuotationOrders,
   onShowPayments,
   filterState,
-  onFilterChange,
-  onUniversalAction
+  onFilterChange
 }: SalesOrdersProps) {
   const { t } = useTranslation();
   
-  // Action handler for sales order-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'UPDATE_ORDER_STATUS':
-        // Future: Handle order status updates
-        // TODO: Implement update order status
-        break;
-      case 'SEND_PAYMENT_REMINDER':
-        // Future: Handle payment reminders
-        // TODO: Implement send payment reminder
-        break;
-      case 'MARK_READY_FOR_PRODUCTION':
-        // Future: Handle production readiness
-        // TODO: Implement mark ready for production
-        break;
-      default:
-        // TODO: Handle unhandled sales order action
-    }
-  }
   
   // Helper function to calculate payment details for an order
   const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
@@ -236,31 +213,6 @@ function SalesOrders({
         </p>
       </div>
 
-      {/* Voice Assistant for Sales Order Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="orders"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: mockSalesOrders.filter(order => {
-            const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount);
-            return paymentDetails.paymentStatus === 'overdue';
-          }).length,
-          readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search orders by customer name or order content
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const filteredOrders = mockSalesOrders.filter(order => {
-            const customer = getBusinessProfileById(order.businessProfileId);
-            return customer?.companyName.toLowerCase().includes(query.toLowerCase()) ||
-                   order.items.toLowerCase().includes(query.toLowerCase());
-          });
-          // TODO: Display filtered orders
-        }}
-      />
     </div>
   );
 }

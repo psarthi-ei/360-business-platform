@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { 
   mockProformaInvoices, 
   mockFinalInvoices, 
   formatCurrency, 
-  getBusinessProfileById,
-  mockLeads,
-  mockSalesOrders,
-  mockBusinessProfiles
+  getBusinessProfileById
 } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams, FilterInvoiceParams } from '../services/nlp/types';
 import styles from '../styles/Invoices.module.css';
 
 interface InvoicesProps {
@@ -20,7 +15,6 @@ interface InvoicesProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 interface InvoiceRecord {
@@ -46,8 +40,7 @@ function Invoices({
   onShowSalesOrders,
   onShowCustomerProfile,
   filterState,
-  onFilterChange,
-  onUniversalAction
+  onFilterChange
 }: InvoicesProps) {
   const { t } = useTranslation();
   
@@ -133,34 +126,6 @@ function Invoices({
 
   const filteredInvoices = getFilteredInvoices();
 
-  // Action handler for invoice-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'SEND_INVOICE':
-        // Future: Handle invoice sending for specific invoices
-        // TODO: Implement send invoice functionality
-        break;
-      case 'FOLLOW_UP_INVOICE':
-        // Future: Handle invoice follow-up
-        // TODO: Implement invoice follow-up functionality
-        break;
-      case 'FILTER_INVOICES':
-        // Future: Handle filtering by type or status
-        if (params && ('type' in params || 'status' in params)) {
-          const filterParams = params as FilterInvoiceParams;
-          if (filterParams.type) {
-            setInvoiceType(filterParams.type);
-          }
-          if (filterParams.status) {
-            onFilterChange(filterParams.status);
-          }
-        }
-        // TODO: Display filtered invoices results
-        break;
-      default:
-        // TODO: Handle unhandled invoice action
-    }
-  }
 
   const handleSendInvoice = (invoiceId: string, customerName: string, contactInfo: string) => {
     
@@ -473,28 +438,6 @@ function Invoices({
         </div>
       </div>
 
-      {/* Voice Assistant for Invoice Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="invoices"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: allInvoiceRecords.filter(invoice => invoice.status === 'overdue').length,
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search invoices by customer name, invoice number, or related IDs
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const filteredInvoices = allInvoiceRecords.filter(invoice => 
-            invoice.customerName.toLowerCase().includes(query.toLowerCase()) ||
-            invoice.invoiceNumber.toLowerCase().includes(query.toLowerCase()) ||
-            (invoice.relatedId && invoice.relatedId.toLowerCase().includes(query.toLowerCase()))
-          );
-          // TODO: Display filtered invoice search results
-        }}
-      />
     </div>
   );
 }

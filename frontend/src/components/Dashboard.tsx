@@ -1,9 +1,6 @@
-import React, { useState, useRef } from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import React, { useState } from 'react';
 import TabNavigation from './TabNavigation';
-import GlobalSearch, { GlobalSearchRef } from './GlobalSearch';
 import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
-import { ActionParams, NavigateAndExecuteParams } from '../services/nlp/types';
 import styles from '../styles/Dashboard.module.css';
 
 interface DashboardProps {
@@ -21,7 +18,7 @@ interface DashboardProps {
   onShowAnalytics?: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
-  onUniversalSearch?: (query: string) => void;
+  // Universal search handled by App.tsx GlobalSearch
   onGuestMode?: () => void;
   onDemoMode?: () => void;
   onLogout?: () => void;
@@ -44,7 +41,7 @@ function Dashboard({
   onShowAnalytics,
   onLogin,
   onSignUp,
-  onUniversalSearch,
+  // Universal search handled by App.tsx
   onGuestMode,
   onDemoMode,
   onLogout,
@@ -56,17 +53,13 @@ function Dashboard({
   
   // Swipe navigation state will be implemented in future
   
-  // Current process stage for voice assistant
-  const [currentProcessStage, setCurrentProcessStage] = useState('dashboard');
+  // Dashboard is now a pure display component
   
   // Tab navigation state
   const [showTabNavigation, setShowTabNavigation] = useState(false);
   const [activeCardType, setActiveCardType] = useState<string | null>(null);
   
-  // Dashboard search state (will be removed in unified architecture)
-  // const [dashboardSearchQuery, setDashboardSearchQuery] = useState('');
-  // const [showDashboardSearch, setShowDashboardSearch] = useState(false);
-  const globalSearchRef = useRef<GlobalSearchRef>(null);
+  // Dashboard search removed - handled by universal GlobalSearch in App.tsx
   
   // Calculate business metrics from mock data
   const totalLeads = mockLeads.length;
@@ -79,149 +72,30 @@ function Dashboard({
   const activeOrders = mockSalesOrders.filter(order => order.status === 'production_started').length;
   const readyToShip = mockSalesOrders.filter(order => order.status === 'ready_to_ship').length;
   const overduePayments = mockSalesOrders.filter(order => order.paymentStatus && order.paymentStatus.includes('overdue')).length;
+  const pendingAdvanceAmount = mockSalesOrders.reduce((sum, order) => {
+    // Simple calculation: 50% advance for orders not yet started
+    if (order.status === 'order_confirmed') {
+      return sum + (order.totalAmount * 0.5);
+    }
+    return sum;
+  }, 0);
   
-  // Business data for voice assistant
-  const businessData = {
-    hotLeads,
-    overduePayments,
-    readyToShip,
-    totalCustomers
-  };
+  // Dashboard displays business metrics only
 
   // Tab navigation handlers
   const handleCardClick = (cardType: string) => {
     setActiveCardType(cardType);
     setShowTabNavigation(true);
-    setCurrentProcessStage(cardType);
+    // setCurrentProcessStage(cardType); - removed with voice assistant integration
   };
 
   const closeTabNavigation = () => {
     setShowTabNavigation(false);
     setActiveCardType(null);
-    setCurrentProcessStage('dashboard');
+    // setCurrentProcessStage('dashboard'); - removed with voice assistant integration
   };
 
-  // Dashboard search handler - handles voice search locally without navigation (will be removed in unified architecture)
-  // const handleDashboardSearch = (query: string) => {
-  //   console.log('🔍 Dashboard voice search triggered with query:', query);
-  //   setDashboardSearchQuery(query);
-  //   setShowDashboardSearch(true);
-  //   
-  //   // Trigger the actual search via GlobalSearch ref
-  //   if (globalSearchRef.current) {
-  //     globalSearchRef.current.performSearch(query);
-  //   }
-  // };
-
-  // Universal action handler for all navigation commands
-  const handleUniversalAction = (actionType: string, params?: ActionParams) => {
-    // TODO: Log universal action handling
-    
-    switch (actionType) {
-      case 'NAVIGATE_TO_LEADS':
-        setCurrentProcessStage('leads');
-        onShowLeadManagement();
-        break;
-      case 'NAVIGATE_TO_QUOTES':
-        setCurrentProcessStage('quotes');
-        onShowQuotationOrders();
-        break;
-      case 'NAVIGATE_TO_ORDERS':
-        setCurrentProcessStage('production');
-        onShowSalesOrders();
-        break;
-      case 'NAVIGATE_TO_PAYMENTS':
-        setCurrentProcessStage('payments');
-        onShowPayments();
-        break;
-      case 'NAVIGATE_TO_INVOICES':
-        setCurrentProcessStage('invoices');
-        onShowInvoices();
-        break;
-      case 'NAVIGATE_TO_CUSTOMERS':
-        setCurrentProcessStage('customers');
-        onShowCustomerList();
-        break;
-      case 'NAVIGATE_TO_INVENTORY':
-        setCurrentProcessStage('inventory');
-        onShowInventory?.();
-        break;
-      case 'NAVIGATE_TO_FULFILLMENT':
-        setCurrentProcessStage('fulfillment');
-        onShowFulfillment?.();
-        break;
-      case 'NAVIGATE_TO_ANALYTICS':
-        setCurrentProcessStage('analytics');
-        onShowAnalytics?.();
-        break;
-      case 'NAVIGATE_TO_DASHBOARD':
-        setCurrentProcessStage('dashboard');
-        // Already on dashboard - no navigation needed
-        break;
-      case 'NAVIGATE_AND_EXECUTE':
-        // Compound action: Navigate to target page + execute business action
-        if (params && 'targetContext' in params && 'action' in params) {
-          const navParams = params as NavigateAndExecuteParams;
-          const { targetContext, action, params: actionParams } = navParams;
-        if (targetContext && action) {
-          // eslint-disable-next-line no-console
-        console.log(`🔗 NAVIGATE_AND_EXECUTE: ${targetContext} → ${action}`, actionParams);
-          
-          // Navigate to target context
-          setCurrentProcessStage(targetContext as string);
-          
-          // Execute appropriate navigation based on target
-          switch (targetContext) {
-            case 'leads':
-              onShowLeadManagement(action as string, actionParams as Record<string, unknown>); // Pass pending action
-              break;
-            case 'quotes':
-              onShowQuotationOrders();
-              // TODO: Pass pending action to QuotationOrders
-              break;
-            case 'orders':
-              onShowSalesOrders();
-              // TODO: Pass pending action to SalesOrders
-              break;
-            case 'payments':
-              onShowPayments();
-              // TODO: Pass pending action to Payments
-              break;
-            case 'invoices':
-              onShowInvoices();
-              // TODO: Pass pending action to Invoices
-              break;
-            case 'customers':
-              onShowCustomerList();
-              // TODO: Pass pending action to CustomerList
-              break;
-            case 'inventory':
-              onShowInventory?.();
-              // TODO: Pass pending action to InventoryManagement
-              break;
-            case 'fulfillment':
-              onShowFulfillment?.();
-              // TODO: Pass pending action to FulfillmentManagement
-              break;
-            case 'analytics':
-              onShowAnalytics?.();
-              // TODO: Pass pending action to AnalyticsManagement
-              break;
-            default:
-              // eslint-disable-next-line no-console
-              console.log('Unknown target context:', targetContext);
-          }
-        } else {
-          // eslint-disable-next-line no-console
-          console.log('Invalid NAVIGATE_AND_EXECUTE params:', params);
-        }
-        }
-        break;
-      default:
-        // eslint-disable-next-line no-console
-        console.log('Unhandled universal action in Dashboard:', actionType, params);
-    }
-  };
+  // Dashboard is now pure display component - no voice handling needed
 
 
   // Get tab configuration for each card type
@@ -620,8 +494,6 @@ function Dashboard({
   // Smart contextual intelligence calculations
   const leadsReadyForQuotes = warmLeads + Math.floor(hotLeads * 0.7);
   const quotesReadyForAdvance = approvedQuotes;
-  const pendingAdvanceAmount = mockSalesOrders.reduce((sum, order) => 
-    sum + (order.status === 'order_confirmed' ? order.totalAmount * 0.3 : 0), 0);
   const repeatCustomerOpportunities = Math.floor(totalCustomers * 0.4);
   
 
@@ -676,7 +548,7 @@ function Dashboard({
         </div>
 
         {/* Dashboard Search - always available for voice commands */}
-        <div style={{ margin: '20px 0', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
+        {/* <div style={{ margin: '20px 0', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
           <GlobalSearch
             ref={globalSearchRef}
             dataSources={{
@@ -695,7 +567,7 @@ function Dashboard({
             }}
             placeholder="Search leads, quotes, orders, and customers..."
           />
-        </div>
+        </div> */}
 
         {/* 8 Sequential Business Process Cards */}
         <div className={styles.businessProcesses}>
@@ -958,12 +830,7 @@ function Dashboard({
         </div>
       </div>
 
-      {/* Floating Voice Assistant - for non-search voice commands */}
-      <FloatingVoiceAssistant
-        currentProcessStage={currentProcessStage}
-        onUniversalAction={handleUniversalAction}
-        businessData={businessData}
-      />
+      {/* Voice functionality now handled by universal FloatingVoiceAssistant in App.tsx */}
 
       {/* Tab Navigation Overlay */}
       {showTabNavigation && activeCardType && (

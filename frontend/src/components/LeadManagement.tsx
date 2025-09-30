@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+// import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, mockQuotes, mockSalesOrders, formatCurrency, Lead } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams, SetPriorityParams, EditLeadParams } from '../services/nlp/types';
+// import { ActionParams, SetPriorityParams, EditLeadParams } from '../services/nlp/types';
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
@@ -16,7 +16,7 @@ interface LeadManagementProps {
   onFilterChange: (filter: string) => void;
   openAddModal?: boolean;
   onAddModalHandled?: () => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
+  // onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function LeadManagement({
@@ -28,7 +28,7 @@ function LeadManagement({
   onFilterChange,
   openAddModal,
   onAddModalHandled,
-  onUniversalAction
+  // onUniversalAction
 }: LeadManagementProps) {
   const { t } = useTranslation();
   const location = useLocation();
@@ -42,8 +42,15 @@ function LeadManagement({
   // Auto-open modal based on URL parameter
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get('action') === 'add-lead') {
+    const action = params.get('action');
+    
+    if (action === 'add-lead') {
       setShowAddModal(true);
+      
+      // Clean URL after processing action
+      const newParams = new URLSearchParams(location.search);
+      newParams.delete('action');
+      window.history.replaceState({}, '', `${location.pathname}${newParams.toString() ? '?' + newParams.toString() : ''}`);
     }
   }, [location]);
 
@@ -418,50 +425,7 @@ function LeadManagement({
         editingLead={editingLead}
       />
 
-      {/* Voice Assistant for Lead Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="leads"
-        onUniversalAction={onUniversalAction}
-        onAction={(actionType, params) => {
-          // Lead-specific action dispatcher only
-          switch (actionType) {
-            case 'ADD_NEW_LEAD':
-              setShowAddModal(true);
-              break;
-            case 'SET_PRIORITY':
-              if (params && 'leadId' in params && 'priority' in params) {
-                const priorityParams = params as SetPriorityParams;
-                handlePriorityChange(priorityParams.leadId, priorityParams.priority);
-              }
-              break;
-            case 'EDIT_LEAD':
-              if (params && 'leadId' in params) {
-                const editParams = params as EditLeadParams;
-                const leadToEdit = leads.find(l => l.id === editParams.leadId);
-                if (leadToEdit) {
-                  handleEditLead(leadToEdit);
-                }
-              }
-              break;
-            default:
-              // TODO: Handle unhandled lead action
-          }
-        }}
-        businessData={{
-          hotLeads: leads.filter(l => l.priority === 'hot').length,
-          overduePayments: 0,
-          readyToShip: 0,
-          totalCustomers: leads.filter(l => l.conversionStatus === 'converted_to_customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Basic search functionality - filter leads by company name or inquiry
-          const filteredLeads = mockLeads.filter(lead => 
-            lead.companyName.toLowerCase().includes(query.toLowerCase()) ||
-            lead.inquiry.toLowerCase().includes(query.toLowerCase())
-          );
-          setLeads(filteredLeads);
-        }}
-      />
+      {/* Voice functionality now handled by universal FloatingVoiceAssistant in App.tsx */}
     </div>
   );
 }

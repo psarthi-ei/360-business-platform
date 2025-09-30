@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById, mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
-import { ActionParams } from '../services/nlp/types';
+import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById } from '../data/mockData';
 import styles from '../styles/Payments.module.css';
 
 interface PaymentsProps {
@@ -10,7 +8,6 @@ interface PaymentsProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 interface PaymentRecord {
@@ -39,8 +36,7 @@ function Payments({
   onShowInvoices,
   onShowCustomerProfile,
   filterState,
-  onFilterChange,
-  onUniversalAction
+  onFilterChange
 }: PaymentsProps) {
   // Translation hook available for future multilingual features
   // const { t } = useTranslation();
@@ -135,25 +131,6 @@ function Payments({
 
   const filteredPayments = getFilteredPayments();
 
-  // Action handler for payment-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'SEND_PAYMENT_REMINDER':
-        // Future: Handle payment reminders for specific payments
-        // TODO: Implement send payment reminder functionality
-        break;
-      case 'RECORD_PAYMENT':
-        // Future: Handle payment recording
-        // TODO: Implement record payment functionality
-        break;
-      case 'MARK_PAYMENT_RECEIVED':
-        // Future: Mark payment as received
-        // TODO: Implement mark payment received functionality
-        break;
-      default:
-        // TODO: Handle unhandled payment action
-    }
-  }
 
   const handleRecordPayment = (paymentId: string, amount: number) => {
     // Find the payment record to get customer information
@@ -481,28 +458,6 @@ function Payments({
         </div>
       </div>
 
-      {/* Voice Assistant for Payment Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="payments"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: allPaymentRecords.filter(payment => payment.paymentStatus === 'overdue').length,
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search payments by customer name or payment details
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const filteredPayments = allPaymentRecords.filter(payment => 
-            payment.customerName.toLowerCase().includes(query.toLowerCase()) ||
-            payment.invoiceId.toLowerCase().includes(query.toLowerCase()) ||
-            payment.paymentMethod.toLowerCase().includes(query.toLowerCase())
-          );
-          // TODO: Display filtered payment search results
-        }}
-      />
     </div>
   );
 }

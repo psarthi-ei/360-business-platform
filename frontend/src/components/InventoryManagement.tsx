@@ -1,40 +1,17 @@
 import React from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface InventoryManagementProps {
   onBackToDashboard: () => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function InventoryManagement({
-  onBackToDashboard,
-  onUniversalAction
+  onBackToDashboard
 }: InventoryManagementProps) {
   const { t } = useTranslation();
 
   // Action handler for inventory-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'CHECK_STOCK_LEVELS':
-        // Future: Handle stock level checking
-        // TODO: Implement check stock levels
-        break;
-      case 'UPDATE_INVENTORY':
-        // Future: Handle inventory updates
-        // TODO: Implement update inventory
-        break;
-      case 'CREATE_PURCHASE_ORDER':
-        // Future: Handle purchase order creation
-        // TODO: Implement create purchase order
-        break;
-      default:
-        // TODO: Handle unhandled inventory action
-    }
-  }
 
   return (
     <div className={styles.container}>
@@ -101,23 +78,6 @@ function InventoryManagement({
         </div>
       </div>
 
-      {/* Voice Assistant for Inventory Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="inventory"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: 0, // Mock data - in real app would calculate from payments
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search inventory by material name, supplier, or stock status
-          // TODO: Implement inventory search
-          // Future: Filter inventory items based on search query
-        }}
-      />
     </div>
   );
 }

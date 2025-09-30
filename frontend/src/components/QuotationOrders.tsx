@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams, QuoteActionParams } from '../services/nlp/types';
 import styles from '../styles/QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
@@ -11,7 +10,6 @@ interface QuotationOrdersProps {
   onShowLeadManagement?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function QuotationOrders({
@@ -20,9 +18,9 @@ function QuotationOrders({
   onShowLeadManagement,
   filterState,
   onFilterChange,
-  onUniversalAction
 }: QuotationOrdersProps) {
   const { t } = useTranslation();
+  const location = useLocation();
   
   // Component state for workflow tracking
   const [workflowState, setWorkflowState] = useState({
@@ -34,7 +32,7 @@ function QuotationOrders({
   const [workflowMessages, setWorkflowMessages] = useState<{[key: string]: string}>({});
 
   // Workflow Method 1: Handle Quote Approval
-  function handleQuoteApproval(quoteId: string) {
+  const handleQuoteApproval = useCallback((quoteId: string) => {
     const quote = mockQuotes.find(q => q.id === quoteId);
     if (!quote) {
       setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote not found'});
@@ -61,10 +59,10 @@ function QuotationOrders({
       }));
       setWorkflowMessages({...workflowMessages, [quoteId]: 'Quote approved! Send profile completion link to proceed.'});
     }
-  }
+  }, [workflowMessages]);
 
   // Workflow Method 2: Handle Send Profile Link
-  function handleSendProfileLink(quoteId: string) {
+  const handleSendProfileLink = useCallback((quoteId: string) => {
     const quote = mockQuotes.find(q => q.id === quoteId);
     if (!quote) {
       setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote not found'});
@@ -96,10 +94,10 @@ function QuotationOrders({
     if (window.confirm('Open WhatsApp to share profile completion link?')) {
       window.open(whatsappUrl, '_blank');
     }
-  }
+  }, [workflowMessages]);
 
   // Workflow Method 3: Handle Proforma Invoice Generation (for existing customers)
-  function handleProformaGeneration(quoteId: string) {
+  const handleProformaGeneration = useCallback((quoteId: string) => {
     const quote = mockQuotes.find(q => q.id === quoteId);
     if (!quote || !quote.businessProfileId) {
       setWorkflowMessages({...workflowMessages, [quoteId]: 'Error: Quote or customer not found'});
@@ -117,10 +115,10 @@ function QuotationOrders({
     quote.statusMessage = `Proforma invoice ${proformaId} generated. Advance payment of ${formatCurrency(advanceAmount)} awaiting.`;
     
     setWorkflowMessages({...workflowMessages, [quoteId]: `Proforma invoice generated! Advance payment ${formatCurrency(advanceAmount)} requested.`});
-  }
+  }, [workflowMessages]);
 
   // Workflow Method 4: Check Profile Completion Status
-  function checkProfileStatus(quoteId: string) {
+  const checkProfileStatus = useCallback((quoteId: string) => {
     const linkData = workflowState.profileLinks.find(pl => pl.quoteId === quoteId);
     if (!linkData) {
       setWorkflowMessages({...workflowMessages, [quoteId]: 'No profile link found for this quote'});
@@ -138,7 +136,27 @@ function QuotationOrders({
       const daysLeft = Math.ceil((linkData.expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000));
       setWorkflowMessages({...workflowMessages, [quoteId]: `Profile link active. ${daysLeft} days remaining.`});
     }
-  }
+  }, [workflowState.profileLinks, workflowState.completedProfiles, workflowMessages]);
+
+  // Auto-handle URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const action = params.get('action');
+    const quoteId = params.get('quoteId');
+    
+    if (action === 'approve-quote' && quoteId) {
+      handleQuoteApproval(quoteId);
+    }
+    
+    // Clean URL after processing action
+    if (action) {
+      const newParams = new URLSearchParams(location.search);
+      newParams.delete('action');
+      if (quoteId) newParams.delete('quoteId');
+      window.history.replaceState({}, '', `${location.pathname}${newParams.toString() ? '?' + newParams.toString() : ''}`);
+    }
+  }, [location, handleQuoteApproval]);
+
   
   return (
     <div className={styles.quotationOrdersScreen}>
@@ -345,47 +363,6 @@ function QuotationOrders({
         </p>
       </div>
 
-      {/* Voice Assistant for Quotation Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="quotes"
-        onUniversalAction={onUniversalAction}
-        onAction={(actionType, params) => {
-          // Quote-specific action dispatcher
-          switch (actionType) {
-            case 'APPROVE_QUOTE':
-              if (params && 'quoteId' in params) {
-                const quoteParams = params as QuoteActionParams;
-                handleQuoteApproval(quoteParams.quoteId);
-              }
-              break;
-            case 'SEND_PROFILE_LINK':
-              if (params && 'quoteId' in params) {
-                const quoteParams = params as QuoteActionParams;
-                handleSendProfileLink(quoteParams.quoteId);
-              }
-              break;
-            default:
-              // eslint-disable-next-line no-console
-              console.log('Unhandled quote action:', actionType, params);
-          }
-        }}
-        businessData={{
-          hotLeads: 0,
-          overduePayments: 0,
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.length
-        }}
-        onPerformSearch={(query) => {
-          // Search quotes by company name or items
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const filteredQuotes = mockQuotes.filter(quote => 
-            quote.companyName.toLowerCase().includes(query.toLowerCase()) ||
-            quote.items.toLowerCase().includes(query.toLowerCase())
-          );
-          // Note: Would need state management to actually filter displayed quotes
-          // TODO: Implement quotes search filter display
-        }}
-      />
     </div>
   );
 }

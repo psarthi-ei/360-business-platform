@@ -1,40 +1,15 @@
 import React from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface AnalyticsManagementProps {
   onBackToDashboard: () => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function AnalyticsManagement({
-  onBackToDashboard,
-  onUniversalAction
+  onBackToDashboard
 }: AnalyticsManagementProps) {
   const { t } = useTranslation();
-
-  // Action handler for analytics-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'GENERATE_REPORT':
-        // Future: Handle report generation
-        // TODO: Implement report generation
-        break;
-      case 'SHOW_ANALYTICS':
-        // Future: Handle analytics display
-        // TODO: Implement analytics display
-        break;
-      case 'EXPORT_DATA':
-        // Future: Handle data export
-        // TODO: Implement data export
-        break;
-      default:
-        // TODO: Handle unhandled analytics action
-    }
-  }
 
   return (
     <div className={styles.container}>
@@ -101,23 +76,6 @@ function AnalyticsManagement({
         </div>
       </div>
 
-      {/* Voice Assistant for Analytics Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="analytics"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: 0, // Mock data - in real app would calculate from payments
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search analytics by report name, metric type, or date range
-          // TODO: Implement analytics search
-          // Future: Filter analytics reports based on search query
-        }}
-      />
     </div>
   );
 }

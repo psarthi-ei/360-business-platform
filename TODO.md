@@ -7,42 +7,41 @@
 
 ---
 
-## 🔥 **ACTIVE (Current Priority) - Fix Compilation Errors & Voice Navigation**
+## 🔥 **ACTIVE (Current Priority) - Unified Voice & Search Architecture**
 
-### 🎯 STRATEGIC PRIORITY: Get App Running + Universal Voice Commands
-**Context**: App is currently down due to multiple TypeScript compilation errors. Need to fix these immediately, then ensure universal dashboard navigation via voice commands works from all component pages.
+### 🎯 STRATEGIC PRIORITY: Major Architecture Refactoring
+**Context**: Implementing unified voice and search architecture to eliminate code duplication and create single source of truth for voice/search behavior across platform.
 
-#### Immediate Fixes (Priority 1) - App Down! 🚨
-**Must fix these to get development server running:**
+#### Phase 1: Configuration System (20 mins) ⏳
+**Status**: Ready to implement
+- [ ] **Create `/src/config/platformConfig.ts`** - Simple global vs component-specific configuration
+- [ ] **Create `/src/utils/scopeResolver.ts`** - Clean scope resolution functions  
+- [ ] **Test configuration imports** - Verify TypeScript compilation and imports
 
-- [ ] **Fix all TypeScript compilation errors preventing app from starting**
-  - [ ] Fix App.tsx function name mismatch showHomepage → showHomePage (3 locations)
-  - [ ] Fix FloatingVoiceAssistant TypeScript command context type checking error (line 80)
-  - [ ] Fix sales order status mismatch errors (ready_to_ship → valid status) across 6 components
-  - [ ] Fix QuotationOrders property access error (remove non-existent content property)
-  - [ ] Clean up ESLint console.log errors preventing compilation
+#### Phase 2: Voice/Search Separation (30 mins) ⏳
+**Status**: Ready after Phase 1
+- [ ] **Remove FloatingVoiceAssistant from GlobalSearch.tsx** - Separate voice from search
+- [ ] **Add universal FloatingVoiceAssistant to App.tsx** - Single voice instance
+- [ ] **Test voice/search separation** - Verify search typing unchanged, voice works universally
 
-#### Voice Architecture Integration (Priority 2)
-**Current Status**: 3-tier architecture implemented but needs integration fixes
+#### Phase 3: Business Component Cleanup (40 mins) ⏳ 
+**Status**: Ready after Phase 2
+- [ ] **Remove duplicate voice components from 10+ business components**
+  - Dashboard.tsx, LeadManagement.tsx, QuotationOrders.tsx, SalesOrders.tsx
+  - Payments.tsx, Invoices.tsx, CustomerList.tsx, InventoryManagement.tsx
+  - FulfillmentManagement.tsx, AnalyticsManagement.tsx
+- [ ] **Test each component after cleanup** - Verify business logic unchanged
 
-- [ ] **Link component pages to dashboard business stage and associated tab view**
-  - Component pages exist but aren't properly connected to dashboard business stage tracking
-  - Need to ensure proper state synchronization between Dashboard and components
+#### Phase 4: Pipeline Integration (20 mins) ⏳
+**Status**: Ready after Phase 3
+- [ ] **Verify Voice → NLP → Search pipeline** - Single voice, single search, single NLP
+- [ ] **Test configuration behavior** - Global vs component-specific modes
+- [ ] **Complete integration testing** - Voice search across all platform pages
 
-- [ ] **Implement voice command to go to dashboard from any component page** 
-  - NAVIGATE_TO_DASHBOARD already exists in architecture but needs testing
-  - Universal voice commands should work: "go to dashboard", "show dashboard", "go home"
-
-- [ ] **Test universal dashboard navigation via voice commands from all pages**
-  - Verify "say anything anywhere" functionality works properly
-  - Test cross-page command routing through 3-tier architecture
-
-#### Documentation Updates (Priority 3)
-- [ ] **Update NLP architecture document with detailed 3-tier responsibility breakdown**
-  - Add Traffic Controller/Navigation System/Local Experts analogies
-  - Include "What each tier owns vs does NOT own" sections
-  - Add comprehensive information flow examples
-  - Document architecture trade-offs and decision rationale
+#### Documentation & Safety ✅
+- [x] **Created `/docs/UNIFIED_ARCHITECTURE.md`** - Complete architectural blueprint
+- [x] **Phase-by-phase commit strategy** - Safe rollback at any point
+- [x] **File-by-file change specifications** - Exact implementation details
 
 ---
 
@@ -139,23 +138,24 @@
 **Rationale**: Cannot test or develop further features until compilation errors are resolved
 
 ### **Current Session Tasks** (Synced with TodoWrite):
-1. 🔄 **Update TODO.md with platform development todos** (In Progress)
-2. ⏳ **Update NLP architecture document** (Pending)
-3. ⏳ **Fix all TypeScript compilation errors** (Pending - Priority 1)
-4. ⏳ **Fix component-dashboard integration** (Pending - Priority 2)
-5. ⏳ **Test universal voice navigation** (Pending - Priority 3)
+1. ✅ **Created unified architecture document** - Complete refactoring blueprint
+2. ✅ **Updated TODO.md with unified architecture plan** - Phase-by-phase implementation  
+3. ⏳ **Ready to implement Phase 1** - Configuration system creation (20 mins)
+4. ⏳ **Ready for complete refactoring** - Single voice, single search, zero duplication
+5. ⏳ **Architecture testing planned** - Voice → NLP → Search pipeline verification
 
 ### **Next Session Priorities**:
-1. **Fix compilation errors** - Get development server running
-2. **Test voice commands** - Verify 3-tier architecture works end-to-end
-3. **Fix integration issues** - Ensure proper business stage tracking
-4. **Document enhancements** - Update architecture guide with detailed breakdowns
+1. **Implement Phase 1** - Create configuration system (platformConfig.ts, scopeResolver.ts)
+2. **Implement Phase 2** - Separate voice from search (remove embedded voice assistant)
+3. **Implement Phase 3** - Clean business components (remove 10+ duplicate voice components)
+4. **Implement Phase 4** - Test unified pipeline (voice → NLP → search → business logic)
 
 ### **Key Architecture Decisions**:
-- **Dashboard Middle Layer**: Chosen over direct communication for clear separation of concerns
-- **3-Tier Hierarchy**: MASTER (voice) → MIDDLE (navigation) → SPECIALIST (business)
-- **Universal Commands**: "Say anything anywhere" through context-aware routing
-- **Business Stage Tracking**: Centralized in Dashboard for consistent state management
+- **Unified Architecture**: Single voice, single search, single NLP processor
+- **Zero Duplication**: Remove 10+ duplicate voice components across business pages
+- **Clean Separation**: Universal infrastructure vs pure business logic components  
+- **Simple Configuration**: Global vs component-specific behavior (single source of truth)
+- **Preserved Functionality**: Search typing behavior completely unchanged
 
 ---
 

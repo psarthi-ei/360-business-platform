@@ -1,40 +1,15 @@
 import React from 'react';
-import FloatingVoiceAssistant from './FloatingVoiceAssistant';
-import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface FulfillmentManagementProps {
   onBackToDashboard: () => void;
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function FulfillmentManagement({
-  onBackToDashboard,
-  onUniversalAction
+  onBackToDashboard
 }: FulfillmentManagementProps) {
   const { t } = useTranslation();
-
-  // Action handler for fulfillment-specific commands only
-  function handleAction(actionType: string, params?: ActionParams) {
-    switch (actionType) {
-      case 'PREPARE_SHIPMENT':
-        // Future: Handle shipment preparation
-        // TODO: Implement prepare shipment
-        break;
-      case 'TRACK_DELIVERY':
-        // Future: Handle delivery tracking
-        // TODO: Implement track delivery
-        break;
-      case 'UPDATE_CUSTOMER':
-        // Future: Handle customer updates
-        // TODO: Implement update customer
-        break;
-      default:
-        // TODO: Handle unhandled fulfillment action
-    }
-  }
 
   return (
     <div className={styles.container}>
@@ -101,23 +76,6 @@ function FulfillmentManagement({
         </div>
       </div>
 
-      {/* Voice Assistant for Fulfillment Management */}
-      <FloatingVoiceAssistant
-        currentProcessStage="fulfillment"
-        onUniversalAction={onUniversalAction}
-        onAction={handleAction}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: 0, // Mock data - in real app would calculate from payments
-          readyToShip: mockSalesOrders.filter(order => order.status === 'completed').length,
-          totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
-        }}
-        onPerformSearch={(query) => {
-          // Search fulfillment items by order ID, customer name, or delivery status
-          // TODO: Implement fulfillment search
-          // Future: Filter fulfillment items based on search query
-        }}
-      />
     </div>
   );
 }

@@ -48,10 +48,8 @@ declare global {
 
 interface FloatingVoiceAssistantProps {
   currentProcessStage?: string;
-  // Universal action handler for navigation commands (handled by Dashboard)
+  // Universal action handler for all voice commands
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
-  // Component-specific action handler (handled by individual components)
-  onAction?: (actionType: string, params?: ActionParams) => void;
   businessData?: {
     hotLeads: number;
     overduePayments: number;
@@ -61,96 +59,27 @@ interface FloatingVoiceAssistantProps {
   onPerformSearch?: (query: string) => void;
 }
 
-// Command Classification System - Only FloatingVoiceAssistant knows this
-const COMMAND_CONTEXTS = {
-  leads: ['ADD_NEW_LEAD', 'EDIT_LEAD', 'SET_PRIORITY', 'DELETE_LEAD'],
-  quotes: ['APPROVE_QUOTE', 'SEND_PROFILE_LINK', 'CREATE_QUOTE'],
-  payments: ['SEND_PAYMENT_REMINDER', 'RECORD_PAYMENT', 'MARK_PAYMENT_RECEIVED'],
-  orders: ['UPDATE_ORDER_STATUS', 'MARK_READY_FOR_PRODUCTION', 'CREATE_ORDER'],
-  inventory: ['CHECK_STOCK_LEVELS', 'UPDATE_INVENTORY', 'CREATE_PURCHASE_ORDER'],
-  fulfillment: ['PREPARE_SHIPMENT', 'TRACK_DELIVERY', 'UPDATE_CUSTOMER'],
-  customers: ['VIEW_CUSTOMER_PROFILE', 'CALL_CUSTOMER', 'CREATE_QUOTE_FOR_CUSTOMER', 'ADD_NEW_CUSTOMER', 'FILTER_CUSTOMERS'],
-  invoices: ['SEND_INVOICE', 'FOLLOW_UP_INVOICE', 'FILTER_INVOICES'],
-  analytics: ['GENERATE_REPORT', 'SHOW_ANALYTICS', 'EXPORT_DATA']
-} as const;
-
-// Context detection function - determines which page a command belongs to
-function getCommandContext(actionType: string): string | null {
-  for (const [context, commands] of Object.entries(COMMAND_CONTEXTS)) {
-    if ((commands as readonly string[]).includes(actionType)) {
-      return context;
-    }
-  }
-  return null; // Navigation command or unknown
-}
-
-// Map page stages to context names
-function mapStageToContext(stage: string): string {
-  const stageMapping: Record<string, string> = {
-    'leads': 'leads',
-    'quotes': 'quotes', 
-    'orders': 'orders',
-    'payments': 'payments',
-    'inventory': 'inventory',
-    'fulfillment': 'fulfillment',
-    'customers': 'customers',
-    'invoices': 'invoices',
-    'analytics': 'analytics',
-    'dashboard': 'dashboard'
-  };
-  return stageMapping[stage] || stage;
-}
-
-// Context-aware action dispatcher - the heart of "say anything anywhere"
-function routeActionWithContext(
+// Simplified Universal Routing - All commands go through VoiceCommandRouter
+// No context detection needed - App.tsx VoiceCommandRouter handles all routing logic
+function routeUniversalAction(
   actionType: string, 
   params: ActionParams, 
-  currentStage: string,
-  onUniversalAction?: (actionType: string, params?: ActionParams) => void,
-  onAction?: (actionType: string, params?: ActionParams) => void
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void
 ): void {
-  // Determine which context this command belongs to
-  const requiredContext = getCommandContext(actionType);
-  const currentContext = mapStageToContext(currentStage);
-  
   // eslint-disable-next-line no-console
-  console.log(`🎯 Context-aware routing: action=${actionType}, required=${requiredContext}, current=${currentContext}`);
+  console.log(`🎯 Universal routing: action=${actionType}`);
   
-  if (!requiredContext) {
-    // Navigation command or unknown - always route to universal handler
-    // eslint-disable-next-line no-console
-    console.log('📍 Navigation/unknown command - routing to Dashboard');
-    if (onUniversalAction) {
-      onUniversalAction(actionType, params);
-    }
-    return;
-  }
-  
-  if (requiredContext === currentContext) {
-    // Command matches current page context - execute directly
-    // eslint-disable-next-line no-console
-    console.log('✅ Context match - executing locally');
-    if (onAction) {
-      onAction(actionType, params);
-    }
+  if (onUniversalAction) {
+    onUniversalAction(actionType, params);
   } else {
-    // Context mismatch - need to navigate first, then execute
     // eslint-disable-next-line no-console
-    console.log('🔄 Context mismatch - using NAVIGATE_AND_EXECUTE');
-    if (onUniversalAction) {
-      onUniversalAction('NAVIGATE_AND_EXECUTE', {
-        targetContext: requiredContext,
-        action: actionType,
-        params: params
-      });
-    }
+    console.warn('⚠️ No universal action handler provided');
   }
 }
 
 function FloatingVoiceAssistant({
   currentProcessStage = 'dashboard',
   onUniversalAction,
-  onAction,
   businessData,
   onPerformSearch
 }: FloatingVoiceAssistantProps) {
@@ -413,8 +342,8 @@ function FloatingVoiceAssistant({
               break;
           }
           
-          // Use context-aware routing for all create commands
-          routeActionWithContext(actionType, nlpResult.payload || {}, currentProcessStage, onUniversalAction, onAction);
+          // Use universal routing for all create commands
+          routeUniversalAction(actionType, nlpResult.payload || {}, onUniversalAction);
         }
         break;
       
@@ -422,8 +351,8 @@ function FloatingVoiceAssistant({
       case 'SET_PRIORITY_COMMAND':
         if (nlpResult.payload) {
           // eslint-disable-next-line no-console
-          console.log('🎯 Dispatching SET_PRIORITY action with context awareness:', nlpResult.payload);
-          routeActionWithContext('SET_PRIORITY', nlpResult.payload || {}, currentProcessStage, onUniversalAction, onAction);
+          console.log('🎯 Dispatching SET_PRIORITY action with universal routing:', nlpResult.payload);
+          routeUniversalAction('SET_PRIORITY', nlpResult.payload || {}, onUniversalAction);
         }
         break;
         
@@ -434,7 +363,7 @@ function FloatingVoiceAssistant({
         // UNKNOWN_INTENT - no action needed, response already set
         break;
     }
-  }, [onPerformSearch, extractSearchQuery, navigateToTarget, onAction, onUniversalAction, currentProcessStage]);
+  }, [onPerformSearch, extractSearchQuery, navigateToTarget, onUniversalAction]);
 
   // Enhanced voice command processing with NLP
   const processVoiceCommand = useCallback(async (command: string) => {
