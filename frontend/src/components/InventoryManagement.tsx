@@ -37,7 +37,7 @@ function InventoryManagement({
   }
 
   return (
-    <div className={styles.container} style={{ paddingTop: '80px' }}>
+    <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>
           📦 {t('inventory')} {t('manage')}

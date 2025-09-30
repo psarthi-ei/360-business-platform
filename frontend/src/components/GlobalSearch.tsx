@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers, SearchResult } from './useGlobalSearch';
 import SearchResults from './SearchResults';
+import FloatingVoiceAssistant from './FloatingVoiceAssistant';
+import { ActionParams } from '../services/nlp/types';
 import styles from '../styles/GlobalSearch.module.css';
 
 interface GlobalSearchProps {
@@ -8,6 +10,8 @@ interface GlobalSearchProps {
   navigationHandlers: SearchNavigationHandlers;
   placeholder?: string;
   className?: string;
+  // Voice functionality
+  onUniversalAction?: (actionType: string, params?: ActionParams) => void;
   // Optional search state - if provided, use external state instead of internal
   searchState?: {
     searchQuery: string;
@@ -20,10 +24,11 @@ interface GlobalSearchProps {
   };
 }
 
-// Ref interface for parent components to control scrolling
+// Ref interface for parent components to control scrolling and search
 export interface GlobalSearchRef {
   scrollToSearch: () => void;
   focusSearch: () => void;
+  performSearch: (query: string) => void;
 }
 
 const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({ 
@@ -31,6 +36,7 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   navigationHandlers, 
   placeholder = "Search or try voice commands...",
   className = "",
+  onUniversalAction,
   searchState
 }, ref) => {
   // Use external search state if provided, otherwise create internal state
@@ -96,8 +102,12 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
       if (searchInputRef.current) {
         searchInputRef.current.focus();
       }
+    },
+    performSearch: (query: string) => {
+      // Use the internal search state's performGlobalSearch function
+      internalSearchState.performGlobalSearch(query);
     }
-  }), []);
+  }), [internalSearchState]);
 
   // Handle click outside to close search results
   useEffect(() => {
@@ -141,47 +151,71 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   // eslint-disable-next-line no-console
   console.log('GlobalSearch rendered with:', { searchQuery, searchResults: searchResults.length, showSearchResults });
   
+  // Debug search state
+  // eslint-disable-next-line no-console
+  console.log('🔧 GlobalSearch internalSearchState:', { 
+    hasPerformGlobalSearch: !!internalSearchState.performGlobalSearch,
+    searchState: !!searchState,
+    searchStateFunction: !!searchState?.performGlobalSearch
+  });
+  
   // Additional debug: Check if SearchResults should render
   // eslint-disable-next-line no-console
   console.log('Should render SearchResults?', showSearchResults && searchResults.length > 0);
 
   return (
-    <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef}>
-      <div className={styles.integratedSearch}>
-        <div className={styles.searchInputWrapper}>
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            ref={searchInputRef}
-            type="text"
-            placeholder={placeholder}
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-            className={styles.searchInput}
-            autoComplete="off"
-            aria-label="Global search"
-            aria-haspopup="listbox"
-          />
-          {searchQuery && (
-            <button 
-              className={styles.clearSearch} 
-              onClick={clearSearch}
-              aria-label="Clear search"
-              type="button"
-            >
-              ×
-            </button>
-          )}
+    <div className={styles.universalSearchContainer}>
+      <div className={styles.universalSearch} style={{ width: '100%', maxWidth: '700px' }}>
+        <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef} style={{ width: '100%', maxWidth: '100%' }}>
+          <div className={styles.integratedSearch} style={{ width: '75%', maxWidth: '600px' }}>
+            <div className={styles.searchInputWrapper} style={{ width: '100%', maxWidth: '100%' }}>
+              <span className={styles.searchIcon}>🔍</span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder={placeholder}
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
+                className={styles.searchInput}
+                autoComplete="off"
+                aria-label="Global search"
+                aria-haspopup="listbox"
+              />
+              {searchQuery && (
+                <button 
+                  className={styles.clearSearch} 
+                  onClick={clearSearch}
+                  aria-label="Clear search"
+                  type="button"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            
+            {/* Search Results */}
+            {showSearchResults && (
+              <SearchResults
+                results={searchResults}
+                searchQuery={searchQuery}
+                onClose={closeSearchResults}
+              />
+            )}
+          </div>
         </div>
         
-        {/* Search Results */}
-        {showSearchResults && (
-          <SearchResults
-            results={searchResults}
-            searchQuery={searchQuery}
-            onClose={closeSearchResults}
-          />
-        )}
+        {/* Floating Voice Assistant for voice search */}
+        <FloatingVoiceAssistant
+          currentProcessStage="search"
+          onUniversalAction={onUniversalAction}
+          onPerformSearch={(query: string) => {
+            // eslint-disable-next-line no-console
+            console.log('🎯 Direct voice search handler called with:', query);
+            // Direct call to performGlobalSearch to ensure it works
+            internalSearchState.performGlobalSearch(query);
+          }}
+        />
       </div>
     </div>
   );

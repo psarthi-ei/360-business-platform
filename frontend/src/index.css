@@ -1,3 +1,40 @@
+/* CSS Variables for Dynamic Layout */
+:root {
+  --product-header-height: 80px;
+  --universal-search-container-height: 60px; /* The strip behind search bar */
+  --header-gap: 0px; /* No gap - search bar sits directly below header */
+  --content-buffer: 20px;
+  --platform-content-top: calc(
+    var(--product-header-height) + 
+    var(--universal-search-container-height) + 
+    var(--header-gap) + 
+    var(--content-buffer)
+  );
+}
+
+/* Platform Page Content Layout */
+.platformPageContent {
+  padding-top: var(--platform-content-top);
+  min-height: 100vh;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  :root {
+    --product-header-height: 60px; /* Actual rendered mobile header height */
+    --universal-search-container-height: 48px; /* Mobile search height including padding */
+    --header-gap: 0px;
+    --content-buffer: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --universal-search-container-height: 58px;
+    --content-buffer: 18px;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

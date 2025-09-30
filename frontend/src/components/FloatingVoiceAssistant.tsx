@@ -313,27 +313,38 @@ function FloatingVoiceAssistant({
 
   const extractSearchQuery = useCallback((result: NLPResult): string | null => {
     // Use new structured payload from Universal Command Processor
+    // eslint-disable-next-line no-console
+    console.log('🔧 extractSearchQuery called with result:', result);
     if (result.payload && result.payload.query) {
+      // eslint-disable-next-line no-console
+      console.log('✅ Found query in payload:', result.payload.query);
       return result.payload.query;
     }
     
     // Fallback for legacy results without payload
     if (result.originalText) {
+      // eslint-disable-next-line no-console
+      console.log('⚠️ Using fallback originalText:', result.originalText);
       // This should rarely happen with the new architecture
       return result.originalText.trim();
     }
     
+    // eslint-disable-next-line no-console
+    console.log('❌ No query found in result');
     return null;
   }, []);
 
   // Execute actions based on detected intent and NLP result
   const executeVoiceAction = useCallback(async (nlpResult: NLPResult) => {
-    const { intent } = nlpResult;
+    // Handle both possible structures: nlpResult.intent as string or as object with intent property
+    const intent = typeof nlpResult.intent === 'string' ? nlpResult.intent : (nlpResult.intent as { intent?: string })?.intent;
     // eslint-disable-next-line no-console
     console.log('🎯 executeVoiceAction called with intent:', intent, 'full result:', nlpResult);
     
     switch (intent) {
       case 'SEARCH_COMMAND':
+        // eslint-disable-next-line no-console
+        console.log('🔍 SEARCH_COMMAND case reached, onPerformSearch:', !!onPerformSearch);
         if (onPerformSearch) {
           const searchQuery = extractSearchQuery(nlpResult);
           // eslint-disable-next-line no-console

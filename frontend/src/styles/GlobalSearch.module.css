@@ -12,41 +12,34 @@
   justify-content: center;
   align-items: center;
   margin: 4px auto 30px auto;
-  max-width: 600px;
+  max-width: 100% !important;
+  width: 100% !important;
   position: relative;
   z-index: 9999;
 }
 
-.integratedSearch .searchInputWrapper {
+/* Unified Search Input Wrapper */
+.integratedSearch .searchInputWrapper,
+.searchInputWrapper {
+  position: relative;
   display: flex;
   align-items: center;
   background: white;
   border-radius: 50px;
   padding: 18px 24px;
   width: 100%;
-  max-width: 600px;
+  max-width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
-.integratedSearch .searchInputWrapper:focus-within {
+.integratedSearch .searchInputWrapper:focus-within,
+.searchInputWrapper:focus-within {
   border-color: rgba(102, 126, 234, 0.6);
   box-shadow: 0 8px 40px rgba(102, 126, 234, 0.25);
   transform: translateY(-2px);
-}
-
-/* Search Input Elements */
-.searchInputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 25px;
-  padding: 12px 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .searchIcon {
@@ -57,7 +50,7 @@
 }
 
 .searchInput {
-  flex: 1;
+  flex: 1 !important;
   border: none;
   background: transparent;
   font-size: 1.1rem;
@@ -65,6 +58,8 @@
   outline: none;
   placeholder-color: #7f8c8d;
   margin-left: 8px;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .searchInput::placeholder {
@@ -302,17 +297,27 @@
 @media (max-width: 768px) {
   .integratedSearch {
     margin: 4px auto 30px auto;
-    max-width: 100%;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   .integratedSearch .searchInputWrapper {
     padding: 16px 20px;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
 @media (max-width: 480px) {
   .integratedSearch {
     margin: 4px auto 25px auto;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .integratedSearch .searchInputWrapper {
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   .integratedSearch .searchInputWrapper {
@@ -339,4 +344,92 @@
   .resultSubtitle {
     font-size: 0.8rem;
   }
+}
+
+/* Universal Search Container Styles - Full Width Design */
+.universalSearchContainer {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Universal Search Component Styling - Full Width */
+.universalSearch {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+/* Universal Search Full Width Overrides */
+.universalSearch .integratedSearch {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.universalSearch .integratedSearch .searchInputWrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Mobile Responsive for Universal Search Container */
+@media (max-width: 768px) {
+  .universalSearchContainer {
+    top: 60px !important; /* Actual rendered mobile ProductHeader height */
+    padding: 8px 12px;
+    z-index: 999; /* Lower than HeaderDropdown (9999) to allow mobile nav to appear on top */
+    background: #f8f9fa !important; /* Slight background difference for visual separation */
+    border-top: 1px solid #e9ecef; /* Subtle top border for differentiation */
+    margin-top: 0px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Light shadow for separation */
+  }
+  
+  .universalSearch {
+    max-width: 100%;
+    padding: 0 4px;
+  }
+}
+
+/* Tablet Responsive for Universal Search Container */
+@media (max-width: 1024px) {
+  .universalSearchContainer {
+    padding: 13px 14px;
+  }
+}
+
+/* Dark theme support for Universal Search Container */
+.universalSearchContainer[data-theme="dark"] {
+  background: #2c3e50;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* FINAL OVERRIDE - Force Full Width for All Search Components */
+.universalSearch .integratedSearch,
+.universalSearchContainer .universalSearch .integratedSearch,
+.integratedSearch {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.universalSearch .integratedSearch .searchInputWrapper,
+.universalSearchContainer .universalSearch .integratedSearch .searchInputWrapper,
+.integratedSearch .searchInputWrapper {
+  max-width: 100% !important;
+  width: 100% !important;
 }

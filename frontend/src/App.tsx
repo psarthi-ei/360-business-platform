@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
@@ -32,9 +32,36 @@ import { themes, applyTheme } from './styles/themes';
 import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
 import { scrollToTop } from './utils/scrollUtils';
 import { ActionParams, NavigateAndExecuteParams } from './services/nlp/types';
+import GlobalSearch from './components/GlobalSearch';
+import { 
+  mockLeads, 
+  mockQuotes, 
+  mockSalesOrders, 
+  mockBusinessProfiles,
+  formatCurrency,
+  getBusinessProfileById
+} from './data/mockData';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
+
+// Helper function to determine if current screen is a platform page (needs universal search)
+function isPlatformPage(currentScreen: string): boolean {
+  const platformPages = [
+    'dashboard',
+    'leads', 
+    'quotations',
+    'salesorders',
+    'advancepayment',
+    'invoices',
+    'customerprofile',
+    'customerlist',
+    'inventory',
+    'fulfillment',
+    'analytics'
+  ];
+  return platformPages.includes(currentScreen);
+}
 
 function AppContent() {
   const navigate = useNavigate();
@@ -67,6 +94,41 @@ function AppContent() {
     setCurrentTheme(themeName);
     safeLocalStorageSetItem('selectedTheme', themeName);
   }
+
+  const showLeadManagement = useCallback((autoAction?: string, actionParams?: ActionParams) => {
+    if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
+      navigate('/leads?action=add-lead');
+    } else {
+      navigate('/leads');
+    }
+    // TODO: Pass actionParams to LeadManagement for compound actions
+    // console.log('showLeadManagement called with:', autoAction, actionParams);
+  }, [navigate]);
+
+  // Centralized search function for voice commands
+  const handleUniversalSearch = useCallback((query: string) => {
+    // eslint-disable-next-line no-console
+    console.log('🔍 Universal search triggered with query:', query);
+    
+    // If we're on Dashboard, navigate to Lead Management with search
+    if (currentScreen === 'dashboard') {
+      showLeadManagement('search', { query });
+      return;
+    }
+    
+    // If we're on a platform page with search functionality, trigger search directly
+    const platformPagesWithSearch = ['leads', 'quotes', 'sales-orders', 'customers'];
+    if (platformPagesWithSearch.includes(currentScreen)) {
+      // The GlobalSearch component on these pages will handle the search
+      // We just need to ensure the query gets to the search component
+      // This will be handled by the GlobalSearch component's onPerformSearch
+      // eslint-disable-next-line no-console
+      console.log('🎯 On platform page with search, query will be handled by GlobalSearch');
+    } else {
+      // For other pages, navigate to Lead Management with search
+      showLeadManagement('search', { query });
+    }
+  }, [currentScreen, showLeadManagement]);
 
   useEffect(() => {
     const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light') as string;
@@ -230,16 +292,6 @@ function AppContent() {
     }
   }
 
-  function showLeadManagement(autoAction?: string, actionParams?: ActionParams) {
-    if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
-      navigate('/leads?action=add-lead');
-    } else {
-      navigate('/leads');
-    }
-    // TODO: Pass actionParams to LeadManagement for compound actions
-    // console.log('showLeadManagement called with:', autoAction, actionParams);
-  }
-
   function showQuotationOrders() {
     navigate('/quotes');
   }
@@ -327,7 +379,7 @@ function AppContent() {
 
   function renderDashboard() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <Dashboard
           currentTheme={currentTheme}
           onThemeChange={switchTheme}
@@ -348,6 +400,7 @@ function AppContent() {
           onLogout={handleLogout}
           isAuthenticated={isAuthenticated}
           userMode={userMode}
+          onUniversalSearch={handleUniversalSearch}
         />
       </div>
     );
@@ -365,7 +418,7 @@ function AppContent() {
 
   function renderLeadManagement() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <LeadManagement
           onShowCustomerProfile={showCustomerProfile}
           onShowQuoteFromLead={showQuoteFromLead}
@@ -381,7 +434,7 @@ function AppContent() {
 
   function renderQuotationOrders() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <QuotationOrders
           onShowSalesOrders={showSalesOrders}
           onShowCustomerProfile={showCustomerProfile}
@@ -396,7 +449,7 @@ function AppContent() {
 
   function renderSalesOrders() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <SalesOrders
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
@@ -411,7 +464,7 @@ function AppContent() {
 
   function renderPayments() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <Payments
           onShowSalesOrders={showSalesOrders}
           onShowInvoices={showInvoices}
@@ -447,7 +500,7 @@ function AppContent() {
 
   function renderCustomerList() {
     return (
-      <div style={{ paddingTop: '80px' }}>
+      <div className="platformPageContent">
         <CustomerList
           onShowCustomerProfile={showCustomerProfile}
           customerSearch={customerSearch}
@@ -631,6 +684,29 @@ function AppContent() {
             onAbout={showAbout}
             onContact={showContact}
           />
+        
+        {/* Universal Search Bar - Only on Platform Pages */}
+        {isPlatformPage(currentScreen) && (
+          <GlobalSearch
+            dataSources={{
+              leads: mockLeads,
+              quotes: mockQuotes,
+              salesOrders: mockSalesOrders,
+              customers: mockBusinessProfiles
+            }}
+            navigationHandlers={{
+              onShowLeadManagement: showLeadManagement,
+              onShowQuotationOrders: showQuotationOrders,
+              onShowSalesOrders: showSalesOrders,
+              onShowCustomerList: showCustomerList,
+              formatCurrency,
+              getBusinessProfileById
+            }}
+            onUniversalAction={handleUniversalAction}
+            placeholder="Search or try voice commands..."
+          />
+        )}
+        
         <Routes>
           <Route path="/" element={renderHomePage()} />
           <Route path="/login" element={renderAuthentication()} />

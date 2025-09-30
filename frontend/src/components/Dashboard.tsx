@@ -1,9 +1,8 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import TabNavigation from './TabNavigation';
 import GlobalSearch, { GlobalSearchRef } from './GlobalSearch';
-import { useGlobalSearch } from './useGlobalSearch';
-import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../data/mockData';
+import { mockLeads, mockQuotes, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
 import { ActionParams, NavigateAndExecuteParams } from '../services/nlp/types';
 import styles from '../styles/Dashboard.module.css';
 
@@ -22,6 +21,7 @@ interface DashboardProps {
   onShowAnalytics?: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
+  onUniversalSearch?: (query: string) => void;
   onGuestMode?: () => void;
   onDemoMode?: () => void;
   onLogout?: () => void;
@@ -44,6 +44,7 @@ function Dashboard({
   onShowAnalytics,
   onLogin,
   onSignUp,
+  onUniversalSearch,
   onGuestMode,
   onDemoMode,
   onLogout,
@@ -62,34 +63,10 @@ function Dashboard({
   const [showTabNavigation, setShowTabNavigation] = useState(false);
   const [activeCardType, setActiveCardType] = useState<string | null>(null);
   
-  // Ref for GlobalSearch component to control scrolling
+  // Dashboard search state (will be removed in unified architecture)
+  // const [dashboardSearchQuery, setDashboardSearchQuery] = useState('');
+  // const [showDashboardSearch, setShowDashboardSearch] = useState(false);
   const globalSearchRef = useRef<GlobalSearchRef>(null);
-  
-  // Global search functionality for voice commands
-  const navigationHandlers = {
-    onShowLeadManagement: () => { setCurrentProcessStage('leads'); onShowLeadManagement(); },
-    onShowQuotationOrders: () => { setCurrentProcessStage('quotes'); onShowQuotationOrders(); },
-    onShowSalesOrders: () => { setCurrentProcessStage('production'); onShowSalesOrders(); },
-    onShowCustomerList: () => { setCurrentProcessStage('customers'); onShowCustomerList(); },
-    formatCurrency,
-    getBusinessProfileById
-  };
-
-  // Callback for when search is triggered via voice command
-  const handleSearchTriggered = useCallback(() => {
-    if (globalSearchRef.current) {
-      globalSearchRef.current.scrollToSearch();
-    }
-  }, []);
-
-  const globalSearchState = useGlobalSearch({
-    leads: mockLeads,
-    quotes: mockQuotes,
-    salesOrders: mockSalesOrders,
-    customers: mockBusinessProfiles
-  }, navigationHandlers, handleSearchTriggered);
-  
-  
   
   // Calculate business metrics from mock data
   const totalLeads = mockLeads.length;
@@ -123,6 +100,18 @@ function Dashboard({
     setActiveCardType(null);
     setCurrentProcessStage('dashboard');
   };
+
+  // Dashboard search handler - handles voice search locally without navigation (will be removed in unified architecture)
+  // const handleDashboardSearch = (query: string) => {
+  //   console.log('🔍 Dashboard voice search triggered with query:', query);
+  //   setDashboardSearchQuery(query);
+  //   setShowDashboardSearch(true);
+  //   
+  //   // Trigger the actual search via GlobalSearch ref
+  //   if (globalSearchRef.current) {
+  //     globalSearchRef.current.performSearch(query);
+  //   }
+  // };
 
   // Universal action handler for all navigation commands
   const handleUniversalAction = (actionType: string, params?: ActionParams) => {
@@ -644,41 +633,12 @@ function Dashboard({
 
   // Date formatting utilities will be added when needed
 
-  // Debug: Log GlobalSearch data
-  // eslint-disable-next-line no-console
-  console.log('Dashboard: Rendering GlobalSearch with data:', {
-    leadsCount: mockLeads?.length || 0,
-    quotesCount: mockQuotes?.length || 0,
-    salesOrdersCount: mockSalesOrders?.length || 0,
-    customersCount: mockBusinessProfiles?.length || 0
-  });
 
   return (
     <>
       <div className={styles.dashboard} data-testid="dashboard-container">
       
       <div className={styles.dashboardContainer}>
-
-        {/* Integrated Global Search */}
-        <GlobalSearch
-          ref={globalSearchRef}
-          dataSources={{
-            leads: mockLeads,
-            quotes: mockQuotes,
-            salesOrders: mockSalesOrders,
-            customers: mockBusinessProfiles
-          }}
-          navigationHandlers={{
-            onShowLeadManagement,
-            onShowQuotationOrders,
-            onShowSalesOrders,
-            onShowCustomerList,
-            formatCurrency,
-            getBusinessProfileById
-          }}
-          placeholder="Search or try voice commands..."
-          searchState={globalSearchState}
-        />
 
         {/* Compact Business Intelligence Metrics Bar */}
         <div className={styles.compactMetricsBar}>
@@ -713,6 +673,28 @@ function Dashboard({
               <div className={styles.compactLabel}>Priority Items</div>
             </div>
           </div>
+        </div>
+
+        {/* Dashboard Search - always available for voice commands */}
+        <div style={{ margin: '20px 0', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <GlobalSearch
+            ref={globalSearchRef}
+            dataSources={{
+              leads: mockLeads,
+              quotes: mockQuotes,
+              salesOrders: mockSalesOrders,
+              customers: mockBusinessProfiles
+            }}
+            navigationHandlers={{
+              onShowLeadManagement,
+              onShowQuotationOrders,
+              onShowSalesOrders,
+              onShowCustomerList,
+              formatCurrency: (amount: number) => `₹${(amount / 100000).toFixed(1)}L`,
+              getBusinessProfileById: (id: string) => mockBusinessProfiles.find(profile => profile.id === id)
+            }}
+            placeholder="Search leads, quotes, orders, and customers..."
+          />
         </div>
 
         {/* 8 Sequential Business Process Cards */}
@@ -976,12 +958,11 @@ function Dashboard({
         </div>
       </div>
 
-      {/* Floating Voice Assistant */}
+      {/* Floating Voice Assistant - for non-search voice commands */}
       <FloatingVoiceAssistant
         currentProcessStage={currentProcessStage}
         onUniversalAction={handleUniversalAction}
         businessData={businessData}
-        onPerformSearch={globalSearchState.performGlobalSearch}
       />
 
       {/* Tab Navigation Overlay */}
