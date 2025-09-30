@@ -33,6 +33,7 @@ import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicod
 import { scrollToTop } from './utils/scrollUtils';
 import { ActionParams, NavigateAndExecuteParams } from './services/nlp/types';
 import GlobalSearch from './components/GlobalSearch';
+// import { getSearchScope, getVoiceScope } from './utils/scopeResolver';
 import { 
   mockLeads, 
   mockQuotes, 
