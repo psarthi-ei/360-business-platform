@@ -5,13 +5,11 @@ import HeaderDropdown from './HeaderDropdown';
 import SearchResults from './SearchResults';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from './useGlobalSearch';
 import { ActionParams } from '../services/nlp/types';
+import { getSearchDataSources, getSearchNavigationHandlers } from '../business/searchBusinessLogic';
 import {
   mockLeads,
   mockSalesOrders,
-  mockBusinessProfiles,
-  mockQuotes,
-  formatCurrency,
-  getBusinessProfileById
+  mockBusinessProfiles
 } from '../data/mockData';
 import logoImage from '../assets/images/logo.png';
 import './MobileAppShell.css';
@@ -74,22 +72,9 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
   // Debug panel state for mobile header control
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   
-  // Global Search Configuration for Mobile
-  const searchDataSources: SearchDataSources = {
-    leads: mockLeads,
-    quotes: mockQuotes,
-    salesOrders: mockSalesOrders,
-    customers: mockBusinessProfiles
-  };
-
-  const searchNavigationHandlers: SearchNavigationHandlers = {
-    onShowLeadManagement: () => navigate('/leads'),
-    onShowQuotationOrders: () => navigate('/quotes'),
-    onShowSalesOrders: () => navigate('/orders'),
-    onShowCustomerList: () => navigate('/customers'),
-    formatCurrency,
-    getBusinessProfileById
-  };
+  // Global Search Configuration for Mobile - using shared business logic
+  const searchDataSources: SearchDataSources = getSearchDataSources();
+  const searchNavigationHandlers: SearchNavigationHandlers = getSearchNavigationHandlers(navigate);
 
   // Search state and handlers using the useGlobalSearch hook
   const {

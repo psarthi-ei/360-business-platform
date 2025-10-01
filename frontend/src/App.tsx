@@ -37,13 +37,11 @@ import FloatingVoiceAssistant from './components/FloatingVoiceAssistant';
 import { getSearchScope /*, getVoiceScope*/ } from './utils/scopeResolver';
 import { useResponsive } from './hooks/useResponsive';
 import MobileAppShell from './components/MobileAppShell';
+import { getSearchDataSources, getSearchNavigationHandlers } from './business/searchBusinessLogic';
 import { 
   mockLeads, 
-  mockQuotes, 
   mockSalesOrders, 
-  mockBusinessProfiles,
-  formatCurrency,
-  getBusinessProfileById
+  mockBusinessProfiles
 } from './data/mockData';
 
 type Language = 'en' | 'gu' | 'hi';
@@ -671,20 +669,8 @@ function AppContent() {
               <GlobalSearch
                 ref={globalSearchRef}
                 searchScope={getSearchScope(currentScreen)}
-                dataSources={{
-                  leads: mockLeads,
-                  quotes: mockQuotes,
-                  salesOrders: mockSalesOrders,
-                  customers: mockBusinessProfiles
-                }}
-                navigationHandlers={{
-                  onShowLeadManagement: showLeadManagement,
-                  onShowQuotationOrders: showQuotationOrders,
-                  onShowSalesOrders: showSalesOrders,
-                  onShowCustomerList: showCustomerList,
-                  formatCurrency,
-                  getBusinessProfileById
-                }}
+                dataSources={getSearchDataSources()}
+                navigationHandlers={getSearchNavigationHandlers(navigate)}
                 placeholder="Search across platform..."
               />
             )}
