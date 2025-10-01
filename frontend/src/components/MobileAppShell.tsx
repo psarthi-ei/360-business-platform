@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import HeaderDropdown from './HeaderDropdown';
@@ -6,11 +6,9 @@ import SearchResults from './SearchResults';
 import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from './useGlobalSearch';
 import { ActionParams } from '../services/nlp/types';
 import { getSearchDataSources, getSearchNavigationHandlers } from '../business/searchBusinessLogic';
-import {
-  mockLeads,
-  mockSalesOrders,
-  mockBusinessProfiles
-} from '../data/mockData';
+import { getBusinessData, getCurrentProcessStage } from '../business/businessDataLogic';
+import { createUniversalActionHandler } from '../business/voiceBusinessLogic';
+import { createVoiceCommandRouter } from '../services/voice/VoiceCommandRouter';
 import logoImage from '../assets/images/logo.png';
 import './MobileAppShell.css';
 
@@ -87,30 +85,19 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
     performGlobalSearch
   } = useGlobalSearch(searchDataSources, searchNavigationHandlers);
   
-  // Get current process stage for voice context
-  const getCurrentProcessStage = () => {
-    const path = location.pathname;
-    if (path.includes('/dashboard')) return 'dashboard';
-    if (path.includes('/leads')) return 'leads';
-    if (path.includes('/quotes')) return 'quotes';
-    if (path.includes('/orders')) return 'orders';
-    if (path.includes('/payments')) return 'payments';
-    if (path.includes('/customers')) return 'customers';
-    if (path.includes('/inventory')) return 'inventory';
-    if (path.includes('/fulfillment')) return 'fulfillment';
-    if (path.includes('/analytics')) return 'analytics';
-    return 'dashboard';
-  };
-
+  // Create VoiceCommandRouter instance for mobile
+  const voiceCommandRouter = useMemo(() => 
+    createVoiceCommandRouter(navigate), [navigate]
+  );
 
   // Universal search handler - Connected to search logic
-  const handleUniversalSearch = (query: string) => {
+  const handleUniversalSearch = useCallback((query: string) => {
     // eslint-disable-next-line no-console
     console.log('🔍 Voice search query:', query);
     
     // Trigger search using the performGlobalSearch function
     performGlobalSearch(query);
-  };
+  }, [performGlobalSearch]);
 
   // Handle keyboard events in search input
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -121,38 +108,11 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
     // TODO: Add arrow key navigation for search results
   };
   
-  // Universal action handler for voice commands
-  const handleUniversalAction = (actionType: string, params?: ActionParams) => {
-    if (onUniversalAction) {
-      onUniversalAction(actionType, params);
-    } else {
-      // Fallback navigation for common actions
-      switch (actionType) {
-        case 'NAVIGATE_TO_LEADS':
-          navigate('/leads');
-          break;
-        case 'NAVIGATE_TO_DASHBOARD':
-          navigate('/dashboard');
-          break;
-        case 'NAVIGATE_TO_CUSTOMERS':
-          navigate('/customers');
-          break;
-        case 'NAVIGATE_TO_QUOTES':
-          navigate('/quotes');
-          break;
-        case 'NAVIGATE_TO_ORDERS':
-          navigate('/orders');
-          break;
-        case 'NAVIGATE_TO_PAYMENTS':
-          navigate('/payments');
-          break;
-        default:
-          // eslint-disable-next-line no-console
-          console.log('🎯 Universal action not handled:', actionType, params);
-          break;
-      }
-    }
-  };
+  // Universal action handler using shared business logic - no fallback needed
+  const handleUniversalAction = useMemo(() => 
+    onUniversalAction || createUniversalActionHandler(navigate, voiceCommandRouter, handleUniversalSearch), 
+    [onUniversalAction, navigate, voiceCommandRouter, handleUniversalSearch]
+  );
 
 
   // V2 Workflow-Based Navigation (4 tabs instead of 8)
@@ -310,15 +270,10 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
       
       {/* Voice Assistant - Bottom Right Position (WhatsApp Style) */}
       <FloatingVoiceAssistant
-        currentProcessStage={getCurrentProcessStage()}
+        currentProcessStage={getCurrentProcessStage(location.pathname)}
         onUniversalAction={handleUniversalAction}
         onPerformSearch={handleUniversalSearch}
-        businessData={{
-          hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-          overduePayments: 0, // TODO: Calculate from actual payment data
-          readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
-          totalCustomers: mockBusinessProfiles.length
-        }}
+        businessData={getBusinessData()}
         externalDebugState={showDebugPanel}
         onDebugToggle={setShowDebugPanel}
       />

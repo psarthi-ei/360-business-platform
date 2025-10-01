@@ -158,13 +158,14 @@ export class VoiceCommandRouter {
         break;
 
       // ============================================================================
-      // SEARCH COMMANDS - Handled by handleUniversalSearch in App.tsx
+      // SEARCH COMMANDS - Handled locally for immediate UI response
       // ============================================================================
       case 'SEARCH':
       case 'GLOBAL_SEARCH':
-        // Search commands are handled by handleUniversalSearch, not this router
+        // Search commands are intercepted before reaching this router
+        // They're handled locally in createUniversalActionHandler for immediate UI updates
         // eslint-disable-next-line no-console
-        console.log('Search commands should be handled by handleUniversalSearch');
+        console.log('Search commands should not reach VoiceCommandRouter - handled locally');
         break;
 
       // ============================================================================

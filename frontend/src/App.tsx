@@ -30,7 +30,6 @@ import { UserProvider } from './contexts/UserContext';
 import { HelmetProvider } from 'react-helmet-async';
 // Theme-related imports removed for MVP simplicity
 import { scrollToTop } from './utils/scrollUtils';
-import { ActionParams } from './services/nlp/types';
 import { createVoiceCommandRouter } from './services/voice/VoiceCommandRouter';
 import GlobalSearch, { GlobalSearchRef } from './components/GlobalSearch';
 import FloatingVoiceAssistant from './components/FloatingVoiceAssistant';
@@ -39,11 +38,8 @@ import { useResponsive } from './hooks/useResponsive';
 import MobileAppShell from './components/MobileAppShell';
 import { getSearchDataSources, getSearchNavigationHandlers } from './business/searchBusinessLogic';
 import { createNavigationHelpers } from './business/navigationBusinessLogic';
-import { 
-  mockLeads, 
-  mockSalesOrders, 
-  mockBusinessProfiles
-} from './data/mockData';
+import { getBusinessData, getCurrentProcessStage } from './business/businessDataLogic';
+import { createUniversalActionHandler } from './business/voiceBusinessLogic';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -150,22 +146,11 @@ function AppContent() {
   );
 
 
-  // Simplified universal action handler - delegates to VoiceCommandRouter service
-  const handleUniversalAction = useCallback((actionType: string, params?: ActionParams) => {
-    // eslint-disable-next-line no-console
-    console.log('🎯 Universal action triggered:', actionType, params);
-    
-    // Handle search commands locally (not routed through VoiceCommandRouter)
-    if (actionType === 'SEARCH' || actionType === 'GLOBAL_SEARCH') {
-      if (params && 'query' in params) {
-        handleUniversalSearch(params.query as string);
-      }
-      return;
-    }
-    
-    // Route all other commands through VoiceCommandRouter service
-    voiceCommandRouter.routeVoiceCommand(actionType, params);
-  }, [handleUniversalSearch, voiceCommandRouter]);
+  // Universal action handler using shared business logic
+  const handleUniversalAction = useMemo(() => 
+    createUniversalActionHandler(navigate, voiceCommandRouter, handleUniversalSearch), 
+    [navigate, voiceCommandRouter, handleUniversalSearch]
+  );
 
 
 
@@ -633,15 +618,10 @@ function AppContent() {
             {/* Universal Voice Assistant - Only on Platform Pages (Desktop) */}
             {isPlatformPage(currentScreen) && (
               <FloatingVoiceAssistant
-                currentProcessStage={currentScreen}
+                currentProcessStage={getCurrentProcessStage(location.pathname)}
                 onUniversalAction={handleUniversalAction}
                 onPerformSearch={handleUniversalSearch}
-                businessData={{
-                  hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-                  overduePayments: 0, // TODO: Calculate from actual payment data
-                  readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
-                  totalCustomers: mockBusinessProfiles.length
-                }}
+                businessData={getBusinessData()}
               />
             )}
             
