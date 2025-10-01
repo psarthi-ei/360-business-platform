@@ -269,6 +269,166 @@
   margin-bottom: 24px;
 }
 
+/* Mobile Business Health */
+.mobile-business-health {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mobile-business-health h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.health-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.health-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.health-icon {
+  font-size: 16px;
+  width: 24px;
+}
+
+.health-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Mobile Priority Actions */
+.mobile-priority-actions {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mobile-priority-actions h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.priority-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.priority-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-height: 48px;
+}
+
+.priority-item:hover {
+  background: #f8f9fa;
+}
+
+.priority-item:active {
+  background: #e9ecef;
+  transform: scale(0.98);
+}
+
+.priority-icon {
+  font-size: 16px;
+  width: 24px;
+}
+
+.priority-text {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.priority-arrow {
+  font-size: 14px;
+  color: #667eea;
+}
+
+/* Mobile Quick Modules */
+.mobile-quick-modules {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mobile-quick-modules h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.module-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 80px;
+  justify-content: center;
+  text-align: center;
+}
+
+.module-card:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.module-card:active {
+  transform: scale(0.95);
+}
+
+.module-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.module-title {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.module-count {
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
 .metric-card {
   background: white;
   border-radius: 12px;

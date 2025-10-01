@@ -348,6 +348,7 @@ function AppContent() {
     return (
       <div className="platformPageContent">
         <Dashboard
+          mobile={isMobile}
           currentTheme={currentTheme}
           onThemeChange={switchTheme}
           onNavigateHome={showHomePage}
