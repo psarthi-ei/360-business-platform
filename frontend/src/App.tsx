@@ -36,6 +36,8 @@ import { createVoiceCommandRouter } from './services/voice/VoiceCommandRouter';
 import GlobalSearch, { GlobalSearchRef } from './components/GlobalSearch';
 import FloatingVoiceAssistant from './components/FloatingVoiceAssistant';
 import { getSearchScope /*, getVoiceScope*/ } from './utils/scopeResolver';
+import { useResponsive } from './hooks/useResponsive';
+import MobileAppShell from './components/MobileAppShell';
 import { 
   mockLeads, 
   mockQuotes, 
@@ -69,6 +71,7 @@ function isPlatformPage(currentScreen: string): boolean {
 function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isMobile } = useResponsive();
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [currentTheme, setCurrentTheme] = useState('light');
@@ -613,101 +616,126 @@ function AppContent() {
         <UserProvider>
           <div className="App">
           <div className="App-content">
-        <ProductHeader
-            currentLanguage={currentLanguage}
-            onLanguageChange={switchLanguage}
-            currentTheme={currentTheme}
-            onThemeChange={switchTheme}
-            onHome={showHomePage}
-            onDashboard={showDashboard}
-            onLogin={showLogin}
-            onSignUp={showSignUp}
-            onGuestMode={handleGuestMode}
-            onDemoMode={handleDemoMode}
-            onLogout={handleLogout}
-            isAuthenticated={isAuthenticated}
-            userMode={userMode}
-            showWebsiteNavigation={true}
-            currentScreen={currentScreen}
-            onServicesHub={showServicesHub}
-            onTurnaroundStories={showTurnaroundStories}
-            onBlogHome={showBlogHome}
-            onAbout={showAbout}
-            onContact={showContact}
-          />
         
-        {/* Universal Search Bar - Only on Platform Pages */}
-        {isPlatformPage(currentScreen) && (
-          <GlobalSearch
-            ref={globalSearchRef}
-            searchScope={getSearchScope(currentScreen)}
-            dataSources={{
-              leads: mockLeads,
-              quotes: mockQuotes,
-              salesOrders: mockSalesOrders,
-              customers: mockBusinessProfiles
-            }}
-            navigationHandlers={{
-              onShowLeadManagement: showLeadManagement,
-              onShowQuotationOrders: showQuotationOrders,
-              onShowSalesOrders: showSalesOrders,
-              onShowCustomerList: showCustomerList,
-              formatCurrency,
-              getBusinessProfileById
-            }}
-            placeholder="Search across platform..."
-          />
+        {/* Responsive Layout: Mobile vs Desktop */}
+        {isMobile && isPlatformPage(currentScreen) ? (
+          // Mobile Layout with MobileAppShell for Platform Pages
+          <MobileAppShell>
+            <Routes>
+              <Route path="/dashboard" element={renderDashboard()} />
+              <Route path="/leads" element={renderLeadManagement()} />
+              <Route path="/quotes" element={renderQuotationOrders()} />
+              <Route path="/orders" element={renderSalesOrders()} />
+              <Route path="/payments" element={renderPayments()} />
+              <Route path="/invoices" element={renderInvoices()} />
+              <Route path="/customers/:customerId" element={renderCustomerProfile()} />
+              <Route path="/customers" element={renderCustomerList()} />
+              <Route path="/inventory" element={renderInventoryManagement()} />
+              <Route path="/fulfillment" element={renderFulfillmentManagement()} />
+              <Route path="/analytics" element={renderAnalyticsManagement()} />
+              <Route path="*" element={renderDashboard()} />
+            </Routes>
+          </MobileAppShell>
+        ) : (
+          // Desktop Layout or Website Pages
+          <>
+            <ProductHeader
+                currentLanguage={currentLanguage}
+                onLanguageChange={switchLanguage}
+                currentTheme={currentTheme}
+                onThemeChange={switchTheme}
+                onHome={showHomePage}
+                onDashboard={showDashboard}
+                onLogin={showLogin}
+                onSignUp={showSignUp}
+                onGuestMode={handleGuestMode}
+                onDemoMode={handleDemoMode}
+                onLogout={handleLogout}
+                isAuthenticated={isAuthenticated}
+                userMode={userMode}
+                showWebsiteNavigation={true}
+                currentScreen={currentScreen}
+                onServicesHub={showServicesHub}
+                onTurnaroundStories={showTurnaroundStories}
+                onBlogHome={showBlogHome}
+                onAbout={showAbout}
+                onContact={showContact}
+              />
+            
+            {/* Universal Search Bar - Only on Platform Pages (Desktop) */}
+            {isPlatformPage(currentScreen) && (
+              <GlobalSearch
+                ref={globalSearchRef}
+                searchScope={getSearchScope(currentScreen)}
+                dataSources={{
+                  leads: mockLeads,
+                  quotes: mockQuotes,
+                  salesOrders: mockSalesOrders,
+                  customers: mockBusinessProfiles
+                }}
+                navigationHandlers={{
+                  onShowLeadManagement: showLeadManagement,
+                  onShowQuotationOrders: showQuotationOrders,
+                  onShowSalesOrders: showSalesOrders,
+                  onShowCustomerList: showCustomerList,
+                  formatCurrency,
+                  getBusinessProfileById
+                }}
+                placeholder="Search across platform..."
+              />
+            )}
+            
+            {/* Universal Voice Assistant - Only on Platform Pages (Desktop) */}
+            {isPlatformPage(currentScreen) && (
+              <FloatingVoiceAssistant
+                currentProcessStage={currentScreen}
+                onUniversalAction={handleUniversalAction}
+                onPerformSearch={handleUniversalSearch}
+                businessData={{
+                  hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+                  overduePayments: 0, // TODO: Calculate from actual payment data
+                  readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
+                  totalCustomers: mockBusinessProfiles.length
+                }}
+              />
+            )}
+            
+            <Routes>
+              <Route path="/" element={renderHomePage()} />
+              <Route path="/login" element={renderAuthentication()} />
+              <Route path="/signup" element={renderAuthentication()} />
+              <Route path="/dashboard" element={renderDashboard()} />
+              <Route path="/leads" element={renderLeadManagement()} />
+              <Route path="/quotes" element={renderQuotationOrders()} />
+              <Route path="/orders" element={renderSalesOrders()} />
+              <Route path="/payments" element={renderPayments()} />
+              <Route path="/invoices" element={renderInvoices()} />
+              <Route path="/customers/:customerId" element={renderCustomerProfile()} />
+              <Route path="/customers" element={renderCustomerList()} />
+              <Route path="/profile-completion" element={renderProfileCompletion()} />
+              <Route path="/inventory" element={renderInventoryManagement()} />
+              <Route path="/fulfillment" element={renderFulfillmentManagement()} />
+              <Route path="/analytics" element={renderAnalyticsManagement()} />
+              <Route path="/services" element={renderServicesHub()} />
+              <Route path="/services/:framework" element={renderServicesHub()} />
+              <Route path="/turnaround-stories" element={renderTurnaroundStories()} />
+              <Route path="/turnaround-stories/:story" element={renderTurnaroundStories()} />
+              <Route path="/blog" element={renderBlogHome()} />
+              <Route path="/blog/:slug" element={renderBlogPost()} />
+              <Route path="/about" element={renderAbout()} />
+              <Route path="/contact" element={renderContact()} />
+              <Route path="*" element={renderHomePage()} />
+            </Routes>
+            
+            {/* Single Footer for All Pages (Desktop) */}
+            <Footer
+              currentLanguage={currentLanguage}
+              onLanguageChange={switchLanguage}
+              onAbout={showAbout}
+              onContact={showContact}
+            />
+          </>
         )}
-        
-        {/* Universal Voice Assistant - Only on Platform Pages */}
-        {isPlatformPage(currentScreen) && (
-          <FloatingVoiceAssistant
-            currentProcessStage={currentScreen}
-            onUniversalAction={handleUniversalAction}
-            onPerformSearch={handleUniversalSearch}
-            businessData={{
-              hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
-              overduePayments: 0, // TODO: Calculate from actual payment data
-              readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
-              totalCustomers: mockBusinessProfiles.length
-            }}
-          />
-        )}
-        
-        <Routes>
-          <Route path="/" element={renderHomePage()} />
-          <Route path="/login" element={renderAuthentication()} />
-          <Route path="/signup" element={renderAuthentication()} />
-          <Route path="/dashboard" element={renderDashboard()} />
-          <Route path="/leads" element={renderLeadManagement()} />
-          <Route path="/quotes" element={renderQuotationOrders()} />
-          <Route path="/orders" element={renderSalesOrders()} />
-          <Route path="/payments" element={renderPayments()} />
-          <Route path="/invoices" element={renderInvoices()} />
-          <Route path="/customers/:customerId" element={renderCustomerProfile()} />
-          <Route path="/customers" element={renderCustomerList()} />
-          <Route path="/profile-completion" element={renderProfileCompletion()} />
-          <Route path="/inventory" element={renderInventoryManagement()} />
-          <Route path="/fulfillment" element={renderFulfillmentManagement()} />
-          <Route path="/analytics" element={renderAnalyticsManagement()} />
-          <Route path="/services" element={renderServicesHub()} />
-          <Route path="/services/:framework" element={renderServicesHub()} />
-          <Route path="/turnaround-stories" element={renderTurnaroundStories()} />
-          <Route path="/turnaround-stories/:story" element={renderTurnaroundStories()} />
-          <Route path="/blog" element={renderBlogHome()} />
-          <Route path="/blog/:slug" element={renderBlogPost()} />
-          <Route path="/about" element={renderAbout()} />
-          <Route path="/contact" element={renderContact()} />
-          <Route path="*" element={renderHomePage()} />
-        </Routes>
-        
-        {/* Single Footer for All Pages */}
-        <Footer
-          currentLanguage={currentLanguage}
-          onLanguageChange={switchLanguage}
-          onAbout={showAbout}
-          onContact={showContact}
-        />
         
           </div>
         </div>

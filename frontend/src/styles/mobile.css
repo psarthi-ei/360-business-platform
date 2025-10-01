@@ -1,0 +1,388 @@
+/* Mobile CSS Foundation for ElevateBusiness 360° */
+
+/* Mobile-specific global styles */
+@media (max-width: 768px) {
+  /* Remove default platform page content padding on mobile */
+  .platformPageContent {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Mobile-first content area styling */
+  .mobile-content .platformPageContent {
+    background: transparent;
+  }
+}
+
+/* Mobile Lead Cards */
+.mobile-leads {
+  padding: 0;
+}
+
+.mobile-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.mobile-filters button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  white-space: nowrap;
+  min-height: 48px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-filters button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.mobile-filters button:hover {
+  border-color: #667eea;
+}
+
+.mobile-lead-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.mobile-lead-card:active {
+  transform: scale(0.98);
+}
+
+.lead-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.lead-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.priority-badge {
+  font-size: 18px;
+}
+
+.lead-material, .lead-price {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.mobile-lead-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  font-size: 12px;
+  min-height: 48px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.action-btn.call {
+  background: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.action-btn.whatsapp {
+  background: #25d366;
+  color: white;
+  border-color: #25d366;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile CRM Cards */
+.mobile-crm {
+  padding: 0;
+}
+
+.mobile-customer-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.mobile-customer-card:active {
+  transform: scale(0.98);
+}
+
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.customer-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.customer-status {
+  font-size: 18px;
+}
+
+.customer-location, .customer-stats {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.mobile-customer-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Mobile Analytics */
+.mobile-analytics {
+  padding: 0;
+}
+
+.mobile-kpi-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:active {
+  transform: scale(0.98);
+}
+
+.kpi-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.kpi-trend {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.kpi-trend.positive { 
+  color: #4caf50; 
+}
+
+.kpi-trend.negative { 
+  color: #f44336; 
+}
+
+.mobile-chart-section {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mobile-chart-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.mobile-chart-placeholder {
+  height: 200px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+  border: 1px dashed #ddd;
+}
+
+/* Mobile Dashboard Specific Styles */
+.mobile-dashboard {
+  padding: 0;
+}
+
+.mobile-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.metric-card:active {
+  transform: scale(0.98);
+}
+
+.metric-card.hot {
+  border-left: 4px solid #ff4757;
+}
+
+.metric-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 20px;
+}
+
+.metric-info {
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.2;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.mobile-quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-action {
+  flex: 1;
+  padding: 12px 8px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 12px;
+  min-height: 48px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-action:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.quick-action:active {
+  transform: scale(0.95);
+}
+
+/* General Mobile Utilities */
+.mobile-scrollable {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-hidden {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  .mobile-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-kpi-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .metric-card {
+    padding: 12px;
+  }
+  
+  .kpi-card {
+    padding: 12px;
+  }
+  
+  .mobile-lead-card,
+  .mobile-customer-card {
+    padding: 12px;
+  }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .action-btn:hover,
+  .quick-action:hover,
+  .mobile-filters button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

@@ -1,5 +1,8 @@
 /* Global App Styles */
 
+/* Import Mobile CSS Foundation */
+@import './styles/mobile.css';
+
 /* Markdown Content Styling - Global styles for ReactMarkdown */
 .markdown-content {
   line-height: 1.8;
