@@ -66,33 +66,22 @@ Transform ElevateBusiness 360° from a traditional module-based mobile interface
 - ❌ **Break Separation**: Keep universal infrastructure separate from business logic
 - ❌ **Add Complexity**: Simple configuration-driven enhancements only
 
-### **Mobile Enhancement Areas**
+### **Mobile Enhancement Areas - SIMPLIFIED FOR MVP**
 ```typescript
-// Enhanced configurations (extend existing)
+// SIMPLIFIED: Desktop and Mobile only (768px breakpoint)
 mobileSearchPlaceholders = {
-  'dashboard': 'Search leads, customers, orders...',
-  'pipeline': 'Search leads, quotes, payments...',
-  'operations': 'Search work orders, inventory...',
-  'customers': 'Search customer profiles, history...'
+  'universal': 'Search leads, customers, orders...' // Single universal placeholder
 }
 
 mobileVoiceConfig = {
-  buttonSize: 'large',        // 56px for easy touch
-  factoryMode: true,          // Noise cancellation
+  buttonSize: 'standard',     // 50px for mobile (no factory complexity)
   visualFeedback: true,       // Visual confirmation
   position: 'bottom-right'    // Thumb-accessible
 }
 
-workflowScopes = {
-  'pipeline': {
-    search: ['leads', 'quotes', 'payments'],
-    voice: ['ADD_NEW_LEAD', 'CREATE_QUOTE', 'RECORD_PAYMENT']
-  },
-  'operations': {
-    search: ['orders', 'inventory', 'production'], 
-    voice: ['START_PRODUCTION', 'CHECK_STOCK', 'DISPATCH_ORDER']
-  }
-}
+// REMOVED: Factory-specific configurations for MVP simplicity
+// REMOVED: Multiple workflow scopes - keeping universal search
+// REMOVED: Factory environment optimizations
 ```
 
 ---
@@ -910,48 +899,43 @@ export const priorityConfig = {
 
 ### **Mobile CSS Design System**
 
-#### **Factory Environment Optimizations**
+#### **Simplified Mobile Design - MVP Standards**
 ```css
-/* Mobile UX V2 Factory Environment CSS */
+/* Mobile UX V2 Simplified CSS - No Factory Complexity */
 
-/* Touch Target Standards */
+/* Standard Touch Target Requirements */
 .mobile-touch-target {
   min-height: 48px;
   min-width: 48px;
   padding: 12px;
 }
 
-/* Factory Environment Colors */
+/* Standard Mobile Colors */
 :root {
-  --factory-primary: #667eea;
-  --factory-urgent: #ff4757;
-  --factory-success: #2ed573;
-  --factory-warning: #ffa502;
-  --factory-text-high: #2c3e50;
-  --factory-bg-clean: #ffffff;
-  --factory-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --mobile-primary: #667eea;
+  --mobile-urgent: #ff4757;
+  --mobile-success: #2ed573;
+  --mobile-warning: #ffa502;
+  --mobile-text: #2c3e50;
+  --mobile-bg: #ffffff;
+  --mobile-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* High Contrast for Factory Lighting */
-.factory-high-contrast {
-  color: var(--factory-text-high);
-  background: var(--factory-bg-clean);
-  border: 2px solid var(--factory-primary);
-  box-shadow: var(--factory-shadow);
-}
-
-/* Large Voice Button for Gloved Hands */
-.voice-button-factory {
-  width: 56px;
-  height: 56px;
-  border-radius: 28px;
-  background: linear-gradient(45deg, var(--factory-primary), #764ba2);
+/* Standard Mobile Voice Button */
+.voice-button-mobile {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: linear-gradient(45deg, var(--mobile-primary), #764ba2);
   position: fixed;
-  bottom: 80px;
-  right: 16px;
+  bottom: 100px;
+  right: 20px;
   z-index: 1000;
   box-shadow: 0 4px 16px rgba(103, 126, 234, 0.4);
 }
+
+/* REMOVED: Factory-specific styling complexity */
+/* SIMPLIFIED: Standard mobile design only */
 
 /* Business Priority Cards */
 .priority-card-urgent {
@@ -1025,71 +1009,60 @@ export const priorityConfig = {
 
 ## 📱 **MOBILE-FIRST DESIGN SYSTEM**
 
-### **Touch Optimization Standards**
-**Minimum Touch Target Requirements:**
+### **Simplified Touch Standards - MVP**
+**Standard Mobile Touch Requirements:**
 - **Interactive Elements**: 48px minimum height/width
-- **Text Input Fields**: 52px minimum height  
-- **Navigation Elements**: 56px minimum height
-- **Voice Button**: 56px diameter (factory gloves)
+- **Text Input Fields**: 48px minimum height  
+- **Navigation Elements**: 48px minimum height
+- **Voice Button**: 50px diameter (standard mobile)
 
-**Spacing Standards:**
-- **Card Padding**: 16px minimum internal spacing
-- **Element Gaps**: 12px minimum between interactive elements
+**Standard Mobile Spacing:**
+- **Card Padding**: 16px internal spacing
+- **Element Gaps**: 12px between interactive elements
 - **Screen Margins**: 16px side margins on mobile
-- **Vertical Rhythm**: 8px base unit for consistent spacing
+- **Vertical Rhythm**: 8px base unit
 
-### **Factory Environment Design Principles**
+### **Standard Mobile Design Principles - No Factory Complexity**
 
-#### **High Contrast & Visibility**
-- **Text Contrast**: Minimum 4.5:1 ratio for all text
-- **Button States**: Clear visual feedback for active/inactive states
-- **Status Indicators**: High contrast colors for urgent/normal/success states
-- **Loading States**: Obvious visual feedback for processing actions
+#### **Standard Mobile Visibility**
+- **Text Contrast**: Standard mobile accessibility (4.5:1 ratio)
+- **Button States**: Clear active/inactive states
+- **Status Indicators**: Standard urgent/normal/success colors
+- **Loading States**: Standard mobile feedback
 
-#### **One-Handed Operation Support**
-- **Thumb-Accessible Zone**: Critical actions within 75% of screen height
-- **Gesture Support**: Swipe actions for common tasks
-- **Voice Alternative**: Every action accessible via voice command
-- **Quick Actions**: Most frequent tasks within immediate reach
+#### **Standard One-Handed Operation**
+- **Thumb Zone**: Standard mobile accessibility zones
+- **Voice Alternative**: Universal voice commands available
+- **Quick Actions**: Standard mobile interaction patterns
 
-#### **Noise & Distraction Resistance**
-- **Visual Feedback**: Clear confirmation for voice commands
-- **Haptic Feedback**: Touch confirmation for critical actions
-- **Error Prevention**: Confirmation dialogs for destructive actions
-- **Status Clarity**: Always-visible status indicators
+**REMOVED**: Factory environment complexity, noise resistance, glove optimization
 
 ### **Responsive Design Framework**
 
 #### **Breakpoint Strategy**
 ```css
-/* Mobile UX V2 Responsive Framework */
+/* Mobile UX V2 Simplified Responsive Framework */
 
-/* Mobile First (320px - 768px) */
+/* Mobile Only (up to 768px) */
 @media (max-width: 768px) {
   .mobile-optimized {
-    /* Factory environment optimizations */
+    /* Standard mobile optimizations */
     font-size: 16px;
     line-height: 1.5;
     touch-action: manipulation;
   }
 }
 
-/* Tablet (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
+/* Desktop (768px+) */
+@media (min-width: 768px) {
   .mobile-optimized {
-    /* Transition to desktop patterns */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .mobile-optimized {
-    /* Full desktop experience */
+    /* Desktop experience */
     display: none; /* Hide mobile-specific elements */
   }
 }
+
+/* REMOVED: Complex tablet breakpoints */
+/* SIMPLIFIED: Just Desktop and Mobile (768px) */
 ```
 
 #### **Content Hierarchy for Small Screens**

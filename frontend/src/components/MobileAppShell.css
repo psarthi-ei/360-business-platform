@@ -45,7 +45,7 @@
 }
 
 .brand-logo {
-  height: 24px;
+  height: 32px;
   width: auto;
   margin-right: 8px;
 }
@@ -60,7 +60,7 @@
 }
 
 .brand-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.3px;
   line-height: 1.2;
@@ -70,9 +70,9 @@
 }
 
 .brand-tagline {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   letter-spacing: 0.1px;
   line-height: 1;
   margin-top: -2px;
@@ -178,11 +178,11 @@
   }
   
   .brand-name {
-    font-size: 11px !important;
+    font-size: 14px !important;
   }
   
   .brand-tagline {
-    font-size: 8px !important;
+    font-size: 11px !important;
   }
 }
 
@@ -265,6 +265,7 @@
   border: 1px solid #e0e0e0;
   padding: 12px 16px;
   transition: all 0.3s ease;
+  position: relative; /* For search results positioning */
 }
 
 .search-container:focus-within {
@@ -314,86 +315,28 @@
   font-weight: 400;
 }
 
-/* Mobile GlobalSearch - V2 Specification */
-.mobile-global-search {
-  width: 100% !important;
-  /* DEBUG: Visual boundary */
-  border: 3px solid blue !important;
-}
-
-.mobile-global-search .universalSearchContainer {
-  width: 100% !important;
-}
-
-.mobile-global-search .universalSearch {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.mobile-global-search .globalSearch {
-  width: 100% !important;
-  max-width: 100% !important;
-  background: transparent;
+.search-container .clear-search-button {
+  background: #f0f0f0;
   border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.mobile-global-search .integratedSearch {
-  width: 100% !important;
-  max-width: 100% !important;
+.search-container .clear-search-button:hover {
+  background: #e0e0e0;
+  color: #333;
 }
 
-.mobile-global-search .searchInputWrapper {
-  width: 100% !important;
-  max-width: 100% !important;
-  background: #f8f9fa;
-  border-radius: 24px;
-  border: 1px solid #e0e0e0;
-  transition: all 0.3s ease;
-  position: relative; /* For voice button positioning */
-  padding-right: 48px; /* Make space for integrated voice button */
-}
-
-.mobile-global-search .searchInputWrapper:focus-within {
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
-}
-
-.mobile-global-search .searchInput {
-  background: transparent !important;
-  border: none !important;
-  color: #333 !important;
-  font-size: 16px !important;
-  padding: 14px 16px !important;
-  width: 100% !important;
-  outline: none !important;
-}
-
-.mobile-global-search .searchInput::placeholder {
-  color: #666 !important;
-  font-weight: 400 !important;
-}
-
-.mobile-global-search .searchIcon {
-  color: #667eea !important;
-  font-size: 18px !important;
-  margin-left: 4px !important;
-}
-
-.mobile-global-search .clearSearch {
-  color: #666 !important;
-  background: #f0f0f0 !important;
-  border-radius: 50% !important;
-  width: 24px !important;
-  height: 24px !important;
-  font-size: 14px !important;
-  transition: all 0.2s ease !important;
-}
-
-.mobile-global-search .clearSearch:hover {
-  background: #e0e0e0 !important;
-  color: #333 !important;
-}
 
 /* Mobile Content Area */
 .mobile-content {
@@ -690,15 +633,15 @@
   }
   
   .brand-logo {
-    height: 22px;
+    height: 28px;
   }
   
   .brand-name {
-    font-size: 12px;
+    font-size: 14px;
   }
   
   .brand-tagline {
-    font-size: 9px;
+    font-size: 11px;
   }
   
   .debug-button {

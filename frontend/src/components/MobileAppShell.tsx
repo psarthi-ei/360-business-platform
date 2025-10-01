@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import HeaderDropdown from './HeaderDropdown';
+import SearchResults from './SearchResults';
+import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from './useGlobalSearch';
 import { ActionParams } from '../services/nlp/types';
 import {
   mockLeads,
   mockSalesOrders,
-  mockBusinessProfiles
+  mockBusinessProfiles,
+  mockQuotes,
+  formatCurrency,
+  getBusinessProfileById
 } from '../data/mockData';
 import logoImage from '../assets/images/logo.png';
 import './MobileAppShell.css';
@@ -69,6 +74,34 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
   // Debug panel state for mobile header control
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   
+  // Global Search Configuration for Mobile
+  const searchDataSources: SearchDataSources = {
+    leads: mockLeads,
+    quotes: mockQuotes,
+    salesOrders: mockSalesOrders,
+    customers: mockBusinessProfiles
+  };
+
+  const searchNavigationHandlers: SearchNavigationHandlers = {
+    onShowLeadManagement: () => navigate('/leads'),
+    onShowQuotationOrders: () => navigate('/quotes'),
+    onShowSalesOrders: () => navigate('/orders'),
+    onShowCustomerList: () => navigate('/customers'),
+    formatCurrency,
+    getBusinessProfileById
+  };
+
+  // Search state and handlers using the useGlobalSearch hook
+  const {
+    searchQuery,
+    searchResults,
+    showSearchResults,
+    handleSearchChange,
+    closeSearchResults,
+    clearSearch,
+    performGlobalSearch
+  } = useGlobalSearch(searchDataSources, searchNavigationHandlers);
+  
   // Get current process stage for voice context
   const getCurrentProcessStage = () => {
     const path = location.pathname;
@@ -85,11 +118,22 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
   };
 
 
-  // Universal search handler
+  // Universal search handler - Connected to search logic
   const handleUniversalSearch = (query: string) => {
-    // TODO: Implement search functionality
     // eslint-disable-next-line no-console
-    console.log('🔍 Search query:', query);
+    console.log('🔍 Voice search query:', query);
+    
+    // Trigger search using the performGlobalSearch function
+    performGlobalSearch(query);
+  };
+
+  // Handle keyboard events in search input
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      closeSearchResults();
+      (e.target as HTMLInputElement).blur();
+    }
+    // TODO: Add arrow key navigation for search results
   };
   
   // Universal action handler for voice commands
@@ -220,7 +264,7 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
           </div>
         </div>
         
-        {/* Search Row - Full Width Clean Design */}
+        {/* Search Row - Original Style with Functional Logic */}
         <div className="search-row">
           <div className="search-container">
             <span className="search-icon">🔍</span>
@@ -228,8 +272,29 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
               type="text" 
               placeholder="Search leads, customers, orders..."
               className="search-input"
-              // TODO: Connect to search logic
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
             />
+            {searchQuery && (
+              <button 
+                className="clear-search-button" 
+                onClick={clearSearch}
+                type="button"
+                aria-label="Clear search"
+              >
+                ×
+              </button>
+            )}
+            
+            {/* Search Results - Positioned relative to search input */}
+            {showSearchResults && (
+              <SearchResults
+                results={searchResults}
+                searchQuery={searchQuery}
+                onClose={closeSearchResults}
+              />
+            )}
           </div>
         </div>
       </header>
