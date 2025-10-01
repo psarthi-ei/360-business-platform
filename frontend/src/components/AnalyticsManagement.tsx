@@ -3,10 +3,12 @@ import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/PlaceholderScreen.module.css';
 
 interface AnalyticsManagementProps {
+  mobile?: boolean;
   onBackToDashboard: () => void;
 }
 
 function AnalyticsManagement({
+  mobile,
   onBackToDashboard
 }: AnalyticsManagementProps) {
   const { t } = useTranslation();

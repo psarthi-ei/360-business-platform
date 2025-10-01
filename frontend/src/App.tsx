@@ -388,6 +388,7 @@ function AppContent() {
     return (
       <div className="platformPageContent">
         <LeadManagement
+          mobile={isMobile}
           onShowCustomerProfile={showCustomerProfile}
           onShowQuoteFromLead={showQuoteFromLead}
           onShowQuotationOrders={showQuotationOrders}
@@ -465,6 +466,7 @@ function AppContent() {
     return (
       <div className="platformPageContent">
         <CustomerList
+          mobile={isMobile}
           onShowCustomerProfile={showCustomerProfile}
           customerSearch={customerSearch}
           onCustomerSearchChange={setCustomerSearch}
@@ -544,6 +546,7 @@ function AppContent() {
   function renderAnalyticsManagement() {
     return (
       <AnalyticsManagement
+        mobile={isMobile}
         onBackToDashboard={showDashboard}
       />
     );

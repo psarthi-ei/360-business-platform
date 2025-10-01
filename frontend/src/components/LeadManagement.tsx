@@ -8,6 +8,7 @@ import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/LeadManagement.module.css';
 
 interface LeadManagementProps {
+  mobile?: boolean;
   onShowCustomerProfile?: (customerId: string) => void;
   onShowQuoteFromLead?: (leadId: string) => void;
   onShowQuotationOrders?: () => void;
@@ -20,6 +21,7 @@ interface LeadManagementProps {
 }
 
 function LeadManagement({
+  mobile,
   onShowCustomerProfile,
   onShowQuoteFromLead,
   onShowQuotationOrders,

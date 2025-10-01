@@ -4,12 +4,14 @@ import { useTranslation } from '../contexts/TranslationContext';
 import styles from '../styles/CustomerList.module.css';
 
 interface CustomerListProps {
+  mobile?: boolean;
   onShowCustomerProfile: (customerId: string) => void;
   customerSearch: string;
   onCustomerSearchChange: (search: string) => void;
 }
 
 function CustomerList({
+  mobile,
   onShowCustomerProfile,
   customerSearch,
   onCustomerSearchChange
