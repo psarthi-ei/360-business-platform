@@ -171,7 +171,7 @@ function BlogPost({
 
         {/* Post Content */}
         <article className={styles.postContent}>
-          <ReactMarkdown>
+          <ReactMarkdown className={styles.markdown}>
             {post.content}
           </ReactMarkdown>
         </article>

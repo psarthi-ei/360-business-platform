@@ -1,8 +1,15 @@
 import { NavigateFunction } from 'react-router-dom';
 import { ActionParams } from '../services/nlp/types';
 
+// Type definitions for state setters
+export interface NavigationStateSetters {
+  setSelectedCustomerId?: (customerId: string) => void;
+  setServicesHubResetKey?: (updater: (prev: number) => number) => void;
+  setCurrentBlogPostSlug?: (slug: string) => void;
+}
+
 // Single source of truth for navigation functions
-export function createNavigationHelpers(navigate: NavigateFunction) {
+export function createNavigationHelpers(navigate: NavigateFunction, stateSetters?: NavigationStateSetters) {
   return {
     showHomePage: () => navigate('/'),
     showDashboard: () => navigate('/dashboard'),
@@ -31,6 +38,28 @@ export function createNavigationHelpers(navigate: NavigateFunction) {
     showAbout: () => navigate('/about'),
     showContact: () => navigate('/contact'),
     showQuoteFromLead: (leadId: string) => navigate(`/quotes?from-lead=${leadId}`),
-    showProfileCompletion: () => navigate('/profile-completion')
+    showProfileCompletion: () => navigate('/profile-completion'),
+    
+    // Enhanced navigation functions with state management
+    showCustomerProfileWithState: (customerId: string) => {
+      if (stateSetters?.setSelectedCustomerId) {
+        stateSetters.setSelectedCustomerId(customerId);
+      }
+      navigate(`/customers/${customerId}`);
+    },
+    
+    showServicesHubWithReset: () => {
+      if (stateSetters?.setServicesHubResetKey) {
+        stateSetters.setServicesHubResetKey(prev => prev + 1);
+      }
+      navigate('/services');
+    },
+    
+    showBlogPostWithState: (slug: string) => {
+      if (stateSetters?.setCurrentBlogPostSlug) {
+        stateSetters.setCurrentBlogPostSlug(slug);
+      }
+      navigate(`/blog/${slug}`);
+    }
   };
 }

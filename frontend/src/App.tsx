@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from 'react-router-dom';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
 import Dashboard from './components/Dashboard';
@@ -97,7 +97,11 @@ function AppContent() {
   }
 
   // Shared navigation helpers - single source of truth
-  const navigationHelpers = createNavigationHelpers(navigate);
+  const navigationHelpers = createNavigationHelpers(navigate, {
+    setSelectedCustomerId,
+    setServicesHubResetKey,
+    setCurrentBlogPostSlug
+  });
 
 
   // Navigation functions destructured from shared helpers
@@ -110,19 +114,20 @@ function AppContent() {
     showPayments,
     showInvoices,
     showCustomerList,
-    showCustomerProfile,
     showInventory,
     showFulfillment,
     showAnalytics,
     showLogin,
     showSignUp,
-    showServicesHub,
     showTurnaroundStories,
     showBlogHome,
-    showBlogPost,
     showAbout,
     showContact,
-    showQuoteFromLead
+    showQuoteFromLead,
+    // Enhanced navigation functions with state management
+    showCustomerProfileWithState,
+    showServicesHubWithReset,
+    showBlogPostWithState
   } = navigationHelpers;
 
   // Universal search function - Execute search on current page
@@ -260,23 +265,6 @@ function AppContent() {
     navigate('/orders');
   }
 
-  // Custom navigation with state updates
-  function customShowCustomerProfile(customerId: string) {
-    setSelectedCustomerId(customerId);
-    showCustomerProfile(customerId);
-  }
-
-
-  // Custom navigation with state updates
-  function customShowServicesHub() {
-    setServicesHubResetKey(prev => prev + 1); // Force ServicesHub to reset to overview
-    showServicesHub();
-  }
-
-  function customShowBlogPost(slug: string) {
-    setCurrentBlogPostSlug(slug);
-    showBlogPost(slug);
-  }
 
 
   function renderDashboard() {
@@ -322,7 +310,7 @@ function AppContent() {
       <div className="platformPageContent">
         <LeadManagement
           mobile={isMobile}
-          onShowCustomerProfile={showCustomerProfile}
+          onShowCustomerProfile={showCustomerProfileWithState}
           onShowQuoteFromLead={showQuoteFromLead}
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
@@ -338,7 +326,7 @@ function AppContent() {
       <div className="platformPageContent">
         <QuotationOrders
           onShowSalesOrders={showSalesOrders}
-          onShowCustomerProfile={showCustomerProfile}
+          onShowCustomerProfile={showCustomerProfileWithState}
           onShowLeadManagement={showLeadManagement}
           filterState={quoteFilter}
           onFilterChange={setQuoteFilter}
@@ -367,7 +355,7 @@ function AppContent() {
         <Payments
           onShowSalesOrders={showSalesOrders}
           onShowInvoices={showInvoices}
-          onShowCustomerProfile={showCustomerProfile}
+          onShowCustomerProfile={showCustomerProfileWithState}
           filterState={paymentFilter}
           onFilterChange={setPaymentFilter}
         />
@@ -380,7 +368,7 @@ function AppContent() {
       <Invoices
         onShowQuotationOrders={showQuotationOrders}
         onShowPayments={showPayments}
-        onShowCustomerProfile={showCustomerProfile}
+        onShowCustomerProfile={showCustomerProfileWithState}
         filterState={invoiceFilter}
         onFilterChange={setInvoiceFilter}
       />
@@ -400,7 +388,7 @@ function AppContent() {
       <div className="platformPageContent">
         <CustomerList
           mobile={isMobile}
-          onShowCustomerProfile={showCustomerProfile}
+          onShowCustomerProfile={showCustomerProfileWithState}
           customerSearch={customerSearch}
           onCustomerSearchChange={setCustomerSearch}
         />
@@ -429,7 +417,7 @@ function AppContent() {
         onSignUp={showSignUp}
         onGuestMode={handleGuestMode}
         onDemoMode={handleDemoMode}
-        onServicesHub={showServicesHub}
+        onServicesHub={showServicesHubWithReset}
         onBlogHome={showBlogHome}
         onAbout={showAbout}
         onContact={showContact}
@@ -512,21 +500,35 @@ function AppContent() {
       <BlogHome
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onBlogPostClick={(day: number) => showBlogPost(`day${day}`)}
+        onBlogPostClick={(day: number) => showBlogPostWithState(`day${day}`)}
       />
     );
   }
 
   function renderBlogPost() {
-    return (
-      <BlogPost
-        slug={currentBlogPostSlug}
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onBackClick={showBlogHome}
-        onNavigateToPost={showBlogPost}
-      />
-    );
+    // Create a wrapper component that can use useParams
+    const BlogPostWrapper = () => {
+      const { slug } = useParams<{ slug: string }>();
+      
+      // Update state with the URL parameter
+      useEffect(() => {
+        if (slug) {
+          setCurrentBlogPostSlug(slug);
+        }
+      }, [slug]);
+      
+      return (
+        <BlogPost
+          slug={slug || ''}
+          currentLanguage={currentLanguage}
+          onLanguageChange={switchLanguage}
+          onBackClick={showBlogHome}
+          onNavigateToPost={showBlogPostWithState}
+        />
+      );
+    };
+    
+    return <BlogPostWrapper />;
   }
 
   function renderAbout() {
@@ -572,7 +574,7 @@ function AppContent() {
             userMode={userMode}
             showWebsiteNavigation={true}
             currentScreen={currentScreen}
-            onServicesHub={showServicesHub}
+            onServicesHub={showServicesHubWithReset}
             onTurnaroundStories={showTurnaroundStories}
             onBlogHome={showBlogHome}
             onAbout={showAbout}
@@ -610,7 +612,7 @@ function AppContent() {
                 userMode={userMode}
                 showWebsiteNavigation={true}
                 currentScreen={currentScreen}
-                onServicesHub={showServicesHub}
+                onServicesHub={showServicesHubWithReset}
                 onTurnaroundStories={showTurnaroundStories}
                 onBlogHome={showBlogHome}
                 onAbout={showAbout}
