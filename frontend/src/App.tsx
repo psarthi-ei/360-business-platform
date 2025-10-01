@@ -38,6 +38,7 @@ import { getSearchScope /*, getVoiceScope*/ } from './utils/scopeResolver';
 import { useResponsive } from './hooks/useResponsive';
 import MobileAppShell from './components/MobileAppShell';
 import { getSearchDataSources, getSearchNavigationHandlers } from './business/searchBusinessLogic';
+import { createNavigationHelpers } from './business/navigationBusinessLogic';
 import { 
   mockLeads, 
   mockSalesOrders, 
@@ -95,14 +96,34 @@ function AppContent() {
     setCurrentLanguage(language as Language);
   }
 
+  // Shared navigation helpers - single source of truth
+  const navigationHelpers = createNavigationHelpers(navigate);
 
-  const showLeadManagement = useCallback((autoAction?: string, actionParams?: ActionParams) => {
-    if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
-      navigate('/leads?action=add-lead');
-    } else {
-      navigate('/leads');
-    }
-  }, [navigate]);
+
+  // Navigation functions destructured from shared helpers
+  const {
+    showHomePage,
+    showDashboard,
+    showLeadManagement,
+    showQuotationOrders,
+    showSalesOrders,
+    showPayments,
+    showInvoices,
+    showCustomerList,
+    showCustomerProfile,
+    showInventory,
+    showFulfillment,
+    showAnalytics,
+    showLogin,
+    showSignUp,
+    showServicesHub,
+    showTurnaroundStories,
+    showBlogHome,
+    showBlogPost,
+    showAbout,
+    showContact,
+    showQuoteFromLead
+  } = navigationHelpers;
 
   // Universal search function - Execute search on current page
   const handleUniversalSearch = useCallback((query: string) => {
@@ -123,14 +144,6 @@ function AppContent() {
     createVoiceCommandRouter(navigate), [navigate]
   );
 
-  // Navigation functions - defined before handleUniversalAction
-  const showDashboard = useCallback(() => {
-    navigate('/dashboard');
-  }, [navigate]);
-
-  const showQuotationOrders = useCallback(() => {
-    navigate('/quotes');
-  }, [navigate]);
 
   // Simplified universal action handler - delegates to VoiceCommandRouter service
   const handleUniversalAction = useCallback((actionType: string, params?: ActionParams) => {
@@ -212,17 +225,6 @@ function AppContent() {
     }
   }, [currentBlogPostSlug]);
 
-  function showHomePage() {
-    navigate('/');
-  }
-
-  function showLogin() {
-    navigate('/login');
-  }
-
-  function showSignUp() {
-    navigate('/signup');
-  }
 
   function handleAuthSuccess() {
     setIsAuthenticated(true);
@@ -248,81 +250,32 @@ function AppContent() {
     navigate('/');
   }
 
-  function showQuoteFromLead(leadId: string) {
-    navigate('/quotes');
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function showLeadFromQuote(leadId: string) {
     navigate('/leads');
   }
-
-  function showSalesOrders() {
-    navigate('/orders');
-  }
-
-  function showPayments() {
-    navigate('/payments');
-  }
-
-  function showInvoices() {
-    navigate('/invoices');
-  }
-
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function convertToCustomer(quoteId: string) {
     navigate('/orders');
   }
 
-  function showCustomerProfile(customerId: string) {
+  // Custom navigation with state updates
+  function customShowCustomerProfile(customerId: string) {
     setSelectedCustomerId(customerId);
-    navigate('/customers/' + customerId);
-  }
-
-  function showCustomerList() {
-    navigate('/customers');
-  }
-
-  function showInventory() {
-    navigate('/inventory');
-  }
-
-  function showFulfillment() {
-    navigate('/fulfillment');
-  }
-
-  function showAnalytics() {
-    navigate('/analytics');
+    showCustomerProfile(customerId);
   }
 
 
-  function showServicesHub() {
-    navigate('/services');
+  // Custom navigation with state updates
+  function customShowServicesHub() {
     setServicesHubResetKey(prev => prev + 1); // Force ServicesHub to reset to overview
+    showServicesHub();
   }
 
-  function showTurnaroundStories() {
-    navigate('/turnaround-stories');
-  }
-
-
-  function showBlogHome() {
-    navigate('/blog');
-  }
-
-  function showBlogPost(slug: string) {
+  function customShowBlogPost(slug: string) {
     setCurrentBlogPostSlug(slug);
-    navigate('/blog/' + slug);
-  }
-
-
-  function showAbout() {
-    navigate('/about');
-  }
-
-  function showContact() {
-    navigate('/contact');
+    showBlogPost(slug);
   }
 
 

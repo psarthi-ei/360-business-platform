@@ -570,6 +570,175 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
+## **🚀 PHASE 1.1: ARCHITECTURAL REFACTORING - ELIMINATE CODE DUPLICATION**
+**⏱️ Time Estimate: 70-100 minutes (1.5-2 hours)**  
+**🎯 Priority: HIGH - Eliminates technical debt and improves long-term maintainability**
+
+### **Phase 1.1 Scope & Problem Statement**
+
+**CRITICAL TECHNICAL DEBT IDENTIFIED**: The current implementation has significant code duplication that violates DRY principles and creates maintenance burden:
+
+#### **🔴 Duplication Problems Discovered**
+1. **Route Duplication**: 11 platform routes defined twice (mobile + desktop) = 22 route definitions
+2. **Business Logic Duplication**: Same search data sources, navigation handlers, business calculations defined in both MobileAppShell.tsx and App.tsx
+3. **Configuration Duplication**: Identical props passed to both mobile and desktop components
+4. **Maintenance Burden**: Every route or business logic change requires updates in 2 places
+
+#### **🎯 Root Cause Analysis**
+**Problem**: Business logic mixed with presentation logic
+- Mobile: Configuration embedded inside MobileAppShell.tsx
+- Desktop: Configuration embedded inside App.tsx
+- **Result**: Same business logic duplicated across both contexts
+
+#### **💡 Architectural Solution**
+**Goal**: Separate business logic from presentation logic
+- **Create Shared Business Layer**: Extract all business logic into reusable hooks/configs
+- **Single Routes Definition**: Eliminate route duplication through conditional layout wrapper
+- **Maintain UX Differences**: Keep mobile vs desktop presentation differences intact
+
+### **Phase 1.1 Technical Implementation Plan**
+
+#### **1. Create Shared Business Configuration Hook (15-20 mins)**
+**File**: `src/hooks/useBusinessConfiguration.ts`
+**Purpose**: Single source of truth for all business logic
+
+**Extract from both MobileAppShell.tsx and App.tsx**:
+```typescript
+// Shared business configuration
+const useBusinessConfiguration = () => {
+  const navigate = useNavigate();
+  
+  return {
+    // Search data sources
+    searchDataSources: {
+      leads: mockLeads,
+      quotes: mockQuotes,
+      salesOrders: mockSalesOrders,
+      customers: mockBusinessProfiles
+    },
+    
+    // Navigation handlers
+    navigationHandlers: {
+      onShowLeadManagement: () => navigate('/leads'),
+      onShowQuotationOrders: () => navigate('/quotes'),
+      onShowSalesOrders: () => navigate('/orders'),
+      onShowCustomerList: () => navigate('/customers'),
+      formatCurrency,
+      getBusinessProfileById
+    },
+    
+    // Business data calculations
+    businessData: {
+      hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
+      overduePayments: 0,
+      readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
+      totalCustomers: mockBusinessProfiles.length
+    }
+  };
+};
+```
+
+#### **2. Create Shared Routes Configuration (10-15 mins)**
+**File**: `src/config/platformRoutes.tsx`
+**Purpose**: Eliminate route duplication
+
+**Single route definitions with conditional layout**:
+```typescript
+// Platform routes configuration
+export const platformRoutes = [
+  { path: '/dashboard', component: Dashboard },
+  { path: '/leads', component: LeadManagement },
+  { path: '/quotes', component: QuotationOrders },
+  // ... all 11 platform routes defined ONCE
+];
+
+// Layout wrapper chooses mobile vs desktop
+const PlatformLayoutWrapper = ({ children }) => {
+  const { isMobile } = useResponsive();
+  const businessConfig = useBusinessConfiguration();
+  
+  return isMobile ? (
+    <MobileAppShell {...businessConfig}>
+      {children}
+    </MobileAppShell>
+  ) : (
+    <>
+      <ProductHeader {...businessConfig} />
+      <GlobalSearch {...businessConfig.searchConfig} />
+      <FloatingVoiceAssistant {...businessConfig.voiceConfig} />
+      {children}
+      <Footer />
+    </>
+  );
+};
+```
+
+#### **3. Refactor MobileAppShell.tsx (15-20 mins)**
+**Changes**:
+- Replace internal configuration with `useBusinessConfiguration()` hook
+- Remove duplicated search data sources, navigation handlers, business calculations
+- Keep mobile-specific UX (layout, navigation, styling) unchanged
+- Import shared business configuration instead of defining inline
+
+**Before (Duplicated)**:
+```typescript
+// Internal configuration (DUPLICATED)
+const searchDataSources = { leads: mockLeads, ... };
+const handlers = { onShowLeads: () => navigate('/leads') };
+```
+
+**After (Shared)**:
+```typescript
+// Shared configuration (SINGLE SOURCE)
+const { searchDataSources, navigationHandlers, businessData } = useBusinessConfiguration();
+```
+
+#### **4. Refactor App.tsx (15-20 mins)**
+**Changes**:
+- Replace inline configuration with `useBusinessConfiguration()` hook
+- Use shared routes configuration instead of duplicated Routes blocks
+- Remove duplicated GlobalSearch and FloatingVoiceAssistant configuration
+- Keep desktop-specific UX (ProductHeader, Footer, layout) unchanged
+
+#### **5. Create Universal Action Context (5-10 mins)**
+**File**: `src/contexts/UniversalActionContext.tsx`
+**Purpose**: Share universal action handlers between mobile and desktop
+
+### **Phase 1.1 Expected Outcome & Benefits**
+
+#### **✅ Code Quality Improvements**
+- **50% Fewer Route Definitions**: 11 routes instead of 22 (eliminate duplication)
+- **Single Source of Truth**: All business logic in shared hooks/configs
+- **Better Separation of Concerns**: Business logic separated from presentation
+- **Easier Maintenance**: Changes in one place affect both mobile/desktop
+
+#### **✅ Development Velocity Improvements**
+- **Faster Feature Development**: New routes added once instead of twice
+- **Reduced Bug Risk**: No mobile/desktop consistency issues
+- **Better Testability**: Business logic testable independently
+- **Cleaner Codebase**: Improved code organization and readability
+
+#### **✅ Zero Impact on User Experience**
+- **Mobile UX Unchanged**: Same MobileAppShell experience
+- **Desktop UX Unchanged**: Same ProductHeader + GlobalSearch + Footer experience
+- **Functionality Preserved**: All search, voice, and navigation works identically
+- **Performance Maintained**: No performance regression
+
+### **Phase 1.1 Success Criteria**
+- [ ] All business logic moved to shared hooks (zero duplication)
+- [ ] Single routes definition (11 routes total instead of 22)
+- [ ] Mobile functionality unchanged (search, voice, navigation work)
+- [ ] Desktop functionality unchanged (search, voice, navigation work)
+- [ ] No compilation errors or TypeScript issues
+- [ ] All existing tests pass
+- [ ] Business logic consistency between mobile/desktop verified
+- [ ] Maintenance burden reduced (single update point for business changes)
+
+### **Phase 1.1 Git Commit**
+`MOBILE UX V2 - PHASE 1.1: ARCHITECTURAL REFACTORING - Eliminate code duplication and establish shared business layer`
+
+---
+
 ## **🚀 PHASE 2: Enhanced Search Results with Quick Actions**
 **⏱️ Time Estimate: 10-15 minutes**  
 **🎯 Priority: HIGH - Factory workers need quick actions for efficiency**
@@ -778,14 +947,17 @@ After each phase:
 - [ ] Move to next phase
 
 ### **Total Implementation Time**
-**Estimated Total: 115-150 minutes (2-2.5 hours)**
-- Phase 0: 15-20 mins (Critical - Navigation Infrastructure)
-- Phase 1: 15-20 mins (Critical - Search & Voice)
+**Updated Total: 185-250 minutes (3-4 hours) including architectural refactoring**
+- Phase 0: 15-20 mins (COMPLETE - Navigation Infrastructure) ✅
+- Phase 1: 15-20 mins (COMPLETE - Search & Voice Integration) ✅  
+- **Phase 1.1: 70-100 mins (NEW - Architectural Refactoring)** 📋
 - Phase 2: 10-15 mins (High Priority - Enhanced Search)  
 - Phase 3: 25-30 mins (High Priority - LeadManagement)
 - Phase 4: 25-30 mins (High Priority - QuotationOrders)
 - Phase 5: 15-20 mins (Medium Priority - Supporting Components)
 - Phase 6: 10-15 mins (Polish - Design System)
+
+**Note**: Phase 1.1 is critical for long-term maintainability and must be completed before proceeding with remaining phases to avoid compounding technical debt.
 
 ---
 
@@ -1121,18 +1293,21 @@ export const priorityConfig = {
 - [x] **State Management**: Workflow context management
 - [x] **Visual Design**: Workflow-specific styling and animations
 
-#### **✅ Phase 3: Voice & Search Enhancement - COMPLETE**
-- [x] **Search Enhancement**: Mobile optimizations and universal search
-- [x] **Voice Optimization**: Factory environment button and feedback
-- [x] **Universal Integration**: Single voice/search instances (no duplication)
-- [x] **Touch Optimization**: Voice button 80px, factory-ready
-- [x] **Performance**: Voice/search response time optimization
+#### **✅ Phase 1: Mobile Foundation - COMPLETE** 
+- [x] **Mobile Search Integration**: Functional GlobalSearch in MobileAppShell with useGlobalSearch hook
+- [x] **Voice Assistant Integration**: FloatingVoiceAssistant working on mobile with proper positioning
+- [x] **Universal Access**: Mobile users have full search and voice functionality
+- [x] **Business Data Integration**: Complete search data sources and navigation handlers
+- [x] **Mobile UX Optimization**: Factory settings removed, mobile header fonts fixed
 
 ### **❌ CRITICAL MISSING IMPLEMENTATIONS**
 
-#### **❌ Missing Architecture Components (URGENT)**
-- [ ] **CRITICAL**: Add GlobalSearch to MobileAppShell (mobile users have NO search)
-- [ ] **CRITICAL**: Add FloatingVoiceAssistant to MobileAppShell (mobile users have NO voice)
+#### **❌ Phase 1.1: Architectural Refactoring (HIGH PRIORITY)**
+- [ ] **CRITICAL**: Create shared business configuration hook (eliminate business logic duplication)
+- [ ] **CRITICAL**: Create shared routes configuration (eliminate route duplication)
+- [ ] **CRITICAL**: Refactor MobileAppShell to use shared configuration
+- [ ] **CRITICAL**: Refactor App.tsx to use shared configuration and single routes
+- [ ] **CRITICAL**: Create universal action context for shared handlers
 - [ ] **Mobile Header Design**: Complete header system combining auth + search
 - [ ] **True Universal Architecture**: Make search/voice work on BOTH desktop AND mobile
 - [ ] **Enhanced Search Results**: Quick action buttons (Call, WhatsApp, View)
@@ -1165,16 +1340,18 @@ export const priorityConfig = {
 
 ### **🚨 IMPLEMENTATION PRIORITY ORDER**
 
-**URGENT (Fix Immediately)**:
-1. **MobileAppShell Universal Integration** - Mobile users have NO search/voice access
-2. **Mobile Header Design** - Combine authentication + search for mobile
-3. **LeadManagement Mobile Transformation** - Most-used business component
-4. **True Universal Architecture** - Make search/voice actually universal
+**ARCHITECTURAL REFACTORING (Next Priority)**:
+1. **Phase 1.1: Eliminate Code Duplication** - High technical debt, affects long-term maintainability
+   - Create shared business configuration hook
+   - Create shared routes configuration (11 routes → single definition)
+   - Refactor MobileAppShell and App.tsx to use shared configuration
+   - Establish clean separation between business logic and presentation
 
-**HIGH PRIORITY (Next Week)**:
-4. **QuotationOrders Mobile Transformation** - Core sales process
-5. **Enhanced Search Results** - Workflow efficiency improvement
-6. **AddLeadModal Mobile Optimization** - Essential form interactions
+**HIGH PRIORITY (After Refactoring)**:
+2. **Phase 2: Enhanced Search Results** - Quick action buttons (Call, WhatsApp, View, Quote)
+3. **Phase 3: LeadManagement Mobile Transformation** - Most-used business component
+4. **Phase 4: QuotationOrders Mobile Transformation** - Core sales process
+5. **AddLeadModal Mobile Optimization** - Essential form interactions
 
 **MEDIUM PRIORITY (Following Week)**:
 7. **CustomerProfile Mobile Transformation** - Customer relationship management
