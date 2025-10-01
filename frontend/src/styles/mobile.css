@@ -2,6 +2,12 @@
 
 /* Mobile-specific global styles */
 @media (max-width: 768px) {
+  /* Ensure mobile app doesn't overflow viewport */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
   /* Remove default platform page content padding on mobile */
   .platformPageContent {
     padding: 0 !important;
@@ -11,6 +17,17 @@
   /* Mobile-first content area styling */
   .mobile-content .platformPageContent {
     background: transparent;
+  }
+  
+  /* Ensure App container doesn't overflow */
+  .App {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  .App-content {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 }
 
@@ -545,4 +562,480 @@
     transform: none;
     box-shadow: none;
   }
+}
+
+/* ================================ */
+/* MOBILE DASHBOARD V2 - INTELLIGENCE DASHBOARD */
+/* ================================ */
+
+/* Mobile Dashboard V2 Container */
+.mobile-dashboard-v2 {
+  padding: 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ================================ */
+/* BUSINESS PRIORITIES COMPONENT */
+/* ================================ */
+
+.business-priorities h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+.priorities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.priority-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.priority-card:active {
+  transform: scale(0.98);
+}
+
+/* Priority type colors */
+.priority-card-urgent {
+  border-left-color: #ff4757;
+  background: linear-gradient(135deg, #fff 0%, #ffe6e8 100%);
+}
+
+.priority-card-hot {
+  border-left-color: #ffa502;
+  background: linear-gradient(135deg, #fff 0%, #fff4e6 100%);
+}
+
+.priority-card-cashflow {
+  border-left-color: #2ed573;
+  background: linear-gradient(135deg, #fff 0%, #e8f8f5 100%);
+}
+
+.priority-card-production {
+  border-left-color: #667eea;
+  background: linear-gradient(135deg, #fff 0%, #eef2ff 100%);
+}
+
+.priority-card-quotes {
+  border-left-color: #5352ed;
+  background: linear-gradient(135deg, #fff 0%, #ededff 100%);
+}
+
+.priority-card-warm {
+  border-left-color: #70a1ff;
+  background: linear-gradient(135deg, #fff 0%, #e6f2ff 100%);
+}
+
+.priority-card-success {
+  border-left-color: #2ed573;
+  background: linear-gradient(135deg, #fff 0%, #e8f8f5 100%);
+}
+
+.priority-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.priority-icon {
+  font-size: 18px;
+  width: 24px;
+}
+
+.priority-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.priority-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.priority-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  min-height: 36px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn-urgent {
+  background: #ff4757;
+  color: white;
+}
+
+.action-btn-hot {
+  background: #ffa502;
+  color: white;
+}
+
+.action-btn-cashflow {
+  background: #2ed573;
+  color: white;
+}
+
+.action-btn-production {
+  background: #667eea;
+  color: white;
+}
+
+.action-btn-quotes {
+  background: #5352ed;
+  color: white;
+}
+
+.action-btn-warm {
+  background: #70a1ff;
+  color: white;
+}
+
+.action-btn-success {
+  background: #2ed573;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* ================================ */
+/* BUSINESS HEALTH COMPONENT */
+/* ================================ */
+
+.business-health h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+.business-health-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.health-metric {
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: all 0.2s ease;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.metric-icon {
+  font-size: 16px;
+  width: 20px;
+}
+
+.metric-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.metric-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+}
+
+.metric-value {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.metric-progress {
+  width: 100%;
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+/* ================================ */
+/* SMART INSIGHTS COMPONENT */
+/* ================================ */
+
+.smart-insights h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+.insights-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: all 0.2s ease;
+}
+
+.insight-content {
+  flex: 1;
+}
+
+.insight-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.insight-icon {
+  font-size: 16px;
+  width: 20px;
+}
+
+.insight-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.insight-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.insight-action {
+  display: flex;
+  align-items: center;
+}
+
+.insight-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.insight-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.insight-btn:active {
+  transform: scale(0.95);
+}
+
+/* ================================ */
+/* QUICK ACTIONS COMPONENT */
+/* ================================ */
+
+.quick-actions h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quick-action-btn {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 64px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.quick-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+.quick-action-btn:active {
+  transform: scale(0.98);
+}
+
+.quick-action-btn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.action-icon {
+  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-content {
+  flex: 1;
+}
+
+.action-label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.action-description {
+  font-size: 11px;
+  opacity: 0.8;
+  line-height: 1.2;
+}
+
+/* ================================ */
+/* RESPONSIVE ADJUSTMENTS */
+/* ================================ */
+
+@media (max-width: 480px) {
+  .mobile-dashboard-v2 {
+    padding: 12px;
+    gap: 16px;
+  }
+  
+  .priority-card,
+  .business-health-card,
+  .insights-card {
+    padding: 12px;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-action-btn {
+    min-height: 56px;
+  }
+  
+  .priority-header,
+  .insight-header {
+    flex-wrap: wrap;
+  }
+  
+  .metric-header {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+/* ================================ */
+/* FACTORY ENVIRONMENT OPTIMIZATIONS */
+/* ================================ */
+
+/* Large touch targets for gloved hands */
+.priority-card,
+.quick-action-btn,
+.insight-btn,
+.action-btn {
+  min-height: 48px;
+}
+
+/* High contrast for bright factory lighting */
+.priority-title,
+.metric-label,
+.insight-title,
+.action-label {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+/* Prevent accidental touches */
+.mobile-dashboard-v2 * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

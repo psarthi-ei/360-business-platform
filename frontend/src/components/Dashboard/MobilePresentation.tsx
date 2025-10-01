@@ -1,4 +1,8 @@
 import React from 'react';
+import BusinessPriorities from './components/BusinessPriorities';
+import BusinessHealth from './components/BusinessHealth';
+import SmartInsights from './components/SmartInsights';
+import QuickActions from './components/QuickActions';
 
 interface MobilePresentationProps {
   // Business metrics
@@ -55,169 +59,56 @@ const MobilePresentation: React.FC<MobilePresentationProps> = ({
   onShowAnalytics
 }) => {
   return (
-    <div className="mobile-dashboard">
-      {/* Mobile Metrics Cards */}
-      <div className="mobile-metrics">
-        <div className="metric-card">
-          <div className="metric-icon">🎯</div>
-          <div className="metric-info">
-            <div className="metric-value">{totalLeads}</div>
-            <div className="metric-label">Total Leads</div>
-          </div>
-        </div>
-        
-        <div className="metric-card hot">
-          <div className="metric-icon">🔥</div>
-          <div className="metric-info">
-            <div className="metric-value">{hotLeads}</div>
-            <div className="metric-label">Hot Leads</div>
-          </div>
-        </div>
-        
-        <div className="metric-card">
-          <div className="metric-icon">📋</div>
-          <div className="metric-info">
-            <div className="metric-value">{approvedQuotes}</div>
-            <div className="metric-label">Approved Quotes</div>
-          </div>
-        </div>
-        
-        <div className="metric-card">
-          <div className="metric-icon">💰</div>
-          <div className="metric-info">
-            <div className="metric-value">₹{(totalRevenue/100000).toFixed(1)}L</div>
-            <div className="metric-label">Revenue</div>
-          </div>
-        </div>
-      </div>
+    <div className="mobile-dashboard-v2">
+      {/* Business Intelligence Dashboard V2 */}
+      
+      {/* Today's Business Priorities */}
+      <BusinessPriorities
+        hotLeads={hotLeads}
+        warmLeads={warmLeads}
+        overduePayments={overduePayments}
+        pendingAdvanceAmount={pendingAdvanceAmount}
+        readyToShip={readyToShip}
+        pendingQuotes={pendingQuotes}
+        onShowLeadManagement={onShowLeadManagement}
+        onShowPayments={onShowPayments}
+        onShowQuotationOrders={onShowQuotationOrders}
+        onShowFulfillment={onShowFulfillment}
+      />
       
       {/* Business Health Summary */}
-      <div className="mobile-business-health">
-        <h3>Business Health</h3>
-        <div className="health-metrics">
-          <div className="health-item">
-            <span className="health-icon">🔥</span>
-            <span className="health-text">Pipeline {hotLeads > 3 ? 'Strong' : hotLeads > 1 ? 'Good' : 'Needs Attention'}</span>
-          </div>
-          <div className="health-item">
-            <span className="health-icon">💰</span>
-            <span className="health-text">Cash Flow {overduePayments === 0 ? 'Healthy' : overduePayments < 3 ? 'Good' : 'Needs Attention'}</span>
-          </div>
-          <div className="health-item">
-            <span className="health-icon">🏭</span>
-            <span className="health-text">Production {activeOrders > 2 ? 'Active' : activeOrders > 0 ? 'Moderate' : 'Planning Phase'}</span>
-          </div>
-          <div className="health-item">
-            <span className="health-icon">🤝</span>
-            <span className="health-text">Customer Health {repeatCustomerOpportunities > 5 ? 'Excellent' : repeatCustomerOpportunities > 2 ? 'Good' : 'Building'}</span>
-          </div>
-        </div>
-      </div>
+      <BusinessHealth
+        totalRevenue={totalRevenue}
+        revenueTarget={1000000}
+        totalLeads={totalLeads}
+        conversionRate={conversionRate}
+        overduePayments={overduePayments}
+        pendingAdvanceAmount={pendingAdvanceAmount}
+        activeOrders={activeOrders}
+        onTimeDeliveryRate={85}
+      />
       
-      {/* Priority Actions */}
-      <div className="mobile-priority-actions">
-        <h3>Priority Actions</h3>
-        <div className="priority-list">
-          {warmLeads > 0 && (
-            <div className="priority-item" onClick={() => onShowLeadManagement()}>
-              <span className="priority-icon">📞</span>
-              <span className="priority-text">Follow up with {warmLeads} warm leads</span>
-              <span className="priority-arrow">→</span>
-            </div>
-          )}
-          
-          {overduePayments > 0 && (
-            <div className="priority-item" onClick={() => onShowPayments()}>
-              <span className="priority-icon">💰</span>
-              <span className="priority-text">Chase {overduePayments} overdue payments</span>
-              <span className="priority-arrow">→</span>
-            </div>
-          )}
-          
-          {pendingQuotes > 0 && (
-            <div className="priority-item" onClick={() => onShowQuotationOrders()}>
-              <span className="priority-icon">📋</span>
-              <span className="priority-text">{pendingQuotes} quotes expiring soon</span>
-              <span className="priority-arrow">→</span>
-            </div>
-          )}
-          
-          {readyToShip > 0 && (
-            <div className="priority-item" onClick={() => onShowFulfillment && onShowFulfillment()}>
-              <span className="priority-icon">🚚</span>
-              <span className="priority-text">{readyToShip} orders ready to ship</span>
-              <span className="priority-arrow">→</span>
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Smart Business Insights */}
+      <SmartInsights
+        totalRevenue={totalRevenue}
+        totalCustomers={totalCustomers}
+        activeOrders={activeOrders}
+        repeatCustomerOpportunities={repeatCustomerOpportunities}
+        conversionRate={conversionRate}
+        onShowCustomerList={onShowCustomerList}
+        onShowLeadManagement={onShowLeadManagement}
+        onShowAnalytics={onShowAnalytics}
+      />
       
-      {/* Quick Access Modules */}
-      <div className="mobile-quick-modules">
-        <h3>Business Modules</h3>
-        <div className="modules-grid">
-          <div className="module-card" onClick={() => onShowLeadManagement()}>
-            <div className="module-icon">🎯</div>
-            <div className="module-title">Leads</div>
-            <div className="module-count">{totalLeads}</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowQuotationOrders()}>
-            <div className="module-icon">📋</div>
-            <div className="module-title">Quotes</div>
-            <div className="module-count">{approvedQuotes}</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowSalesOrders()}>
-            <div className="module-icon">📄</div>
-            <div className="module-title">Orders</div>
-            <div className="module-count">{activeOrders}</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowPayments()}>
-            <div className="module-icon">💰</div>
-            <div className="module-title">Payments</div>
-            <div className="module-count">₹{(pendingAdvanceAmount/100000).toFixed(1)}L</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowCustomerList()}>
-            <div className="module-icon">🤝</div>
-            <div className="module-title">Customers</div>
-            <div className="module-count">{totalCustomers}</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowInventory && onShowInventory()}>
-            <div className="module-icon">📦</div>
-            <div className="module-title">Inventory</div>
-            <div className="module-count">Stock</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowFulfillment && onShowFulfillment()}>
-            <div className="module-icon">🚚</div>
-            <div className="module-title">Shipping</div>
-            <div className="module-count">{readyToShip}</div>
-          </div>
-          
-          <div className="module-card" onClick={() => onShowAnalytics && onShowAnalytics()}>
-            <div className="module-icon">📊</div>
-            <div className="module-title">Analytics</div>
-            <div className="module-count">{conversionRate}%</div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile Quick Actions */}
-      <div className="mobile-quick-actions">
-        <button className="quick-action" onClick={() => onShowLeadManagement('add-lead')}>
-          ➕ Add Lead
-        </button>
-        <button className="quick-action" onClick={() => onShowQuotationOrders()}>
-          📋 New Quote
-        </button>
-        <button className="quick-action" onClick={() => onShowLeadManagement()}>
-          📞 Follow Up
-        </button>
-      </div>
+      {/* Quick Actions */}
+      <QuickActions
+        onShowLeadManagement={onShowLeadManagement}
+        onShowPayments={onShowPayments}
+        onShowAnalytics={onShowAnalytics}
+        hotLeads={hotLeads}
+        overduePayments={overduePayments}
+        totalRevenue={totalRevenue}
+      />
     </div>
   );
 };

@@ -35,6 +35,55 @@ date
 4. Proceed with development tasks using verified date context
 5. Flag any timeline discrepancies immediately
 
+## ⚡ **SESSION PERFORMANCE MANAGEMENT**
+
+### **OPTIMAL WORKFLOW: `/clear` + `/resume` Every 2-3 Hours**
+**Problem:** Claude's context window fills up during long sessions, causing slower responses and lost context
+
+**SOLUTION: Proactive Context Management**
+```bash
+# Every 2-3 hours or at natural break points
+/clear
+/resume
+```
+
+### **When to Use `/clear` + `/resume`**
+
+**Performance Indicators (Don't Wait for These):**
+- Claude starts responding slowly
+- Re-reading files already examined  
+- Asking about things just discussed
+- Responses become less focused/coherent
+
+**Proactive Triggers (Recommended):**
+- **Every 2-3 hours** of active coding
+- **After 50-100 message exchanges**
+- **Before starting new major features/modules**
+- **After completing significant todo lists**
+- **When switching between different parts of codebase**
+- **After complex debugging sessions**
+
+### **Why This Works**
+- **`/clear`**: Completely resets context window, removes conversation history weight
+- **`/resume`**: Provides curated, high-quality project context without performance overhead
+- **Result**: Maximum speed + essential continuity
+
+### **Best Practice**
+**Don't wait for slowdown** - use `/clear` + `/resume` proactively at natural break points. Prevention is better than pushing through degraded performance.
+
+### **Claude's Reminder Behavior**
+**Claude will proactively suggest `/clear` + `/resume` when:**
+- Noticing own performance degradation (re-reading files, asking about recent topics)
+- At natural workflow break points (completing major tasks, switching modules)
+- After 2-3 hours of continuous coding work
+- Before starting complex tasks that need fresh context
+
+**Reminder Style:**
+- **Brief and helpful**: "Might be a good time for `/clear` + `/resume`"
+- **Context-aware**: Only when it genuinely makes sense for workflow
+- **Non-intrusive**: Won't interrupt urgent debugging or mid-task work
+- **Your choice**: Final decision on timing always yours
+
 ## 🔍 **DEVELOPMENT VERIFICATION PROTOCOL**
 
 ### **CRITICAL: Always Verify Compilation State**

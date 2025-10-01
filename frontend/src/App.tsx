@@ -28,8 +28,7 @@ import Footer from './website/components/Footer';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { UserProvider } from './contexts/UserContext';
 import { HelmetProvider } from 'react-helmet-async';
-import { themes, applyTheme } from './styles/themes';
-import { safeLocalStorageSetItem, safeLocalStorageGetItem } from './utils/unicodeUtils';
+// Theme-related imports removed for MVP simplicity
 import { scrollToTop } from './utils/scrollUtils';
 import { ActionParams } from './services/nlp/types';
 import { createVoiceCommandRouter } from './services/voice/VoiceCommandRouter';
@@ -74,7 +73,6 @@ function AppContent() {
   const { isMobile } = useResponsive();
   const [currentScreen, setCurrentScreen] = useState('homepage');
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
-  const [currentTheme, setCurrentTheme] = useState('light');
   const [userMode, setUserMode] = useState<UserMode>('guest');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [leadFilter, setLeadFilter] = useState('all');
@@ -99,10 +97,6 @@ function AppContent() {
     setCurrentLanguage(language as Language);
   }
 
-  function switchTheme(themeName: string) {
-    setCurrentTheme(themeName);
-    safeLocalStorageSetItem('selectedTheme', themeName);
-  }
 
   const showLeadManagement = useCallback((autoAction?: string, actionParams?: ActionParams) => {
     if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
@@ -157,17 +151,7 @@ function AppContent() {
     voiceCommandRouter.routeVoiceCommand(actionType, params);
   }, [handleUniversalSearch, voiceCommandRouter]);
 
-  useEffect(() => {
-    const savedTheme = safeLocalStorageGetItem('selectedTheme', 'light') as string;
-    setCurrentTheme(savedTheme);
-    const theme = themes[savedTheme] || themes['light'];
-    applyTheme(theme);
-  }, []);
 
-  useEffect(() => {
-    const theme = themes[currentTheme] || themes['light'];
-    applyTheme(theme);
-  }, [currentTheme]);
 
   // Sync currentScreen with URL path
   useEffect(() => {
@@ -349,8 +333,6 @@ function AppContent() {
       <div className="platformPageContent">
         <Dashboard
           mobile={isMobile}
-          currentTheme={currentTheme}
-          onThemeChange={switchTheme}
           onNavigateHome={showHomePage}
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
@@ -624,7 +606,27 @@ function AppContent() {
         {/* Responsive Layout: Mobile vs Desktop */}
         {isMobile && isPlatformPage(currentScreen) ? (
           // Mobile Layout with MobileAppShell for Platform Pages
-          <MobileAppShell>
+          <MobileAppShell 
+            onUniversalAction={handleUniversalAction}
+            currentLanguage={currentLanguage}
+            onLanguageChange={switchLanguage}
+            onHome={showHomePage}
+            onDashboard={showDashboard}
+            onLogin={showLogin}
+            onSignUp={showSignUp}
+            onGuestMode={handleGuestMode}
+            onDemoMode={handleDemoMode}
+            onLogout={handleLogout}
+            isAuthenticated={isAuthenticated}
+            userMode={userMode}
+            showWebsiteNavigation={true}
+            currentScreen={currentScreen}
+            onServicesHub={showServicesHub}
+            onTurnaroundStories={showTurnaroundStories}
+            onBlogHome={showBlogHome}
+            onAbout={showAbout}
+            onContact={showContact}
+          >
             <Routes>
               <Route path="/dashboard" element={renderDashboard()} />
               <Route path="/leads" element={renderLeadManagement()} />
@@ -646,8 +648,6 @@ function AppContent() {
             <ProductHeader
                 currentLanguage={currentLanguage}
                 onLanguageChange={switchLanguage}
-                currentTheme={currentTheme}
-                onThemeChange={switchTheme}
                 onHome={showHomePage}
                 onDashboard={showDashboard}
                 onLogin={showLogin}

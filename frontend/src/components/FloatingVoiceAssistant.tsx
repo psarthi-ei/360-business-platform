@@ -57,6 +57,9 @@ interface FloatingVoiceAssistantProps {
     totalCustomers: number;
   };
   onPerformSearch?: (query: string) => void;
+  // External debug control for mobile header integration
+  externalDebugState?: boolean;
+  onDebugToggle?: (isOpen: boolean) => void;
 }
 
 // Simplified Universal Routing - All commands go through VoiceCommandRouter
@@ -81,7 +84,9 @@ function FloatingVoiceAssistant({
   currentProcessStage = 'dashboard',
   onUniversalAction,
   businessData,
-  onPerformSearch
+  onPerformSearch,
+  externalDebugState,
+  onDebugToggle
 }: FloatingVoiceAssistantProps) {
   // const { t } = useTranslation(); // Translation available if needed
   
@@ -458,10 +463,20 @@ function FloatingVoiceAssistant({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessData, currentProcessStage, executeVoiceAction]);
 
-  // Debug logging state
-  const [showDebugPanel, setShowDebugPanel] = useState(false);
+  // Debug logging state - with external control support
+  const [internalDebugPanel, setInternalDebugPanel] = useState(false);
+  const showDebugPanel = externalDebugState !== undefined ? externalDebugState : internalDebugPanel;
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
   const [debugFilter, setDebugFilter] = useState<'all' | 'voice' | 'audio' | 'permission' | 'capability' | 'nlp'>('all');
+
+  // Debug panel toggle handler
+  const handleDebugToggle = (newState: boolean) => {
+    if (onDebugToggle) {
+      onDebugToggle(newState);
+    } else {
+      setInternalDebugPanel(newState);
+    }
+  };
   
   // Enhanced debug logger with capability detection
   const addDebugLog = useCallback((type: string, message: string) => {
@@ -883,15 +898,6 @@ function FloatingVoiceAssistant({
         {voiceState === 'PROCESSING' ? '⚡' : voiceState === 'LISTENING' ? '🎙️' : voiceState === 'ERROR' ? '❌' : '🎤'}
       </button>
 
-      {/* Debug Toggle Button */}
-      <button 
-        className={`${styles.debugToggleButton} ${showDebugPanel ? styles.active : ''}`}
-        onClick={() => setShowDebugPanel(!showDebugPanel)}
-        aria-label="Toggle Debug Panel"
-        title="Toggle Voice Debug Panel"
-      >
-        🐛
-      </button>
 
       {/* Voice Command Suggestions Panel */}
       {showVoicePanel && (
@@ -931,6 +937,16 @@ function FloatingVoiceAssistant({
         </div>
       )}
 
+      {/* Debug Toggle Button - Desktop Only */}
+      <button 
+        className={`${styles.debugToggleButton} ${showDebugPanel ? styles.active : ''}`}
+        onClick={() => handleDebugToggle(!showDebugPanel)}
+        aria-label="Toggle Debug Panel"
+        title="Toggle Voice Debug Panel"
+      >
+        🐛
+      </button>
+
       {/* Debug Panel */}
       {showDebugPanel && (
         <div className={styles.debugPanel}>
@@ -960,7 +976,7 @@ function FloatingVoiceAssistant({
               </button>
               <button 
                 className={styles.closeDebugPanel}
-                onClick={() => setShowDebugPanel(false)}
+                onClick={() => handleDebugToggle(false)}
                 title="Close Debug Panel"
               >
                 ✕
@@ -1010,6 +1026,7 @@ function FloatingVoiceAssistant({
           </div>
         </div>
       )}
+
     </>
   );
 }

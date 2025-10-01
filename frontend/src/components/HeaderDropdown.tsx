@@ -69,25 +69,14 @@ function HeaderDropdown({
     { code: 'hi', name: 'हिंदी', flag: '🇮🇳' }
   ];
 
-  const themes = [
-    { id: 'light', name: 'Light', icon: '☀️' },
-    { id: 'dark', name: 'Dark', icon: '🌙' }
-  ];
-
   const currentLang = languages.find(lang => lang.code === currentLanguage);
-  const currentThemeData = themes.find(theme => theme.id === currentTheme);
 
   const handleLanguageSelect = (langCode: string) => {
     onLanguageChange(langCode);
     setIsOpen(false);
   };
 
-  const handleThemeSelect = (themeId: string) => {
-    if (onThemeChange) {
-      onThemeChange(themeId);
-    }
-    setIsOpen(false);
-  };
+  // Theme functionality removed for MVP simplicity
 
   // const handleNavigation = (action: () => void) => {
   //   action();
@@ -259,27 +248,7 @@ function HeaderDropdown({
           </div>
 
 
-          {/* Theme Section */}
-          {currentTheme && onThemeChange && (
-            <div className={styles.menuSection}>
-              <div className={styles.sectionTitle}>
-                Theme: {currentThemeData?.icon} {currentThemeData?.name}
-              </div>
-              {themes.map(theme => (
-                <button
-                  key={theme.id}
-                  className={`${styles.menuItem} ${currentTheme === theme.id ? styles.activeItem : ''}`}
-                  onClick={() => handleThemeSelect(theme.id)}
-                >
-                  <span className={styles.itemIcon}>{theme.icon}</span>
-                  <span className={styles.itemText}>{theme.name}</span>
-                  {currentTheme === theme.id && (
-                    <span className={styles.checkmark}>✓</span>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Theme Section removed for MVP simplicity */}
         </div>
       )}
     </div>

@@ -84,7 +84,7 @@ function QuotationOrders({
 
     // Create shareable WhatsApp message
     const profileUrl = `${window.location.origin}/profile-complete/${linkId}`;
-    const whatsappMessage = `Hello ${quote.companyName}! 🏢\n\nThank you for approving our quote ${quoteId}. To proceed with your order, please complete your business profile using this secure link:\n\n${profileUrl}\n\n📋 This will take just 3 minutes\n🔒 Your information is secure\n⏰ Link expires in 7 days\n\nBest regards,\nElevateBusiness Team`;
+    const whatsappMessage = `Hello ${quote.companyName}! 🏢\n\nThank you for approving our quote ${quoteId}. To proceed with your order, please complete your business profile using this secure link:\n\n${profileUrl}\n\n📋 This will take just 3 minutes\n🔒 Your information is secure\n⏰ Link expires in 7 days\n\nBest regards,\nElevateBusiness 360° Team`;
     
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
     
