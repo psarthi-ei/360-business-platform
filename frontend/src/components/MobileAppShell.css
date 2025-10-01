@@ -90,40 +90,56 @@
 }
 
 .debug-button {
+  /* UNIFIED STYLING - Same as desktop debug button */
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   border: 2px solid rgba(26, 188, 156, 0.4);
   color: #1abc9c;
   font-size: 12px;
   font-weight: 600;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  padding: 4px 6px;
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
   overflow: hidden;
-  min-width: 32px;
-  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+  backdrop-filter: blur(10px);
+  
+  /* MOBILE POSITION - Integrated in header */
+  position: relative;
+  width: 40px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 4px 6px;
+  min-width: 32px;
 }
 
-.debug-button span {
+.debug-button::before {
+  content: '</>';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 14px;
   font-weight: bold;
   color: #1abc9c;
   text-shadow: 0 0 8px rgba(26, 188, 156, 0.5);
 }
 
+.debug-button span {
+  /* Hide span content since we use ::before for consistency */
+  opacity: 0;
+}
+
 .debug-button:hover {
   background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
   border-color: rgba(255, 255, 255, 0.6);
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
+  box-shadow: 0 6px 20px rgba(26, 188, 156, 0.4);
 }
 
-.debug-button:hover span {
+.debug-button:hover::before {
   color: white;
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
 }
@@ -134,9 +150,10 @@
   animation: debugPulse 2s ease-in-out infinite;
 }
 
-.debug-button.active span {
+.debug-button.active::before {
   color: white;
   content: '⚡';
+  font-size: 16px;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }
 

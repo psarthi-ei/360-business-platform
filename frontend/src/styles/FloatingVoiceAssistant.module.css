@@ -370,11 +370,9 @@
   }
 }
 
-/* Debug Toggle Button - Professional Developer Tool */
+/* Debug Toggle Button - Unified Styling (Desktop Position) */
 .debugToggleButton {
-  position: fixed;
-  bottom: 85px;
-  right: 20px;
+  /* UNIFIED STYLING - Used for both mobile and desktop */
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -388,12 +386,16 @@
   box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
+  
+  /* DESKTOP POSITION - Fixed floating button */
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  z-index: 1002;
 }
 
 .debugToggleButton::before {
@@ -451,6 +453,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden; /* Prevent content from breaking layout */
+  color: #333; /* Default dark text for desktop */
 }
 
 .debugPanelHeader {
@@ -572,7 +575,7 @@
 /* Mobile responsive for debug panel */
 @media (max-width: 768px) {
   .debugToggleButton {
-    display: none; /* Hide floating debug button on mobile - use header button instead */
+    display: none; /* Hide desktop floating debug button on mobile - use header button instead */
   }
   
   .debugPanel {
@@ -581,6 +584,11 @@
     left: 10px;
     width: auto;
     max-height: 300px;
+    /* Use same light background as desktop for consistency */
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   }
   
   .debugLogEntry {
@@ -617,6 +625,7 @@
     background: #fff;
     border: 2px solid #000;
   }
+  
   
   .debugToggleButton {
     background: #000;
