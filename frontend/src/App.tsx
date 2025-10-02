@@ -40,6 +40,7 @@ import { getSearchDataSources, getSearchNavigationHandlers } from './business/se
 import { createNavigationHelpers } from './business/navigationBusinessLogic';
 import { getBusinessData, getCurrentProcessStage } from './business/businessDataLogic';
 import { createUniversalActionHandler } from './business/voiceBusinessLogic';
+import { createAllRoutes, RenderFunctions } from './business/routeBusinessLogic';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -534,6 +535,54 @@ function AppContent() {
     );
   }
 
+  function renderExternalProfileForm() {
+    function handleProfileSubmit(profileData: BusinessProfileFormData) {
+      setTimeout(() => {
+        alert('Profile created successfully! Our team will contact you soon.');
+        showHomePage();
+      }, 2000);
+    }
+
+    function handleProfileSuccess(businessProfileId: string) {
+    }
+
+    return (
+      <ExternalProfileForm
+        quoteId={profileQuoteId}
+        companyName={profileCompanyName}
+        linkId={profileLinkId}
+        onSubmit={handleProfileSubmit}
+        onSuccess={handleProfileSuccess}
+        onCancel={() => showHomePage()}
+      />
+    );
+  }
+
+  // Render functions object for shared route configuration
+  const renderFunctions: RenderFunctions = {
+    renderHomePage,
+    renderDashboard,
+    renderLeadManagement,
+    renderQuotationOrders,
+    renderSalesOrders,
+    renderPayments,
+    renderInvoices,
+    renderCustomerList,
+    renderCustomerProfile,
+    renderInventoryManagement,
+    renderFulfillmentManagement,
+    renderAnalyticsManagement,
+    renderAuthentication,
+    renderProfileCompletion,
+    renderServicesHub,
+    renderTurnaroundStories,
+    renderBlogHome,
+    renderBlogPost,
+    renderAbout,
+    renderContact,
+    renderExternalProfileForm
+  };
+
   return (
     <HelmetProvider>
       <TranslationProvider defaultLanguage={currentLanguage}>
@@ -566,17 +615,7 @@ function AppContent() {
             onContact={showContact}
           >
             <Routes>
-              <Route path="/dashboard" element={renderDashboard()} />
-              <Route path="/leads" element={renderLeadManagement()} />
-              <Route path="/quotes" element={renderQuotationOrders()} />
-              <Route path="/orders" element={renderSalesOrders()} />
-              <Route path="/payments" element={renderPayments()} />
-              <Route path="/invoices" element={renderInvoices()} />
-              <Route path="/customers/:customerId" element={renderCustomerProfile()} />
-              <Route path="/customers" element={renderCustomerList()} />
-              <Route path="/inventory" element={renderInventoryManagement()} />
-              <Route path="/fulfillment" element={renderFulfillmentManagement()} />
-              <Route path="/analytics" element={renderAnalyticsManagement()} />
+              {createAllRoutes(renderFunctions)}
               <Route path="*" element={renderDashboard()} />
             </Routes>
           </MobileAppShell>
@@ -626,29 +665,7 @@ function AppContent() {
             )}
             
             <Routes>
-              <Route path="/" element={renderHomePage()} />
-              <Route path="/login" element={renderAuthentication()} />
-              <Route path="/signup" element={renderAuthentication()} />
-              <Route path="/dashboard" element={renderDashboard()} />
-              <Route path="/leads" element={renderLeadManagement()} />
-              <Route path="/quotes" element={renderQuotationOrders()} />
-              <Route path="/orders" element={renderSalesOrders()} />
-              <Route path="/payments" element={renderPayments()} />
-              <Route path="/invoices" element={renderInvoices()} />
-              <Route path="/customers/:customerId" element={renderCustomerProfile()} />
-              <Route path="/customers" element={renderCustomerList()} />
-              <Route path="/profile-completion" element={renderProfileCompletion()} />
-              <Route path="/inventory" element={renderInventoryManagement()} />
-              <Route path="/fulfillment" element={renderFulfillmentManagement()} />
-              <Route path="/analytics" element={renderAnalyticsManagement()} />
-              <Route path="/services" element={renderServicesHub()} />
-              <Route path="/services/:framework" element={renderServicesHub()} />
-              <Route path="/turnaround-stories" element={renderTurnaroundStories()} />
-              <Route path="/turnaround-stories/:story" element={renderTurnaroundStories()} />
-              <Route path="/blog" element={renderBlogHome()} />
-              <Route path="/blog/:slug" element={renderBlogPost()} />
-              <Route path="/about" element={renderAbout()} />
-              <Route path="/contact" element={renderContact()} />
+              {createAllRoutes(renderFunctions)}
               <Route path="*" element={renderHomePage()} />
             </Routes>
             
