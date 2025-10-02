@@ -231,7 +231,7 @@ body {
   overflow: visible;
 }
 
-/* Dashboard Styles - Dashboard.module.css will be used for component-specific styles */
+/* Dashboard Styles - dashboard.module.css will be used for component-specific styles */
 .dashboard {
   min-height: 100vh;
   display: flex;
