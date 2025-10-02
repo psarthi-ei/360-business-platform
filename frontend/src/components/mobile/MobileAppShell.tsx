@@ -172,7 +172,11 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
       <header className="mobile-header">
         {/* Navigation Row - Company Branding */}
         <div className="nav-row">
-          <div className="brand-section">
+          <div 
+            className="brand-section clickable" 
+            onClick={() => onHome ? onHome() : navigate('/')}
+            style={{ cursor: 'pointer' }}
+          >
             <img src={logoImage} alt="ElevateIdea" className="brand-logo" />
             <div className="brand-info">
               <div className="brand-name">ElevateIdea</div>
