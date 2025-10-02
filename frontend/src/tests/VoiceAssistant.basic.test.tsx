@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import FloatingVoiceAssistant from '../components/FloatingVoiceAssistant';
+import FloatingVoiceAssistant from '../components/voice/FloatingVoiceAssistant';
 
 // Mock CSS modules
 jest.mock('../styles/FloatingVoiceAssistant.module.css', () => ({

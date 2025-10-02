@@ -2,7 +2,7 @@
 // Focus on core search behavior without complex interface dependencies
 
 import { renderHook, act } from '@testing-library/react';
-import { useGlobalSearch } from '../components/useGlobalSearch';
+import { useGlobalSearch } from '../components/search/useGlobalSearch';
 
 describe('Core Search Functionality', () => {
   const mockNavigationHandlers = {

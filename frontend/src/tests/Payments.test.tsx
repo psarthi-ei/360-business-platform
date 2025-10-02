@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Payments from '../components/Payments';
+import Payments from '../components/business/Payments';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {

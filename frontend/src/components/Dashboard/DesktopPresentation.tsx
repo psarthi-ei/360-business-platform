@@ -1,6 +1,6 @@
 import React from 'react';
-import TabNavigation from '../TabNavigation';
-import styles from '../../styles/Dashboard.module.css';
+import TabNavigation from '../ui/TabNavigation';
+import styles from './Dashboard.module.css';
 
 interface DesktopPresentationProps {
   // Business metrics

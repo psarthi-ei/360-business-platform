@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import AddLeadModal from '../components/AddLeadModal';
+import AddLeadModal from '../components/business/AddLeadModal';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {

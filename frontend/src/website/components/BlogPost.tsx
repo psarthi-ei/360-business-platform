@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import { scrollToTop } from '../../utils/scrollUtils';
 import styles from '../styles/BlogPost.module.css';
 import { 

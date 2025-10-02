@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { scrollToTop } from '../../utils/scrollUtils';
 import { openConsultationForm } from '../../utils/contactUtils';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import styles from '../styles/ServicesHub.module.css';
 
 interface ServicesHubProps {

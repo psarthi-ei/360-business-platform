@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import QuotationOrders from '../components/QuotationOrders';
+import QuotationOrders from '../components/business/QuotationOrders';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {

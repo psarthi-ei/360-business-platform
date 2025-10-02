@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CustomerList from '../components/CustomerList';
+import CustomerList from '../components/business/CustomerList';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {

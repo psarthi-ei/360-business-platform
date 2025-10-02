@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Authentication from '../components/Authentication';
+import Authentication from '../components/auth/Authentication';
 import { TranslationProvider } from '../contexts/TranslationContext';
 import { UserProvider } from '../contexts/UserContext';
 

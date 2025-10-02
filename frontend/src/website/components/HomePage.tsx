@@ -1,6 +1,6 @@
 import React from 'react';
 import { openBetaSignup } from '../../utils/contactUtils';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import styles from '../styles/HomePage.module.css';
 
 interface HomePageProps {

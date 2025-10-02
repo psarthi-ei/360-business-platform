@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import SignUp from '../components/SignUp';
+import SignUp from '../components/auth/SignUp';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 // Mock props

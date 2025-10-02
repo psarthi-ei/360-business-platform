@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/AboutPage.module.css';
 import { openConsultationForm } from '../../utils/contactUtils';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 
 interface AboutPageProps {
   currentLanguage: string;

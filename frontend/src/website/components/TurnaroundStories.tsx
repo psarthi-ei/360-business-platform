@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { scrollToTop } from '../../utils/scrollUtils';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import styles from '../styles/TurnaroundStories.module.css';
 
 interface TurnaroundStoriesProps {

@@ -1,5 +1,5 @@
 import React from 'react';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import styles from '../styles/ContactPage.module.css';
 import { openConsultationForm } from '../../utils/contactUtils';
 

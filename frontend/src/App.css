@@ -1,7 +1,7 @@
 /* Global App Styles */
 
-/* Import Mobile CSS Foundation */
-@import './styles/mobile.css';
+/* Import Mobile Global CSS Foundation */
+@import './mobileGlobal.css';
 
 /* Markdown Content Styling - Global styles for ReactMarkdown */
 .markdown-content {

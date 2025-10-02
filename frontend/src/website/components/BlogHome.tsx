@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SEO from '../../components/SEO';
+import SEO from '../../components/ui/SEO';
 import styles from '../styles/BlogHome.module.css';
 import BlogCategoryManager from './BlogCategoryManager';
 import { useUser } from '../../contexts/UserContext';
