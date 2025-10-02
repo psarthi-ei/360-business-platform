@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Dashboard from '../components/dashboard';
+import Dashboard from '../components/dashboard/index';
 import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {

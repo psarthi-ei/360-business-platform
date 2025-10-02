@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from 'react-router-dom';
 import LanguageSwitcher from './components/ui/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
-import Dashboard from './components/dashboard';
+import Dashboard from './components/dashboard/index';
 import LeadManagement from './components/business/LeadManagement';
 import QuotationOrders from './components/business/QuotationOrders';
 import SalesOrders from './components/business/SalesOrders';
