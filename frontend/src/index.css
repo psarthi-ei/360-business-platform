@@ -18,12 +18,173 @@
   --font-base: clamp(16px, 3.5vw, 18px);  /* Standard UI elements, dropdowns */
   --font-lg: clamp(18px, 4vw, 20px);      /* Important text, headings */
   --font-xl: clamp(20px, 4.5vw, 24px);    /* Large headers, emphasis */
+
+  /* DESIGN SYSTEM V2 - Mobile-First Global Variables */
+  /* Professional Light Theme Color System (from LeadManagement success) */
+  --ds-bg-primary: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  --ds-bg-card: white;
+  --ds-bg-expanded: #f8fafb;
+  
+  /* Text Colors */
+  --ds-text-primary: #2d3748;
+  --ds-text-secondary: #4a5568;
+  --ds-text-muted: #718096;
+  
+  /* Border & Dividers */
+  --ds-border-primary: #e1e8ed;
+  --ds-border-secondary: #cbd5e0;
+  
+  /* Interactive States */
+  --ds-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --ds-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Button Color System - Proven Hierarchy */
+  --ds-btn-primary: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
+  --ds-btn-primary-hover: linear-gradient(135deg, #3182ce 0%, #5a67d8 100%);
+  --ds-btn-urgent: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+  --ds-btn-urgent-hover: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+  --ds-btn-secondary: white;
+  --ds-btn-secondary-border: #4299e1;
+  --ds-btn-secondary-hover: #4299e1;
+
+  /* Priority Badge Colors */
+  --ds-badge-hot: linear-gradient(135deg, #ff4757, #ff3742);
+  --ds-badge-warm: linear-gradient(135deg, #ffa502, #ff9500);
+  --ds-badge-cold: linear-gradient(135deg, #4299e1, #667eea);
+
+  /* Responsive Spacing System */
+  --ds-space-xs: clamp(4px, 1vw, 8px);
+  --ds-space-sm: clamp(8px, 2vw, 12px);
+  --ds-space-md: clamp(12px, 3vw, 16px);
+  --ds-space-lg: clamp(16px, 4vw, 24px);
+  --ds-space-xl: clamp(24px, 5vw, 32px);
+  --ds-space-xxl: clamp(32px, 6vw, 48px);
+
+  /* Component Spacing Patterns */
+  --ds-padding-component: clamp(20px, 4vw, 30px) clamp(10px, 2vw, 20px);
+  --ds-padding-screen: clamp(20px, 4vw, 30px) clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) clamp(10px, 2vw, 20px);
+  --ds-padding-header: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
+  --ds-padding-button: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
+
+  /* Grid Gap System */
+  --ds-gap-sm: clamp(0.25rem, 1.5vw, 0.75rem);
+  --ds-gap-md: clamp(0.5rem, 2vw, 1rem);
+  --ds-gap-lg: clamp(1rem, 3vw, 1.5rem);
+
+  /* Touch Target Standards */
+  --ds-touch-target-min: clamp(42px, 8vw, 44px);
+  --ds-touch-target-preferred: clamp(44px, 9vw, 48px);
+  --ds-touch-target-comfortable: clamp(48px, 10vw, 56px);
+  --ds-touch-action: manipulation;
+  --ds-tap-highlight: transparent;
+
+  /* Border Radius System */
+  --ds-radius-sm: clamp(4px, 1vw, 6px);
+  --ds-radius-md: clamp(6px, 1.2vw, 8px);
+  --ds-radius-lg: clamp(8px, 1.5vw, 12px);
+  --ds-radius-xl: clamp(12px, 2vw, 16px);
 }
 
-/* Platform Page Content Layout */
+/* DESIGN SYSTEM V2 - Universal Button System */
+/* Global Button Foundation - extends existing Design System V2 variables */
+.ds-btn {
+  /* Base structure using existing DS variables */
+  padding: var(--ds-padding-button);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  
+  /* Mobile optimization using existing standards */
+  min-height: var(--ds-touch-target-min);
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+  
+  /* Responsive flex layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-xs);
+}
+
+/* Primary Button Variant */
+.ds-btn-primary {
+  background: var(--ds-btn-primary);
+  color: white;
+}
+.ds-btn-primary:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button Variant (proven in Lead/Quote components) */
+.ds-btn-secondary {
+  background: var(--ds-btn-secondary);
+  color: var(--ds-text-primary);
+  border: 1px solid var(--ds-btn-secondary-border);
+}
+.ds-btn-secondary:hover {
+  background: var(--ds-btn-secondary-hover);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Urgent/Hot Priority Actions */
+.ds-btn-urgent {
+  background: var(--ds-btn-urgent);
+  color: white;
+}
+.ds-btn-urgent:hover {
+  background: var(--ds-btn-urgent-hover);
+  transform: translateY(-1px);
+}
+
+/* Action-Specific Variants (from Lead/Quote success) */
+.ds-btn-call { 
+  background: #2ed573; 
+  color: white;
+}
+.ds-btn-call:hover { 
+  background: #7bed9f; 
+}
+
+.ds-btn-whatsapp { 
+  background: #25d366; 
+  color: white;
+}
+.ds-btn-whatsapp:hover { 
+  background: #128c7e; 
+}
+
+/* Filter Buttons (QuotationOrders pattern) */
+.ds-btn-filter {
+  background: rgba(66, 153, 225, 0.1);
+  color: #4299e1;
+  border: 1px solid #4299e1;
+}
+.ds-btn-filter:hover {
+  background: #4299e1;
+  color: white;
+}
+
+/* More/Toggle Buttons */
+.ds-btn-more {
+  background: rgba(66, 153, 225, 0.1);
+  color: #4299e1;
+  border: 1px solid #4299e1;
+  min-width: 80px;
+}
+.ds-btn-more:hover {
+  background: #4299e1;
+  color: white;
+}
+
+/* Platform Page Content Layout - Clean Global Base */
 .platformPageContent {
-  padding-top: var(--platform-content-top);
   min-height: 100vh;
+  /* No global padding - let shells and components handle their own spacing */
 }
 
 /* Responsive Adjustments */

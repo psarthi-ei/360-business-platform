@@ -1,9 +1,9 @@
 # 📱 MOBILE UX V2 IMPLEMENTATION
 ## Holistic Business Intelligence & Workflow-Based Mobile Experience
 
-**Document Version:** 2.3  
+**Document Version:** 2.4  
 **Created:** October 1, 2025  
-**Last Updated:** October 2, 2025  
+**Last Updated:** October 3, 2025  
 **Project:** ElevateBusiness 360° by ElevateIdea Technologies  
 
 ---
@@ -33,68 +33,120 @@
 | **Mobile Base** | ✅ **COMPLETE** | Search & Voice Integration | - | MobileAppShell has functional GlobalSearch & FloatingVoiceAssistant |
 | **Phase 2** | ❌ **SKIPPED** | Enhanced Search Results | - | Quick action buttons deemed overkill for MVP |
 | **Phase 3** | ✅ **COMPLETE** | LeadManagement Mobile UX V2 | 25-30 mins | Desktop cards → Mobile stack with 48px touch targets |
-| **Phase 3.1** | 🎯 **READY** | LeadManagement Enhanced Mobile UX | 35-40 mins | Critical redesign for proper mobile experience |
-| **Phase 4** | ⏳ **PENDING** | QuotationOrders Mobile UX V2 | 25-30 mins | Wide tables → Mobile cards with workflow actions **MUST follow Design System** |
-| **Phase 5** | ⏳ **PENDING** | Supporting Components | 15-20 mins | AddLeadModal, CustomerProfile, remaining components **MUST follow Design System** |
+| **Phase 3.1** | ✅ **COMPLETE** | Design System V2 Creation | 45 mins | Comprehensive design system with global CSS variables |
+| **Phase 4** | ✅ **COMPLETE** | QuotationOrders Mobile UX V2 | 30 mins | Wide tables → Mobile cards with workflow actions following Design System V2 |
+| **Phase 4.1** | ⏳ **PENDING** | Universal Button System (Lead & Quote) | 15-20 mins | Replace duplicate button classes with global `.ds-btn` system in LeadManagement and QuotationOrders |
+| **Phase 5** | ⏳ **PENDING** | Supporting Components + Button System | 20-25 mins | AddLeadModal, CustomerProfile, remaining components **MUST follow Design System V2 + use global `.ds-btn` system** |
 | **Phase 6** | ⏳ **PENDING** | Design System Compliance Audit | 10-15 mins | Verify ALL components follow established standards |
 
 **📱 Current App Status**: ✅ Running successfully at http://localhost:3000 with clean compilation  
-**🎯 Next Action**: Start Phase 3.1 (LeadManagement Enhanced Mobile UX) - 35-40 minutes  
-**⏱️ Total Remaining**: 85-105 minutes for complete Mobile UX V2 transformation
+**🎯 Next Action**: Start Phase 4.1 (Universal Button System for Lead & Quote) - 15-20 minutes  
+**⏱️ Total Remaining**: 45-60 minutes for complete Mobile UX V2 transformation
 
 ---
 
 ## 🚨 **DESIGN SYSTEM IMPLEMENTATION MANDATE**
 ### **MANDATORY for ALL Future Implementation Phases**
 
-**All remaining phases (Phase 4, 5, 6) and future development MUST strictly adhere to the established [Mobile-First Design System](#📱-mobile-first-design-system) standards.**
+**All remaining phases (Phase 5, 6) and future development MUST strictly adhere to the Design System V2 standards documented in `/docs/DESIGN_SYSTEM_V2.md`.**
 
 ### **Mandatory Requirements for Every Component:**
 
 #### **1. Typography Compliance (NON-NEGOTIABLE)**
 - ❌ **FORBIDDEN:** Any hardcoded font-size values (px, rem, em)
 - ✅ **REQUIRED:** All text MUST use CSS variables (--font-xs through --font-xl)
-- ✅ **VERIFICATION:** Zero tolerance policy - compilation will be checked for compliance
+- ✅ **REFERENCE:** Complete typography guidelines in `/docs/DESIGN_SYSTEM_V2.md`
 
 #### **2. Unified Header Pattern (WHERE APPLICABLE)**
 - ✅ **REQUIRED:** CSS Grid layout with 3-column structure for business components
 - ✅ **REQUIRED:** Touch targets minimum 42-44px height
-- ✅ **REQUIRED:** Responsive spacing using clamp() functions
-- ✅ **REQUIRED:** Professional styling matching LeadManagement standards
+- ✅ **REFERENCE:** Implementation templates in `/docs/DESIGN_SYSTEM_V2.md`
 
 #### **3. Progressive Disclosure (FOR COMPLEX COMPONENTS)**
-- ✅ **REQUIRED:** Three-tier information architecture
-- ✅ **REQUIRED:** Mobile-first approach to information hierarchy
+- ✅ **REQUIRED:** Three-tier information architecture for complex components
 - ✅ **REQUIRED:** Touch-friendly toggle controls with proper state management
+- ✅ **REFERENCE:** React patterns and CSS animations in `/docs/DESIGN_SYSTEM_V2.md`
 
 #### **4. Touch Optimization (UNIVERSAL REQUIREMENT)**
 - ✅ **REQUIRED:** All interactive elements minimum 42px height
-- ✅ **REQUIRED:** `touch-action: manipulation` on all buttons/links
-- ✅ **REQUIRED:** `-webkit-tap-highlight-color: transparent` for clean mobile experience
+- ✅ **REQUIRED:** `touch-action: manipulation` and clean tap highlights
+- ✅ **REFERENCE:** Complete touch standards in `/docs/DESIGN_SYSTEM_V2.md`
 
 ### **Phase-Specific Design System Integration:**
 
-#### **Phase 4: QuotationOrders Mobile UX V2**
-- Convert ALL font sizes to CSS variables during mobile transformation
-- Implement Unified Header pattern with Add/Filter/Counter structure
-- Apply Progressive Disclosure to quote details and order information
-- Ensure all action buttons meet touch target requirements
+#### **Phase 4: QuotationOrders Mobile UX V2** ✅ **COMPLETE**
+- ✅ Convert ALL font sizes to CSS variables - **COMPLETED**
+- ✅ Implement Unified Header pattern with Add/Filter/Counter structure - **COMPLETED**
+- ✅ Apply Progressive Disclosure to quote details and order information - **COMPLETED**
+- ✅ Ensure all action buttons meet touch target requirements - **COMPLETED**
 
-#### **Phase 5: Supporting Components**
-- **AddLeadModal:** Form inputs using --font-base, labels using --font-sm
-- **CustomerProfile:** Complex information requiring Progressive Disclosure
-- **All Components:** Complete font standardization during enhancement
+#### **Phase 4.1: Universal Button System (Lead & Quote Components)** ⏳ **PENDING**
+**Duration:** 15-20 minutes  
+**Scope:** Replace duplicate button classes in LeadManagement and QuotationOrders with global Design System button classes
 
-#### **Phase 6: Design System Compliance Audit**
-- Systematic verification of Typography Compliance across ALL components
-- Touch target measurement and validation
-- Responsive behavior testing across device sizes
-- Professional aesthetics consistency verification
+**Implementation Steps:**
+
+1. **Add Global Button Classes to `/index.css`** (3-5 mins)
+   - Add `.ds-btn` foundation classes after existing Design System V2 variables
+   - Include all button variants used in Lead/Quote components
+   - Test compilation with new global classes
+
+2. **LeadManagement Button Migration** (6-8 mins)
+   - Remove: `.actionBtn`, `.primaryBtn`, `.secondaryBtn`, `.callBtn`, `.quoteBtn`, `.whatsappBtn`
+   - Replace JSX: `${styles.actionBtn} ${styles.primaryBtn}` → `ds-btn ds-btn-primary`
+   - Update: Edit Lead and Edit Requirements buttons to use standard pattern
+   - Verify: All button functionality preserved
+
+3. **QuotationOrders Button Migration** (6-8 mins)
+   - Remove: `.actionBtn`, `.primaryBtn`, `.secondaryBtn`, `.moreBtn`, `.filterBtn`
+   - Replace JSX: Component-specific classes → Global `.ds-btn` variants
+   - Update: Filter buttons, action buttons, and More... buttons
+   - Verify: Progressive disclosure and workflow actions working
+
+4. **Visual Verification** (2-3 mins)
+   - Side-by-side comparison with current appearance
+   - Mobile touch target validation (42px minimum maintained)
+   - Hover states and transitions working correctly
+   - Zero compilation errors or console warnings
+
+**Success Criteria:**
+- ✅ LeadManagement: All custom button classes removed, using global `.ds-btn` system
+- ✅ QuotationOrders: All custom button classes removed, using global `.ds-btn` system  
+- ✅ Visual consistency: Buttons look identical to current implementation
+- ✅ Functionality preserved: All click handlers and business logic working
+- ✅ Mobile optimization: Touch targets and responsive behavior maintained
+
+**Files Modified:**
+- `/index.css` - Add global button system
+- `/components/business/LeadManagement.module.css` - Remove duplicate button classes
+- `/components/business/LeadManagement.tsx` - Update JSX className usage
+- `/components/business/QuotationOrders.module.css` - Remove duplicate button classes  
+- `/components/business/QuotationOrders.tsx` - Update JSX className usage
+
+**Quality Gate:**
+- Search for `.actionBtn`, `.primaryBtn`, `.secondaryBtn` in Lead/Quote CSS files should return zero results
+- All existing button functionality must work identically
+- Mobile responsive behavior verified on actual device/DevTools
+
+#### **Phase 5: Supporting Components + Button System** ⏳ **PENDING**
+- **Follow Design System V2**: Use templates and patterns from `/docs/DESIGN_SYSTEM_V2.md`
+- **AddLeadModal:** Convert to Design System V2 with proper form styling
+- **CustomerProfile:** Implement progressive disclosure for complex customer data
+- **Typography Conversion:** Replace all hardcoded font sizes with CSS variables
+- **Touch Optimization:** Ensure 42px minimum touch targets
+- **Professional Styling:** Apply light theme color palette and shadow system
+
+#### **Phase 6: Design System Compliance Audit** ⏳ **PENDING**
+- **Typography Compliance:** Verify zero hardcoded font sizes across ALL components
+- **Touch Target Validation:** Measure all interactive elements meet 42px minimum
+- **Responsive Behavior:** Test across device sizes using clamp() functions
+- **Professional Aesthetics:** Confirm consistent Design System V2 appearance
+- **Quality Reference:** Use quality assurance checklist from `/docs/DESIGN_SYSTEM_V2.md`
 
 ### **Quality Gates:**
-- **No Phase Complete** until Design System compliance verified
-- **No Merge** without font standardization confirmation
-- **No Deployment** with remaining hardcoded font sizes
+- **No Phase Complete** until Design System V2 compliance verified
+- **No Merge** without typography standardization confirmation
+- **Reference Document:** `/docs/DESIGN_SYSTEM_V2.md` for all implementation details
 
 ---
 
@@ -919,20 +971,19 @@ Tap "History" → Show/hide quotes and orders
 
 ---
 
-## **🚀 PHASE 4: QuotationOrders Mobile UX V2 Transformation**
-**⏱️ Time Estimate: 25-30 minutes**  
-**🎯 Priority: HIGH - Critical for sales workflow on mobile**
-**🎨 MANDATORY: Must follow [Mobile-First Design System](#📱-mobile-first-design-system) standards**
+## **🚀 PHASE 4: QuotationOrders Mobile UX V2 Transformation** ✅ **COMPLETE**
+**⏱️ Time Estimate: ~~25-30 minutes~~ → 30 minutes actual**  
+**🎯 Priority: ~~HIGH~~ → **COMPLETED** - Critical for sales workflow on mobile**
+**🎨 MANDATORY: Must follow Design System V2 standards documented in `/docs/DESIGN_SYSTEM_V2.md`**
 
-### **Phase 4 Scope**
-- Transform QuotationOrders from wide desktop layout to mobile cards
-- **REQUIRED:** Convert ALL font sizes to CSS variables (--font-xs through --font-xl)
-- **REQUIRED:** Implement Unified Header pattern with CSS Grid layout
-- **REQUIRED:** Apply Progressive Disclosure to quote details
-- **REQUIRED:** Ensure all interactive elements meet 42-44px touch targets
-- Optimize workflow action buttons for mobile
-- Implement progressive disclosure for quote details
-- Add mobile-friendly status indicators
+### **Phase 4 Scope** ✅ **COMPLETED**
+- ✅ Transform QuotationOrders from wide desktop layout to mobile cards - **COMPLETED**
+- ✅ **REQUIRED:** Convert ALL font sizes to CSS variables (--font-xs through --font-xl) - **COMPLETED**
+- ✅ **REQUIRED:** Implement Unified Header pattern with CSS Grid layout - **COMPLETED**
+- ✅ **REQUIRED:** Apply Progressive Disclosure to quote details - **COMPLETED**
+- ✅ **REQUIRED:** Ensure all interactive elements meet 42-44px touch targets - **COMPLETED**
+- ✅ Optimize workflow action buttons for mobile - **COMPLETED**
+- ✅ Add mobile-friendly status indicators - **COMPLETED**
 
 ### **Phase 4 Technical Changes**
 1. **QuotationOrders.tsx Layout Transformation** (12-15 mins):
@@ -968,16 +1019,16 @@ Tap "History" → Show/hide quotes and orders
 ## **🚀 PHASE 5: CustomerProfile & Supporting Components Mobile UX V2**
 **⏱️ Time Estimate: 15-20 minutes**  
 **🎯 Priority: MEDIUM - Complete mobile experience**
-**🎨 MANDATORY: Must follow [Mobile-First Design System](#📱-mobile-first-design-system) standards**
+**🎨 MANDATORY: Must follow Design System V2 standards documented in `/docs/DESIGN_SYSTEM_V2.md`**
 
 ### **Phase 5 Scope**
-- Transform remaining business components for mobile
+- Transform remaining business components for mobile using Design System V2
 - **REQUIRED:** Convert ALL font sizes to CSS variables in all components
-- **REQUIRED:** Apply Unified Header pattern where applicable
+- **REQUIRED:** Apply Unified Header pattern where applicable  
 - **REQUIRED:** Implement Progressive Disclosure for CustomerProfile complex data
 - **REQUIRED:** Ensure all forms and modals meet touch target requirements
-- Optimize AddLeadModal for mobile form interaction
-- Ensure consistent mobile UX across all components
+- **IMPLEMENTATION REFERENCE:** Use templates and patterns from `/docs/DESIGN_SYSTEM_V2.md`
+- **QUALITY ASSURANCE:** Follow QA checklist from Design System V2 document
 
 ### **Phase 5 Technical Changes**
 1. **AddLeadModal.tsx Mobile Optimization** (8-10 mins):
@@ -1007,19 +1058,19 @@ Tap "History" → Show/hide quotes and orders
 
 ---
 
-## **🚀 PHASE 6: Design System Compliance Audit & Quality Assurance**
+## **🚀 PHASE 6: Design System V2 Compliance Audit & Quality Assurance**
 **⏱️ Time Estimate: 10-15 minutes**  
-**🎯 Priority: HIGH - Ensure ALL components follow established Design System standards**
-**🎨 FOCUS: Comprehensive verification of [Mobile-First Design System](#📱-mobile-first-design-system) compliance**
+**🎯 Priority: HIGH - Ensure ALL components follow Design System V2 standards**
+**🎨 FOCUS: Comprehensive verification of Design System V2 compliance using `/docs/DESIGN_SYSTEM_V2.md`**
 
 ### **Phase 6 Scope**
-- **AUDIT:** Systematic verification that ALL 33 components follow Design System standards
+- **AUDIT:** Systematic verification that ALL components follow Design System V2 standards
 - **VERIFY:** Zero hardcoded font sizes remain in any component CSS files
-- **CONFIRM:** All interactive elements meet minimum touch target requirements
+- **CONFIRM:** All interactive elements meet minimum touch target requirements (42-44px)
 - **VALIDATE:** Responsive behavior works consistently across all screen sizes
 - **TEST:** Professional aesthetics and brand consistency across entire platform
-- Factory environment testing optimizations
-- Performance and accessibility improvements
+- **QUALITY REFERENCE:** Use complete QA checklist from `/docs/DESIGN_SYSTEM_V2.md`
+- **TEMPLATE VERIFICATION:** Ensure components follow established React and CSS patterns
 
 ### **Phase 6 Technical Changes**
 1. **Mobile CSS Audit & Polish** (5-7 mins):
@@ -2122,8 +2173,26 @@ Priority Order:
 - **Responsive scaling:** Typography and spacing behavior verification
 - **Cross-browser compatibility:** Chrome, Safari, Firefox, Edge testing
 
-This design system serves as the complete guide for maintaining consistency and quality across all ElevateBusiness 360° components, ensuring a professional, mobile-optimized experience for MSME textile manufacturers.
+---
+
+## 📄 **IMPLEMENTATION REFERENCE**
+
+**For detailed implementation guidelines, React templates, CSS patterns, and quality assurance checklists, see:**
+
+### **📋 `/docs/DESIGN_SYSTEM_V2.md`**
+- **Complete Implementation Guide** - Copy-paste React and CSS templates
+- **Universal Typography System** - CSS variables and usage guidelines  
+- **Unified Header Patterns** - 3-column CSS Grid layouts
+- **Progressive Disclosure Templates** - React state management patterns
+- **Contextual Action Systems** - Two-tier action hierarchy implementations
+- **Quality Assurance Checklists** - Complete verification procedures
+- **Professional Card Design** - Priority-based styling and responsive patterns
+
+### **🎯 Usage for Remaining Phases**
+- **Phase 5 (Supporting Components):** Use Design System V2 templates for AddLeadModal and CustomerProfile transformation
+- **Phase 6 (Compliance Audit):** Follow QA checklist for systematic verification across all 33 components
+- **Future Development:** Apply Design System V2 standards to all new components and features
 
 ---
 
-*This document serves as the comprehensive implementation guide and status tracker for Mobile UX V2, with verified current status and clear next steps for component-level mobile optimization.*
+*This document serves as the comprehensive UX strategy and implementation roadmap for Mobile UX V2, with all implementation details centralized in Design System V2 for universal application.*
