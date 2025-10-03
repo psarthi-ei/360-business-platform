@@ -231,6 +231,14 @@ body {
   overflow: visible;
 }
 
+/* Desktop-specific Universal Search Clearance */
+@media (min-width: 769px) {
+  .App-content .platformPageContent {
+    padding-top: var(--platform-content-top);
+    /* Desktop containers need clearance for universal search bar */
+  }
+}
+
 /* Dashboard Styles - dashboard.module.css will be used for component-specific styles */
 .dashboard {
   min-height: 100vh;

@@ -1,10 +1,10 @@
 /* Lead Management Screen Styles */
 .leadManagementScreen {
   min-height: 100vh;
-  padding: clamp(20px, 4vw, 30px) clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) clamp(10px, 2vw, 20px);
+  padding: var(--ds-padding-screen);
   text-align: left !important;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-  color: #2d3748;
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
   position: relative;
   width: 100%;
   max-width: none;
@@ -109,55 +109,38 @@
 }
 
 .filterDropdown {
-  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
-  border: 1px solid #cbd5e0;
+  font-size: var(--font-base);
+  min-height: clamp(42px, 8vw, 44px);
+  width: 100%;
+  touch-action: manipulation;
+  padding: clamp(0.5rem, 2vw, 0.75rem);
+  border: 1px solid #e1e8ed;
   border-radius: clamp(6px, 1.2vw, 8px);
   background: white;
   color: #4a5568;
-  font-size: var(--font-base);
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: clamp(42px, 8vw, 44px);
-  width: 100%;
-  min-width: 0;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  appearance: none;
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xIDFMNiA2TDExIDEiIHN0cm9rZT0iIzRBNTU2OCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+');
-  background-repeat: no-repeat;
-  background-position: right clamp(8px, 2vw, 12px) center;
-  padding-right: clamp(2rem, 6vw, 2.5rem);
-  display: flex;
-  align-items: center;
+  outline: none;
 }
 
-.filterDropdown:hover {
+.filterDropdown:focus {
   border-color: #4299e1;
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
-.filterDropdown:focus {
-  outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
-}
-
 .leadCounter {
-  background: #f8fafb;
-  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
-  border-radius: clamp(6px, 1.2vw, 8px);
   font-size: var(--font-sm);
-  font-weight: 600;
-  color: #4a5568;
-  border: 1px solid #e1e8ed;
-  white-space: nowrap;
   min-width: clamp(4rem, 20vw, 6rem);
   min-height: clamp(42px, 8vw, 44px);
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  color: #4a5568;
+  font-weight: 600;
+  background: rgba(66, 153, 225, 0.1);
+  border-radius: clamp(6px, 1.2vw, 8px);
+  padding: clamp(0.5rem, 2vw, 0.75rem);
 }
 
 .filterButtons {
@@ -244,35 +227,36 @@
 }
 
 .leadCard {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  border-left: 4px solid;
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-lg);
+  border-left: 6px solid;
   transition: all 0.3s ease;
-  border: 1px solid #e1e8ed;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  margin-bottom: 16px;
+  border: 1px solid var(--ds-border-primary);
+  box-shadow: var(--ds-shadow-card);
+  margin-bottom: var(--ds-space-lg);
+  backdrop-filter: blur(10px);
 }
 
 .leadCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: #cbd5e0;
+  transform: translateY(-4px);
+  box-shadow: var(--ds-shadow-elevated);
+  background: var(--ds-bg-card);
 }
 
 .leadCard.hotLead {
   border-left-color: #ff4757;
-  background: #fff5f5;
+  background: var(--ds-bg-card);
 }
 
 .leadCard.warmLead {
   border-left-color: #ffa502;
-  background: #fffbf0;
+  background: var(--ds-bg-card);
 }
 
 .leadCard.coldLead {
   border-left-color: #4299e1;
-  background: #f0f9ff;
+  background: var(--ds-bg-card);
 }
 
 .leadHeader {
@@ -548,6 +532,308 @@
   font-style: italic;
 }
 
+/* Design System V2 - Card Actions Structure (All Screen Sizes) */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-md);
+}
+
+.primaryActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-xs);
+}
+
+.secondaryActions {
+  display: flex;
+  gap: var(--ds-space-xs);
+  flex-wrap: wrap;
+}
+
+/* Design System V2 - Action Button Base (All Screen Sizes) */
+.actionBtn {
+  font-size: var(--font-sm);
+  min-height: var(--ds-touch-target-min);
+  padding: var(--ds-padding-button);
+  border-radius: var(--ds-radius-md);
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-xs);
+  font-weight: 600;
+  border: none;
+  flex: 1;
+  min-width: clamp(60px, 20vw, 80px);
+  white-space: nowrap;
+}
+
+.primaryBtn {
+  background: var(--ds-btn-primary);
+  color: white;
+}
+
+.primaryBtn:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  background: var(--ds-btn-secondary);
+  color: var(--ds-btn-secondary-border);
+  border: 1px solid var(--ds-btn-secondary-border);
+}
+
+.secondaryBtn:hover {
+  background: var(--ds-btn-secondary-hover);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.urgentBtn {
+  background: var(--ds-btn-urgent);
+  color: white;
+}
+
+.urgentBtn:hover {
+  background: var(--ds-btn-urgent-hover);
+  transform: translateY(-1px);
+}
+
+.moreBtn {
+  background: rgba(66, 153, 225, 0.1);
+  color: #4299e1;
+  border: 1px solid #4299e1;
+}
+
+.moreBtn:hover {
+  background: rgba(66, 153, 225, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Badge Container Styles */
+.badgeContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  flex-wrap: wrap;
+  margin-top: var(--ds-space-xs);
+}
+
+/* Essential Preview Section */
+.essentialPreview {
+  margin: var(--ds-space-sm) 0;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-expanded);
+  border-radius: var(--ds-radius-sm);
+  border-left: 3px solid var(--ds-border-secondary);
+}
+
+.materialInfo {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Expanded Details Section */
+.expandedDetails {
+  margin: var(--ds-space-md) 0;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-expanded);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  animation: expandIn 0.2s ease-out;
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.detailsContent p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+}
+
+.detailsContent strong {
+  color: var(--ds-text-secondary);
+  font-weight: 600;
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: var(--ds-space-md);
+    padding-bottom: var(--ds-space-md);
+  }
+}
+
+/* Professional Expanded Details Styling - Global Scope (All Screen Sizes) */
+.expandedDetails {
+  background: #f8fafb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.detailsContent p {
+  margin: 8px 0;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+  color: #2d3748;
+}
+
+.expandedActions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Removed - using standard .actionBtn .secondaryBtn pattern instead */
+
+/* Section Toggle Buttons - Enhanced Visibility */
+.sectionToggleBtn {
+  background: none;
+  border: none;
+  color: #2d3748;
+  cursor: pointer;
+  padding: 12px 0;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sectionToggleBtn:hover, .sectionToggleBtn:active {
+  color: #4299e1;
+  background: rgba(66, 153, 225, 0.05);
+  border-radius: 8px;
+}
+
+.toggleIcon {
+  font-size: var(--font-xs);
+  transition: transform 0.2s ease;
+  color: #4299e1;
+  font-weight: bold;
+}
+
+/* Fabric Requirements Section - Professional Styling */
+.fabricRequirementsSection {
+  margin-bottom: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e1e8ed;
+  padding: 12px;
+}
+
+.fabricContent {
+  padding: 12px 0;
+}
+
+.fabricDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fabricTag {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+  color: #2d3748;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: 1px solid #a0aec0;
+}
+
+.fabricColors, .fabricProcessing {
+  color: #4a5568;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+}
+
+/* Removed - using standard .actionBtn .secondaryBtn pattern instead */
+
+.noFabricData {
+  color: #6b7280;
+  font-style: italic;
+  margin: 12px 0;
+  font-size: var(--font-sm);
+}
+
+/* History Section - Professional Styling */
+.historySection {
+  margin-bottom: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e1e8ed;
+  padding: 12px;
+}
+
+.historyContent {
+  padding: 12px 0;
+}
+
+.quotesHistory, .ordersHistory {
+  margin-bottom: 12px;
+}
+
+.quotesHistory p, .ordersHistory p {
+  color: #2d3748;
+  margin: 8px 0;
+}
+
+.historyItem {
+  margin: 6px 0;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+  padding-left: 20px;
+  color: #4a5568;
+}
+
+.historyLink {
+  color: #4299e1;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.historyLink:hover, .historyLink:active {
+  color: #2b6cb0;
+}
+
+.noHistoryData {
+  color: #6b7280;
+  font-style: italic;
+  margin: 12px 0;
+  font-size: var(--font-sm);
+}
+
 /* Mobile responsive styles using fluid design principles */
 @media (max-width: 480px) {
   .screenHeader {
@@ -804,22 +1090,6 @@
   align-items: center;
 }
 
-.editRequirementsBtn {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: var(--font-xs);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 60px;
-}
-
-.editRequirementsBtn:hover {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-  transform: translateY(-1px);
-}
 
 .addRequirementsBtn {
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
@@ -869,7 +1139,6 @@
     gap: 4px;
   }
 
-  .editRequirementsBtn,
   .addRequirementsBtn {
     font-size: var(--font-sm);
     padding: 8px 12px;
@@ -888,7 +1157,6 @@
     font-weight: 600;
   }
   
-  .editRequirementsBtn:hover,
   .addRequirementsBtn:hover {
     transform: scale(0.95);
   }
@@ -1002,15 +1270,7 @@
     flex: 0 0 auto;
   }
 
-  /* Progressive Disclosure Sections - Professional Light Theme */
-  .expandedDetails {
-    background: #f8fafb;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid #e1e8ed;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
+  /* Mobile-specific adjustments for expanded details */
 
   .detailsContent p {
     margin: 8px 0;
@@ -1023,27 +1283,6 @@
     margin-top: 12px;
     display: flex;
     gap: 12px;
-  }
-
-  .expandedActionBtn {
-    background: white;
-    color: #4a5568;
-    border: 1px solid #cbd5e0;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: var(--font-xs);
-    min-height: 36px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-
-  .expandedActionBtn:hover, .expandedActionBtn:active {
-    background: #4299e1;
-    color: white;
-    border-color: #4299e1;
-    transform: translateY(-1px);
   }
 
   /* Section Toggle Buttons - Enhanced Visibility */
@@ -1119,27 +1358,7 @@
     line-height: 1.4;
   }
 
-  .editRequirementsBtn {
-    background: #edf2f7;
-    color: #4299e1;
-    border: 1px solid #cbd5e0;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: var(--font-xs);
-    min-height: 36px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-
-  .editRequirementsBtn:hover, .editRequirementsBtn:active {
-    background: #4299e1;
-    color: white;
-    border-color: #4299e1;
-    transform: translateY(-1px);
-  }
+  /* Removed duplicate - using standard .actionBtn .secondaryBtn pattern */
 
   .noFabricData {
     color: #6b7280;

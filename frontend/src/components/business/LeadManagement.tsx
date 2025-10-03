@@ -279,126 +279,141 @@ function LeadManagement({
 
           return (
             <div key={lead.id} className={`${styles.leadCard} ${styles[lead.priority + 'Lead']}`}>
-              {/* Mobile UX V2: Simplified Header with Priority and Company */}
+              {/* Clean Header - Company Name and Priority Badge */}
               <div className={styles.leadHeader}>
-                <div className={styles.priorityHeaderRow}>
-                  <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
-                    {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
-                  </span>
-                  <div className={styles.priorityQuickActions}>
-                    <button 
-                      className={`${styles.priorityBtn} ${styles.hotBtn} ${lead.priority === 'hot' ? styles.active : ''}`}
-                      onClick={() => handlePriorityChange(lead.id, 'hot')}
-                      title="Mark as Hot Lead"
-                      disabled={lead.priority === 'hot'}
-                    >
-                      🔥
-                    </button>
-                    <button 
-                      className={`${styles.priorityBtn} ${styles.warmBtn} ${lead.priority === 'warm' ? styles.active : ''}`}
-                      onClick={() => handlePriorityChange(lead.id, 'warm')}
-                      title="Mark as Warm Lead"
-                      disabled={lead.priority === 'warm'}
-                    >
-                      🔶
-                    </button>
-                    <button 
-                      className={`${styles.priorityBtn} ${styles.coldBtn} ${lead.priority === 'cold' ? styles.active : ''}`}
-                      onClick={() => handlePriorityChange(lead.id, 'cold')}
-                      title="Mark as Cold Lead"
-                      disabled={lead.priority === 'cold'}
-                    >
-                      🔵
-                    </button>
-                  </div>
-                </div>
-                
                 <h3 className={styles.companyName}>
                   <span 
                     onClick={() => lead.businessProfileId ? onShowCustomerProfile?.(lead.businessProfileId) : null}
                     style={{cursor: lead.businessProfileId ? 'pointer' : 'default', textDecoration: lead.businessProfileId ? 'underline' : 'none'}}
                     title={lead.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
                   >
-                    {lead.companyName} - {lead.location}
+                    {lead.businessProfileId ? '✅' : '🔸'} {lead.id} - {lead.companyName}
                   </span>
                 </h3>
-                
-                {/* Mobile UX V2: Essential Preview Info */}
-                <div className={styles.essentialPreview}>
-                  <span className={styles.materialInfo}>
-                    {lead.fabricRequirements?.fabricType || lead.inquiry} • {lead.budget} • {lead.timeline}
-                  </span>
+                <div className={styles.badgeContainer}>
+                  <div className={styles.prioritySection}>
+                    <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
+                      {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
+                    </span>
+                    
+                    {/* UC-L05: Priority Quick Change Buttons */}
+                    <div className={styles.priorityQuickActions}>
+                      <button
+                        className={`${styles.priorityBtn} ${lead.priority === 'hot' ? styles.active : ''}`}
+                        onClick={() => handlePriorityChange(lead.id, 'hot')}
+                        disabled={lead.priority === 'hot'}
+                        title="Set as Hot Lead"
+                      >
+                        🔥
+                      </button>
+                      <button
+                        className={`${styles.priorityBtn} ${lead.priority === 'warm' ? styles.active : ''}`}
+                        onClick={() => handlePriorityChange(lead.id, 'warm')}
+                        disabled={lead.priority === 'warm'}
+                        title="Set as Warm Lead"
+                      >
+                        🔶
+                      </button>
+                      <button
+                        className={`${styles.priorityBtn} ${lead.priority === 'cold' ? styles.active : ''}`}
+                        onClick={() => handlePriorityChange(lead.id, 'cold')}
+                        disabled={lead.priority === 'cold'}
+                        title="Set as Cold Lead"
+                      >
+                        🔵
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Mobile UX V2: Contextual Smart Actions */}
-              <div className={styles.contextualActions}>
+              {/* Essential Preview - Always Visible */}
+              <div className={styles.essentialPreview}>
+                <span className={styles.materialInfo}>
+                  {lead.fabricRequirements?.fabricType || lead.inquiry} • {lead.budget} • {lead.timeline}
+                </span>
+              </div>
+
+              {/* Priority-Based Card Actions - Structured Layout */}
+              <div className={styles.cardActions}>
                 {/* Hot Leads: Urgent actions */}
                 {lead.priority === 'hot' && (
                   <>
-                    <button className={`${styles.actionBtn} ${styles.urgentBtn}`}>
-                      🔥 Call Now
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.primaryBtn}`} 
-                      onClick={() => onShowQuoteFromLead?.(lead.id)}
-                    >
-                      📋 Rush Quote
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
-                      onClick={() => toggleDetails(lead.id)}
-                    >
-                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
-                    </button>
+                    <div className={styles.primaryActions}>
+                      <button className={`${styles.actionBtn} ${styles.urgentBtn}`}>
+                        🔥 Call Now
+                      </button>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.primaryBtn}`} 
+                        onClick={() => onShowQuoteFromLead?.(lead.id)}
+                      >
+                        📋 Rush Quote
+                      </button>
+                    </div>
+                    <div className={styles.secondaryActions}>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                        onClick={() => toggleDetails(lead.id)}
+                      >
+                        {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                      </button>
+                    </div>
                   </>
                 )}
                 
                 {/* Warm Leads: Standard business actions */}
                 {lead.priority === 'warm' && (
                   <>
-                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
-                      📞 Call
-                    </button>
-                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
-                      💬 WhatsApp
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
-                      onClick={() => onShowQuoteFromLead?.(lead.id)}
-                    >
-                      {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
-                      onClick={() => toggleDetails(lead.id)}
-                    >
-                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
-                    </button>
+                    <div className={styles.primaryActions}>
+                      <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                        📞 Call
+                      </button>
+                      <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                        💬 WhatsApp
+                      </button>
+                    </div>
+                    <div className={styles.secondaryActions}>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
+                        onClick={() => onShowQuoteFromLead?.(lead.id)}
+                      >
+                        {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
+                      </button>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                        onClick={() => toggleDetails(lead.id)}
+                      >
+                        {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                      </button>
+                    </div>
                   </>
                 )}
                 
                 {/* Cold Leads: Gentle approach */}
                 {lead.priority === 'cold' && (
                   <>
-                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
-                      📞 Call
-                    </button>
-                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
-                      💬 Message
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
-                      onClick={() => onShowQuoteFromLead?.(lead.id)}
-                    >
-                      {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
-                    </button>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
-                      onClick={() => toggleDetails(lead.id)}
-                    >
-                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
-                    </button>
+                    <div className={styles.primaryActions}>
+                      <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                        📞 Call
+                      </button>
+                      <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                        💬 Message
+                      </button>
+                    </div>
+                    <div className={styles.secondaryActions}>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
+                        onClick={() => onShowQuoteFromLead?.(lead.id)}
+                      >
+                        {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
+                      </button>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                        onClick={() => toggleDetails(lead.id)}
+                      >
+                        {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
@@ -416,7 +431,7 @@ function LeadManagement({
                   
                   <div className={styles.expandedActions}>
                     <button 
-                      className={`${styles.actionBtn} ${styles.expandedActionBtn} ${styles.editBtn}`} 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
                       onClick={() => handleEditLead(lead)}
                       title="Edit lead details"
                     >
@@ -481,7 +496,7 @@ function LeadManagement({
                         <p className={styles.noFabricData}>No fabric requirements specified yet.</p>
                       )}
                       <button 
-                        className={styles.editRequirementsBtn}
+                        className={`${styles.actionBtn} ${styles.secondaryBtn}`}
                         onClick={() => handleAddRequirements(lead)}
                         title="Edit fabric requirements"
                       >

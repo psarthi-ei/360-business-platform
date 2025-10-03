@@ -30,6 +30,22 @@ function QuotationOrders({
     processingQuotes: [] as string[]
   });
   const [workflowMessages, setWorkflowMessages] = useState<{[key: string]: string}>({});
+  
+  // Progressive disclosure state (missing - causing "More..." button to not work)
+  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  
+  // Toggle function for progressive disclosure
+  const toggleDetails = useCallback((quoteId: string) => {
+    setExpandedDetails(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(quoteId)) {
+        newSet.delete(quoteId);
+      } else {
+        newSet.add(quoteId);
+      }
+      return newSet;
+    });
+  }, []);
 
   // Workflow Method 1: Handle Quote Approval
   const handleQuoteApproval = useCallback((quoteId: string) => {
@@ -118,6 +134,7 @@ function QuotationOrders({
   }, [workflowMessages]);
 
   // Workflow Method 4: Check Profile Completion Status
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const checkProfileStatus = useCallback((quoteId: string) => {
     const linkData = workflowState.profileLinks.find(pl => pl.quoteId === quoteId);
     if (!linkData) {
@@ -161,38 +178,29 @@ function QuotationOrders({
   return (
     <div className={styles.quotationOrdersScreen}>
       <div className={styles.pageContent}>
-        <div className={styles.screenHeader}>
+        <div className={styles.unifiedHeader}>
           <button className={styles.addButton}>{t('addNewQuote')}</button>
+          <div className={styles.filterDropdownContainer}>
+            <select 
+              className={styles.filterDropdown}
+              value={filterState}
+              onChange={(e) => onFilterChange(e.target.value)}
+            >
+              <option value="all">{t('showAll')}</option>
+              <option value="pending">{t('showPending')}</option>
+              <option value="approved">{t('showApproved')}</option>
+              <option value="expired">{t('showExpired')}</option>
+            </select>
+          </div>
+          <div className={styles.quoteCounter}>
+            {mockQuotes.filter(quote => 
+              filterState === 'all' ||
+              (filterState === 'pending' && quote.status === 'pending') ||
+              (filterState === 'approved' && quote.status === 'approved') ||
+              (filterState === 'expired' && quote.status === 'expired')
+            ).length} quotes
+          </div>
         </div>
-
-      <div className={styles.filtersSection}>
-        <div className={styles.filterButtons}>
-          <button 
-            className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('all')}
-          >
-            {t('showAll')}
-          </button>
-          <button 
-            className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('pending')}
-          >
-            {t('showPending')}
-          </button>
-          <button 
-            className={filterState === 'approved' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('approved')}
-          >
-            {t('showApproved')}
-          </button>
-          <button 
-            className={filterState === 'expired' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('expired')}
-          >
-            {t('showExpired')}
-          </button>
-        </div>
-      </div>
 
       <div className={styles.quotesContainer}>
         {mockQuotes.map(quote => {
@@ -260,87 +268,112 @@ function QuotationOrders({
                   </span>
                 </div>
               </div>
-              <div className={styles.quoteDetails}>
-                <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
-                <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
-                <p><strong>Items:</strong> {quote.items}</p>
-                <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
-                <p><strong>Status:</strong> {quote.statusMessage}</p>
+              {/* Essential preview info - always visible */}
+              <div className={styles.essentialPreview}>
+                <span className={styles.materialInfo}>
+                  {quote.items} • {formatCurrency(quote.totalAmount)} • {quote.quoteDate}
+                </span>
               </div>
 
-              {/* Related Lead and Order Information */}
-              <div className={styles.quoteMapping}>
-                <div className={styles.mappingInfo}>
-                  {relatedLead && (
-                    <p><strong>📋 From Lead:</strong> 
-                      <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
-                        {relatedLead.id}
-                      </span> 
-                    - {relatedLead.priority} priority ({relatedLead.budget})</p>
-                  )}
-                  {relatedOrder ? (
-                    <p><strong>📦 Converted to Order:</strong> 
-                      <span className={styles.mappingLink} onClick={() => onShowSalesOrders()}>
-                        {relatedOrder.id}
-                      </span> 
-                    - {relatedOrder.status} ({relatedOrder.statusMessage})</p>
-                  ) : (
-                    <p><strong>📦 Order Status:</strong> <span className={styles.noOrder}>Not converted to order yet</span></p>
-                  )}
+              {/* Progressive Disclosure - Detailed Information */}
+              {expandedDetails.has(quote.id) && (
+                <div className={styles.expandedDetails}>
+                  <div className={styles.detailsContent}>
+                    <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
+                    <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
+                    <p><strong>Items:</strong> {quote.items}</p>
+                    <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
+                    <p><strong>Status:</strong> {quote.statusMessage}</p>
+                    
+                    {/* Related Lead and Order Information */}
+                    <div className={styles.quoteMapping}>
+                      <div className={styles.mappingInfo}>
+                        {relatedLead && (
+                          <p><strong>📋 From Lead:</strong> 
+                            <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
+                              {relatedLead.id}
+                            </span> 
+                          - {relatedLead.priority} priority ({relatedLead.budget})</p>
+                        )}
+                        {relatedOrder ? (
+                          <p><strong>📦 Converted to Order:</strong> 
+                            <span className={styles.mappingLink} onClick={() => onShowSalesOrders()}>
+                              {relatedOrder.id}
+                            </span> 
+                          - {relatedOrder.status} ({relatedOrder.statusMessage})</p>
+                        ) : (
+                          <p><strong>📦 Order Status:</strong> <span className={styles.noOrder}>Not converted to order yet</span></p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
               
-              <div className={styles.quoteActions}>
-                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
+              <div className={styles.cardActions}>
+                {/* Primary Actions Row - Universal for all business cards */}
+                <div className={styles.primaryActions}>
+                  <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                    📞 Call
+                  </button>
+                  <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                    📱 WhatsApp
+                  </button>
+                </div>
                 
-                {/* Progressive workflow actions based on quote status and customer type */}
-                {quote.status === 'pending' && isProspect && (
+                {/* Secondary Actions Row - Workflow-specific actions */}
+                <div className={styles.secondaryActions}>
+                  <button className={`${styles.actionBtn} ${styles.secondaryBtn}`}>
+                    📄 View PDF
+                  </button>
+                  
+                  {/* Context-specific action based on quote status */}
+                  {quote.status === 'pending' && isProspect && (
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      onClick={() => handleQuoteApproval(quote.id)}
+                    >
+                      ✅ Approve
+                    </button>
+                  )}
+                  
+                  {quote.status === 'approved' && isProspect && !workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      onClick={() => handleSendProfileLink(quote.id)}
+                    >
+                      📝 Send Link
+                    </button>
+                  )}
+                  
+                  {quote.status === 'approved' && isCustomer && !relatedOrder && (
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      onClick={() => handleProformaGeneration(quote.id)}
+                    >
+                      📋 Proforma
+                    </button>
+                  )}
+                  
+                  {relatedOrder && (
+                    <button className={`${styles.actionBtn} ${styles.secondaryBtn}`} onClick={() => onShowSalesOrders()}>
+                      📦 View Order
+                    </button>
+                  )}
+                  
+                  {quote.status === 'expired' && (
+                    <button className={`${styles.actionBtn} ${styles.secondaryBtn}`}>
+                      🔄 Renew
+                    </button>
+                  )}
+                  
                   <button 
-                    className={`${styles.actionBtn} ${styles.approveBtn}`}
-                    onClick={() => handleQuoteApproval(quote.id)}
+                    className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                    onClick={() => toggleDetails(quote.id)}
                   >
-                    ✅ Mark as Verbally Approved
+                    {expandedDetails.has(quote.id) ? 'Less...' : 'More...'}
                   </button>
-                )}
-                
-                {quote.status === 'approved' && isProspect && !workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
-                  <button 
-                    className={`${styles.actionBtn} ${styles.profileBtn}`}
-                    onClick={() => handleSendProfileLink(quote.id)}
-                  >
-                    📝 Send Profile Link
-                  </button>
-                )}
-                
-                {quote.status === 'approved' && isProspect && workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
-                  <button 
-                    className={`${styles.actionBtn} ${styles.checkBtn}`}
-                    onClick={() => checkProfileStatus(quote.id)}
-                  >
-                    🔍 Check Profile Status
-                  </button>
-                )}
-                
-                {quote.status === 'approved' && isCustomer && !relatedOrder && (
-                  <button 
-                    className={`${styles.actionBtn} ${styles.invoiceBtn}`}
-                    onClick={() => handleProformaGeneration(quote.id)}
-                  >
-                    📋 Send Proforma Invoice
-                  </button>
-                )}
-                
-                {relatedOrder && (
-                  <button className={`${styles.actionBtn} ${styles.viewOrderBtn}`} onClick={() => onShowSalesOrders()}>
-                    📦 View Order ({relatedOrder.status})
-                  </button>
-                )}
-                
-                {quote.status === 'expired' && (
-                  <button className={`${styles.actionBtn} ${styles.renewBtn}`}>
-                    🔄 Renew Quote
-                  </button>
-                )}
+                </div>
               </div>
               
               {/* Workflow Messages */}

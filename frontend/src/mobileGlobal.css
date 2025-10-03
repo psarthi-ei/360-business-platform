@@ -8,10 +8,9 @@
     max-width: 100vw;
   }
   
-  /* Remove default platform page content padding on mobile */
+  /* Mobile global platform page styling - no conflicts needed */
   .platformPageContent {
-    padding: 0 !important;
-    margin: 0 !important;
+    /* Clean base - no overrides needed with proper architecture */
   }
   
   /* Mobile-first content area styling moved to MobileAppShell.css */
