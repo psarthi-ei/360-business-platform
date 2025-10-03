@@ -40,6 +40,11 @@ function LeadManagement({
   const [leads, setLeads] = useState<Lead[]>(mockLeads);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
+  
+  // Mobile UX V2: Progressive disclosure state
+  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  const [expandedFabricReqs, setExpandedFabricReqs] = useState<Set<string>>(new Set());
+  const [expandedHistory, setExpandedHistory] = useState<Set<string>>(new Set());
 
   // Auto-open modal based on URL parameter
   useEffect(() => {
@@ -164,16 +169,77 @@ function LeadManagement({
     }, 3000);
   };
 
+  // Mobile UX V2: Progressive disclosure toggle functions
+  const toggleDetails = (leadId: string) => {
+    setExpandedDetails(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(leadId)) {
+        newSet.delete(leadId);
+      } else {
+        newSet.add(leadId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleFabricRequirements = (leadId: string) => {
+    setExpandedFabricReqs(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(leadId)) {
+        newSet.delete(leadId);
+      } else {
+        newSet.add(leadId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleHistory = (leadId: string) => {
+    setExpandedHistory(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(leadId)) {
+        newSet.delete(leadId);
+      } else {
+        newSet.add(leadId);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <div className={styles.leadManagementScreen}>
       <div className={styles.pageContent}>
-        <div className={styles.screenHeader}>
+        {/* Mobile UX V2: Unified Smart Header Bar */}
+        <div className={styles.unifiedHeader}>
           <button 
             className={styles.addButton}
             onClick={() => setShowAddModal(true)}
           >
-            {t('addNewLead')}
+            + Add
           </button>
+          
+          <div className={styles.filterDropdownContainer}>
+            <select 
+              className={styles.filterDropdown}
+              value={filterState}
+              onChange={(e) => onFilterChange(e.target.value)}
+            >
+              <option value="all">All Leads</option>
+              <option value="hotleads">🔥 Hot Leads</option>
+              <option value="warmleads">🔶 Warm Leads</option>
+              <option value="coldleads">🔵 Cold Leads</option>
+            </select>
+          </div>
+          
+          <div className={styles.leadCounter}>
+            📊 {leads.filter(lead => {
+              if (filterState === 'all') return true;
+              if (filterState === 'hotleads') return lead.priority === 'hot';
+              if (filterState === 'warmleads') return lead.priority === 'warm';
+              if (filterState === 'coldleads') return lead.priority === 'cold';
+              return true;
+            }).length} leads
+          </div>
         </div>
 
         {/* Success Message */}
@@ -182,35 +248,6 @@ function LeadManagement({
             ✅ {successMessage}
           </div>
         )}
-
-      <div className={styles.filtersSection}>
-        <div className={styles.filterButtons}>
-          <button 
-            className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('all')}
-          >
-            {t('showAll')}
-          </button>
-          <button 
-            className={filterState === 'hotleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('hotleads')}
-          >
-            {t('showHotLeads')}
-          </button>
-          <button 
-            className={filterState === 'warmleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('warmleads')}
-          >
-            {t('showWarmLeads')}
-          </button>
-          <button 
-            className={filterState === 'coldleads' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('coldleads')}
-          >
-            {t('showColdLeads')}
-          </button>
-        </div>
-      </div>
 
       <div className={styles.leadsContainer}>
         {leads.map(lead => {
@@ -242,17 +279,9 @@ function LeadManagement({
 
           return (
             <div key={lead.id} className={`${styles.leadCard} ${styles[lead.priority + 'Lead']}`}>
+              {/* Mobile UX V2: Simplified Header with Priority and Company */}
               <div className={styles.leadHeader}>
-                <h3>
-                  <span 
-                    onClick={() => lead.businessProfileId ? onShowCustomerProfile?.(lead.businessProfileId) : null}
-                    style={{cursor: lead.businessProfileId ? 'pointer' : 'default', textDecoration: lead.businessProfileId ? 'underline' : 'none'}}
-                    title={lead.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
-                  >
-                    {lead.companyName} - {lead.location}
-                  </span>
-                </h3>
-                <div className={styles.prioritySection}>
+                <div className={styles.priorityHeaderRow}>
                   <span className={`${styles.priorityBadge} ${styles[lead.priority]}`}>
                     {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
                   </span>
@@ -283,128 +312,239 @@ function LeadManagement({
                     </button>
                   </div>
                 </div>
-              </div>
-              <div className={styles.leadDetails}>
-                <p><strong>Contact:</strong> {lead.contact}</p>
-                <p><strong>Business:</strong> {lead.business}</p>
-                <p><strong>Inquiry:</strong> {lead.inquiry}</p>
-                <p><strong>Budget:</strong> {lead.budget} | <strong>Timeline:</strong> {lead.timeline}</p>
-                <p><strong>Last Contact:</strong> {lead.lastContact}</p>
+                
+                <h3 className={styles.companyName}>
+                  <span 
+                    onClick={() => lead.businessProfileId ? onShowCustomerProfile?.(lead.businessProfileId) : null}
+                    style={{cursor: lead.businessProfileId ? 'pointer' : 'default', textDecoration: lead.businessProfileId ? 'underline' : 'none'}}
+                    title={lead.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
+                  >
+                    {lead.companyName} - {lead.location}
+                  </span>
+                </h3>
+                
+                {/* Mobile UX V2: Essential Preview Info */}
+                <div className={styles.essentialPreview}>
+                  <span className={styles.materialInfo}>
+                    {lead.fabricRequirements?.fabricType || lead.inquiry} • {lead.budget} • {lead.timeline}
+                  </span>
+                </div>
               </div>
 
-              {/* UC-L04: Fabric Requirements Display */}
-              {lead.fabricRequirements && (
-                lead.fabricRequirements.fabricType || 
-                lead.fabricRequirements.gsm || 
-                lead.fabricRequirements.quantity
-              ) ? (
-                <div className={styles.fabricRequirements}>
-                  <div className={styles.fabricRequirementsHeader}>
-                    <p><strong>🧵 Fabric Requirements:</strong></p>
-                    <button 
-                      className={styles.editRequirementsBtn}
-                      onClick={() => handleAddRequirements(lead)}
-                      title="Edit fabric requirements"
-                    >
-                      ✏️ Edit
+              {/* Mobile UX V2: Contextual Smart Actions */}
+              <div className={styles.contextualActions}>
+                {/* Hot Leads: Urgent actions */}
+                {lead.priority === 'hot' && (
+                  <>
+                    <button className={`${styles.actionBtn} ${styles.urgentBtn}`}>
+                      🔥 Call Now
                     </button>
-                  </div>
-                  <div className={styles.fabricDetails}>
-                    {lead.fabricRequirements.fabricType && (
-                      <span className={styles.fabricTag}>{lead.fabricRequirements.fabricType}</span>
-                    )}
-                    {lead.fabricRequirements.gsm && (
-                      <span className={styles.fabricTag}>{lead.fabricRequirements.gsm} GSM</span>
-                    )}
-                    {lead.fabricRequirements.width && (
-                      <span className={styles.fabricTag}>{lead.fabricRequirements.width}</span>
-                    )}
-                    {lead.fabricRequirements.weaveType && (
-                      <span className={styles.fabricTag}>{lead.fabricRequirements.weaveType}</span>
-                    )}
-                    {lead.fabricRequirements.quantity && (
-                      <span className={styles.fabricTag}>
-                        {lead.fabricRequirements.quantity} {lead.fabricRequirements.unit || 'units'}
-                      </span>
-                    )}
-                    {lead.fabricRequirements.qualityGrade && (
-                      <span className={styles.fabricTag}>{lead.fabricRequirements.qualityGrade}</span>
-                    )}
-                  </div>
-                  {lead.fabricRequirements.colors && (
-                    <p className={styles.fabricColors}><strong>Colors:</strong> {lead.fabricRequirements.colors}</p>
-                  )}
-                  {lead.fabricRequirements.specialProcessing && (
-                    <p className={styles.fabricProcessing}><strong>Processing:</strong> {lead.fabricRequirements.specialProcessing}</p>
-                  )}
-                </div>
-              ) : (
-                <div className={styles.missingFabricRequirements}>
-                  <div className={styles.missingRequirementsHeader}>
-                    <p><strong>🧵 Fabric Requirements:</strong> <span className={styles.incompleteInfo}>Not specified</span></p>
                     <button 
-                      className={styles.addRequirementsBtn}
-                      onClick={() => handleAddRequirements(lead)}
-                      title="Add fabric requirements"
+                      className={`${styles.actionBtn} ${styles.primaryBtn}`} 
+                      onClick={() => onShowQuoteFromLead?.(lead.id)}
                     >
-                      + Add Details
+                      📋 Rush Quote
+                    </button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                      onClick={() => toggleDetails(lead.id)}
+                    >
+                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                    </button>
+                  </>
+                )}
+                
+                {/* Warm Leads: Standard business actions */}
+                {lead.priority === 'warm' && (
+                  <>
+                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                      📞 Call
+                    </button>
+                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                      💬 WhatsApp
+                    </button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
+                      onClick={() => onShowQuoteFromLead?.(lead.id)}
+                    >
+                      {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
+                    </button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                      onClick={() => toggleDetails(lead.id)}
+                    >
+                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                    </button>
+                  </>
+                )}
+                
+                {/* Cold Leads: Gentle approach */}
+                {lead.priority === 'cold' && (
+                  <>
+                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                      📞 Call
+                    </button>
+                    <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                      💬 Message
+                    </button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn}`} 
+                      onClick={() => onShowQuoteFromLead?.(lead.id)}
+                    >
+                      {relatedQuotes.length > 0 ? `📋 Quote (${relatedQuotes.length})` : '📋 Quote'}
+                    </button>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                      onClick={() => toggleDetails(lead.id)}
+                    >
+                      {expandedDetails.has(lead.id) ? 'Less...' : 'More...'}
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Mobile UX V2: Progressive Disclosure - Details */}
+              {expandedDetails.has(lead.id) && (
+                <div className={styles.expandedDetails}>
+                  <div className={styles.detailsContent}>
+                    <p><strong>Contact:</strong> {lead.contact}</p>
+                    <p><strong>Business:</strong> {lead.business}</p>
+                    <p><strong>Inquiry:</strong> {lead.inquiry}</p>
+                    <p><strong>Last Contact:</strong> {lead.lastContact}</p>
+                    <p><strong>Notes:</strong> {lead.notes}</p>
+                  </div>
+                  
+                  <div className={styles.expandedActions}>
+                    <button 
+                      className={`${styles.actionBtn} ${styles.expandedActionBtn} ${styles.editBtn}`} 
+                      onClick={() => handleEditLead(lead)}
+                      title="Edit lead details"
+                    >
+                      ✏️ Edit Lead
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Related Quote and Order Information */}
-              <div className={styles.leadMapping}>
-                {relatedQuotes.length > 0 ? (
-                  <div className={styles.mappingInfo}>
-                    <p><strong>📄 Related Quotes ({relatedQuotes.length}):</strong></p>
-                    {relatedQuotes.map((quote, index) => (
-                      <p key={quote.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
-                        • <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
-                          {quote.id}
-                        </span> 
-                        - {formatCurrency(quote.totalAmount)} ({quote.status})
-                      </p>
-                    ))}
-                    {relatedOrders.length > 0 && (
-                      <>
-                        <p><strong>📦 Related Orders ({relatedOrders.length}):</strong></p>
-                        {relatedOrders.map((order, index) => (
-                          <p key={order.id} style={{marginLeft: '20px', marginBottom: '8px'}}>
-                            • <span className={styles.mappingLink} onClick={() => onShowSalesOrders?.()}>
-                              {order.id}
-                            </span> 
-                            - {order.status} ({order.statusMessage})
-                          </p>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <div className={styles.mappingInfo}>
-                    <p><strong>📄 Quote Status:</strong> <span className={styles.noQuote}>No quotes created yet</span></p>
-                  </div>
-                )}
-              </div>
-              
-              <div className={styles.leadActions}>
-                <button className={`${styles.actionBtn} ${styles.callBtn}`}>📞 Call{lead.priority === 'hot' ? ' Now' : ''}</button>
-                <button className={`${styles.actionBtn} ${styles.whatsappBtn}`}>💬 WhatsApp</button>
-                <button className={`${styles.actionBtn} ${styles.quoteBtn}`} onClick={() => onShowQuoteFromLead?.(lead.id)}>
-                  ₹ {relatedQuotes.length > 0 ? `View Quotes (${relatedQuotes.length})` : 'Send Quote'}
-                </button>
-                <button 
-                  className={`${styles.actionBtn} ${styles.editBtn}`} 
-                  onClick={() => handleEditLead(lead)}
-                  title="Edit lead details"
-                >
-                  ✏️ Edit Lead
-                </button>
-              </div>
-              
-              <div className={styles.leadNotes}>
-                <p><strong>Notes:</strong> {lead.notes}</p>
-              </div>
+              {/* Mobile UX V2: Progressive Disclosure - Fabric Requirements */}
+              {expandedDetails.has(lead.id) && (
+                <div className={styles.fabricRequirementsSection}>
+                  <button 
+                    className={styles.sectionToggleBtn}
+                    onClick={() => toggleFabricRequirements(lead.id)}
+                    title={expandedFabricReqs.has(lead.id) ? "Hide fabric requirements" : "Show fabric requirements"}
+                  >
+                    <span>🧵 Fabric Requirements</span>
+                    <span className={styles.toggleIcon}>
+                      {expandedFabricReqs.has(lead.id) ? '▼' : '▶'}
+                    </span>
+                  </button>
+                  
+                  {expandedFabricReqs.has(lead.id) && (
+                    <div className={styles.fabricContent}>
+                      {lead.fabricRequirements && (
+                        lead.fabricRequirements.fabricType || 
+                        lead.fabricRequirements.gsm || 
+                        lead.fabricRequirements.quantity
+                      ) ? (
+                        <>
+                          <div className={styles.fabricDetails}>
+                            {lead.fabricRequirements.fabricType && (
+                              <span className={styles.fabricTag}>{lead.fabricRequirements.fabricType}</span>
+                            )}
+                            {lead.fabricRequirements.gsm && (
+                              <span className={styles.fabricTag}>{lead.fabricRequirements.gsm} GSM</span>
+                            )}
+                            {lead.fabricRequirements.width && (
+                              <span className={styles.fabricTag}>{lead.fabricRequirements.width}</span>
+                            )}
+                            {lead.fabricRequirements.weaveType && (
+                              <span className={styles.fabricTag}>{lead.fabricRequirements.weaveType}</span>
+                            )}
+                            {lead.fabricRequirements.quantity && (
+                              <span className={styles.fabricTag}>
+                                {lead.fabricRequirements.quantity} {lead.fabricRequirements.unit || 'units'}
+                              </span>
+                            )}
+                            {lead.fabricRequirements.qualityGrade && (
+                              <span className={styles.fabricTag}>{lead.fabricRequirements.qualityGrade}</span>
+                            )}
+                          </div>
+                          {lead.fabricRequirements.colors && (
+                            <p className={styles.fabricColors}><strong>Colors:</strong> {lead.fabricRequirements.colors}</p>
+                          )}
+                          {lead.fabricRequirements.specialProcessing && (
+                            <p className={styles.fabricProcessing}><strong>Processing:</strong> {lead.fabricRequirements.specialProcessing}</p>
+                          )}
+                        </>
+                      ) : (
+                        <p className={styles.noFabricData}>No fabric requirements specified yet.</p>
+                      )}
+                      <button 
+                        className={styles.editRequirementsBtn}
+                        onClick={() => handleAddRequirements(lead)}
+                        title="Edit fabric requirements"
+                      >
+                        ✏️ Edit Requirements
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Mobile UX V2: Progressive Disclosure - History */}
+              {expandedDetails.has(lead.id) && (
+                <div className={styles.historySection}>
+                  <button 
+                    className={styles.sectionToggleBtn}
+                    onClick={() => toggleHistory(lead.id)}
+                    title={expandedHistory.has(lead.id) ? "Hide history" : "Show history"}
+                  >
+                    <span>📚 History ({relatedQuotes.length + relatedOrders.length})</span>
+                    <span className={styles.toggleIcon}>
+                      {expandedHistory.has(lead.id) ? '▼' : '▶'}
+                    </span>
+                  </button>
+                  
+                  {expandedHistory.has(lead.id) && (
+                    <div className={styles.historyContent}>
+                      {relatedQuotes.length > 0 || relatedOrders.length > 0 ? (
+                        <>
+                          {relatedQuotes.length > 0 && (
+                            <div className={styles.quotesHistory}>
+                              <p><strong>📄 Quotes ({relatedQuotes.length}):</strong></p>
+                              {relatedQuotes.map((quote) => (
+                                <p key={quote.id} className={styles.historyItem}>
+                                  • <span className={styles.historyLink} onClick={() => onShowQuotationOrders?.()}>
+                                    {quote.id}
+                                  </span> 
+                                  - {formatCurrency(quote.totalAmount)} ({quote.status})
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                          
+                          {relatedOrders.length > 0 && (
+                            <div className={styles.ordersHistory}>
+                              <p><strong>📦 Orders ({relatedOrders.length}):</strong></p>
+                              {relatedOrders.map((order) => (
+                                <p key={order.id} className={styles.historyItem}>
+                                  • <span className={styles.historyLink} onClick={() => onShowSalesOrders?.()}>
+                                    {order.id}
+                                  </span> 
+                                  - {order.status} ({order.statusMessage})
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <p className={styles.noHistoryData}>No quotes or orders yet. Create a quote to get started!</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

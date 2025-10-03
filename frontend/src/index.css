@@ -10,6 +10,14 @@
     var(--header-gap) + 
     var(--content-buffer)
   );
+
+  /* Standardized Font Size System - Universal Responsive Typography */
+  /* Responsive font sizes using clamp() - scales automatically across all devices */
+  --font-xs: clamp(12px, 2.5vw, 14px);    /* Small labels, secondary text */
+  --font-sm: clamp(14px, 3vw, 16px);      /* Body text, action buttons */
+  --font-base: clamp(16px, 3.5vw, 18px);  /* Standard UI elements, dropdowns */
+  --font-lg: clamp(18px, 4vw, 20px);      /* Important text, headings */
+  --font-xl: clamp(20px, 4.5vw, 24px);    /* Large headers, emphasis */
 }
 
 /* Platform Page Content Layout */

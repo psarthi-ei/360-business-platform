@@ -4,9 +4,21 @@
 **Current Todos**: Always check `/TODO.md` for persistent todo list across sessions
 **Session Tracking**: Use TodoWrite tool for real-time progress within sessions
 
+**📝 UPDATED CONTEXT BUILDING**: New 2-step approach replaces old "get full context first" command
+- More structured and comprehensive than previous ad-hoc context building
+- Ensures consistent project understanding across all sessions
+
 ## 🕐 **SESSION INITIALIZATION PROTOCOL**
 
-### **MANDATORY FIRST STEP - DATE VERIFICATION**
+### **2-STEP MANDATORY SESSION SETUP**
+**Every new session MUST follow this exact sequence:**
+
+**Quick Session Start Checklist:**
+1. ✅ `date` command (verify current timeline context)
+2. ✅ Read 5 key documents (complete project understanding)
+3. ✅ Ready for development work with full context
+
+### **STEP 1: MANDATORY DATE VERIFICATION**
 **ALWAYS start every session by running the `date` command before any other actions.**
 
 **Example Session Start:**
@@ -34,6 +46,38 @@ date
 3. Calculate actual project days elapsed since Aug 27, 2025
 4. Proceed with development tasks using verified date context
 5. Flag any timeline discrepancies immediately
+
+## 📚 **DOCUMENTATION-BASED CONTEXT BUILDING**
+
+### **STEP 2: MANDATORY DOCUMENTATION CONTEXT BUILDING**
+**After date verification, ALWAYS read the 5 key documents for complete project context.**
+
+**Documentation Navigation:**
+```bash
+# Start with master navigation document
+Read: /docs/DOCUMENTATION_INDEX.md
+```
+
+**🔑 KEY DOCUMENTS - ESSENTIAL FOR CONTEXT (Read in Order):**
+1. **PRODUCT_REQUIREMENTS.md** - What we're building & why (business requirements, MVP scope)
+2. **BUSINESS_PROCESSES.md** - How textile business works (8-stage workflow, automated conversion)
+3. **UNIFIED_ARCHITECTURE.md** - Platform architecture & zero code duplication 
+4. **MOBILE_UX_V2_IMPLEMENTATION.md** - Current mobile transformation plan (Phase 2 ready)
+5. **USE_CASES_MASTER.md** - Implementation status & progress tracking (272 use cases)
+
+**Why This Context Building Approach:**
+- **Complete Understanding**: 5 documents provide full project comprehension
+- **Current Status**: Real implementation progress vs outdated assumptions  
+- **Business Logic**: Textile manufacturing domain knowledge essential for decisions
+- **Architecture Clarity**: Universal voice/search system and shared business logic
+- **Immediate Priorities**: Phase-by-phase mobile transformation ready to execute
+
+**Context Building Verification:**
+✅ Understand the 8-stage textile business workflow  
+✅ Know the automated lead-to-customer conversion system  
+✅ Grasp the universal architecture with zero code duplication  
+✅ Identify current Mobile UX V2 phase status (Phase 2: Enhanced Search Results)  
+✅ Review implementation progress (Foundation modules 28-38% complete)
 
 ## ⚡ **SESSION PERFORMANCE MANAGEMENT**
 

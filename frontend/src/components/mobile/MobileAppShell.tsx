@@ -124,7 +124,7 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
       description: 'Business Intelligence Dashboard'
     },
     { 
-      path: '/pipeline', 
+      path: '/leads', 
       icon: '⚡', 
       label: 'Pipeline',
       description: 'Leads → Quotes → Orders'
