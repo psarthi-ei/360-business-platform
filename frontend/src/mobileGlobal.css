@@ -1035,3 +1035,24 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+/* ========================================
+   MOBILE-SPECIFIC: UNIFIED HEADER SYSTEM
+   ======================================== */
+
+/* Mobile Unified Header - Mobile-first responsive design */
+@media (max-width: 768px) {
+  .unifiedHeader {
+    display: grid;
+    grid-template-columns: minmax(3.5rem, auto) 1fr minmax(5rem, auto);
+    align-items: center;
+    margin: clamp(0.5rem, 2vw, 1.25rem) auto clamp(1rem, 3vw, 1.5rem) auto;
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
+    max-width: 1400px;
+    background: white;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e1e8ed;
+    gap: clamp(0.25rem, 1.5vw, 0.75rem);
+  }
+}

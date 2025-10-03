@@ -54,16 +54,25 @@
 - [x] **Mobile-First Design Standards** established for all future components
 - [x] **Design System Implementation Mandate** added for remaining phases
 
-#### **Phase 4: QuotationOrders Mobile UX V2 Transformation** (25-30 mins) 🎯 **READY**
-**Status**: **READY NOW** - Must follow established Design System standards
-- [ ] **Transform wide desktop layout to mobile cards**
-- [ ] **Optimize workflow action buttons** for mobile interaction
-- [ ] **Implement progressive disclosure** for quote details
-- [ ] **Add mobile-friendly status indicators** and progression
-- [ ] **Test mobile sales workflow** end-to-end
+#### **Phase 4: QuotationOrders Mobile UX V2 Transformation** ✅ **COMPLETE**
+**Status**: **COMPLETE** - Wide tables → Mobile cards with workflow actions following Design System V2
+- [x] **Transform wide desktop layout to mobile cards**
+- [x] **Optimize workflow action buttons** for mobile interaction
+- [x] **Implement progressive disclosure** for quote details
+- [x] **Add mobile-friendly status indicators** and progression
+- [x] **Test mobile sales workflow** end-to-end
 
-#### **Phase 5: CustomerProfile & Supporting Components** (15-20 mins) �
-**Status**: Ready after Phase 4
+#### **Phase 4.1: Universal Button System (Lead & Quote)** (15-20 mins) 🎯 **READY**
+**Status**: **Foundation Complete** - Global `.ds-btn` system ready for component migration
+- [x] **Document Universal Button System** in Design System V2
+- [x] **Implement global .ds-btn classes** in index.css with Design System V2 integration
+- [x] **Create migration roadmap** with detailed implementation steps
+- [ ] **Migrate LeadManagement button classes** to global system
+- [ ] **Migrate QuotationOrders button classes** to global system
+- [ ] **Verify visual consistency** and functionality across components
+
+#### **Phase 5: Supporting Components + Button System** (20-25 mins) �
+**Status**: Ready after Phase 4.1
 - [ ] **Transform AddLeadModal** for mobile form interaction
 - [ ] **Optimize CustomerProfile** for mobile screens
 - [ ] **Ensure consistent mobile UX** across all remaining components
@@ -139,7 +148,7 @@
 
 ### **Current Focus**: Mobile UX V2 Component Transformation
 **Target**: Complete mobile optimization of all business components for MSME textile manufacturers
-**Next Session**: **Start with Phase 4 (QuotationOrders Mobile UX V2) - 25-30 minutes**
+**Next Session**: **Complete Phase 4.1 (Universal Button System Migration) - 10-15 minutes remaining**
 
 ### **Architecture Status**:
 -  **Zero Code Duplication Achieved** - Business logic extracted and shared
@@ -148,7 +157,7 @@
 -  **Ready for Component Transformation** - All infrastructure in place
 
 ### **Implementation Strategy**:
-- **Sequential Phases**: ~~2~~ **SKIPPED** → ~~3~~ **COMPLETE** → ~~3.1~~ **COMPLETE** → 4 → 5 → 6 (each 15-30 minutes)
+- **Sequential Phases**: ~~2~~ **SKIPPED** → ~~3~~ **COMPLETE** → ~~3.1~~ **COMPLETE** → ~~4~~ **COMPLETE** → 4.1 → 5 → 6 (each 15-30 minutes)
 - **Mobile-First Focus**: 48px touch targets, progressive disclosure patterns
 - **Business-Driven**: MSME textile manufacturer workflow optimization
 - **Git Strategy**: Phase-by-phase commits with structured messages

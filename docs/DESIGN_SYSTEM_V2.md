@@ -318,22 +318,29 @@ const toggleDetails = (itemId: string) => {
 };
 ```
 
-**CSS Structure:**
+**CSS Structure (Updated - Universal System):**
 ```css
-.expandedDetails {
+/* UPDATED: Use global classes - implemented in index.css */
+.ds-expanded-details {
+  margin: var(--ds-space-md) 0;
+  padding: var(--ds-space-md);
   background: var(--ds-bg-expanded);
-  border-radius: var(--ds-radius-lg);
-  padding: var(--ds-space-lg);
-  margin-bottom: var(--ds-space-lg);
+  border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-border-primary);
-  box-shadow: var(--ds-shadow-card);
+  animation: expandIn 0.2s ease-out;
 }
 
-.detailsContent p {
-  margin: var(--ds-space-sm) 0;
+.ds-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs); /* Tighter spacing for professional density */
+}
+
+.ds-details-content p {
+  margin: 0;
   font-size: var(--font-sm);
-  line-height: 1.4;
   color: var(--ds-text-primary);
+  line-height: 1.4; /* Improved information density */
 }
 ```
 
@@ -432,6 +439,122 @@ const toggleDetails = (itemId: string) => {
   flex-wrap: wrap;
 }
 ```
+
+### **4. Universal Expanded Details System** ⭐ **NEW**
+**Global CSS Classes for All Progressive Disclosure Content**
+
+**Problem Solved:** Eliminates duplicate expanded details CSS across components, ensures consistent spacing and animation platform-wide.
+
+**Implementation Status:** ✅ **ACTIVE** - Implemented in `index.css`, used by LeadManagement and QuotationOrders
+
+#### **When to Use:**
+- "More..." button expansions in business cards
+- Detailed information sections in any component  
+- Progressive disclosure content (fabric requirements, history, etc.)
+- Any expandable content areas across the platform
+
+#### **Global CSS Classes (DO NOT RECREATE):**
+```css
+/* Global classes in /index.css - NEVER recreate in component CSS */
+.ds-expanded-details {
+  margin: var(--ds-space-md) 0;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-expanded);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  animation: expandIn 0.2s ease-out;
+}
+
+.ds-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs); /* Professional 4-8px spacing */
+}
+
+.ds-details-content p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.4; /* Optimized information density */
+}
+
+.ds-details-content strong {
+  color: var(--ds-text-secondary);
+  font-weight: 600;
+}
+```
+
+#### **Standard Content Patterns:**
+```jsx
+// Pattern A: Simple Information (LeadManagement style)
+<div className="ds-expanded-details">
+  <div className="ds-details-content">
+    <p><strong>Contact:</strong> {lead.contact}</p>
+    <p><strong>Business:</strong> {lead.business}</p>
+    <p><strong>Inquiry:</strong> {lead.inquiry}</p>
+  </div>
+</div>
+
+// Pattern B: Complex Information (QuotationOrders style)
+<div className="ds-expanded-details">
+  <div className="ds-details-content">
+    <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
+    <p><strong>Date:</strong> {quote.date} | <strong>Valid Until:</strong> {quote.validUntil}</p>
+    <p><strong>Amount:</strong> {formatCurrency(quote.amount)} (incl. GST)</p>
+  </div>
+</div>
+
+// Pattern C: Status/Reference Information  
+<div className="ds-expanded-details">
+  <div className="ds-details-content">
+    <p><strong>📋 From Lead:</strong> <span className="link">{leadId}</span></p>
+    <p><strong>📦 Order Status:</strong> {orderStatus}</p>
+  </div>
+</div>
+```
+
+#### **React Implementation Template:**
+```jsx
+// State management
+const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+
+// Toggle function
+const toggleDetails = (itemId: string) => {
+  setExpandedDetails(prev => {
+    const newSet = new Set(prev);
+    if (newSet.has(itemId)) {
+      newSet.delete(itemId);
+    } else {
+      newSet.add(itemId);
+    }
+    return newSet;
+  });
+};
+
+// UI Implementation
+{expandedDetails.has(item.id) && (
+  <div className="ds-expanded-details">
+    <div className="ds-details-content">
+      <p><strong>Label:</strong> {item.value}</p>
+      {/* Add more content following standard patterns */}
+    </div>
+  </div>
+)}
+```
+
+#### **🚨 CRITICAL DEVELOPER RULES:**
+1. **NEVER** create `.expandedDetails` or `.detailsContent` in component CSS
+2. **ALWAYS** use global `.ds-expanded-details` and `.ds-details-content` classes
+3. **FOLLOW** standard content patterns for consistent information display
+4. **USE** proper semantic markup with `<strong>` for labels
+5. **INCLUDE** units and context (e.g., "incl. GST", emojis for visual clarity)
+
+#### **Migration Checklist for Existing Components:**
+- [ ] Replace component `.expandedDetails` with global `.ds-expanded-details`
+- [ ] Replace component `.detailsContent` with global `.ds-details-content`  
+- [ ] Remove duplicate CSS from component `.module.css` files
+- [ ] Verify spacing matches Design System V2 standards
+- [ ] Test expansion animation and responsive behavior
 
 ---
 
@@ -553,12 +676,100 @@ Add to existing Design System V2 variables:
 </button>
 ```
 
+### **Single-Row Button Layout Pattern** ⭐ **NEW**
+
+All components now use consistent single-row button layouts with natural wrapping for better mobile efficiency:
+
+```css
+/* Single-row layout with natural wrapping - in component CSS */
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
+}
+```
+
+**Implementation Example:**
+```jsx
+{/* BEFORE: Forced two-row layout */}
+<div className={styles.primaryActions}>
+  <button className="ds-btn ds-btn-primary">📞 Call</button>
+  <button className="ds-btn ds-btn-primary">📱 WhatsApp</button>
+</div>
+<div className={styles.secondaryActions}>
+  <button className="ds-btn ds-btn-secondary">📄 View</button>
+  <button className="ds-btn ds-btn-more">More...</button>
+</div>
+
+{/* AFTER: Single row with natural wrapping */}
+<div className={styles.actionButtons}>
+  <button className="ds-btn ds-btn-primary">📞 Call</button>
+  <button className="ds-btn ds-btn-primary">📱 WhatsApp</button>
+  <button className="ds-btn ds-btn-secondary">📄 View</button>
+  <button className="ds-btn ds-btn-more">More...</button>
+</div>
+```
+
+**Benefits:**
+- **Space Efficient**: Uses available horizontal space better on both mobile and desktop
+- **Natural Flow**: Buttons wrap only when screen space insufficient
+- **Consistent Layout**: Same pattern across all components (LeadManagement, QuotationOrders, etc.)
+- **Responsive**: Works seamlessly across all device sizes
+
 ### **Benefits**
 ✅ **Single Source of Truth**: All button styling in `/index.css`  
 ✅ **Zero Duplication**: Remove duplicate button definitions across components  
 ✅ **Global Consistency**: Change button colors/spacing everywhere at once  
 ✅ **Mobile Responsive**: Works perfectly on all devices using existing Design System V2  
 ✅ **Performance**: Smaller CSS bundle, better caching
+✅ **Efficient Layouts**: Single-row patterns maximize screen space usage
+
+---
+
+---
+
+## 🛠️ **IMPLEMENTATION GUIDELINES & DEVELOPER RULES**
+
+### **🚨 CRITICAL DEVELOPER RULES - PREVENT REWORK**
+
+#### **Universal Systems Usage (MANDATORY)**
+1. **NEVER recreate `.ds-expanded-details` or `.ds-details-content` in component CSS**
+   - These classes exist globally in `index.css`
+   - Always use global classes for expanded content areas
+   - Remove any duplicate CSS after migration
+
+2. **ALWAYS use `.ds-btn` global button classes**
+   - Replace all component-specific button styles with global classes
+   - Use `.actionButtons` for single-row layouts with natural wrapping
+   - Remove duplicate button CSS from component modules
+
+3. **FOLLOW single-row button layout pattern**
+   - Use `.actionButtons` container for all button groups
+   - Let buttons wrap naturally when screen space insufficient
+   - Avoid forced two-row layouts (`.primaryActions` + `.secondaryActions`)
+
+#### **Design System V2 Compliance (NON-NEGOTIABLE)**
+1. **Typography**: Zero hardcoded font-size values - always use CSS variables
+2. **Spacing**: Only use `var(--ds-padding-screen)` for screen-level padding
+3. **Touch Targets**: Minimum 42px height for all interactive elements
+4. **Responsive**: Use clamp() functions for all spacing and sizing
+
+#### **Component Development Workflow**
+1. **Start with global systems** - check what exists in `index.css` first
+2. **Migrate existing components** - replace duplicates with global classes
+3. **Follow standard patterns** - use established React/CSS structures
+4. **Test responsiveness** - verify mobile and desktop behavior
+5. **Document changes** - update Design System V2 when adding new patterns
+
+#### **Quality Gates Before Merge**
+- [ ] Zero compilation errors with current npm start
+- [ ] All buttons use global `.ds-btn` classes
+- [ ] All expanded details use global `.ds-expanded-details` classes
+- [ ] Single-row button layouts implemented (`.actionButtons`)
+- [ ] No hardcoded font sizes or spacing values
+- [ ] Mobile responsiveness tested and verified
 
 ---
 

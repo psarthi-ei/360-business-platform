@@ -237,6 +237,11 @@ body {
     padding-top: var(--platform-content-top);
     /* Desktop containers need clearance for universal search bar */
   }
+  
+  /* Desktop background override - use Design System V2 light theme instead of blue gradient */
+  .App-content {
+    background: var(--ds-bg-primary, linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%));
+  }
 }
 
 /* Dashboard Styles - dashboard.module.css will be used for component-specific styles */
@@ -392,5 +397,27 @@ body {
     min-height: 100vh;
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
+  }
+}
+
+/* ========================================
+   WEB-SPECIFIC: UNIFIED HEADER SYSTEM
+   ======================================== */
+
+/* Desktop Unified Header - Web-specific responsive design */
+@media (min-width: 769px) {
+  .unifiedHeader {
+    display: grid;
+    grid-template-columns: auto minmax(200px, 300px) auto auto;
+    align-items: center;
+    justify-content: flex-start;
+    margin: clamp(0.5rem, 2vw, 1.25rem) auto clamp(1rem, 3vw, 1.5rem) auto;
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
+    max-width: 1400px;
+    background: white;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e1e8ed;
+    gap: clamp(0.5rem, 1vw, 0.75rem);
   }
 }

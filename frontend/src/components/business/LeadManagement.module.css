@@ -18,20 +18,7 @@
   z-index: 10;
 }
 
-/* Mobile UX V2: Universal Responsive Header - Fluid CSS Grid Design */
-.unifiedHeader {
-  display: grid;
-  grid-template-columns: minmax(3.5rem, auto) 1fr minmax(5rem, auto);
-  align-items: center;
-  margin: clamp(0.5rem, 2vw, 1.25rem) auto clamp(1rem, 3vw, 1.5rem) auto;
-  padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
-  max-width: 1400px;
-  background: white;
-  border-radius: clamp(8px, 1.5vw, 12px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e1e8ed;
-  gap: clamp(0.25rem, 1.5vw, 0.75rem);
-}
+/* REMOVED: Unified header CSS migrated to mobileGlobal.css + App.css */
 
 .pageTitle {
   font-size: var(--font-xl);
@@ -108,24 +95,7 @@
   min-width: 0;
 }
 
-.filterDropdown {
-  font-size: var(--font-base);
-  min-height: clamp(42px, 8vw, 44px);
-  width: 100%;
-  touch-action: manipulation;
-  padding: clamp(0.5rem, 2vw, 0.75rem);
-  border: 1px solid #e1e8ed;
-  border-radius: clamp(6px, 1.2vw, 8px);
-  background: white;
-  color: #4a5568;
-  cursor: pointer;
-  outline: none;
-}
-
-.filterDropdown:focus {
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-}
+/* REMOVED: Filter dropdown CSS migrated to global .ds-filter-dropdown system in index.css */
 
 .leadCounter {
   font-size: var(--font-sm);
@@ -271,7 +241,7 @@
 .leadHeader h3 {
   margin: 0;
   font-size: var(--font-xl);
-  color: var(--color-primary, #ffd700);
+  color: var(--color-primary) !important;
   font-weight: 600;
   flex: 1;
 }
@@ -391,45 +361,7 @@
   margin-bottom: 16px;
 }
 
-.actionBtn {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  font-size: var(--font-sm);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.actionBtn.callBtn, .actionBtn.call {
-  background: var(--color-success, #2ed573);
-  color: var(--color-text, white);
-}
-
-.actionBtn.callBtn:hover, .actionBtn.call:hover {
-  background: #7bed9f;
-}
-
-.actionBtn.quoteBtn, .actionBtn.quote {
-  background: var(--color-accent, #3742fa);
-  color: var(--color-text, white);
-}
-
-.actionBtn.quoteBtn:hover, .actionBtn.quote:hover {
-  background: #5352ed;
-}
-
-.actionBtn.whatsappBtn, .actionBtn.whatsapp {
-  background: var(--color-success, #25d366);
-  color: var(--color-text, white);
-}
-
-.actionBtn.whatsappBtn:hover, .actionBtn.whatsapp:hover {
-  background: #128c7e;
-}
+/* REMOVED: Duplicate button classes - now using global .ds-btn system from index.css */
 
 .leadNotes {
   margin-top: 16px;
@@ -478,25 +410,7 @@
   }
 }
 
-.voiceCommands {
-  max-width: 1400px;
-  margin: clamp(20px, 4vw, 30px) auto clamp(20px, 5vw, 40px) auto;
-  padding: clamp(16px, 4vw, 24px) clamp(12px, 3vw, 20px);
-  background: rgba(59, 130, 246, 0.08);
-  border-radius: clamp(12px, 3vw, 16px);
-  border: 2px solid rgba(59, 130, 246, 0.2);
-  text-align: center;
-  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);
-}
-
-.voiceHint {
-  margin: 0;
-  font-size: var(--font-base);
-  color: #1e40af;
-  font-weight: 600;
-  line-height: 1.4;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
+/* REMOVED: Voice commands CSS migrated to global .ds-voice-commands system in index.css */
 
 /* Data Mapping Styles */
 .leadMapping {
@@ -540,81 +454,16 @@
   margin-top: var(--ds-space-md);
 }
 
-.primaryActions {
+/* Single-row button layout with natural wrapping */
+.actionButtons {
   display: flex;
   gap: var(--ds-space-sm);
-  margin-bottom: var(--ds-space-xs);
-}
-
-.secondaryActions {
-  display: flex;
-  gap: var(--ds-space-xs);
   flex-wrap: wrap;
-}
-
-/* Design System V2 - Action Button Base (All Screen Sizes) */
-.actionBtn {
-  font-size: var(--font-sm);
-  min-height: var(--ds-touch-target-min);
-  padding: var(--ds-padding-button);
-  border-radius: var(--ds-radius-md);
-  touch-action: var(--ds-touch-action);
-  -webkit-tap-highlight-color: var(--ds-tap-highlight);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--ds-space-xs);
-  font-weight: 600;
-  border: none;
-  flex: 1;
-  min-width: clamp(60px, 20vw, 80px);
-  white-space: nowrap;
+  margin-top: var(--ds-space-md);
 }
 
-.primaryBtn {
-  background: var(--ds-btn-primary);
-  color: white;
-}
-
-.primaryBtn:hover {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-}
-
-.secondaryBtn {
-  background: var(--ds-btn-secondary);
-  color: var(--ds-btn-secondary-border);
-  border: 1px solid var(--ds-btn-secondary-border);
-}
-
-.secondaryBtn:hover {
-  background: var(--ds-btn-secondary-hover);
-  color: white;
-  transform: translateY(-1px);
-}
-
-.urgentBtn {
-  background: var(--ds-btn-urgent);
-  color: white;
-}
-
-.urgentBtn:hover {
-  background: var(--ds-btn-urgent-hover);
-  transform: translateY(-1px);
-}
-
-.moreBtn {
-  background: rgba(66, 153, 225, 0.1);
-  color: #4299e1;
-  border: 1px solid #4299e1;
-}
-
-.moreBtn:hover {
-  background: rgba(66, 153, 225, 0.2);
-  transform: translateY(-1px);
-}
+/* REMOVED: All button classes migrated to global .ds-btn system in index.css */
 
 /* Badge Container Styles */
 .badgeContainer {
@@ -641,66 +490,9 @@
   line-height: 1.4;
 }
 
-/* Expanded Details Section */
-.expandedDetails {
-  margin: var(--ds-space-md) 0;
-  padding: var(--ds-space-md);
-  background: var(--ds-bg-expanded);
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-border-primary);
-  animation: expandIn 0.2s ease-out;
-}
+/* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
-.detailsContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.detailsContent p {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--ds-text-primary);
-  line-height: 1.5;
-}
-
-.detailsContent strong {
-  color: var(--ds-text-secondary);
-  font-weight: 600;
-}
-
-@keyframes expandIn {
-  from {
-    opacity: 0;
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 500px;
-    padding-top: var(--ds-space-md);
-    padding-bottom: var(--ds-space-md);
-  }
-}
-
-/* Professional Expanded Details Styling - Global Scope (All Screen Sizes) */
-.expandedDetails {
-  background: #f8fafb;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  border: 1px solid #e1e8ed;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.detailsContent p {
-  margin: 8px 0;
-  font-size: var(--font-sm);
-  line-height: 1.4;
-  color: #2d3748;
-}
-
+/* Component-specific styling for action buttons in expanded sections */
 .expandedActions {
   margin-top: 12px;
   display: flex;
@@ -1181,7 +973,7 @@
     font-size: var(--font-base);
     font-weight: 600;
     margin: 6px 0;
-    color: #2c3e50;
+    color: var(--color-primary);
     line-height: 1.2;
   }
 

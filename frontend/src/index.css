@@ -19,6 +19,9 @@
   --font-lg: clamp(18px, 4vw, 20px);      /* Important text, headings */
   --font-xl: clamp(20px, 4.5vw, 24px);    /* Large headers, emphasis */
 
+  /* Global Color Variables - Fixed golden color readability issue */
+  --color-primary: #2d3748;  /* Dark gray for better readability on light backgrounds */
+
   /* DESIGN SYSTEM V2 - Mobile-First Global Variables */
   /* Professional Light Theme Color System (from LeadManagement success) */
   --ds-bg-primary: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
@@ -179,6 +182,112 @@
 .ds-btn-more:hover {
   background: #4299e1;
   color: white;
+}
+
+/* ========================================
+   UNIVERSAL VOICE COMMANDS SYSTEM
+   ======================================== */
+
+/* Voice Commands Container - Standardized across all components */
+.ds-voice-commands {
+  max-width: 1400px;
+  margin: clamp(20px, 4vw, 30px) auto clamp(20px, 5vw, 40px) auto;
+  padding: clamp(16px, 4vw, 24px) clamp(12px, 3vw, 20px);
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: clamp(12px, 3vw, 16px);
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Voice Hint Text - Professional blue styling */
+.ds-voice-hint {
+  margin: 0;
+  font-size: var(--font-base);
+  color: #1e40af;
+  font-weight: 600;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   UNIFIED HEADER RESPONSIVE OPTIMIZATION
+   ======================================== */
+
+/* Filter Dropdown - Responsive width optimization */
+.ds-filter-dropdown {
+  font-size: var(--font-base);
+  min-height: clamp(42px, 8vw, 44px);
+  width: 100%;
+  max-width: 250px; /* Prevent excessive width on desktop */
+  touch-action: manipulation;
+  padding: clamp(0.5rem, 2vw, 0.75rem);
+  border: 1px solid #e1e8ed;
+  border-radius: clamp(6px, 1.2vw, 8px);
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  outline: none;
+}
+
+.ds-filter-dropdown:focus {
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+/* Mobile: Full width for better touch targets */
+@media (max-width: 768px) {
+  .ds-filter-dropdown {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* NOTE: Unified header CSS kept in component modules for now until proper migration */
+
+/* DESIGN SYSTEM V2 - Universal Expanded Details System */
+/* Global standardized classes for all expanded/details content across components */
+.ds-expanded-details {
+  margin: var(--ds-space-md) 0;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-expanded);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  animation: expandIn 0.2s ease-out;
+}
+
+.ds-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs); /* Tighter spacing: 4-8px for professional density */
+}
+
+.ds-details-content p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.4; /* Slightly tighter for better information density */
+}
+
+.ds-details-content strong {
+  color: var(--ds-text-secondary);
+  font-weight: 600;
+}
+
+/* Universal expand animation */
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    padding-top: var(--ds-space-md);
+    padding-bottom: var(--ds-space-md);
+  }
 }
 
 /* Platform Page Content Layout - Clean Global Base */

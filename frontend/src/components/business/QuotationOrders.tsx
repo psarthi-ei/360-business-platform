@@ -178,11 +178,11 @@ function QuotationOrders({
   return (
     <div className={styles.quotationOrdersScreen}>
       <div className={styles.pageContent}>
-        <div className={styles.unifiedHeader}>
+        <div className="unifiedHeader">
           <button className={styles.addButton}>{t('addNewQuote')}</button>
           <div className={styles.filterDropdownContainer}>
             <select 
-              className={styles.filterDropdown}
+              className="ds-filter-dropdown"
               value={filterState}
               onChange={(e) => onFilterChange(e.target.value)}
             >
@@ -277,8 +277,8 @@ function QuotationOrders({
 
               {/* Progressive Disclosure - Detailed Information */}
               {expandedDetails.has(quote.id) && (
-                <div className={styles.expandedDetails}>
-                  <div className={styles.detailsContent}>
+                <div className="ds-expanded-details">
+                  <div className="ds-details-content">
                     <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
                     <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
                     <p><strong>Items:</strong> {quote.items}</p>
@@ -311,26 +311,22 @@ function QuotationOrders({
               )}
               
               <div className={styles.cardActions}>
-                {/* Primary Actions Row - Universal for all business cards */}
-                <div className={styles.primaryActions}>
-                  <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                {/* Single-row button layout with natural wrapping */}
+                <div className={styles.actionButtons}>
+                  <button className="ds-btn ds-btn-primary">
                     📞 Call
                   </button>
-                  <button className={`${styles.actionBtn} ${styles.primaryBtn}`}>
+                  <button className="ds-btn ds-btn-primary">
                     📱 WhatsApp
                   </button>
-                </div>
-                
-                {/* Secondary Actions Row - Workflow-specific actions */}
-                <div className={styles.secondaryActions}>
-                  <button className={`${styles.actionBtn} ${styles.secondaryBtn}`}>
+                  <button className="ds-btn ds-btn-secondary">
                     📄 View PDF
                   </button>
                   
                   {/* Context-specific action based on quote status */}
                   {quote.status === 'pending' && isProspect && (
                     <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      className="ds-btn ds-btn-secondary"
                       onClick={() => handleQuoteApproval(quote.id)}
                     >
                       ✅ Approve
@@ -339,7 +335,7 @@ function QuotationOrders({
                   
                   {quote.status === 'approved' && isProspect && !workflowState.profileLinks.find(pl => pl.quoteId === quote.id) && (
                     <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      className="ds-btn ds-btn-secondary"
                       onClick={() => handleSendProfileLink(quote.id)}
                     >
                       📝 Send Link
@@ -348,7 +344,7 @@ function QuotationOrders({
                   
                   {quote.status === 'approved' && isCustomer && !relatedOrder && (
                     <button 
-                      className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                      className="ds-btn ds-btn-secondary"
                       onClick={() => handleProformaGeneration(quote.id)}
                     >
                       📋 Proforma
@@ -356,19 +352,19 @@ function QuotationOrders({
                   )}
                   
                   {relatedOrder && (
-                    <button className={`${styles.actionBtn} ${styles.secondaryBtn}`} onClick={() => onShowSalesOrders()}>
+                    <button className="ds-btn ds-btn-secondary" onClick={() => onShowSalesOrders()}>
                       📦 View Order
                     </button>
                   )}
                   
                   {quote.status === 'expired' && (
-                    <button className={`${styles.actionBtn} ${styles.secondaryBtn}`}>
+                    <button className="ds-btn ds-btn-secondary">
                       🔄 Renew
                     </button>
                   )}
                   
                   <button 
-                    className={`${styles.actionBtn} ${styles.secondaryBtn} ${styles.moreBtn}`}
+                    className="ds-btn ds-btn-more"
                     onClick={() => toggleDetails(quote.id)}
                   >
                     {expandedDetails.has(quote.id) ? 'Less...' : 'More...'}
@@ -388,8 +384,8 @@ function QuotationOrders({
         </div>
       </div>
 
-      <div className={styles.voiceCommands}>
-        <p className={styles.voiceHint}>
+      <div className="ds-voice-commands">
+        <p className="ds-voice-hint">
           🎤 <strong>{t('voiceCommandsHint')}</strong> 
           "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "Mark as approved" • "Send profile link"
         </p>

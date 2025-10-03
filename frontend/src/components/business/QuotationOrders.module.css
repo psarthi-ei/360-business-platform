@@ -29,7 +29,8 @@
   text-align: left;
 }
 
-.backButton, .addButton {
+/* REMOVED: Duplicate addButton CSS - migrated to Design System V2 below */
+.backButton {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -53,7 +54,7 @@
 }
 
 .addButton {
-  padding: var(--ds-padding-button);
+  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
   border: none;
   border-radius: var(--ds-radius-md);
   font-size: var(--font-sm);
@@ -69,6 +70,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
 .addButton:hover {
@@ -174,8 +176,8 @@
 
 .quoteHeader h3 {
   margin: 0;
-  font-size: var(--font-lg);
-  color: var(--color-primary, #ffd700);
+  font-size: var(--font-xl);
+  color: var(--color-primary) !important;
   font-weight: 600;
   flex: 1;
 }
@@ -221,7 +223,7 @@
 }
 
 .quoteDetails strong {
-  color: var(--color-primary, #ffd700);
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -233,94 +235,18 @@
   margin-top: clamp(12px, 3vw, 16px);
 }
 
-.primaryActions {
+/* Single-row button layout with natural wrapping */
+.actionButtons {
   display: flex;
-  gap: clamp(8px, 2vw, 12px);
-  margin-bottom: clamp(4px, 1vw, 8px);
-}
-
-.secondaryActions {
-  display: flex;
-  gap: clamp(6px, 1.5vw, 8px);
+  gap: var(--ds-space-sm);
   flex-wrap: wrap;
-}
-
-.actionBtn {
-  font-size: var(--font-xs);
-  min-height: clamp(42px, 8vw, 44px);
-  padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
-  border-radius: clamp(6px, 1.2vw, 8px);
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
+  margin-top: var(--ds-space-md);
 }
 
-.primaryBtn {
-  background: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
-  color: white;
-  border: none;
-  flex: 1;
-}
+/* REMOVED: All button classes migrated to global .ds-btn system in index.css */
 
-.primaryBtn:hover {
-  background: linear-gradient(135deg, #3182ce 0%, #5a67d8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
-
-.secondaryBtn {
-  background: white;
-  color: #4a5568;
-  border: 1px solid #e1e8ed;
-  font-weight: 500;
-  flex: 1;
-  min-width: clamp(60px, 20vw, 80px);
-}
-
-.secondaryBtn:hover {
-  background: #f7fafc;
-  border-color: #cbd5e0;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.moreBtn {
-  background: rgba(66, 153, 225, 0.1);
-  color: #4299e1;
-  border: 1px solid #4299e1;
-}
-
-.moreBtn:hover {
-  background: rgba(66, 153, 225, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Remove old action button styles - replaced by Design System */
-
-.voiceCommands {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px 10px;
-  background: rgba(255, 215, 0, 0.08);
-  border-radius: var(--radius-large, 16px);
-  border: 2px solid rgba(255, 215, 0, 0.2);
-  text-align: center;
-}
-
-.voiceHint {
-  margin: 0;
-  font-size: var(--font-lg);
-  color: var(--color-primary, #ffd700);
-  font-weight: 500;
-}
+/* REMOVED: Voice commands CSS migrated to global .ds-voice-commands system in index.css */
 
 /* Badge Container Styles */
 .badgeContainer {
@@ -373,7 +299,7 @@
 
 .mappingLink {
   background: rgba(255, 215, 0, 0.2);
-  color: var(--color-primary, #ffd700);
+  color: var(--color-primary);
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 600;
@@ -393,20 +319,7 @@
 /* pageContent wrapper - no styling to match LeadManagement behavior */
 
 
-/* Unified Header Pattern - Design System V2 */
-.unifiedHeader {
-  display: grid;
-  grid-template-columns: minmax(3.5rem, auto) 1fr minmax(5rem, auto);
-  align-items: center;
-  margin: clamp(0.5rem, 2vw, 1.25rem) auto clamp(1rem, 3vw, 1.5rem) auto;
-  padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
-  max-width: 1400px;
-  background: white;
-  border-radius: clamp(8px, 1.5vw, 12px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e1e8ed;
-  gap: clamp(0.25rem, 1.5vw, 0.75rem);
-}
+/* REMOVED: Unified header CSS migrated to mobileGlobal.css + App.css */
 
 /* Unified Header Pattern Components */
 .filterDropdownContainer {
@@ -416,24 +329,7 @@
   min-width: 0;
 }
 
-.filterDropdown {
-  font-size: var(--font-base);
-  min-height: clamp(42px, 8vw, 44px);
-  width: 100%;
-  touch-action: manipulation;
-  padding: clamp(0.5rem, 2vw, 0.75rem);
-  border: 1px solid #e1e8ed;
-  border-radius: clamp(6px, 1.2vw, 8px);
-  background: white;
-  color: #4a5568;
-  cursor: pointer;
-  outline: none;
-}
-
-.filterDropdown:focus {
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-}
+/* REMOVED: Filter dropdown CSS migrated to global .ds-filter-dropdown system in index.css */
 
 .quoteCounter {
   font-size: var(--font-sm);
@@ -477,18 +373,8 @@
     gap: clamp(6px, 2vw, 8px);
   }
   
-  .primaryActions {
+  .actionButtons {
     gap: clamp(6px, 2vw, 8px);
-  }
-  
-  .secondaryActions {
-    gap: clamp(4px, 1vw, 6px);
-  }
-
-  .actionBtn {
-    min-height: 42px;
-    font-size: var(--font-xs);
-    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.5rem, 2vw, 0.75rem);
   }
 
   .quotationOrdersScreen .languageSwitcher {
@@ -536,47 +422,7 @@
   line-height: 1.4;
 }
 
-.expandedDetails {
-  margin: var(--ds-space-md) 0;
-  padding: var(--ds-space-md);
-  background: var(--ds-bg-expanded);
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-border-primary);
-  animation: expandIn 0.2s ease-out;
-}
-
-.detailsContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.detailsContent p {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--ds-text-primary);
-  line-height: 1.5;
-}
-
-.detailsContent strong {
-  color: var(--ds-text-secondary);
-  font-weight: 600;
-}
-
-@keyframes expandIn {
-  from {
-    opacity: 0;
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 500px;
-    padding-top: var(--ds-space-md);
-    padding-bottom: var(--ds-space-md);
-  }
-}
+/* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
 /* Update card styling to use Design System V2 colors */
 .quoteCard {
