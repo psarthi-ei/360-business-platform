@@ -119,7 +119,7 @@ This is the master navigation document that guides you to all project informatio
 1. **PRODUCT_REQUIREMENTS.md** 🔑 - What we're building & why
 2. **BUSINESS_PROCESSES.md** 🔑 - How textile business works
 3. **UNIFIED_ARCHITECTURE.md** 🔑 - Platform architecture & zero code duplication
-4. **MOBILE_UX_V2_IMPLEMENTATION.md** 🔑 - Current mobile transformation plan
+4. **MOBILE_UX_STRATEGY.md** 🔑 - Strategic UX decisions & mobile experience philosophy
 5. **USE_CASES_MASTER.md** 🔑 - Implementation status & progress tracking
 
 ---
@@ -188,19 +188,19 @@ This is the master navigation document that guides you to all project informatio
 
 ### **DEVELOPMENT & IMPLEMENTATION**
 
-### **4. MOBILE_UX_V2_IMPLEMENTATION.md** - Mobile UX V2 Transformation Guide 🔑 KEY DOCUMENT
-**Purpose**: Complete phase-by-phase mobile transformation guide respecting existing universal architecture
+### **4. MOBILE_UX_STRATEGY.md** - Mobile UX Strategic Philosophy & User Experience Design 🔑 KEY DOCUMENT
+**Purpose**: Strategic UX decisions, user journey design, and mobile experience philosophy for textile manufacturers
 
 **Contains**:
-- **Phase Status Summary**: Real-time tracking of 6 implementation phases with time estimates
-- **Mobile UX V2 Vision**: Business intelligence dashboard + 4-workflow navigation system
-- **Universal Architecture Respect**: Enhancement strategy that maintains single voice/search instances
-- **Dashboard Intelligence**: Transform from module launcher to business control center with priority cards
-- **Workflow Navigation**: 4-tab system (Home/Pipeline/Operations/Customers) replacing 8 scattered modules
-- **Implementation Phases**: Phase-by-phase execution plan (Phase 2 ready: Enhanced Search Results)
-- **Mobile Design System**: Touch targets, CSS architecture, factory environment optimization
+- **Mobile UX V2 Vision**: Business intelligence dashboard + 4-workflow navigation system philosophy
+- **Strategic UX Decisions**: Why 4-workflow system, progressive disclosure patterns, factory environment considerations
+- **User Journey Design**: Complete user flows from lead capture to delivery with voice command integration
+- **Business Context Integration**: Gujarat textile manufacturer workflows, cultural considerations, industry-specific UX patterns
+- **Voice-First Mobile Strategy**: How voice commands integrate with touch interfaces for factory environments
+- **Progressive Disclosure Philosophy**: Strategic information architecture for complex business processes
+- **Touch Interaction Design**: 42-44px touch targets, mobile-first approach for textile factory conditions
 
-**Update Schedule**: When mobile UX patterns change, new responsive components added, or phase implementations complete
+**Update Schedule**: When strategic UX decisions evolve or user experience philosophy changes
 
 ---
 
@@ -271,7 +271,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **9. DESIGN_SYSTEM.md** - Visual Design Standards
+### **9. DESIGN_SYSTEM.md** - Visual Design Standards (Master)
 **Purpose**: UI/UX design patterns and business context guidelines
 
 **Contains**:
@@ -280,8 +280,11 @@ This is the master navigation document that guides you to all project informatio
 - Mobile-first responsive design patterns for textile factory environments
 - Information architecture for textile business data
 - Business context integration (Gujarat textile examples, cultural sensitivity)
+- Comprehensive CSS architecture and component implementation standards
 
 **Update Schedule**: After major screen implementations, new UI patterns, or user feedback
+
+**Note**: DESIGN_SYSTEM_ARCHIVE.md contains historical design decisions for reference
 
 ---
 
@@ -343,8 +346,8 @@ This is the master navigation document that guides you to all project informatio
 | "How many use cases are completed?" | **USE_CASES_MASTER.md** | Progress metrics and completion tracking |
 | "How do I implement the dashboard?" | **DASHBOARD_SPECIFICATIONS.md** | Technical implementation guide |
 | "What are the component specifications?" | **DASHBOARD_SPECIFICATIONS.md** | UI architecture and styling standards |
-| "How do I implement mobile UX V2?" | **MOBILE_UX_V2_IMPLEMENTATION.md** | Complete mobile transformation guide with phase-by-phase execution |
-| "What's the current mobile implementation status?" | **MOBILE_UX_V2_IMPLEMENTATION.md** | Phase tracking, ready-to-execute plans, time estimates |
+| "What are the strategic UX decisions for mobile?" | **MOBILE_UX_STRATEGY.md** | Strategic UX philosophy, user journey design, voice-first mobile strategy |
+| "Why 4-workflow navigation system?" | **MOBILE_UX_STRATEGY.md** | Strategic UX decisions, progressive disclosure patterns, business context integration |
 | "When is the deadline?" | **PRODUCT_REQUIREMENTS.md** | Timeline and delivery milestones |
 | "How do textile manufacturers think?" | **BUSINESS_PROCESSES.md** | User mental models and daily patterns |
 | "What does this button do?" | **DASHBOARD_SPECIFICATIONS.md** | Component behavior and interactions |
@@ -415,7 +418,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 - ✅ **DESIGN_SYSTEM.md** - After major screen implementations
 - ✅ **BUSINESS_PROCESSES.md** - When business processes are refined
 - ✅ **UNIFIED_ARCHITECTURE.md** - When major architectural changes occur or new integration patterns are established
-- ✅ **MOBILE_UX_V2_IMPLEMENTATION.md** - When mobile UX patterns change, new responsive components added, or phase implementations complete
+- ✅ **MOBILE_UX_STRATEGY.md** - When strategic UX decisions evolve or user experience philosophy changes
 - ✅ **DOCUMENTATION_INDEX.md** - When documentation strategy changes
 
 ---
@@ -486,7 +489,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **Business Context for Use Cases (workflow logic, business rules)** | BUSINESS_PROCESSES.md | Business domain knowledge |
 | **Visual Design Philosophy & Standards** | DESIGN_SYSTEM.md | Design principles and patterns |
 | **Dashboard Technical Implementation** | DASHBOARD_SPECIFICATIONS.md | UI component architecture |
-| **Mobile UX V2 Implementation (phase-by-phase transformation, universal architecture respect)** | MOBILE_UX_V2_IMPLEMENTATION.md | Mobile transformation guide with execution phases |
+| **Mobile UX Strategic Decisions (philosophy, user journey design, voice-first strategy)** | MOBILE_UX_STRATEGY.md | Strategic UX philosophy and mobile experience design decisions |
 | **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
 | **Business Process (Lead→Quote→Order)** | BUSINESS_PROCESSES.md | Industry workflows |
 | **Feature Requirements (Voice Commands)** | PRODUCT_REQUIREMENTS.md | What to build |

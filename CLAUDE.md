@@ -19,7 +19,7 @@ date  # ALWAYS run first - validates project timeline context
 /docs/PRODUCT_REQUIREMENTS.md      # What we're building
 /docs/BUSINESS_PROCESSES.md        # 8-stage textile workflow
 /docs/UNIFIED_ARCHITECTURE.md      # Zero duplication architecture
-/docs/MOBILE_UX_V2_IMPLEMENTATION.md  # Current phase details
+/docs/MOBILE_UX_STRATEGY.md        # Strategic UX decisions
 /docs/USE_CASES_MASTER.md          # Implementation progress
 ```
 
@@ -63,7 +63,7 @@ if (params && 'leadId' in params) {
 **✅ Required Standards**:
 - ALL font sizes MUST use CSS variables (`--font-xs` through `--font-xl`)
 - ALL interactive elements MUST meet 42-44px touch targets
-- Follow patterns in `/docs/DESIGN_SYSTEM_V2.md`
+- Follow patterns in `/docs/DESIGN_SYSTEM.md`
 
 ### **4. FILE EDITING PROTOCOL**
 **❌ Common Mistake**: Using Edit tool without reading file first
@@ -77,7 +77,7 @@ if (params && 'leadId' in params) {
 
 ## 🎯 CURRENT PHASE: MOBILE UX V2
 
-### **Phase Status (Check `/docs/MOBILE_UX_V2_IMPLEMENTATION.md` for details)**
+### **Phase Status (Check `/docs/MOBILE_UX_STRATEGY.md` for details)**
 - ✅ **Foundation**: Dashboard intelligence, workflow navigation
 - ✅ **Phase 3**: LeadManagement Mobile UX V2 
 - ✅ **Phase 3.1**: Design System V2 standardization
