@@ -86,6 +86,47 @@
   --ds-radius-md: clamp(6px, 1.2vw, 8px);
   --ds-radius-lg: clamp(8px, 1.5vw, 12px);
   --ds-radius-xl: clamp(12px, 2vw, 16px);
+
+  /* UNIVERSAL BUSINESS COLOR SYSTEM - Business-neutral categories */
+  
+  /* Business Priority System - Universal across all processes (leads, quotes, orders, customers) */
+  --ds-priority-high: #ff4757;         /* Hot leads, urgent orders, critical items */
+  --ds-priority-medium: #ffa502;       /* Warm leads, pending quotes, scheduled items */
+  --ds-priority-low: #4299e1;          /* Cold leads, draft quotes, routine items */
+  
+  /* Business Status System - Universal process states */
+  --ds-status-active: #2ed573;         /* Approved, completed, active customers */
+  --ds-status-pending: #ffa502;        /* Pending approval, in-progress items */
+  --ds-status-inactive: #6b7280;       /* Expired, cancelled, inactive items */
+  
+  /* Background Colors - Business context neutral */
+  --ds-bg-priority-high-subtle: rgba(255, 71, 87, 0.08);
+  --ds-bg-priority-medium-subtle: rgba(255, 165, 2, 0.08);
+  --ds-bg-priority-low-subtle: rgba(66, 153, 225, 0.08);
+  --ds-bg-status-active-subtle: rgba(46, 213, 115, 0.08);
+  --ds-bg-interactive: #f8fafb;
+  --ds-bg-hover: #f0f9ff;
+  --ds-bg-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Text Colors - Universal text hierarchy */
+  --ds-text-link: #4299e1;
+  --ds-text-link-hover: #2b6cb0;
+  --ds-text-positive: #16a34a;         /* Success messages, confirmations */
+  --ds-text-attention: #f59e0b;        /* Warnings, attention needed */
+  --ds-text-critical: #dc2626;         /* Errors, critical issues */
+  --ds-text-muted: #9ca3af;            /* Secondary info, placeholders */
+
+  /* Interactive States - Universal hover/active */
+  --ds-hover-priority-high: rgba(255, 71, 87, 0.3);
+  --ds-hover-priority-medium: rgba(255, 165, 2, 0.3);
+  --ds-hover-priority-low: rgba(66, 153, 225, 0.3);
+  --ds-hover-status-active: rgba(46, 213, 115, 0.3);
+  --ds-hover-neutral: rgba(107, 114, 128, 0.3);
+
+  /* Border Colors - Universal boundaries */
+  --ds-border-interactive: #e1e8ed;
+  --ds-border-subtle: #f3f4f6;
+  --ds-border-accent: #cbd5e0;
 }
 
 /* DESIGN SYSTEM V2 - Universal Button System */
