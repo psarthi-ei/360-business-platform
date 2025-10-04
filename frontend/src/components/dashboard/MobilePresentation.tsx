@@ -3,6 +3,7 @@ import BusinessPriorities from './components/BusinessPriorities';
 import BusinessHealth from './components/BusinessHealth';
 import SmartInsights from './components/SmartInsights';
 import QuickActions from './components/QuickActions';
+import styles from './dashboard.module.css';
 
 interface MobilePresentationProps {
   // Business metrics
@@ -59,7 +60,7 @@ const MobilePresentation: React.FC<MobilePresentationProps> = ({
   onShowAnalytics
 }) => {
   return (
-    <div className="mobile-dashboard-v2">
+    <div className={styles['mobile-dashboard-v2']}>
       {/* Business Intelligence Dashboard V2 */}
       
       {/* Today's Business Priorities */}

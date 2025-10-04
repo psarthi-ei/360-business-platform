@@ -18,7 +18,7 @@
   z-index: 10;
 }
 
-/* REMOVED: Unified header CSS migrated to mobileGlobal.css + App.css */
+/* REMOVED: Unified header CSS migrated to App.css (common patterns) */
 
 .pageTitle {
   font-size: var(--font-xl);

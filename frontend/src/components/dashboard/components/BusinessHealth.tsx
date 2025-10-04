@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../dashboard.module.css';
 
 interface BusinessHealthProps {
   // Revenue metrics
@@ -64,28 +65,28 @@ const BusinessHealth: React.FC<BusinessHealthProps> = ({
   };
   
   return (
-    <div className="business-health">
+    <div className={styles['business-health']}>
       <h3>📊 Business Health - This Month</h3>
-      <div className="business-health-card">
+      <div className={styles['business-health-card']}>
         
         {/* Revenue Progress */}
-        <div className="health-metric">
-          <div className="metric-header">
-            <span className="metric-icon">💰</span>
-            <span className="metric-label">Revenue Progress</span>
+        <div className={styles['health-metric']}>
+          <div className={styles['metric-header']}>
+            <span className={styles['metric-icon']}>💰</span>
+            <span className={styles['metric-label']}>Revenue Progress</span>
             <span 
-              className="metric-status"
+              className={styles['metric-status']}
               style={{ color: getStatusColor(revenueStatus) }}
             >
               {getStatusText(revenueStatus)}
             </span>
           </div>
-          <div className="metric-value">
+          <div className={styles['metric-value']}>
             ₹{(totalRevenue/100000).toFixed(1)}L / ₹{(revenueTarget/100000).toFixed(0)}L ({revenueProgress.toFixed(0)}%)
           </div>
-          <div className="metric-progress">
+          <div className={styles['metric-progress']}>
             <div 
-              className="progress-bar"
+              className={styles['progress-bar']}
               style={{ 
                 width: `${Math.min(revenueProgress, 100)}%`,
                 backgroundColor: getStatusColor(revenueStatus)
@@ -95,35 +96,35 @@ const BusinessHealth: React.FC<BusinessHealthProps> = ({
         </div>
         
         {/* Pipeline Strength */}
-        <div className="health-metric">
-          <div className="metric-header">
-            <span className="metric-icon">🎯</span>
-            <span className="metric-label">Pipeline Strength</span>
+        <div className={styles['health-metric']}>
+          <div className={styles['metric-header']}>
+            <span className={styles['metric-icon']}>🎯</span>
+            <span className={styles['metric-label']}>Pipeline Strength</span>
             <span 
-              className="metric-status"
+              className={styles['metric-status']}
               style={{ color: getStatusColor(conversionStatus) }}
             >
               {getStatusText(conversionStatus)}
             </span>
           </div>
-          <div className="metric-value">
+          <div className={styles['metric-value']}>
             {totalLeads} active leads, {conversionRate}% conversion rate
           </div>
         </div>
         
         {/* Cash Flow Status */}
-        <div className="health-metric">
-          <div className="metric-header">
-            <span className="metric-icon">💳</span>
-            <span className="metric-label">Cash Flow Status</span>
+        <div className={styles['health-metric']}>
+          <div className={styles['metric-header']}>
+            <span className={styles['metric-icon']}>💳</span>
+            <span className={styles['metric-label']}>Cash Flow Status</span>
             <span 
-              className="metric-status"
+              className={styles['metric-status']}
               style={{ color: getStatusColor(cashFlowStatus) }}
             >
               {getStatusText(cashFlowStatus)}
             </span>
           </div>
-          <div className="metric-value">
+          <div className={styles['metric-value']}>
             {overduePayments === 0 
               ? 'All payments current' 
               : `₹${(pendingAdvanceAmount/100000).toFixed(1)}L outstanding, avg ${avgOutstandingDays} days`
@@ -132,18 +133,18 @@ const BusinessHealth: React.FC<BusinessHealthProps> = ({
         </div>
         
         {/* Production Efficiency */}
-        <div className="health-metric">
-          <div className="metric-header">
-            <span className="metric-icon">🏭</span>
-            <span className="metric-label">Production Efficiency</span>
+        <div className={styles['health-metric']}>
+          <div className={styles['metric-header']}>
+            <span className={styles['metric-icon']}>🏭</span>
+            <span className={styles['metric-label']}>Production Efficiency</span>
             <span 
-              className="metric-status"
+              className={styles['metric-status']}
               style={{ color: getStatusColor(productionStatus) }}
             >
               {getStatusText(productionStatus)}
             </span>
           </div>
-          <div className="metric-value">
+          <div className={styles['metric-value']}>
             {activeOrders} active orders, {onTimeDeliveryRate}% on-time delivery
           </div>
         </div>

@@ -319,7 +319,7 @@
 /* pageContent wrapper - no styling to match LeadManagement behavior */
 
 
-/* REMOVED: Unified header CSS migrated to mobileGlobal.css + App.css */
+/* REMOVED: Unified header CSS migrated to App.css (common patterns) */
 
 /* Unified Header Pattern Components */
 .filterDropdownContainer {

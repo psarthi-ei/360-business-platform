@@ -883,33 +883,7 @@ voice: "add new lead"
 
 ### **CSS Loading Architecture & Container System**
 
-#### **CSS Loading Hierarchy**
-CSS files are loaded in a specific order to ensure proper styling and avoid conflicts:
-
-```
-index.tsx
-├── index.css (React app base styles)
-└── App.tsx
-    ├── App.css (Main application styles)
-    │   ├── @import './mobileGlobal.css' (Global mobile patterns)
-    │   └── Markdown content styles (.markdown-content)
-    └── Components
-        ├── MobileAppShell.css (Mobile container structure)
-        ├── Dashboard.module.css (Component-specific styles)
-        └── Other component CSS modules
-```
-
-#### **File Responsibilities Matrix**
-
-| File | Purpose | Scope | Dependencies |
-|------|---------|--------|--------------|
-| **index.css** | React app foundation | Global reset, base styles | None |
-| **App.css** | Main app styles + imports | Global app patterns, markdown | mobileGlobal.css |
-| **mobileGlobal.css** | Global mobile patterns | Mobile-first responsive design | None (standalone) |
-| **MobileAppShell.css** | Mobile container structure | `.mobile-content`, shell layout | None |
-| **Component.module.css** | Component-specific styles | Scoped to component | None |
-
-#### **Container Architecture Pattern**
+#### **Component Container Architecture**
 
 **MobileAppShell as Root Mobile Container:**
 ```jsx
@@ -917,50 +891,24 @@ index.tsx
 <div className="mobile-container">
   <div className="mobile-content">
     {/* All mobile pages render inside this container */}
-    <Dashboard /> {/* Uses mobileGlobal.css patterns */}
+    <Dashboard />
     <Leads />
     <Quotes />
   </div>
 </div>
 ```
 
-**Global Mobile Patterns:**
-```css
-/* mobileGlobal.css - Global mobile styling patterns */
-.mobile-dashboard-v2 {
-  padding: 16px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-```
-
-#### **Architectural Best Practices**
-
-**✅ Proper CSS Organization:**
-- **Global patterns** → `mobileGlobal.css` (root level, no dependencies)
-- **Container structure** → `MobileAppShell.css` (component-specific)
-- **Component styling** → `Component.module.css` (scoped modules)
-
-**✅ Dependency Management:**
-- Global CSS files should have no dependencies on component CSS
-- Component CSS can reference global patterns but not cross-reference other components
-- Use clear naming: `mobileGlobal.css` vs `MobileAppShell.css` for obvious distinction
-
-**❌ Anti-Patterns to Avoid:**
-- Cross-file dependencies (global CSS depending on component CSS)
-- Confusing naming (mobile.css alongside MobileAppShell.css)
-- Global CSS in subdirectories (should be at root level)
-
-#### **Mobile-First Container System**
-1. **MobileAppShell**: Root mobile container with `.mobile-content` wrapper
-2. **Global Patterns**: `mobileGlobal.css` provides reusable mobile styling classes
-3. **Component Modules**: Scoped styles for specific functionality
-4. **Responsive Design**: Mobile-first approach with desktop overrides
+**Component Organization Principles:**
+1. **MobileAppShell**: Root mobile container with navigation
+2. **Component Modules**: Each component handles its own desktop + mobile styling
+3. **Business Logic Separation**: Clear separation between presentation and business logic
+4. **Responsive Design**: Mobile-first approach with desktop enhancements
 
 This architecture ensures clean separation of concerns, eliminates CSS conflicts, and provides a maintainable foundation for mobile-first design.
+
+## **CSS Architecture**
+
+For complete CSS architecture details, see [Design System V2](./DESIGN_SYSTEM_V2.md#css-architecture-standardization).
 
 ### **URL-Based Action Pattern**
 

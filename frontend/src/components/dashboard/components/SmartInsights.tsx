@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../dashboard.module.css';
 
 interface SmartInsightsProps {
   // Business data for insights generation
@@ -120,12 +121,12 @@ const SmartInsights: React.FC<SmartInsightsProps> = ({
   
   if (insights.length === 0) {
     return (
-      <div className="smart-insights">
+      <div className={styles['smart-insights']}>
         <h3>💡 Smart Business Insights</h3>
-        <div className="insights-card">
-          <div className="insight-item">
-            <span className="insight-icon">📊</span>
-            <span className="insight-text">
+        <div className={styles['insights-card']}>
+          <div className={styles['insight-item']}>
+            <span className={styles['insight-icon']}>📊</span>
+            <span className={styles['insight-text']}>
               Generating insights from your business data...
             </span>
           </div>
@@ -135,24 +136,24 @@ const SmartInsights: React.FC<SmartInsightsProps> = ({
   }
   
   return (
-    <div className="smart-insights">
+    <div className={styles['smart-insights']}>
       <h3>💡 Smart Business Insights</h3>
-      <div className="insights-card">
+      <div className={styles['insights-card']}>
         {insights.map((insight, index) => (
-          <div key={index} className="insight-item">
-            <div className="insight-content">
-              <div className="insight-header">
-                <span className="insight-icon">{insight.icon}</span>
-                <span className="insight-title">{insight.title}</span>
+          <div key={index} className={styles['insight-item']}>
+            <div className={styles['insight-content']}>
+              <div className={styles['insight-header']}>
+                <span className={styles['insight-icon']}>{insight.icon}</span>
+                <span className={styles['insight-title']}>{insight.title}</span>
               </div>
-              <div className="insight-description">
+              <div className={styles['insight-description']}>
                 {insight.description}
               </div>
             </div>
             {insight.handler && (
-              <div className="insight-action">
+              <div className={styles['insight-action']}>
                 <button 
-                  className="insight-btn"
+                  className={styles['insight-btn']}
                   style={{ backgroundColor: insight.color }}
                   onClick={insight.handler}
                 >

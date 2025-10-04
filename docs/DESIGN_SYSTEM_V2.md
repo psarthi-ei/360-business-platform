@@ -666,11 +666,11 @@ const toggleDetails = (itemId: string) => {
 **Problem Solved:** Desktop unified headers had poor spacing with filter dropdowns too wide, items pushed to extremes.
 
 **Solution Implemented:**
-- **Mobile-specific CSS**: `mobileGlobal.css` handles mobile headers (≤768px)
+- **Mobile-specific CSS**: `MobileAppShell.css` handles mobile-specific global patterns (≤768px)
 - **Desktop-specific CSS**: `App.css` handles desktop headers (≥769px)  
 - **Component CSS**: Components use global `className="unifiedHeader"` instead of module classes
 
-#### **Mobile Header System (`mobileGlobal.css`)**
+#### **Mobile Header System (`MobileAppShell.css`)**
 ```css
 @media (max-width: 768px) {
   .unifiedHeader {
@@ -739,15 +739,68 @@ const toggleDetails = (itemId: string) => {
 | **CSS File** | **Responsibility** | **Screen Size** | **Content** |
 |--------------|-------------------|-----------------|-------------|
 | `index.css` | Global variables, universal classes | All | Colors, typography, .ds-btn, .ds-expanded-details |
-| `mobileGlobal.css` | Mobile-specific global styles | ≤768px | Mobile unified headers, shell styles |
-| `App.css` | Desktop-specific global styles | ≥769px | Desktop unified headers, search clearance |
-| `Component.module.css` | Component-specific styles | All | Business logic, card layouts, component behavior |
+| `App.css` | Common web + mobile application styles | All | Shared layouts, common patterns, universal search clearance |
+| `MobileAppShell.css` | Mobile-specific global styles | ≤768px | Mobile shell, mobile navigation, mobile-only patterns |
+| `Component.module.css` | Component-specific styles | All | Business logic, card layouts, component behavior (desktop + mobile) |
 
 **🚨 Critical Separation Rules:**
 - **NEVER mix responsibilities** - each file has single purpose
 - **NO global styles in component CSS** - use index.css
 - **NO hardcoded mobile overrides** - use proper layer
 - **CONSISTENT class naming** - global classes without module prefixes
+
+#### **📋 Complete 4-Layer CSS Architecture Guide**
+
+**Layer 1: `index.css` - Global Foundation**
+```css
+/* Purpose: Pure global variables and universal classes */
+:root {
+  /* Design System V2 variables */
+  --font-xs: clamp(12px, 2.5vw, 14px);
+  --ds-btn-primary: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
+  /* Universal button classes */
+}
+.ds-btn { /* Universal button foundation */ }
+.ds-expanded-details { /* Universal progressive disclosure */ }
+```
+
+**Layer 2: `App.css` - Common Application Styles**
+```css
+/* Purpose: Shared patterns for both web and mobile */
+.unified-header { /* Common header layout */ }
+.search-clearance { /* Universal search spacing */ }
+/* Shared layout components */
+```
+
+**Layer 3: `MobileAppShell.css` - Mobile-Specific Global**
+```css
+/* Purpose: Mobile shell and navigation patterns */
+@media (max-width: 768px) {
+  .mobile-navigation { /* Mobile nav patterns */ }
+  .mobile-shell-layout { /* Mobile-specific layouts */ }
+}
+```
+
+**Layer 4: `Component.module.css` - Component-Specific**
+```css
+/* Purpose: Component business logic and layouts */
+.componentScreen { /* Desktop + mobile component styles */ }
+.businessCard { /* Component-specific patterns */ }
+/* Handles both desktop and mobile in single file */
+```
+
+**🎯 Loading Order & Responsibility:**
+1. **index.css** → Global variables foundation (loaded first)
+2. **App.css** → Common application patterns (shared between platforms)  
+3. **MobileAppShell.css** → Mobile-specific additions (when applicable)
+4. **Component.module.css** → Component-specific styling (on-demand)
+
+**✅ Architecture Benefits:**
+- **Clean Separation**: Each layer has single, well-defined responsibility
+- **Flexible Common Layer**: App.css accommodates shared web + mobile patterns  
+- **Pure Foundation**: index.css remains focused on variables and universal classes
+- **Unified Components**: One CSS file per component handles both desktop and mobile
+- **Scalable**: Easy to add new components following established patterns
 
 ### **4. Compilation and Cache Management**
 

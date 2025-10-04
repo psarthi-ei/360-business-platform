@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../dashboard.module.css';
 
 interface QuickActionsProps {
   // Navigation handlers for quick actions
@@ -55,32 +56,32 @@ const QuickActions: React.FC<QuickActionsProps> = ({
   const priorityAction = getPriorityAction();
   
   return (
-    <div className="quick-actions">
+    <div className={styles['quick-actions']}>
       <h3>⚡ Quick Actions</h3>
-      <div className="actions-grid">
+      <div className={styles['actions-grid']}>
         
         {/* Priority Action (Dynamic) */}
         <button 
-          className={`quick-action-btn ${priorityAction.primary ? 'primary' : ''}`}
+          className={`${styles['quick-action-btn']} ${priorityAction.primary ? styles['primary'] : ''}`}
           onClick={priorityAction.handler}
         >
-          <div className="action-icon">{priorityAction.icon}</div>
-          <div className="action-content">
-            <div className="action-label">{priorityAction.label}</div>
-            <div className="action-description">{priorityAction.description}</div>
+          <div className={styles['action-icon']}>{priorityAction.icon}</div>
+          <div className={styles['action-content']}>
+            <div className={styles['action-label']}>{priorityAction.label}</div>
+            <div className={styles['action-description']}>{priorityAction.description}</div>
           </div>
         </button>
         
         {/* Add Lead (Always available) */}
         {!priorityAction.label.includes('Add Lead') && (
           <button 
-            className="quick-action-btn"
+            className={styles['quick-action-btn']}
             onClick={() => onShowLeadManagement('add-lead')}
           >
-            <div className="action-icon">🆕</div>
-            <div className="action-content">
-              <div className="action-label">Add Lead</div>
-              <div className="action-description">New inquiry</div>
+            <div className={styles['action-icon']}>🆕</div>
+            <div className={styles['action-content']}>
+              <div className={styles['action-label']}>Add Lead</div>
+              <div className={styles['action-description']}>New inquiry</div>
             </div>
           </button>
         )}
@@ -88,13 +89,13 @@ const QuickActions: React.FC<QuickActionsProps> = ({
         {/* Record Payment (Always available) */}
         {!priorityAction.label.includes('Record Payment') && (
           <button 
-            className="quick-action-btn"
+            className={styles['quick-action-btn']}
             onClick={() => onShowPayments()}
           >
-            <div className="action-icon">💰</div>
-            <div className="action-content">
-              <div className="action-label">Record Payment</div>
-              <div className="action-description">Update cash</div>
+            <div className={styles['action-icon']}>💰</div>
+            <div className={styles['action-content']}>
+              <div className={styles['action-label']}>Record Payment</div>
+              <div className={styles['action-description']}>Update cash</div>
             </div>
           </button>
         )}
@@ -102,26 +103,26 @@ const QuickActions: React.FC<QuickActionsProps> = ({
         {/* Priority Call (If not primary action) */}
         {!priorityAction.label.includes('Priority Call') && hotLeads > 0 && (
           <button 
-            className="quick-action-btn"
+            className={styles['quick-action-btn']}
             onClick={() => onShowLeadManagement('priority-call')}
           >
-            <div className="action-icon">📞</div>
-            <div className="action-content">
-              <div className="action-label">Priority Call</div>
-              <div className="action-description">{hotLeads} hot leads</div>
+            <div className={styles['action-icon']}>📞</div>
+            <div className={styles['action-content']}>
+              <div className={styles['action-label']}>Priority Call</div>
+              <div className={styles['action-description']}>{hotLeads} hot leads</div>
             </div>
           </button>
         )}
         
         {/* Today's Report */}
         <button 
-          className="quick-action-btn"
+          className={styles['quick-action-btn']}
           onClick={() => onShowAnalytics && onShowAnalytics()}
         >
-          <div className="action-icon">📊</div>
-          <div className="action-content">
-            <div className="action-label">Today's Report</div>
-            <div className="action-description">₹{(totalRevenue/100000).toFixed(1)}L total</div>
+          <div className={styles['action-icon']}>📊</div>
+          <div className={styles['action-content']}>
+            <div className={styles['action-label']}>Today's Report</div>
+            <div className={styles['action-description']}>₹{(totalRevenue/100000).toFixed(1)}L total</div>
           </div>
         </button>
         

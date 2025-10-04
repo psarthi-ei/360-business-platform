@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../dashboard.module.css';
 
 interface BusinessPrioritiesProps {
   // Business metrics for priority calculation
@@ -113,18 +114,18 @@ const BusinessPriorities: React.FC<BusinessPrioritiesProps> = ({
   // If no priorities, show positive message
   if (priorities.length === 0) {
     return (
-      <div className="business-priorities">
+      <div className={styles['business-priorities']}>
         <h3>📊 Today's Business Priorities</h3>
-        <div className="priority-card priority-card-success">
-          <div className="priority-header">
-            <span className="priority-icon">✅</span>
-            <span className="priority-title">EXCELLENT</span>
+        <div className={`${styles['priority-card']} ${styles['priority-card-success']}`}>
+          <div className={styles['priority-header']}>
+            <span className={styles['priority-icon']}>✅</span>
+            <span className={styles['priority-title']}>EXCELLENT</span>
           </div>
-          <div className="priority-description">
+          <div className={styles['priority-description']}>
             All priorities handled! Business running smoothly.
           </div>
-          <div className="priority-action">
-            <button className="action-btn action-btn-success" onClick={() => onShowLeadManagement()}>
+          <div className={styles['priority-action']}>
+            <button className={`${styles['action-btn']} ${styles['action-btn-success']}`} onClick={() => onShowLeadManagement()}>
               🎯 Find New Opportunities
             </button>
           </div>
@@ -134,21 +135,21 @@ const BusinessPriorities: React.FC<BusinessPrioritiesProps> = ({
   }
   
   return (
-    <div className="business-priorities">
+    <div className={styles['business-priorities']}>
       <h3>📊 Today's Business Priorities</h3>
-      <div className="priorities-list">
+      <div className={styles['priorities-list']}>
         {priorities.slice(0, 4).map((priority, index) => (
-          <div key={index} className={`priority-card priority-card-${priority.type}`}>
-            <div className="priority-header">
-              <span className="priority-icon">{priority.icon}</span>
-              <span className="priority-title">{priority.title}</span>
+          <div key={index} className={`${styles['priority-card']} ${styles[`priority-card-${priority.type}`]}`}>
+            <div className={styles['priority-header']}>
+              <span className={styles['priority-icon']}>{priority.icon}</span>
+              <span className={styles['priority-title']}>{priority.title}</span>
             </div>
-            <div className="priority-description">
+            <div className={styles['priority-description']}>
               {priority.description}
             </div>
-            <div className="priority-action">
+            <div className={styles['priority-action']}>
               <button 
-                className={`action-btn action-btn-${priority.type}`} 
+                className={`${styles['action-btn']} ${styles[`action-btn-${priority.type}`]}`} 
                 onClick={priority.handler}
               >
                 {priority.actionIcon} {priority.action}
