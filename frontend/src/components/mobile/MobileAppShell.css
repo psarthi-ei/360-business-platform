@@ -6,7 +6,7 @@
   width: 100vw;
   max-width: 100%;
   overflow-x: hidden;
-  background: #f5f5f5;
+  background: var(--ds-bg-primary);  /* Use design system variable */
   position: relative;
 }
 
@@ -343,7 +343,7 @@
 .mobile-content {
   flex: 1;
   overflow-y: auto;
-  background: #f5f5f5;
+  background: var(--ds-bg-primary);  /* Use design system variable */
   /* No padding - let components start right after shell header */
   /* Components will handle their own spacing internally */
 }

@@ -3,7 +3,7 @@
 /* Mobile-First Responsive Layout - Visual Design Specification */
 .App {
   min-height: 100vh;
-  background: #f5f5f5;  /* Neutral light gray instead of variable */
+  background: var(--ds-bg-primary);  /* Use design system variable */
   font-family: 'Inter', 'Roboto', sans-serif;
   /* Ensure no margins/padding causing blue bleed-through */
   margin: 0 !important;
