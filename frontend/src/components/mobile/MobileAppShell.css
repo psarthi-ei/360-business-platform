@@ -1,4 +1,4 @@
-/* Mobile App Shell Styles - Full Coverage to Prevent Blue Bleed-Through */
+/* Mobile App Shell Styles */
 .mobile-shell {
   display: flex;
   flex-direction: column;
@@ -8,10 +8,6 @@
   overflow-x: hidden;
   background: #f5f5f5;
   position: relative;
-  /* Ensure no margins/padding causing blue background to show */
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box;
 }
 
 /* Mobile Header - V2 Professional: Two-Row Design */
@@ -348,11 +344,7 @@
   flex: 1;
   overflow-y: auto;
   background: #f5f5f5;
-  /* Ensure full coverage without gaps */
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  /* No additional padding - let components start right after shell header */
+  /* No padding - let components start right after shell header */
   /* Components will handle their own spacing internally */
 }
 
