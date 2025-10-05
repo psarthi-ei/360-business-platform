@@ -40,7 +40,13 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
     <Route key="/customers/:customerId" path="/customers/:customerId" element={renderFunctions.renderCustomerProfile()} />,
     <Route key="/inventory" path="/inventory" element={renderFunctions.renderInventoryManagement()} />,
     <Route key="/fulfillment" path="/fulfillment" element={renderFunctions.renderFulfillmentManagement()} />,
-    <Route key="/analytics" path="/analytics" element={renderFunctions.renderAnalyticsManagement()} />
+    <Route key="/analytics" path="/analytics" element={renderFunctions.renderAnalyticsManagement()} />,
+    
+    // 5-Tab Navigation Routes - Visual Design Specification
+    // Temporary routes: /sales -> leads, /production -> inventory, /procurement -> inventory
+    <Route key="/sales" path="/sales" element={renderFunctions.renderLeadManagement()} />,
+    <Route key="/production" path="/production" element={renderFunctions.renderInventoryManagement()} />,
+    <Route key="/procurement" path="/procurement" element={renderFunctions.renderInventoryManagement()} />
   ];
 }
 

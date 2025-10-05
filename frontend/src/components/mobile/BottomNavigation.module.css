@@ -1,0 +1,167 @@
+/* Bottom Tab Navigation - Visual Design Specification */
+.bottomTabs {
+  display: flex;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  height: 64px;  /* Visual Design Spec: Exact 64px bottom navigation */
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 100;
+  padding: 4px 8px;
+}
+
+.tabButton {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 8px 6px;
+  font-size: 12px;
+  text-align: center;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  gap: 6px;
+  border-radius: 12px;
+  margin: 2px;
+  position: relative;
+}
+
+.tabButton:hover {
+  color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  background: var(--ds-bg-priority-low-subtle);  /* Visual Design Spec: Primary blue subtle background */
+  transform: translateY(-2px);
+}
+
+.tabButton.active {
+  color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  background: var(--ds-bg-priority-low-subtle);  /* Visual Design Spec: Primary blue subtle background */
+  border: 1px solid var(--ds-btn-primary);  /* Visual Design Spec: Primary blue border */
+}
+
+.tabButton:active {
+  transform: scale(0.95);
+}
+
+.tabIcon {
+  font-size: 22px;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.tabLabel {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.2px;
+}
+
+.tabButton.active .tabIcon {
+  filter: drop-shadow(0 0 12px rgba(29, 78, 216, 0.6));  /* Visual Design Spec: Primary blue glow */
+  transform: scale(1.1);
+}
+
+.tabButton.active .tabLabel {
+  font-weight: 700;
+  color: var(--ds-btn-primary-hover);  /* Visual Design Spec: Primary dark blue */
+}
+
+/* Workflow Tab Specific Styling - Visual Design Specification */
+.tabButton[data-workflow="home"] .tabIcon {
+  background: var(--ds-btn-urgent);  /* Visual Design Spec: #F97316 accent orange */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tabButton[data-workflow="sales"] .tabIcon {
+  background: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tabButton[data-workflow="production"] .tabIcon {
+  background: var(--ds-status-active);  /* Visual Design Spec: #16A34A success green */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tabButton[data-workflow="procurement"] .tabIcon {
+  background: var(--ds-priority-high);  /* Visual Design Spec: #F97316 accent orange */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tabButton[data-workflow="customers"] .tabIcon {
+  background: var(--ds-priority-high);  /* Visual Design Spec: #F97316 accent orange */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced Active State - Visual Design Specification */
+.tabButton.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  border-radius: 2px;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 480px) {
+  .bottomTabs {
+    height: 80px;
+    padding: 2px 4px;
+  }
+  
+  .tabButton {
+    padding: 6px 3px;
+    min-height: 52px;
+    gap: 4px;
+    margin: 1px;
+  }
+  
+  .tabLabel {
+    font-size: 10px;
+  }
+  
+  .tabIcon {
+    font-size: 20px;
+  }
+  
+  .tabButton.active .tabIcon {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 360px) {
+  .bottomTabs {
+    height: 76px;
+  }
+  
+  .tabButton {
+    padding: 4px 2px;
+    min-height: 48px;
+    gap: 2px;
+  }
+  
+  .tabLabel {
+    font-size: 9px;
+  }
+  
+  .tabIcon {
+    font-size: 18px;
+  }
+}

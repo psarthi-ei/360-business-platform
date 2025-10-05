@@ -10,6 +10,7 @@ import { getBusinessData, getCurrentProcessStage } from '../../core/businessData
 import { createUniversalActionHandler } from '../../core/voiceBusinessLogic';
 import { createVoiceCommandRouter } from '../../services/voice/VoiceCommandRouter';
 import logoImage from '../../assets/images/logo.png';
+import BottomNavigation from './BottomNavigation';
 import './MobileAppShell.css';
 
 interface MobileAppShellProps {
@@ -115,56 +116,7 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
   );
 
 
-  // V2 Workflow-Based Navigation (4 tabs instead of 8)
-  const tabs = [
-    { 
-      path: '/dashboard', 
-      icon: '🏠', 
-      label: 'Home',
-      description: 'Business Intelligence Dashboard'
-    },
-    { 
-      path: '/leads', 
-      icon: '⚡', 
-      label: 'Pipeline',
-      description: 'Leads → Quotes → Orders'
-    },
-    { 
-      path: '/operations', 
-      icon: '🏭', 
-      label: 'Operations',
-      description: 'Production → Inventory → Fulfillment'
-    },
-    { 
-      path: '/customers', 
-      icon: '👥', 
-      label: 'Customers',
-      description: 'CRM & Customer Management'
-    }
-  ];
-
-  const isActiveTab = (path: string) => {
-    // Enhanced logic for workflow-based navigation
-    const currentPath = location.pathname;
-    
-    if (path === '/dashboard') {
-      return currentPath === '/dashboard' || currentPath === '/';
-    }
-    
-    if (path === '/pipeline') {
-      return ['/leads', '/quotes', '/orders', '/payments', '/pipeline'].includes(currentPath);
-    }
-    
-    if (path === '/operations') {
-      return ['/production', '/inventory', '/shipping', '/fulfillment', '/operations'].includes(currentPath);
-    }
-    
-    if (path === '/customers') {
-      return ['/crm', '/customers', '/customer-profile'].includes(currentPath);
-    }
-    
-    return currentPath === path;
-  };
+  // Navigation is now handled by BottomNavigation component
 
   return (
     <div className="mobile-shell">
@@ -253,24 +205,8 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
         {children}
       </main>
       
-      {/* Bottom Tab Navigation - V2 Workflow Design */}
-      <nav className="bottom-tabs">
-        {tabs.map((tab, index) => {
-          const workflowNames = ['home', 'pipeline', 'operations', 'customers'];
-          return (
-            <button 
-              key={tab.path}
-              className={`tab-button ${isActiveTab(tab.path) ? 'active' : ''}`}
-              data-workflow={workflowNames[index]}
-              onClick={() => navigate(tab.path)}
-              title={tab.description}
-            >
-              <span className="tab-icon">{tab.icon}</span>
-              <span className="tab-label">{tab.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+      {/* Bottom Tab Navigation - Visual Design Specification */}
+      <BottomNavigation />
       
       {/* Voice Assistant - Bottom Right Position (WhatsApp Style) */}
       <FloatingVoiceAssistant
