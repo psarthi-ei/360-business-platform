@@ -19,8 +19,8 @@
   --font-lg: clamp(18px, 4vw, 20px);      /* Important text, headings */
   --font-xl: clamp(20px, 4.5vw, 24px);    /* Large headers, emphasis */
 
-  /* Global Color Variables - Fixed golden color readability issue */
-  --color-primary: #2d3748;  /* Dark gray for better readability on light backgrounds */
+  /* Global Color Variables - Visual Design Specification Implementation */
+  --color-primary: #1D4ED8;  /* Visual Design Spec primary blue */
 
   /* DESIGN SYSTEM V2 - Mobile-First Global Variables */
   /* Professional Light Theme Color System (from LeadManagement success) */
@@ -41,19 +41,19 @@
   --ds-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
   --ds-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-  /* Button Color System - Proven Hierarchy */
-  --ds-btn-primary: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
-  --ds-btn-primary-hover: linear-gradient(135deg, #3182ce 0%, #5a67d8 100%);
-  --ds-btn-urgent: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
-  --ds-btn-urgent-hover: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+  /* Button Color System - Visual Design Specification */
+  --ds-btn-primary: #1D4ED8;  /* Visual Design Spec primary blue */
+  --ds-btn-primary-hover: #1E40AF;  /* Visual Design Spec primary dark */
+  --ds-btn-urgent: #F97316;  /* Visual Design Spec accent orange */
+  --ds-btn-urgent-hover: #EA580C;  /* Visual Design Spec accent orange dark */
   --ds-btn-secondary: white;
-  --ds-btn-secondary-border: #4299e1;
-  --ds-btn-secondary-hover: #4299e1;
+  --ds-btn-secondary-border: #1D4ED8;  /* Visual Design Spec primary blue */
+  --ds-btn-secondary-hover: #1D4ED8;  /* Visual Design Spec primary blue */
 
-  /* Priority Badge Colors */
-  --ds-badge-hot: linear-gradient(135deg, #ff4757, #ff3742);
-  --ds-badge-warm: linear-gradient(135deg, #ffa502, #ff9500);
-  --ds-badge-cold: linear-gradient(135deg, #4299e1, #667eea);
+  /* Priority Badge Colors - Visual Design Specification */
+  --ds-badge-hot: #F97316;  /* Visual Design Spec accent orange for urgent */
+  --ds-badge-warm: #FBBF24;  /* Visual Design Spec amber for warnings */
+  --ds-badge-cold: #1D4ED8;  /* Visual Design Spec primary blue for normal */
 
   /* Responsive Spacing System */
   --ds-space-xs: clamp(4px, 1vw, 8px);
@@ -87,33 +87,33 @@
   --ds-radius-lg: clamp(8px, 1.5vw, 12px);
   --ds-radius-xl: clamp(12px, 2vw, 16px);
 
-  /* UNIVERSAL BUSINESS COLOR SYSTEM - Business-neutral categories */
+  /* UNIVERSAL BUSINESS COLOR SYSTEM - Visual Design Specification */
   
   /* Business Priority System - Universal across all processes (leads, quotes, orders, customers) */
-  --ds-priority-high: #ff4757;         /* Hot leads, urgent orders, critical items */
-  --ds-priority-medium: #ffa502;       /* Warm leads, pending quotes, scheduled items */
-  --ds-priority-low: #4299e1;          /* Cold leads, draft quotes, routine items */
+  --ds-priority-high: #F97316;         /* Hot leads, urgent orders, critical items - Visual Design Spec orange */
+  --ds-priority-medium: #FBBF24;       /* Warm leads, pending quotes, scheduled items - Visual Design Spec amber */
+  --ds-priority-low: #1D4ED8;          /* Cold leads, draft quotes, routine items - Visual Design Spec primary blue */
   
   /* Business Status System - Universal process states */
-  --ds-status-active: #2ed573;         /* Approved, completed, active customers */
-  --ds-status-pending: #ffa502;        /* Pending approval, in-progress items */
-  --ds-status-inactive: #6b7280;       /* Expired, cancelled, inactive items */
+  --ds-status-active: #16A34A;         /* Approved, completed, active customers - Visual Design Spec success green */
+  --ds-status-pending: #FBBF24;        /* Pending approval, in-progress items - Visual Design Spec amber */
+  --ds-status-inactive: #6B7280;       /* Expired, cancelled, inactive items - Visual Design Spec muted gray */
   
-  /* Background Colors - Business context neutral */
-  --ds-bg-priority-high-subtle: rgba(255, 71, 87, 0.08);
-  --ds-bg-priority-medium-subtle: rgba(255, 165, 2, 0.08);
-  --ds-bg-priority-low-subtle: rgba(66, 153, 225, 0.08);
-  --ds-bg-status-active-subtle: rgba(46, 213, 115, 0.08);
+  /* Background Colors - Visual Design Specification subtle backgrounds */
+  --ds-bg-priority-high-subtle: rgba(249, 115, 22, 0.08);  /* Orange subtle background */
+  --ds-bg-priority-medium-subtle: rgba(251, 191, 36, 0.08);  /* Amber subtle background */
+  --ds-bg-priority-low-subtle: rgba(29, 78, 216, 0.08);  /* Primary blue subtle background */
+  --ds-bg-status-active-subtle: rgba(22, 163, 74, 0.08);  /* Success green subtle background */
   --ds-bg-interactive: #f8fafb;
   --ds-bg-hover: #f0f9ff;
   --ds-bg-subtle: rgba(255, 255, 255, 0.08);
 
-  /* Text Colors - Universal text hierarchy */
-  --ds-text-link: #4299e1;
-  --ds-text-link-hover: #2b6cb0;
-  --ds-text-positive: #16a34a;         /* Success messages, confirmations */
-  --ds-text-attention: #f59e0b;        /* Warnings, attention needed */
-  --ds-text-critical: #dc2626;         /* Errors, critical issues */
+  /* Text Colors - Visual Design Specification text hierarchy */
+  --ds-text-link: #1D4ED8;  /* Visual Design Spec primary blue */
+  --ds-text-link-hover: #1E40AF;  /* Visual Design Spec primary dark */
+  --ds-text-positive: #16A34A;         /* Success messages, confirmations - Visual Design Spec success */
+  --ds-text-attention: #FBBF24;        /* Warnings, attention needed - Visual Design Spec amber */
+  --ds-text-critical: #DC2626;         /* Errors, critical issues - Visual Design Spec error red */
   --ds-text-muted: #9ca3af;            /* Secondary info, placeholders */
 
   /* Interactive States - Universal hover/active */
@@ -129,20 +129,21 @@
   --ds-border-accent: #cbd5e0;
 }
 
-/* DESIGN SYSTEM V2 - Universal Button System */
-/* Global Button Foundation - extends existing Design System V2 variables */
+/* DESIGN SYSTEM V2 - Universal Button System - Visual Design Specification */
+/* Global Button Foundation - Visual Design Spec implementation */
 .ds-btn {
-  /* Base structure using existing DS variables */
+  /* Base structure following Visual Design Spec */
   padding: var(--ds-padding-button);
-  border-radius: var(--ds-radius-md);
+  border-radius: 8px;  /* Visual Design Spec 8px border radius */
   font-size: var(--font-sm);
   font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;  /* Visual Design Spec typography */
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
   
-  /* Mobile optimization using existing standards */
-  min-height: var(--ds-touch-target-min);
+  /* Visual Design Spec touch targets - 44px minimum */
+  min-height: 44px;
   touch-action: var(--ds-touch-action);
   -webkit-tap-highlight-color: var(--ds-tap-highlight);
   
@@ -153,35 +154,35 @@
   gap: var(--ds-space-xs);
 }
 
-/* Primary Button Variant */
+/* Primary Button Variant - Visual Design Specification */
 .ds-btn-primary {
-  background: var(--ds-btn-primary);
+  background: var(--ds-btn-primary);  /* #1D4ED8 */
   color: white;
 }
 .ds-btn-primary:hover {
-  background: var(--ds-btn-primary-hover);
+  background: var(--ds-btn-primary-hover);  /* #1E40AF */
   transform: translateY(-1px);
 }
 
-/* Secondary Button Variant (proven in Lead/Quote components) */
+/* Secondary Button Variant - Visual Design Specification */
 .ds-btn-secondary {
-  background: var(--ds-btn-secondary);
-  color: var(--ds-text-primary);
-  border: 1px solid var(--ds-btn-secondary-border);
+  background: var(--ds-btn-secondary);  /* white */
+  color: var(--ds-btn-secondary-border);  /* #1D4ED8 text */
+  border: 1px solid var(--ds-btn-secondary-border);  /* #1D4ED8 border */
 }
 .ds-btn-secondary:hover {
-  background: var(--ds-btn-secondary-hover);
+  background: var(--ds-btn-secondary-hover);  /* #1D4ED8 */
   color: white;
   transform: translateY(-1px);
 }
 
-/* Urgent/Hot Priority Actions */
+/* Urgent/Hot Priority Actions - Visual Design Specification */
 .ds-btn-urgent {
-  background: var(--ds-btn-urgent);
+  background: var(--ds-btn-urgent);  /* #F97316 */
   color: white;
 }
 .ds-btn-urgent:hover {
-  background: var(--ds-btn-urgent-hover);
+  background: var(--ds-btn-urgent-hover);  /* #EA580C */
   transform: translateY(-1px);
 }
 
@@ -356,7 +357,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
