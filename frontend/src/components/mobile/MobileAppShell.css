@@ -24,14 +24,14 @@
   flex-shrink: 0;
 }
 
-/* Navigation Row - Branding & Context */
+/* Navigation Row - Branding & Context - Visual Design Specification */
 .nav-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  min-height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 56px;  /* Visual Design Spec: Exact 56px header height */
+  background: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   color: white;
   width: 100%;
   box-sizing: border-box;
@@ -247,13 +247,14 @@
   }
 }
 
-/* Search Row - Full Width Clean Design */
+/* Search Row - Visual Design Specification */
 .search-row {
-  padding: 12px 16px;
+  padding: 6px 16px;  /* Adjusted padding for 48px total height */
   background: white;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  min-height: 48px;  /* Visual Design Spec: Exact 48px search height */
 }
 
 .search-container {
@@ -269,9 +270,9 @@
 }
 
 .search-container:focus-within {
-  border-color: #667eea;
+  border-color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   background: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.15);  /* Visual Design Spec: Primary blue shadow */
 }
 
 /* V2 Integrated Search Bar */
@@ -288,13 +289,13 @@
 }
 
 .integrated-search-bar:focus-within {
-  border-color: #667eea;
+  border-color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   background: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.15);  /* Visual Design Spec: Primary blue shadow */
 }
 
 .search-container .search-icon {
-  color: #667eea;
+  color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   font-size: 18px;
   margin-right: 12px;
   flex-shrink: 0;
@@ -352,12 +353,12 @@
   background: transparent;
 }
 
-/* Bottom Tab Navigation - V2 Workflow Design */
+/* Bottom Tab Navigation - Visual Design Specification */
 .bottom-tabs {
   display: flex;
   background: white;
   border-top: 1px solid #e0e0e0;
-  height: 88px;
+  height: 64px;  /* Visual Design Spec: Exact 64px bottom navigation */
   box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
   position: relative;
   z-index: 100;
@@ -386,15 +387,15 @@
 }
 
 .tab-button:hover {
-  color: #667eea;
-  background: rgba(102, 126, 234, 0.08);
+  color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  background: var(--ds-bg-priority-low-subtle);  /* Visual Design Spec: Primary blue subtle background */
   transform: translateY(-2px);
 }
 
 .tab-button.active {
-  color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  color: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
+  background: var(--ds-bg-priority-low-subtle);  /* Visual Design Spec: Primary blue subtle background */
+  border: 1px solid var(--ds-btn-primary);  /* Visual Design Spec: Primary blue border */
 }
 
 .tab-button:active {
@@ -415,45 +416,45 @@
 }
 
 .tab-button.active .tab-icon {
-  filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.6));
+  filter: drop-shadow(0 0 12px rgba(29, 78, 216, 0.6));  /* Visual Design Spec: Primary blue glow */
   transform: scale(1.1);
 }
 
 .tab-button.active .tab-label {
   font-weight: 700;
-  color: #5848c4;
+  color: var(--ds-btn-primary-hover);  /* Visual Design Spec: Primary dark blue */
 }
 
-/* Workflow Tab Specific Styling */
+/* Workflow Tab Specific Styling - Visual Design Specification */
 .tab-button[data-workflow="home"] .tab-icon {
-  background: linear-gradient(135deg, #ffa502 0%, #ff6b6b 100%);
+  background: var(--ds-btn-urgent);  /* Visual Design Spec: #F97316 accent orange */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .tab-button[data-workflow="pipeline"] .tab-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .tab-button[data-workflow="operations"] .tab-icon {
-  background: linear-gradient(135deg, #2ed573 0%, #17a2b8 100%);
+  background: var(--ds-status-active);  /* Visual Design Spec: #16A34A success green */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .tab-button[data-workflow="customers"] .tab-icon {
-  background: linear-gradient(135deg, #ff4757 0%, #ff6b6b 100%);
+  background: var(--ds-priority-high);  /* Visual Design Spec: #F97316 accent orange */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Enhanced Active State */
+/* Enhanced Active State - Visual Design Specification */
 .tab-button.active::before {
   content: '';
   position: absolute;
@@ -462,7 +463,7 @@
   transform: translateX(-50%);
   width: 24px;
   height: 3px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--ds-btn-primary);  /* Visual Design Spec: #1D4ED8 primary blue */
   border-radius: 2px;
 }
 
@@ -540,8 +541,8 @@
   width: 48px !important; /* Reduced size for mobile */
   height: 48px !important;
   border-radius: 24px !important;
-  background: linear-gradient(45deg, #667eea, #764ba2) !important; /* V2 Spec gradient */
-  box-shadow: 0 4px 12px rgba(103, 126, 234, 0.3) !important; /* V2 Spec shadow */
+  background: var(--ds-btn-primary) !important; /* Visual Design Spec primary blue */
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3) !important; /* Visual Design Spec shadow */
   border: none !important;
   font-size: 18px !important; /* Reduced font size */
   color: white !important;

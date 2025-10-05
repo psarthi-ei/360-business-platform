@@ -1,4 +1,90 @@
-/* Global App Styles */
+/* Global App Styles - Mobile-First Architecture */
+
+/* Mobile-First Responsive Layout - Visual Design Specification */
+.App {
+  min-height: 100vh;
+  background: var(--ds-bg-primary);
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+/* Mobile-First Layout Variables - Visual Design Specification */
+:root {
+  /* Visual Design Spec Layout Heights */
+  --vds-header-height: 56px;        /* Visual Design Spec: Global header */
+  --vds-search-height: 48px;        /* Visual Design Spec: Search bar */
+  --vds-bottom-nav-height: 64px;    /* Visual Design Spec: Bottom navigation */
+  --vds-content-clearance: calc(
+    var(--vds-header-height) + 
+    var(--vds-search-height) + 
+    var(--vds-bottom-nav-height)
+  ); /* Total clearance needed: 168px */
+}
+
+/* Mobile-First Content Layout */
+.App-content {
+  min-height: calc(100vh - var(--vds-content-clearance));
+  padding: var(--ds-space-md);
+  /* Mobile optimization: touch-friendly spacing */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Mobile Header Integration */
+.unifiedHeader {
+  height: var(--vds-header-height);
+  background: var(--ds-btn-primary); /* Visual Design Spec primary blue */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ds-space-md);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: var(--ds-shadow-card);
+}
+
+/* Responsive Breakpoints - Mobile-First */
+/* Mobile: 360px-767px (Primary focus) */
+@media (max-width: 767px) {
+  .App-content {
+    padding: var(--ds-space-sm);
+    /* Optimize for thumb reach */
+    padding-bottom: calc(var(--vds-bottom-nav-height) + var(--ds-space-md));
+  }
+  
+  .unifiedHeader {
+    padding: 0 var(--ds-space-sm);
+  }
+}
+
+/* Tablet: 768px-1023px (Transition) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .App-content {
+    padding: var(--ds-space-lg);
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+
+/* Desktop: 1024px+ (Compatibility) */
+@media (min-width: 1024px) {
+  .App-content {
+    padding: var(--ds-space-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Desktop navigation adjustments */
+  .unifiedHeader {
+    position: relative;
+    /* Desktop uses sidebar navigation, not fixed header */
+  }
+}
 
 
 /* Markdown Content Styling - Global styles for ReactMarkdown */
