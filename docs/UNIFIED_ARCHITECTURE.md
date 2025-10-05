@@ -12,12 +12,13 @@
 3. [**Component Interaction Flows**](#🔄-component-interaction-flows)
 4. [**Detailed Component Architecture**](#🎯-detailed-component-architecture)
 5. [**Configuration-Driven Architecture**](#⚙️-configuration-driven-architecture)
-6. [**Adding New Functionality**](#🔧-adding-new-functionality)
-7. [**Real-World Complete Examples**](#🎯-real-world-complete-examples)
-8. [**Architecture Patterns & Best Practices**](#🏗️-architecture-patterns--best-practices)
-9. [**Performance & Scalability Considerations**](#📊-performance--scalability-considerations)
-10. [**Zero Code Duplication Architecture**](#🏗️-zero-code-duplication-architecture)
-11. [**Conclusion: Master Architecture Summary**](#🎯-conclusion-master-architecture-summary)
+6. [**CSS Architecture & Component Patterns**](#🏛️-css-architecture--component-patterns)
+7. [**Adding New Functionality**](#🔧-adding-new-functionality)
+8. [**Real-World Complete Examples**](#🎯-real-world-complete-examples)
+9. [**Architecture Patterns & Best Practices**](#🏗️-architecture-patterns--best-practices)
+10. [**Performance & Scalability Considerations**](#📊-performance--scalability-considerations)
+11. [**Zero Code Duplication Architecture**](#🏗️-zero-code-duplication-architecture)
+12. [**Conclusion: Master Architecture Summary**](#🎯-conclusion-master-architecture-summary)
 
 ---
 
@@ -32,6 +33,8 @@ This document serves as the comprehensive master reference for understanding the
 - ✅ **Clean Separation**: Universal infrastructure completely separate from business logic
 - ✅ **Configuration-Driven**: Simple configuration controls all behavior
 - ✅ **Professional Patterns**: URL-based actions, service architecture, proper routing
+- ✅ **CSS Architecture**: 4-layer standardized system with global patterns
+- ✅ **Component Patterns**: Unified patterns for headers, cards, progressive disclosure
 
 ---
 
@@ -463,6 +466,466 @@ function getPageScope(currentPage: string): DataScope[] {
   return pageScopeMap[currentPage] || [];
 }
 ```
+
+---
+
+## 🏛️ **CSS ARCHITECTURE & COMPONENT PATTERNS**
+
+### **4-Layer CSS Architecture System**
+
+**Master Reference for Standardized CSS Organization & Component Structure Patterns**
+
+This section defines the complete CSS architecture and component structure patterns that ensure consistency, prevent duplication, and maintain clean separation of concerns across the entire platform.
+
+#### **Four-Layer CSS Architecture**
+
+| **CSS File** | **Responsibility** | **Screen Size** | **Content** |
+|--------------|-------------------|-----------------|-------------|
+| `index.css` | Global variables, universal classes | All | Colors, typography, .ds-btn, .ds-expanded-details |
+| `App.css` | Common web + mobile application styles | All | Shared layouts, common patterns, universal search clearance |
+| `MobileAppShell.css` | Mobile-specific global styles | ≤768px | Mobile shell, mobile navigation, mobile-only patterns |
+| `Component.module.css` | Component-specific styles | All | Business logic, card layouts, component behavior (desktop + mobile) |
+
+#### **🚨 Critical CSS Architecture Rules**
+
+**Separation of Concerns - WHO HANDLES WHAT:**
+- **NEVER mix responsibilities** - each file has single purpose
+- **NO global styles in component CSS** - use index.css
+- **NO hardcoded mobile overrides** - use proper layer
+- **NO duplicate infrastructure** - use global classes
+
+**CSS Specificity & Variable Management:**
+```css
+/* Global Variable (index.css) - Single source of truth */
+--color-primary: #2d3748;
+
+/* Components: Use global variable consistently */
+.leadHeader h3 { color: var(--color-primary) !important; }
+.quoteHeader h3 { color: var(--color-primary) !important; }
+```
+
+### **Universal Component Structure Patterns**
+
+#### **1. Unified Header Pattern**
+**Standard 3-Column Grid Layout** (proven in LeadManagement):
+
+```css
+.unifiedHeader {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, auto) 1fr minmax(5rem, auto);
+  align-items: center;
+  margin: var(--ds-gap-md) auto var(--ds-gap-lg) auto;
+  padding: var(--ds-padding-header);
+  max-width: 1400px;
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-card);
+  border: 1px solid var(--ds-border-primary);
+  gap: var(--ds-gap-sm);
+}
+```
+
+**React Structure Pattern:**
+```jsx
+<div className="unifiedHeader"> {/* Global class, NOT module class */}
+  <button className={styles.addButton}>+ Add</button>
+  <div className={styles.filterDropdownContainer}>
+    <select className={styles.filterDropdown}>
+      <option value="all">All Items</option>
+    </select>
+  </div>
+  <div className={styles.itemCounter}>
+    {filteredItems.length} items
+  </div>
+</div>
+```
+
+#### **2. Progressive Disclosure Pattern**
+**Standard State Management & UI Structure:**
+
+```jsx
+// Standard state setup for any component
+const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+
+const toggleDetails = (itemId: string) => {
+  setExpandedDetails(prev => {
+    const newSet = new Set(prev);
+    if (newSet.has(itemId)) {
+      newSet.delete(itemId);
+    } else {
+      newSet.add(itemId);
+    }
+    return newSet;
+  });
+};
+
+// UI Implementation - ALWAYS use global classes
+{expandedDetails.has(item.id) && (
+  <div className="ds-expanded-details"> {/* Global class */}
+    <div className="ds-details-content"> {/* Global class */}
+      <p><strong>Label:</strong> {item.value}</p>
+    </div>
+  </div>
+)}
+```
+
+#### **3. Card Layout Standards**
+**Professional Card System Pattern:**
+
+```css
+.businessCard {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-lg);
+  border: 1px solid var(--ds-border-primary);
+  transition: all 0.3s ease;
+  box-shadow: var(--ds-shadow-card);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.businessCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ds-shadow-elevated);
+}
+```
+
+#### **4. Contextual Actions System**
+**Priority-Based Button Hierarchy:**
+
+```css
+.actionBtn {
+  font-size: var(--font-sm);
+  min-height: var(--ds-touch-target-min);
+  padding: var(--ds-padding-button);
+  border-radius: var(--ds-radius-md);
+  touch-action: var(--ds-touch-action);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-xs);
+  font-weight: 600;
+  border: none;
+}
+
+.urgentBtn {
+  background: var(--ds-btn-urgent);
+  color: white;
+}
+
+.primaryBtn {
+  background: var(--ds-btn-primary);
+  color: white;
+}
+```
+
+### **Global Classes System**
+
+#### **Universal Expanded Details**
+**NEVER recreate - use these global classes:**
+
+```css
+/* Global classes in index.css - NEVER recreate in component CSS */
+.ds-expanded-details {
+  margin: var(--ds-space-md) 0;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-expanded);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  animation: expandIn 0.2s ease-out;
+}
+
+.ds-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+```
+
+#### **🚨 CRITICAL SPACING RULES**
+**MANDATORY GUIDELINES TO PREVENT MOBILE OVERRIDE ISSUES**
+
+> **LESSON LEARNED**: QuotationOrders had 70px top padding + 25px extra side padding due to mobile CSS overrides that bypassed Design System standards.
+
+**Screen Padding Authority - SINGLE SOURCE OF TRUTH:**
+```css
+/* ✅ CORRECT: Use ONLY this variable for screen-level padding */
+.componentScreen {
+  padding: var(--ds-padding-screen);
+  /* This provides: top, right, bottom, left responsive padding */
+  /* Resolves to: clamp(20px, 4vw, 30px) clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) clamp(10px, 2vw, 20px) */
+}
+
+/* ❌ NEVER DO: Hardcoded mobile overrides */
+@media (max-width: 768px) {
+  .componentScreen {
+    padding: 70px 10px 20px 10px; /* BREAKS DESIGN SYSTEM */
+  }
+}
+```
+
+**Container Spacing Prohibition:**
+```css
+/* ❌ NEVER ADD: Extra margin/padding on containers inside components */
+@media (max-width: 768px) {
+  .itemsContainer,
+  .cardsContainer {
+    margin-left: 10px;    /* BREAKS CONSISTENCY */
+    margin-right: 10px;   /* BREAKS CONSISTENCY */
+    padding-left: 15px;   /* BREAKS CONSISTENCY */
+    padding-right: 15px;  /* BREAKS CONSISTENCY */
+  }
+}
+
+/* ✅ CORRECT: Let Design System handle all spacing */
+.itemsContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 10px; /* Only for max-width constraint, not spacing */
+}
+```
+
+**Separation of Concerns - WHO HANDLES WHAT SPACING:**
+
+| **Responsibility** | **CSS File** | **What It Does** | **What It NEVER Does** |
+|-------------------|--------------|------------------|------------------------|
+| **Global Screen Padding** | `index.css` | `--ds-padding-screen` variable | Component-specific overrides |
+| **Desktop Shell** | `App.css` | Universal search clearance | Mobile spacing |
+| **Mobile Shell** | `MobileAppShell.css` | Shell header spacing | Component content spacing |
+| **Component Level** | `Component.module.css` | Uses `var(--ds-padding-screen)` | Hardcoded mobile overrides |
+
+**QuotationOrders Case Study - WHAT WENT WRONG:**
+```css
+/* ❌ THE PROBLEM: Multiple conflicting spacing sources */
+
+/* 1. Component used correct Design System */
+.quotationOrdersScreen {
+  padding: var(--ds-padding-screen); /* ✅ CORRECT: 20-30px top, 10-20px sides */
+}
+
+/* 2. BUT mobile override forced hardcoded values */
+@media (max-width: 768px) {
+  .quotationOrdersScreen {
+    padding: 70px 10px 20px 10px; /* ❌ WRONG: 70px top override */
+  }
+  
+  .itemsContainer {
+    margin-left: 10px;     /* ❌ WRONG: +10px sides */
+    margin-right: 10px;    /* ❌ WRONG: +10px sides */
+    padding-left: 15px;    /* ❌ WRONG: +15px sides */
+    padding-right: 15px;   /* ❌ WRONG: +15px sides */
+  }
+}
+
+/* RESULT: 70px top + 25px extra on each side = BROKEN LAYOUT */
+```
+
+**THE FIX - TRUST THE DESIGN SYSTEM:**
+```css
+/* ✅ SOLUTION: Remove ALL mobile overrides, use Design System */
+.quotationOrdersScreen {
+  padding: var(--ds-padding-screen); /* Responsive 20-30px top, 10-20px sides */
+}
+
+@media (max-width: 768px) {
+  /* Let Design System handle screen padding consistently */
+  /* NO hardcoded padding overrides allowed */
+}
+```
+
+**COMPLIANCE VERIFICATION:**
+Before every component merge:
+1. **Search for hardcoded padding in mobile media queries** - should find ZERO
+2. **Verify only `var(--ds-padding-screen)` used for screen padding** 
+3. **Check for container margin/padding overrides** - should find NONE
+4. **Test spacing matches LeadManagement exactly**
+
+### **Component Migration Patterns**
+
+#### **From Module Classes to Global Classes:**
+```jsx
+// Before: Module-specific classes
+<div className={styles.unifiedHeader}>
+<div className={styles.expandedDetails}>
+
+// After: Global unified classes  
+<div className="unifiedHeader">
+<div className="ds-expanded-details">
+```
+
+#### **CSS Variable Migration:**
+```css
+/* Before: Hardcoded values */
+.header { color: #2d3748; }
+.button { background: #4299e1; }
+
+/* After: Global variables */
+.header { color: var(--color-primary); }
+.button { background: var(--ds-btn-primary); }
+```
+
+### **🎨 Business-Neutral Color System Architecture**
+
+#### **Component Agnostic Benefits**
+
+**Universal Application Examples:**
+- **`--ds-priority-high`** works for: Hot leads, urgent orders, critical customers, overdue payments
+- **`--ds-status-active`** works for: Approved quotes, active customers, completed orders, successful payments
+- **`--ds-text-link`** works for: Any clickable element across leads, quotes, orders, customers
+
+**Future-Proof Design Patterns:**
+- ✅ **Component Names Can Change**: Button labels, icons, component structure - semantic colors remain valid
+- ✅ **New Components**: Instantly inherit consistent color system (inventory, production, analytics)
+- ✅ **Theme Changes**: Update one variable → changes entire platform
+- ✅ **Zero Technical Debt**: No more hardcoded colors anywhere in the codebase
+
+**Business Logic Integration Architecture:**
+- **Priority System**: Works universally for business urgency (leads, orders, customers, tasks)
+- **Status System**: Works universally for business process states (quotes, payments, production, delivery)  
+- **Text Hierarchy**: Works universally for communication consistency (success, warnings, errors)
+
+#### **Implementation Results (Technical Debt Elimination)**
+
+**Before Standardization:**
+- LeadManagement.module.css: ~50 hardcoded color values
+- QuotationOrders.module.css: ~11 hardcoded color values
+- Total: 61+ scattered hardcoded colors
+
+**After Standardization:**
+- LeadManagement.module.css: 0 hardcoded colors
+- QuotationOrders.module.css: 0 hardcoded colors  
+- Total: 100% business-neutral semantic variables
+
+**Visual Consistency Verified:**
+- Both components show identical computed styles
+- Header consistency achieved using `--ds-text-primary`
+- Clean compilation with zero TypeScript issues
+
+### **Architecture Compliance Checklist**
+
+**Before every component implementation:**
+- [ ] Use global header classes (.unifiedHeader)
+- [ ] Use global expanded details classes (.ds-expanded-details, .ds-details-content)
+- [ ] All colors use CSS variables (--color-primary, --ds-btn-primary, etc.)
+- [ ] Screen padding uses var(--ds-padding-screen) ONLY
+- [ ] No hardcoded mobile overrides in component CSS
+- [ ] Progressive disclosure follows standard state pattern
+- [ ] Touch targets meet minimum height requirements
+- [ ] Component follows proper CSS layer separation
+- [ ] Business colors use semantic variables (--ds-priority-high, --ds-status-active, etc.)
+- [ ] Zero hardcoded color values in component CSS
+
+---
+
+## 🏗️ **ARCHITECTURE DEVELOPMENT PRINCIPLES**
+
+### **Core Architecture Standards**
+
+#### **1. Never Recreate Global Systems Principle**
+**Architectural Standard**: Single source of truth for all universal functionality
+
+**Global Systems That Must Never Be Duplicated:**
+- `.ds-expanded-details` and `.ds-details-content` classes
+- `.ds-btn` global button systems
+- Universal header systems (`.unifiedHeader`)
+- Global navigation and search instances
+- CSS variable systems
+
+**Architecture Pattern:**
+```
+Before Development → Check Global Systems → Extend If Exists → Create Only If Missing
+```
+
+#### **2. Component Development Workflow Pattern**
+**Architectural Approach**: Global-first development strategy
+
+**Standard Development Sequence:**
+1. **Start with global systems** - Check what exists in `index.css` first
+2. **Migrate existing components** - Replace duplicates with global classes  
+3. **Follow standard patterns** - Use established React/CSS structures
+4. **Preserve architecture** - Never break single source of truth
+
+#### **3. Zero Duplication Architecture Standard**
+**Principle**: One implementation, universal usage
+
+**Architecture Rules:**
+- **Buttons**: Single `.ds-btn` system serves all components
+- **Typography**: Global CSS variables only (never hardcoded font-size)
+- **Spacing**: Single `--ds-padding-screen` authority
+- **Progressive Disclosure**: Global classes for all expandable content
+- **Headers**: Universal `.unifiedHeader` pattern for all business components
+
+### **Architecture Compliance Standards**
+
+#### **Design System Compliance (Non-Negotiable)**
+**Architecture Requirements:**
+- **Typography**: Zero hardcoded font-size values - always use CSS variables
+- **Spacing**: Only use `var(--ds-padding-screen)` for screen-level padding  
+- **Touch Targets**: Minimum 42px height architectural requirement
+- **Responsive**: Clamp() functions for all sizing (architectural pattern)
+
+#### **Universal Systems Usage (Mandatory)**
+**Architecture Standards:**
+- **Global Button Classes**: Always use `.ds-btn` systems, never recreate
+- **Expanded Details**: Always use global `.ds-expanded-details` classes
+- **Single-Row Layout Pattern**: Use `.actionButtons` container for all button groups
+- **Natural Wrapping**: Let elements wrap organically, avoid forced layouts
+
+### **Progressive Migration Architecture Pattern**
+
+#### **Font Standardization Approach**
+**Architecture Strategy**: Systematic CSS variable adoption
+
+**Migration Pattern:**
+1. **Identify** hardcoded font declarations across codebase
+2. **Map** to appropriate CSS variable hierarchy
+3. **Replace** with `var(--font-*)` references systematically
+4. **Verify** compilation and responsive behavior
+
+#### **Unified Header Implementation Standard**
+**Architecture Requirement**: All business management components must use unified header pattern
+
+**Header Architecture Pattern:**
+- **Structure**: 3-column grid layout (standard across platform)
+- **Responsive**: Mobile/desktop adaptive behavior
+- **Universal**: Same implementation pattern for all business components
+- **Global Class**: Use `.unifiedHeader` class, never recreate structure
+
+### **Architecture Layer Responsibilities**
+
+#### **Global vs Component Architecture Separation**
+**Architecture Principle**: Clear responsibility boundaries
+
+**Global Layer Responsibilities:**
+- Universal button systems
+- Global expanded details patterns
+- Platform-wide CSS variables
+- Cross-component consistency patterns
+
+**Component Layer Responsibilities:**
+- Business-specific logic implementation
+- Data handling and state management  
+- Component-specific visual variations
+- Business workflow integration
+
+#### **Component Structure Standards**
+**Architecture Patterns:**
+
+**Progressive Disclosure Pattern:**
+- **State Management**: Standard Set-based approach for expanded items
+- **UI Structure**: Global classes for consistent implementation
+- **Toggle Logic**: Universal pattern across all components
+
+**Card Layout Standard:**
+- **Professional Card System**: Consistent hover, shadow, and spacing patterns
+- **Header Structure**: Standard flex layout with responsive wrapping
+- **Action Placement**: Consistent button grouping and spacing
+
+**Business Context Integration:**
+- **Priority System**: Universal semantic approach for business urgency
+- **Status System**: Universal process state management
+- **Text Hierarchy**: Consistent communication patterns
 
 ---
 

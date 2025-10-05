@@ -9,18 +9,19 @@ date  # ALWAYS run first - validates project timeline context
 
 **Current Timeline:**
 - **Project Start**: August 27, 2025
-- **Current Phase**: Mobile UX V2 Component Transformation  
-- **Current Work**: Phase 4.1 (Universal Button System)
-- **Next**: Backend Integration (Nov-Dec 2025)
+- **Current Phase**: Visual Design Specification Implementation
+- **Current Work**: Phase 1 (Update Existing Systems with Visual Design Spec)
+- **Next**: 6-phase implementation following Master Implementation Plan
 
-### **STEP 2: READ 5 KEY DOCUMENTS**
+### **STEP 2: READ 6 KEY DOCUMENTS**
 ```bash
 # Essential context documents (read in order):
-/docs/PRODUCT_REQUIREMENTS.md      # What we're building
-/docs/BUSINESS_PROCESSES.md        # 8-stage textile workflow
-/docs/UNIFIED_ARCHITECTURE.md      # Zero duplication architecture
-/docs/MOBILE_UX_STRATEGY.md        # Strategic UX decisions
-/docs/USE_CASES_MASTER.md          # Implementation progress
+/docs/PRODUCT_REQUIREMENTS.md         # What we're building
+/docs/BUSINESS_PROCESSES.md           # 8-stage textile workflow
+/docs/UNIFIED_ARCHITECTURE.md         # Zero duplication architecture
+/docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual design for all screens
+/docs/MASTER_IMPLEMENTATION_PLAN.md   # Architecturally compliant implementation strategy
+/docs/USE_CASES_MASTER.md             # Implementation progress
 ```
 
 ### **STEP 3: CHECK TODO STATUS**
@@ -57,13 +58,15 @@ if (params && 'leadId' in params) {
 }
 ```
 
-### **3. DESIGN SYSTEM V2 COMPLIANCE (MANDATORY)**
-**❌ Common Mistake**: Hardcoded font sizes in new components
+### **3. VISUAL DESIGN SPECIFICATION COMPLIANCE (MANDATORY)**
+**❌ Common Mistake**: Creating new files instead of updating existing systems
 
 **✅ Required Standards**:
-- ALL font sizes MUST use CSS variables (`--font-xs` through `--font-xl`)
-- ALL interactive elements MUST meet 42-44px touch targets
-- Follow patterns in `/docs/DESIGN_SYSTEM.md`
+- ALL updates MUST follow existing architectural patterns
+- ALL colors MUST use Visual Design Spec (#1D4ED8 primary, #F97316 secondary)
+- ALL fonts MUST use Inter typography hierarchy
+- ALL touch targets MUST meet 44px minimum
+- Follow Master Implementation Plan in `/docs/MASTER_IMPLEMENTATION_PLAN.md`
 
 ### **4. FILE EDITING PROTOCOL**
 **❌ Common Mistake**: Using Edit tool without reading file first
@@ -75,21 +78,23 @@ if (params && 'leadId' in params) {
 
 ---
 
-## 🎯 CURRENT PHASE: MOBILE UX V2
+## 🎯 CURRENT PHASE: VISUAL DESIGN SPECIFICATION IMPLEMENTATION
 
-### **Phase Status (Check `/docs/MOBILE_UX_STRATEGY.md` for details)**
-- ✅ **Foundation**: Dashboard intelligence, workflow navigation
-- ✅ **Phase 3**: LeadManagement Mobile UX V2 
-- ✅ **Phase 3.1**: Design System V2 standardization
-- ✅ **Phase 4**: QuotationOrders Mobile UX V2
-- 🎯 **Phase 4.1**: Universal Button System (CURRENT - 15-20 mins)
-- ⏳ **Phase 5**: Supporting Components (20-25 mins)
-- ⏳ **Phase 6**: Compliance Audit (10-15 mins)
+### **Phase Status (Check `/docs/MASTER_IMPLEMENTATION_PLAN.md` for details)**
+- 🎯 **Phase 1**: Update Existing Systems with Visual Design Spec (CURRENT)
+  - Sub-Phase 1.1: Transform Global Variables (30 mins)
+  - Sub-Phase 1.2: Enhanced Navigation Foundation (45 mins)
+  - Sub-Phase 1.3: Bottom Navigation Implementation (60 mins)
+- ⏳ **Phase 2**: Core UI Components Update (2 hours)
+- ⏳ **Phase 3**: Dashboard Mobile Transformation (2 hours)
+- ⏳ **Phase 4**: Sales Module Transformation (2.5 hours)
+- ⏳ **Phase 5**: Missing Module Implementation (3-4 hours)
+- ⏳ **Phase 6**: Visual Polish & Integration (1.5 hours)
 
 ### **Current Priority Actions**
-1. Replace duplicate button classes in LeadManagement and QuotationOrders
-2. Apply global `.ds-btn` system from Design System V2
-3. Verify visual consistency and touch targets
+1. UPDATE existing index.css with Visual Design Specification colors and fonts
+2. EXTEND existing Design System classes (NOT create new files)
+3. PRESERVE all existing architectural patterns while applying Visual Design styling
 
 ---
 
@@ -102,17 +107,20 @@ if (params && 'leadId' in params) {
 /resume
 ```
 
-### **Git Commit Standards**
+### **Git Commit Standards - Sub-Phase Strategy**
 ```
-MOBILE UX V2 - PHASE [X]: [Component] - [Brief Description]
+MOBILE UX V2 - SUB-PHASE [X.Y]: [Component] - [Brief Description]
 
-[Detailed changes]
-- ✅ [Specific change 1]
-- ✅ [Specific change 2]
+✅ [Primary change accomplished]
+- [Specific detail 1]
+- [Specific detail 2]
+- [Specific detail 3]
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+**MANDATORY**: Commit after every sub-phase for rollback safety
 
 ### **TodoWrite Usage**
 - Start session: Create todos for current work
