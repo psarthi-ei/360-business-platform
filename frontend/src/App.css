@@ -3,8 +3,13 @@
 /* Mobile-First Responsive Layout - Visual Design Specification */
 .App {
   min-height: 100vh;
-  background: var(--ds-bg-primary);
+  background: #f5f5f5;  /* Neutral light gray instead of variable */
   font-family: 'Inter', 'Roboto', sans-serif;
+  /* Ensure no margins/padding causing blue bleed-through */
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Mobile-First Layout Variables - Visual Design Specification */
@@ -23,28 +28,28 @@
 /* Mobile-First Content Layout */
 .App-content {
   min-height: calc(100vh - var(--vds-content-clearance));
-  padding: var(--ds-space-md);
+  padding: 0 !important;  /* Remove all padding to eliminate gaps */
+  margin: 0 !important;   /* Remove all margins to eliminate gaps */
+  background: transparent;  /* Ensure no background color inheritance */
   /* Mobile optimization: touch-friendly spacing */
   touch-action: manipulation;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Mobile Header Integration */
+/* Mobile Header Integration - Only for desktop contexts */
 .unifiedHeader {
   height: var(--vds-header-height);
   background: var(--ds-btn-primary); /* Visual Design Spec primary blue */
   color: white;
-  display: flex;
+  display: none; /* Hidden by default - mobile uses MobileAppShell navigation */
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--ds-space-md);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  position: relative; /* Changed from fixed to avoid conflicts */
   box-shadow: var(--ds-shadow-card);
 }
 
@@ -81,6 +86,7 @@
   
   /* Desktop navigation adjustments */
   .unifiedHeader {
+    display: flex; /* Show unified header on desktop */
     position: relative;
     /* Desktop uses sidebar navigation, not fixed header */
   }
