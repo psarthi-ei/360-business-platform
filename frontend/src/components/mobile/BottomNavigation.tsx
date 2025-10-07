@@ -1,19 +1,24 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import FloatingActionButton from './FloatingActionButton';
 import styles from './BottomNavigation.module.css';
 
 interface BottomNavigationProps {
   className?: string;
+  onFABAction?: (action: string) => void;
 }
 
-const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = '' }) => {
+const BottomNavigation: React.FC<BottomNavigationProps> = ({ 
+  className = '', 
+  onFABAction 
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   // 5-Tab Navigation - Visual Design Specification
   const tabs = [
     { 
-      path: '/dashboard', 
+      path: '/home', 
       icon: '🏠', 
       label: 'Home',
       description: 'Business Intelligence Dashboard'
@@ -48,8 +53,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = '' }) =
     // Enhanced logic for workflow-based navigation
     const currentPath = location.pathname;
     
-    if (path === '/dashboard') {
-      return currentPath === '/dashboard' || currentPath === '/';
+    if (path === '/home') {
+      return currentPath === '/home' || currentPath === '/' || currentPath === '/dashboard';
     }
     
     if (path === '/sales') {
@@ -71,24 +76,37 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = '' }) =
     return currentPath === path;
   };
 
+  // Get currently active tab for FAB context
+  const getActiveTab = () => {
+    // Find the active tab based on current path
+    const activeTab = tabs.find(tab => isActiveTab(tab.path));
+    return activeTab?.path || '/home';
+  };
+
   return (
-    <nav className={`${styles.bottomTabs} ${className}`}>
-      {tabs.map((tab, index) => {
-        const workflowNames = ['home', 'sales', 'production', 'procurement', 'customers'];
-        return (
-          <button 
-            key={tab.path}
-            className={`${styles.tabButton} ${isActiveTab(tab.path) ? styles.active : ''}`}
-            data-workflow={workflowNames[index]}
-            onClick={() => navigate(tab.path)}
-            title={tab.description}
-          >
-            <span className={styles.tabIcon}>{tab.icon}</span>
-            <span className={styles.tabLabel}>{tab.label}</span>
-          </button>
-        );
-      })}
-    </nav>
+    <div className="bottom-navigation-container">
+      <FloatingActionButton 
+        activeTab={getActiveTab()}
+        onClick={onFABAction}
+      />
+      <nav className={`${styles.bottomTabs} ${className}`}>
+        {tabs.map((tab, index) => {
+          const workflowNames = ['home', 'sales', 'production', 'procurement', 'customers'];
+          return (
+            <button 
+              key={tab.path}
+              className={`${styles.tabButton} ${isActiveTab(tab.path) ? styles.active : ''}`}
+              data-workflow={workflowNames[index]}
+              onClick={() => navigate(tab.path)}
+              title={tab.description}
+            >
+              <span className={styles.tabIcon}>{tab.icon}</span>
+              <span className={styles.tabLabel}>{tab.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
   );
 };
 

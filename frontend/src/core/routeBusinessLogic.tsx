@@ -31,6 +31,7 @@ export interface RenderFunctions {
 export function createPlatformRoutes(renderFunctions: RenderFunctions): React.ReactElement[] {
   return [
     <Route key="/dashboard" path="/dashboard" element={renderFunctions.renderDashboard()} />,
+    <Route key="/home" path="/home" element={renderFunctions.renderDashboard()} />,
     <Route key="/leads" path="/leads" element={renderFunctions.renderLeadManagement()} />,
     <Route key="/quotes" path="/quotes" element={renderFunctions.renderQuotationOrders()} />,
     <Route key="/orders" path="/orders" element={renderFunctions.renderSalesOrders()} />,
