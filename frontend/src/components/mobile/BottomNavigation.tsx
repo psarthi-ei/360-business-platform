@@ -84,7 +84,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   };
 
   return (
-    <div className="bottom-navigation-container">
+    <div className={styles.bottomNavigationContainer}>
       <FloatingActionButton 
         activeTab={getActiveTab()}
         onClick={onFABAction}

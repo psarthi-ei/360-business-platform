@@ -119,6 +119,12 @@
   border-radius: 2px;
 }
 
+/* Bottom Navigation Container - Ensure FAB positioning */
+.bottomNavigationContainer {
+  position: relative;
+  z-index: 90;
+}
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 480px) {
   .bottomTabs {
