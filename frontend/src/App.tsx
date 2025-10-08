@@ -49,6 +49,7 @@ type UserMode = 'guest' | 'demo' | 'authenticated';
 function isPlatformPage(currentScreen: string): boolean {
   const platformPages = [
     'dashboard',
+    'home',
     'leads', 
     'quotes',
     'orders',
@@ -58,16 +59,51 @@ function isPlatformPage(currentScreen: string): boolean {
     'customers',
     'inventory',
     'fulfillment',
-    'analytics'
+    'analytics',
+    'sales',
+    'production',
+    'procurement'
   ];
   return platformPages.includes(currentScreen);
+}
+
+// Helper function to get screen name from pathname
+function getScreenFromPath(pathname: string): string {
+  if (pathname === '/') return 'homepage';
+  if (pathname === '/login') return 'login';
+  if (pathname === '/signup') return 'signup';
+  if (pathname === '/dashboard') return 'dashboard';
+  if (pathname === '/home') return 'home';
+  if (pathname === '/leads') return 'leads';
+  if (pathname === '/quotes') return 'quotes';
+  if (pathname === '/orders') return 'orders';
+  if (pathname === '/payments') return 'payments';
+  if (pathname === '/invoices') return 'invoices';
+  if (pathname.startsWith('/customers/')) return 'customerprofile';
+  if (pathname === '/customers') return 'customers';
+  if (pathname === '/inventory') return 'inventory';
+  if (pathname === '/fulfillment') return 'fulfillment';
+  if (pathname === '/analytics') return 'analytics';
+  if (pathname === '/sales') return 'sales';
+  if (pathname === '/production') return 'production';
+  if (pathname === '/procurement') return 'procurement';
+  if (pathname === '/services') return 'services-hub';
+  if (pathname === '/turnaround-stories') return 'turnaround-stories';
+  if (pathname === '/blog') return 'blog-home';
+  if (pathname.startsWith('/blog/')) return 'blog-post';
+  if (pathname === '/about') return 'about';
+  if (pathname === '/contact') return 'contact';
+  if (pathname === '/profile-completion') return 'profilecompletion';
+  return 'homepage';
 }
 
 function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isMobile } = useResponsive();
-  const [currentScreen, setCurrentScreen] = useState('homepage');
+  
+  // Initialize currentScreen based on current URL to prevent timing issues
+  const [currentScreen, setCurrentScreen] = useState(() => getScreenFromPath(location.pathname));
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [userMode, setUserMode] = useState<UserMode>('guest');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -157,28 +193,7 @@ function AppContent() {
 
   // Sync currentScreen with URL path
   useEffect(() => {
-    const path = location.pathname;
-    if (path === '/') setCurrentScreen('homepage');
-    else if (path === '/login') setCurrentScreen('login');
-    else if (path === '/signup') setCurrentScreen('signup');
-    else if (path === '/dashboard') setCurrentScreen('dashboard');
-    else if (path === '/leads') setCurrentScreen('leads');
-    else if (path === '/quotes') setCurrentScreen('quotes');
-    else if (path === '/orders') setCurrentScreen('orders');
-    else if (path === '/payments') setCurrentScreen('payments');
-    else if (path === '/invoices') setCurrentScreen('invoices');
-    else if (path.startsWith('/customers/')) setCurrentScreen('customerprofile');
-    else if (path === '/customers') setCurrentScreen('customers');
-    else if (path === '/inventory') setCurrentScreen('inventory');
-    else if (path === '/fulfillment') setCurrentScreen('fulfillment');
-    else if (path === '/analytics') setCurrentScreen('analytics');
-    else if (path === '/services') setCurrentScreen('services-hub');
-    else if (path === '/turnaround-stories') setCurrentScreen('turnaround-stories');
-    else if (path === '/blog') setCurrentScreen('blog-home');
-    else if (path.startsWith('/blog/')) setCurrentScreen('blog-post');
-    else if (path === '/about') setCurrentScreen('about');
-    else if (path === '/contact') setCurrentScreen('contact');
-    else if (path === '/profile-completion') setCurrentScreen('profilecompletion');
+    setCurrentScreen(getScreenFromPath(location.pathname));
   }, [location.pathname]);
 
   // Global scroll to top when screen changes
