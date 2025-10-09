@@ -80,8 +80,8 @@
 @media (min-width: 1024px) {
   .App-content {
     padding: var(--ds-space-xl);
-    max-width: 1200px;
-    margin: 0 auto;
+    /* Removed max-width constraint to eliminate gray space on sides */
+    /* Components will handle their own content width constraints */
   }
   
   /* Desktop navigation adjustments */
