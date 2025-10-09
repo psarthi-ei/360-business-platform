@@ -368,7 +368,17 @@
   .desktopOnly {
     display: none;
   }
-  
+}
+
+/* Desktop Responsive - Hide mobile-only elements */
+@media (min-width: 769px) {
+  .notificationButton {
+    display: none;
+  }
+}
+
+/* Mobile layout continuation */
+@media (max-width: 768px) {
   .logoSection {
     flex: 1;
     min-width: 0; /* Allow shrinking */

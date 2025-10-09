@@ -465,6 +465,7 @@
 @media (max-width: 768px) {
   
   /* Enhanced Search Input for Mobile Workflow - Visual Design Spec: 48px height */
+  .integratedSearch .searchInputWrapper,
   .searchInputWrapper {
     /* Visual Design Spec height */
     height: 48px;
@@ -486,6 +487,25 @@
     border-color: rgba(29, 78, 216, 0.6);
     box-shadow: 0 12px 48px rgba(29, 78, 216, 0.3);
     transform: translateY(-2px);
+  }
+  
+  /* Mobile-optimized search input */
+  .searchInput {
+    font-size: 16px !important;      /* Prevent iOS zoom */
+    line-height: 1.4;
+  }
+  
+  /* Mobile-optimized search icon */
+  .searchIcon {
+    font-size: 1.2rem !important;
+    color: rgba(29, 78, 216, 0.8) !important;
+  }
+  
+  /* Mobile-optimized voice icon */
+  .voiceIcon {
+    min-width: 36px !important;      /* Touch-friendly target */
+    height: 36px !important;
+    font-size: 1.1rem !important;
   }
   
   /* Enhanced Search Icon */

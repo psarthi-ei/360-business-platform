@@ -665,7 +665,6 @@ function AppContent() {
                 searchScope={getSearchScope(currentScreen)}
                 dataSources={getSearchDataSources()}
                 navigationHandlers={getSearchNavigationHandlers(navigate)}
-                placeholder="Search across platform..."
               />
             )}
             

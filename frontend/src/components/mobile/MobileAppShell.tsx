@@ -2,8 +2,8 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FloatingVoiceAssistant from '../voice/FloatingVoiceAssistant';
 import HeaderDropdown from '../ui/HeaderDropdown';
-import SearchResults from '../search/SearchResults';
-import { useGlobalSearch, SearchDataSources, SearchNavigationHandlers } from '../search/useGlobalSearch';
+import GlobalSearch from '../search/GlobalSearch';
+import { SearchDataSources, SearchNavigationHandlers } from '../search/useGlobalSearch';
 import { ActionParams } from '../../services/nlp/types';
 import { getSearchDataSources, getSearchNavigationHandlers } from '../../core/searchBusinessLogic';
 import { getBusinessData, getCurrentProcessStage } from '../../core/businessDataLogic';
@@ -75,39 +75,21 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
   const searchDataSources: SearchDataSources = getSearchDataSources();
   const searchNavigationHandlers: SearchNavigationHandlers = getSearchNavigationHandlers(navigate);
 
-  // Search state and handlers using the useGlobalSearch hook
-  const {
-    searchQuery,
-    searchResults,
-    showSearchResults,
-    handleSearchChange,
-    closeSearchResults,
-    clearSearch,
-    performGlobalSearch
-  } = useGlobalSearch(searchDataSources, searchNavigationHandlers);
+  // Search data sources and handlers for GlobalSearch component
   
   // Create VoiceCommandRouter instance for mobile
   const voiceCommandRouter = useMemo(() => 
     createVoiceCommandRouter(navigate), [navigate]
   );
 
-  // Universal search handler - Connected to search logic
+  // Universal search handler - Will be handled by GlobalSearch component
   const handleUniversalSearch = useCallback((query: string) => {
     // eslint-disable-next-line no-console
     console.log('🔍 Voice search query:', query);
     
-    // Trigger search using the performGlobalSearch function
-    performGlobalSearch(query);
-  }, [performGlobalSearch]);
+    // Note: Search will be handled by GlobalSearch component directly
+  }, []);
 
-  // Handle keyboard events in search input
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      closeSearchResults();
-      (e.target as HTMLInputElement).blur();
-    }
-    // TODO: Add arrow key navigation for search results
-  };
   
   // Universal action handler using shared business logic - no fallback needed
   const handleUniversalAction = useMemo(() => 
@@ -137,6 +119,9 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
           </div>
           
           <div className="nav-actions">
+            <button className="notification-button" title="Notifications">
+              🔔
+            </button>
             <button 
               className={`debug-button ${showDebugPanel ? 'active' : ''}`}
               onClick={() => setShowDebugPanel(!showDebugPanel)}
@@ -165,38 +150,13 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
           </div>
         </div>
         
-        {/* Search Row - Original Style with Functional Logic */}
+        {/* Search Row - Unified GlobalSearch Component */}
         <div className="search-row">
-          <div className="search-container">
-            <span className="search-icon">🔍</span>
-            <input 
-              type="text" 
-              placeholder="Search leads, customers, orders..."
-              className="search-input"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              onKeyDown={handleSearchKeyDown}
-            />
-            {searchQuery && (
-              <button 
-                className="clear-search-button" 
-                onClick={clearSearch}
-                type="button"
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            )}
-            
-            {/* Search Results - Positioned relative to search input */}
-            {showSearchResults && (
-              <SearchResults
-                results={searchResults}
-                searchQuery={searchQuery}
-                onClose={closeSearchResults}
-              />
-            )}
-          </div>
+          <GlobalSearch
+            dataSources={searchDataSources}
+            navigationHandlers={searchNavigationHandlers}
+            className="mobile-search-integration"
+          />
         </div>
       </header>
       

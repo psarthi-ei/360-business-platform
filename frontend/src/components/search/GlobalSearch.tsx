@@ -34,7 +34,7 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   searchScope, // Accept scope from configuration
   dataSources, 
   navigationHandlers, 
-  placeholder = "Search across platform...",
+  placeholder = "Search leads, customers, orders...",
   className = "",
   searchState
 }, ref) => {
