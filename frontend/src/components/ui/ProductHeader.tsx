@@ -27,6 +27,7 @@ interface ProductHeaderProps {
   onBlogHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
+  userName?: string;
 }
 
 function ProductHeader({
@@ -57,14 +58,23 @@ function ProductHeader({
   return (
     <div className={styles.productHeader}>
       <div className={styles.headerContent}>
-        {/* Logo Section - Always visible and clickable */}
+        {/* Logo Section - Desktop: Logo | Mobile: Back + Greeting */}
         <div className={styles.logoSection}>
-          <div className={styles.logo} onClick={onHome}>
+          {/* Desktop Logo - Hidden on mobile */}
+          <div className={`${styles.logo} ${styles.desktopOnly}`} onClick={onHome}>
             <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
             <div className={styles.logoTextContainer}>
               <span className={styles.logoText}>ElevateIdea</span>
               <span className={styles.logoTagline}>Scaling Business with Technology</span>
             </div>
+          </div>
+          
+          {/* Mobile Greeting - Visible only on mobile */}
+          <div className={styles.mobileGreeting}>
+            <button className={styles.backButton} onClick={onHome} title="Go back">
+              ←
+            </button>
+            <span className={styles.greetingText}>Good morning, Ramesh 👋</span>
           </div>
         </div>
         
@@ -117,17 +127,23 @@ function ProductHeader({
           )}
         </div>
         
-        {/* Controls Section - Dashboard Button and User Menu */}
+        {/* Controls Section - Desktop: Dashboard + Menu | Mobile: Notification + Menu */}
         <div className={styles.controlsSection}>
+          {/* Desktop Dashboard Button */}
           {showDashboardButton && onDashboard && (
             <button 
-              className={styles.dashboardButton}
+              className={`${styles.dashboardButton} ${styles.desktopOnly}`}
               onClick={onDashboard}
               title="Go to Dashboard"
             >
               Dashboard
             </button>
           )}
+          
+          {/* Mobile Notification Icon */}
+          <button className={styles.notificationButton} title="Notifications">
+            🔔
+          </button>
           
           <HeaderDropdown
             currentLanguage={currentLanguage}

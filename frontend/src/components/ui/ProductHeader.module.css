@@ -282,17 +282,91 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Mobile Responsive - Improved layout */
+/* Visual Design Spec Mobile Elements */
+.mobileGreeting {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--color-primary, #1D4ED8);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton:hover {
+  background: rgba(29, 78, 216, 0.1);
+}
+
+.greetingText {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.notificationButton {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationButton:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary, #667eea);
+}
+
+.desktopOnly {
+  display: flex;
+}
+
+/* Mobile Responsive - Visual Design Spec: 56px exact height */
 @media (max-width: 768px) {
   .productHeader {
-    padding: 10px 0;
+    padding: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
   }
   
   .headerContent {
-    padding: 0 10px;
+    padding: 0 16px;
     flex-direction: row;
-    gap: 8px;
+    gap: 12px;
     position: relative;
+    height: 56px;
+    align-items: center;
+  }
+  
+  /* Show mobile greeting, hide desktop logo */
+  .mobileGreeting {
+    display: flex;
+  }
+  
+  .desktopOnly {
+    display: none;
   }
   
   .logoSection {

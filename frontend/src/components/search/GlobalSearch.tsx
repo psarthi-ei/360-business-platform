@@ -181,6 +181,14 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
                 aria-label="Global search"
                 aria-haspopup="listbox"
               />
+              <button 
+                className={styles.voiceIcon}
+                title="Voice search"
+                aria-label="Voice search"
+                type="button"
+              >
+                🎙
+              </button>
               {searchQuery && (
                 <button 
                   className={styles.clearSearch} 
