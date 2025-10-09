@@ -1,25 +1,23 @@
-/* Platform Header - Unified Mobile + Desktop for Business Application */
+/* Platform Header - Grid Compatible for Business Application */
 .platformHeader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 8px 0;
-  height: 56px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
   color: #333;
+  display: flex;
+  align-items: center;
 }
 
 .headerContent {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 /* Logo Section - Responsive */
@@ -107,11 +105,27 @@
   border-radius: 12px;
 }
 
+/* Search Section - Desktop Only */
+.searchSection {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.integratedSearch {
+  width: 100%;
+}
+
 /* Controls Section - Responsive */
 .controlsSection {
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
+  z-index: 100000;
 }
 
 
@@ -119,21 +133,19 @@
   display: flex;
 }
 
-/* Mobile Responsive - Simplified for unified header */
+/* Mobile Responsive - Grid compatible */
 @media (max-width: 768px) {
   .platformHeader {
-    padding: 0;
-    height: 56px !important;
-    min-height: 56px !important;
-    max-height: 56px !important;
+    /* Grid handles sizing */
   }
   
   .headerContent {
-    height: 100%;
     padding: 0 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  }
+  
+  /* Hide search section on mobile */
+  .searchSection {
+    display: none;
   }
   
   /* Hide platform context on mobile to save space */

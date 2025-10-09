@@ -1,27 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { companyName, tagline, logoAlt } from '../../config/brand';
-import logoImage from '../../assets/images/logo.png';
 import styles from './LeftSidebarNavigation.module.css';
 
 interface LeftSidebarNavigationProps {
   className?: string;
-  isCollapsed?: boolean;
-  onToggleCollapse?: () => void;
 }
 
 const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({ 
-  className = '',
-  isCollapsed = false,
-  onToggleCollapse
+  className = ''
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [internalCollapsed, setInternalCollapsed] = useState(false);
-  
-  // Use external state if provided, otherwise use internal state
-  const collapsed = onToggleCollapse ? isCollapsed : internalCollapsed;
-  const toggleCollapse = onToggleCollapse || (() => setInternalCollapsed(!internalCollapsed));
 
   // Navigation items matching BottomNavigation for consistency
   const navigationItems = [
@@ -84,26 +73,7 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
   };
 
   return (
-    <aside className={`${styles.leftSidebar} ${collapsed ? styles.collapsed : ''} ${className}`}>
-      {/* Brand Section */}
-      <div className={styles.brandSection}>
-        <div className={styles.brandContent}>
-          <img src={logoImage} alt={logoAlt} className={styles.brandLogo} />
-          {!collapsed && (
-            <div className={styles.brandInfo}>
-              <div className={styles.brandName}>{companyName}</div>
-              <div className={styles.brandTagline}>{tagline}</div>
-            </div>
-          )}
-        </div>
-        <button 
-          className={styles.collapseButton}
-          onClick={toggleCollapse}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {collapsed ? '→' : '←'}
-        </button>
-      </div>
+    <aside className={`${styles.leftSidebar} ${className}`}>
 
       {/* Navigation Items */}
       <nav className={styles.navigation}>
@@ -112,29 +82,14 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
             key={item.path}
             className={`${styles.navItem} ${isActiveItem(item.path) ? styles.active : ''}`}
             onClick={() => navigate(item.path)}
-            title={collapsed ? item.description : undefined}
+            title={item.description}
           >
             <span className={styles.navIcon}>{item.icon}</span>
-            {!collapsed && (
-              <>
-                <span className={styles.navLabel}>{item.label}</span>
-                <span className={styles.navDescription}>{item.description}</span>
-              </>
-            )}
+            <span className={styles.navLabel}>{item.label}</span>
           </button>
         ))}
       </nav>
 
-      {/* Business Context */}
-      {!collapsed && (
-        <div className={styles.businessContext}>
-          <div className={styles.contextHeader}>Current Business</div>
-          <div className={styles.businessInfo}>
-            <div className={styles.businessName}>Gujarat Textiles Ltd.</div>
-            <div className={styles.businessStatus}>Production Active</div>
-          </div>
-        </div>
-      )}
     </aside>
   );
 };

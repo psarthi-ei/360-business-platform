@@ -1,25 +1,25 @@
 /* GlobalSearch Component - Extracted from Dashboard */
 
-/* Main Search Container - Fixed positioned for mobile */
+/* Main Search Container - Grid Area Compatible */
 .globalSearch {
-  position: fixed;
-  top: 56px;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  height: 64px; /* 48px search + 16px padding */
+  position: static !important;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Integrated Search - Simplified container */
 .integratedSearch {
+  position: static !important;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 8px 16px;
+  padding: 12px 16px;
 }
 
 /* Unified Search Input Wrapper - Visual Design Spec: 48px height */
@@ -38,6 +38,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  z-index: 1;
 }
 
 .integratedSearch .searchInputWrapper:focus-within,
@@ -124,7 +125,7 @@
   max-height: 400px;
   overflow: hidden;
   animation: slideDown 0.3s ease;
-  z-index: 10000; /* Even higher than search container */
+  z-index: 10000; /* Highest z-index for visibility across all contexts */
 }
 
 @keyframes slideDown {
@@ -322,13 +323,33 @@
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
-  .integratedSearch {
-    margin: 4px auto 30px auto;
+  .globalSearch {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+  }
+  
+  /* Fix CSS Modules targeting - use parent class for proper cascade */
+  .globalSearch .integratedSearch {
+    position: static !important;
+    margin: 4px auto !important;
     max-width: 100% !important;
     width: 100% !important;
+    padding: 12px 16px !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
 
-  .integratedSearch .searchInputWrapper {
+  .globalSearch .integratedSearch .searchInputWrapper {
     padding: 16px 20px;
     max-width: 100% !important;
     width: 100% !important;
@@ -336,18 +357,17 @@
 }
 
 @media (max-width: 480px) {
-  .integratedSearch {
+  /* Fix CSS Modules targeting - use parent class for proper cascade */
+  .globalSearch .integratedSearch {
     margin: 4px auto 25px auto;
     max-width: 100% !important;
     width: 100% !important;
+    padding: 10px 12px !important;
   }
   
-  .integratedSearch .searchInputWrapper {
+  .globalSearch .integratedSearch .searchInputWrapper {
     max-width: 100% !important;
     width: 100% !important;
-  }
-
-  .integratedSearch .searchInputWrapper {
     padding: 14px 18px;
   }
 
@@ -373,22 +393,16 @@
   }
 }
 
-/* Universal Search Container Styles - Full Width Design */
+/* Universal Search Container - Grid Area Compatible */
 .universalSearchContainer {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
+  position: relative;
   width: 100%;
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 15px 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  z-index: 998;
+  height: 100%;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  padding: 8px 16px;
 }
 
 /* Universal Search Component Styling - Full Width */
@@ -418,13 +432,7 @@
 /* Mobile Responsive for Universal Search Container */
 @media (max-width: 768px) {
   .universalSearchContainer {
-    top: 60px !important; /* Actual rendered mobile ProductHeader height */
     padding: 8px 12px;
-    z-index: 999; /* Lower than HeaderDropdown (9999) to allow mobile nav to appear on top */
-    background: #f8f9fa !important; /* Slight background difference for visual separation */
-    border-top: 1px solid #e9ecef; /* Subtle top border for differentiation */
-    margin-top: 0px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Light shadow for separation */
   }
   
   .universalSearch {
@@ -671,14 +679,11 @@
   
   /* Universal Search Container - Mobile Workflow Optimizations */
   .universalSearchContainer {
-    /* Better positioning with new navigation */
-    top: 72px !important; /* Above new mobile header */
+    /* Remove fixed positioning - let CSS Grid handle positioning */
+    position: relative;
     
     /* Enhanced styling */
-    background: rgba(248, 249, 250, 0.95) !important;
-    backdrop-filter: blur(20px);
-    border-bottom: 2px solid rgba(255, 107, 53, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: transparent;
     
     /* Better padding */
     padding: 12px 16px;

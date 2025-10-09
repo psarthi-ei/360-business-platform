@@ -1,5 +1,7 @@
 import React from 'react';
 import HeaderDropdown from './HeaderDropdown';
+import GlobalSearch, { GlobalSearchRef } from '../search/GlobalSearch';
+import { SearchDataSources, SearchNavigationHandlers } from '../search/useGlobalSearch';
 import styles from './PlatformHeader.module.css';
 import logoImage from '../../assets/images/logo.png';
 import { companyName, tagline, logoAlt } from '../../config/brand';
@@ -16,6 +18,12 @@ interface PlatformHeaderProps {
   isAuthenticated?: boolean;
   userMode?: string;
   userName?: string;
+  // Search props for desktop integration
+  globalSearchRef?: React.RefObject<GlobalSearchRef | null>;
+  searchScope?: string[];
+  dataSources?: SearchDataSources;
+  navigationHandlers?: SearchNavigationHandlers;
+  showSearch?: boolean;
 }
 
 function PlatformHeader({
@@ -29,7 +37,12 @@ function PlatformHeader({
   onLogout,
   isAuthenticated = false,
   userMode = 'guest',
-  userName
+  userName,
+  globalSearchRef,
+  searchScope,
+  dataSources,
+  navigationHandlers,
+  showSearch = false
 }: PlatformHeaderProps) {
   return (
     <div className={styles.platformHeader}>
@@ -44,13 +57,18 @@ function PlatformHeader({
           </div>
         </div>
         
-        {/* Center: Platform Context - Desktop Only */}
-        <div className={styles.platformContext}>
-          <div className={styles.businessInfo}>
-            <span className={styles.businessName}>Gujarat Textiles Ltd.</span>
-            <span className={styles.businessStatus}>Production Active</span>
+        {/* Center: Integrated Search - Desktop Only */}
+        {showSearch && dataSources && navigationHandlers && (
+          <div className={styles.searchSection}>
+            <GlobalSearch
+              ref={globalSearchRef}
+              searchScope={searchScope}
+              dataSources={dataSources}
+              navigationHandlers={navigationHandlers}
+              className={styles.integratedSearch}
+            />
           </div>
-        </div>
+        )}
         
         {/* Right: Single HeaderDropdown - Responsive Design */}
         <div className={styles.controlsSection}>

@@ -1,91 +1,172 @@
-/* Platform Shell - Unified container for all business application pages */
+/* Platform Shell - Clean CSS Grid Layout for Desktop and Mobile */
+
+/* ===== DESKTOP LAYOUT (CSS Grid) ===== */
 .platformShell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-background, #ffffff);
+  display: grid;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--color-background, #F3F4F6);
+  
+  /* Desktop Grid Template - Integrated Search in Header */
+  grid-template-areas: 
+    "sidebar header"
+    "sidebar content";
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 80px 1fr;
+  
+  /* Smooth transitions for responsive changes */
+  transition: grid-template-columns 0.3s ease;
 }
 
-/* Platform Content Area - Mobile Layout */
-.platformContentMobile {
-  flex: 1;
+/* ===== GRID AREAS ===== */
+.sidebarArea {
+  grid-area: sidebar;
+  background: var(--color-card-background, #FFFFFF);
+  border-right: 1px solid var(--color-border, #E5E7EB);
+  z-index: 999;
+  overflow: visible;
   position: relative;
-  z-index: 1;
-  
-  /* Provide clearance for fixed positioned elements */
-  /* Header (56px) + Search (64px with padding) = 120px total clearance */
-  padding-top: 120px;
-  
-  /* Account for bottom navigation on mobile */
-  padding-bottom: var(--mobile-bottom-nav-height, 64px);
 }
 
-/* Platform Content Area - Desktop Layout */
-.platformContentDesktop {
-  flex: 1;
+.headerArea {
+  grid-area: header;
+  background: var(--color-card-background, #FFFFFF);
+  border-bottom: 1px solid var(--color-border, #E5E7EB);
+  z-index: 1001;
+  overflow: visible;
   position: relative;
-  z-index: 1;
-  
-  /* Provide clearance for fixed positioned elements */
-  padding-top: var(--platform-header-height, 64px);
-  
-  /* Account for GlobalSearch if present */
-  margin-top: var(--global-search-height, 0);
-  
-  /* Account for left sidebar on desktop */
-  margin-left: 280px; /* Match LeftSidebarNavigation width */
-  
-  /* Responsive adjustment for large desktops */
-  transition: margin-left 0.3s ease;
 }
 
-/* Desktop specific styles */
+.searchArea {
+  grid-area: search;
+  background: var(--color-card-background, #FFFFFF);
+  border-bottom: 1px solid var(--color-border, #E5E7EB);
+  padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px);
+  z-index: 1000;
+  overflow: visible;
+  position: relative;
+}
+
+.contentArea {
+  grid-area: content;
+  overflow-y: auto;
+  padding: var(--ds-space-xs, 8px) var(--ds-space-l, 24px) var(--ds-space-l, 24px) var(--ds-space-l, 24px);
+  background: var(--color-background, #F3F4F6);
+  z-index: 1;
+}
+
+.navigationArea {
+  grid-area: navigation;
+  background: var(--color-card-background, #FFFFFF);
+  border-top: 1px solid var(--color-border, #E5E7EB);
+  z-index: 10;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Desktop (1025px+) - Hide navigation area and search area */
 @media (min-width: 1025px) {
-  .platformContentDesktop {
-    /* Desktop has more header space and search bar */
-    padding-top: var(--platform-header-height-desktop, 80px);
-    margin-top: var(--global-search-height-desktop, 60px);
+  .navigationArea {
+    display: none;
+  }
+  
+  .searchArea {
+    display: none;
   }
 }
 
-/* Large desktop optimization - adjust for wider sidebar */
+/* Large Desktop (1400px+) - Wider sidebar */
 @media (min-width: 1400px) {
-  .platformContentDesktop {
-    margin-left: 320px; /* Match LeftSidebarNavigation large desktop width */
+  .platformShell {
+    grid-template-columns: 320px 1fr;
   }
 }
 
-/* Mobile/Tablet specific styles */
+/* Tablet/Mobile (1024px and below) - Stack vertically with separate search */
 @media (max-width: 1024px) {
   .platformShell {
-    /* Mobile shell should take full viewport */
-    min-height: 100vh;
-    background: var(--color-background, #ffffff);
+    grid-template-areas: 
+      "header"
+      "search"
+      "content"
+      "navigation";
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 48px 1fr 64px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
   }
   
-  .platformContentMobile {
-    /* Mobile: Header (56px) + Search (64px with padding) = 120px total clearance */
-    padding-top: 120px;
-    
-    /* Ensure content doesn't get cut off */
-    padding-bottom: var(--mobile-bottom-nav-height, 64px);
+  
+  
+  /* Hide sidebar area on mobile */
+  .sidebarArea {
+    display: none;
+  }
+  
+  /* Mobile-specific adjustments */
+  .headerArea {
+    border-bottom: 1px solid var(--color-border, #E5E7EB);
+  }
+  
+  .searchArea {
+    display: block;
+    padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px);
+  }
+  
+  .contentArea {
+    padding: var(--ds-space-xs, 8px) var(--ds-space-m, 16px) var(--ds-space-m, 16px) var(--ds-space-m, 16px);
   }
 }
 
-/* Extra small mobile screens */
+/* Small Mobile (480px and below) - Optimize for smaller screens */
 @media (max-width: 480px) {
-  .platformContentMobile {
-    /* Same clearance on small screens: Header (56px) + Search (64px) = 120px */
-    padding-top: 120px;
-    /* Adjust for larger bottom navigation on small screens */
-    padding-bottom: 80px;
+  .platformShell {
+    grid-template-rows: 56px 48px 1fr 80px; /* Larger navigation on small screens */
+  }
+  
+  .contentArea {
+    padding: var(--ds-space-xs, 8px) var(--ds-space-s, 12px) var(--ds-space-s, 12px) var(--ds-space-s, 12px);
+  }
+  
+  .searchArea {
+    display: block;
+    padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px);
   }
 }
 
-/* High contrast mode support */
+/* ===== VISUAL DESIGN SPECIFICATION COMPLIANCE ===== */
+
+/* Professional color scheme from Visual Design Spec */
+.platformShell {
+  color: var(--color-text-primary, #111827);
+  font-family: var(--font-family, 'Inter', 'Roboto', sans-serif);
+}
+
+/* Grid area backgrounds and borders follow Visual Design Spec */
+.sidebarArea,
+.headerArea,
+.searchArea,
+.navigationArea {
+  background: var(--color-card-background, #FFFFFF);
+  border-color: var(--color-border, #E5E7EB);
+}
+
+.contentArea {
+  background: var(--color-background, #F3F4F6);
+}
+
+/* ===== ACCESSIBILITY & MOTION ===== */
+
+/* High contrast support */
 @media (prefers-contrast: high) {
-  .platformShell {
-    border: 2px solid var(--color-border, #e2e8f0);
+  .sidebarArea,
+  .headerArea,
+  .searchArea,
+  .navigationArea {
+    border-width: 2px;
+    border-color: var(--color-text-primary, #111827);
   }
 }
 
@@ -93,5 +174,21 @@
 @media (prefers-reduced-motion: reduce) {
   .platformShell {
     transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .platformShell {
+    grid-template-areas: "content";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  
+  .sidebarArea,
+  .headerArea,
+  .searchArea,
+  .navigationArea {
+    display: none;
   }
 }

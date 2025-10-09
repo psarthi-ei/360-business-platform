@@ -59,47 +59,63 @@ function PlatformShell({
 
   return (
     <div className={styles.platformShell}>
-      {/* Platform Header - Responsive for both mobile and desktop */}
-      <PlatformHeader
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-        onHome={onHome}
-        onLogin={onLogin}
-        onSignUp={onSignUp}
-        onGuestMode={onGuestMode}
-        onDemoMode={onDemoMode}
-        onLogout={onLogout}
-        isAuthenticated={isAuthenticated}
-        userMode={userMode}
-        userName={userName}
-      />
+      {/* CSS Grid Layout - All Areas Always Present */}
       
-      {/* Desktop Left Sidebar Navigation - Only on Platform Pages */}
-      {isPlatformPage(location.pathname) && !isMobile && (
-        <LeftSidebarNavigation />
-      )}
+      {/* Sidebar Area - Content conditional, area always exists */}
+      <aside className={styles.sidebarArea}>
+        {isPlatformPage(location.pathname) && !isMobile && (
+          <LeftSidebarNavigation />
+        )}
+      </aside>
       
-      {/* Universal Search Bar - Only on Platform Pages */}
-      {isPlatformPage(location.pathname) && (
-        <GlobalSearch
-          ref={globalSearchRef}
+      {/* Header Area - Always rendered */}
+      <header className={styles.headerArea}>
+        <PlatformHeader
+          currentLanguage={currentLanguage}
+          onLanguageChange={onLanguageChange}
+          onHome={onHome}
+          onLogin={onLogin}
+          onSignUp={onSignUp}
+          onGuestMode={onGuestMode}
+          onDemoMode={onDemoMode}
+          onLogout={onLogout}
+          isAuthenticated={isAuthenticated}
+          userMode={userMode}
+          userName={userName}
+          // Desktop search integration
+          showSearch={!isMobile && isPlatformPage(location.pathname)}
+          globalSearchRef={globalSearchRef}
           searchScope={getSearchScope(currentScreen)}
           dataSources={getSearchDataSources()}
           navigationHandlers={getSearchNavigationHandlers(navigate)}
         />
-      )}
+      </header>
       
-      {/* Platform Content */}
-      <main className={isMobile ? styles.platformContentMobile : styles.platformContentDesktop}>
+      {/* Search Area - Content conditional, area always exists */}
+      <section className={styles.searchArea}>
+        {isPlatformPage(location.pathname) && (
+          <GlobalSearch
+            ref={globalSearchRef}
+            searchScope={getSearchScope(currentScreen)}
+            dataSources={getSearchDataSources()}
+            navigationHandlers={getSearchNavigationHandlers(navigate)}
+          />
+        )}
+      </section>
+      
+      {/* Content Area - Always rendered */}
+      <main className={styles.contentArea}>
         {children}
       </main>
       
-      {/* Mobile Bottom Navigation - Only on Platform Pages */}
-      {isPlatformPage(location.pathname) && isMobile && (
-        <BottomNavigation />
-      )}
+      {/* Navigation Area - Content conditional, area always exists */}
+      <nav className={styles.navigationArea}>
+        {isPlatformPage(location.pathname) && isMobile && (
+          <BottomNavigation />
+        )}
+      </nav>
       
-      {/* Universal Voice Assistant - Only on Platform Pages (Desktop) */}
+      {/* Floating Elements - Outside Grid */}
       {isPlatformPage(location.pathname) && !isMobile && (
         <FloatingVoiceAssistant
           currentProcessStage={getCurrentProcessStage(location.pathname)}
