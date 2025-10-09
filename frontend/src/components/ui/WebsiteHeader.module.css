@@ -1,4 +1,4 @@
-/* Website Header - Desktop Only, No Mobile CSS */
+/* Website Header - Responsive for Website Pages (No Platform Elements) */
 .websiteHeader {
   position: fixed;
   top: 0;
@@ -279,4 +279,117 @@
   font-size: 12px;
   font-weight: 500;
   color: var(--color-primary, #667eea);
+}
+
+/* Mobile Responsive Design - Website Navigation Only */
+@media (max-width: 1024px) {
+  .websiteHeader {
+    padding: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .headerContent {
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .logoSection {
+    /* Left side: Logo section - ensure it stays left */
+    flex: 0 0 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    font-size: 18px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logoImage {
+    height: 24px;
+  }
+  
+  .logoTextContainer {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .logoText {
+    font-size: 18px;
+    line-height: 1.1;
+  }
+  
+  .logoTagline {
+    font-size: 10px;
+    margin-top: -1px;
+    white-space: nowrap;
+  }
+  
+  /* Hide website navigation on mobile - direct selector */
+  .navigationSection {
+    display: none !important;
+    margin: 0 !important;
+    flex: 0 !important;
+  }
+  
+  .controlsSection {
+    gap: 12px;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    /* Ensure it stays right when navigation is hidden */
+    margin-left: auto;
+  }
+  
+  .dashboardButton {
+    min-width: 70px;
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  .headerContent {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  
+  .logoText {
+    font-size: 16px;
+  }
+  
+  .logoImage {
+    height: 22px;
+  }
+  
+  .logoTagline {
+    font-size: 9px;
+    letter-spacing: 0.1px;
+  }
+  
+  .dashboardButton {
+    min-width: 60px;
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .controlsSection {
+    gap: 8px;
+  }
 }

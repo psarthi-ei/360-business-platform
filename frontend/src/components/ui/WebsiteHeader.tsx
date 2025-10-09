@@ -72,7 +72,7 @@ function WebsiteHeader({
   return (
     <div className={styles.websiteHeader}>
       <div className={styles.headerContent}>
-        {/* Logo Section - Desktop Only */}
+        {/* Logo Section */}
         <div className={styles.logoSection}>
           <div className={styles.logo} onClick={onHome}>
             <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
@@ -83,7 +83,7 @@ function WebsiteHeader({
           </div>
         </div>
         
-        {/* Navigation Section - Website Navigation */}
+        {/* Navigation Section - Hidden on mobile via CSS */}
         <div className={styles.navigationSection}>
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
@@ -132,9 +132,9 @@ function WebsiteHeader({
           )}
         </div>
         
-        {/* Controls Section - Desktop Only */}
+        {/* Controls Section - Responsive */}
         <div className={styles.controlsSection}>
-          {/* Desktop Dashboard Button */}
+          {/* Dashboard Button */}
           {showDashboardButton && onDashboard && (
             <button 
               className={styles.dashboardButton}

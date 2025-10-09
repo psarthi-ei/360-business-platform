@@ -168,8 +168,8 @@
 }
 
 /* Professional Mobile Design */
-@media (max-width: 768px) {
-  /* Show website navigation on mobile only */
+@media (max-width: 1024px) {
+  /* Show website navigation on tablet and mobile */
   .websiteNavigationSection {
     display: block;
   }

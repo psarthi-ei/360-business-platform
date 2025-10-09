@@ -13,15 +13,11 @@ date  # ALWAYS run first - validates project timeline context
 - **Current Work**: Phase 1 (Update Existing Systems with Visual Design Spec)
 - **Next**: 6-phase implementation following Master Implementation Plan
 
-### **STEP 2: READ 6 KEY DOCUMENTS**
+### **STEP 2: READ 2 KEY DOCUMENTS**
 ```bash
 # Essential context documents (read in order):
-/docs/PRODUCT_REQUIREMENTS.md         # What we're building
-/docs/BUSINESS_PROCESSES.md           # 8-stage textile workflow
-/docs/UNIFIED_ARCHITECTURE.md         # Zero duplication architecture
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual design for all screens
 /docs/MASTER_IMPLEMENTATION_PLAN.md   # Architecturally compliant implementation strategy
-/docs/USE_CASES_MASTER.md             # Implementation progress
 ```
 
 ### **STEP 3: CHECK TODO STATUS**
@@ -139,5 +135,5 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
-**📍 For detailed information, refer to the 5 key documents above.**  
+**📍 For detailed information, refer to the 2 key documents above.**  
 **🎯 This guide focuses on session protocol and mistake prevention only.**

@@ -573,8 +573,48 @@ This section defines the complete CSS architecture and component structure patte
 |--------------|-------------------|-----------------|-------------|
 | `index.css` | Global variables, universal classes | All | Colors, typography, .ds-btn, .ds-expanded-details |
 | `App.css` | Common web + mobile application styles | All | Shared layouts, common patterns, universal search clearance |
-| `MobileAppShell.css` | Mobile-specific global styles | ≤768px | Mobile shell, mobile navigation, mobile-only patterns |
+| `MobileAppShell.css` | Mobile-specific global styles | ≤1024px | Mobile shell, mobile navigation, mobile-only patterns |
 | `Component.module.css` | Component-specific styles | All | Business logic, card layouts, component behavior (desktop + mobile) |
+
+#### **🚨 Responsive Design Strategy (Standard 2-Tier Approach)**
+
+**Architecture Decision: Simplified Mobile/Desktop Split**
+
+We implement a **standard 2-tier responsive design** following industry best practices:
+
+**🖥️ Desktop Experience (≥1024px):**
+- Full navigation visible in header
+- Complete business application interface
+- Professional multi-column layouts
+- Standard desktop interaction patterns
+
+**📱 Mobile/Tablet Experience (<1024px):**
+- Hamburger menu navigation (HeaderDropdown)
+- Touch-optimized interface patterns
+- Single-column responsive layouts
+- Unified experience for phones and tablets
+
+**Why 1024px Breakpoint:**
+- ✅ Industry standard for complex navigation
+- ✅ Tablets get professional dropdown navigation
+- ✅ Prevents navigation text cutoff issues
+- ✅ Simplifies maintenance with fewer breakpoints
+- ✅ Provides adequate space for desktop navigation
+
+**Implementation Pattern:**
+```css
+/* Desktop: Full navigation visible */
+@media (min-width: 1025px) {
+  .navigationSection { display: flex; }
+  .websiteNavigationSection { display: none; }
+}
+
+/* Mobile/Tablet: Dropdown navigation */
+@media (max-width: 1024px) {
+  .navigationSection { display: none; }
+  .websiteNavigationSection { display: block; }
+}
+```
 
 #### **🚨 Critical CSS Architecture Rules**
 
@@ -748,7 +788,7 @@ const toggleDetails = (itemId: string) => {
 }
 
 /* ❌ NEVER DO: Hardcoded mobile overrides */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .componentScreen {
     padding: 70px 10px 20px 10px; /* BREAKS DESIGN SYSTEM */
   }
@@ -758,7 +798,7 @@ const toggleDetails = (itemId: string) => {
 **Container Spacing Prohibition:**
 ```css
 /* ❌ NEVER ADD: Extra margin/padding on containers inside components */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .itemsContainer,
   .cardsContainer {
     margin-left: 10px;    /* BREAKS CONSISTENCY */
@@ -795,7 +835,7 @@ const toggleDetails = (itemId: string) => {
 }
 
 /* 2. BUT mobile override forced hardcoded values */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .quotationOrdersScreen {
     padding: 70px 10px 20px 10px; /* ❌ WRONG: 70px top override */
   }
@@ -818,7 +858,7 @@ const toggleDetails = (itemId: string) => {
   padding: var(--ds-padding-screen); /* Responsive 20-30px top, 10-20px sides */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   /* Let Design System handle screen padding consistently */
   /* NO hardcoded padding overrides allowed */
 }
