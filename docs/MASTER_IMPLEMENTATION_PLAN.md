@@ -351,6 +351,107 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 ---
 
+### **Sub-Phase 2.1.1: Unified Header Architecture Restructure** ⏱️ *3.5 hours*
+
+**Objective**: Complete architectural restructure to unified header system with clean route separation
+
+**🚨 CRITICAL ARCHITECTURAL ISSUE IDENTIFIED**:
+- Current ProductHeader serves both website + platform contexts (confusion)
+- MobileAppShell has integrated header only for mobile platform
+- Dashboard acts as both platform home + business component (dual identity)  
+- Complex conditional logic with isPlatformPage() checks
+- URL structure mixes platform and website routes
+
+**Target Architecture**:
+```
+Website Routes (Marketing/Public):
+├── / (HomePage - website landing)
+├── /about, /services, /blog, /contact
+
+Platform Routes (Business Application):  
+├── /platform (Default to dashboard)
+├── /platform/dashboard (Business overview)
+├── /platform/leads, /quotes, /orders, /customers, etc.
+```
+
+**Header Architecture Redesign**:
+1. **WebsiteHeader** (Renamed from ProductHeader)
+   - Purpose: Marketing/public pages only
+   - Features: Branding, website navigation, language switcher
+   - Responsive: Mobile and desktop optimized for website
+
+2. **PlatformHeader** (New Unified Component)  
+   - Purpose: Business application pages only
+   - Features: Platform branding, search integration, user context
+   - Responsive: Single component for mobile + desktop platform
+
+**Implementation Plan**:
+```
+✅ Phase 1: Route Structure Migration (30 min) - COMPLETED
+- ✅ Update all platform routes to /platform/* pattern
+- ✅ Update navigation handlers and BottomNavigation
+- ✅ Fixed dual navigation route issue (ElevateBusiness 360° button)
+- ✅ Standardized pathname-based active state detection
+- ✅ Unified header navigation logic across desktop and mobile
+- ✅ Test route changes compile successfully
+- 🎯 Commit: 282af68 - "MOBILE UX V2 - NAVIGATION ROUTE CONSISTENCY"
+
+Phase 2: Header Component Restructure (45 min)  
+- Rename ProductHeader → WebsiteHeader
+- Remove platform logic from WebsiteHeader
+- Create new PlatformHeader component
+
+Phase 3: Create Unified PlatformShell (60 min)
+- Create PlatformShell component with PlatformHeader
+- Integrate GlobalSearch, content area, voice assistant
+- Handle mobile/desktop responsiveness within shell
+
+Phase 4: App.tsx Simplification (30 min)
+- Replace complex conditional logic with route-based logic  
+- Remove isPlatformPage() function
+- Update routing to use WebsiteShell vs PlatformShell
+
+Phase 5: Dashboard Integration (15 min)
+- Update Dashboard to standard business component
+- Make /platform default to dashboard
+- Remove dashboard vs homepage confusion
+
+Phase 6: Cleanup & Testing (30 min)
+- Remove unused imports and conditional logic
+- Test mobile and desktop experiences
+- Verify search, voice, navigation work correctly
+```
+
+**Files Modified**:
+- ✅ Multiple route files - Platform route structure
+- ✅ `ProductHeader.tsx` → `WebsiteHeader.tsx` - Rename and simplify
+- ✅ `PlatformHeader.tsx` - New unified platform header
+- ✅ `PlatformShell.tsx` - New unified platform shell
+- ✅ `App.tsx` - Simplified routing logic
+- ✅ `BottomNavigation.tsx` - Updated routes
+- ✅ Navigation handlers - Updated route patterns
+
+**Validation Criteria**:
+- ✅ Clean route separation: website vs /platform/* (Phase 1 complete)
+- ✅ Consistent navigation logic across desktop and mobile (Phase 1 complete)
+- ✅ Fixed dual navigation routing issues (Phase 1 complete) 
+- ✅ Compilation successful across all routes (Phase 1 complete)
+- [ ] WebsiteHeader handles only marketing pages (Phase 2 pending)
+- [ ] PlatformHeader unified across mobile/desktop (Phase 2 pending)
+- [ ] No isPlatformPage() conditional logic (Phase 4 pending)
+- [ ] Dashboard as standard business component (Phase 5 pending)
+- [ ] All existing functionality preserved (Ongoing)
+
+**Benefits Achieved**:
+- ✅ Clear separation: Website vs Platform distinct
+- ✅ Unified platform experience: Same header for mobile + desktop
+- ✅ Simplified routing: Clean /platform/* structure  
+- ✅ Single responsibility: Each header serves one purpose
+- ✅ Maintainable code: No complex conditional logic
+- ✅ Scalable architecture: Easy to add features
+
+---
+
 ### **Sub-Phase 2.2: Global Header Transformation** ⏱️ *45 minutes*
 
 **Objective**: Transform existing header to match Visual Design Specification mobile pattern
