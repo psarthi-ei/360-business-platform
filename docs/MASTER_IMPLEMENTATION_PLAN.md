@@ -11,7 +11,7 @@
 
 ### **📊 Progress Overview**
 - **Phases Completed**: 0/6 phases (Phase 1 completed - 100% complete)
-- **Sub-Phases Completed**: 4/18 sub-phases (**22% complete**)
+- **Sub-Phases Completed**: 4/19 sub-phases (**21% complete**)
 - **Estimated Time Remaining**: 9-11 hours
 - **Current Compilation Status**: ✅ **"Compiled successfully!"**
 
@@ -96,8 +96,8 @@ Transform current 8-card dashboard system into the complete 5-tab mobile-first V
 
 ## **📋 IMPLEMENTATION ROADMAP**
 
-### **Total Estimated Time**: 8-10 hours across 6 major phases (CORRECTED)
-### **Sub-Phases**: 18 architecturally compliant implementation steps
+### **Total Estimated Time**: 10-13 hours across 6 major phases (UPDATED)
+### **Sub-Phases**: 19 architecturally compliant implementation steps
 ### **Approach**: Extend existing systems with Visual Design Specification styling
 ### **Git Strategy**: Mandatory commit after each sub-phase for rollback safety
 
@@ -283,7 +283,7 @@ git reset --hard <commit-hash>  # Rollback to safe state
 ---
 
 ## **PHASE 2: 5-TAB NAVIGATION IMPLEMENTATION**
-*Duration: 2-3 hours | Sub-phases: 3*
+*Duration: 4-6 hours | Sub-phases: 4*
 
 ### **Sub-Phase 2.1: Core Navigation Component** ⏱️ *60 minutes*
 
@@ -388,7 +388,133 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 ---
 
-### **Sub-Phase 2.3: Screen Routing & State Management** ⏱️ *30 minutes*
+### **Sub-Phase 2.3: Mobile App Shell Architecture Optimization** ⏱️ *3-4 hours*
+
+**Objective**: Restructure mobile app shell to clean 4-container architecture and eliminate spacing/greeting issues
+
+**🚨 CRITICAL FIXES ADDRESSED**:
+- ❌ "Good morning, Ramesh" appearing on mobile navigation  
+- ❌ ProductHeader mobile CSS conflicts with MobileAppShell
+- ❌ Search embedded inside header instead of separate container
+- ❌ Unwanted 6px padding and complex nested containers
+- ❌ Grey background spaces and 75% width constraints
+
+**Technical Implementation**:
+```
+STEP 1: Mobile Greeting & Header Conflicts Fix (30 min)
+1. Remove mobileGreeting element from ProductHeader.tsx
+   - Delete "Good morning, Ramesh 👋" greeting span
+   - Remove backButton and greetingText elements completely
+2. Remove mobile CSS from ProductHeader.module.css  
+   - Delete entire @media (max-width: 768px) block
+   - Remove .mobileGreeting, .backButton, .greetingText classes
+   - Make ProductHeader purely desktop-only component
+3. Verify App.tsx conditional rendering prevents mobile conflicts
+
+STEP 2: Extract Search from Mobile Header (45 min)
+1. Restructure MobileAppShell.tsx to clean 4-container pattern:
+   <div className="mobile-shell">
+     <header className="mobile-header">
+       <div className="nav-row">...</div>  // Pure header only
+     </header>
+     <section className="mobile-search-container">  // NEW: Separate
+       <GlobalSearch />
+     </section>
+     <main className="mobile-content">...</main>
+     <nav className="mobile-bottom-navigation">...</nav>
+   </div>
+
+2. Update MobileAppShell.css layout system
+3. Recalculate height variables for new architecture
+
+STEP 3: Optimize Search Container Spacing (30 min)
+1. Remove 6px padding creating unwanted green debug space
+2. Use design system variables: var(--ds-space-xs)
+3. Fix 75% width constraint causing grey background artifacts
+4. Eliminate complex nested container spacing issues
+
+STEP 4: Simplify GlobalSearch Component Structure (45 min)
+1. Remove universalSearchContainer wrapper (desktop-specific)
+2. Simplify to essential containers: globalSearch → integratedSearch → searchInputWrapper
+3. Clean up redundant positioning and CSS overrides
+4. Restore proper component boundaries
+
+STEP 5: Debug Cleanup & Production Ready (30 min)
+1. Remove all debug colors (red, green, cyan, brown, purple, orange)
+2. Restore original Visual Design Specification styling
+3. Clean up temporary CSS overrides and debug comments
+4. Final testing and compilation verification
+
+STEP 6: Desktop 4-Container Pattern in App.tsx (45 min)
+1. Restructure App.tsx desktop section to match mobile pattern:
+   // Current (messy):
+   <>
+     <ProductHeader />
+     <GlobalSearch />  // Mixed positioning
+     <Routes>...</Routes>
+   </>
+   
+   // Target (clean 4-container):
+   <div className="desktop-layout">
+     <header className="desktop-header">
+       <ProductHeader />
+     </header>
+     <section className="desktop-search-container">
+       <GlobalSearch />
+     </section>
+     <main className="desktop-content">
+       <Routes>...</Routes>
+     </main>
+     <nav className="desktop-navigation">
+       {/* Desktop nav - sidebar/top nav */}
+     </nav>
+   </div>
+
+2. Create desktop layout CSS for 4-container pattern:
+   - Remove fixed positioning from desktop search
+   - Use normal document flow like mobile
+   - Proper height calculations without position: fixed complexity
+
+3. Ensure GlobalSearch works in both mobile and desktop containers:
+   - Same component, different container styling
+   - Remove desktop-specific positioning wrappers
+   - Unified component behavior across platforms
+```
+
+**🚨 ARCHITECTURAL COMPLIANCE**: 
+- Maintains existing unified voice/search architecture
+- Follows Visual Design Specification 4-container pattern
+- No duplication of existing systems
+- Extends current mobile-first responsive design
+
+**Files Modified**:
+- `ProductHeader.tsx` - Remove mobile greeting elements
+- `ProductHeader.module.css` - Remove mobile responsive CSS
+- `MobileAppShell.tsx` - Extract search to separate container  
+- `MobileAppShell.css` - Implement clean 4-container layout
+- `GlobalSearch.tsx` - Simplify component structure
+- `GlobalSearch.module.css` - Clean up and restore styling
+- `App.tsx` - Restructure desktop section to 4-container pattern
+- `App.css` - Add desktop 4-container layout styles
+
+**Validation Criteria**:
+- [ ] No "Good morning, Ramesh" appears on any mobile navigation
+- [ ] ProductHeader never renders on mobile screens (≤768px)
+- [ ] Clean 4-container mobile architecture: header → search → content → navigation
+- [ ] Desktop App.tsx follows same 4-container pattern as mobile
+- [ ] No fixed positioning in desktop layout
+- [ ] Same GlobalSearch component works in both mobile and desktop containers
+- [ ] No unwanted spacing, padding, or grey background artifacts
+- [ ] All debug colors removed, Visual Design Spec styling restored
+- [ ] Compilation status: ✅ "Compiled successfully!"
+
+**🔄 Git Commit**: `MOBILE UX V2 - SUB-PHASE 2.3: Mobile App Shell Architecture Optimization`
+
+**Expected Result**: Production-ready mobile architecture with proper container separation, no greeting conflicts, optimized spacing, and full Visual Design Specification compliance.
+
+---
+
+### **Sub-Phase 2.4: Screen Routing & State Management** ⏱️ *30 minutes*
 
 **Objective**: Implement proper routing for 5 main tabs with state preservation
 
