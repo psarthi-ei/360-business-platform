@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import HeaderDropdown from './HeaderDropdown';
 import styles from './ProductHeader.module.css';
 import logoImage from '../../assets/images/logo.png';
@@ -21,7 +22,6 @@ interface ProductHeaderProps {
   userMode?: string;
   // Website Navigation Props
   showWebsiteNavigation?: boolean;
-  currentScreen?: string;
   onServicesHub?: () => void;
   onTurnaroundStories?: () => void;
   onBlogHome?: () => void;
@@ -48,13 +48,27 @@ function ProductHeader({
   userMode = 'guest',
   // Website Navigation Props
   showWebsiteNavigation = false,
-  currentScreen = '',
   onServicesHub,
   onTurnaroundStories,
   onBlogHome,
   onAbout,
   onContact
 }: ProductHeaderProps) {
+  const location = useLocation();
+  
+  // Helper function for consistent active route detection
+  const isActiveRoute = (routePath: string): boolean => {
+    const currentPath = location.pathname;
+    
+    // Special case for blog routes (both /blog and /blog/* should be active)
+    if (routePath === '/blog') {
+      return currentPath === '/blog' || currentPath.startsWith('/blog/');
+    }
+    
+    // Exact match for other routes
+    return currentPath === routePath;
+  };
+  
   return (
     <div className={styles.productHeader}>
       <div className={styles.headerContent}>
@@ -84,42 +98,42 @@ function ProductHeader({
             <nav className={styles.websiteNavigation}>
               <button 
                 onClick={isAuthenticated || userMode !== 'guest' ? onDashboard : onDemoMode} 
-                className={`${styles.navButton} ${['dashboard', 'leads', 'quotations', 'salesorders', 'advancepayment', 'invoices', 'customerprofile', 'customerlist', 'inventory', 'fulfillment', 'analytics'].includes(currentScreen) ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${location.pathname.startsWith('/platform') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>ElevateBusiness 360°</span>
               </button>
               
               <button 
                 onClick={onServicesHub} 
-                className={`${styles.navButton} ${currentScreen === 'services-hub' ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${isActiveRoute('/services') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>Consulting Services</span>
               </button>
               
               <button 
                 onClick={onAbout} 
-                className={`${styles.navButton} ${currentScreen === 'about' ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${isActiveRoute('/about') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>About Us</span>
               </button>
               
               <button 
                 onClick={onTurnaroundStories} 
-                className={`${styles.navButton} ${currentScreen === 'turnaround-stories' ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${isActiveRoute('/turnaround-stories') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>Turnaround Stories</span>
               </button>
               
               <button 
                 onClick={onBlogHome} 
-                className={`${styles.navButton} ${currentScreen === 'blog-home' || currentScreen === 'blog-post' ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${isActiveRoute('/blog') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>365 Days of Stories</span>
               </button>
               
               <button 
                 onClick={onContact} 
-                className={`${styles.navButton} ${currentScreen === 'contact' ? styles.activeNavButton : ''}`}
+                className={`${styles.navButton} ${isActiveRoute('/contact') ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>Contact</span>
               </button>
@@ -150,6 +164,7 @@ function ProductHeader({
             onLanguageChange={onLanguageChange}
             currentTheme={currentTheme}
             onThemeChange={onThemeChange}
+            onDashboard={onDashboard}
             showThemeSelector={showThemeSelector}
             onLogin={onLogin}
             onSignUp={onSignUp}

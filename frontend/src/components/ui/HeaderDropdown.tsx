@@ -7,6 +7,7 @@ interface HeaderDropdownProps {
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
   onNavigateHome?: () => void;
+  onDashboard?: () => void;
   showThemeSelector?: boolean;
   onLogin?: () => void;
   onSignUp?: () => void;
@@ -30,6 +31,7 @@ function HeaderDropdown({
   currentTheme,
   onThemeChange,
   onNavigateHome,
+  onDashboard,
   showThemeSelector = true,
   onLogin,
   onSignUp,
@@ -103,7 +105,12 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  onDemoMode?.();
+                  // Match ProductHeader logic: authenticated users or non-guest users go to dashboard, others to demo
+                  if (isAuthenticated || userMode !== 'guest') {
+                    onDashboard?.();
+                  } else {
+                    onDemoMode?.();
+                  }
                   setIsOpen(false);
                 }}
               >

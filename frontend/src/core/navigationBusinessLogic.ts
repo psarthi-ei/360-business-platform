@@ -12,23 +12,23 @@ export interface NavigationStateSetters {
 export function createNavigationHelpers(navigate: NavigateFunction, stateSetters?: NavigationStateSetters) {
   return {
     showHomePage: () => navigate('/'),
-    showDashboard: () => navigate('/dashboard'),
+    showDashboard: () => navigate('/platform/home'),
     showLeadManagement: (autoAction?: string, actionParams?: ActionParams) => {
       if (autoAction === 'add-lead' || autoAction === 'ADD_NEW_LEAD') {
-        navigate('/leads?action=add-lead');
+        navigate('/platform/leads?action=add-lead');
       } else {
-        navigate('/leads');
+        navigate('/platform/leads');
       }
     },
-    showQuotationOrders: () => navigate('/quotes'),
-    showSalesOrders: () => navigate('/orders'),
-    showPayments: () => navigate('/payments'),
-    showInvoices: () => navigate('/invoices'),
-    showCustomerList: () => navigate('/customers'),
-    showCustomerProfile: (customerId: string) => navigate(`/customers/${customerId}`),
-    showInventory: () => navigate('/inventory'),
-    showFulfillment: () => navigate('/fulfillment'),
-    showAnalytics: () => navigate('/analytics'),
+    showQuotationOrders: () => navigate('/platform/quotes'),
+    showSalesOrders: () => navigate('/platform/orders'),
+    showPayments: () => navigate('/platform/payments'),
+    showInvoices: () => navigate('/platform/invoices'),
+    showCustomerList: () => navigate('/platform/customers'),
+    showCustomerProfile: (customerId: string) => navigate(`/platform/customers/${customerId}`),
+    showInventory: () => navigate('/platform/inventory'),
+    showFulfillment: () => navigate('/platform/fulfillment'),
+    showAnalytics: () => navigate('/platform/analytics'),
     showLogin: () => navigate('/login'),
     showSignUp: () => navigate('/signup'),
     showServicesHub: () => navigate('/services'),
@@ -37,7 +37,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
     showBlogPost: (slug: string) => navigate(`/blog/${slug}`),
     showAbout: () => navigate('/about'),
     showContact: () => navigate('/contact'),
-    showQuoteFromLead: (leadId: string) => navigate(`/quotes?from-lead=${leadId}`),
+    showQuoteFromLead: (leadId: string) => navigate(`/platform/quotes?from-lead=${leadId}`),
     showProfileCompletion: () => navigate('/profile-completion'),
     
     // Enhanced navigation functions with state management
@@ -45,7 +45,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
       if (stateSetters?.setSelectedCustomerId) {
         stateSetters.setSelectedCustomerId(customerId);
       }
-      navigate(`/customers/${customerId}`);
+      navigate(`/platform/customers/${customerId}`);
     },
     
     showServicesHubWithReset: () => {

@@ -45,48 +45,17 @@ import { createAllRoutes, RenderFunctions } from './core/routeBusinessLogic';
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
 
-// Helper function to determine if current screen is a platform page (needs universal search)
-function isPlatformPage(currentScreen: string): boolean {
-  const platformPages = [
-    'dashboard',
-    'home',
-    'leads', 
-    'quotes',
-    'orders',
-    'payments',
-    'invoices',
-    'customerprofile',
-    'customers',
-    'inventory',
-    'fulfillment',
-    'analytics',
-    'sales',
-    'production',
-    'procurement'
-  ];
-  return platformPages.includes(currentScreen);
+// Helper function to determine if current path is a platform page (needs universal search)
+function isPlatformPage(pathname: string): boolean {
+  return pathname.startsWith('/platform');
 }
 
 // Helper function to get screen name from pathname
 function getScreenFromPath(pathname: string): string {
+  // Website routes
   if (pathname === '/') return 'homepage';
   if (pathname === '/login') return 'login';
   if (pathname === '/signup') return 'signup';
-  if (pathname === '/dashboard') return 'dashboard';
-  if (pathname === '/home') return 'home';
-  if (pathname === '/leads') return 'leads';
-  if (pathname === '/quotes') return 'quotes';
-  if (pathname === '/orders') return 'orders';
-  if (pathname === '/payments') return 'payments';
-  if (pathname === '/invoices') return 'invoices';
-  if (pathname.startsWith('/customers/')) return 'customerprofile';
-  if (pathname === '/customers') return 'customers';
-  if (pathname === '/inventory') return 'inventory';
-  if (pathname === '/fulfillment') return 'fulfillment';
-  if (pathname === '/analytics') return 'analytics';
-  if (pathname === '/sales') return 'sales';
-  if (pathname === '/production') return 'production';
-  if (pathname === '/procurement') return 'procurement';
   if (pathname === '/services') return 'services-hub';
   if (pathname === '/turnaround-stories') return 'turnaround-stories';
   if (pathname === '/blog') return 'blog-home';
@@ -94,6 +63,24 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/about') return 'about';
   if (pathname === '/contact') return 'contact';
   if (pathname === '/profile-completion') return 'profilecompletion';
+  
+  // Platform routes - /platform/* pattern only
+  if (pathname === '/platform' || pathname === '/platform/dashboard') return 'dashboard';
+  if (pathname === '/platform/home') return 'home';
+  if (pathname === '/platform/leads') return 'leads';
+  if (pathname === '/platform/quotes') return 'quotes';
+  if (pathname === '/platform/orders') return 'orders';
+  if (pathname === '/platform/payments') return 'payments';
+  if (pathname === '/platform/invoices') return 'invoices';
+  if (pathname.startsWith('/platform/customers/')) return 'customerprofile';
+  if (pathname === '/platform/customers') return 'customers';
+  if (pathname === '/platform/inventory') return 'inventory';
+  if (pathname === '/platform/fulfillment') return 'fulfillment';
+  if (pathname === '/platform/analytics') return 'analytics';
+  if (pathname === '/platform/sales') return 'sales';
+  if (pathname === '/platform/production') return 'production';
+  if (pathname === '/platform/procurement') return 'procurement';
+  
   return 'homepage';
 }
 
@@ -235,19 +222,19 @@ function AppContent() {
   function handleAuthSuccess() {
     setIsAuthenticated(true);
     setUserMode('authenticated');
-    navigate('/dashboard');
+    showDashboard();
   }
 
   function handleGuestMode() {
     setUserMode('guest');
     setIsAuthenticated(false);
-    navigate('/dashboard');
+    showDashboard();
   }
 
   function handleDemoMode() {
     setUserMode('demo');
     setIsAuthenticated(false);
-    navigate('/dashboard');
+    showDashboard();
   }
 
   function handleLogout() {
@@ -606,7 +593,7 @@ function AppContent() {
           <div className="App-content">
         
         {/* Responsive Layout: Mobile vs Desktop */}
-        {isMobile && isPlatformPage(currentScreen) ? (
+        {isMobile && isPlatformPage(location.pathname) ? (
           // Mobile Layout with MobileAppShell for Platform Pages
           <MobileAppShell 
             onUniversalAction={handleUniversalAction}
@@ -622,7 +609,6 @@ function AppContent() {
             isAuthenticated={isAuthenticated}
             userMode={userMode}
             showWebsiteNavigation={true}
-            currentScreen={currentScreen}
             onServicesHub={showServicesHubWithReset}
             onTurnaroundStories={showTurnaroundStories}
             onBlogHome={showBlogHome}
@@ -650,7 +636,6 @@ function AppContent() {
                 isAuthenticated={isAuthenticated}
                 userMode={userMode}
                 showWebsiteNavigation={true}
-                currentScreen={currentScreen}
                 onServicesHub={showServicesHubWithReset}
                 onTurnaroundStories={showTurnaroundStories}
                 onBlogHome={showBlogHome}
@@ -659,7 +644,7 @@ function AppContent() {
               />
             
             {/* Universal Search Bar - Only on Platform Pages (Desktop) */}
-            {isPlatformPage(currentScreen) && (
+            {isPlatformPage(location.pathname) && (
               <GlobalSearch
                 ref={globalSearchRef}
                 searchScope={getSearchScope(currentScreen)}
@@ -669,7 +654,7 @@ function AppContent() {
             )}
             
             {/* Universal Voice Assistant - Only on Platform Pages (Desktop) */}
-            {isPlatformPage(currentScreen) && (
+            {isPlatformPage(location.pathname) && (
               <FloatingVoiceAssistant
                 currentProcessStage={getCurrentProcessStage(location.pathname)}
                 onUniversalAction={handleUniversalAction}
