@@ -2,6 +2,7 @@ import React from 'react';
 import HeaderDropdown from './HeaderDropdown';
 import styles from './PlatformHeader.module.css';
 import logoImage from '../../assets/images/logo.png';
+import { companyName, tagline, logoAlt } from '../../config/brand';
 
 interface PlatformHeaderProps {
   currentLanguage: string;
@@ -33,23 +34,45 @@ function PlatformHeader({
   return (
     <div className={styles.platformHeader}>
       <div className={styles.headerContent}>
-        {/* Logo Section - Responsive for both mobile and desktop */}
+        {/* Desktop Logo Section */}
         <div className={styles.logoSection}>
-          {/* Desktop Logo */}
           <div className={`${styles.logo} ${styles.desktopOnly}`} onClick={onHome}>
-            <img src={logoImage} alt="ElevateBusiness" className={styles.logoImage} />
+            <img src={logoImage} alt={logoAlt} className={styles.logoImage} />
             <div className={styles.logoTextContainer}>
-              <span className={styles.logoText}>ElevateBusiness 360°</span>
-              <span className={styles.logoTagline}>Complete Business Management</span>
+              <span className={styles.logoText}>{companyName}</span>
+              <span className={styles.logoTagline}>{tagline}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Mobile Header - Outside logoSection */}
+        <div className={styles.mobileHeader}>
+          {/* Left: Logo + Company Name + Tagline */}
+          <div className={styles.brandSection} onClick={onHome}>
+            <img src={logoImage} alt={logoAlt} className={styles.brandLogo} />
+            <div className={styles.brandInfo}>
+              <div className={styles.brandName}>{companyName}</div>
+              <div className={styles.brandTagline}>{tagline}</div>
             </div>
           </div>
           
-          {/* Mobile Greeting - Visual Design Specification */}
-          <div className={styles.mobileGreeting}>
-            <button className={styles.backButton} onClick={onHome} title="Go back">
-              ←
-            </button>
-            <span className={styles.greetingText}>Good morning, Ramesh 👋</span>
+          {/* Right: Notification + Debug + Hamburger */}
+          <div className={styles.navActions}>
+            <button className={styles.notificationButton} title="Notifications">🔔</button>
+            <button className={styles.debugButton} title="Debug">&lt;/&gt;</button>
+            <HeaderDropdown
+              currentLanguage={currentLanguage}
+              onLanguageChange={onLanguageChange}
+              showThemeSelector={false}
+              onLogin={onLogin}
+              onSignUp={onSignUp}
+              onGuestMode={onGuestMode}
+              onDemoMode={onDemoMode}
+              onLogout={onLogout}
+              isAuthenticated={isAuthenticated}
+              userMode={userMode}
+              showWebsiteNavigation={false}
+            />
           </div>
         </div>
         
@@ -61,13 +84,8 @@ function PlatformHeader({
           </div>
         </div>
         
-        {/* Controls Section - Responsive for both mobile and desktop */}
+        {/* Controls Section - Desktop Only */}
         <div className={styles.controlsSection}>
-          {/* Mobile Notification Icon */}
-          <button className={styles.notificationButton} title="Notifications">
-            🔔
-          </button>
-          
           <HeaderDropdown
             currentLanguage={currentLanguage}
             onLanguageChange={onLanguageChange}

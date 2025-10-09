@@ -1,0 +1,101 @@
+/* Platform Shell - Unified container for all business application pages */
+.platformShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background, #ffffff);
+}
+
+/* Platform Content Area - Mobile Layout */
+.platformContentMobile {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  
+  /* Provide clearance for fixed positioned elements */
+  padding-top: var(--platform-header-height, 64px);
+  
+  /* Account for GlobalSearch if present */
+  margin-top: var(--global-search-height, 0);
+  
+  /* Account for bottom navigation on mobile */
+  padding-bottom: var(--mobile-bottom-nav-height, 64px);
+}
+
+/* Platform Content Area - Desktop Layout */
+.platformContentDesktop {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  
+  /* Provide clearance for fixed positioned elements */
+  padding-top: var(--platform-header-height, 64px);
+  
+  /* Account for GlobalSearch if present */
+  margin-top: var(--global-search-height, 0);
+  
+  /* Account for left sidebar on desktop */
+  margin-left: 280px; /* Match LeftSidebarNavigation width */
+  
+  /* Responsive adjustment for large desktops */
+  transition: margin-left 0.3s ease;
+}
+
+/* Desktop specific styles */
+@media (min-width: 1025px) {
+  .platformContentDesktop {
+    /* Desktop has more header space and search bar */
+    padding-top: var(--platform-header-height-desktop, 80px);
+    margin-top: var(--global-search-height-desktop, 60px);
+  }
+}
+
+/* Large desktop optimization - adjust for wider sidebar */
+@media (min-width: 1400px) {
+  .platformContentDesktop {
+    margin-left: 320px; /* Match LeftSidebarNavigation large desktop width */
+  }
+}
+
+/* Mobile/Tablet specific styles */
+@media (max-width: 1024px) {
+  .platformShell {
+    /* Mobile shell should take full viewport */
+    min-height: 100vh;
+    background: var(--color-background, #ffffff);
+  }
+  
+  .platformContentMobile {
+    /* Mobile header is smaller */
+    padding-top: var(--platform-header-height-mobile, 64px);
+    margin-top: var(--global-search-height-mobile, 48px);
+    
+    /* Ensure content doesn't get cut off */
+    padding-bottom: var(--mobile-bottom-nav-height, 64px);
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  .platformContentMobile {
+    /* Tighter spacing on small screens */
+    padding-top: calc(var(--platform-header-height-mobile, 64px) - 4px);
+    margin-top: calc(var(--global-search-height-mobile, 48px) - 4px);
+    /* Adjust for larger bottom navigation on small screens */
+    padding-bottom: 80px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .platformShell {
+    border: 2px solid var(--color-border, #e2e8f0);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .platformShell {
+    transition: none;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from 'react-router-dom';
@@ -31,24 +31,16 @@ import { HelmetProvider } from 'react-helmet-async';
 // Theme-related imports removed for MVP simplicity
 import { scrollToTop } from './utils/scrollUtils';
 import { createVoiceCommandRouter } from './services/voice/VoiceCommandRouter';
-import GlobalSearch, { GlobalSearchRef } from './components/search/GlobalSearch';
-import FloatingVoiceAssistant from './components/voice/FloatingVoiceAssistant';
-import { getSearchScope /*, getVoiceScope*/ } from './core/scopeResolver';
+// GlobalSearch and FloatingVoiceAssistant now handled by PlatformShell
 import { useResponsive } from './hooks/useResponsive';
-import MobileAppShell from './components/mobile/MobileAppShell';
-import { getSearchDataSources, getSearchNavigationHandlers } from './core/searchBusinessLogic';
+import PlatformShell from './components/platform/PlatformShell';
 import { createNavigationHelpers } from './core/navigationBusinessLogic';
-import { getBusinessData, getCurrentProcessStage } from './core/businessDataLogic';
 import { createUniversalActionHandler } from './core/voiceBusinessLogic';
 import { createAllRoutes, RenderFunctions } from './core/routeBusinessLogic';
+import { isPlatformPage } from './utils/pageDetection';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
-
-// Helper function to determine if current path is a platform page (needs universal search)
-function isPlatformPage(pathname: string): boolean {
-  return pathname.startsWith('/platform');
-}
 
 // Helper function to get screen name from pathname
 function getScreenFromPath(pathname: string): string {
@@ -104,8 +96,7 @@ function AppContent() {
   const [profileLinkId] = useState('');
   const [profileQuoteId] = useState('');
   
-  // Ref to GlobalSearch component for direct search calls
-  const globalSearchRef = useRef<GlobalSearchRef>(null);
+  // GlobalSearch ref now handled within PlatformShell
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
@@ -150,18 +141,11 @@ function AppContent() {
     showBlogPostWithState
   } = navigationHelpers;
 
-  // Universal search function - Execute search on current page
+  // Universal search function - Now handled by PlatformShell
   const handleUniversalSearch = useCallback((query: string) => {
     // eslint-disable-next-line no-console
     console.log('🔍 Universal search triggered with query:', query);
-    
-    // Trigger search on current page via GlobalSearch component
-    if (globalSearchRef.current) {
-      globalSearchRef.current.performSearch(query);
-    } else {
-      // eslint-disable-next-line no-console
-      console.warn('⚠️ GlobalSearch ref not available, search cannot be executed');
-    }
+    // Note: Actual search execution now handled within PlatformShell
   }, []);
 
   // Create VoiceCommandRouter instance
@@ -592,15 +576,13 @@ function AppContent() {
           <div className="App">
           <div className="App-content">
         
-        {/* Responsive Layout: Mobile vs Desktop */}
-        {isMobile && isPlatformPage(location.pathname) ? (
-          // Mobile Layout with MobileAppShell for Platform Pages
-          <MobileAppShell 
-            onUniversalAction={handleUniversalAction}
+        {/* Clean Layout Separation: Platform vs Website */}
+        {isPlatformPage(location.pathname) ? (
+          // Platform Application (Business Pages) - Unified Shell for Mobile and Desktop
+          <PlatformShell
             currentLanguage={currentLanguage}
             onLanguageChange={switchLanguage}
             onHome={showHomePage}
-            onDashboard={showDashboard}
             onLogin={showLogin}
             onSignUp={showSignUp}
             onGuestMode={handleGuestMode}
@@ -608,20 +590,17 @@ function AppContent() {
             onLogout={handleLogout}
             isAuthenticated={isAuthenticated}
             userMode={userMode}
-            showWebsiteNavigation={true}
-            onServicesHub={showServicesHubWithReset}
-            onTurnaroundStories={showTurnaroundStories}
-            onBlogHome={showBlogHome}
-            onAbout={showAbout}
-            onContact={showContact}
+            currentScreen={currentScreen}
+            onUniversalAction={handleUniversalAction}
+            onPerformSearch={handleUniversalSearch}
           >
             <Routes>
               {createAllRoutes(renderFunctions)}
               <Route path="*" element={renderDashboard()} />
             </Routes>
-          </MobileAppShell>
+          </PlatformShell>
         ) : (
-          // Desktop Layout or Website Pages
+          // Website Pages (Marketing/Public)
           <>
             <WebsiteHeader
                 currentLanguage={currentLanguage}
@@ -642,26 +621,6 @@ function AppContent() {
                 onAbout={showAbout}
                 onContact={showContact}
               />
-            
-            {/* Universal Search Bar - Only on Platform Pages (Desktop) */}
-            {isPlatformPage(location.pathname) && (
-              <GlobalSearch
-                ref={globalSearchRef}
-                searchScope={getSearchScope(currentScreen)}
-                dataSources={getSearchDataSources()}
-                navigationHandlers={getSearchNavigationHandlers(navigate)}
-              />
-            )}
-            
-            {/* Universal Voice Assistant - Only on Platform Pages (Desktop) */}
-            {isPlatformPage(location.pathname) && (
-              <FloatingVoiceAssistant
-                currentProcessStage={getCurrentProcessStage(location.pathname)}
-                onUniversalAction={handleUniversalAction}
-                onPerformSearch={handleUniversalSearch}
-                businessData={getBusinessData()}
-              />
-            )}
             
             <Routes>
               {createAllRoutes(renderFunctions)}

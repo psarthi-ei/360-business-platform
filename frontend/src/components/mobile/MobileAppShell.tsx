@@ -11,6 +11,7 @@ import { createUniversalActionHandler } from '../../core/voiceBusinessLogic';
 import { createVoiceCommandRouter } from '../../services/voice/VoiceCommandRouter';
 import logoImage from '../../assets/images/logo.png';
 import BottomNavigation from './BottomNavigation';
+import { companyName, tagline, logoAlt } from '../../config/brand';
 import './MobileAppShell.css';
 
 interface MobileAppShellProps {
@@ -111,10 +112,10 @@ const MobileAppShell: React.FC<MobileAppShellProps> = ({
             onClick={() => onHome ? onHome() : navigate('/')}
             style={{ cursor: 'pointer' }}
           >
-            <img src={logoImage} alt="ElevateIdea" className="brand-logo" />
+            <img src={logoImage} alt={logoAlt} className="brand-logo" />
             <div className="brand-info">
-              <div className="brand-name">ElevateIdea</div>
-              <div className="brand-tagline">Scaling Business with Technology</div>
+              <div className="brand-name">{companyName}</div>
+              <div className="brand-tagline">{tagline}</div>
             </div>
           </div>
           
