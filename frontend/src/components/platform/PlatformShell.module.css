@@ -51,7 +51,7 @@
 .contentArea {
   grid-area: content;
   overflow-y: auto;
-  padding: var(--ds-space-xs, 8px) var(--ds-space-l, 24px) var(--ds-space-l, 24px) var(--ds-space-l, 24px);
+  padding: var(--ds-space-m, 16px) var(--ds-space-l, 24px) var(--ds-space-l, 24px) var(--ds-space-l, 24px);
   background: var(--color-background, #F3F4F6);
   z-index: 1;
 }
@@ -92,7 +92,7 @@
       "content"
       "navigation";
     grid-template-columns: 1fr;
-    grid-template-rows: 56px 48px 1fr 64px;
+    grid-template-rows: 56px 72px 1fr 64px;
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
@@ -116,14 +116,14 @@
   }
   
   .contentArea {
-    padding: var(--ds-space-xs, 8px) var(--ds-space-m, 16px) var(--ds-space-m, 16px) var(--ds-space-m, 16px);
+    padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px) var(--ds-space-m, 16px) var(--ds-space-m, 16px);
   }
 }
 
 /* Small Mobile (480px and below) - Optimize for smaller screens */
 @media (max-width: 480px) {
   .platformShell {
-    grid-template-rows: 56px 48px 1fr 80px; /* Larger navigation on small screens */
+    grid-template-rows: 56px 72px 1fr 80px; /* Larger navigation on small screens */
   }
   
   .contentArea {

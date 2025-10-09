@@ -324,7 +324,7 @@ body {
 /* Desktop-specific Universal Search Clearance */
 @media (min-width: 769px) {
   .App-content .platformPageContent {
-    padding-top: var(--platform-content-top);
+    padding-top: 0; /* PlatformShell CSS Grid handles layout - no top padding needed */
     /* Desktop containers need clearance for universal search bar */
   }
   

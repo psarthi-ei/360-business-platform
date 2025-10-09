@@ -2,7 +2,6 @@
 .dashboard {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding-top: 80px; /* Account for fixed header */
   position: relative;
 }
 
@@ -24,7 +23,7 @@
 .dashboardContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 10px 40px 40px 40px;
+  padding: 20px 40px 40px 40px;
   position: relative;
   z-index: 1;
 }
@@ -5345,9 +5344,9 @@
 
 /* Mobile Dashboard V2 Container */
 .mobile-dashboard-v2 {
-  padding: 16px;
+  padding: 0; /* PlatformShell contentArea handles padding */
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  min-height: 100vh;
+  min-height: 100%; /* Fit within parent grid area instead of full viewport */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -5755,7 +5754,7 @@
 
 @media (max-width: 480px) {
   .mobile-dashboard-v2 {
-    padding: 12px;
+    padding: 0; /* PlatformShell contentArea handles padding */
     gap: 16px;
   }
   
