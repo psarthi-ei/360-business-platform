@@ -13,10 +13,8 @@
   z-index: 1;
   
   /* Provide clearance for fixed positioned elements */
-  padding-top: var(--platform-header-height, 64px);
-  
-  /* Account for GlobalSearch if present */
-  margin-top: var(--global-search-height, 0);
+  /* Header (56px) + Search (64px with padding) = 120px total clearance */
+  padding-top: 120px;
   
   /* Account for bottom navigation on mobile */
   padding-bottom: var(--mobile-bottom-nav-height, 64px);
@@ -66,9 +64,8 @@
   }
   
   .platformContentMobile {
-    /* Mobile header is smaller */
-    padding-top: var(--platform-header-height-mobile, 64px);
-    margin-top: var(--global-search-height-mobile, 48px);
+    /* Mobile: Header (56px) + Search (64px with padding) = 120px total clearance */
+    padding-top: 120px;
     
     /* Ensure content doesn't get cut off */
     padding-bottom: var(--mobile-bottom-nav-height, 64px);
@@ -78,9 +75,8 @@
 /* Extra small mobile screens */
 @media (max-width: 480px) {
   .platformContentMobile {
-    /* Tighter spacing on small screens */
-    padding-top: calc(var(--platform-header-height-mobile, 64px) - 4px);
-    margin-top: calc(var(--global-search-height-mobile, 48px) - 4px);
+    /* Same clearance on small screens: Header (56px) + Search (64px) = 120px */
+    padding-top: 120px;
     /* Adjust for larger bottom navigation on small screens */
     padding-bottom: 80px;
   }

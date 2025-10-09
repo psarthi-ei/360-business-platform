@@ -9,7 +9,7 @@
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   padding: 8px 0;
-  min-height: 56px;
+  height: 56px;
   color: #333;
 }
 
@@ -74,77 +74,7 @@
   white-space: nowrap;
 }
 
-/* Simple Mobile Header */
-.mobileHeader {
-  display: none; /* Hide by default, show on mobile */
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  height: 56px;
-  color: white;
-}
-
-.brandSection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.brandLogo {
-  height: 32px;
-  width: auto;
-}
-
-.brandInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.brandName {
-  font-size: 16px;
-  font-weight: 700;
-  color: #333;
-  text-align: left;
-}
-
-.brandTagline {
-  font-size: 12px;
-  color: #666;
-  text-align: left;
-}
-
-.navActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-}
-
-
-.notificationButton {
-  background: none;
-  border: none;
-  color: #667eea;
-  font-size: 18px;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.notificationButton:hover {
-  background: rgba(102, 126, 234, 0.1);
-}
-
-.debugButton {
-  background: #2c3e50;
-  border: 1px solid #1abc9c;
-  color: #1abc9c;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+/* Removed redundant mobile header styles - HeaderDropdown handles responsiveness */
 
 
 /* Platform Context - Business Information */
@@ -189,41 +119,50 @@
   display: flex;
 }
 
-/* Mobile Responsive - Fix Header Visibility */
+/* Mobile Responsive - Simplified for unified header */
 @media (max-width: 768px) {
   .platformHeader {
     padding: 0;
-    height: 56px;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
   }
   
   .headerContent {
     height: 100%;
-    padding: 0;
+    padding: 0 16px;
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
   }
   
-  /* Show mobile header, hide desktop elements */
-  .mobileHeader {
+  /* Hide platform context on mobile to save space */
+  .platformContext {
+    display: none;
+  }
+  
+  /* Adjust logo section for mobile */
+  .logoSection {
     display: flex;
-    width: 100%;
-    height: 100%;
+    align-items: center;
+    gap: 8px;
   }
   
-  .desktopOnly,
-  .logoSection,
-  .platformContext,
-  .controlsSection {
-    display: none;
+  .logoImage {
+    height: 28px;
   }
-}
-
-/* Desktop Responsive - Hide mobile-only elements */
-@media (min-width: 769px) {
-  .mobileHeader {
-    display: none;
+  
+  .logoTextContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logoText {
+    font-size: 14px;
+  }
+  
+  .logoTagline {
+    font-size: 9px;
   }
 }
 

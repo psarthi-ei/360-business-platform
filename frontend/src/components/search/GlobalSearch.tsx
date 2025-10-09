@@ -30,10 +30,10 @@ export interface GlobalSearchRef {
   performSearch: (query: string) => void;
 }
 
-const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({ 
-  searchScope, // Accept scope from configuration
-  dataSources, 
-  navigationHandlers, 
+const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
+  searchScope,
+  dataSources,
+  navigationHandlers,
   placeholder = "Search leads, customers, orders...",
   className = "",
   searchState
@@ -163,56 +163,50 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   console.log('Should render SearchResults?', showSearchResults && searchResults.length > 0);
 
   return (
-    <div className={styles.universalSearchContainer}>
-      <div className={styles.universalSearch} style={{ width: '100%', maxWidth: '700px' }}>
-        <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef} style={{ width: '100%', maxWidth: '100%' }}>
-          <div className={styles.integratedSearch} style={{ width: '75%', maxWidth: '600px' }}>
-            <div className={styles.searchInputWrapper} style={{ width: '100%', maxWidth: '100%' }}>
-              <span className={styles.searchIcon}>🔍</span>
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder={placeholder}
-                value={searchQuery}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyDown}
-                className={styles.searchInput}
-                autoComplete="off"
-                aria-label="Global search"
-                aria-haspopup="listbox"
-              />
-              <button 
-                className={styles.voiceIcon}
-                title="Voice search"
-                aria-label="Voice search"
-                type="button"
-              >
-                🎙
-              </button>
-              {searchQuery && (
-                <button 
-                  className={styles.clearSearch} 
-                  onClick={clearSearch}
-                  aria-label="Clear search"
-                  type="button"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            
-            {/* Search Results */}
-            {showSearchResults && (
-              <SearchResults
-                results={searchResults}
-                searchQuery={searchQuery}
-                onClose={closeSearchResults}
-              />
-            )}
-          </div>
+    <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef}>
+      <div className={styles.integratedSearch}>
+        <div className={styles.searchInputWrapper}>
+          <span className={styles.searchIcon}>🔍</span>
+          <input
+            ref={searchInputRef}
+            type="text"
+            placeholder={placeholder}
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
+            className={styles.searchInput}
+            autoComplete="off"
+            aria-label="Global search"
+            aria-haspopup="listbox"
+          />
+          <button 
+            className={styles.voiceIcon}
+            title="Voice search"
+            aria-label="Voice search"
+            type="button"
+          >
+            🎙
+          </button>
+          {searchQuery && (
+            <button 
+              className={styles.clearSearch} 
+              onClick={clearSearch}
+              aria-label="Clear search"
+              type="button"
+            >
+              ×
+            </button>
+          )}
         </div>
         
-        {/* Voice functionality removed - now handled by universal FloatingVoiceAssistant in App.tsx */}
+        {/* Search Results */}
+        {showSearchResults && (
+          <SearchResults
+            results={searchResults}
+            searchQuery={searchQuery}
+            onClose={closeSearchResults}
+          />
+        )}
       </div>
     </div>
   );

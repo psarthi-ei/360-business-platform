@@ -1,21 +1,25 @@
 /* GlobalSearch Component - Extracted from Dashboard */
 
-/* Main Search Container */
+/* Main Search Container - Fixed positioned for mobile */
 .globalSearch {
-  position: relative;
-  z-index: 9999; /* Highest priority to appear above all elements */
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  height: 64px; /* 48px search + 16px padding */
 }
 
-/* Integrated Search - Google Style */
+/* Integrated Search - Simplified container */
 .integratedSearch {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 4px auto 30px auto;
-  max-width: 100% !important;
-  width: 100% !important;
-  position: relative;
-  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  padding: 8px 16px;
 }
 
 /* Unified Search Input Wrapper - Visual Design Spec: 48px height */
