@@ -15,34 +15,34 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 5-Tab Navigation - Visual Design Specification
+  // 5-Tab Navigation - Visual Design Specification (Platform Routes)
   const tabs = [
     { 
-      path: '/home', 
+      path: '/platform/home', 
       icon: '🏠', 
       label: 'Home',
       description: 'Business Intelligence Dashboard'
     },
     { 
-      path: '/sales', 
+      path: '/platform/sales', 
       icon: '💼', 
       label: 'Sales',
       description: 'Leads → Quotes → Orders'
     },
     { 
-      path: '/production', 
+      path: '/platform/production', 
       icon: '🏭', 
       label: 'Production',
       description: 'Manufacturing & Work Orders'
     },
     { 
-      path: '/procurement', 
+      path: '/platform/procurement', 
       icon: '📦', 
       label: 'Procurement',
       description: 'Purchasing & Materials'
     },
     { 
-      path: '/customers', 
+      path: '/platform/customers', 
       icon: '👥', 
       label: 'Customers',
       description: 'CRM & Customer Management'
@@ -50,27 +50,27 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   ];
 
   const isActiveTab = (path: string) => {
-    // Enhanced logic for workflow-based navigation
+    // Enhanced logic for workflow-based navigation with platform routes
     const currentPath = location.pathname;
     
-    if (path === '/home') {
-      return currentPath === '/home' || currentPath === '/' || currentPath === '/dashboard';
+    if (path === '/platform/home') {
+      return ['/platform/home', '/platform', '/platform/dashboard'].includes(currentPath);
     }
     
-    if (path === '/sales') {
-      return ['/leads', '/quotes', '/orders', '/payments', '/sales'].includes(currentPath);
+    if (path === '/platform/sales') {
+      return ['/platform/leads', '/platform/quotes', '/platform/orders', '/platform/payments', '/platform/sales'].includes(currentPath);
     }
     
-    if (path === '/production') {
-      return ['/production', '/work-orders', '/manufacturing'].includes(currentPath);
+    if (path === '/platform/production') {
+      return ['/platform/production', '/platform/work-orders', '/platform/manufacturing'].includes(currentPath);
     }
     
-    if (path === '/procurement') {
-      return ['/procurement', '/purchase-orders', '/inventory', '/suppliers'].includes(currentPath);
+    if (path === '/platform/procurement') {
+      return ['/platform/procurement', '/platform/purchase-orders', '/platform/inventory', '/platform/suppliers'].includes(currentPath);
     }
     
-    if (path === '/customers') {
-      return ['/crm', '/customers', '/customer-profile'].includes(currentPath);
+    if (path === '/platform/customers') {
+      return ['/platform/crm', '/platform/customers'].includes(currentPath) || currentPath.startsWith('/platform/customers/');
     }
     
     return currentPath === path;
