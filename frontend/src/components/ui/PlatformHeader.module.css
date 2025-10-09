@@ -1,0 +1,238 @@
+/* Platform Header - Unified Mobile + Desktop for Business Application */
+.platformHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 15px 0;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo Section - Responsive */
+.logoSection {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.logo:hover {
+  opacity: 0.8;
+  background-color: rgba(29, 78, 216, 0.1);
+}
+
+.logoImage {
+  height: 32px;
+  width: auto;
+  margin-right: 8px;
+}
+
+.logoTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logoText {
+  background: linear-gradient(135deg, #1D4ED8 0%, #F97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+.logoTagline {
+  font-size: 10px;
+  font-weight: 500;
+  color: #666;
+  margin-top: -2px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* Mobile Greeting - Visual Design Specification */
+.mobileGreeting {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--color-primary, #1D4ED8);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton:hover {
+  background: rgba(29, 78, 216, 0.1);
+}
+
+.greetingText {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
+  flex: 1;
+}
+
+/* Platform Context - Business Information */
+.platformContext {
+  flex: 1;
+  margin: 0 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.businessInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.businessName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1D4ED8;
+}
+
+.businessStatus {
+  font-size: 11px;
+  font-weight: 500;
+  color: #16A34A;
+  background: rgba(22, 163, 74, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Controls Section - Responsive */
+.controlsSection {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.notificationButton {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationButton:hover {
+  background: rgba(29, 78, 216, 0.1);
+  color: var(--color-primary, #1D4ED8);
+}
+
+.desktopOnly {
+  display: flex;
+}
+
+/* Mobile Responsive - Visual Design Spec: 56px exact height */
+@media (max-width: 768px) {
+  .platformHeader {
+    padding: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .headerContent {
+    padding: 0 16px;
+    flex-direction: row;
+    gap: 12px;
+    position: relative;
+    height: 56px;
+    align-items: center;
+  }
+  
+  /* Show mobile greeting, hide desktop logo */
+  .mobileGreeting {
+    display: flex;
+  }
+  
+  .desktopOnly {
+    display: none;
+  }
+  
+  .logoSection {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 120px);
+  }
+  
+  .platformContext {
+    display: none;
+  }
+  
+  .controlsSection {
+    gap: 12px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+
+/* Desktop Responsive - Hide mobile-only elements */
+@media (min-width: 769px) {
+  .mobileGreeting {
+    display: none;
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  .headerContent {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  
+  .greetingText {
+    font-size: 14px;
+  }
+  
+  .controlsSection {
+    gap: 8px;
+  }
+}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import HeaderDropdown from './HeaderDropdown';
-import styles from './ProductHeader.module.css';
+import styles from './WebsiteHeader.module.css';
 import logoImage from '../../assets/images/logo.png';
 
-interface ProductHeaderProps {
+interface WebsiteHeaderProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   currentTheme?: string;
@@ -30,7 +30,7 @@ interface ProductHeaderProps {
   userName?: string;
 }
 
-function ProductHeader({
+function WebsiteHeader({
   currentLanguage,
   onLanguageChange,
   currentTheme,
@@ -53,7 +53,7 @@ function ProductHeader({
   onBlogHome,
   onAbout,
   onContact
-}: ProductHeaderProps) {
+}: WebsiteHeaderProps) {
   const location = useLocation();
   
   // Helper function for consistent active route detection
@@ -70,29 +70,20 @@ function ProductHeader({
   };
   
   return (
-    <div className={styles.productHeader}>
+    <div className={styles.websiteHeader}>
       <div className={styles.headerContent}>
-        {/* Logo Section - Desktop: Logo | Mobile: Back + Greeting */}
+        {/* Logo Section - Desktop Only */}
         <div className={styles.logoSection}>
-          {/* Desktop Logo - Hidden on mobile */}
-          <div className={`${styles.logo} ${styles.desktopOnly}`} onClick={onHome}>
+          <div className={styles.logo} onClick={onHome}>
             <img src={logoImage} alt="ElevateIdea" className={styles.logoImage} />
             <div className={styles.logoTextContainer}>
               <span className={styles.logoText}>ElevateIdea</span>
               <span className={styles.logoTagline}>Scaling Business with Technology</span>
             </div>
           </div>
-          
-          {/* Mobile Greeting - Visible only on mobile */}
-          <div className={styles.mobileGreeting}>
-            <button className={styles.backButton} onClick={onHome} title="Go back">
-              ←
-            </button>
-            <span className={styles.greetingText}>Good morning, Ramesh 👋</span>
-          </div>
         </div>
         
-        {/* Navigation Section - Website Navigation or Empty for center spacing */}
+        {/* Navigation Section - Website Navigation */}
         <div className={styles.navigationSection}>
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
@@ -141,23 +132,18 @@ function ProductHeader({
           )}
         </div>
         
-        {/* Controls Section - Desktop: Dashboard + Menu | Mobile: Notification + Menu */}
+        {/* Controls Section - Desktop Only */}
         <div className={styles.controlsSection}>
           {/* Desktop Dashboard Button */}
           {showDashboardButton && onDashboard && (
             <button 
-              className={`${styles.dashboardButton} ${styles.desktopOnly}`}
+              className={styles.dashboardButton}
               onClick={onDashboard}
               title="Go to Dashboard"
             >
               Dashboard
             </button>
           )}
-          
-          {/* Mobile Notification Icon */}
-          <button className={styles.notificationButton} title="Notifications">
-            🔔
-          </button>
           
           <HeaderDropdown
             currentLanguage={currentLanguage}
@@ -186,4 +172,4 @@ function ProductHeader({
   );
 }
 
-export default ProductHeader;
+export default WebsiteHeader;

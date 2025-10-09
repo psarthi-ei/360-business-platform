@@ -16,7 +16,7 @@ import ExternalProfileForm, { BusinessProfileFormData } from './components/auth/
 import InventoryManagement from './components/business/InventoryManagement';
 import FulfillmentManagement from './components/business/FulfillmentManagement';
 import AnalyticsManagement from './components/business/AnalyticsManagement';
-import ProductHeader from './components/ui/ProductHeader';
+import WebsiteHeader from './components/ui/WebsiteHeader';
 import Authentication from './components/auth/Authentication';
 import ServicesHub from './website/components/ServicesHub';
 import TurnaroundStories from './website/components/TurnaroundStories';
@@ -623,7 +623,7 @@ function AppContent() {
         ) : (
           // Desktop Layout or Website Pages
           <>
-            <ProductHeader
+            <WebsiteHeader
                 currentLanguage={currentLanguage}
                 onLanguageChange={switchLanguage}
                 onHome={showHomePage}

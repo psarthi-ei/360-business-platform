@@ -1,5 +1,5 @@
-/* Single Header - Styled to match HomePage design exactly */
-.productHeader {
+/* Website Header - Desktop Only, No Mobile CSS */
+.websiteHeader {
   position: fixed;
   top: 0;
   left: 0;
@@ -20,7 +20,7 @@
   align-items: center;
 }
 
-/* Logo Section - Matches HomePage styling exactly */
+/* Logo Section - Desktop Only */
 .logoSection {
   display: flex;
   align-items: center;
@@ -71,13 +71,13 @@
   white-space: nowrap;
 }
 
-/* Navigation Section - Matches HomePage navigation exactly */
+/* Navigation Section */
 .navigationSection {
   flex: 1;
   margin: 0 40px;
 }
 
-/* Professional Navigation Structure - Exactly like HomePage */
+/* Professional Navigation Structure */
 .websiteNavigation {
   display: flex;
   align-items: center;
@@ -117,7 +117,7 @@
   white-space: nowrap;
 }
 
-/* Default navigation items - consistent professional styling */
+/* Default navigation items */
 .navButton .navLabel {
   font-size: 14px;
   font-weight: 600;
@@ -125,7 +125,7 @@
   white-space: nowrap;
 }
 
-/* Active navigation item - highlighted when on current page */
+/* Active navigation item */
 .activeNavButton .navLabel {
   font-size: 15px;
   font-weight: 700;
@@ -133,7 +133,7 @@
   white-space: nowrap;
 }
 
-/* Header Controls - Matches HomePage styling exactly */
+/* Header Controls */
 .controlsSection {
   display: flex;
   align-items: center;
@@ -165,7 +165,6 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 
 .homeButton {
   background: var(--gradient-card, rgba(102, 126, 234, 0.1));
@@ -280,187 +279,4 @@
   font-size: 12px;
   font-weight: 500;
   color: var(--color-primary, #667eea);
-}
-
-/* Visual Design Spec Mobile Elements */
-.mobileGreeting {
-  display: none;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.backButton {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: var(--color-primary, #1D4ED8);
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  min-width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.backButton:hover {
-  background: rgba(29, 78, 216, 0.1);
-}
-
-.greetingText {
-  font-size: 16px;
-  font-weight: 500;
-  color: #2c3e50;
-  flex: 1;
-}
-
-.notificationButton {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #666;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  min-width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.notificationButton:hover {
-  background: rgba(102, 126, 234, 0.1);
-  color: var(--color-primary, #667eea);
-}
-
-.desktopOnly {
-  display: flex;
-}
-
-/* Mobile Responsive - Visual Design Spec: 56px exact height */
-@media (max-width: 768px) {
-  .productHeader {
-    padding: 0;
-    height: 56px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .headerContent {
-    padding: 0 16px;
-    flex-direction: row;
-    gap: 12px;
-    position: relative;
-    height: 56px;
-    align-items: center;
-  }
-  
-  /* Show mobile greeting, hide desktop logo */
-  .mobileGreeting {
-    display: flex;
-  }
-  
-  .desktopOnly {
-    display: none;
-  }
-}
-
-/* Desktop Responsive - Hide mobile-only elements */
-@media (min-width: 769px) {
-  .notificationButton {
-    display: none;
-  }
-}
-
-/* Mobile layout continuation */
-@media (max-width: 768px) {
-  .logoSection {
-    flex: 1;
-    min-width: 0; /* Allow shrinking */
-    max-width: calc(100% - 120px); /* Reserve space for controls */
-  }
-  
-  .logo {
-    font-size: 18px;
-    padding: 4px;
-  }
-  
-  .logoImage {
-    height: 24px;
-  }
-  
-  .logoTextContainer {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Prevent overflow but don't truncate */
-  }
-  
-  .logoText {
-    font-size: 18px;
-    line-height: 1.1;
-  }
-  
-  .logoTagline {
-    font-size: 10px;
-    margin-top: -1px;
-    white-space: nowrap;
-  }
-  
-  .navigationSection {
-    display: none;
-  }
-  
-  .controlsSection {
-    gap: 12px;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
-  }
-  
-  .dashboardButton {
-    min-width: 70px;
-    height: 36px;
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 6px;
-  }
-}
-
-/* Extra small mobile screens */
-@media (max-width: 480px) {
-  .headerContent {
-    padding: 0 8px;
-    gap: 6px;
-  }
-  
-  .logoText {
-    font-size: 16px;
-  }
-  
-  .logoImage {
-    height: 22px;
-  }
-  
-  .logoTagline {
-    font-size: 9px;
-    letter-spacing: 0.1px;
-  }
-  
-  .dashboardButton {
-    min-width: 60px;
-    height: 32px;
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-  
-  .controlsSection {
-    gap: 8px;
-  }
-  
 }
