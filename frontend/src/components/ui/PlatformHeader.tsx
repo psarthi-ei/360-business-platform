@@ -24,6 +24,10 @@ interface PlatformHeaderProps {
   dataSources?: SearchDataSources;
   navigationHandlers?: SearchNavigationHandlers;
   showSearch?: boolean;
+  onVoiceSearch?: () => void;
+  onVoiceHover?: (buttonPosition: { x: number; y: number; width: number; height: number }) => void;
+  onNotificationClick?: () => void;
+  voiceState?: 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR';
 }
 
 function PlatformHeader({
@@ -42,7 +46,11 @@ function PlatformHeader({
   searchScope,
   dataSources,
   navigationHandlers,
-  showSearch = false
+  showSearch = false,
+  onVoiceSearch,
+  onVoiceHover,
+  onNotificationClick,
+  voiceState = 'IDLE'
 }: PlatformHeaderProps) {
   return (
     <div className={styles.platformHeader}>
@@ -65,13 +73,25 @@ function PlatformHeader({
               searchScope={searchScope}
               dataSources={dataSources}
               navigationHandlers={navigationHandlers}
+              onVoiceSearch={onVoiceSearch}
+              onVoiceHover={onVoiceHover}
+              voiceState={voiceState}
               className={styles.integratedSearch}
             />
           </div>
         )}
         
-        {/* Right: Single HeaderDropdown - Responsive Design */}
+        {/* Right: Controls Section - Notification + Dropdown */}
         <div className={styles.controlsSection}>
+          <button 
+            className={styles.notificationButton}
+            onClick={onNotificationClick}
+            title="Notifications"
+            aria-label="View notifications"
+            type="button"
+          >
+            🔔
+          </button>
           <HeaderDropdown
             currentLanguage={currentLanguage}
             onLanguageChange={onLanguageChange}

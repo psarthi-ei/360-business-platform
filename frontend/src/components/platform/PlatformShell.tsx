@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PlatformHeader from '../ui/PlatformHeader';
 import GlobalSearch, { GlobalSearchRef } from '../search/GlobalSearch';
-import FloatingVoiceAssistant from '../voice/FloatingVoiceAssistant';
+import GlobalVoice, { VoiceControlRef } from '../voice/GlobalVoice';
 import BottomNavigation from './BottomNavigation';
 import LeftSidebarNavigation from './LeftSidebarNavigation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { getSearchScope } from '../../core/scopeResolver';
 import { getSearchDataSources, getSearchNavigationHandlers } from '../../core/searchBusinessLogic';
-import { getBusinessData, getCurrentProcessStage } from '../../core/businessDataLogic';
+import { getBusinessData } from '../../core/businessDataLogic';
 import { ActionParams } from '../../services/nlp/types';
 import styles from './PlatformShell.module.css';
 
@@ -49,10 +49,36 @@ function PlatformShell({
   onPerformSearch,
   children
 }: PlatformShellProps) {
-  const location = useLocation();
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
-  const globalSearchRef = useRef<GlobalSearchRef>(null);
+  const desktopSearchRef = useRef<GlobalSearchRef>(null);
+  const mobileSearchRef = useRef<GlobalSearchRef>(null);
+  const voiceControlRef = useRef<VoiceControlRef>(null);
+  
+  // Voice state management with proper useState
+  const [voiceState, setVoiceState] = useState<'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR'>('IDLE');
+  
+  // Debug voice state changes
+  // eslint-disable-next-line no-console
+  console.log('🎙️ PlatformShell voiceState:', voiceState);
+
+  // Voice search handler - connects voice icon to universal voice system
+  const handleVoiceSearch = () => {
+    voiceControlRef.current?.startVoiceRecognition();
+  };
+
+  // Voice-to-search handler - connects voice recognition results to search input
+  const handleVoiceToSearch = (query: string) => {
+    // Route to correct search instance based on device
+    const targetSearchRef = isMobile ? mobileSearchRef : desktopSearchRef;
+    targetSearchRef.current?.performSearch(query);
+  };
+
+  // Voice hover handler - triggers voice suggestions panel
+  const handleVoiceHover = (buttonPosition: { x: number; y: number; width: number; height: number }) => {
+    // Forward hover event to GlobalVoice to show suggestions
+    voiceControlRef.current?.showVoiceSuggestions?.(buttonPosition);
+  };
 
   return (
     <div className={styles.platformShell}>
@@ -81,20 +107,26 @@ function PlatformShell({
           userName={userName}
           // Desktop search integration
           showSearch={!isMobile}
-          globalSearchRef={globalSearchRef}
+          globalSearchRef={desktopSearchRef}
           searchScope={getSearchScope(currentScreen)}
           dataSources={getSearchDataSources()}
           navigationHandlers={getSearchNavigationHandlers(navigate)}
+          onVoiceSearch={handleVoiceSearch}
+          onVoiceHover={handleVoiceHover}
+          voiceState={voiceState}
         />
       </header>
       
       {/* Search Area - Always rendered for platform */}
       <section className={styles.searchArea}>
         <GlobalSearch
-          ref={globalSearchRef}
+          ref={mobileSearchRef}
           searchScope={getSearchScope(currentScreen)}
           dataSources={getSearchDataSources()}
           navigationHandlers={getSearchNavigationHandlers(navigate)}
+          onVoiceSearch={handleVoiceSearch}
+          onVoiceHover={handleVoiceHover}
+          voiceState={voiceState}
         />
       </section>
       
@@ -110,15 +142,15 @@ function PlatformShell({
         )}
       </nav>
       
-      {/* Floating Elements - Desktop only */}
-      {!isMobile && (
-        <FloatingVoiceAssistant
-          currentProcessStage={getCurrentProcessStage(location.pathname)}
-          onUniversalAction={onUniversalAction}
-          onPerformSearch={onPerformSearch}
-          businessData={getBusinessData()}
-        />
-      )}
+      {/* GlobalVoice - Universal voice component for voice recognition */}
+      <GlobalVoice
+        ref={voiceControlRef}
+        currentProcessStage={currentScreen}
+        onUniversalAction={onUniversalAction}
+        onPerformSearch={handleVoiceToSearch}
+        businessData={getBusinessData()}
+        onVoiceStateChange={setVoiceState}
+      />
     </div>
   );
 }

@@ -306,6 +306,9 @@ body {
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  /* Enable smooth touch scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .App {

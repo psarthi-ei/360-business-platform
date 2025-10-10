@@ -11,6 +11,9 @@ interface GlobalSearchProps {
   navigationHandlers: SearchNavigationHandlers;
   placeholder?: string;
   className?: string;
+  onVoiceSearch?: () => void;  // Voice search handler
+  voiceState?: 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR';  // Voice state for visual feedback
+  onVoiceHover?: (buttonPosition: { x: number; y: number; width: number; height: number }) => void;  // Voice hover handler
   // Optional search state - if provided, use external state instead of internal
   searchState?: {
     searchQuery: string;
@@ -36,6 +39,9 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
   navigationHandlers,
   placeholder = "Search leads, customers, orders...",
   className = "",
+  onVoiceSearch,
+  voiceState = 'IDLE',
+  onVoiceHover,
   searchState
 }, ref) => {
   // Use external search state if provided, otherwise create internal state
@@ -51,6 +57,7 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const voiceButtonRef = useRef<HTMLButtonElement>(null);
 
   // Expose scroll and focus methods to parent components
   useImperativeHandle(ref, () => ({
@@ -146,21 +153,9 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
     // TODO: Add arrow key navigation for search results
   };
 
-  // Debug logging
+  // Keep essential voice state logging for debug panel
   // eslint-disable-next-line no-console
-  console.log('GlobalSearch rendered with:', { searchQuery, searchResults: searchResults.length, showSearchResults });
-  
-  // Debug search state
-  // eslint-disable-next-line no-console
-  console.log('🔧 GlobalSearch internalSearchState:', { 
-    hasPerformGlobalSearch: !!internalSearchState.performGlobalSearch,
-    searchState: !!searchState,
-    searchStateFunction: !!searchState?.performGlobalSearch
-  });
-  
-  // Additional debug: Check if SearchResults should render
-  // eslint-disable-next-line no-console
-  console.log('Should render SearchResults?', showSearchResults && searchResults.length > 0);
+  console.log('🎙️ GlobalSearch voiceState:', voiceState);
 
   return (
     <div className={`${styles.globalSearch} ${className}`} ref={searchContainerRef}>
@@ -180,12 +175,39 @@ const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(({
             aria-haspopup="listbox"
           />
           <button 
-            className={styles.voiceIcon}
-            title="Voice search"
-            aria-label="Voice search"
+            ref={voiceButtonRef}
+            className={`${styles.voiceIcon} ${voiceState === 'LISTENING' ? styles.listening : ''} ${voiceState === 'PROCESSING' ? styles.processing : ''} ${voiceState === 'ERROR' ? styles.error : ''}`}
+            title={`Voice search - ${voiceState}`}
+            aria-label={`Voice search - ${voiceState}`}
             type="button"
+            onClick={() => {
+              // eslint-disable-next-line no-console
+              console.log('🎯 Voice button clicked in GlobalSearch - showing panel AND starting voice');
+              
+              // Show voice suggestions panel first
+              if (onVoiceHover && voiceButtonRef.current) {
+                const rect = voiceButtonRef.current.getBoundingClientRect();
+                onVoiceHover({
+                  x: rect.left,
+                  y: rect.bottom,
+                  width: rect.width,
+                  height: rect.height
+                });
+              }
+              
+              // Blur search input to prevent focus conflicts with voice recognition
+              if (searchInputRef.current) {
+                searchInputRef.current.blur();
+              }
+              
+              // Small delay to ensure focus is cleared before starting voice recognition
+              setTimeout(() => {
+                onVoiceSearch?.();
+              }, 50);
+            }}
+            disabled={voiceState !== 'IDLE'}
           >
-            🎙
+            {voiceState === 'PROCESSING' ? '⚡' : voiceState === 'LISTENING' ? '🎙️' : voiceState === 'ERROR' ? '❌' : '🎙'}
           </button>
           {searchQuery && (
             <button 

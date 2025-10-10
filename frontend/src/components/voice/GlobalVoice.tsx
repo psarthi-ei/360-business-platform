@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { nlpService } from '../../services/nlp/NLPService';
 import { NLPResult, ActionParams } from '../../services/nlp/types';
-import styles from './FloatingVoiceAssistant.module.css';
+import styles from './GlobalVoice.module.css';
 
 // TypeScript declarations for Speech Recognition API
 interface SpeechRecognitionInterface {
@@ -46,7 +46,14 @@ declare global {
   }
 }
 
-interface FloatingVoiceAssistantProps {
+// Voice control interface for external components
+export interface VoiceControlRef {
+  startVoiceRecognition: () => void;
+  showVoiceSuggestions?: (buttonPosition: { x: number; y: number; width: number; height: number }) => void;
+  voiceState: 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR';
+}
+
+interface GlobalVoiceProps {
   currentProcessStage?: string;
   // Universal action handler for all voice commands
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
@@ -60,6 +67,8 @@ interface FloatingVoiceAssistantProps {
   // External debug control for mobile header integration
   externalDebugState?: boolean;
   onDebugToggle?: (isOpen: boolean) => void;
+  // Voice state synchronization for external components
+  onVoiceStateChange?: (state: 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR') => void;
 }
 
 // Simplified Universal Routing - All commands go through VoiceCommandRouter
@@ -80,14 +89,15 @@ function routeUniversalAction(
   }
 }
 
-function FloatingVoiceAssistant({
+const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function GlobalVoice({
   currentProcessStage = 'dashboard',
   onUniversalAction,
   businessData,
   onPerformSearch,
   externalDebugState,
-  onDebugToggle
-}: FloatingVoiceAssistantProps) {
+  onDebugToggle,
+  onVoiceStateChange
+}, ref) {
   // const { t } = useTranslation(); // Translation available if needed
   
   // Voice recognition state machine
@@ -95,7 +105,13 @@ function FloatingVoiceAssistant({
   const [voiceState, setVoiceState] = useState<VoiceState>('IDLE');
   const [voiceResponse, setVoiceResponse] = useState('');
   const [showVoiceResponse, setShowVoiceResponse] = useState(false);
-  const [showVoicePanel, setShowVoicePanel] = useState(false);
+  const [voicePanelPosition, setVoicePanelPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
+  
+  // Helper function to update voice state and sync with external components
+  const syncVoiceState = useCallback((newState: VoiceState) => {
+    setVoiceState(newState);
+    onVoiceStateChange?.(newState);
+  }, [onVoiceStateChange]);
   
   // Speech recognition instance ref to prevent multiple instances
   const recognitionRef = useRef<SpeechRecognitionInterface | null>(null);
@@ -105,8 +121,8 @@ function FloatingVoiceAssistant({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as HTMLElement;
-      if (showVoicePanel && !target.closest(`.${styles.voiceCommandPanel}`) && !target.closest(`.${styles.floatingVoiceAssistant}`)) {
-        setShowVoicePanel(false);
+      if (voicePanelPosition && !target.closest(`.${styles.voiceCommandPanel}`)) {
+        setVoicePanelPosition(null);
       }
     }
 
@@ -114,13 +130,13 @@ function FloatingVoiceAssistant({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showVoicePanel]);
+  }, [voicePanelPosition]);
 
   // Escape key detection
   useEffect(() => {
     function handleEscapeKey(event: KeyboardEvent) {
-      if (event.key === 'Escape' && showVoicePanel) {
-        setShowVoicePanel(false);
+      if (event.key === 'Escape' && voicePanelPosition) {
+        setVoicePanelPosition(null);
       }
     }
 
@@ -128,7 +144,12 @@ function FloatingVoiceAssistant({
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
-  }, [showVoicePanel]);
+  }, [voicePanelPosition]);
+
+  // External voice state propagation - separate from recognition event handlers for performance
+  useEffect(() => {
+    onVoiceStateChange?.(voiceState);
+  }, [voiceState, onVoiceStateChange]);
 
   // Context-aware voice command suggestions - shows universal + page-specific commands
   const getProcessVoiceCommands = (stage: string) => {
@@ -288,7 +309,7 @@ function FloatingVoiceAssistant({
             console.log('🚀 Calling onPerformSearch with query:', searchQuery);
             onPerformSearch(searchQuery);
             // Close voice panel to show search results
-            setShowVoicePanel(false);
+            setVoicePanelPosition(null);
           } else {
             // eslint-disable-next-line no-console
             console.log('❌ No search query extracted - search not executed');
@@ -308,7 +329,7 @@ function FloatingVoiceAssistant({
           // eslint-disable-next-line no-console
           console.log('🔍 SHOW_COMMAND with query but no target - treating as search:', query);
           onPerformSearch(query);
-          setShowVoicePanel(false);
+          setVoicePanelPosition(null);
           break;
         }
         
@@ -380,7 +401,7 @@ function FloatingVoiceAssistant({
     addDebugLog('NLP-Input', `Original: "${command}" (length: ${command.length})`);
     addDebugLog('NLP-Input', `Languages detected: ${command.match(/[\u0900-\u097F]/) ? 'Hindi ' : ''}${command.match(/[\u0A80-\u0AFF]/) ? 'Gujarati ' : ''}${command.match(/[a-zA-Z]/) ? 'English' : ''}`.trim());
     
-    setVoiceState('PROCESSING'); // Show processing state
+    syncVoiceState('PROCESSING'); // Show processing state
     
     try {
       // Use new NLP service for command processing
@@ -440,16 +461,16 @@ function FloatingVoiceAssistant({
       addDebugLog('NLP-Action', `✅ Command executed successfully`);
       
       // Close suggestion panel after any voice command
-      setShowVoicePanel(false);
+      setVoicePanelPosition(null);
       
       // Only show popup for unknown intents and errors
       if (result.intent === 'UNKNOWN_INTENT') {
         addDebugLog('NLP-Result', `❌ Unknown intent - command not recognized`);
         setVoiceResponse(result.response);
         setShowVoiceResponse(true);
-        setVoiceState('ERROR');
+        syncVoiceState('ERROR');
       } else {
-        setVoiceState('IDLE');
+        syncVoiceState('IDLE');
       }
       
     } catch (error) {
@@ -458,7 +479,7 @@ function FloatingVoiceAssistant({
       addDebugLog('NLP-Error', `Command: "${command}"`);
       setVoiceResponse('Sorry, I couldn\'t process that command. Please try again.');
       setShowVoiceResponse(true);
-      setVoiceState('ERROR');
+      syncVoiceState('ERROR');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businessData, currentProcessStage, executeVoiceAction]);
@@ -647,23 +668,69 @@ function FloatingVoiceAssistant({
     }
   }, [addDebugLog]);
 
+  // Direct speech recognition test - bypasses all integration
+  const testDirectSpeechRecognition = useCallback(() => {
+    addDebugLog('Test', '=== DIRECT SPEECH RECOGNITION TEST ===');
+    addDebugLog('Test', 'Starting isolated speech recognition test...');
+    
+    if (recognitionRef.current && voiceState === 'IDLE') {
+      try {
+        // Direct recognition start without going through integration
+        addDebugLog('Test', 'Starting recognition directly...');
+        (window as unknown as { voiceStartTime: number }).voiceStartTime = Date.now();
+        
+        // Set listening state
+        syncVoiceState('LISTENING');
+        
+        // Start recognition directly
+        recognitionRef.current.start();
+        
+        // Add test timeout
+        setTimeout(() => {
+          addDebugLog('Test', `Voice state after 5 seconds: ${voiceState}`);
+        }, 5000);
+        
+      } catch (error) {
+        addDebugLog('Test', `Direct test failed: ${error}`);
+        syncVoiceState('ERROR');
+      }
+    } else {
+      addDebugLog('Test', `Cannot test: Recognition=${!!recognitionRef.current}, State=${voiceState}`);
+    }
+  }, [addDebugLog, voiceState, syncVoiceState]);
+
   // Initialize speech recognition instance once
   useEffect(() => {
+    // Check for existing instances
+    if (recognitionRef.current) {
+      addDebugLog('Instance', 'Recognition already exists, cleaning up...');
+      recognitionRef.current.abort();
+      recognitionRef.current = null;
+    }
+    
+    // Track global instances for debugging
+    if (!(window as any).speechRecognitionInstances) {
+      (window as any).speechRecognitionInstances = 0;
+    }
+    (window as any).speechRecognitionInstances++;
+    addDebugLog('Instance', `Creating recognition instance #${(window as any).speechRecognitionInstances}`);
+    
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
       
-      // Simple, universal recognition settings
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-IN';
+      // Simple, universal recognition settings - PRODUCTION WORKING CONFIG
+      recognition.continuous = false;  // Single-shot recognition (working in production)
+      recognition.interimResults = false;  // Final results only (working in production)
+      recognition.lang = 'en-IN';  // Original working language from production
       
       // Enhanced device and configuration logging
       addDebugLog('Voice-Init', '=== VOICE RECOGNITION SETUP ===');
-      addDebugLog('Config', 'Language: en-IN, Continuous: false, Timeout: 10s');
+      addDebugLog('Config', 'Language: en-IN, Continuous: false, InterimResults: false, Timeout: 10s');
 
       recognition.onstart = () => {
         addDebugLog('Voice', 'Started');
+        addDebugLog('Voice-Events', 'onstart event fired - recognition successfully started');
         setVoiceState('LISTENING');
       };
       
@@ -678,18 +745,24 @@ function FloatingVoiceAssistant({
         
         extendedRecognition.onaudiostart = () => {
           addDebugLog('Voice', 'Audio detected');
+          addDebugLog('Voice-Events', '✅ onaudiostart - Microphone audio detected');
+          // Track audio events
+          (window as any).voiceAudioEvents = ((window as any).voiceAudioEvents || 0) + 1;
         };
         
         extendedRecognition.onspeechstart = () => {
           addDebugLog('Voice', 'Speech detected');
+          addDebugLog('Voice-Events', '✅ onspeechstart - Speech input detected');
         };
         
         extendedRecognition.onspeechend = () => {
           addDebugLog('Voice', 'Speech ended');
+          addDebugLog('Voice-Events', '⏹️ onspeechend - Speech input ended');
         };
         
         extendedRecognition.onaudioend = () => {
           addDebugLog('Voice', 'Audio ended');
+          addDebugLog('Voice-Events', '⏹️ onaudioend - Microphone audio ended');
         };
       } catch (e) {
         addDebugLog('Warning', 'Some audio events not supported');
@@ -746,6 +819,13 @@ function FloatingVoiceAssistant({
 
       recognition.onerror = (event: SpeechRecognitionEvent) => {
         const errorType = event.error || 'unknown';
+        // eslint-disable-next-line no-console
+        console.log('🎯 Speech Recognition Error:', errorType, event);
+        addDebugLog('Voice-Error', `=== ERROR EVENT DETAILS ===`);
+        addDebugLog('Voice-Error', `Error type: ${errorType}`);
+        addDebugLog('Voice-Error', `Error message: ${event.error?.message || 'none'}`);
+        addDebugLog('Voice-Error', `Event object: ${JSON.stringify(event)}`);
+        addDebugLog('Voice-Error', `Error occurred during recognition`);
         addDebugLog('Voice', `Error - ${errorType}`);
         
         // Clear timeout
@@ -783,6 +863,31 @@ function FloatingVoiceAssistant({
       recognition.onend = () => {
         addDebugLog('Voice', 'Ended');
         
+        // Enhanced logging to understand why it ended
+        addDebugLog('Voice-End', `=== RECOGNITION END ANALYSIS ===`);
+        addDebugLog('Voice-End', `Timeout active: ${!!timeoutRef.current}`);
+        addDebugLog('Voice-End', `Recognition continuous: ${recognitionRef.current?.continuous}`);
+        addDebugLog('Voice-End', `Recognition lang: ${recognitionRef.current?.lang}`);
+        addDebugLog('Voice-End', `Global instances count: ${(window as any).speechRecognitionInstances || 'unknown'}`);
+        
+        // Check if any audio events were fired
+        const audioEventsDetected = (window as any).voiceAudioEvents || 0;
+        addDebugLog('Voice-End', `Audio events detected: ${audioEventsDetected}`);
+        
+        // Check if this is an unexpected early end
+        const now = Date.now();
+        const timeSinceStart = now - ((window as unknown as { voiceStartTime?: number }).voiceStartTime || 0);
+        addDebugLog('Voice-End', `Time since start: ${timeSinceStart}ms`);
+        
+        if (timeSinceStart < 1000) {
+          addDebugLog('Voice-End', '⚠️ EARLY END: Recognition ended within 1 second!');
+          addDebugLog('Voice-End', 'This suggests a configuration or permission issue');
+        } else if (timeSinceStart < 5000) {
+          addDebugLog('Voice-End', '⚠️ SHORT SESSION: Recognition ended quickly');
+        } else {
+          addDebugLog('Voice-End', '✅ NORMAL END: Recognition ran for reasonable time');
+        }
+        
         // Clear timeout
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
@@ -805,9 +910,10 @@ function FloatingVoiceAssistant({
         }
       };
     }
-  }, [addDebugLog, detectCapabilities, processVoiceCommand]); // Dependencies for debug logging
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependencies like production - initialize once only
 
-  const startVoiceRecognition = () => {
+  const startVoiceRecognition = useCallback(() => {
     if (voiceState !== 'IDLE') {
       addDebugLog('Voice', `Already active, state: ${voiceState}`);
       return;
@@ -817,26 +923,100 @@ function FloatingVoiceAssistant({
       try {
         addDebugLog('Voice', 'Starting...');
         
+        // Track start time for end analysis
+        (window as unknown as { voiceStartTime: number }).voiceStartTime = Date.now();
+        
         // Simple 10 second timeout for all devices
         timeoutRef.current = setTimeout(() => {
           addDebugLog('Voice', 'Timeout after 10s');
           if (recognitionRef.current) {
             recognitionRef.current.abort();
           }
-          setVoiceState('IDLE');
+          syncVoiceState('IDLE');
         }, 10000);
         
         recognitionRef.current.start();
       } catch (error) {
         addDebugLog('Voice', `Start error: ${error}`);
-        setVoiceState('ERROR');
+        syncVoiceState('ERROR');
         setVoiceResponse('Could not start voice recognition. Please try again.');
         setShowVoiceResponse(true);
-        setTimeout(() => setVoiceState('IDLE'), 2000);
+        setTimeout(() => syncVoiceState('IDLE'), 2000);
       }
+    }
+  }, [voiceState, addDebugLog, syncVoiceState]);
+
+  // Calculate optimal panel position based on viewport bounds and device type
+  const calculatePanelPosition = (buttonPosition: { x: number; y: number; width: number; height: number }) => {
+    const viewport = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    };
+    
+    // Panel dimensions (approximate)
+    const panelWidth = 280; // Base panel width
+    const panelHeight = 200; // Approximate panel height
+    const isMobile = viewport.width <= 768;
+    
+    if (isMobile) {
+      // Mobile: Position below search bar, center horizontally relative to search bar
+      let x = Math.max(10, (viewport.width - panelWidth) / 2); // Center with margins
+      let y = buttonPosition.y + buttonPosition.height + 8; // 8px below search bar
+      
+      // Ensure panel doesn't overflow right edge
+      if (x + panelWidth > viewport.width - 10) {
+        x = viewport.width - panelWidth - 10;
+      }
+      
+      // Ensure panel doesn't overflow bottom (push up if needed)
+      if (y + panelHeight > viewport.height - 60) { // 60px margin for bottom nav
+        y = viewport.height - panelHeight - 60;
+      }
+      
+      return {
+        x,
+        y,
+        width: Math.min(panelWidth, viewport.width - 20), // Max width with margins
+        height: buttonPosition.height
+      };
+    } else {
+      // Desktop: Smart positioning relative to button
+      let x = buttonPosition.x;
+      let y = buttonPosition.y + buttonPosition.height + 8;
+      
+      // Prevent overflow right
+      if (x + panelWidth > viewport.width - 20) {
+        x = viewport.width - panelWidth - 20;
+      }
+      
+      // Prevent overflow left
+      if (x < 20) {
+        x = 20;
+      }
+      
+      // Prevent overflow bottom
+      if (y + panelHeight > viewport.height - 20) {
+        y = buttonPosition.y - panelHeight - 8; // Position above button
+      }
+      
+      return {
+        x,
+        y,
+        width: buttonPosition.width,
+        height: buttonPosition.height
+      };
     }
   };
 
+  // Expose voice control interface to parent components
+  useImperativeHandle(ref, () => ({
+    startVoiceRecognition,
+    showVoiceSuggestions: (buttonPosition: { x: number; y: number; width: number; height: number }) => {
+      const optimizedPosition = calculatePanelPosition(buttonPosition);
+      setVoicePanelPosition(optimizedPosition);
+    },
+    voiceState
+  }), [startVoiceRecognition, voiceState]);
 
   // Auto-hide voice response after 5 seconds
   useEffect(() => {
@@ -847,6 +1027,17 @@ function FloatingVoiceAssistant({
       return () => clearTimeout(timer);
     }
   }, [showVoiceResponse]);
+
+  // Auto-hide voice panel when voice interaction completes (timeout, error, or success)
+  useEffect(() => {
+    if (voiceState === 'IDLE' || voiceState === 'ERROR') {
+      // Small delay to allow user to see the final state before hiding panel
+      const timer = setTimeout(() => {
+        setVoicePanelPosition(null);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [voiceState]);
 
   // Get process stage display name
   const getProcessStageDisplay = (stage: string) => {
@@ -885,28 +1076,20 @@ function FloatingVoiceAssistant({
         </div>
       )}
 
-      {/* Floating Voice Assistant - WhatsApp Style */}
-      <button 
-        className={`${styles.floatingVoiceAssistant} ${voiceState === 'LISTENING' ? styles.listening : ''} ${voiceState === 'PROCESSING' ? styles.processing : ''} ${voiceState === 'ERROR' ? styles.error : ''}`}
-        onClick={startVoiceRecognition}
-        onMouseEnter={() => setShowVoicePanel(true)}
-        onMouseLeave={() => setShowVoicePanel(false)}
-        disabled={voiceState !== 'IDLE'}
-        aria-label="Voice Assistant"
-        title={`Voice Assistant - ${voiceState}`}
-      >
-        {voiceState === 'PROCESSING' ? '⚡' : voiceState === 'LISTENING' ? '🎙️' : voiceState === 'ERROR' ? '❌' : '🎤'}
-      </button>
-
-
-      {/* Voice Command Suggestions Panel */}
-      {showVoicePanel && (
-        <div className={`${styles.voiceCommandPanel} ${showVoicePanel ? styles.visible : ''}`}>
+      {/* Voice Command Suggestions Panel - Positioned based on triggering search button */}
+      {voicePanelPosition && (
+        <div 
+          className={`${styles.voiceCommandPanel} ${styles.visible}`}
+          style={{
+            '--panel-x': `${voicePanelPosition.x}px`,
+            '--panel-y': `${voicePanelPosition.y + 8}px`,
+          } as React.CSSProperties}
+        >
           <div className={styles.voiceCommandPanelHeader}>
             <span className={styles.voiceCommandTitle}>Voice Commands</span>
             <button 
               className={styles.closeVoicePanel}
-              onClick={() => setShowVoicePanel(false)}
+              onClick={() => setVoicePanelPosition(null)}
             >
               ✕
             </button>
@@ -923,7 +1106,7 @@ function FloatingVoiceAssistant({
                 className={styles.voiceCommandSuggestion}
                 onClick={() => {
                   processVoiceCommand(command);
-                  setShowVoicePanel(false);
+                  setVoicePanelPosition(null);
                 }}
               >
                 {command}
@@ -966,6 +1149,13 @@ function FloatingVoiceAssistant({
                 title="Test Microphone"
               >
                 🎤
+              </button>
+              <button 
+                className={styles.testButton}
+                onClick={testDirectSpeechRecognition}
+                title="Direct Speech Recognition Test"
+              >
+                🗣️
               </button>
               <button 
                 className={styles.clearLogsButton}
@@ -1029,6 +1219,6 @@ function FloatingVoiceAssistant({
 
     </>
   );
-}
+});
 
-export default FloatingVoiceAssistant;
+export default GlobalVoice;

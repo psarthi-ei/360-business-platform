@@ -1,5 +1,5 @@
-/* Floating Voice Assistant - Enhanced Prominent Style */
-.floatingVoiceAssistant {
+/* Global Voice - Universal Voice Recognition Component */
+.globalVoice {
   position: fixed;
   bottom: 20px;
   left: 20px;
@@ -20,8 +20,8 @@
   animation: breathe 3s ease-in-out infinite;
 }
 
-/* V2 MOBILE INTEGRATION: When FloatingVoiceAssistant is inside integrated search bar */
-:global(.integrated-search-bar) .floatingVoiceAssistant {
+/* V2 MOBILE INTEGRATION: When GlobalVoice is inside integrated search bar */
+:global(.integrated-search-bar) .globalVoice {
   /* Override default positioning for V2 integration */
   position: absolute !important;
   top: 50% !important;
@@ -49,31 +49,31 @@
   animation: none !important;
 }
 
-.floatingVoiceAssistant:hover {
+.globalVoice:hover {
   transform: scale(1.15);
   box-shadow: 0 12px 35px rgba(255, 193, 7, 0.9);
   background: linear-gradient(135deg, #FFD54F, #E65100);
 }
 
-.floatingVoiceAssistant.listening {
+.globalVoice.listening {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   animation: pulse 1.5s infinite;
   transition: all 0.2s ease;
 }
 
-.floatingVoiceAssistant.processing {
+.globalVoice.processing {
   background: linear-gradient(135deg, #3498db, #2980b9);
   animation: spin 1s linear infinite;
   transition: all 0.2s ease;
 }
 
-.floatingVoiceAssistant.error {
+.globalVoice.error {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   animation: shake 0.5s ease-in-out;
   transition: all 0.2s ease;
 }
 
-.floatingVoiceAssistant.disabled {
+.globalVoice.disabled {
   background: linear-gradient(135deg, #95a5a6, #7f8c8d);
   cursor: not-allowed;
   opacity: 0.7;
@@ -192,23 +192,26 @@
 /* Voice Command Suggestions Panel */
 .voiceCommandPanel {
   position: fixed;
-  bottom: 90px;
-  right: 20px;
-  width: 280px;
+  /* Use CSS custom properties for smart positioning */
+  left: var(--panel-x, 50%);
+  top: var(--panel-y, 50%);
+  /* Transform to center panel if no custom position provided */
+  transform: var(--panel-x, translate(-50%, -50%));
+  width: auto;
+  min-width: 260px;
+  max-width: min(400px, calc(100vw - 40px));
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  z-index: 998;
+  z-index: 1000;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: translateY(20px);
   opacity: 0;
   transition: all 0.3s ease;
 }
 
 .voiceCommandPanel.visible {
-  transform: translateY(0);
   opacity: 1;
 }
 
@@ -216,8 +219,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -314,17 +317,22 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  /* Remove height constraints - show all suggestions at full height */
 }
 
 .voiceCommandSuggestion {
-  padding: 8px 12px;
-  margin: 4px 0;
+  padding: 6px 10px;
+  margin: 3px 0;
   background: rgba(102, 126, 234, 0.05);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.85rem;
   color: #34495e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
 .voiceCommandSuggestion:hover {
@@ -347,20 +355,17 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .floatingVoiceAssistant {
-    width: 48px;
-    height: 48px;
-    font-size: 1.2rem;
-    bottom: 15px;
-    left: 15px;
+  .globalVoice {
+    /* Hide floating button on mobile - voice functionality is now integrated into search bar */
+    display: none !important;
   }
   
   .voiceCommandPanel {
-    width: 320px;
-    max-width: calc(100vw - 40px);
-    right: 20px;
-    left: auto;
-    bottom: 75px;
+    /* Mobile: Center horizontally above bottom navigation */
+    left: var(--panel-x, 50%) !important;
+    top: var(--panel-y, calc(100vh - 300px)) !important;
+    transform: var(--panel-x, translateX(-50%)) !important;
+    max-width: calc(100vw - 20px);
     z-index: 998;
   }
   
@@ -441,7 +446,7 @@
 /* Debug Panel */
 .debugPanel {
   position: fixed;
-  top: 20px;
+  top: 76px; /* 56px header height + 20px spacing */
   right: 20px;
   width: 350px;
   max-height: 400px;
@@ -552,6 +557,10 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Enhanced scrolling support */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea rgba(0, 0, 0, 0.1);
+  -webkit-overflow-scrolling: touch;
 }
 
 .debugLogEntry {
@@ -576,11 +585,18 @@
 /* Mobile responsive for debug panel */
 @media (max-width: 768px) {
   .debugToggleButton {
-    display: none; /* Hide desktop floating debug button on mobile - use header button instead */
+    /* Position debug button at extreme left for better separation */
+    position: fixed;
+    bottom: 100px;
+    left: 20px; /* Extreme left position */
+    z-index: 99999;
+    width: 36px;
+    height: 36px;
+    font-size: 10px;
   }
   
   .debugPanel {
-    top: 10px;
+    top: 66px; /* 56px header height + 10px spacing for mobile */
     right: 10px;
     left: 10px;
     width: auto;
@@ -610,11 +626,24 @@
   .debugFilterTabs::-webkit-scrollbar {
     display: none;
   }
+  
+  .debugLogContainer {
+    max-height: 200px !important; /* Adjust for mobile panel height */
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important; /* Smooth touch scrolling on iOS */
+    padding: 8px !important; /* Reduce padding for mobile */
+    /* Enhanced mobile scrolling */
+    scrollbar-width: thin !important;
+    scrollbar-color: #667eea transparent !important;
+    /* Ensure scrolling works on all mobile browsers */
+    overscroll-behavior: contain !important;
+  }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .floatingVoiceAssistant {
+  .globalVoice {
     background: #000;
     color: #fff;
     border: 2px solid #fff;
@@ -639,7 +668,7 @@
 @media (max-width: 768px) {
   
   /* Enhanced Voice Button for Factory Use */
-  .floatingVoiceAssistant {
+  .globalVoice {
     /* Optimized touch target for mobile */
     width: 52px;
     height: 52px;
@@ -665,13 +694,13 @@
     font-size: 1.3rem;
   }
   
-  .floatingVoiceAssistant:hover {
+  .globalVoice:hover {
     transform: scale(1.2);
     box-shadow: 0 16px 50px rgba(255, 107, 53, 1);
   }
   
   /* Enhanced listening state for factory */
-  .floatingVoiceAssistant.listening {
+  .globalVoice.listening {
     background: linear-gradient(135deg, #e74c3c, #c0392b);
     animation: factoryPulse 1s infinite;
     border-color: #fff;
@@ -679,7 +708,7 @@
   }
   
   /* Enhanced processing state */
-  .floatingVoiceAssistant.processing {
+  .globalVoice.processing {
     background: linear-gradient(135deg, #3498db, #2980b9);
     animation: factorySpin 0.8s linear infinite;
     border-color: #fff;
@@ -687,12 +716,8 @@
   
   /* Voice Panel - Factory Optimized */
   .voiceCommandPanel {
-    /* Compact but accessible for touch interaction */
-    width: 340px;
+    /* Compact but accessible for touch interaction - positioning handled by JS */
     max-width: calc(100vw - 30px);
-    right: 15px;
-    left: auto;
-    bottom: 210px; /* Above voice button and navigation */
     
     /* Enhanced contrast and visibility */
     background: rgba(255, 255, 255, 0.98);
@@ -819,7 +844,7 @@
 @media (max-width: 768px) {
   
   /* Voice Button - Standard Mobile */
-  .floatingVoiceAssistant {
+  .globalVoice {
     width: 50px;
     height: 50px;
     bottom: 100px;
@@ -829,11 +854,8 @@
   
   /* Voice Panel - Compact and Clean */
   .voiceCommandPanel {
-    width: 320px;
+    /* Standard mobile - positioning handled by JS calculatePanelPosition */
     max-width: calc(100vw - 40px);
-    right: 20px;
-    left: auto;
-    bottom: 160px;
   }
   
   /* Standard Mobile Touch Targets */

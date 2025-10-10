@@ -128,6 +128,32 @@
   z-index: 100000;
 }
 
+/* Notification Button */
+.notificationButton {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.notificationButton:hover {
+  background: rgba(29, 78, 216, 0.1);
+  color: #1D4ED8;
+  transform: scale(1.05);
+}
+
+.notificationButton:active {
+  transform: scale(0.95);
+}
 
 .desktopOnly {
   display: flex;
@@ -175,6 +201,19 @@
   
   .logoTagline {
     font-size: 9px;
+  }
+  
+  /* Ensure controls section remains visible per Visual Design Spec [🔔][⋯] pattern */
+  .controlsSection {
+    display: flex;
+    gap: 12px;
+  }
+  
+  /* Ensure notification button is visible and touch-friendly */
+  .notificationButton {
+    min-width: 44px;
+    height: 44px;
+    font-size: 16px;
   }
 }
 
