@@ -59,7 +59,7 @@
 - **Sub-Phase 1.2**: Mobile-First Layout Architecture (✅ Complete)
   - Restructured App.css with mobile-first responsive design (360px→768px→1024px+)
   - Implemented Visual Design Spec layout variables (56px header, 48px search, 64px navigation)
-  - Enhanced MobileAppShell.css with comprehensive mobile optimization
+  - Enhanced PlatformShell.css with comprehensive mobile optimization
 - **Sub-Phase 1.3**: Navigation Architecture Setup (✅ Complete)
   - Created modular BottomNavigation component with CSS Modules
   - Implemented 5-tab Visual Design Specification (Home, Sales, Production, Procurement, Customers)
@@ -179,12 +179,13 @@
 ## **🎯 OVERVIEW**
 
 ### **Transformation Scope**
-Transform current 8-card dashboard system into the complete 5-tab mobile-first Visual Design Specification while maintaining existing functionality and unified voice/search architecture.
+Transform current 8-card dashboard system into the complete 5-tab mobile-first Visual Design Specification while leveraging the **✅ COMPLETED unified PlatformShell architecture** with CSS Grid responsive system and clean header separation.
 
 ### **Current State**
 - **Dashboard**: 8-card business process layout (DesktopPresentation.tsx)
-- **Navigation**: Desktop-first with product header
-- **Architecture**: Unified voice/search system (preserve)
+- **Navigation**: ✅ **Unified PlatformShell** with CSS Grid responsive architecture (mobile ≤1024px, desktop >1024px)
+- **Header System**: ✅ **WebsiteHeader + PlatformHeader** separation complete (ProductHeader eliminated)
+- **Architecture**: ✅ **Unified voice/search/platform** system with mobile folder cleanup (1,078 lines eliminated)
 - **Modules**: Partial implementation (Lead Management, Quotation Orders, Customer List)
 
 ### **Target State** 
@@ -194,11 +195,13 @@ Transform current 8-card dashboard system into the complete 5-tab mobile-first V
 - **Modules**: Full production-ready modules with realistic mock data
 
 ### **🚨 ARCHITECTURAL COMPLIANCE REQUIREMENTS**
-- ✅ **Unified Architecture**: Work within existing App.tsx universal container, pure business components
+- ✅ **Unified PlatformShell**: CSS Grid responsive architecture (mobile ≤1024px, desktop >1024px) - **COMPLETED**
 - ✅ **Design System Patterns**: Use existing 4-layer CSS architecture, extend global classes
 - ✅ **Visual Design Spec**: Implement complete color system (#1D4ED8, #F97316), Inter fonts, 44px touch targets
-- ✅ **Existing Systems**: Extend existing voice/search/button systems (never recreate)
-- ✅ **Zero Duplication**: Follow established patterns, update with Visual Design Specification styling
+- ✅ **Header Separation**: WebsiteHeader (marketing) + PlatformHeader (business) - **COMPLETED**
+- ✅ **Zero Duplication**: Eliminated mobile folder (1,078 lines), unified architecture - **COMPLETED**
+- 🚨 **Mobile Branding**: Company logo/name/tagline in mobile header (NO personal greetings)
+- ❓ **Desktop Greeting**: Placement for any greeting elements in desktop side nav uncertain - TBD
 
 ---
 
@@ -321,7 +324,7 @@ git reset --hard <commit-hash>  # Rollback to safe state
    - Modify .unifiedHeader for 56px mobile pattern
    - Add mobile navigation container structure
 
-2. Update MobileAppShell.css
+2. Update PlatformShell.css
    - Implement Visual Design Spec mobile patterns
    - Add bottom navigation clearance
    - Optimize for 360px→768px→1024px+ breakpoints
@@ -334,7 +337,7 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 **Files Modified**:
 - ✅ `App.css` - Mobile-first responsive architecture
-- ✅ `MobileAppShell.css` - Mobile layout optimization
+- ✅ `PlatformShell.css` - Mobile layout optimization
 
 **Validation Criteria**:
 - [x] Responsive breakpoints work correctly
@@ -347,7 +350,7 @@ git reset --hard <commit-hash>  # Rollback to safe state
 **✅ Completion Summary**:
 - Restructured App.css with complete mobile-first responsive design (360px→768px→1024px+)
 - Implemented Visual Design Spec layout variables: 56px header, 48px search, 64px navigation
-- Enhanced MobileAppShell.css with comprehensive mobile optimization
+- Enhanced PlatformShell.css with comprehensive mobile optimization
 - Added proper content clearance and touch-friendly interactions
 - Validated responsive behavior across all breakpoints
 - Preserved existing unified architecture patterns
@@ -464,11 +467,11 @@ git reset --hard <commit-hash>  # Rollback to safe state
 **Objective**: Complete architectural restructure to unified header system with clean route separation
 
 **🚨 CRITICAL ARCHITECTURAL ISSUE IDENTIFIED**:
-- Current ProductHeader serves both website + platform contexts (confusion)
-- MobileAppShell has integrated header only for mobile platform
-- Dashboard acts as both platform home + business component (dual identity)  
-- Complex conditional logic with isPlatformPage() checks
-- URL structure mixes platform and website routes
+- ✅ **RESOLVED**: ProductHeader → WebsiteHeader + PlatformHeader separation (unified system)
+- PlatformShell has unified header system for mobile and desktop platform
+- ✅ **RESOLVED**: Dashboard now pure business component (dual identity eliminated)  
+- ✅ **RESOLVED**: Complex conditional logic eliminated via CSS Grid layout routes
+- ✅ **RESOLVED**: Clean URL structure: website (/*) vs platform (/platform/*)
 
 **Target Architecture**:
 ```
@@ -697,18 +700,18 @@ Platform Routes (Business Application):
 - Extends current mobile-first responsive design
 
 **Files Modified**:
-- `ProductHeader.tsx` - Remove mobile greeting elements
-- `ProductHeader.module.css` - Remove mobile responsive CSS
-- `MobileAppShell.tsx` - Extract search to separate container  
-- `MobileAppShell.css` - Implement clean 4-container layout
+- ✅ `WebsiteHeader.tsx` - ✅ **COMPLETED** - Pure website/marketing component
+- ✅ `PlatformHeader.tsx` - ✅ **COMPLETED** - Pure platform business component
+- `PlatformShell.tsx` - ✅ **ALREADY IMPLEMENTED** - Unified CSS Grid architecture  
+- `PlatformShell.css` - ✅ **ALREADY IMPLEMENTED** - Clean responsive layout
 - `GlobalSearch.tsx` - Simplify component structure
 - `GlobalSearch.module.css` - Clean up and restore styling
 - `App.tsx` - Restructure desktop section to 4-container pattern
 - `App.css` - Add desktop 4-container layout styles
 
 **Validation Criteria**:
-- [ ] No "Good morning, Ramesh" appears on any mobile navigation
-- [ ] ProductHeader never renders on mobile screens (≤768px)
+- [ ] Company branding (logo, name, tagline) displays prominently in mobile header
+- [x] WebsiteHeader never renders on platform routes (/platform/*)
 - [ ] Clean 4-container mobile architecture: header → search → content → navigation
 - [ ] Desktop App.tsx follows same 4-container pattern as mobile
 - [ ] No fixed positioning in desktop layout
@@ -816,7 +819,7 @@ Platform Routes (Business Application):
 
 2. Mobile layout architecture following Visual Design Spec
    ┌─────────────────────────────────────┐
-   │ [←]  Good morning, Ramesh 👋   [🔔][⋯]│ 56px header
+   │ [←] [LOGO] Company Name & Tagline [🔔][⋯]│ 56px header with company branding
    │ [🔍 Search orders, customers...(🎙)]│ 48px search
    ├─────────────────────────────────────┤
    │     KPI STRIP (swipe horizontal)    │ 120px
