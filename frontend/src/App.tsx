@@ -243,7 +243,6 @@ function AppContent() {
       <div className="platformPageContent">
         <Dashboard
           mobile={isMobile}
-          onNavigateHome={showHomePage}
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}

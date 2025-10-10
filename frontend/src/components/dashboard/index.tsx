@@ -7,7 +7,6 @@ interface DashboardProps {
   mobile?: boolean;
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
-  onNavigateHome?: () => void;
   onShowLeadManagement: (autoAction?: string, actionParams?: Record<string, unknown>) => void;
   onShowQuotationOrders: () => void;
   onShowSalesOrders: () => void;
@@ -30,7 +29,6 @@ function Dashboard({
   mobile = false,
   currentTheme,
   onThemeChange,
-  onNavigateHome,
   onShowLeadManagement,
   onShowQuotationOrders,
   onShowSalesOrders,
@@ -521,7 +519,6 @@ function Dashboard({
     // Theme and auth
     currentTheme,
     onThemeChange,
-    onNavigateHome,
     onLogin,
     onSignUp,
     onGuestMode,

@@ -58,7 +58,6 @@ interface DesktopPresentationProps {
   // Theme and auth
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
-  onNavigateHome?: () => void;
   onLogin?: () => void;
   onSignUp?: () => void;
   onGuestMode?: () => void;
