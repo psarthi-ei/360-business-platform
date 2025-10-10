@@ -46,6 +46,16 @@ declare global {
   }
 }
 
+// Extended window interfaces for voice tracking
+interface WindowWithVoiceTracking extends Window {
+  speechRecognitionInstances?: number;
+  voiceStartTime?: number;
+}
+
+interface WindowWithAudioTracking extends Window {
+  voiceAudioEvents?: number;
+}
+
 // Voice control interface for external components
 export interface VoiceControlRef {
   startVoiceRecognition: () => void;
@@ -709,11 +719,12 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
     }
     
     // Track global instances for debugging
-    if (!(window as any).speechRecognitionInstances) {
-      (window as any).speechRecognitionInstances = 0;
+    const windowWithVoice = window as WindowWithVoiceTracking;
+    if (!windowWithVoice.speechRecognitionInstances) {
+      windowWithVoice.speechRecognitionInstances = 0;
     }
-    (window as any).speechRecognitionInstances++;
-    addDebugLog('Instance', `Creating recognition instance #${(window as any).speechRecognitionInstances}`);
+    windowWithVoice.speechRecognitionInstances++;
+    addDebugLog('Instance', `Creating recognition instance #${windowWithVoice.speechRecognitionInstances}`);
     
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
@@ -747,7 +758,8 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
           addDebugLog('Voice', 'Audio detected');
           addDebugLog('Voice-Events', '✅ onaudiostart - Microphone audio detected');
           // Track audio events
-          (window as any).voiceAudioEvents = ((window as any).voiceAudioEvents || 0) + 1;
+          const windowWithAudio = window as WindowWithAudioTracking;
+          windowWithAudio.voiceAudioEvents = (windowWithAudio.voiceAudioEvents || 0) + 1;
         };
         
         extendedRecognition.onspeechstart = () => {
@@ -868,15 +880,18 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
         addDebugLog('Voice-End', `Timeout active: ${!!timeoutRef.current}`);
         addDebugLog('Voice-End', `Recognition continuous: ${recognitionRef.current?.continuous}`);
         addDebugLog('Voice-End', `Recognition lang: ${recognitionRef.current?.lang}`);
-        addDebugLog('Voice-End', `Global instances count: ${(window as any).speechRecognitionInstances || 'unknown'}`);
+        const windowWithVoice = window as WindowWithVoiceTracking;
+        addDebugLog('Voice-End', `Global instances count: ${windowWithVoice.speechRecognitionInstances || 'unknown'}`);
         
         // Check if any audio events were fired
-        const audioEventsDetected = (window as any).voiceAudioEvents || 0;
+        const windowWithAudio = window as WindowWithAudioTracking;
+        const audioEventsDetected = windowWithAudio.voiceAudioEvents || 0;
         addDebugLog('Voice-End', `Audio events detected: ${audioEventsDetected}`);
         
         // Check if this is an unexpected early end
         const now = Date.now();
-        const timeSinceStart = now - ((window as unknown as { voiceStartTime?: number }).voiceStartTime || 0);
+        const windowWithVoiceStart = window as WindowWithVoiceTracking;
+        const timeSinceStart = now - (windowWithVoiceStart.voiceStartTime || 0);
         addDebugLog('Voice-End', `Time since start: ${timeSinceStart}ms`);
         
         if (timeSinceStart < 1000) {
