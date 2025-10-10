@@ -4791,7 +4791,7 @@
     /* Clean base - no overrides needed with proper architecture */
   }
   
-  /* Mobile-first content area styling moved to MobileAppShell.css */
+  /* Mobile-first content area styling moved to PlatformShell */
   
   /* Ensure App container doesn't overflow */
   .App {

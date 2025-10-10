@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import FloatingActionButton from '../mobile/FloatingActionButton';
+import FloatingActionButton from './FloatingActionButton';
 import styles from './BottomNavigation.module.css';
 
 interface BottomNavigationProps {

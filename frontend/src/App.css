@@ -45,7 +45,7 @@
   height: var(--vds-header-height);
   background: var(--ds-btn-primary); /* Visual Design Spec primary blue */
   color: white;
-  display: none; /* Hidden by default - mobile uses MobileAppShell navigation */
+  display: none; /* Hidden by default - mobile uses PlatformShell navigation */
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--ds-space-md);
