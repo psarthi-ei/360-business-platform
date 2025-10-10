@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './App.css';
 import { Analytics } from '@vercel/analytics/react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams, Outlet } from 'react-router-dom';
 import LanguageSwitcher from './components/ui/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
 import Dashboard from './components/dashboard/index';
@@ -36,8 +36,7 @@ import { useResponsive } from './hooks/useResponsive';
 import PlatformShell from './components/platform/PlatformShell';
 import { createNavigationHelpers } from './core/navigationBusinessLogic';
 import { createUniversalActionHandler } from './core/voiceBusinessLogic';
-import { createAllRoutes, RenderFunctions } from './core/routeBusinessLogic';
-import { isPlatformPage } from './utils/pageDetection';
+import { createPlatformRoutes, createWebsiteRoutes, RenderFunctions } from './core/routeBusinessLogic';
 
 type Language = 'en' | 'gu' | 'hi';
 type UserMode = 'guest' | 'demo' | 'authenticated';
@@ -56,8 +55,8 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/contact') return 'contact';
   if (pathname === '/profile-completion') return 'profilecompletion';
   
-  // Platform routes - /platform/* pattern only
-  if (pathname === '/platform' || pathname === '/platform/dashboard') return 'dashboard';
+  // Platform routes - /platform/* pattern with nested routing
+  if (pathname === '/platform' || pathname === '/platform/' || pathname === '/platform/dashboard') return 'dashboard';
   if (pathname === '/platform/home') return 'home';
   if (pathname === '/platform/leads') return 'leads';
   if (pathname === '/platform/quotes') return 'quotes';
@@ -576,33 +575,35 @@ function AppContent() {
           <div className="App">
           <div className="App-content">
         
-        {/* Clean Layout Separation: Platform vs Website */}
-        {isPlatformPage(location.pathname) ? (
-          // Platform Application (Business Pages) - Unified Shell for Mobile and Desktop
-          <PlatformShell
-            currentLanguage={currentLanguage}
-            onLanguageChange={switchLanguage}
-            onHome={showHomePage}
-            onLogin={showLogin}
-            onSignUp={showSignUp}
-            onGuestMode={handleGuestMode}
-            onDemoMode={handleDemoMode}
-            onLogout={handleLogout}
-            isAuthenticated={isAuthenticated}
-            userMode={userMode}
-            currentScreen={currentScreen}
-            onUniversalAction={handleUniversalAction}
-            onPerformSearch={handleUniversalSearch}
-          >
-            <Routes>
-              {createAllRoutes(renderFunctions)}
-              <Route path="*" element={renderDashboard()} />
-            </Routes>
-          </PlatformShell>
-        ) : (
-          // Website Pages (Marketing/Public)
-          <>
-            <WebsiteHeader
+        {/* Clean Layout Routes: Platform vs Website */}
+        <Routes>
+          {/* Platform Layout Route */}
+          <Route path="/platform/*" element={
+            <PlatformShell
+              currentLanguage={currentLanguage}
+              onLanguageChange={switchLanguage}
+              onHome={showHomePage}
+              onLogin={showLogin}
+              onSignUp={showSignUp}
+              onGuestMode={handleGuestMode}
+              onDemoMode={handleDemoMode}
+              onLogout={handleLogout}
+              isAuthenticated={isAuthenticated}
+              userMode={userMode}
+              currentScreen={currentScreen}
+              onUniversalAction={handleUniversalAction}
+              onPerformSearch={handleUniversalSearch}
+            >
+              <Outlet />
+            </PlatformShell>
+          }>
+            {createPlatformRoutes(renderFunctions)}
+          </Route>
+          
+          {/* Website Layout Route */}
+          <Route path="/*" element={
+            <>
+              <WebsiteHeader
                 currentLanguage={currentLanguage}
                 onLanguageChange={switchLanguage}
                 onHome={showHomePage}
@@ -621,21 +622,18 @@ function AppContent() {
                 onAbout={showAbout}
                 onContact={showContact}
               />
-            
-            <Routes>
-              {createAllRoutes(renderFunctions)}
-              <Route path="*" element={renderHomePage()} />
-            </Routes>
-            
-            {/* Single Footer for All Pages (Desktop) */}
-            <Footer
-              currentLanguage={currentLanguage}
-              onLanguageChange={switchLanguage}
-              onAbout={showAbout}
-              onContact={showContact}
-            />
-          </>
-        )}
+              <Outlet />
+              <Footer
+                currentLanguage={currentLanguage}
+                onLanguageChange={switchLanguage}
+                onAbout={showAbout}
+                onContact={showContact}
+              />
+            </>
+          }>
+            {createWebsiteRoutes(renderFunctions)}
+          </Route>
+        </Routes>
         
           </div>
         </div>

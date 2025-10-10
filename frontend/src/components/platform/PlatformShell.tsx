@@ -12,10 +12,7 @@ import { getBusinessData, getCurrentProcessStage } from '../../core/businessData
 import { ActionParams } from '../../services/nlp/types';
 import styles from './PlatformShell.module.css';
 
-// Helper function to determine if current path is a platform page
-function isPlatformPage(pathname: string): boolean {
-  return pathname.startsWith('/platform');
-}
+// Note: isPlatformPage checks removed - PlatformShell now only renders for platform routes via layout routing
 
 interface PlatformShellProps {
   currentLanguage: string;
@@ -61,9 +58,9 @@ function PlatformShell({
     <div className={styles.platformShell}>
       {/* CSS Grid Layout - All Areas Always Present */}
       
-      {/* Sidebar Area - Content conditional, area always exists */}
+      {/* Sidebar Area - Desktop only */}
       <aside className={styles.sidebarArea}>
-        {isPlatformPage(location.pathname) && !isMobile && (
+        {!isMobile && (
           <LeftSidebarNavigation />
         )}
       </aside>
@@ -83,7 +80,7 @@ function PlatformShell({
           userMode={userMode}
           userName={userName}
           // Desktop search integration
-          showSearch={!isMobile && isPlatformPage(location.pathname)}
+          showSearch={!isMobile}
           globalSearchRef={globalSearchRef}
           searchScope={getSearchScope(currentScreen)}
           dataSources={getSearchDataSources()}
@@ -91,16 +88,14 @@ function PlatformShell({
         />
       </header>
       
-      {/* Search Area - Content conditional, area always exists */}
+      {/* Search Area - Always rendered for platform */}
       <section className={styles.searchArea}>
-        {isPlatformPage(location.pathname) && (
-          <GlobalSearch
-            ref={globalSearchRef}
-            searchScope={getSearchScope(currentScreen)}
-            dataSources={getSearchDataSources()}
-            navigationHandlers={getSearchNavigationHandlers(navigate)}
-          />
-        )}
+        <GlobalSearch
+          ref={globalSearchRef}
+          searchScope={getSearchScope(currentScreen)}
+          dataSources={getSearchDataSources()}
+          navigationHandlers={getSearchNavigationHandlers(navigate)}
+        />
       </section>
       
       {/* Content Area - Always rendered */}
@@ -108,15 +103,15 @@ function PlatformShell({
         {children}
       </main>
       
-      {/* Navigation Area - Content conditional, area always exists */}
+      {/* Navigation Area - Mobile only */}
       <nav className={styles.navigationArea}>
-        {isPlatformPage(location.pathname) && isMobile && (
+        {isMobile && (
           <BottomNavigation />
         )}
       </nav>
       
-      {/* Floating Elements - Outside Grid */}
-      {isPlatformPage(location.pathname) && !isMobile && (
+      {/* Floating Elements - Desktop only */}
+      {!isMobile && (
         <FloatingVoiceAssistant
           currentProcessStage={getCurrentProcessStage(location.pathname)}
           onUniversalAction={onUniversalAction}
