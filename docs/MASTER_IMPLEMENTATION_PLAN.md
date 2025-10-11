@@ -809,74 +809,35 @@ Platform Routes (Business Application):
 
 **Objective**: Create unified responsive Dashboard.tsx following Visual Design Specification, consolidating all dashboard functionality into single component
 
+**Reference**: **Visual Design Specification Section 6** - [🏠 HOME DASHBOARD - Central Command Center](../docs/VISUAL_DESIGN_SPECIFICATION.md#home-dashboard---central-command-center) *(Line 413)*
+
 **Technical Implementation**:
 ```
-1. Create unified Dashboard.tsx (Simplified Responsive Approach)
+1. Architecture Consolidation
    - Consolidate Dashboard/index.tsx, MobilePresentation.tsx, and DesktopPresentation.tsx
    - Move all business logic calculations directly into Dashboard.tsx
-   - Implement Visual Design Specification layout structure
+   - Implement responsive layout per Visual Design Specification Section 6
    - Use CSS Grid/Flexbox with responsive breakpoints (≤1024px mobile, >1024px desktop)
-   - Horizontal scrolling KPI strip (120px height) 
-   - Primary Actions row (56px height, 4 buttons)
-   - Business cards with Visual Design Spec format
-   - Include tab navigation state and all existing business data calculations
 
-2. Unified responsive layout structure (CSS breakpoints handle mobile ≤1024px, desktop >1024px)
-   ┌─────────────────────────────────────┐
-   │ [←] [LOGO] Company Name & Tagline [🔔][⋯]│ 56px header with company branding
-   │ [🔍 Search orders, customers...(🎙)]│ 48px search
-   ├─────────────────────────────────────┤
-   │     KPI STRIP (swipe horizontal)    │ 120px height
-   │ ┌─────────┐ ┌─────────┐ ┌─────────┐ │ Cards: 104px, 8px gaps
-   │ │Revenue  │ │Pending  │ │Orders   │ │ Revenue, Pending Inv,
-   │ │₹4.2L ↑5%│ │Inv: 3   │ │Risk: 2  │ │ Orders Risk, Prod Eff
-   │ └─────────┘ └─────────┘ └─────────┘ │
-   ├─────────────────────────────────────┤
-   │    PRIMARY ACTIONS (4 buttons)     │ 56px height, 4px gaps
-   │ [+Order] [Payment] [PR] [Job]       │ Touch-friendly CTAs
-   ├─────────────────────────────────────┤
-   │ ⚠️ TOP INSIGHT CARD                 │ Alert: 72px height
-   │ 2 orders blocked - Cotton shortage  │ Alert background color
-   │ (300 kg)              [Resolve] ──→ │ Action button right
-   ├─────────────────────────────────────┤
-   │ 📈 SALES SNAPSHOT                  │ Business snapshots
-   │ Pipeline: Leads 12→Quotes 6→Orders 2│ 64px height each
-   │                   [View Pipeline] ─→│ Navigation arrows
-   ├─────────────────────────────────────┤
-   │ 🏭 OPERATIONS SNAPSHOT             │ Real-time status
-   │ WOs active: 5 | Delayed >24h: 1    │ Key metrics display
-   │                  [Open Production]─→│ Module navigation
-   ├─────────────────────────────────────┤
-   │ 👥 CUSTOMER HEALTH                 │ Relationship metrics
-   │ Top: Suresh(₹1.2L) Ramesh(₹0.5L)   │ Customer highlights
-   │ Unhappy: 1           [View Customers]│ Action integration
-   ├─────────────────────────────────────┤
-   │ 📋 RECENT ACTIVITY                 │ Activity timeline
-   │ • 09:12 Advance ₹25K (Acme)        │ 40px items each
-   │ • 08:55 GRN received (ABC)         │ Time + description
-   │ • 08:15 WO#451 started (Line 2)    │ Business events
-   └─────────────────────────────────────┘
+2. Layout Implementation
+   - Follow exact wireframe specifications from Visual Design Spec Section 6
+   - Implement KPI strip (120px height), Primary Actions (56px), Business Cards (64px each)
+   - Use specified Visual Design colors: Alert cards #FEF3C7, borders #EAB308
+   - Apply 8px baseline grid system with 44px minimum touch targets
 
-3. Eliminate Dashboard/index.tsx wrapper layer
-   - Direct Dashboard.tsx import in App.tsx routing
-   - No mobile prop needed - responsive behavior handled by CSS
-   - Simplified component tree: App.tsx → Dashboard.tsx
-
-4. Desktop-specific layout implementation (>1024px)
-   - Multi-column KPI grid (2x2 layout) instead of horizontal scroll
-   - Side-by-side business intelligence cards (2-column layout)
-   - Larger card dimensions for more detailed information
-   - Enhanced typography and spacing for desktop viewing
-   - Navigation breadcrumbs: "ElevateBusiness 360° > Home > Dashboard"
-
-5. Update dashboard.module.css for responsive Visual Design Specification
+3. Responsive Behavior
    - Mobile (≤1024px): Horizontal scrolling KPI strip, stacked cards
    - Desktop (>1024px): Multi-column grid layouts, larger cards, enhanced spacing
-   - CSS Grid/Flexbox with breakpoint-specific behavior
-   - Visual Design Spec colors: Alert cards #FEF3C7, borders #EAB308
-   - 8px baseline grid system with proper touch targets (44px minimum)
-   - Horizontal scroll with snap points for KPI strip on mobile only
+   - CSS breakpoints handle layout changes automatically
+   - Eliminate mobile prop dependency
+
+4. Component Architecture
+   - Direct Dashboard.tsx import in App.tsx routing
+   - Simplified component tree: App.tsx → Dashboard.tsx (no wrappers)
+   - Include tab navigation state and all existing business data calculations
 ```
+
+**Design Reference**: All visual specifications, measurements, and layouts are detailed in **Visual Design Specification Section 6** with complete ASCII wireframes and implementation guidelines.
 
 **Files Modified**:
 - `Dashboard.tsx` - **NEW**: Single unified responsive component with all business logic and Visual Design Specification
@@ -947,34 +908,27 @@ Platform Routes (Business Application):
 
 **Objective**: Transform existing process cards to alert and snapshot format
 
+**Reference**: **Visual Design Specification Section 6** - [🏠 HOME DASHBOARD - Central Command Center](../docs/VISUAL_DESIGN_SPECIFICATION.md#home-dashboard---central-command-center) *(Lines 428-450)*
+
 **Technical Implementation**:
 ```
-1. Alert Card Transformation
+1. Alert Card Implementation
+   - Follow Visual Design Spec alert card specifications (Line 429-431)
    - Material shortage alerts with warning background (#FEF3C7)
-   - Action buttons for immediate resolution
-   - Orange border (#EAB308) for urgent items
+   - Action buttons for immediate resolution with orange border (#EAB308)
    
 2. Business Snapshot Cards
-   📈 SALES SNAPSHOT
-   │ Pipeline: Leads 12→Quotes 6→Orders 2│
-   │ Conversion Rate: 33%                │
-   │                   [View Pipeline] ──→│
+   - Implement Sales, Operations, and Customer Health snapshot cards per Visual Design Spec
+   - Use specified 64px height for snapshot cards (Lines 433-443)
+   - Include navigation arrows and proper metrics display
    
-   🏭 OPERATIONS SNAPSHOT
-   │ WOs active: 5 | Delayed >24h: 1    │
-   │ Production Efficiency: 78%          │
-   │                  [Open Production]──→│
-   
-   👥 CUSTOMER HEALTH
-   │ Active Customers: 32                │
-   │ Top: Suresh(₹1.2L) Ramesh(₹0.5L)   │
-   │ Unhappy: 1           [View Customers]│
-
 3. Activity Timeline
-   - Real-time business events with timestamps
-   - Textile-specific activities (GRN received, WO started)
-   - Interactive items with navigation links
+   - Follow Visual Design Spec activity timeline format (Lines 445-448)
+   - Real-time business events with 40px item height
+   - Textile-specific activities with time + description format
 ```
+
+**Design Reference**: Complete wireframes and card specifications are in **Visual Design Specification Section 6** with exact measurements and styling guidelines.
 
 **Files Modified**:
 - ✅ Dashboard card components - Alert and snapshot redesign
@@ -996,17 +950,14 @@ Platform Routes (Business Application):
 
 **Objective**: Merge LeadManagement and QuotationOrders into unified 4-tab Sales module
 
+**Reference**: **Visual Design Specification Section 6** - [💼 SALES TAB - Revenue Pipeline Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#sales-tab---revenue-pipeline-management) *(Lines 464-497)*
+
 **Technical Implementation**:
 ```
 1. Sales Module Architecture
-   Create unified Sales component with 4 tabs:
-   ┌─────────────────────────────────────┐
-   │ Sales    [ Leads│Quotes│Orders│Inv ]│ 48px tab bar
-   │ [🔍 Search orders... (🎙)]          │ 44px search
-   ├─────────────────────────────────────┤
-   │ Tab Content Area                    │ Dynamic content
-   │ (Leads/Quotes/Orders/Invoices)      │ based on active tab
-   └─────────────────────────────────────┘
+   - Follow Visual Design Spec 4-tab structure: Leads | Quotes | Orders | Invoices
+   - Implement 48px tab bar and 44px search bar per specifications (Line 470-471)
+   - Use exact layout and styling from Visual Design Specification wireframes
 
 2. Component Integration
    - Merge LeadManagement.tsx lead functionality into Leads tab
@@ -1015,11 +966,13 @@ Platform Routes (Business Application):
    - Preserve all existing functionality and data
 
 3. State Management Updates
-   - Tab-specific state management
+   - Tab-specific state management with Visual Design Spec navigation
    - Shared data between tabs (lead to quote progression)
-   - Search functionality across all tabs
-   - Persistent tab selection
+   - Search functionality with voice integration per design spec
+   - Persistent tab selection with visual active states
 ```
+
+**Design Reference**: Complete sales module wireframes and specifications are in **Visual Design Specification Section 6** including order list views, creation flows, and payment recording interfaces.
 
 **Files Modified**:
 - ✅ `LeadManagement.tsx` - Integration into Sales module
@@ -1192,58 +1145,31 @@ Platform Routes (Business Application):
 
 **Objective**: Implement detailed Work Order interface for factory operators following Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 6** - [🏭 PRODUCTION TAB - Work Order Detail (Operator Interface)](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-operator-interface) *(Lines 696-737)*
+
 **Technical Implementation**:
 ```
-1. Work Order Detail Screen (Visual Design Spec lines 697-737)
-   ┌─────────────────────────────────────┐
-   │ WO#451 — Dyed Fabric           [←] │ Header with back
-   │ Order: #O-2345 | Machine: Line 2    │ Context info
-   ├─────────────────────────────────────┤
-   │ 🎯 Job Information                  │
-   │ Target Quantity: 1000m             │ Large text
-   │ Produced: 800m                     │ Bold progress
-   │ Remaining: 200m                    │ Calculated
-   │ Progress: [████████░░] 80%         │ Visual progress
-   ├─────────────────────────────────────┤
-   │ ⏱️ Time Tracking                    │
-   │ Started: 08:15 AM                  │ Start time
-   │ Running: 02:45:30                  │ Live timer
-   │ Est. Completion: 11:30 AM          │ Calculated ETA
-   ├─────────────────────────────────────┤
-   │ 📊 Today's Production Entry         │
-   │ ┌─────────────────────────────────┐ │
-   │ │ Qty Produced: [50] m    [+][-] │ │ Number input
-   │ └─────────────────────────────────┘ │ +/- buttons
-   │ ┌─────────────────────────────────┐ │
-   │ │ Scrap/Waste:  [5 ] m    [+][-] │ │ Waste tracking
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ 📝 Issues/Notes                     │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [Minor color variation noted]   │ │ Text area
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ 📷 Photo Evidence                   │
-   │ [📷 Attach Progress Photo]          │ Photo button
-   │ [Current quality looks good.jpg]    │ Attached file
-   ├─────────────────────────────────────┤
-   │    [Pause Job]    [Complete Job]    │ Large buttons
-   └─────────────────────────────────────┘
+1. Work Order Detail Implementation
+   - Follow exact Visual Design Spec wireframe (Lines 699-737)
+   - Implement all specified sections: Job Information, Time Tracking, Production Entry
+   - Use precise measurements and layout from Visual Design Specification
 
-2. Live Timer Implementation
-   - Real-time elapsed time display
+2. Live Timer System
+   - Real-time elapsed time display per Visual Design Spec
    - ETA calculations based on progress rate
-   - Start/pause/resume functionality
+   - Start/pause/resume functionality with visual feedback
    - Time logging for productivity analysis
 
-3. Production Entry System
-   - Numeric input with +/- increment buttons
+3. Production Entry Interface
+   - Numeric input with +/- increment buttons (per Line 716-720)
    - Waste tracking for quality metrics
    - Running totals and remaining calculations
    - Validation against target quantities
 
 4. Photo Evidence Integration
-   - Camera access for progress photos
+   - Follow Visual Design Spec photo capture patterns (Section 9)
+   - Camera access for progress photos with context
+   - Photo gallery integration for quality documentation
    - Photo gallery for attached evidence
    - Quality documentation requirements
    - Photo compression and storage
@@ -1269,60 +1195,30 @@ Platform Routes (Business Application):
 
 **Objective**: Implement QC workflow following Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 6** - [🏭 PRODUCTION TAB - Quality Control Screen](../docs/VISUAL_DESIGN_SPECIFICATION.md#quality-control-screen) *(Lines 739-776)*
+
 **Technical Implementation**:
 ```
-1. Quality Control Screen (Visual Design Spec lines 740-776)
-   ┌─────────────────────────────────────┐
-   │ Quality Check — WO#451         [←] │ QC header
-   │ Dyed Fabric | Batch: B2024-045     │ Product context
-   ├─────────────────────────────────────┤
-   │ ✅ Quality Checklist                │ Checklist section
-   │ ☑️ Color match within tolerance     │ Completed items
-   │ ☑️ Width specifications met         │ Green checkmarks
-   │ ☑️ Weight/GSM correct               │
-   │ ⬜ Shrinkage test pending           │ Pending item
-   │ ☑️ No visible defects               │ Clean layout
-   ├─────────────────────────────────────┤
-   │ 🎯 Quality Grade Assessment         │
-   │ ● A Grade (Premium)                │ Radio options
-   │ ○ B Grade (Standard)               │ 40px each
-   │ ○ Reject (Rework needed)           │ Clear hierarchy
-   ├─────────────────────────────────────┤
-   │ 📝 Quality Notes                    │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [Slight edge variation but      │ │ Notes area
-   │ │  within acceptable limits]      │ │ Pre-filled example
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ 📷 Quality Evidence (Required)      │
-   │ ┌─────────────────────────────────┐ │
-   │ │     [📷 Take QC Photo]         │ │ Photo requirement
-   │ │                                 │ │ Visual guidance
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ 👤 QC Inspector: [Ravi Sharma ▼]    │ Inspector selection
-   ├─────────────────────────────────────┤
-   │ [Mark QC Pass] [QC Fail - Rework]   │ Clear outcomes
-   └─────────────────────────────────────┘
+1. Quality Control Interface
+   - Follow exact Visual Design Spec wireframe (Lines 742-775)
+   - Implement quality checklist with interactive checkboxes
+   - Quality grade assessment with radio button selection
+   - Required photo evidence per Visual Design Specification
 
-2. Quality Checklist System
-   - Interactive checkboxes for quality parameters
+2. Quality Assessment System
    - Textile-specific quality checks (color, width, weight, shrinkage)
+   - A-Grade, B-Grade, Reject classifications per Visual Design Spec
    - Visual indicators for completed/pending items
-   - Progress tracking through quality stages
+   - Impact on pricing and customer satisfaction tracking
 
-3. Quality Grading System
-   - A-Grade, B-Grade, Reject classifications
-   - Impact on pricing and customer satisfaction
-   - Quality metrics for business intelligence
-   - Historical quality trend tracking
-
-4. QC Photo Requirements
-   - Mandatory photo evidence for quality decisions
-   - Before/after photos for rework items
-   - Quality documentation for customer records
-   - Integration with photo capture system
+3. QC Documentation
+   - Mandatory photo evidence following Visual Design Spec photo patterns
+   - Quality notes with pre-filled examples per specification
+   - QC inspector selection and accountability
+   - Integration with Visual Design Spec photo capture system (Section 9)
 ```
+
+**Design Reference**: Complete QC workflow and interface specifications are in **Visual Design Specification Section 6** with exact measurements, styling, and interaction patterns.
 
 **Files Modified**:
 - `Production.tsx` - Add QualityControl component and navigation
@@ -1344,38 +1240,33 @@ Platform Routes (Business Application):
 
 **Objective**: CREATE new Procurement module using existing architectural patterns
 
+**Reference**: **Visual Design Specification Section 6** - [📦 PROCUREMENT TAB - Supply Chain Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#procurement-tab---supply-chain-management) *(Lines 778-898)*
+
 **Technical Implementation**:
 ```
-1. CREATE Procurement Component Following Architecture
-   /frontend/src/components/business/ (existing folder structure)
-   ├── Procurement.tsx (NEW: Using existing component patterns)
-   └── Procurement.module.css (NEW: Extending Design System)
+1. Procurement Architecture
+   - Create Procurement.tsx following existing component patterns
+   - Implement 4-tab interface per Visual Design Spec: MatReq | PRs | POs | GRNs
+   - Follow exact layout specifications from Visual Design Specification
 
-2. 4-Tab Procurement Interface
-   ┌─────────────────────────────────────┐
-   │ Procurement [MatReq│PRs│POs│GRNs]    │ Sub-tabs
-   │ [🔍 Search materials... (🎙)]       │ Search
-   ├─────────────────────────────────────┤
-   │ ┌─────────────────────────────────┐ │
-   │ │ Cotton Yarn 30s: Short 300kg    │ │ Material alert
-   │ │ Required for: WO#451, WO#452    │ │ Dependencies
-   │ │ Supplier: Gujarat Cotton Mills  │ │ Preferred vendor
-   │ │ [Create PR] [Call Supplier]     │ │ Actions
-   │ └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
+2. Material Requirements Interface
+   - Follow Visual Design Spec material shortage detection (Lines 780-815)
+   - Auto-calculation from work orders with shortage alerts
+   - Implement table format and styling per specification
 
-3. Supply Chain Features
-   - Material Requirement Planning: Auto-calculation from work orders
-   - Purchase Request Generation: Smart PR creation based on shortages
-   - Purchase Order Management: Vendor communication and tracking
-   - Goods Receipt Note (GRN): Photo capture and quality verification
+3. Purchase Request & GRN Workflows
+   - PR creation following Visual Design Spec workflow (Lines 817-854)
+   - GRN processing per Visual Design Spec (Lines 856-898)
+   - Photo capture integration following Section 9 patterns
+   - Vendor communication with WhatsApp integration
 
-4. Gujarat Textile Suppliers Integration
-   - Local supplier database (Surat, Ahmedabad cotton mills)
-   - Pricing history and lead times
-   - Quality ratings and performance metrics
-   - WhatsApp integration for supplier communication
+4. Supply Chain Features
+   - Smart PR creation based on shortages per Visual Design Spec
+   - Vendor performance tracking and quality verification
+   - Material receipt processing with photo documentation
 ```
+
+**Design Reference**: Complete procurement workflows, wireframes, and specifications are detailed in **Visual Design Specification Section 6** with exact layouts and interaction patterns.
 
 **Files Modified**:
 - ⭐ `Procurement.tsx` - NEW: Following existing business component architecture
@@ -1652,40 +1543,29 @@ Platform Routes (Business Application):
 
 **Objective**: Implement desktop-specific UI patterns from Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 7** - [💻 Web Desktop Design Specifications](../docs/VISUAL_DESIGN_SPECIFICATION.md#web-desktop-design-specifications) *(Lines 1059-1273)*
+
 **Technical Implementation**:
 ```
-1. Sidebar Navigation Enhancement (Desktop >1024px)
-   ┌──────────────┬─────────────────────────────┐
-   │ 🏭 ElevateB. │ Dashboard                   │ Header bar
-   ├──────────────┼─────────────────────────────┤
-   │ 📊 Dashboard │ ┌─────────┬─────────┬─────┐ │ Main content
-   │ 🎯 Sales     │ │ Widget1 │ Widget2 │ ... │ │ Grid layout
-   │ 📋 Orders    │ ├─────────┼─────────┼─────┤ │
-   │ 💰 Payments  │ │ Widget3 │ Widget4 │ ... │ │
-   │ 📦 Inventory │ └─────────┴─────────┴─────┘ │
-   │ 🏭 Production│                             │
-   │ 📈 Reports   │                             │
-   └──────────────┴─────────────────────────────┘
+1. Desktop Layout Architecture
+   - Follow Visual Design Spec sidebar navigation system (Lines 1063-1086)
+   - Implement desktop dashboard layout per specification (Lines 1088-1137)
+   - Use exact measurements and grid specifications from Visual Design Spec
 
-2. Table View Implementation
-   - Advanced data grids with sorting/filtering
-   - Inline editing capabilities
-   - Bulk action toolbars
-   - Export functionality (PDF, Excel)
-   - Column customization and persistence
+2. Advanced Desktop Features
+   - Table views per Visual Design Spec sales module (Lines 1139-1195)
+   - Split-view customer 360° per specification (Lines 1197-1231)
+   - Desktop reports and analytics per specification (Lines 1233-1273)
+   - Implement all specified desktop UI patterns and interactions
 
-3. Split-View Layouts
-   - Customer detail with order history
-   - Order management with production timeline
-   - Invoice view with payment reconciliation
-   - Inventory with stock movement details
-
-4. Drawer Panels
-   - Contextual detail views
-   - Quick edit interfaces
-   - Communication panels
-   - Document preview areas
+3. Responsive Desktop Components
+   - Sidebar navigation with proper states and hierarchy
+   - Advanced data management interfaces
+   - Multi-column layouts utilizing larger screen space
+   - Desktop-specific interaction patterns
 ```
+
+**Design Reference**: Complete desktop layouts, navigation systems, and component specifications are detailed in **Visual Design Specification Section 7** with exact measurements and styling guidelines.
 
 **Files Modified**:
 - ✅ UPDATE `PlatformShell.tsx` - Desktop sidebar navigation
@@ -1705,57 +1585,31 @@ Platform Routes (Business Application):
 
 **Objective**: Implement universal photo capture system as specified in Visual Design
 
+**Reference**: **Visual Design Specification Section 9** - [📸 Photo Capture Patterns](../docs/VISUAL_DESIGN_SPECIFICATION.md#photo-capture-patterns) *(Lines 1453-1487)*
+
 **Technical Implementation**:
 ```
 1. Universal Photo Capture Component
-   ┌─────────────────────────────────────┐
-   │ 📷 Capture Photo — Work Order #1234 │ Context header
-   ├─────────────────────────────────────┤
-   │ ┌─────────────────────────────────┐ │
-   │ │                                 │ │ Camera preview
-   │ │         📷 CAMERA VIEW          │ │ Live feed
-   │ │                                 │ │
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ Photo Type: [Quality Check      ▼] │ Context selector
-   │ Description: [Optional note...    ] │ Annotation field
-   ├─────────────────────────────────────┤
-   │ [📷 Capture] [🗂️ Gallery] [❌ Cancel] │ Action buttons
-   └─────────────────────────────────────┘
+   - Follow exact Visual Design Spec photo capture UI flow (Lines 1455-1487)
+   - Implement camera interface with preview per specification
+   - Context-aware photo types and annotation fields
+   - Action buttons and review process per Visual Design Spec
 
 2. Module Integration Points
-   Production Module:
-   - Work order progress photos
-   - Material receipt documentation
-   - Equipment setup verification
-   
-   Quality Control:
-   - Defect documentation with annotations
-   - Inspection evidence capture
-   - Before/after comparison photos
-   
-   Procurement:
-   - GRN material photos
-   - Damage documentation
-   - Supplier delivery proof
-   
-   Payment Module:
-   - Receipt photo capture
-   - Cheque/cash documentation
-   - Bank transfer screenshots
-   
-   Sales Module:
-   - Sample photos for quotes
-   - Delivery proof documentation
-   - Customer facility photos
+   - Follow Visual Design Spec integration specifications across all modules
+   - Production: Work order progress, material receipt, equipment setup
+   - Quality Control: Defect documentation, inspection evidence, before/after
+   - Procurement: GRN materials, damage documentation, delivery proof
+   - Payments: Receipt capture, documentation, bank transfer screenshots
+   - Sales: Sample photos, delivery proof, customer facility documentation
 
 3. Photo Management System
-   - Cloud storage integration (AWS S3/Cloudinary)
-   - Photo compression and optimization
-   - Annotation and labeling system
-   - Gallery view with zoom functionality
-   - Photo sharing via WhatsApp integration
+   - Cloud storage integration per Visual Design Spec requirements
+   - Photo compression, annotation, and gallery systems
+   - WhatsApp sharing integration following design patterns
 ```
+
+**Design Reference**: Complete photo capture workflows, UI patterns, and integration specifications are detailed in **Visual Design Specification Section 9** with exact interface designs and interaction flows.
 
 **Files Modified**:
 - ✅ CREATE `PhotoCapture.tsx` - Universal photo component
