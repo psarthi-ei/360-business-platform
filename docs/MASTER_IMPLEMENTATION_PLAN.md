@@ -807,54 +807,99 @@ Platform Routes (Business Application):
 
 ### **Sub-Phase 3.1: Dashboard Layout Restructure** ⏱️ *60 minutes*
 
-**Objective**: Transform 8-card desktop layout to mobile KPI strip + vertical card layout
+**Objective**: Create unified responsive Dashboard.tsx following Visual Design Specification, consolidating all dashboard functionality into single component
 
 **Technical Implementation**:
 ```
-1. Restructure DesktopPresentation.tsx
-   - Replace 8-card grid with vertical mobile layout
-   - Implement horizontal scrolling KPI strip at top
-   - Add vertical scrolling for business intelligence cards
-   - Maintain existing business logic and data connections
+1. Create unified Dashboard.tsx (Simplified Responsive Approach)
+   - Consolidate Dashboard/index.tsx, MobilePresentation.tsx, and DesktopPresentation.tsx
+   - Move all business logic calculations directly into Dashboard.tsx
+   - Implement Visual Design Specification layout structure
+   - Use CSS Grid/Flexbox with responsive breakpoints (≤1024px mobile, >1024px desktop)
+   - Horizontal scrolling KPI strip (120px height) 
+   - Primary Actions row (56px height, 4 buttons)
+   - Business cards with Visual Design Spec format
+   - Include tab navigation state and all existing business data calculations
 
-2. Mobile layout architecture following Visual Design Spec
+2. Unified responsive layout structure (CSS breakpoints handle mobile ≤1024px, desktop >1024px)
    ┌─────────────────────────────────────┐
    │ [←] [LOGO] Company Name & Tagline [🔔][⋯]│ 56px header with company branding
    │ [🔍 Search orders, customers...(🎙)]│ 48px search
    ├─────────────────────────────────────┤
-   │     KPI STRIP (swipe horizontal)    │ 120px
-   │ ┌─────────┐ ┌─────────┐ ┌─────────┐ │
-   │ │Revenue  │ │Pending  │ │Orders   │ │
-   │ │₹4.2L ↑5%│ │Inv: 3   │ │Risk: 2  │ │
+   │     KPI STRIP (swipe horizontal)    │ 120px height
+   │ ┌─────────┐ ┌─────────┐ ┌─────────┐ │ Cards: 104px, 8px gaps
+   │ │Revenue  │ │Pending  │ │Orders   │ │ Revenue, Pending Inv,
+   │ │₹4.2L ↑5%│ │Inv: 3   │ │Risk: 2  │ │ Orders Risk, Prod Eff
    │ └─────────┘ └─────────┘ └─────────┘ │
    ├─────────────────────────────────────┤
-   │    PRIMARY ACTIONS (4 buttons)     │ 56px
-   │ [+Order] [Payment] [PR] [Job]       │
+   │    PRIMARY ACTIONS (4 buttons)     │ 56px height, 4px gaps
+   │ [+Order] [Payment] [PR] [Job]       │ Touch-friendly CTAs
    ├─────────────────────────────────────┤
-   │ ⚠️ TOP INSIGHT CARD                 │ Alert cards
+   │ ⚠️ TOP INSIGHT CARD                 │ Alert: 72px height
+   │ 2 orders blocked - Cotton shortage  │ Alert background color
+   │ (300 kg)              [Resolve] ──→ │ Action button right
+   ├─────────────────────────────────────┤
    │ 📈 SALES SNAPSHOT                  │ Business snapshots
+   │ Pipeline: Leads 12→Quotes 6→Orders 2│ 64px height each
+   │                   [View Pipeline] ─→│ Navigation arrows
+   ├─────────────────────────────────────┤
    │ 🏭 OPERATIONS SNAPSHOT             │ Real-time status
+   │ WOs active: 5 | Delayed >24h: 1    │ Key metrics display
+   │                  [Open Production]─→│ Module navigation
+   ├─────────────────────────────────────┤
    │ 👥 CUSTOMER HEALTH                 │ Relationship metrics
-   │ 📋 RECENT ACTIVITY                 │ Timeline
+   │ Top: Suresh(₹1.2L) Ramesh(₹0.5L)   │ Customer highlights
+   │ Unhappy: 1           [View Customers]│ Action integration
+   ├─────────────────────────────────────┤
+   │ 📋 RECENT ACTIVITY                 │ Activity timeline
+   │ • 09:12 Advance ₹25K (Acme)        │ 40px items each
+   │ • 08:55 GRN received (ABC)         │ Time + description
+   │ • 08:15 WO#451 started (Line 2)    │ Business events
    └─────────────────────────────────────┘
 
-3. Update dashboard.module.css
-   - Mobile-first responsive grid system
-   - Proper spacing following 8px baseline
-   - Touch-friendly interaction areas
-   - Smooth scrolling behavior
+3. Eliminate Dashboard/index.tsx wrapper layer
+   - Direct Dashboard.tsx import in App.tsx routing
+   - No mobile prop needed - responsive behavior handled by CSS
+   - Simplified component tree: App.tsx → Dashboard.tsx
+
+4. Desktop-specific layout implementation (>1024px)
+   - Multi-column KPI grid (2x2 layout) instead of horizontal scroll
+   - Side-by-side business intelligence cards (2-column layout)
+   - Larger card dimensions for more detailed information
+   - Enhanced typography and spacing for desktop viewing
+   - Navigation breadcrumbs: "ElevateBusiness 360° > Home > Dashboard"
+
+5. Update dashboard.module.css for responsive Visual Design Specification
+   - Mobile (≤1024px): Horizontal scrolling KPI strip, stacked cards
+   - Desktop (>1024px): Multi-column grid layouts, larger cards, enhanced spacing
+   - CSS Grid/Flexbox with breakpoint-specific behavior
+   - Visual Design Spec colors: Alert cards #FEF3C7, borders #EAB308
+   - 8px baseline grid system with proper touch targets (44px minimum)
+   - Horizontal scroll with snap points for KPI strip on mobile only
 ```
 
 **Files Modified**:
-- ✅ `DesktopPresentation.tsx` - Complete mobile layout transformation
-- ✅ `dashboard.module.css` - Mobile-first styling overhaul
+- `Dashboard.tsx` - **NEW**: Single unified responsive component with all business logic and Visual Design Specification
+- `Dashboard/index.tsx` - **DELETE**: Wrapper layer eliminated, functionality moved to Dashboard.tsx
+- `MobilePresentation.tsx` - **DELETE**: Functionality consolidated into Dashboard.tsx
+- `DesktopPresentation.tsx` - **DELETE**: Functionality consolidated into Dashboard.tsx
+- `dashboard.module.css` - Responsive Visual Design Spec styling with CSS breakpoints
+- `App.tsx` - Update routing to import Dashboard.tsx directly (no mobile prop needed)
 
 **Validation Criteria**:
-- [ ] Layout matches Visual Design Specification wireframes
-- [ ] Horizontal KPI scroll works smoothly
-- [ ] Vertical card scroll functions properly
-- [ ] All existing business logic preserved
-- [ ] Touch interactions work correctly
+- [ ] Single unified Dashboard.tsx component created successfully with all business logic
+- [ ] Dashboard/index.tsx, MobilePresentation.tsx, and DesktopPresentation.tsx files deleted
+- [ ] App.tsx routes directly to Dashboard.tsx (no mobile prop or wrapper needed)
+- [ ] Visual Design Specification layout implemented responsively with CSS breakpoints
+- [ ] CSS breakpoints handle mobile (≤1024px) and desktop (>1024px) correctly
+- [ ] Horizontal KPI strip scrolls smoothly with snap points on all devices
+- [ ] Primary Actions row displays 4 buttons with proper spacing (44px touch targets)
+- [ ] Alert cards use correct Visual Design Spec colors (#FEF3C7 background, #EAB308 border)
+- [ ] Business snapshot cards display with 64px height and navigation arrows
+- [ ] Activity timeline shows 40px items with time and description
+- [ ] All existing business logic and data calculations preserved in Dashboard.tsx
+- [ ] Tab navigation state handled within Dashboard.tsx component
+- [ ] Simplified component tree: App.tsx → Dashboard.tsx (no intermediate layers)
 
 ---
 
@@ -1143,7 +1188,159 @@ Platform Routes (Business Application):
 
 ---
 
-### **Sub-Phase 5.2: Procurement Module Creation** ⏱️ *90 minutes*
+### **Sub-Phase 5.2: Production Operator Interface** ⏱️ *60 minutes*
+
+**Objective**: Implement detailed Work Order interface for factory operators following Visual Design Specification
+
+**Technical Implementation**:
+```
+1. Work Order Detail Screen (Visual Design Spec lines 697-737)
+   ┌─────────────────────────────────────┐
+   │ WO#451 — Dyed Fabric           [←] │ Header with back
+   │ Order: #O-2345 | Machine: Line 2    │ Context info
+   ├─────────────────────────────────────┤
+   │ 🎯 Job Information                  │
+   │ Target Quantity: 1000m             │ Large text
+   │ Produced: 800m                     │ Bold progress
+   │ Remaining: 200m                    │ Calculated
+   │ Progress: [████████░░] 80%         │ Visual progress
+   ├─────────────────────────────────────┤
+   │ ⏱️ Time Tracking                    │
+   │ Started: 08:15 AM                  │ Start time
+   │ Running: 02:45:30                  │ Live timer
+   │ Est. Completion: 11:30 AM          │ Calculated ETA
+   ├─────────────────────────────────────┤
+   │ 📊 Today's Production Entry         │
+   │ ┌─────────────────────────────────┐ │
+   │ │ Qty Produced: [50] m    [+][-] │ │ Number input
+   │ └─────────────────────────────────┘ │ +/- buttons
+   │ ┌─────────────────────────────────┐ │
+   │ │ Scrap/Waste:  [5 ] m    [+][-] │ │ Waste tracking
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ 📝 Issues/Notes                     │
+   │ ┌─────────────────────────────────┐ │
+   │ │ [Minor color variation noted]   │ │ Text area
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ 📷 Photo Evidence                   │
+   │ [📷 Attach Progress Photo]          │ Photo button
+   │ [Current quality looks good.jpg]    │ Attached file
+   ├─────────────────────────────────────┤
+   │    [Pause Job]    [Complete Job]    │ Large buttons
+   └─────────────────────────────────────┘
+
+2. Live Timer Implementation
+   - Real-time elapsed time display
+   - ETA calculations based on progress rate
+   - Start/pause/resume functionality
+   - Time logging for productivity analysis
+
+3. Production Entry System
+   - Numeric input with +/- increment buttons
+   - Waste tracking for quality metrics
+   - Running totals and remaining calculations
+   - Validation against target quantities
+
+4. Photo Evidence Integration
+   - Camera access for progress photos
+   - Photo gallery for attached evidence
+   - Quality documentation requirements
+   - Photo compression and storage
+```
+
+**Files Modified**:
+- `Production.tsx` - Add WorkOrderDetail component and routing
+- `Production.module.css` - Operator interface styling
+- **NEW** `WorkOrderDetail.tsx` - Detailed operator interface
+- **NEW** `PhotoCapture.tsx` - Universal photo handling component
+
+**Validation Criteria**:
+- [ ] Work order detail screen matches Visual Design Specification
+- [ ] Live timer displays and updates correctly
+- [ ] Production entry with +/- buttons functions
+- [ ] Photo capture and display works properly
+- [ ] Pause/Complete actions update work order status
+- [ ] All operator interface elements are touch-friendly (44px minimum)
+
+---
+
+### **Sub-Phase 5.3: Quality Control System** ⏱️ *45 minutes*
+
+**Objective**: Implement QC workflow following Visual Design Specification
+
+**Technical Implementation**:
+```
+1. Quality Control Screen (Visual Design Spec lines 740-776)
+   ┌─────────────────────────────────────┐
+   │ Quality Check — WO#451         [←] │ QC header
+   │ Dyed Fabric | Batch: B2024-045     │ Product context
+   ├─────────────────────────────────────┤
+   │ ✅ Quality Checklist                │ Checklist section
+   │ ☑️ Color match within tolerance     │ Completed items
+   │ ☑️ Width specifications met         │ Green checkmarks
+   │ ☑️ Weight/GSM correct               │
+   │ ⬜ Shrinkage test pending           │ Pending item
+   │ ☑️ No visible defects               │ Clean layout
+   ├─────────────────────────────────────┤
+   │ 🎯 Quality Grade Assessment         │
+   │ ● A Grade (Premium)                │ Radio options
+   │ ○ B Grade (Standard)               │ 40px each
+   │ ○ Reject (Rework needed)           │ Clear hierarchy
+   ├─────────────────────────────────────┤
+   │ 📝 Quality Notes                    │
+   │ ┌─────────────────────────────────┐ │
+   │ │ [Slight edge variation but      │ │ Notes area
+   │ │  within acceptable limits]      │ │ Pre-filled example
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ 📷 Quality Evidence (Required)      │
+   │ ┌─────────────────────────────────┐ │
+   │ │     [📷 Take QC Photo]         │ │ Photo requirement
+   │ │                                 │ │ Visual guidance
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ 👤 QC Inspector: [Ravi Sharma ▼]    │ Inspector selection
+   ├─────────────────────────────────────┤
+   │ [Mark QC Pass] [QC Fail - Rework]   │ Clear outcomes
+   └─────────────────────────────────────┘
+
+2. Quality Checklist System
+   - Interactive checkboxes for quality parameters
+   - Textile-specific quality checks (color, width, weight, shrinkage)
+   - Visual indicators for completed/pending items
+   - Progress tracking through quality stages
+
+3. Quality Grading System
+   - A-Grade, B-Grade, Reject classifications
+   - Impact on pricing and customer satisfaction
+   - Quality metrics for business intelligence
+   - Historical quality trend tracking
+
+4. QC Photo Requirements
+   - Mandatory photo evidence for quality decisions
+   - Before/after photos for rework items
+   - Quality documentation for customer records
+   - Integration with photo capture system
+```
+
+**Files Modified**:
+- `Production.tsx` - Add QualityControl component and navigation
+- **NEW** `QualityControl.tsx` - QC workflow interface
+- `Production.module.css` - QC interface styling
+- `PhotoCapture.tsx` - QC photo integration
+
+**Validation Criteria**:
+- [ ] Quality checklist displays with interactive checkboxes
+- [ ] Quality grade selection works correctly
+- [ ] Photo capture required for QC decisions
+- [ ] QC Pass/Fail actions update work order status
+- [ ] QC inspector selection functions
+- [ ] All QC interface elements meet accessibility standards
+
+---
+
+### **Sub-Phase 5.4: Procurement Module Creation** ⏱️ *90 minutes*
 
 **Objective**: CREATE new Procurement module using existing architectural patterns
 
@@ -1194,7 +1391,171 @@ Platform Routes (Business Application):
 
 ---
 
-### **Sub-Phase 5.3: Customer 360° Enhancement** ⏱️ *60 minutes*
+### **Sub-Phase 5.5: Purchase Request Creation Workflow** ⏱️ *45 minutes*
+
+**Objective**: Implement detailed PR creation following Visual Design Specification
+
+**Technical Implementation**:
+```
+1. Purchase Request Creation Screen (Visual Design Spec lines 818-854)
+   ┌─────────────────────────────────────┐
+   │ Create Purchase Request        [×] │ Modal header
+   │ Auto-generated from Order #O-2345   │ Context: 32px
+   ├─────────────────────────────────────┤
+   │ 📋 Items Required                   │ Section header
+   │ ┌─────────────────────────────────┐ │
+   │ │ Cotton Yarn 30s Count           │ │ Item card: 80px
+   │ │ Quantity: [300] kg              │ │ Editable quantity
+   │ │ Quality: Premium Grade          │ │ Quality note
+   │ │ [Edit Specs] [Remove]           │ │ Item actions
+   │ └─────────────────────────────────┘ │
+   │                                     │
+   │ [+ Add Item]                        │ 44px add button
+   ├─────────────────────────────────────┤
+   │ ⚡ Priority & Timeline              │
+   │ ● Urgent  ○ Normal                 │ Priority radio: 40px
+   │ Required By: [12 Oct 2024]         │ Date picker: 48px
+   ├─────────────────────────────────────┤
+   │ 🏪 Vendor Selection                 │
+   │ ┌─────────────────────────────────┐ │
+   │ │ [ABC Suppliers          ▼]     │ │ Vendor dropdown
+   │ └─────────────────────────────────┘ │ 48px height
+   │ Last price: ₹85/kg | Rating: ⭐⭐⭐⭐  │ Vendor info: 24px
+   ├─────────────────────────────────────┤
+   │ 📝 Special Instructions             │
+   │ ┌─────────────────────────────────┐ │
+   │ │ [Previous quality approved -    │ │ Instructions: 60px
+   │ │  same specification required]   │ │ Pre-filled help
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ [Send via WhatsApp] [Save Draft]    │ Primary/secondary
+   └─────────────────────────────────────┘
+
+2. Auto-generation from Material Shortages
+   - Detect shortages from work order material requirements
+   - Pre-populate item specifications and quantities
+   - Suggest preferred vendors based on history
+   - Calculate required delivery dates based on production schedules
+
+3. Vendor Integration System
+   - Vendor database with contact information
+   - Pricing history and lead times
+   - Quality ratings and performance metrics
+   - WhatsApp integration for direct communication
+
+4. Priority and Timeline Management
+   - Urgent vs Normal priority classification
+   - Required delivery date calculations
+   - Impact analysis on production schedules
+   - Automatic deadline warnings
+```
+
+**Files Modified**:
+- `Procurement.tsx` - Add PurchaseRequestCreate component
+- **NEW** `PurchaseRequestCreate.tsx` - PR creation interface
+- **NEW** `VendorSelector.tsx` - Vendor selection with history
+- `Procurement.module.css` - PR creation styling
+
+**Validation Criteria**:
+- [ ] PR creation modal matches Visual Design Specification
+- [ ] Material shortage auto-population works
+- [ ] Vendor selection shows pricing history and ratings
+- [ ] WhatsApp integration launches with pre-filled message
+- [ ] Priority and timeline selection functions correctly
+- [ ] Save draft and send actions work properly
+
+---
+
+### **Sub-Phase 5.6: Goods Receipt Note (GRN) Workflow** ⏱️ *45 minutes*
+
+**Objective**: Implement GRN processing following Visual Design Specification
+
+**Technical Implementation**:
+```
+1. Goods Receipt Note Screen (Visual Design Spec lines 856-898)
+   ┌─────────────────────────────────────┐
+   │ GRN — PO#56 ABC Suppliers      [←] │ GRN header
+   │ Delivery Date: 15 Oct 2024          │ Context info: 32px
+   ├─────────────────────────────────────┤
+   │ 📦 Material Received                │ Section header
+   │ Material: Cotton Yarn 30s Count     │ Material name: 16px
+   │ Ordered Qty: [300] kg               │ Reference qty
+   │ Received Qty: [300] kg              │ Actual received
+   │ ┌─────────────────────────────────┐ │ Quantity input: 48px
+   │ │ [300] kg              [+] [-]   │ │ With adjustment
+   │ └─────────────────────────────────┘ │ buttons
+   ├─────────────────────────────────────┤
+   │ ✅ Quality Assessment               │
+   │ ● Good Quality                      │ Quality radio: 40px
+   │ ○ Minor Issues (specify below)      │ Conditional input
+   │ ○ Major Issues (reject)             │ Clear hierarchy
+   ├─────────────────────────────────────┤
+   │ 🏷️ Batch Information                │
+   │ Batch Number: [CY-2024-089]         │ Batch input: 44px
+   │ Expiry Date: [Not Applicable]       │ Optional field
+   ├─────────────────────────────────────┤
+   │ 📝 Issues/Defects (if any)          │
+   │ ┌─────────────────────────────────┐ │
+   │ │ [None - quality as expected]    │ │ Issues area: 60px
+   │ └─────────────────────────────────┘ │ Default text
+   ├─────────────────────────────────────┤
+   │ 📷 Evidence Photos                  │
+   │ [📷 Delivery Challan] (Required)    │ Required photo
+   │ [📷 Material Sample] (Optional)     │ Optional photo
+   │                                     │
+   │ [challan_photo.jpg] ✅              │ Uploaded indicator
+   │ [sample_photo.jpg] ✅               │ Visual confirmation
+   ├─────────────────────────────────────┤
+   │ 👤 Received By: [Ramesh-Storekeeper]│ Receiver info: 32px
+   ├─────────────────────────────────────┤
+   │         [Mark as Received]          │ 56px primary CTA
+   │                                     │
+   │ ✅ Will update stock & unblock orders│ Action consequence
+   └─────────────────────────────────────┘
+
+2. Quantity Reconciliation System
+   - Compare ordered vs received quantities
+   - Handle partial deliveries and overage
+   - Automatic variance calculations
+   - Impact analysis on pending work orders
+
+3. Quality Assessment Integration
+   - Quality scoring system for vendors
+   - Photo evidence requirements for quality issues
+   - Rejection workflow for substandard materials
+   - Quality trend tracking for supplier performance
+
+4. Stock Update Automation
+   - Automatic inventory updates upon GRN completion
+   - Unblock work orders waiting for materials
+   - Trigger notifications for completed material requirements
+   - Update procurement dashboards and alerts
+
+5. Photo Evidence System
+   - Mandatory delivery challan photos
+   - Optional material sample photos for quality records
+   - Photo compression and cloud storage
+   - Integration with quality assessment workflow
+```
+
+**Files Modified**:
+- `Procurement.tsx` - Add GRN component and navigation
+- **NEW** `GoodsReceiptNote.tsx` - GRN processing interface
+- `PhotoCapture.tsx` - GRN photo integration
+- `Procurement.module.css` - GRN interface styling
+
+**Validation Criteria**:
+- [ ] GRN screen matches Visual Design Specification exactly
+- [ ] Quantity adjustment with +/- buttons works
+- [ ] Quality assessment affects vendor ratings
+- [ ] Photo capture for challan and samples functions
+- [ ] Mark as Received updates stock and unblocks orders
+- [ ] Batch information tracking works correctly
+- [ ] All GRN elements are touch-friendly and accessible
+
+---
+
+### **Sub-Phase 5.7: Customer 360° Enhancement** ⏱️ *60 minutes*
 
 **Objective**: UPDATE existing CustomerList with Visual Design Specification enhancements
 
@@ -1286,6 +1647,128 @@ Platform Routes (Business Application):
 - [ ] Visual consistency across entire platform
 - [ ] Accessibility requirements met
 - [ ] No design system violations
+
+### **Sub-Phase 6.2: Desktop-Specific Design Implementation** ⏱️ *30 minutes*
+
+**Objective**: Implement desktop-specific UI patterns from Visual Design Specification
+
+**Technical Implementation**:
+```
+1. Sidebar Navigation Enhancement (Desktop >1024px)
+   ┌──────────────┬─────────────────────────────┐
+   │ 🏭 ElevateB. │ Dashboard                   │ Header bar
+   ├──────────────┼─────────────────────────────┤
+   │ 📊 Dashboard │ ┌─────────┬─────────┬─────┐ │ Main content
+   │ 🎯 Sales     │ │ Widget1 │ Widget2 │ ... │ │ Grid layout
+   │ 📋 Orders    │ ├─────────┼─────────┼─────┤ │
+   │ 💰 Payments  │ │ Widget3 │ Widget4 │ ... │ │
+   │ 📦 Inventory │ └─────────┴─────────┴─────┘ │
+   │ 🏭 Production│                             │
+   │ 📈 Reports   │                             │
+   └──────────────┴─────────────────────────────┘
+
+2. Table View Implementation
+   - Advanced data grids with sorting/filtering
+   - Inline editing capabilities
+   - Bulk action toolbars
+   - Export functionality (PDF, Excel)
+   - Column customization and persistence
+
+3. Split-View Layouts
+   - Customer detail with order history
+   - Order management with production timeline
+   - Invoice view with payment reconciliation
+   - Inventory with stock movement details
+
+4. Drawer Panels
+   - Contextual detail views
+   - Quick edit interfaces
+   - Communication panels
+   - Document preview areas
+```
+
+**Files Modified**:
+- ✅ UPDATE `PlatformShell.tsx` - Desktop sidebar navigation
+- ✅ ENHANCE `dashboard.module.css` - Desktop grid layouts
+- ✅ CREATE `DesktopTable.tsx` - Advanced table component
+- ✅ IMPLEMENT `SplitView.tsx` - Desktop split layouts
+- ✅ ADD `DrawerPanel.tsx` - Desktop drawer component
+
+**Validation Criteria**:
+- [ ] Sidebar navigation works correctly on desktop
+- [ ] Table views display properly with all features
+- [ ] Split-view layouts function as designed
+- [ ] Drawer panels open/close smoothly
+- [ ] Desktop breakpoints (>1024px) trigger correctly
+
+### **Sub-Phase 6.3: Photo Capture Integration Across All Modules** ⏱️ *15 minutes*
+
+**Objective**: Implement universal photo capture system as specified in Visual Design
+
+**Technical Implementation**:
+```
+1. Universal Photo Capture Component
+   ┌─────────────────────────────────────┐
+   │ 📷 Capture Photo — Work Order #1234 │ Context header
+   ├─────────────────────────────────────┤
+   │ ┌─────────────────────────────────┐ │
+   │ │                                 │ │ Camera preview
+   │ │         📷 CAMERA VIEW          │ │ Live feed
+   │ │                                 │ │
+   │ └─────────────────────────────────┘ │
+   ├─────────────────────────────────────┤
+   │ Photo Type: [Quality Check      ▼] │ Context selector
+   │ Description: [Optional note...    ] │ Annotation field
+   ├─────────────────────────────────────┤
+   │ [📷 Capture] [🗂️ Gallery] [❌ Cancel] │ Action buttons
+   └─────────────────────────────────────┘
+
+2. Module Integration Points
+   Production Module:
+   - Work order progress photos
+   - Material receipt documentation
+   - Equipment setup verification
+   
+   Quality Control:
+   - Defect documentation with annotations
+   - Inspection evidence capture
+   - Before/after comparison photos
+   
+   Procurement:
+   - GRN material photos
+   - Damage documentation
+   - Supplier delivery proof
+   
+   Payment Module:
+   - Receipt photo capture
+   - Cheque/cash documentation
+   - Bank transfer screenshots
+   
+   Sales Module:
+   - Sample photos for quotes
+   - Delivery proof documentation
+   - Customer facility photos
+
+3. Photo Management System
+   - Cloud storage integration (AWS S3/Cloudinary)
+   - Photo compression and optimization
+   - Annotation and labeling system
+   - Gallery view with zoom functionality
+   - Photo sharing via WhatsApp integration
+```
+
+**Files Modified**:
+- ✅ CREATE `PhotoCapture.tsx` - Universal photo component
+- ✅ CREATE `PhotoGallery.tsx` - Photo display and management
+- ✅ UPDATE all module components - Photo integration points
+- ✅ CREATE `photoService.ts` - Photo management utilities
+
+**Validation Criteria**:
+- [ ] Photo capture works in all specified modules
+- [ ] Photos save correctly with proper context
+- [ ] Gallery displays photos with annotations
+- [ ] Photo sharing functionality works
+- [ ] Cloud storage integration functions properly
 - [ ] Professional appearance maintained
 
 ---
@@ -1374,6 +1857,61 @@ Platform Routes (Business Application):
 - [ ] Visual feedback elements ready for voice commands
 - [ ] Existing voice architecture preserved
 - [ ] Voice routing updated for 5-tab system
+
+---
+
+## **🎯 PROJECT VALIDATION CRITERIA**
+*Updated to ensure 100% Visual Design Specification coverage*
+
+### **Complete Visual Design Specification Coverage Validation**
+
+**Mobile Interface Requirements (≤1024px)**:
+- [ ] All 40+ mobile screens implemented per Visual Design Spec
+- [ ] Touch targets minimum 44px for factory environment
+- [ ] Voice integration working in Lead Management and Quick Actions
+- [ ] WhatsApp integration functional across all communication points
+- [ ] Photo capture working in Production, QC, Procurement, and Payment modules
+- [ ] Bottom navigation with proper active states and icons
+- [ ] Card-based layouts with proper spacing and shadows
+- [ ] Mobile-optimized forms with step-by-step wizards
+
+**Desktop Interface Requirements (>1024px)**:
+- [ ] Sidebar navigation with collapsible states implemented
+- [ ] Table views with advanced sorting/filtering in all data modules
+- [ ] Split-view layouts for Customer 360°, Order Management, and Invoicing
+- [ ] Drawer panels for contextual details and quick actions
+- [ ] Desktop-specific bulk operations and export functionality
+- [ ] Multi-column layouts for dashboard widgets and reports
+- [ ] Advanced data grids with inline editing capabilities
+- [ ] Context menus and keyboard navigation support
+
+**Production Operator Interface Requirements**:
+- [ ] Work Order Detail screen with live progress timers
+- [ ] Material tracking with barcode scanning capability
+- [ ] Production entry forms with quantity and time logging
+- [ ] Quality Control workflow with inspection checklists
+- [ ] Photo evidence capture for quality documentation
+- [ ] Equipment assignment and status tracking
+- [ ] Shift handover functionality with production notes
+
+**Procurement Workflow Requirements**:
+- [ ] Purchase Request creation with vendor selection
+- [ ] GRN processing with photo documentation
+- [ ] Vendor performance tracking and rating system
+- [ ] Material receipt verification with batch tracking
+- [ ] Quality assessment integration affecting vendor ratings
+- [ ] WhatsApp integration for vendor communication
+- [ ] Automated stock updates upon material receipt
+
+**Universal System Requirements**:
+- [ ] Visual Design Specification color palette (#1D4ED8, #F97316) implemented
+- [ ] Inter font family applied consistently across all interfaces
+- [ ] 8px baseline grid spacing system followed throughout
+- [ ] Professional B2B aesthetic maintained across all modules
+- [ ] Responsive breakpoints (1024px) functioning correctly
+- [ ] CSS Grid layout system working for both mobile and desktop
+- [ ] Design system tokens used consistently (no hardcoded values)
+- [ ] Accessibility standards met (WCAG AA, 4.5:1 contrast ratio)
 
 ---
 
