@@ -254,6 +254,8 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 **Objective**: UPDATE existing index.css with complete Visual Design Specification system
 
+**Reference**: **Visual Design Specification Section 4** - [🎨 Color Palette & Typography System](../docs/VISUAL_DESIGN_SPECIFICATION.md#visual-design-system) *(Lines 123-222)*
+
 **🚨 ARCHITECTURAL COMPLIANCE**: Design System already has 4-layer CSS architecture and global variables
 
 **Technical Implementation**:
@@ -316,6 +318,8 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 **Objective**: Transform desktop-first layout to mobile-first responsive system
 
+**Reference**: **Visual Design Specification Section 5** - [📱 Mobile Design Architecture](../docs/VISUAL_DESIGN_SPECIFICATION.md#mobile-design-architecture) *(Lines 300-409)*
+
 **Technical Implementation**:
 ```
 1. Restructure App.css responsive design
@@ -362,6 +366,8 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 **Objective**: Prepare infrastructure for 5-tab navigation system
 
+**Reference**: **Visual Design Specification Section 5** - [📱 5-Tab Bottom Navigation System](../docs/VISUAL_DESIGN_SPECIFICATION.md#5-tab-bottom-navigation-system) *(Lines 304-347)*
+
 **Technical Implementation**:
 ```
 1. Create bottom navigation component structure
@@ -399,6 +405,8 @@ git reset --hard <commit-hash>  # Rollback to safe state
 ### **Sub-Phase 2.1: Core Navigation Component** ⏱️ *60 minutes*
 
 **Objective**: Implement exact 5-tab navigation from Visual Design Specification
+
+**Reference**: **Visual Design Specification Section 5** - [📱 5-Tab Bottom Navigation System](../docs/VISUAL_DESIGN_SPECIFICATION.md#5-tab-bottom-navigation-system) *(Lines 304-347)*
 
 **Technical Implementation**:
 ```
@@ -868,27 +876,27 @@ Platform Routes (Business Application):
 
 **Objective**: Create horizontal scrolling KPI cards with realistic business metrics
 
+**Reference**: **Visual Design Specification Section 6** - [🏠 HOME DASHBOARD - KPI Strip](../docs/VISUAL_DESIGN_SPECIFICATION.md#home-dashboard---central-command-center) *(Lines 420-427)*
+
 **Technical Implementation**:
 ```
 1. KPI Card Component Development
-   - Individual cards: 104px height, white background, 8px gaps
-   - Typography: Large numbers (20px), trend indicators, labels
-   - Color coding: Green for positive trends, red for warnings
-   
+   - Follow Visual Design Spec KPI card specifications (104px height, 8px gaps)
+   - Implement typography and color coding per specification
+   - Use exact measurements from Visual Design Specification
+
 2. Business Metrics Implementation
-   KPI Cards with realistic Gujarat textile data:
-   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-   │  Revenue    │ │   Pending   │ │ Orders at   │ │ Production  │
-   │   ₹4.2L     │ │ Invoices 3  │ │   Risk 2    │ │ Eff. 78%    │
-   │   ↑5%       │ │  ₹45,000    │ │   ⚠️        │ │   📊        │
-   └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘
+   - Implement 4 KPI cards per Visual Design Spec: Revenue, Pending Invoices, Orders at Risk, Production Efficiency
+   - Connect to existing business data from components
+   - Add trend calculations and warning thresholds per specification
 
 3. Data Integration
-   - Connect to existing business data from components
-   - Calculate real metrics from leads, orders, production data
-   - Add trend calculations (month-over-month growth)
-   - Implement warning thresholds for risk indicators
+   - Real-time business metrics calculation following Visual Design Spec patterns
+   - Gujarat textile business data integration
+   - Horizontal scroll behavior with snap points per specification
 ```
+
+**Design Reference**: Complete KPI strip layout and styling specifications are in **Visual Design Specification Section 6** with exact measurements and business metrics.
 
 **Files Modified**:
 - ⭐ New KPI components - Individual metric cards
@@ -993,44 +1001,30 @@ Platform Routes (Business Application):
 
 **Objective**: Implement 3-step order creation flow from Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 6** - [💼 SALES TAB - Create New Order Flow (3-Step Process)](../docs/VISUAL_DESIGN_SPECIFICATION.md#create-new-order-flow-3-step-process) *(Lines 500-589)*
+
 **Technical Implementation**:
 ```
 1. Step 1: Customer & Items Selection
-   Modal Component with:
-   ┌─────────────────────────────────────┐
-   │ Create Order                    [×] │ Modal header
-   │ Step 1 of 3 ●●○                     │ Progress dots
-   ├─────────────────────────────────────┤
-   │ Customer Selection                   │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [Suresh Textiles          ▼]   │ │ Dropdown
-   │ └─────────────────────────────────┘ │
-   │ [+ Add New Customer]                │
-   ├─────────────────────────────────────┤
-   │ Order Items                         │
-   │ ┌─────────────────────────────────┐ │
-   │ │ 1. Cotton 40s                   │ │ Item cards
-   │ │    500m @ ₹90/m = ₹45,000      │ │
-   │ │                    [Edit] [×]   │ │
-   │ └─────────────────────────────────┘ │
-   │ [+ Add Item]                        │
-   ├─────────────────────────────────────┤
-   │ Order Total: ₹69,000               │ Running total
-   │            [Continue]               │
-   └─────────────────────────────────────┘
+   - Follow exact Visual Design Spec modal layout (Lines 502-535)
+   - Customer selection dropdown with add new customer option
+   - Order items with edit/remove functionality per specification
+   - Running total calculation and continue button
 
 2. Step 2: Delivery & Payment Terms
-   - Delivery date picker with calendar
-   - Payment terms: 30%/50%/100% advance options
-   - Special instructions text area
-   - Order summary with advance calculation
+   - Implement delivery date picker per Visual Design Spec (Lines 536-564)
+   - Payment terms selection (30%/50%/100% advance options)
+   - Special instructions text area with proper styling
+   - Order summary with advance calculation display
 
 3. Step 3: Success + Material Check
-   - Order creation confirmation
-   - Automatic material availability check
-   - Cotton yarn shortage alerts
-   - Next steps guidance (record payment, create PR)
+   - Order creation confirmation per Visual Design Spec (Lines 565-589)
+   - Automatic material availability check integration
+   - Material shortage alerts with proper visual indicators
+   - Next steps guidance following design patterns
 ```
+
+**Design Reference**: Complete 3-step order creation workflow with exact layouts, form fields, and interaction patterns are detailed in **Visual Design Specification Section 6** (Lines 500-589).
 
 **Files Modified**:
 - ⭐ Order creation modal components - 3-step workflow
@@ -1050,21 +1044,20 @@ Platform Routes (Business Application):
 
 **Objective**: Update sales list items to card format with status indicators
 
+**Reference**: **Visual Design Specification Section 6** - [💼 SALES TAB - Orders List (Default View)](../docs/VISUAL_DESIGN_SPECIFICATION.md#sales--orders-list-default-view) *(Lines 466-497)*
+
 **Technical Implementation**:
 ```
-1. Sales Card Design (120px height)
-   ┌─────────────────────────────────┐
-   │ Order #O-2345 — Suresh Textiles │ Card header
-   │ Status: 🟡 Production in progress│ Status badge
-   │ ₹1,20,000 | Delivery: 12 Oct   │ Key details
-   │ [View] [Call] [WhatsApp]        │ Action buttons
-   └─────────────────────────────────┘
+1. Update Sales List Component
+   - Modify existing sales order list to card format per Visual Design Spec
+   - Replace table/list layout with card-based layout
+   - Implement status badge component with proper styling
+   - Add action button integration (Call, WhatsApp, View)
 
-2. Status Badge System
-   - 🟡 In Progress (Production phase)
-   - ⚠️ Materials Short (Procurement needed)
-   - ✅ Delivered (Completed)
-   - 🔴 Overdue (Requires attention)
+2. Implement Status System
+   - Create status badge component following Visual Design Spec
+   - Update order status logic to support visual indicators
+   - Integrate with existing business logic for status determination
 
 3. Action Button Integration
    - Call button: Integration with device calling
@@ -1092,6 +1085,8 @@ Platform Routes (Business Application):
 
 **Objective**: CREATE new Production module using existing architectural patterns
 
+**Reference**: **Visual Design Specification Section 6** - [🏭 PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution) *(Lines 654-737)*
+
 **Technical Implementation**:
 ```
 1. CREATE Production Component Following Architecture Patterns
@@ -1099,20 +1094,12 @@ Platform Routes (Business Application):
    ├── Production.tsx (NEW: Following existing component patterns)
    └── Production.module.css (NEW: Using existing CSS architecture)
 
-2. 3-Tab Production Interface (Using Existing Tab Pattern)
-   ┌─────────────────────────────────────┐
-   │ Production  [ Today│Progress│Done ]  │ Sub-tabs
-   │ [🔍 Search work orders... (🎙)]     │ Search
-   ├─────────────────────────────────────┤
-   │ ┌─────────────────────────────────┐ │
-   │ │ WO#451 — Order #O-2345          │ │ Work order card
-   │ │ 🎯 Dyed Fabric                  │ │ Product icon
-   │ │ Operator: Vikram | Line 2       │ │ Assignment
-   │ │ Progress: [████████░░] 80%      │ │ Progress bar
-   │ │ Target: 1000m | Done: 800m      │ │ Metrics
-   │ │ [View Job] [Pause] [Complete]   │ │ Actions
-   │ └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
+2. Implement 3-Tab Production Interface
+   - Create tab component with Today | Progress | Done states
+   - Implement tab switching logic and state management
+   - Add search functionality with voice integration hooks
+   - Build work order card components with interactive elements
+   - Integrate with existing production data and business logic
 
 3. Production Status System
    - 🔴 Ready to Start: Materials allocated, awaiting operator
@@ -1286,60 +1273,37 @@ Platform Routes (Business Application):
 
 **Objective**: Implement detailed PR creation following Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 6** - [📦 PROCUREMENT TAB - Create Purchase Request](../docs/VISUAL_DESIGN_SPECIFICATION.md#create-purchase-request) *(Lines 817-854)*
+
 **Technical Implementation**:
 ```
-1. Purchase Request Creation Screen (Visual Design Spec lines 818-854)
-   ┌─────────────────────────────────────┐
-   │ Create Purchase Request        [×] │ Modal header
-   │ Auto-generated from Order #O-2345   │ Context: 32px
-   ├─────────────────────────────────────┤
-   │ 📋 Items Required                   │ Section header
-   │ ┌─────────────────────────────────┐ │
-   │ │ Cotton Yarn 30s Count           │ │ Item card: 80px
-   │ │ Quantity: [300] kg              │ │ Editable quantity
-   │ │ Quality: Premium Grade          │ │ Quality note
-   │ │ [Edit Specs] [Remove]           │ │ Item actions
-   │ └─────────────────────────────────┘ │
-   │                                     │
-   │ [+ Add Item]                        │ 44px add button
-   ├─────────────────────────────────────┤
-   │ ⚡ Priority & Timeline              │
-   │ ● Urgent  ○ Normal                 │ Priority radio: 40px
-   │ Required By: [12 Oct 2024]         │ Date picker: 48px
-   ├─────────────────────────────────────┤
-   │ 🏪 Vendor Selection                 │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [ABC Suppliers          ▼]     │ │ Vendor dropdown
-   │ └─────────────────────────────────┘ │ 48px height
-   │ Last price: ₹85/kg | Rating: ⭐⭐⭐⭐  │ Vendor info: 24px
-   ├─────────────────────────────────────┤
-   │ 📝 Special Instructions             │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [Previous quality approved -    │ │ Instructions: 60px
-   │ │  same specification required]   │ │ Pre-filled help
-   │ └─────────────────────────────────┘ │
-   ├─────────────────────────────────────┤
-   │ [Send via WhatsApp] [Save Draft]    │ Primary/secondary
-   └─────────────────────────────────────┘
+1. Purchase Request Creation Interface
+   - Follow exact Visual Design Spec modal layout (Lines 820-854)
+   - Items Required section with editable quantities and quality specs
+   - Priority & Timeline selection with date picker per specification
+   - Vendor selection dropdown with performance history display
+   - Special instructions with pre-filled helpful text per design
 
 2. Auto-generation from Material Shortages
-   - Detect shortages from work order material requirements
-   - Pre-populate item specifications and quantities
-   - Suggest preferred vendors based on history
+   - Detect shortages from work order material requirements per Visual Design Spec
+   - Pre-populate item specifications and quantities following design patterns
+   - Suggest preferred vendors based on history and ratings
    - Calculate required delivery dates based on production schedules
 
 3. Vendor Integration System
-   - Vendor database with contact information
-   - Pricing history and lead times
-   - Quality ratings and performance metrics
-   - WhatsApp integration for direct communication
+   - Vendor database with contact information per Visual Design Spec patterns
+   - Pricing history and lead times display following specification
+   - Quality ratings and performance metrics integration
+   - WhatsApp integration for direct communication per design patterns
 
 4. Priority and Timeline Management
-   - Urgent vs Normal priority classification
-   - Required delivery date calculations
+   - Urgent vs Normal priority classification per Visual Design Spec
+   - Required delivery date calculations with visual feedback
    - Impact analysis on production schedules
-   - Automatic deadline warnings
+   - Automatic deadline warnings following design system alerts
 ```
+
+**Design Reference**: Complete Purchase Request creation workflow with exact form layouts, vendor selection, and WhatsApp integration are detailed in **Visual Design Specification Section 6** (Lines 817-854).
 
 **Files Modified**:
 - `Procurement.tsx` - Add PurchaseRequestCreate component
@@ -1361,73 +1325,44 @@ Platform Routes (Business Application):
 
 **Objective**: Implement GRN processing following Visual Design Specification
 
+**Reference**: **Visual Design Specification Section 6** - [📦 PROCUREMENT TAB - Goods Receipt Note (GRN)](../docs/VISUAL_DESIGN_SPECIFICATION.md#goods-receipt-note-grn) *(Lines 856-898)*
+
 **Technical Implementation**:
 ```
-1. Goods Receipt Note Screen (Visual Design Spec lines 856-898)
-   ┌─────────────────────────────────────┐
-   │ GRN — PO#56 ABC Suppliers      [←] │ GRN header
-   │ Delivery Date: 15 Oct 2024          │ Context info: 32px
-   ├─────────────────────────────────────┤
-   │ 📦 Material Received                │ Section header
-   │ Material: Cotton Yarn 30s Count     │ Material name: 16px
-   │ Ordered Qty: [300] kg               │ Reference qty
-   │ Received Qty: [300] kg              │ Actual received
-   │ ┌─────────────────────────────────┐ │ Quantity input: 48px
-   │ │ [300] kg              [+] [-]   │ │ With adjustment
-   │ └─────────────────────────────────┘ │ buttons
-   ├─────────────────────────────────────┤
-   │ ✅ Quality Assessment               │
-   │ ● Good Quality                      │ Quality radio: 40px
-   │ ○ Minor Issues (specify below)      │ Conditional input
-   │ ○ Major Issues (reject)             │ Clear hierarchy
-   ├─────────────────────────────────────┤
-   │ 🏷️ Batch Information                │
-   │ Batch Number: [CY-2024-089]         │ Batch input: 44px
-   │ Expiry Date: [Not Applicable]       │ Optional field
-   ├─────────────────────────────────────┤
-   │ 📝 Issues/Defects (if any)          │
-   │ ┌─────────────────────────────────┐ │
-   │ │ [None - quality as expected]    │ │ Issues area: 60px
-   │ └─────────────────────────────────┘ │ Default text
-   ├─────────────────────────────────────┤
-   │ 📷 Evidence Photos                  │
-   │ [📷 Delivery Challan] (Required)    │ Required photo
-   │ [📷 Material Sample] (Optional)     │ Optional photo
-   │                                     │
-   │ [challan_photo.jpg] ✅              │ Uploaded indicator
-   │ [sample_photo.jpg] ✅               │ Visual confirmation
-   ├─────────────────────────────────────┤
-   │ 👤 Received By: [Ramesh-Storekeeper]│ Receiver info: 32px
-   ├─────────────────────────────────────┤
-   │         [Mark as Received]          │ 56px primary CTA
-   │                                     │
-   │ ✅ Will update stock & unblock orders│ Action consequence
-   └─────────────────────────────────────┘
+1. Goods Receipt Note Interface
+   - Follow exact Visual Design Spec GRN layout (Lines 859-898)
+   - Material Received section with quantity reconciliation
+   - Quality Assessment with radio button selection per specification
+   - Batch Information entry with proper input validation
+   - Issues/Defects text area with default helpful text
+   - Evidence Photos section with required/optional photo capture
 
 2. Quantity Reconciliation System
-   - Compare ordered vs received quantities
-   - Handle partial deliveries and overage
-   - Automatic variance calculations
-   - Impact analysis on pending work orders
+   - Compare ordered vs received quantities per Visual Design Spec
+   - Handle partial deliveries and overage following design patterns
+   - Automatic variance calculations with visual feedback
+   - Impact analysis on pending work orders display
 
 3. Quality Assessment Integration
-   - Quality scoring system for vendors
+   - Quality scoring system for vendors per Visual Design Spec
    - Photo evidence requirements for quality issues
    - Rejection workflow for substandard materials
-   - Quality trend tracking for supplier performance
+   - Quality trend tracking for supplier performance integration
 
 4. Stock Update Automation
-   - Automatic inventory updates upon GRN completion
+   - Automatic inventory updates upon GRN completion per specification
    - Unblock work orders waiting for materials
    - Trigger notifications for completed material requirements
-   - Update procurement dashboards and alerts
+   - Update procurement dashboards and alerts following design patterns
 
 5. Photo Evidence System
-   - Mandatory delivery challan photos
-   - Optional material sample photos for quality records
-   - Photo compression and cloud storage
-   - Integration with quality assessment workflow
+   - Mandatory delivery challan photos following Visual Design Spec photo patterns
+   - Optional material sample photos with proper categorization
+   - Photo upload confirmation and visual indicators
+   - Integration with universal photo capture system (Section 9)
 ```
+
+**Design Reference**: Complete GRN processing workflow with exact form layouts, quality assessment, and photo evidence requirements are detailed in **Visual Design Specification Section 6** (Lines 856-898).
 
 **Files Modified**:
 - `Procurement.tsx` - Add GRN component and navigation
@@ -1450,28 +1385,16 @@ Platform Routes (Business Application):
 
 **Objective**: UPDATE existing CustomerList with Visual Design Specification enhancements
 
+**Reference**: **Visual Design Specification Section 6** - [👥 CUSTOMERS TAB - Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen) *(Lines 939-1016)*
+
 **Technical Implementation**:
 ```
-1. ENHANCE Existing Customer Profile View (Architecture Compliant)
-   ┌─────────────────────────────────────┐
-   │ Suresh Textiles — 360° View    [←] │ Profile header
-   ├─────────────────────────────────────┤
-   │ 📊 BUSINESS INTELLIGENCE            │
-   │ Customer Score: 85/100 🟢           │ Overall rating
-   │ • Payment reliability: 95/100       │ Sub-scores
-   │ • Order consistency: 80/100         │
-   │ • Growth potential: 90/100          │
-   ├─────────────────────────────────────┤
-   │ 💡 Business Opportunities:          │ AI insights
-   │ • Peak ordering: Sept-Dec (festival)│ Seasonal patterns
-   │ • Preferred items: Cotton 40s (70%) │ Product preferences
-   │ • Shows interest in premium grades  │ Upsell potential
-   ├─────────────────────────────────────┤
-   │ 🎁 Recommended Actions:             │ Smart recommendations
-   │ [Send Festival Catalog]             │ Contextual actions
-   │ [Offer Volume Discount]             │
-   │ [Propose Annual Contract]           │
-   └─────────────────────────────────────┘
+1. Enhance Existing Customer Profile Component
+   - Update CustomerList component to include 360° view per Visual Design Spec
+   - Implement customer scoring calculation logic
+   - Add business intelligence section with metrics computation
+   - Create recommendation engine for contextual actions
+   - Integrate customer health scoring with existing customer data
 
 2. Customer Intelligence Features
    - Business pattern analysis (seasonal trends, preferences)
@@ -1507,6 +1430,8 @@ Platform Routes (Business Application):
 ### **Sub-Phase 6.1: Design System Consistency** ⏱️ *45 minutes*
 
 **Objective**: Ensure all components use design system consistently across platform
+
+**Reference**: **Visual Design Specification Section 4** - [🎨 Visual Design System](../docs/VISUAL_DESIGN_SPECIFICATION.md#visual-design-system) *(Lines 123-298)*
 
 **Technical Implementation**:
 ```
@@ -1631,6 +1556,8 @@ Platform Routes (Business Application):
 
 **Objective**: Populate all modules with realistic Gujarat textile business data
 
+**Reference**: **Visual Design Specification Sections 6-10** - All business scenarios and realistic data examples throughout the specification
+
 **Technical Implementation**:
 ```
 1. Comprehensive Mock Data Service
@@ -1677,6 +1604,8 @@ Platform Routes (Business Application):
 ### **Sub-Phase 6.3: Voice Integration Preparation** ⏱️ *15 minutes*
 
 **Objective**: Prepare UI elements for voice command integration
+
+**Reference**: **Visual Design Specification Section 9** - [🗣️ Voice Interaction Design](../docs/VISUAL_DESIGN_SPECIFICATION.md#voice-interaction-design) *(Lines 1412-1451)*
 
 **Technical Implementation**:
 ```

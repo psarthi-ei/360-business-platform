@@ -110,7 +110,7 @@ This is the master navigation document that guides you to all project informatio
 
 ## Documentation Files Structure
 
-**🎉 STREAMLINED: 11 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
+**🎉 STREAMLINED: 8 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
 
 ### **🎯 KEY DOCUMENTS - ESSENTIAL FOR CONTEXT BUILDING** 
 *Read these 6 documents first for complete project understanding*
@@ -119,8 +119,8 @@ This is the master navigation document that guides you to all project informatio
 1. **PRODUCT_REQUIREMENTS.md** 🔑 - What we're building & why
 2. **BUSINESS_PROCESSES.md** 🔑 - How textile business works
 3. **UNIFIED_ARCHITECTURE.md** 🔑 - Platform architecture & zero code duplication
-4. **VISUAL_DESIGN_SPECIFICATION.md** 🔑 - Complete visual design for all screens
-5. **MASTER_IMPLEMENTATION_PLAN.md** 🔑 - Architecturally compliant implementation strategy
+4. **MASTER_IMPLEMENTATION_PLAN.md** 🔑 - **PRIMARY**: Architecturally compliant implementation strategy
+5. **VISUAL_DESIGN_SPECIFICATION.md** 🔑 - **SUPPORTING**: Complete visual design for all screens
 6. **USE_CASES_MASTER.md** 🔑 - Implementation status & progress tracking
 
 ---
@@ -189,7 +189,23 @@ This is the master navigation document that guides you to all project informatio
 
 ### **DEVELOPMENT & IMPLEMENTATION**
 
-### **4. VISUAL_DESIGN_SPECIFICATION.md** - Complete Visual Design for All Screens 🔑 KEY DOCUMENT
+### **4. MASTER_IMPLEMENTATION_PLAN.md** - **PRIMARY IMPLEMENTATION DOCUMENT** 🔑 KEY DOCUMENT
+**Purpose**: Complete 6-phase implementation plan for Visual Design Specification while preserving existing architecture
+
+**Contains**:
+- **Implementation Roadmap**: 8-10 hours across 18 sub-phases with rollback safety
+- **Architectural Compliance**: How to extend existing systems without code duplication
+- **Git Workflow Strategy**: Mandatory sub-phase commits for rollback safety
+- **Phase Breakdown**: Detailed technical implementation for each phase
+- **Quality Gates**: Compilation checks, visual verification, functionality preservation
+- **Sub-Phase Strategy**: 15-20 minute focused work blocks with clear validation criteria
+- **Visual Design References**: Links to specific Visual Design Specification sections for implementation
+
+**Update Schedule**: When implementation approach changes or architectural patterns evolve
+
+---
+
+### **5. VISUAL_DESIGN_SPECIFICATION.md** - **SUPPORTING DESIGN REFERENCE** 🔑 KEY DOCUMENT
 **Purpose**: Complete visual design specification with ASCII wireframes for all 45+ screens and components
 
 **Contains**:
@@ -200,23 +216,9 @@ This is the master navigation document that guides you to all project informatio
 - **Screen Wireframes**: ASCII wireframes for Home, Sales, Production, Procurement, Customer modules
 - **Mobile-First Design**: 5-tab bottom navigation system with contextual FAB
 - **Business Context**: Realistic Gujarat textile scenarios and industry terminology
+- **Table of Contents**: 150+ detailed subsections with line number references
 
 **Update Schedule**: When design components evolve or new screens are added
-
----
-
-### **5. MASTER_IMPLEMENTATION_PLAN.md** - Architecturally Compliant Implementation Strategy 🔑 KEY DOCUMENT
-**Purpose**: Complete 6-phase implementation plan for Visual Design Specification while preserving existing architecture
-
-**Contains**:
-- **Implementation Roadmap**: 8-10 hours across 18 sub-phases with rollback safety
-- **Architectural Compliance**: How to extend existing systems without code duplication
-- **Git Workflow Strategy**: Mandatory sub-phase commits for rollback safety
-- **Phase Breakdown**: Detailed technical implementation for each phase
-- **Quality Gates**: Compilation checks, visual verification, functionality preservation
-- **Sub-Phase Strategy**: 15-20 minute focused work blocks with clear validation criteria
-
-**Update Schedule**: When implementation approach changes or architectural patterns evolve
 
 ---
 
@@ -273,40 +275,10 @@ This is the master navigation document that guides you to all project informatio
 
 ### **DESIGN & USER EXPERIENCE**
 
-### **8. DASHBOARD_SPECIFICATIONS.md** - UI Implementation Guide
-**Purpose**: Complete technical implementation guide for dashboard and UI components
-
-**Contains**:
-- 3-level dashboard architecture (Executive → Process → Module)
-- Technical component specifications and styling standards
-- Navigation framework and user flow patterns
-- Mobile-first design requirements for factory environments
-- Data patterns and KPI calculation logic
-
-**Update Schedule**: After major UI components, new design patterns, or architecture changes
-
----
-
-### **9. DESIGN_SYSTEM.md** - Visual Design Standards (Master)
-**Purpose**: UI/UX design patterns and business context guidelines
-
-**Contains**:
-- Visual design philosophy (business-first, professional manufacturing aesthetics)
-- Multilingual user experience strategy (smart translation approach)
-- Mobile-first responsive design patterns for textile factory environments
-- Information architecture for textile business data
-- Business context integration (Gujarat textile examples, cultural sensitivity)
-- Comprehensive CSS architecture and component implementation standards
-
-**Update Schedule**: After major screen implementations, new UI patterns, or user feedback
-
-**Note**: DESIGN_SYSTEM_ARCHIVE.md contains historical design decisions for reference
-
----
 
 ### **MARKETING & STRATEGY**
 
-### **10. MARKETING_STRATEGY.md** - Brand Strategy & Customer Acquisition
+### **7. MARKETING_STRATEGY.md** - Brand Strategy & Customer Acquisition
 **Purpose**: Complete marketing strategy focusing on brand positioning, competitive positioning, and customer acquisition
 
 **Contains**:
@@ -319,7 +291,7 @@ This is the master navigation document that guides you to all project informatio
 
 ---
 
-### **11. WEBSITE_REDESIGN_PLAN.md** - Website Strategy & Implementation
+### **8. WEBSITE_REDESIGN_PLAN.md** - Website Strategy & Implementation
 **Purpose**: Comprehensive website redesign strategy including architecture, content planning, and implementation
 
 **Contains**:
@@ -360,20 +332,19 @@ This is the master navigation document that guides you to all project informatio
 | "What's the status of UC-L01?" | **USE_CASES_MASTER.md** | Implementation progress and status tracking |
 | "Which use cases are MVP priority?" | **USE_CASES_MASTER.md** | Use case priority and completion tracking |
 | "How many use cases are completed?" | **USE_CASES_MASTER.md** | Progress metrics and completion tracking |
-| "How do I implement the dashboard?" | **DASHBOARD_SPECIFICATIONS.md** | Technical implementation guide |
-| "What are the component specifications?" | **DASHBOARD_SPECIFICATIONS.md** | UI architecture and styling standards |
-| "What are the Visual Design Specification colors and fonts?" | **VISUAL_DESIGN_SPECIFICATION.md** | Complete design system, color palette, typography hierarchy |
-| "How should I implement the Visual Design Specification?" | **MASTER_IMPLEMENTATION_PLAN.md** | Architecturally compliant implementation strategy, phase breakdown |
+| "How should I style components?" | **VISUAL_DESIGN_SPECIFICATION.md** | Complete visual design system with component specifications |
+| "How should I implement the Visual Design Specification?" | **MASTER_IMPLEMENTATION_PLAN.md** | **PRIMARY**: Architecturally compliant implementation strategy, phase breakdown |
+| "What are the Visual Design Specification colors and fonts?" | **VISUAL_DESIGN_SPECIFICATION.md** | **SUPPORTING**: Complete design system, color palette, typography hierarchy |
 | "What's the rollback strategy if implementation breaks?" | **MASTER_IMPLEMENTATION_PLAN.md** | Git workflow strategy, sub-phase commits, quality gates |
 | "When is the deadline?" | **PRODUCT_REQUIREMENTS.md** | Timeline and delivery milestones |
 | "How do textile manufacturers think?" | **BUSINESS_PROCESSES.md** | User mental models and daily patterns |
-| "What does this button do?" | **DASHBOARD_SPECIFICATIONS.md** | Component behavior and interactions |
+| "What are the design standards?" | **VISUAL_DESIGN_SPECIFICATION.md** | Complete design system with colors, fonts, and component patterns |
 | "How should Claude and I work together?" | **CLAUDE_WORKING_GUIDE.md** | Proven collaboration patterns and communication methods |
 | "What's our technology strategy?" | **TECHNICAL_STRATEGY.md** | Architecture decisions and rationale |
 | "How does the complete platform architecture work?" | **UNIFIED_ARCHITECTURE.md** | Master architecture reference for voice, search, routing, and component integration |
 | "How do I add new voice commands or search capabilities?" | **UNIFIED_ARCHITECTURE.md** | Step-by-step guides for extending platform functionality |
-| "What's the Visual Design Specification for the dashboard?" | **VISUAL_DESIGN_SPECIFICATION.md** | Complete wireframes, component specs, mobile-first design |
-| "How do I implement Visual Design without breaking architecture?" | **MASTER_IMPLEMENTATION_PLAN.md** | Architecturally compliant implementation phases and rollback strategy |
+| "What's the Visual Design Specification for the dashboard?" | **VISUAL_DESIGN_SPECIFICATION.md** | **SUPPORTING**: Complete wireframes, component specs, mobile-first design |
+| "How do I implement Visual Design without breaking architecture?" | **MASTER_IMPLEMENTATION_PLAN.md** | **PRIMARY**: Architecturally compliant implementation phases and rollback strategy |
 | "What's our development velocity?" | **DAILY_PROGRESS_LOG.md** | Development timeline, productivity metrics, and progress tracking |
 | "How many commits per day are we doing?" | **DAILY_PROGRESS_LOG.md** | Daily work analysis and development patterns |
 
@@ -396,26 +367,26 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 #### **👨‍💼 Product Managers**
 **Primary**: PRODUCT_REQUIREMENTS.md, USE_CASES_MASTER.md
 **Secondary**: BUSINESS_PROCESSES.md (for domain context)
-**Reference**: DASHBOARD_SPECIFICATIONS.md (for technical feasibility)
+**Reference**: VISUAL_DESIGN_SPECIFICATION.md (for visual standards)
 
 #### **👨‍💻 Frontend Developers**
-**Primary**: USE_CASES_MASTER.md, DASHBOARD_SPECIFICATIONS.md  
+**Primary**: USE_CASES_MASTER.md, MASTER_IMPLEMENTATION_PLAN.md  
 **Secondary**: BUSINESS_PROCESSES.md (for business logic)
-**Reference**: PRODUCT_REQUIREMENTS.md (for acceptance criteria)
+**Reference**: VISUAL_DESIGN_SPECIFICATION.md (for design implementation)
 
 #### **🎨 UI/UX Designers**
-**Primary**: DASHBOARD_SPECIFICATIONS.md
+**Primary**: VISUAL_DESIGN_SPECIFICATION.md
 **Secondary**: BUSINESS_PROCESSES.md (for user workflows)
-**Reference**: DESIGN_SYSTEM.md (for visual patterns)
+**Reference**: VISUAL_DESIGN_SPECIFICATION.md (for visual patterns)
 
 #### **🧪 QA Engineers**
 **Primary**: BUSINESS_PROCESSES.md (for test scenarios)
 **Secondary**: USE_CASES_MASTER.md (for implementation status), PRODUCT_REQUIREMENTS.md (for acceptance criteria)
-**Reference**: DASHBOARD_SPECIFICATIONS.md (for UI validation)
+**Reference**: VISUAL_DESIGN_SPECIFICATION.md (for UI validation)
 
 #### **📚 New Team Members**
 **Start Here**: DOCUMENTATION_INDEX.md → PRODUCT_REQUIREMENTS.md → BUSINESS_PROCESSES.md → USE_CASES_MASTER.md
-**Then**: DASHBOARD_SPECIFICATIONS.md → DEVELOPMENT_GUIDE.md
+**Then**: MASTER_IMPLEMENTATION_PLAN.md → VISUAL_DESIGN_SPECIFICATION.md
 
 ---
 
@@ -434,7 +405,7 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 - ✅ **TECHNICAL_STRATEGY.md** - When architecture decisions change
 
 ### **As Needed Updates**
-- ✅ **DESIGN_SYSTEM.md** - After major screen implementations
+- ✅ **VISUAL_DESIGN_SPECIFICATION.md** - When design components evolve or new screens are added
 - ✅ **BUSINESS_PROCESSES.md** - When business processes are refined
 - ✅ **UNIFIED_ARCHITECTURE.md** - When major architectural changes occur or new integration patterns are established
 - ✅ **VISUAL_DESIGN_SPECIFICATION.md** - When design components evolve or new screens are added
@@ -508,20 +479,19 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **Use Case Implementation Status (UC-L01 completed, MVP priorities)** | USE_CASES_MASTER.md | Implementation progress tracking |
 | **Business Context for Use Cases (workflow logic, business rules)** | BUSINESS_PROCESSES.md | Business domain knowledge |
 | **Visual Design Philosophy & Standards** | DESIGN_SYSTEM.md | Design principles and patterns |
-| **Dashboard Technical Implementation** | DASHBOARD_SPECIFICATIONS.md | UI component architecture |
-| **Visual Design Specification (colors, fonts, components, wireframes)** | VISUAL_DESIGN_SPECIFICATION.md | Complete visual design system and screen specifications |
-| **Implementation Strategy (architecturally compliant Visual Design implementation)** | MASTER_IMPLEMENTATION_PLAN.md | Phase-by-phase implementation plan with rollback safety |
+| **Visual Design Standards & Component Implementation** | VISUAL_DESIGN_SPECIFICATION.md | Complete visual design system and component specifications |
+| **Implementation Strategy (architecturally compliant Visual Design implementation)** | MASTER_IMPLEMENTATION_PLAN.md | **PRIMARY**: Phase-by-phase implementation plan with rollback safety |
+| **Visual Design Specification (colors, fonts, components, wireframes)** | VISUAL_DESIGN_SPECIFICATION.md | **SUPPORTING**: Complete visual design system and screen specifications |
 | **Tech Decisions (PWA vs App, Auth Strategy)** | TECHNICAL_STRATEGY.md | Architecture choices |
 | **Business Process (Lead→Quote→Order)** | BUSINESS_PROCESSES.md | Industry workflows |
 | **Feature Requirements (Voice Commands)** | PRODUCT_REQUIREMENTS.md | What to build |
 | **Working Style & Learning Approach** | CLAUDE_WORKING_GUIDE.md | Our collaboration methods |
 | **Project Status (MVP ready, beta launch)** | README.md | Public overview |
-| **3-Level Dashboard Architecture** | DASHBOARD_SPECIFICATIONS.md | Technical implementation |
-| **Mobile-First Design Requirements** | DASHBOARD_SPECIFICATIONS.md | Factory environment specs |
-| **Component Styling & Responsive Design** | DASHBOARD_SPECIFICATIONS.md | UI implementation guide |
+| **Mobile-First Design Requirements** | VISUAL_DESIGN_SPECIFICATION.md | Factory environment specs and mobile-first design patterns |
+| **Component Styling & Responsive Design** | VISUAL_DESIGN_SPECIFICATION.md | Complete component library and responsive design specifications |
 | **Complete Platform Architecture (voice, search, routing, components)** | UNIFIED_ARCHITECTURE.md | Master architecture reference and integration patterns |
 | **Adding New Voice Commands or Search Features** | UNIFIED_ARCHITECTURE.md | Step-by-step extension guides and architectural patterns |
-| **Visual Design System Implementation** | MASTER_IMPLEMENTATION_PLAN.md | How to implement Visual Design Spec while preserving architecture |
+| **Visual Design System Implementation** | MASTER_IMPLEMENTATION_PLAN.md | **PRIMARY**: How to implement Visual Design Spec while preserving architecture |
 | **Sub-Phase Implementation with Rollback Safety** | MASTER_IMPLEMENTATION_PLAN.md | Git workflow strategy and quality gates for safe implementation |
 | **Development Timeline & Velocity (commits per day, productivity)** | DAILY_PROGRESS_LOG.md | Development analytics and tracking |
 
@@ -536,27 +506,24 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 ### **Common Confusion - Examples**
 
 ❌ **WRONG**: Adding HomePage component details to PRODUCT_REQUIREMENTS.md  
-✅ **RIGHT**: HomePage goes in PROGRESS_LOG.md (what was built) + DASHBOARD_SPECIFICATIONS.md (component specs)
+✅ **RIGHT**: HomePage goes in DAILY_PROGRESS_LOG.md (what was built) + VISUAL_DESIGN_SPECIFICATION.md (component specs)
 
-❌ **WRONG**: Dashboard navigation patterns in DESIGN_SYSTEM.md  
-✅ **RIGHT**: Navigation implementation in DASHBOARD_SPECIFICATIONS.md + visual design principles in DESIGN_SYSTEM.md
-
-❌ **WRONG**: Business workflow logic in DASHBOARD_SPECIFICATIONS.md  
+❌ **WRONG**: Business workflow logic in VISUAL_DESIGN_SPECIFICATION.md  
 ✅ **RIGHT**: Business processes belong in BUSINESS_PROCESSES.md
 
-❌ **WRONG**: 3-level dashboard architecture in PRODUCT_REQUIREMENTS.md  
-✅ **RIGHT**: Technical architecture in DASHBOARD_SPECIFICATIONS.md + business justification in PRODUCT_REQUIREMENTS.md
+❌ **WRONG**: Implementation strategy in VISUAL_DESIGN_SPECIFICATION.md  
+✅ **RIGHT**: Implementation strategy in MASTER_IMPLEMENTATION_PLAN.md + visual design in VISUAL_DESIGN_SPECIFICATION.md
 
 ### **Quick Decision Guide**
 
 **Ask yourself**: 
 1. **Is it use case implementation status?** → USE_CASES_MASTER.md
 2. **Is it about business processes?** → BUSINESS_PROCESSES.md
-3. **Is it dashboard/UI implementation?** → DASHBOARD_SPECIFICATIONS.md
-4. **Is it Visual Design Specification (colors, fonts, wireframes)?** → VISUAL_DESIGN_SPECIFICATION.md
-5. **Is it implementation strategy for Visual Design?** → MASTER_IMPLEMENTATION_PLAN.md
+3. **Is it visual design or UI styling?** → VISUAL_DESIGN_SPECIFICATION.md
+4. **Is it implementation strategy for Visual Design?** → MASTER_IMPLEMENTATION_PLAN.md (**PRIMARY**)
+5. **Is it Visual Design Specification (colors, fonts, wireframes)?** → VISUAL_DESIGN_SPECIFICATION.md (**SUPPORTING**)
 6. **Is it a technology decision?** → TECHNICAL_STRATEGY.md
-7. **Is it visual design philosophy?** → DESIGN_SYSTEM.md
+7. **Is it visual design philosophy?** → VISUAL_DESIGN_SPECIFICATION.md
 8. **Is it daily progress?** → PROGRESS_LOG.md
 9. **Is it setup instructions?** → DEVELOPMENT_GUIDE.md
 10. **Is it what features to build?** → PRODUCT_REQUIREMENTS.md
