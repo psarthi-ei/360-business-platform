@@ -13,11 +13,14 @@ date  # ALWAYS run first - validates project timeline context
 - **Current Work**: Phase 1 (Update Existing Systems with Visual Design Spec)
 - **Next**: 6-phase implementation following Master Implementation Plan
 
-### **STEP 2: READ 2 KEY DOCUMENTS**
+### **STEP 2: READ MANDATORY SESSION CONTEXT**
 ```bash
-# Essential context documents (read in order):
-/docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual design for all screens
-/docs/MASTER_IMPLEMENTATION_PLAN.md   # Architecturally compliant implementation strategy
+# MANDATORY SESSION CONTEXT (read in order):
+/docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all 11 documents and Quick Decision Matrix  
+/docs/MASTER_IMPLEMENTATION_PLAN.md   # SECOND: Primary implementation strategy with Visual Design references
+
+# Supporting design reference (when referenced by Master Plan):
+/docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes
 ```
 
 ### **STEP 3: CHECK TODO STATUS**
@@ -54,11 +57,12 @@ if (params && 'leadId' in params) {
 }
 ```
 
-### **3. VISUAL DESIGN SPECIFICATION COMPLIANCE (MANDATORY)**
+### **3. MASTER IMPLEMENTATION PLAN COMPLIANCE (MANDATORY)**
 **❌ Common Mistake**: Creating new files instead of updating existing systems
 
 **✅ Required Standards**:
-- ALL updates MUST follow existing architectural patterns
+- ALL updates MUST follow existing architectural patterns per Master Implementation Plan
+- ALL designs MUST reference Visual Design Spec via Master Plan
 - ALL colors MUST use Visual Design Spec (#1D4ED8 primary, #F97316 secondary)
 - ALL fonts MUST use Inter typography hierarchy
 - ALL touch targets MUST meet 44px minimum
@@ -74,7 +78,7 @@ if (params && 'leadId' in params) {
 
 ---
 
-## 🎯 CURRENT PHASE: VISUAL DESIGN SPECIFICATION IMPLEMENTATION
+## 🎯 CURRENT PHASE: MASTER IMPLEMENTATION PLAN EXECUTION
 
 ### **Phase Status (Check `/docs/MASTER_IMPLEMENTATION_PLAN.md` for details)**
 - 🎯 **Phase 1**: Update Existing Systems with Visual Design Spec (CURRENT)
@@ -123,6 +127,17 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - During work: Mark in_progress → completed
 - End session: Update persistent `/TODO.md`
 
+### **Documentation System Navigation**
+**Complete Context Available (from DOCUMENTATION_INDEX.md mandatory reading):**
+- **Quick Decision Matrix**: Instant navigation to right document for any question
+- **11 Focused Documents**: Business processes, architecture, design patterns, progress tracking
+- **Document Hierarchy**: PRIMARY vs SUPPORTING document relationships established
+- **Examples from Quick Decision Matrix**: 
+  - Business workflow questions → BUSINESS_PROCESSES.md
+  - Architecture questions → UNIFIED_ARCHITECTURE.md
+  - Use case status → USE_CASES_MASTER.md
+  - Visual design details → VISUAL_DESIGN_SPECIFICATION.md
+
 ---
 
 ## 🏭 BUSINESS CONTEXT ESSENTIALS
@@ -135,5 +150,5 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
-**📍 For detailed information, refer to the 2 key documents above.**  
+**📍 For detailed implementation steps, refer to the Master Implementation Plan.**  
 **🎯 This guide focuses on session protocol and mistake prevention only.**
