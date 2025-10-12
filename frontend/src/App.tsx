@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams, Outlet } from 'react-router-dom';
 import LanguageSwitcher from './components/ui/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
-import Dashboard from './components/dashboard/index';
+import Dashboard from './components/dashboard/Dashboard';
 import LeadManagement from './components/business/LeadManagement';
 import QuotationOrders from './components/business/QuotationOrders';
 import SalesOrders from './components/business/SalesOrders';
@@ -242,7 +242,6 @@ function AppContent() {
     return (
       <div className="platformPageContent">
         <Dashboard
-          mobile={isMobile}
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
@@ -252,14 +251,6 @@ function AppContent() {
           onShowInventory={showInventory}
           onShowFulfillment={showFulfillment}
           onShowAnalytics={showAnalytics}
-          onLogin={showLogin}
-          onSignUp={showSignUp}
-          onGuestMode={handleGuestMode}
-          onDemoMode={handleDemoMode}
-          onLogout={handleLogout}
-          isAuthenticated={isAuthenticated}
-          userMode={userMode}
-          // onUniversalSearch={handleUniversalSearch}
         />
       </div>
     );
