@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import LeadManagement from './components/business/LeadManagement';
 import QuotationOrders from './components/business/QuotationOrders';
 import SalesOrders from './components/business/SalesOrders';
+import Sales from './components/business/Sales';
 import Payments from './components/business/Payments';
 import Invoices from './components/business/Invoices';
 import CustomerList from './components/business/CustomerList';
@@ -282,6 +283,16 @@ function AppContent() {
     );
   }
 
+  function renderSales() {
+    return (
+      <Sales
+        mobile={isMobile}
+        onShowCustomerProfile={showCustomerProfileWithState}
+        onUniversalAction={handleUniversalAction}
+      />
+    );
+  }
+
   function renderQuotationOrders() {
     return (
       <div className="platformPageContent">
@@ -538,6 +549,7 @@ function AppContent() {
     renderHomePage,
     renderDashboard,
     renderLeadManagement,
+    renderSales,
     renderQuotationOrders,
     renderSalesOrders,
     renderPayments,

@@ -178,29 +178,6 @@ function QuotationOrders({
   return (
     <div className={styles.quotationOrdersScreen}>
       <div className={styles.pageContent}>
-        <div className="unifiedHeader">
-          <button className={styles.addButton}>{t('addNewQuote')}</button>
-          <div className={styles.filterDropdownContainer}>
-            <select 
-              className="ds-filter-dropdown"
-              value={filterState}
-              onChange={(e) => onFilterChange(e.target.value)}
-            >
-              <option value="all">{t('showAll')}</option>
-              <option value="pending">{t('showPending')}</option>
-              <option value="approved">{t('showApproved')}</option>
-              <option value="expired">{t('showExpired')}</option>
-            </select>
-          </div>
-          <div className={styles.quoteCounter}>
-            {mockQuotes.filter(quote => 
-              filterState === 'all' ||
-              (filterState === 'pending' && quote.status === 'pending') ||
-              (filterState === 'approved' && quote.status === 'approved') ||
-              (filterState === 'expired' && quote.status === 'expired')
-            ).length} quotes
-          </div>
-        </div>
 
       <div className={styles.quotesContainer}>
         {mockQuotes.map(quote => {
@@ -384,12 +361,6 @@ function QuotationOrders({
         </div>
       </div>
 
-      <div className="ds-voice-commands">
-        <p className="ds-voice-hint">
-          🎤 <strong>{t('voiceCommandsHint')}</strong> 
-          "{t('createQuoteRajesh')}" • "{t('showApprovedQuotes')}" • "Mark as approved" • "Send profile link"
-        </p>
-      </div>
 
     </div>
   );

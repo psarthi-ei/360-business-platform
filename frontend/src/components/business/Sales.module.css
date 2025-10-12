@@ -1,0 +1,280 @@
+/* Sales.module.css - Complete Visual Design Specification Styling */
+
+.salesModule {
+  display: grid;
+  grid-template-rows: 48px 44px 1fr 56px;
+  height: 100%;
+  background: var(--background-primary);
+  position: relative;
+}
+
+/* 48px Tab Navigation - Visual Design Spec */
+.salesTabs {
+  display: flex;
+  height: 48px;
+  background: white;
+  border-bottom: 1px solid #E5E7EB;
+  grid-row: 1;
+}
+
+.tabButton {
+  flex: 1;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: #6B7280;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabButton.active {
+  color: #1D4ED8; /* Visual Design Spec primary */
+  border-bottom: 2px solid #1D4ED8;
+  background: rgba(29, 78, 216, 0.05);
+}
+
+.tabButton:hover:not(.active) {
+  background: rgba(107, 114, 128, 0.05);
+}
+
+/* 44px Business Filters */
+.salesFilters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  padding: 0 16px;
+  background: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  grid-row: 2;
+}
+
+.salesFilters::-webkit-scrollbar {
+  display: none;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.filterDropdowns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.filterDropdown {
+  height: 32px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.filterDropdown:hover {
+  background-color: #F3F4F6;
+  border-color: #9CA3AF;
+}
+
+.filterDropdown:focus {
+  outline: none;
+  border-color: #1D4ED8;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.1);
+}
+
+.countIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #F3F4F6;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 32px;
+  white-space: nowrap;
+}
+
+/* Content Area */
+.salesContent {
+  overflow-y: auto;
+  background: var(--background-primary);
+  grid-row: 3;
+}
+
+/* Hide headers and filters from child components */
+.salesContent :global(.unifiedHeader),
+.salesContent :global(.filtersSection),
+.salesContent :global(.voiceCommands) {
+  display: none !important;
+}
+
+/* Apply 120px card template to child components */
+.salesContent :global([class*="leadCard"]),
+.salesContent :global([class*="quoteCard"]),
+.salesContent :global([class*="orderCard"]),
+.salesContent :global([class*="invoiceCard"]) {
+  height: 120px !important;
+  margin-bottom: 12px !important;
+  padding: 16px !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #E5E7EB !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+/* Typography Hierarchy - Visual Design Spec */
+.salesContent :global([class*="leadCard"] h3),
+.salesContent :global([class*="quoteCard"] h3),
+.salesContent :global([class*="orderCard"] h3),
+.salesContent :global([class*="invoiceCard"] h3) {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+  margin: 0 0 4px 0 !important;
+}
+
+.salesContent :global(.statusBadge) {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  margin-bottom: 8px !important;
+}
+
+.salesContent :global([class*="leadDetails"] p),
+.salesContent :global([class*="quoteDetails"] p),
+.salesContent :global([class*="orderDetails"] p),
+.salesContent :global([class*="invoiceDetails"] p) {
+  font-size: 14px !important;
+  color: #6B7280 !important;
+  margin: 2px 0 !important;
+}
+
+.salesContent :global([class*="leadActions"]),
+.salesContent :global([class*="quoteActions"]),
+.salesContent :global([class*="orderActions"]),
+.salesContent :global([class*="invoiceActions"]) {
+  display: flex !important;
+  gap: 8px !important;
+  height: 32px !important;
+  margin-top: auto !important;
+}
+
+/* 56px Fixed Bottom CTA - Grid Positioned */
+.salesCTA {
+  height: 56px;
+  padding: 8px 16px;
+  background: white;
+  border-top: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  grid-row: 4;
+}
+
+.salesCTAButton {
+  width: 100%;
+  height: 40px;
+  background: #1D4ED8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px; /* Visual Design Spec touch target */
+}
+
+.salesCTAButton:hover {
+  background: #1E40AF;
+}
+
+.salesCTAButton:active {
+  background: #1E3A8A;
+  transform: translateY(1px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .salesFilters {
+    padding: 0 12px;
+  }
+  
+  .filterBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .salesCTA {
+    padding: 8px 12px;
+  }
+  
+  .tabButton {
+    font-size: 14px;
+  }
+}
+
+/* Ensure proper container dimensions for child components */
+.salesContent > div {
+  padding: 16px;
+}
+
+/* Remove any conflicting styles from child components */
+.salesContent :global(.pageContent) {
+  padding: 0 !important;
+}
+
+.salesContent :global([class*="salesOrdersScreen"]),
+.salesContent :global([class*="quotationOrdersScreen"]),
+.salesContent :global([class*="leadManagementScreen"]),
+.salesContent :global([class*="invoicesScreen"]) {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.salesContent :global([class*="ordersContainer"]),
+.salesContent :global([class*="quotesContainer"]),
+.salesContent :global([class*="leadsContainer"]),
+.salesContent :global([class*="invoicesContainer"]) {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove voice commands from child components */
+.salesContent :global([class*="voiceCommands"]) {
+  display: none !important;
+}

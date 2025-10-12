@@ -386,6 +386,40 @@ FLOATING ACTION BUTTON (FAB)
     └─────┘ Fixed bottom-right
 ```
 
+### **🚨 DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users**
+
+#### **Original Specification:**
+- Floating Action Button (FAB) with contextual meaning per tab
+- Abstract "+" symbol changes function based on active tab
+
+#### **Revised Specification (Based on User Research):**
+**Target Users**: Non-technical Gujarat textile manufacturers (35-55 years)
+**Context**: Factory environment, often wearing gloves, WhatsApp-level familiarity expected
+
+**DECISION: Replace FAB with Clear Bottom CTA**
+
+**Rationale:**
+- ✅ **Clear Language**: "Add Lead" vs abstract "+" symbol  
+- ✅ **Predictable Behavior**: Same action expected every time
+- ✅ **Touch-Friendly**: 56px height, easy to tap with gloves
+- ✅ **Business Context**: Immediately clear what action will happen
+- ✅ **Reduced Cognitive Load**: No need to remember tab context
+
+**Implementation:**
+```
+├─────────────────────────────────────┤
+│         [+ Add Lead]                │ 56px contextual CTA
+├─────────────────────────────────────┤
+│ 🏠   💼•  🏭   📦   👥              │ Bottom nav (NO FAB)
+└─────────────────────────────────────┘
+```
+
+**CTA Text by Tab:**
+- Leads: [+ Add Lead]
+- Quotes: [+ Add Quote]  
+- Orders: [+ New Order]
+- Invoices: [+ New Invoice]
+
 #### **Card Styles**
 ```
 STANDARD CARD
@@ -499,17 +533,143 @@ Key Visual Elements:
 - Activity timeline
 ```
 
-#### **💼 SALES Tab - Revenue Pipeline**
+#### **💼 SALES Tab - Revenue Pipeline Management (ENHANCED)**
+
+**Purpose**: Complete Lead → Quote → Order → Invoice workflow
+**Architecture**: Unified 4-tab interface with existing component integration
+**Target Users**: Non-technical Gujarat textile manufacturers
+
+**Tab Structure**: `[ Leads│Quotes│Orders│Inv ]`
+**Layout**: 120px card template (following Orders specification)
+**Integration**: Leverages existing LeadManagement, QuotationOrders, SalesOrders, Invoices components
+
+**Key Visual Elements:**
+- **48px Tab Navigation**: Visual Design primary colors (#1D4ED8)
+- **44px Business Filters**: Tab-specific dropdown filters with counts
+- **120px Card Height**: Consistent with Orders tab template
+- **Typography Hierarchy**: 20px header, 16px status, 14px meta (exact spec)
+- **56px Bottom CTA**: Clear contextual text (no FAB)
+- **Touch Targets**: 44px minimum for factory environment
+
+**Visual Layout:**
 ```
-Purpose: Lead → Quote → Order → Payment workflow
-Sub-tabs: Leads | Quotes | Orders | Invoices
-Layout: List view with action buttons
-Key Visual Elements:
-- Status badges
-- Amount highlighting
-- Quick action buttons (Call, WhatsApp)
-- Progress indicators
+┌─────────────────────────────────────┐ PlatformHeader (unchanged)
+│ [🔍 Search everything... (🎙)]      │ Universal search
+├─────────────────────────────────────┤
+│ [ Leads│Quotes│Orders│Inv ]         │ 48px tab navigation
+│ [All▼] [Hot▼] [This Month▼] [📊12] │ 44px business filters
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ LEAD-2025-001 — Suresh Textiles │ │ 120px card template
+│ │ Status: 🔥 Hot Lead             │ │ (following Orders spec)
+│ │ Cotton • ₹2.5L • 15 days        │ │
+│ │ [Call] [Quote] [WhatsApp]       │ │
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│         [+ Add Lead]                │ 56px contextual CTA
+├─────────────────────────────────────┤
+│ 🏠   💼•  🏭   📦   👥              │ Bottom nav (no FAB)
+└─────────────────────────────────────┘
 ```
+
+**Business Filter Configurations:**
+- **Leads**: All Leads | 🔥 Hot | 🔶 Warm | 🔵 Cold | This Week
+- **Quotes**: All Quotes | ⏳ Pending | ✅ Approved | ❌ Expired | This Month  
+- **Orders**: All Orders | 🟡 Production | ⚠️ Blocked | ✅ Delivered | This Quarter
+- **Invoices**: All Invoices | 💰 Paid | 🟡 Pending | 🔴 Overdue | This Month
+
+**Status Color System:**
+- **Lead Priority**: Hot (Red), Warm (Orange), Cold (Blue)  
+- **Quote Status**: Pending (Orange), Approved (Green), Expired (Red)
+- **Order Status**: Production (Orange), Blocked (Red), Delivered (Green)
+- **Invoice Status**: Paid (Green), Pending (Orange), Overdue (Red)
+
+**Cross-Component Navigation:**
+- Lead → Quote: Click [Quote] button switches to Quotes tab
+- Quote → Order: Click [Proforma] button switches to Orders tab
+- Order → Invoice: Click [Invoice] button switches to Invoices tab
+- Unified workflow progression maintained
+
+**Technical Implementation:**
+- Container Pattern: Sales.tsx wrapper with existing components
+- Business Logic Preservation: All existing functionality maintained
+- Component Integration: LeadManagement → Leads, QuotationOrders → Quotes, etc.
+- Visual Compliance: Orders tab template applied to all tabs
+
+### **🔍 DESIGN DECISION: Universal Search Architecture**
+
+#### **Original Specification:**
+- Contextual search per tab: "Search orders...", "Search leads...", etc.
+- Tab-specific search functionality
+
+#### **Revised Specification (Based on UX Analysis):**
+**DECISION: Universal Search Only**
+
+**Rationale:**
+- ✅ **Consistent Behavior**: Search works the same everywhere
+- ✅ **Reduced Confusion**: No duplicate search systems
+- ✅ **Cross-Tab Discovery**: Can find relationships across leads/quotes/orders
+- ✅ **Simplified Mental Model**: One search for everything
+- ✅ **Voice Integration**: Single voice search system
+
+**Implementation:**
+```
+┌─────────────────────────────────────┐ PlatformHeader
+│ [🔍 Search everything... (🎙)]      │ Universal search ONLY
+├─────────────────────────────────────┤
+│ [ Leads│Quotes│Orders│Inv ]         │ Tab navigation
+│ [All▼] [Hot▼] [This Month▼] [📊12] │ Business filters (NOT search)
+├─────────────────────────────────────┤
+```
+
+**Business Filters Replace Contextual Search:**
+- Leads: All/Hot/Warm/Cold filters
+- Quotes: All/Pending/Approved/Expired filters  
+- Orders: All/Production/Blocked/Delivered filters
+- Invoices: All/Paid/Pending/Overdue filters
+
+### **🔧 DESIGN DECISION: Fixed Layout Architecture**
+
+#### **UX Analysis for Non-Technical Users:**
+**Target**: Gujarat textile manufacturers (35-55 years) in factory environments
+
+#### **Layout Architecture Decision:**
+**FIXED ELEMENTS (Always Visible):**
+- ✅ **Tab Navigation** (48px) - Frequent Lead/Quote/Order switching
+- ✅ **Business Filters** (44px) - Critical for quick filtering  
+- ✅ **Bottom CTA** (56px) - Primary business actions must be accessible
+
+**SCROLLABLE CONTENT:**
+- ✅ **Card Content Area** - Natural scrolling for variable data
+
+#### **Business Rationale:**
+- **Quick Navigation**: Tabs always accessible for workflow switching
+- **Instant Filtering**: Filter controls never hidden during scrolling
+- **Action Accessibility**: Add buttons always visible for business efficiency
+- **Content Flexibility**: Cards scroll naturally for large datasets
+
+#### **Layout Structure:**
+```
+┌─────────────────────────────────────┐ ← PlatformHeader (FIXED)
+├─────────────────────────────────────┤
+│ [ Leads│Quotes│Orders│Inv ]    FIXED│ ← Tab Navigation (48px)
+├─────────────────────────────────────┤  
+│ [Status▼] [Timeline▼] [📊12]   FIXED│ ← Business Filters (44px)
+├─────────────────────────────────────┤
+│ ↕ SCROLLABLE CONTENT AREA ↕         │ ← Cards scroll here
+│ [120px card] [120px card] ...       │
+├─────────────────────────────────────┤
+│         [+ Add Lead]           FIXED│ ← Bottom CTA (56px)
+├─────────────────────────────────────┤
+│ 🏠   💼•  🏭   📦   👥         FIXED│ ← Bottom Navigation
+└─────────────────────────────────────┘
+```
+
+**Implementation Requirements:**
+- **CSS Grid Layout**: Fixed row heights for nav/filters/CTA, flexible content area
+- **Viewport Management**: Proper height calculations for mobile and desktop
+- **Z-Index Management**: Ensure fixed elements layer correctly
+- **Touch Targets**: Maintain 44px minimum for factory environment use
 
 #### **🏭 PRODUCTION Tab - Manufacturing**
 ```
@@ -608,7 +768,7 @@ Key Visual Elements:
 ```
 ┌─────────────────────────────────────┐
 │ Sales    [ Leads│Quotes│Orders│Inv ]│ Tab bar: 48px
-│ [🔍 Search orders... (🎙)]          │ Search: 44px
+│ [All▼] [Production▼] [Blocked▼] [📊5]│ Business filters: 44px
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
 │ │ Order #O-2345 — Suresh Textiles │ │ Card header: 20px
@@ -633,7 +793,7 @@ Key Visual Elements:
 ├─────────────────────────────────────┤
 │          [+ New Order]              │ 56px CTA
 ├─────────────────────────────────────┤
-│ 🏠   💼•  🏭   📦   👥         [+] │ Active: Sales
+│ 🏠   💼•  🏭   📦   👥             │ Active: Sales
 └─────────────────────────────────────┘
 ```
 
@@ -1875,11 +2035,42 @@ Validation Criteria for Next Version:
   - [ ] Navigation components
   - [ ] Modal and overlay patterns
 
+### **📱 MOBILE UX PRINCIPLES FOR NON-TECH USERS**
+
+**Target Demographics**: Gujarat textile manufacturers, 35-55 years, basic smartphone usage
+
+**Core Principles:**
+1. **Explicit > Clever**: Clear text labels instead of abstract symbols
+2. **Consistent > Contextual**: Same behavior patterns throughout app  
+3. **Large > Small**: 44px minimum touch targets for factory environment
+4. **Simple > Feature-Rich**: Essential functionality prominently displayed
+5. **Predictable > Surprising**: No hidden functionality or changing contexts
+
+**Applied Decisions:**
+- ✅ Bottom CTA with clear text instead of contextual FAB
+- ✅ Universal search instead of multiple search systems
+- ✅ Business filters instead of complex search interfaces  
+- ✅ 120px card height for easy reading and touch
+- ✅ Professional B2B design building trust with MSME manufacturers
+
+**Voice Integration:**
+- Single universal voice search system
+- Voice commands maintain same simplicity principles
+- Clear feedback and confirmation for voice actions
+
+**Design Philosophy:**
+- **WhatsApp-Level Simplicity**: Interface familiarity for existing smartphone users
+- **Factory-Ready**: Glove-friendly buttons, high contrast, large text
+- **Business Context**: Actions match real textile manufacturing workflows
+- **Trust Building**: Professional appearance appropriate for B2B transactions
+
+---
+
 ### ✅ Mobile Design Implementation
 - [ ] **Core Navigation**
   - [ ] 5-tab bottom navigation
-  - [ ] Contextual FAB implementation
-  - [ ] Global search with voice
+  - [ ] Contextual CTA implementation (Bottom CTA with clear text)
+  - [ ] Universal search with voice (single system)
   - [ ] Breadcrumb navigation
 
 - [ ] **Screen Implementations**

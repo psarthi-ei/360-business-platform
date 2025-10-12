@@ -209,38 +209,6 @@ function LeadManagement({
   return (
     <div className={styles.leadManagementScreen}>
       <div className={styles.pageContent}>
-        {/* Mobile UX V2: Unified Smart Header Bar */}
-        <div className="unifiedHeader">
-          <button 
-            className={styles.addButton}
-            onClick={() => setShowAddModal(true)}
-          >
-            + Add
-          </button>
-          
-          <div className={styles.filterDropdownContainer}>
-            <select 
-              className="ds-filter-dropdown"
-              value={filterState}
-              onChange={(e) => onFilterChange(e.target.value)}
-            >
-              <option value="all">All Leads</option>
-              <option value="hotleads">🔥 Hot Leads</option>
-              <option value="warmleads">🔶 Warm Leads</option>
-              <option value="coldleads">🔵 Cold Leads</option>
-            </select>
-          </div>
-          
-          <div className={styles.leadCounter}>
-            📊 {leads.filter(lead => {
-              if (filterState === 'all') return true;
-              if (filterState === 'hotleads') return lead.priority === 'hot';
-              if (filterState === 'warmleads') return lead.priority === 'warm';
-              if (filterState === 'coldleads') return lead.priority === 'cold';
-              return true;
-            }).length} leads
-          </div>
-        </div>
 
         {/* Success Message */}
         {successMessage && (
