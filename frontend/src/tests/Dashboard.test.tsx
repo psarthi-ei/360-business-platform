@@ -51,10 +51,10 @@ describe('Dashboard Component', () => {
 
     test('should render action buttons', () => {
       renderDashboard();
-      expect(screen.getByText('+Order')).toBeInTheDocument();
+      expect(screen.getByText('+Lead')).toBeInTheDocument();
+      expect(screen.getByText('+Quote')).toBeInTheDocument();
       expect(screen.getByText('Payment')).toBeInTheDocument();
-      expect(screen.getByText('PR')).toBeInTheDocument();
-      expect(screen.getByText('Job')).toBeInTheDocument();
+      expect(screen.getByText('Production')).toBeInTheDocument();
     });
 
     test('should render alert card', () => {

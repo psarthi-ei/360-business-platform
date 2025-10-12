@@ -64,30 +64,33 @@ function Dashboard({
         <div className={styles.kpiCard}>
           <div className={styles.kpiValue}>{pendingQuotes}</div>
           <div className={styles.kpiLabel}>Pending Invoices</div>
+          <div className={styles.kpiTrend}>↑2</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiValue}>{overduePayments}</div>
           <div className={styles.kpiLabel}>Orders at Risk</div>
+          <div className={styles.kpiTrend}>↓1</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiValue}>85%</div>
           <div className={styles.kpiLabel}>Production Efficiency</div>
+          <div className={styles.kpiTrend}>↑3%</div>
         </div>
       </div>
 
-      {/* Primary Actions - 4 buttons */}
-      <div className={styles.primaryActions}>
-        <button className={styles.actionButton} onClick={() => onShowSalesOrders()}>
-          +Order
+      {/* Primary Actions - 4 buttons aligned with business workflow */}
+      <div className={`${styles.primaryActions} ds-btn-container`}>
+        <button className="ds-btn ds-btn-primary" onClick={() => onShowLeadManagement('create')}>
+          +Lead
         </button>
-        <button className={styles.actionButton} onClick={() => onShowPayments()}>
+        <button className="ds-btn ds-btn-primary" onClick={() => onShowQuotationOrders()}>
+          +Quote
+        </button>
+        <button className="ds-btn ds-btn-primary" onClick={() => onShowPayments()}>
           Payment
         </button>
-        <button className={styles.actionButton} onClick={() => onShowInventory?.()}>
-          PR
-        </button>
-        <button className={styles.actionButton} onClick={() => onShowAnalytics?.()}>
-          Job
+        <button className="ds-btn ds-btn-primary" onClick={() => onShowAnalytics?.()}>
+          Production
         </button>
       </div>
 

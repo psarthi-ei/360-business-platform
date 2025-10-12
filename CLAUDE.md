@@ -9,9 +9,8 @@ date  # ALWAYS run first - validates project timeline context
 
 **Current Timeline:**
 - **Project Start**: August 27, 2025
-- **Current Phase**: Visual Design Specification Implementation
-- **Current Work**: Phase 1 (Update Existing Systems with Visual Design Spec)
-- **Next**: 6-phase implementation following Master Implementation Plan
+- **Implementation Strategy**: 6-phase Visual Design Specification implementation
+- **Phase Details**: Check Master Implementation Plan for current status
 
 ### **STEP 2: READ MANDATORY SESSION CONTEXT**
 ```bash
@@ -78,23 +77,17 @@ if (params && 'leadId' in params) {
 
 ---
 
-## 🎯 CURRENT PHASE: MASTER IMPLEMENTATION PLAN EXECUTION
+## 🎯 IMPLEMENTATION PRINCIPLES
 
-### **Phase Status (Check `/docs/MASTER_IMPLEMENTATION_PLAN.md` for details)**
-- 🎯 **Phase 1**: Update Existing Systems with Visual Design Spec (CURRENT)
-  - Sub-Phase 1.1: Transform Global Variables (30 mins)
-  - Sub-Phase 1.2: Enhanced Navigation Foundation (45 mins)
-  - Sub-Phase 1.3: Bottom Navigation Implementation (60 mins)
-- ⏳ **Phase 2**: Core UI Components Update (2 hours)
-- ⏳ **Phase 3**: Dashboard Mobile Transformation (2 hours)
-- ⏳ **Phase 4**: Sales Module Transformation (2.5 hours)
-- ⏳ **Phase 5**: Missing Module Implementation (3-4 hours)
-- ⏳ **Phase 6**: Visual Polish & Integration (1.5 hours)
+### **Master Implementation Plan Reference**
+- **Current Status**: Check `/docs/MASTER_IMPLEMENTATION_PLAN.md` for live phase status
+- **Todo Tracking**: Check `/TODO.md` for current priorities and session context
 
-### **Current Priority Actions**
-1. UPDATE existing index.css with Visual Design Specification colors and fonts
-2. EXTEND existing Design System classes (NOT create new files)
+### **Core Implementation Standards**
+1. UPDATE existing systems (NOT create new files)
+2. EXTEND existing Design System classes following Visual Design Spec
 3. PRESERVE all existing architectural patterns while applying Visual Design styling
+4. FOLLOW Master Implementation Plan phase structure
 
 ---
 

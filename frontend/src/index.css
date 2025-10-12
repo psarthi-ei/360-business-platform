@@ -144,6 +144,7 @@
   
   /* Visual Design Spec touch targets - 44px minimum */
   min-height: 44px;
+  min-width: 100px;  /* Standard minimum width for consistent button sizing */
   touch-action: var(--ds-touch-action);
   -webkit-tap-highlight-color: var(--ds-tap-highlight);
   
@@ -285,6 +286,22 @@
   }
 }
 
+/* Mobile Button Responsiveness - Global Design System */
+@media (max-width: 1024px) {
+  .ds-btn-container .ds-btn {
+    flex: 1;
+    min-width: 0; /* Only override min-width for buttons in containers */
+    font-size: 13px;
+    padding: 8px 4px;
+  }
+  
+  .ds-btn-container {
+    gap: 3px;
+    padding: 0 4px;
+  }
+}
+
+
 /* NOTE: Unified header CSS kept in component modules for now until proper migration */
 
 /* DESIGN SYSTEM V2 - Universal Expanded Details System */
@@ -368,3 +385,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ========================================
+   GLOBAL BUTTON ENHANCEMENTS
+   ======================================== */
+
+/* Flex button containers - reusable pattern */
+.ds-btn-container {
+  display: flex;
+  gap: 4px;
+}
+
+.ds-btn-container .ds-btn {
+  flex: 1;
+  min-height: 44px;
+  height: 48px;
+}
+
+@media (min-width: 1025px) {
+  .ds-btn-container .ds-btn {
+    height: 44px;
+    min-height: 44px;
+    min-width: 100px;
+    font-size: 14px;
+    padding: 8px 16px;
+    flex: none;
+  }
+  
+  .ds-btn-container {
+    justify-content: center;
+    gap: 8px;
+  }
+}
+

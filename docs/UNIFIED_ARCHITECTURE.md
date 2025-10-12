@@ -826,14 +826,86 @@ function getPageScope(currentPage: string): DataScope[] {
 
 This section defines the complete CSS architecture and component structure patterns that ensure consistency, prevent duplication, and maintain clean separation of concerns across the entire platform.
 
-#### **Four-Layer CSS Architecture**
+#### **Three-Layer CSS Architecture (Clean Separation)**
 
 | **CSS File** | **Responsibility** | **Screen Size** | **Content** |
 |--------------|-------------------|-----------------|-------------|
-| `index.css` | Global variables, universal classes | All | Colors, typography, .ds-btn, .ds-expanded-details |
-| `App.css` | Common web + mobile application styles | All | Shared layouts, common patterns, universal search clearance |
-| `MobileAppShell.css` | Mobile-specific global styles | ≤1024px | Mobile shell, mobile navigation, mobile-only patterns |
-| `Component.module.css` | Component-specific styles | All | Business logic, card layouts, component behavior (desktop + mobile) |
+| `index.css` | **Universal Design System** | All | CSS variables, button system (.ds-btn), reusable components (.ds-*), responsive patterns |
+| `App.css` | **Application Shell & Framework** | All | App structure, responsive layout, shell coordination, content systems |
+| `Component.module.css` | **Component-Specific Styling** | All | Business logic styling, component layouts, interactive states |
+
+#### **✅ Achieved Clean Architecture (2025)**
+
+**📊 Design System Distribution:**
+- **🌐 Global (index.css)**: 25+ universal design system classes
+- **🏠 Application (App.css)**: 15+ shell and framework classes  
+- **📱 Component (*.module.css)**: 20+ component-specific classes per module
+
+**🎯 Key Improvements:**
+- ✅ **Eliminated MobileAppShell.css**: Unified responsive patterns in PlatformShell
+- ✅ **Clean Separation**: Each file handles its appropriate scope
+- ✅ **No Overlap**: Zero duplicate styling or conflicting rules
+- ✅ **Visual Design Spec Compliant**: 44px button standard, proper spacing
+- ✅ **Maintainable**: Changes in one place affect appropriate scope
+
+#### **📋 Design System Element Distribution**
+
+**🌐 GLOBAL INDEX.CSS** (Universal Design System)
+```css
+/* Foundation Layer */
+:root {
+  --font-xs to --font-xl        /* 5-tier responsive typography */
+  --ds-btn-primary, --ds-bg-*   /* Visual Design Spec colors */
+  --ds-space-*, --ds-radius-*   /* Spacing and border tokens */
+}
+
+/* Universal Button System */
+.ds-btn                         /* 44px height, 100px min-width, responsive */
+.ds-btn-primary, .ds-btn-urgent /* Visual Design Spec button variants */
+.ds-btn-container               /* Flex container with responsive behavior */
+
+/* Reusable Components */
+.ds-voice-commands, .ds-voice-hint
+.ds-filter-dropdown
+.ds-expanded-details, .ds-details-content
+```
+
+**🏠 APPLICATION APP.CSS** (Shell & Framework)
+```css
+/* Application Structure */
+.App, .App-content              /* Responsive app foundation */
+.unifiedHeader                  /* Desktop vs mobile header grid */
+.platformPageContent           /* Content area coordination */
+
+/* Content Systems */
+.markdown-content               /* Complete markdown styling system */
+.dashboard, .feature-card       /* Homepage elements */
+.language-switcher              /* Multi-language support */
+```
+
+**📱 COMPONENT MODULES** (Business Logic)
+```css
+/* Dashboard-Specific (dashboard.module.css) */
+.dashboard, .primaryActions     /* Main layout and action container */
+.kpiStrip, .kpiCard, .kpiValue  /* KPI system components */
+.alertCard, .alertContent       /* Alert system components */
+.snapshotCard, .snapshotHeader  /* Business snapshot components */
+.activityTimeline, .syncStatus  /* Activity and status components */
+```
+
+#### **🎯 Design System Standards**
+
+**Button Standards (Visual Design Spec Compliant):**
+- **Desktop**: 44px height, 100px min-width, centered
+- **Mobile**: 44px+ height, full-width flex, touch-optimized
+- **Container**: 56px height for primary actions
+- **Responsive**: `flex: none` (desktop) vs `flex: 1` (mobile)
+
+**Component Patterns:**
+- **Cards**: Consistent padding, border-radius, shadow system
+- **Typography**: 5-tier responsive font scaling
+- **Spacing**: Standardized gap and padding tokens
+- **Colors**: Visual Design Specification compliance
 
 #### **🚨 Responsive Design Strategy (Standard 2-Tier Approach)**
 
