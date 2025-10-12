@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { ActionParams } from '../../services/nlp/types';
 import styles from './Sales.module.css';
+import LeadManagement from './LeadManagement';
+import QuotationOrders from './QuotationOrders';
+import SalesOrders from './SalesOrders';
+import Invoices from './Invoices';
 
 interface SalesProps {
   mobile?: boolean;
@@ -17,8 +21,16 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   const [quoteFilterState, setQuoteFilterState] = useState('all');
   const [orderFilterState, setOrderFilterState] = useState('all');
   const [invoiceFilterState, setInvoiceFilterState] = useState('all');
-  const [timelineFilter, setTimelineFilter] = useState('thismonth'); // Universal timeline filter
-
+  const [timelineFilter, setTimelineFilter] = useState('all');
+  
+  // Timeline filter configuration (Filter 2)
+  const timelineFilterConfig = [
+    { value: 'all', label: '📅 All Time' },
+    { value: 'today', label: '📅 Today' },
+    { value: 'thisweek', label: '📅 This Week' },
+    { value: 'thismonth', label: '📅 This Month' }
+  ];
+  
   // Status filter configurations for each tab (Filter 1)
   const statusFilterConfigs = {
     leads: [
@@ -46,14 +58,6 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       { value: 'overdue', label: '🔴 Overdue', count: 2 }
     ]
   };
-
-  // Timeline filter configuration (Filter 2) - Universal across all tabs
-  const timelineFilterConfig = [
-    { value: 'today', label: 'Today' },
-    { value: 'thisweek', label: 'This Week' },
-    { value: 'thismonth', label: 'This Month' },
-    { value: 'thisquarter', label: 'This Quarter' }
-  ];
 
   // Get current filter state based on active tab
   const getCurrentFilterState = () => {
@@ -91,7 +95,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'today': timelineModifier = 0.1; break;
       case 'thisweek': timelineModifier = 0.3; break;
       case 'thismonth': timelineModifier = 0.7; break;
-      case 'thisquarter': timelineModifier = 1; break;
+      case 'all': 
+      default: timelineModifier = 1; break;
     }
     
     return Math.round(baseCount * timelineModifier);
@@ -106,7 +111,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     return (
       <div className={styles.filterContainer}>
         <div className={styles.filterDropdowns}>
-          {/* Filter 1: Status/Priority Dropdown */}
+          {/* Status/Priority Dropdown */}
           <select 
             className={styles.filterDropdown}
             value={currentStatusFilter}
@@ -119,7 +124,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             ))}
           </select>
           
-          {/* Filter 2: Timeline Dropdown */}
+          {/* Timeline Filter Dropdown */}
           <select 
             className={styles.filterDropdown} 
             value={timelineFilter}
@@ -141,32 +146,53 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     );
   };
 
-  // SIMPLIFIED PLACEHOLDER CONTENT FOR TESTING
+  // Clean render function using configuration - TypeScript-safe approach
   const renderTabContent = () => {
-    return (
-      <div style={{padding: '20px'}}>
-        <h2>Currently viewing: {activeTab.toUpperCase()} tab</h2>
-        <div style={{height: '200px', background: '#f0f0f0', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
-          <p>Placeholder content for {activeTab} tab</p>
-          <p>This should scroll if there's overflow</p>
-          <p>Filter state: {getCurrentFilterState()}</p>
-          <p>Timeline filter: {timelineFilter}</p>
-        </div>
-        <div style={{height: '200px', background: '#e0e0e0', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
-          <p>Second placeholder div to test scrolling</p>
-          <p>Active tab: {activeTab}</p>
-          <p>Filtered count: {getFilteredCount()}</p>
-        </div>
-        <div style={{height: '200px', background: '#d0d0d0', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
-          <p>Third placeholder div</p>
-          <p>This content should scroll while tabs and CTA stay fixed</p>
-        </div>
-        <div style={{height: '200px', background: '#c0c0c0', padding: '20px', borderRadius: '8px'}}>
-          <p>Final placeholder div to test scroll behavior</p>
-          <p>CTA should always be visible at bottom</p>
-        </div>
-      </div>
-    );
+    switch(activeTab) {
+      case 'leads':
+        return (
+          <LeadManagement
+            mobile={mobile}
+            onShowCustomerProfile={onShowCustomerProfile}
+            onShowQuoteFromLead={() => setActiveTab('quotes')}
+            onShowQuotationOrders={() => setActiveTab('quotes')}
+            onShowSalesOrders={() => setActiveTab('orders')}
+            filterState={leadFilterState}
+            onFilterChange={setLeadFilterState}
+          />
+        );
+      case 'quotes':
+        return (
+          <QuotationOrders
+            onShowSalesOrders={() => setActiveTab('orders')}
+            onShowCustomerProfile={onShowCustomerProfile || (() => {})}
+            onShowLeadManagement={() => setActiveTab('leads')}
+            filterState={quoteFilterState}
+            onFilterChange={setQuoteFilterState}
+          />
+        );
+      case 'orders':
+        return (
+          <SalesOrders
+            onShowLeadManagement={() => setActiveTab('leads')}
+            onShowQuotationOrders={() => setActiveTab('quotes')}
+            onShowPayments={() => setActiveTab('invoices')}
+            filterState={orderFilterState}
+            onFilterChange={setOrderFilterState}
+          />
+        );
+      case 'invoices':
+        return (
+          <Invoices
+            onShowSalesOrders={() => setActiveTab('orders')}
+            onShowCustomerProfile={onShowCustomerProfile}
+            filterState={invoiceFilterState}
+            onFilterChange={setInvoiceFilterState}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   // Get contextual CTA text for current tab
