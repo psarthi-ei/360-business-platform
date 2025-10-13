@@ -540,13 +540,13 @@ Key Visual Elements:
 **Target Users**: Non-technical Gujarat textile manufacturers
 
 **Tab Structure**: `[ Leads│Quotes│Orders│Inv ]`
-**Layout**: 120px card template (following Orders specification)
+**Layout**: 140px card template (optimized from Orders specification for content clarity)
 **Integration**: Leverages existing LeadManagement, QuotationOrders, SalesOrders, Invoices components
 
 **Key Visual Elements:**
 - **48px Tab Navigation**: Visual Design primary colors (#1D4ED8)
 - **44px Business Filters**: Tab-specific dropdown filters with counts
-- **120px Card Height**: Consistent with Orders tab template
+- **140px Card Height**: Optimized for content clarity with no element overlapping
 - **Typography Hierarchy**: 20px header, 16px status, 14px meta (exact spec)
 - **56px Bottom CTA**: Clear contextual text (no FAB)
 - **Touch Targets**: 44px minimum for factory environment
@@ -560,8 +560,8 @@ Key Visual Elements:
 │ [All▼] [Hot▼] [This Month▼] [📊12] │ 44px business filters
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
-│ │ LEAD-2025-001 — Suresh Textiles │ │ 120px card template
-│ │ Status: 🔥 Hot Lead             │ │ (following Orders spec)
+│ │ Suresh Textiles Pvt Ltd         │ │ 140px card template
+│ │ Status: 🔥 Hot Lead             │ │ (optimized for clarity)
 │ │ Cotton • ₹2.5L • 15 days        │ │
 │ │ [Call] [Quote] [WhatsApp]       │ │
 │ └─────────────────────────────────┘ │
@@ -594,7 +594,196 @@ Key Visual Elements:
 - Container Pattern: Sales.tsx wrapper with existing components
 - Business Logic Preservation: All existing functionality maintained
 - Component Integration: LeadManagement → Leads, QuotationOrders → Quotes, etc.
-- Visual Compliance: Orders tab template applied to all tabs
+- Visual Compliance: 140px card template applied to all tabs
+
+### **🎬 ANIMATION SYSTEM: Sequential Card Expansion**
+
+#### **Animation Design Philosophy:**
+**Problem**: When expanding Card B while Card A is open, users lose visual connection between action and result.
+
+**Solution**: Sequential animation with clear visual flow:
+1. **Collapse Phase**: Card A closes (200ms animation)
+2. **Brief Pause**: 200ms delay allows user to process collapse
+3. **Expand Phase**: Card B opens from its bottom edge (250ms animation)
+4. **Auto-Scroll**: Smooth scroll ensures expanded content is visible
+
+#### **Animation Specifications:**
+```css
+/* Expand Animation */
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);        /* Start above natural position */
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    transform: translateY(0);            /* Slide to natural position */
+  }
+}
+
+.expandedSection {
+  animation: expandDown 0.25s ease-out;
+  border-top: 2px solid #1D4ED8;        /* Visual connection to card */
+  margin-top: -1px;                     /* Seamless connection */
+}
+
+/* Expanded Card Highlight */
+.leadCard.expanded {
+  box-shadow: 0 0 0 1px #1D4ED8;        /* Blue border highlight */
+  border-bottom-radius: 0;               /* Connect to expanded section */
+}
+```
+
+#### **TypeScript Implementation:**
+```typescript
+const toggleDetails = async (itemId: string) => {
+  if (expandedDetails.has(itemId)) {
+    // Simple collapse
+    setExpandedDetails(new Set());
+  } else {
+    // Sequential expansion
+    if (expandedDetails.size > 0) {
+      setExpandedDetails(new Set());                    // Collapse existing
+      await new Promise(resolve => setTimeout(resolve, 200)); // Wait
+    }
+    setExpandedDetails(new Set([itemId]));              // Expand new
+    
+    // Auto-scroll to ensure visibility
+    setTimeout(() => {
+      document.querySelector(`[data-lead-id="${itemId}"]`)?.scrollIntoView({
+        behavior: 'smooth', block: 'start'
+      });
+    }, 100);
+  }
+};
+```
+
+#### **UX Benefits:**
+- ✅ **Clear Visual Flow**: Users see old content close, then new content open
+- ✅ **No Layout Jumps**: Sequential timing prevents simultaneous animations
+- ✅ **Always Visible**: Auto-scroll ensures expanded content stays in view
+- ✅ **Professional Feel**: Smooth, intentional animations build trust
+- ✅ **Accessible**: Screen readers can follow logical progression
+
+### **📐 CARD TEMPLATE SPECIFICATION: 140px Standard**
+
+#### **Master Card Architecture (Lead Management Template):**
+
+**Physical Dimensions:**
+```
+┌─────────────────────────────────┐
+│ Suresh Textiles Pvt Ltd         │ ← Header: 24px (20px font + 4px)
+│ Status: 🔥 Hot Lead             │ ← Status: 21px (16px font + 5px) 
+│ Cotton fabric • ₹2.5L •         │ ← Meta Line 1: 17px
+│ 15 days delivery               │ ← Meta Line 2: 17px
+│                           More  │ ← Indicator: 16px + auto margin
+└─────────────────────────────────┘
+Total Height: 140px (with 16px padding = 108px content)
+```
+
+#### **Element Specifications:**
+
+**1. Card Container:**
+```css
+.cardContainer {
+  height: 140px;                    /* Optimized for content clarity */
+  padding: 16px;                    /* Symmetric professional padding */
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid;           /* Priority color stripe */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+```
+
+**2. Header Element:**
+```css
+.cardHeader {
+  font-size: 20px;                 /* Visual Design Spec exact */
+  font-weight: 600;
+  color: #111827;
+  height: 24px;                    /* Fixed to prevent compression */
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-shrink: 0;                  /* Prevents compression */
+  margin-bottom: 6px;
+}
+```
+
+**3. Status Element:**
+```css
+.cardStatus {
+  font-size: 16px;                 /* Visual Design Spec exact */
+  font-weight: 500;
+  color: #374151;
+  height: 21px;                    /* Fixed to prevent compression */
+  line-height: 1.3;
+  flex-shrink: 0;                  /* Prevents compression */
+  margin-bottom: 6px;
+}
+```
+
+**4. Meta Content (2-Line):**
+```css
+.cardMeta {
+  font-size: 14px;                 /* Visual Design Spec exact */
+  color: #6B7280;
+  max-height: 34px;                /* Exactly 2 lines: 14px × 1.2 × 2 + 4px */
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  flex-shrink: 0;                  /* Prevents compression */
+  margin-bottom: 8px;
+}
+```
+
+**5. Expand Indicator:**
+```css
+.expandIndicator {
+  font-size: 12px;
+  color: #1D4ED8;
+  margin-top: auto;                /* Push to bottom with flexbox */
+  text-align: right;
+  padding: 4px 6px;
+  background: rgba(29, 78, 216, 0.1);
+  border-radius: 4px;
+  width: fit-content;
+  align-self: flex-end;
+}
+```
+
+#### **Content Guidelines:**
+
+**Header Content:**
+- **Lead Cards**: Company name only (e.g., "Suresh Textiles Pvt Ltd")
+- **Quote Cards**: Company name + quote context
+- **Order Cards**: Order number + company name
+- **Invoice Cards**: Invoice number + company name
+
+**Status Content:**
+- **Format**: "Status: [Icon] [Label]"
+- **Icons**: 🔥 Hot, 🔶 Warm, 🔵 Cold, ⏳ Pending, ✅ Approved, etc.
+
+**Meta Content (2 Lines):**
+- **Line 1**: Primary business info (fabric type, amount, priority)
+- **Line 2**: Secondary info (timeline, delivery, payment status)
+- **Separator**: " • " for inline items
+
+#### **Template Replication Checklist:**
+- ✅ 140px height with 16px padding
+- ✅ Fixed element heights (24px, 21px, 34px)
+- ✅ flex-shrink: 0 on all major elements
+- ✅ Company/business-first headers with ellipsis
+- ✅ 2-line meta with webkit-line-clamp
+- ✅ Sequential animation toggle logic
+- ✅ Blue border highlight when expanded
+- ✅ Data attributes for scroll targeting
 
 ### **🔍 DESIGN DECISION: Universal Search Architecture**
 
@@ -775,7 +964,7 @@ Key Visual Elements:
 │ │ Status: 🟡 Production in progress│ │ Status: 16px
 │ │ ₹1,20,000 | Delivery: 12 Oct   │ │ Meta: 14px
 │ │ [View] [Call] [WhatsApp]        │ │ Actions: 32px
-│ └─────────────────────────────────┘ │ Total: 120px card
+│ └─────────────────────────────────┘ │ Total: 140px card
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
 │ │ Order #O-2344 — Ramesh Mills    │ │
@@ -1212,7 +1401,7 @@ Key Visual Elements:
 │ │ 📅 Last Order: 04 Oct           │ │ Recency info
 │ │ 💎 LTV: ₹2.5L | Status: 🟢 Good │ │ Value & status
 │ │ [View 360°] [📞] [WhatsApp]     │ │ Quick actions
-│ └─────────────────────────────────┘ │ Card: 120px
+│ └─────────────────────────────────┘ │ Card: 140px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
 │ │ 🏢 Ramesh Mills                 │ │
@@ -2050,7 +2239,7 @@ Validation Criteria for Next Version:
 - ✅ Bottom CTA with clear text instead of contextual FAB
 - ✅ Universal search instead of multiple search systems
 - ✅ Business filters instead of complex search interfaces  
-- ✅ 120px card height for easy reading and touch
+- ✅ 140px card height for optimal content display and touch interaction
 - ✅ Professional B2B design building trust with MSME manufacturers
 
 **Voice Integration:**
