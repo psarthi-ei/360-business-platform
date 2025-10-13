@@ -20,20 +20,20 @@
 
 ---
 
-## **🚀 CURRENT: Phase 4 - Sales Module Transformation** 
-⏱️ *8 minutes remaining* (Component Integration completed) | **Project Progress**: 70% Complete (Phase 4 Sub-Phases 4.1A & 4.1B DONE)
+## **🚀 CURRENT: Phase 4 - Sales Module Template Replication** 
+⏱️ *15 minutes remaining* (Lead Template completed) | **Project Progress**: 75% Complete (Phase 4 Sub-Phase 4.1C DONE - Template Ready)
 
 ### **🔍 MAJOR DISCOVERY: Complete Sales Ecosystem Already Built**
 
-#### **Existing Sales Components Inventory:**
-- ✅ **LeadManagement.tsx** (577 lines) - Complete lead workflow with priority management, progressive disclosure
-- ✅ **QuotationOrders.tsx** (398 lines) - Quote approval workflows, customer conversion, proforma generation  
-- ✅ **SalesOrders.tsx** - Order tracking, production status, payment integration
-- ✅ **Invoices.tsx** - Invoice management, payment tracking, collections workflow
+#### **Sales Components Status:**
+- ✅ **LeadManagement.tsx** (577 lines) - ✅ **TEMPLATE COMPLETED** - Perfect 140px cards, sequential animation, ready for replication
+- 🔄 **QuotationOrders.tsx** (398 lines) - Quote approval workflows - **NEEDS TEMPLATE APPLICATION**
+- 🔄 **SalesOrders.tsx** - Order tracking, production status - **NEEDS TEMPLATE APPLICATION**
+- 🔄 **Invoices.tsx** - Invoice management, payment tracking - **NEEDS TEMPLATE APPLICATION**
 - ✅ **Payments.tsx** - Payment processing, advance tracking, payment proof management
 - ✅ **ProformaInvoiceManagement.tsx** - Proforma invoice generation and management
 
-**Strategic Insight**: All business logic exists - only need Visual Design Specification compliance container!
+**Strategic Update**: Lead Management serves as MASTER TEMPLATE for Quote/Order/Invoice modules!
 
 ---
 
@@ -540,9 +540,71 @@ const handleCTAClick = () => {
 
 ---
 
-**STATUS**: 📋 Ready for Implementation  
-**DURATION**: 30 minutes (reduced from 2.5 hours)  
-**PRIORITY**: High - Core business functionality with proven components  
-**BENEFIT**: Complete professional sales workflow with Visual Design Specification compliance
+---
+
+## **📋 NEW PRIORITY: Template Replication Phase (15 minutes)**
+
+### **🎯 LEAD MANAGEMENT TEMPLATE ARCHITECTURE (COMPLETED)**
+
+#### **✅ Master Template Features:**
+- **140px Card Height**: Perfect fit with no overlapping elements
+- **Company Name Headers**: Single-line ellipsis, business-friendly display
+- **2-Line Meta Content**: Full fabric/business requirements display
+- **Sequential Animation**: Collapse → Wait 200ms → Expand with smooth scroll
+- **Visual Connection**: Blue border highlight connects card to expanded section
+- **Fixed Element Heights**: header: 24px, status: 21px, meta: 34px (prevents compression)
+
+#### **📐 Template CSS Classes (Ready for Copy):**
+```css
+.leadCard { height: 140px; padding: 16px; /* + full styling */ }
+.cardHeader { font-size: 20px; height: 24px; flex-shrink: 0; /* + ellipsis */ }
+.cardStatus { font-size: 16px; height: 21px; flex-shrink: 0; }
+.cardMeta { font-size: 14px; max-height: 34px; -webkit-line-clamp: 2; }
+.expandedSection { animation: expandDown 0.25s; transform: translateY(-10px→0); }
+```
+
+#### **🔄 Sequential Toggle Logic (Ready for Copy):**
+```typescript
+const toggleDetails = async (itemId: string) => {
+  if (expandedDetails.has(itemId)) {
+    setExpandedDetails(new Set());
+  } else {
+    if (expandedDetails.size > 0) {
+      setExpandedDetails(new Set());
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
+    setExpandedDetails(new Set([itemId]));
+    // + scroll logic
+  }
+};
+```
+
+---
+
+### **🚀 TEMPLATE REPLICATION PLAN (15 minutes)**
+
+#### **Phase 4.1D: Quote Management Template Application (5 minutes)**
+**File**: `QuotationOrders.tsx` + `QuotationOrders.module.css`
+- Apply 140px card template
+- Convert to company-first headers (remove quote IDs from headers)
+- Implement sequential animation toggle
+- 2-line meta: approval status, amount, timeline
+
+#### **Phase 4.1E: Order Management Template Application (5 minutes)**  
+**File**: `SalesOrders.tsx` + `SalesOrders.module.css`
+- Apply 140px card template
+- Convert to order-number-first headers
+- Implement sequential animation toggle  
+- 2-line meta: production status, delivery date, payment status
+
+#### **Phase 4.1F: Invoice Management Template Application (5 minutes)**
+**File**: `Invoices.tsx` + `Invoices.module.css`  
+- Apply 140px card template
+- Convert to invoice-number-first headers
+- Implement sequential animation toggle
+- 2-line meta: payment status, due date, amount
+
+**PRIORITY**: High - Template is proven and ready for fast replication  
+**BENEFIT**: Consistent UX across all Sales tabs with professional appearance
 
 **USE**: TodoWrite tool for active session progress tracking
