@@ -142,17 +142,34 @@ function LeadManagement({
     setEditingLead(null);
   };
 
-  // Single expansion toggle function - only one card expanded at a time
-  const toggleDetails = (leadId: string) => {
-    setExpandedDetails(prev => {
-      if (prev.has(leadId)) {
-        // If clicking on already expanded card, collapse it
-        return new Set();
-      } else {
-        // Expand only this card, collapse all others
-        return new Set([leadId]);
+  // Sequential expansion toggle function - smooth visual flow
+  const toggleDetails = async (leadId: string) => {
+    if (expandedDetails.has(leadId)) {
+      // Simple collapse - no sequencing needed
+      setExpandedDetails(new Set());
+    } else {
+      // Sequential: First collapse any open card
+      if (expandedDetails.size > 0) {
+        setExpandedDetails(new Set());
+        // Wait for collapse animation to complete
+        await new Promise(resolve => setTimeout(resolve, 200));
       }
-    });
+      
+      // Then expand the new card
+      setExpandedDetails(new Set([leadId]));
+      
+      // Scroll to ensure the card is visible
+      setTimeout(() => {
+        const cardElement = document.querySelector(`[data-lead-id="${leadId}"]`);
+        if (cardElement) {
+          cardElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }, 100);
+    }
   };
 
   return (
@@ -192,7 +209,7 @@ function LeadManagement({
 
 
           return (
-            <div key={lead.id} className={styles.leadCardContainer}>
+            <div key={lead.id} className={styles.leadCardContainer} data-lead-id={lead.id}>
               {/* Clickable Card Summary - Visual Design Spec 120px */}
               <div 
                 className={`${styles.leadCard} ${styles[lead.priority + 'Lead']} ${expandedDetails.has(lead.id) ? styles.expanded : ''}`}

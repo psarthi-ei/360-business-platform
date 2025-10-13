@@ -202,7 +202,7 @@
 }
 
 .leadCard {
-  height: 120px;                    /* Visual Design Spec exact */
+  height: 140px;                    /* Increased from 120px to eliminate overlapping */
   padding: 16px;                    /* Symmetric padding for professional look */
   background: white;
   border-radius: 8px;
@@ -224,7 +224,9 @@
 .leadCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
+  position: relative;
+  z-index: 1;                           /* Ensure card stays above others */
 }
 
 .leadCard.hotLead {
@@ -380,30 +382,36 @@
   font-size: 20px;                 /* Visual Design Spec exact */
   font-weight: 600;
   color: #111827;                  /* Visual Design Spec exact */
-  margin: 0 0 6px 0;               /* Optimized bottom margin for tight spacing */
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
   line-height: 1.2;                /* Tighter line height for single line */
   overflow: hidden;
   white-space: nowrap;              /* Force single line */
   text-overflow: ellipsis;          /* Clean truncation with ... */
+  flex-shrink: 0;                  /* Prevent header compression */
+  height: 24px;                    /* Fixed height for consistency */
 }
 
 .cardStatus {
   font-size: 16px;                 /* Visual Design Spec exact */
   font-weight: 500;
-  margin: 0 0 6px 0;               /* Optimized bottom margin for tight spacing */
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
   color: #374151;
   line-height: 1.3;
+  flex-shrink: 0;                  /* Prevent status compression */
+  height: 21px;                    /* Fixed height for consistency */
 }
 
 .cardMeta {
   font-size: 14px;                 /* Visual Design Spec exact */
   color: #6B7280;                  /* Visual Design Spec exact */
-  margin: 4px 0 8px 0;             /* Optimized spacing for natural flow */
-  line-height: 1.3;                /* Optimized for 2-line display in tight space */
+  margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
+  line-height: 1.2;                /* Tighter line height for 2-line content */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;           /* Exactly 2 lines with ellipsis */
   -webkit-box-orient: vertical;
+  flex-shrink: 0;                  /* Prevent compression affecting header */
+  max-height: 34px;                /* Enforce exact height for 2 lines */
 }
 
 
@@ -1274,10 +1282,11 @@
 .expandedSection {
   background: #F9FAFB;
   border: 1px solid #E5E7EB;
-  border-top: none;
+  border-top: 2px solid #1D4ED8;       /* Clear visual connection */
   border-radius: 0 0 8px 8px;
   padding: 20px;
-  animation: expandDown 0.2s ease-out;
+  margin-top: -1px;                     /* Overlap by 1px for seamless connection */
+  animation: expandDown 0.25s ease-out; /* Slightly longer for smooth appearance */
 }
 
 @keyframes expandDown {
@@ -1286,12 +1295,14 @@
     max-height: 0;
     padding-top: 0;
     padding-bottom: 0;
+    transform: translateY(-10px);        /* Start slightly above */
   }
   to {
     opacity: 1;
     max-height: 1000px;
     padding-top: 20px;
     padding-bottom: 20px;
+    transform: translateY(0);            /* Slide down to natural position */
   }
 }
 
