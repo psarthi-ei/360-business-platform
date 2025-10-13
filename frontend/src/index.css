@@ -68,6 +68,8 @@
   --ds-padding-screen: clamp(20px, 4vw, 30px) clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) clamp(10px, 2vw, 20px);
   --ds-padding-header: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.25rem);
   --ds-padding-button: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
+  --ds-padding-button-card: 4px 8px;  /* Visual Design Spec - Fixed padding for 120px cards */
+  --font-sm-card: 14px;               /* Visual Design Spec - Fixed size for card buttons */
 
   /* Grid Gap System */
   --ds-gap-sm: clamp(0.25rem, 1.5vw, 0.75rem);
@@ -185,6 +187,19 @@
 .ds-btn-urgent:hover {
   background: var(--ds-btn-urgent-hover);  /* #EA580C */
   transform: translateY(-1px);
+}
+
+/* Global Card Button Class - Visual Design Spec Compliant */
+.ds-btn-card {
+  padding: var(--ds-padding-button-card) !important;
+  font-size: var(--font-sm-card) !important;
+  height: 24px !important;
+  min-height: unset !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Action-Specific Variants (from Lead/Quote success) */

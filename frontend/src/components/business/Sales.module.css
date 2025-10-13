@@ -129,65 +129,7 @@
   grid-row: 3;
 }
 
-/* Hide headers and filters from child components */
-.salesContent :global(.unifiedHeader),
-.salesContent :global(.filtersSection),
-.salesContent :global(.voiceCommands) {
-  display: none !important;
-}
-
-/* Apply 120px card template to child components */
-.salesContent :global([class*="leadCard"]),
-.salesContent :global([class*="quoteCard"]),
-.salesContent :global([class*="orderCard"]),
-.salesContent :global([class*="invoiceCard"]) {
-  height: 120px !important;
-  margin-bottom: 12px !important;
-  padding: 16px !important;
-  background: white !important;
-  border-radius: 8px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-  border: 1px solid #E5E7EB !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-}
-
-/* Typography Hierarchy - Visual Design Spec */
-.salesContent :global([class*="leadCard"] h3),
-.salesContent :global([class*="quoteCard"] h3),
-.salesContent :global([class*="orderCard"] h3),
-.salesContent :global([class*="invoiceCard"] h3) {
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  color: #111827 !important;
-  margin: 0 0 4px 0 !important;
-}
-
-.salesContent :global(.statusBadge) {
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  margin-bottom: 8px !important;
-}
-
-.salesContent :global([class*="leadDetails"] p),
-.salesContent :global([class*="quoteDetails"] p),
-.salesContent :global([class*="orderDetails"] p),
-.salesContent :global([class*="invoiceDetails"] p) {
-  font-size: 14px !important;
-  color: #6B7280 !important;
-  margin: 2px 0 !important;
-}
-
-.salesContent :global([class*="leadActions"]),
-.salesContent :global([class*="quoteActions"]),
-.salesContent :global([class*="orderActions"]),
-.salesContent :global([class*="invoiceActions"]) {
-  display: flex !important;
-  gap: 8px !important;
-  height: 32px !important;
-  margin-top: auto !important;
-}
+/* Components now style themselves - no global overrides needed */
 
 /* 56px Fixed Bottom CTA - Grid Positioned */
 .salesCTA {
