@@ -190,33 +190,22 @@
   }
 }
 
-/* Ensure proper container dimensions for child components */
-.salesContent > div {
+/* Specific content type classes instead of broad selector */
+.tabContentWithPadding {
   padding: 16px;
 }
 
-/* Remove any conflicting styles from child components */
-.salesContent :global(.pageContent) {
-  padding: 0 !important;
+.listContent {
+  padding: 16px 10px 0 10px;  /* For list components like leads */
 }
 
-.salesContent :global([class*="salesOrdersScreen"]),
-.salesContent :global([class*="quotationOrdersScreen"]),
-.salesContent :global([class*="leadManagementScreen"]),
-.salesContent :global([class*="invoicesScreen"]) {
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-.salesContent :global([class*="ordersContainer"]),
-.salesContent :global([class*="quotesContainer"]),
-.salesContent :global([class*="leadsContainer"]),
-.salesContent :global([class*="invoicesContainer"]) {
-  padding: 0 !important;
-  margin: 0 !important;
+/* Clean component integration - no !important needed */
+.salesContent .componentWrapper {
+  background: transparent;
+  /* Natural CSS cascade - no conflicts */
 }
 
 /* Remove voice commands from child components */
 .salesContent :global([class*="voiceCommands"]) {
-  display: none !important;
+  display: none;
 }
