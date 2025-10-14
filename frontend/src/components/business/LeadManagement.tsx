@@ -188,9 +188,9 @@ function LeadManagement({
           // Filter logic
           const shouldShow = (
             filterState === 'all' ||
-            (filterState === 'hotleads' && lead.priority === 'hot') ||
-            (filterState === 'warmleads' && lead.priority === 'warm') ||
-            (filterState === 'coldleads' && lead.priority === 'cold')
+            (filterState === 'hot' && lead.priority === 'hot') ||
+            (filterState === 'warm' && lead.priority === 'warm') ||
+            (filterState === 'cold' && lead.priority === 'cold')
           );
 
           if (!shouldShow) return null;

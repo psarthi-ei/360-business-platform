@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ActionParams } from '../../services/nlp/types';
+import { mockLeads, mockQuotes } from '../../data/mockData';
 import styles from './Sales.module.css';
 import LeadManagement from './LeadManagement';
 import QuotationOrders from './QuotationOrders';
@@ -13,6 +14,21 @@ interface SalesProps {
 }
 
 type TabType = 'leads' | 'quotes' | 'orders' | 'invoices';
+
+// Dynamic count calculator functions
+const calculateLeadCounts = () => ({
+  all: mockLeads.length,
+  hot: mockLeads.filter(l => l.priority === 'hot').length,
+  warm: mockLeads.filter(l => l.priority === 'warm').length,
+  cold: mockLeads.filter(l => l.priority === 'cold').length
+});
+
+const calculateQuoteCounts = () => ({
+  all: mockQuotes.length,
+  pending: mockQuotes.filter(q => q.status === 'pending').length,
+  approved: mockQuotes.filter(q => q.status === 'approved').length,
+  expired: mockQuotes.filter(q => q.status === 'expired').length
+});
 
 const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps) => {
   // State Management
@@ -31,19 +47,23 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     { value: 'thismonth', label: '📅 This Month' }
   ];
   
-  // Status filter configurations for each tab (Filter 1)
+  // Dynamic count calculations
+  const leadCounts = calculateLeadCounts();
+  const quoteCounts = calculateQuoteCounts();
+  
+  // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
     leads: [
-      { value: 'all', label: 'All Leads', count: 12 },
-      { value: 'hot', label: '🔥 Hot Leads', count: 3 },
-      { value: 'warm', label: '🔶 Warm Leads', count: 5 },
-      { value: 'cold', label: '🔵 Cold Leads', count: 4 }
+      { value: 'all', label: 'All Leads', count: leadCounts.all },
+      { value: 'hot', label: '🔥 Hot Leads', count: leadCounts.hot },
+      { value: 'warm', label: '🔶 Warm Leads', count: leadCounts.warm },
+      { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
     ],
     quotes: [
-      { value: 'all', label: 'All Quotes', count: 8 },
-      { value: 'pending', label: '⏳ Pending', count: 3 },
-      { value: 'approved', label: '✅ Approved', count: 2 },
-      { value: 'expired', label: '❌ Expired', count: 3 }
+      { value: 'all', label: 'All Quotes', count: quoteCounts.all },
+      { value: 'pending', label: '⏳ Pending', count: quoteCounts.pending },
+      { value: 'approved', label: '✅ Approved', count: quoteCounts.approved },
+      { value: 'expired', label: '❌ Expired', count: quoteCounts.expired }
     ],
     orders: [
       { value: 'all', label: 'All Orders', count: 5 },

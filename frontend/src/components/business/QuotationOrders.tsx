@@ -34,18 +34,35 @@ function QuotationOrders({
   // Progressive disclosure state (missing - causing "More..." button to not work)
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
   
-  // Toggle function for progressive disclosure
-  const toggleDetails = useCallback((quoteId: string) => {
-    setExpandedDetails(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(quoteId)) {
-        newSet.delete(quoteId);
-      } else {
-        newSet.add(quoteId);
+  // Sequential expansion toggle function - smooth visual flow
+  const toggleDetails = useCallback(async (quoteId: string) => {
+    if (expandedDetails.has(quoteId)) {
+      // Simple collapse - no sequencing needed
+      setExpandedDetails(new Set());
+    } else {
+      // Sequential: First collapse any open card
+      if (expandedDetails.size > 0) {
+        setExpandedDetails(new Set());
+        // Wait for collapse animation to complete
+        await new Promise(resolve => setTimeout(resolve, 200));
       }
-      return newSet;
-    });
-  }, []);
+      
+      // Then expand the new card
+      setExpandedDetails(new Set([quoteId]));
+      
+      // Scroll to ensure the card is visible
+      setTimeout(() => {
+        const cardElement = document.querySelector(`[data-quote-id="${quoteId}"]`);
+        if (cardElement) {
+          cardElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }, 100);
+    }
+  }, [expandedDetails]);
 
   // Workflow Method 1: Handle Quote Approval
   const handleQuoteApproval = useCallback((quoteId: string) => {
@@ -216,40 +233,38 @@ function QuotationOrders({
           const isProspect = !businessProfile || businessProfile.customerStatus === 'prospect';
 
           return (
-            <div key={quote.id} className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard}`}>
-              <div className={styles.quoteHeader}>
-                <h3>
-                  <span 
-                    onClick={() => {
-                      // Navigate to customer profile if quote is linked to a BusinessProfile
-                      if (quote.businessProfileId) {
-                        onShowCustomerProfile(quote.businessProfileId);
-                      }
-                    }}
-                    style={{
-                      cursor: quote.businessProfileId ? 'pointer' : 'default', 
-                      textDecoration: quote.businessProfileId ? 'underline' : 'none',
-                      color: isCustomer ? '#27ae60' : (isProspect ? '#7f8c8d' : 'inherit')
-                    }}
-                    title={quote.businessProfileId ? 'View customer profile' : 'Not yet converted to customer'}
-                  >
-                    {isCustomer ? '✅' : '🔸'} {quote.id} - {quote.companyName}
-                  </span>
-                </h3>
-                <div className={styles.badgeContainer}>
-                  <span className={`${styles.customerStatusBadge} ${isCustomer ? styles.customerBadge : styles.prospectBadge}`}>
-                    {isCustomer ? 'Customer' : 'Prospect'}
-                  </span>
-                  <span className={`${styles.statusBadge} ${styles[quote.status]}`}>
-                    {statusIcons[quote.status]} {statusLabels[quote.status]}
-                  </span>
+            <div key={quote.id} className={styles.quoteCardContainer} data-quote-id={quote.id}>
+              {/* Clickable Card Summary - 140px Template */}
+              <div 
+                className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${expandedDetails.has(quote.id) ? styles.expanded : ''}`}
+                onClick={() => toggleDetails(quote.id)}
+              >
+                {/* Template Header - Company Name Only */}
+                <div 
+                  className={styles.cardHeader}
+                  title={`${quote.companyName} (Quote ID: ${quote.id})`}
+                >
+                  {quote.companyName}
                 </div>
-              </div>
-              {/* Essential preview info - always visible */}
-              <div className={styles.essentialPreview}>
-                <span className={styles.materialInfo}>
-                  {quote.items} • {formatCurrency(quote.totalAmount)} • {quote.quoteDate}
-                </span>
+                
+                {/* Template Status */}
+                <div className={styles.cardStatus}>
+                  Status: {statusIcons[quote.status]} {statusLabels[quote.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                </div>
+                
+                {/* Template Meta - 2 lines */}
+                <div 
+                  className={styles.cardMeta}
+                  title={`${quote.items} • ${formatCurrency(quote.totalAmount)} • ${quote.id} • ${quote.quoteDate}`}
+                >
+                  {quote.items} • {formatCurrency(quote.totalAmount)}<br />
+                  {quote.id} • {quote.quoteDate}
+                </div>
+
+                {/* Expand Indicator */}
+                <div className={styles.expandIndicator}>
+                  {expandedDetails.has(quote.id) ? 'Less' : 'More'}
+                </div>
               </div>
 
               {/* Progressive Disclosure - Detailed Information */}
@@ -284,12 +299,11 @@ function QuotationOrders({
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-              
-              <div className={styles.cardActions}>
-                {/* Single-row button layout with natural wrapping */}
-                <div className={styles.actionButtons}>
+                  
+                  {/* Action Buttons - Only visible when expanded */}
+                  <div className={styles.cardActions}>
+                    {/* Single-row button layout with natural wrapping */}
+                    <div className={styles.actionButtons}>
                   <button className="ds-btn ds-btn-primary">
                     📞 Call
                   </button>
@@ -340,19 +354,15 @@ function QuotationOrders({
                     </button>
                   )}
                   
-                  <button 
-                    className="ds-btn ds-btn-more"
-                    onClick={() => toggleDetails(quote.id)}
-                  >
-                    {expandedDetails.has(quote.id) ? 'Less...' : 'More...'}
-                  </button>
                 </div>
-              </div>
-              
-              {/* Workflow Messages */}
-              {workflowMessages[quote.id] && (
-                <div className={styles.workflowMessage}>
-                  💬 {workflowMessages[quote.id]}
+                  </div>
+                  
+                  {/* Workflow Messages - Also only visible when expanded */}
+                  {workflowMessages[quote.id] && (
+                    <div className={styles.workflowMessage}>
+                      💬 {workflowMessages[quote.id]}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

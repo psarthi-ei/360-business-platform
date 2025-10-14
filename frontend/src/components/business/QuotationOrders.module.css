@@ -134,35 +134,18 @@
   margin-bottom: 20px;
 }
 
-.quoteCard {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.08));
-  border-radius: var(--radius-large, 16px);
-  padding: 24px;
-  border-left: 6px solid;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.1));
-}
 
-.quoteCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-  background: var(--gradient-card, rgba(255, 255, 255, 0.12));
-}
 
 .quoteCard.pendingQuote {
   border-left-color: var(--ds-status-pending);
-  background: var(--ds-bg-priority-medium-subtle);
 }
 
 .quoteCard.approvedQuote {
   border-left-color: var(--ds-status-active);
-  background: var(--ds-bg-status-active-subtle);
 }
 
 .quoteCard.expiredQuote {
   border-left-color: var(--ds-priority-high);
-  background: var(--ds-bg-priority-high-subtle);
 }
 
 .quoteHeader {
@@ -385,13 +368,23 @@
 
   /* Let Design System V2 handle container spacing consistently */
 
-  .quoteCard {
-    padding: 20px;
-  }
 
   .filterBtn {
     padding: 10px 16px;
     font-size: var(--font-xs);
+  }
+  
+  .quoteCard {
+    padding: 14px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .quotesContainer {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -424,22 +417,96 @@
 
 /* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
-/* Update card styling to use Design System V2 colors */
+/* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
+.quoteCardContainer {
+  margin-bottom: 12px;              /* Visual Design Spec exact */
+}
+
 .quoteCard {
-  background: var(--ds-bg-card);
-  border-radius: var(--ds-radius-lg);
-  padding: var(--ds-space-lg);
-  border-left: 6px solid;
-  transition: all 0.3s ease;
-  box-shadow: var(--ds-shadow-card);
-  border: 1px solid var(--ds-border-primary);
-  margin-bottom: var(--ds-space-md);
+  height: 140px;                    /* Template fixed height */
+  padding: 16px;                    /* Symmetric padding for professional look */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  border-left: 4px solid;           /* Status color applied by quote status classes */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .quoteCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--ds-shadow-elevated);
-  background: var(--ds-bg-card);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.quoteCard.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
+  position: relative;
+  z-index: 1;                           /* Ensure card stays above others */
+}
+
+/* ===== TEMPLATE CONTENT CLASSES ===== */
+.cardHeader {
+  font-size: 20px;                 /* Visual Design Spec exact */
+  font-weight: 600;
+  color: #111827;                  /* Visual Design Spec exact */
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
+  line-height: 1.2;                /* Tighter line height for single line */
+  overflow: hidden;
+  white-space: nowrap;              /* Force single line */
+  text-overflow: ellipsis;          /* Clean truncation with ... */
+  flex-shrink: 0;                  /* Prevent header compression */
+  height: 24px;                    /* Fixed height for consistency */
+}
+
+.cardStatus {
+  font-size: 16px;                 /* Visual Design Spec exact */
+  font-weight: 500;
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
+  color: #374151;
+  line-height: 1.3;
+  flex-shrink: 0;                  /* Prevent status compression */
+  height: 21px;                    /* Fixed height for consistency */
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cardMeta {
+  font-size: 14px;                 /* Visual Design Spec exact */
+  color: #6B7280;                  /* Visual Design Spec exact */
+  margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
+  line-height: 1.2;                /* Tighter line height for 2-line content */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Exactly 2 lines with ellipsis */
+  -webkit-box-orient: vertical;
+  flex-shrink: 0;                  /* Prevent compression affecting header */
+  max-height: 34px;                /* Enforce exact height for 2 lines */
+}
+
+.expandIndicator {
+  font-size: 12px;
+  color: #1D4ED8;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.quoteCard:hover .expandIndicator {
+  opacity: 1;
+  background: rgba(29, 78, 216, 0.15);
+  color: #1D4ED8;
 }
 
 /* Update customer/prospect card styling */
