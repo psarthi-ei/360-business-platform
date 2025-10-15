@@ -31,7 +31,7 @@ function QuotationOrders({
   });
   const [workflowMessages, setWorkflowMessages] = useState<{[key: string]: string}>({});
   
-  // Progressive disclosure state (missing - causing "More..." button to not work)
+  // Progressive disclosure state for 140px template cards
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
   
   // Sequential expansion toggle function - smooth visual flow

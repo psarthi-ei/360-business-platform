@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
-// import FloatingVoiceAssistant from './FloatingVoiceAssistant';
 import { mockLeads, Lead } from '../../data/mockData';
 import { useTranslation } from '../../contexts/TranslationContext';
-// import { ActionParams, SetPriorityParams, EditLeadParams } from '../services/nlp/types';
 import styles from './LeadManagement.module.css';
 
 interface LeadManagementProps {
@@ -17,7 +15,6 @@ interface LeadManagementProps {
   onFilterChange: (filter: string) => void;
   openAddModal?: boolean;
   onAddModalHandled?: () => void;
-  // onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
 function LeadManagement({
@@ -30,7 +27,6 @@ function LeadManagement({
   onFilterChange,
   openAddModal,
   onAddModalHandled,
-  // onUniversalAction
 }: LeadManagementProps) {
   const { t } = useTranslation();
   const location = useLocation();

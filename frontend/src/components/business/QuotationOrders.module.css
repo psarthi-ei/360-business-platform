@@ -18,16 +18,6 @@
   z-index: 10;
 }
 
-/* Original screenHeader - REMOVED, replaced by Unified Header Pattern */
-
-.screenHeader h1 {
-  font-size: var(--font-xl);
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  color: var(--color-text, white);
-  flex: 1;
-  text-align: left;
-}
 
 /* REMOVED: Duplicate addButton CSS - migrated to Design System V2 below */
 .backButton {
@@ -148,22 +138,6 @@
   border-left-color: var(--ds-priority-high);
 }
 
-.quoteHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.quoteHeader h3 {
-  margin: 0;
-  font-size: var(--font-xl);
-  color: var(--ds-text-primary) !important;
-  font-weight: 600;
-  flex: 1;
-}
 
 .statusBadge {
   padding: 8px 16px;
@@ -231,14 +205,6 @@
 
 /* REMOVED: Voice commands CSS migrated to global .ds-voice-commands system in index.css */
 
-/* Badge Container Styles */
-.badgeContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
 
 .customerStatusBadge {
   padding: 4px 12px;
@@ -399,21 +365,6 @@
   transform: translateY(-2px);
 }
 
-/* Progressive Disclosure - Design System V2 */
-.essentialPreview {
-  margin: var(--ds-space-sm) 0;
-  padding: var(--ds-space-sm);
-  background: var(--ds-bg-expanded);
-  border-radius: var(--ds-radius-sm);
-  border-left: 3px solid var(--ds-border-secondary);
-}
-
-.materialInfo {
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  font-weight: 500;
-  line-height: 1.4;
-}
 
 /* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
