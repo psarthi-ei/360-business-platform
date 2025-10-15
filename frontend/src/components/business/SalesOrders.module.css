@@ -1,10 +1,10 @@
 /* Sales Orders Screen Styles */
 .salesOrdersScreen {
   min-height: 100vh;
-  padding: 100px 10px 20px 10px;
+  padding: var(--ds-padding-screen);
   text-align: left !important;
-  background: var(--gradient-background, linear-gradient(135deg, #1e3c72 0%, #2a5298 100%));
-  color: var(--color-text, white);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
   position: relative;
   width: 100%;
   max-width: none;
@@ -60,91 +60,18 @@
   transform: translateY(-2px);
 }
 
-.filtersSection {
-  max-width: 1400px;
-  margin: 0 auto 30px auto;
-  padding: 20px 10px;
-  background: var(--gradient-card, rgba(255, 255, 255, 0.05));
-  border-radius: var(--radius-large, 16px);
-  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.1));
-}
-
-.filterButtons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.filterBtn {
-  padding: 12px 20px;
-  border: 2px solid var(--color-primary, rgba(255, 255, 255, 0.2));
-  border-radius: var(--radius-large, 25px);
-  background: var(--gradient-card, rgba(255, 255, 255, 0.08));
-  color: var(--color-text, white);
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  backdrop-filter: blur(10px);
-}
-
-.filterBtn:hover {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.15));
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-}
-
-.filterBtn.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: var(--color-secondary, #1e3c72);
-  border-color: var(--color-primary, #ffd700);
-  font-weight: 700;
-  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-  transform: translateY(-2px);
-}
+/* REMOVED: Filter sections - handled by Sales container */
 
 .ordersContainer {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 10px;
   display: grid;
-  gap: 20px;
-  margin-bottom: 40px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.orderCard {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.08));
-  border-radius: var(--radius-large, 16px);
-  padding: 24px;
-  border-left: 6px solid;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.1));
-}
-
-.orderCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-  background: var(--gradient-card, rgba(255, 255, 255, 0.12));
-}
-
-.orderCard.pendingOrder {
-  border-left-color: #ffa502;
-  background: rgba(255, 165, 2, 0.08);
-}
-
-.orderCard.productionOrder {
-  border-left-color: #2ed573;
-  background: rgba(46, 213, 115, 0.08);
-}
-
-.orderCard.completedOrder {
-  border-left-color: #5352ed;
-  background: rgba(83, 82, 237, 0.08);
-}
+/* REMOVED: Old orderCard styles - replaced by template system below */
 
 .orderHeader {
   display: flex;
@@ -246,22 +173,7 @@
   transform: translateY(-2px);
 }
 
-.voiceCommands {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px 10px;
-  background: rgba(255, 215, 0, 0.08);
-  border-radius: var(--radius-large, 16px);
-  border: 2px solid rgba(255, 215, 0, 0.2);
-  text-align: center;
-}
-
-.voiceHint {
-  margin: 0;
-  font-size: 1.1rem;
-  color: var(--color-primary, #ffd700);
-  font-weight: 500;
-}
+/* REMOVED: Voice commands - not needed in Sales container integration */
 
 /* Data Mapping Styles */
 .orderMapping {
@@ -292,50 +204,16 @@
   background: rgba(255, 215, 0, 0.3);
 }
 
-/* New styles for ProductHeader integration */
-.pageContent {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 10px;
-}
+/* pageContent wrapper - no styling to match LeadManagement behavior */
 
 
 /* Mobile Responsive for Sales Orders */
 @media (max-width: 768px) {
   .salesOrdersScreen {
-    padding: 70px 10px 20px 10px;
+    /* Let Design System handle padding consistently */
   }
   
-  .screenHeader {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    margin-top: 0;
-    padding: 0 10px;
-  }
-
-  .screenHeader h1 {
-    text-align: center;
-    font-size: 1.8rem;
-  }
-
-  .orderHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .orderActions {
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .actionBtn {
-    flex: 1;
-    min-width: 120px;
-    font-size: 0.8rem;
-    padding: 8px 12px;
-  }
+  /* REMOVED: Standalone page styling - not needed in Sales container integration */
 
   .salesOrdersScreen .languageSwitcher {
     position: absolute;
@@ -343,21 +221,149 @@
     right: 10px;
   }
 
-  .filtersSection,
-  .ordersContainer,
-  .voiceCommands {
-    margin-left: 10px;
-    margin-right: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .orderCard {
-    padding: 20px;
+  /* Mobile container spacing - match LeadManagement pattern */
+  .ordersContainer {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;     /* Remove padding on mobile like LeadManagement */
+    padding-right: 0;    /* Remove padding on mobile like LeadManagement */
   }
 
   .filterBtn {
     padding: 10px 16px;
     font-size: 0.85rem;
   }
+}
+
+/* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
+.orderCardContainer {
+  margin-bottom: 12px;              /* Visual Design Spec exact */
+}
+
+.orderCard {
+  height: 140px;                    /* Template fixed height */
+  padding: 16px;                    /* Symmetric padding for professional look */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  border-left: 4px solid;           /* Status color applied by order status classes */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.orderCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.orderCard.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
+  position: relative;
+  z-index: 1;                           /* Ensure card stays above others */
+}
+
+/* ===== TEMPLATE CONTENT CLASSES ===== */
+.cardHeader {
+  font-size: 20px;                 /* Visual Design Spec exact */
+  font-weight: 600;
+  color: #111827;                  /* Visual Design Spec exact */
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
+  line-height: 1.2;                /* Tighter line height for single line */
+  overflow: hidden;
+  white-space: nowrap;              /* Force single line */
+  text-overflow: ellipsis;          /* Clean truncation with ... */
+  flex-shrink: 0;                  /* Prevent header compression */
+  height: 24px;                    /* Fixed height for consistency */
+}
+
+.cardStatus {
+  font-size: 16px;                 /* Visual Design Spec exact */
+  font-weight: 500;
+  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
+  color: #374151;
+  line-height: 1.3;
+  flex-shrink: 0;                  /* Prevent status compression */
+  height: 21px;                    /* Fixed height for consistency */
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cardMeta {
+  font-size: 14px;                 /* Visual Design Spec exact */
+  color: #6B7280;                  /* Visual Design Spec exact */
+  margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
+  line-height: 1.2;                /* Tighter line height for 2-line content */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Exactly 2 lines with ellipsis */
+  -webkit-box-orient: vertical;
+  flex-shrink: 0;                  /* Prevent compression affecting header */
+  max-height: 34px;                /* Enforce exact height for 2 lines */
+}
+
+.expandIndicator {
+  font-size: 12px;
+  color: #1D4ED8;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.orderCard:hover .expandIndicator {
+  opacity: 1;
+  background: rgba(29, 78, 216, 0.15);
+  color: #1D4ED8;
+}
+
+/* Update order status card styling to use border colors */
+.orderCard.order_confirmedOrder {
+  border-left-color: var(--ds-status-active);
+}
+
+.orderCard.production_startedOrder {
+  border-left-color: var(--ds-status-pending);
+}
+
+.orderCard.completedOrder {
+  border-left-color: var(--ds-status-active);
+}
+
+/* Update customer/prospect card styling */
+.customerCard {
+  border-left-color: var(--ds-status-active);
+  background: var(--ds-bg-card);
+}
+
+.prospectCard {
+  border-left-color: var(--ds-status-inactive);
+  background: var(--ds-bg-card);
+}
+
+/* Design System Contextual Actions */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  margin-top: clamp(12px, 3vw, 16px);
+}
+
+/* Single-row button layout with natural wrapping */
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
 }

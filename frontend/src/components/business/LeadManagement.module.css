@@ -1229,14 +1229,11 @@
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.2s ease;
-  background: rgba(29, 78, 216, 0.1);
-  padding: 4px 6px;
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  padding: 4px 8px;
   border-radius: 4px;
-  cursor: pointer;
-  margin-top: auto;                     /* Push to bottom with flexbox */
-  text-align: right;
-  align-self: flex-end;                 /* Align to right side */
-  width: fit-content;                   /* Only take needed space */
 }
 
 .leadCard:hover .expandIndicator {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById } from '../../data/mockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './SalesOrders.module.css';
@@ -19,6 +19,39 @@ function SalesOrders({
   onFilterChange
 }: SalesOrdersProps) {
   const { t } = useTranslation();
+  
+  // Progressive disclosure state for 140px template cards
+  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  
+  // Sequential expansion toggle function - smooth visual flow
+  const toggleDetails = useCallback(async (orderId: string) => {
+    if (expandedDetails.has(orderId)) {
+      // Simple collapse - no sequencing needed
+      setExpandedDetails(new Set());
+    } else {
+      // Sequential: First collapse any open card
+      if (expandedDetails.size > 0) {
+        setExpandedDetails(new Set());
+        // Wait for collapse animation to complete
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+      
+      // Then expand the new card
+      setExpandedDetails(new Set([orderId]));
+      
+      // Scroll to ensure the card is visible
+      setTimeout(() => {
+        const cardElement = document.querySelector(`[data-order-id="${orderId}"]`);
+        if (cardElement) {
+          cardElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }, 100);
+    }
+  }, [expandedDetails]);
   
   
   // Helper function to calculate payment details for an order
@@ -52,29 +85,6 @@ function SalesOrders({
   return (
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
-
-      <div className={styles.filtersSection}>
-        <div className={styles.filterButtons}>
-          <button 
-            className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('all')}
-          >
-            {t('showAll')}
-          </button>
-          <button 
-            className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('pending')}
-          >
-            ✅ Order Confirmed
-          </button>
-          <button 
-            className={filterState === 'production' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-            onClick={() => onFilterChange('production')}
-          >
-            🏭 In Production
-          </button>
-        </div>
-      </div>
 
       <div className={styles.ordersContainer}>
         {mockSalesOrders.map(order => {
@@ -119,97 +129,145 @@ function SalesOrders({
           const relatedLead = relatedQuote ? mockLeads.find(lead => lead.id === relatedQuote.leadId) : null;
           const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount);
 
-          return (
-            <div key={order.id} className={`${styles.orderCard} ${styles[order.status + 'Order']}`}>
-              <div className={styles.orderHeader}>
-                <h3>{order.id} - Order</h3>
-                <span className={`${styles.statusBadge} ${styles.approved}`}>
-                  {statusIcons[order.status]} {statusLabels[order.status]}
-                </span>
-              </div>
-              <div className={styles.orderDetails}>
-                <p><strong>{t('customerName')}:</strong> {getBusinessProfileById(order.businessProfileId)?.companyName || 'Unknown'} - {getBusinessProfileById(order.businessProfileId)?.registeredAddress.city || 'Unknown'}</p>
-                <p><strong>{t('orderDate')}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
-                <p><strong>Items:</strong> {order.items}</p>
-                <p><strong>{t('totalAmount')}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
-                <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
-              </div>
+          const businessProfile = getBusinessProfileById(order.businessProfileId);
+          const companyName = businessProfile?.companyName || 'Unknown Company';
+          const isCustomer = businessProfile?.customerStatus === 'customer';
 
-              {/* Related Quote and Lead Information */}
-              <div className={styles.orderMapping}>
-                <div className={styles.mappingInfo}>
-                  {relatedLead && (
-                    <p><strong>📋 Original Lead:</strong> 
-                      <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
-                        {relatedLead.id}
-                      </span> 
-                    - {relatedLead.priority} priority (Budget: {relatedLead.budget})</p>
-                  )}
-                  {relatedQuote && (
-                    <p><strong>📄 From Quote:</strong> 
-                      <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
-                        {relatedQuote.id}
-                      </span> 
-                    - {relatedQuote.quoteDate} ({relatedQuote.status})</p>
-                  )}
-                  <p>
-                    <strong>💳 Payment:</strong> 
-                    <span 
-                      className={styles.mappingLink} 
-                      onClick={() => onShowPayments && onShowPayments()}
-                      title="View payment details"
-                      style={{ marginLeft: '8px' }}
-                    >
-                      {paymentDetails.paymentStatus === 'received' ? (
-                        <span style={{ color: '#27ae60' }}>
-                          ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
-                        </span>
-                      ) : paymentDetails.paymentStatus === 'overdue' ? (
-                        <span style={{ color: '#e74c3c' }}>
-                          🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
-                        </span>
-                      ) : (
-                        <span style={{ color: '#f39c12' }}>
-                          ⏳ Pending {formatCurrency(paymentDetails.balanceAdvance)} of {formatCurrency(paymentDetails.advanceAmount)}
-                        </span>
-                      )}
-                    </span>
-                  </p>
-                  <p><strong>🏭 Production:</strong> {order.productionStatus}</p>
+          return (
+            <div key={order.id} className={styles.orderCardContainer} data-order-id={order.id}>
+              {/* Clickable Card Summary - 140px Template */}
+              <div 
+                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${expandedDetails.has(order.id) ? styles.expanded : ''}`}
+                onClick={() => toggleDetails(order.id)}
+              >
+                {/* Template Header - Company Name Only */}
+                <div 
+                  className={styles.cardHeader}
+                  title={`${companyName} (Order ID: ${order.id})`}
+                >
+                  {companyName}
+                </div>
+                
+                {/* Template Status */}
+                <div className={styles.cardStatus}>
+                  Status: {statusIcons[order.status]} {statusLabels[order.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                </div>
+                
+                {/* Template Meta - 2 lines */}
+                <div 
+                  className={styles.cardMeta}
+                  title={`${order.items} • ${formatCurrency(order.totalAmount)} • ${order.id} • Delivery: ${order.deliveryDate}`}
+                >
+                  {order.items} • {formatCurrency(order.totalAmount)}<br />
+                  {order.id} • Delivery: {order.deliveryDate}
+                </div>
+
+                {/* Expand Indicator */}
+                <div className={styles.expandIndicator}>
+                  {expandedDetails.has(order.id) ? 'Less' : 'More'}
                 </div>
               </div>
-              
-              <div className={styles.orderActions}>
-                <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📄 {t('viewPDF')}</button>
-                {order.status === 'order_confirmed' && (
-                  <>
-                    <button 
-                      className={`${styles.actionBtn} ${styles.paymentBtn}`}
-                      onClick={() => onShowPayments && onShowPayments()}
-                    >
-                      💳 {t('viewPaymentStatus')}
-                    </button>
-                    <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 {t('readyForProduction')}</button>
-                  </>
-                )}
-                {order.status === 'production_started' && (
-                  <button className={`${styles.actionBtn} ${styles.productionBtn}`}>🏭 Production Status</button>
-                )}
-                {order.status === 'completed' && (
-                  <button className={`${styles.actionBtn} ${styles.viewBtn}`}>📋 Delivery Receipt</button>
-                )}
-              </div>
+
+              {/* Progressive Disclosure - Detailed Information */}
+              {expandedDetails.has(order.id) && (
+                <div className="ds-expanded-details">
+                  <div className="ds-details-content">
+                    <p><strong>{t('customerName')}:</strong> {companyName} - {businessProfile?.registeredAddress.city || 'Unknown'}</p>
+                    <p><strong>{t('orderDate')}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
+                    <p><strong>Items:</strong> {order.items}</p>
+                    <p><strong>{t('totalAmount')}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
+                    <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
+                  </div>
+
+                  
+                  {/* Related Quote and Lead Information */}
+                  <div className={styles.orderMapping}>
+                    <div className={styles.mappingInfo}>
+                      {relatedLead && (
+                        <p><strong>📋 Original Lead:</strong> 
+                          <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
+                            {relatedLead.id}
+                          </span> 
+                        - {relatedLead.priority} priority (Budget: {relatedLead.budget})</p>
+                      )}
+                      {relatedQuote && (
+                        <p><strong>📄 From Quote:</strong> 
+                          <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
+                            {relatedQuote.id}
+                          </span> 
+                        - {relatedQuote.quoteDate} ({relatedQuote.status})</p>
+                      )}
+                      <p>
+                        <strong>💳 Payment:</strong> 
+                        <span 
+                          className={styles.mappingLink} 
+                          onClick={() => onShowPayments && onShowPayments()}
+                          title="View payment details"
+                          style={{ marginLeft: '8px' }}
+                        >
+                          {paymentDetails.paymentStatus === 'received' ? (
+                            <span style={{ color: '#27ae60' }}>
+                              ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
+                            </span>
+                          ) : paymentDetails.paymentStatus === 'overdue' ? (
+                            <span style={{ color: '#e74c3c' }}>
+                              🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
+                            </span>
+                          ) : (
+                            <span style={{ color: '#f39c12' }}>
+                              ⏳ Pending {formatCurrency(paymentDetails.balanceAdvance)} of {formatCurrency(paymentDetails.advanceAmount)}
+                            </span>
+                          )}
+                        </span>
+                      </p>
+                      <p><strong>🏭 Production:</strong> {order.productionStatus}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons - Only visible when expanded */}
+                  <div className={styles.cardActions}>
+                    {/* Single-row button layout with natural wrapping */}
+                    <div className={styles.actionButtons}>
+                      <button className="ds-btn ds-btn-primary">
+                        📞 Call
+                      </button>
+                      <button className="ds-btn ds-btn-primary">
+                        📱 WhatsApp
+                      </button>
+                      <button className="ds-btn ds-btn-secondary">
+                        📄 {t('viewPDF')}
+                      </button>
+                      {order.status === 'order_confirmed' && (
+                        <>
+                          <button 
+                            className="ds-btn ds-btn-secondary"
+                            onClick={() => onShowPayments && onShowPayments()}
+                          >
+                            💳 {t('viewPaymentStatus')}
+                          </button>
+                          <button className="ds-btn ds-btn-secondary">
+                            🏭 {t('readyForProduction')}
+                          </button>
+                        </>
+                      )}
+                      {order.status === 'production_started' && (
+                        <button className="ds-btn ds-btn-secondary">
+                          🏭 Production Status
+                        </button>
+                      )}
+                      {order.status === 'completed' && (
+                        <button className="ds-btn ds-btn-secondary">
+                          📋 Delivery Receipt
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
         </div>
-      </div>
-
-      <div className={styles.voiceCommands}>
-        <p className={styles.voiceHint}>
-          🎤 <strong>{t('voiceCommandsHint')}</strong> 
-          "{t('viewPaymentStatus')}" • "{t('sendPaymentReminder')}" • "Mark ready for production"
-        </p>
       </div>
 
     </div>
