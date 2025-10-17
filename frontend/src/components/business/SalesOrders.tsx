@@ -85,7 +85,6 @@ function SalesOrders({
   return (
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
-
       <div className={styles.ordersContainer}>
         {mockSalesOrders.map(order => {
           // Filter logic
@@ -269,7 +268,6 @@ function SalesOrders({
         })}
         </div>
       </div>
-
     </div>
   );
 }

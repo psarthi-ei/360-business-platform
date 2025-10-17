@@ -64,10 +64,10 @@
 .ordersContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--ds-space-sm);
+  padding: 0 10px;
   display: grid;
-  gap: var(--ds-space-sm);
-  margin-bottom: var(--ds-space-lg);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 
@@ -201,7 +201,11 @@
   background: rgba(255, 215, 0, 0.3);
 }
 
-/* pageContent wrapper - no styling to match LeadManagement behavior */
+/* pageContent wrapper - consistent with other sales tabs */
+.pageContent {
+  height: 100%;
+  padding: 0;
+}
 
 
 /* Mobile Responsive for Sales Orders */

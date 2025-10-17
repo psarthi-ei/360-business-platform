@@ -21,6 +21,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
       }
     },
     showQuotationOrders: () => navigate('/platform/quotes'),
+    showSales: () => navigate('/platform/sales'),
     showSalesOrders: () => navigate('/platform/orders'),
     showPayments: () => navigate('/platform/payments'),
     showInvoices: () => navigate('/platform/invoices'),

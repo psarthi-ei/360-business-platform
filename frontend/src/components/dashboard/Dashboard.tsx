@@ -6,6 +6,7 @@ interface DashboardProps {
   // Clean interface - only essential 5-tab navigation handlers
   onShowLeadManagement: (autoAction?: string, actionParams?: Record<string, unknown>) => void;
   onShowQuotationOrders: () => void;
+  onShowSales: () => void;
   onShowSalesOrders: () => void;
   onShowPayments: () => void;
   onShowInvoices: () => void;
@@ -25,6 +26,7 @@ interface DashboardProps {
 function Dashboard({ 
   onShowLeadManagement,
   onShowQuotationOrders,
+  onShowSales,
   onShowSalesOrders,
   onShowPayments,
   onShowInvoices,
@@ -111,7 +113,7 @@ function Dashboard({
       {/* Business Snapshot Cards - 4 cards for complete 5-tab coverage */}
       
       {/* Sales Snapshot */}
-      <div className={styles.snapshotCard} onClick={() => onShowLeadManagement()}>
+      <div className={styles.snapshotCard} onClick={() => onShowSales()}>
         <div className={styles.snapshotHeader}>
           <span className={styles.snapshotIcon}>📈</span>
           <span className={styles.snapshotTitle}>SALES SNAPSHOT</span>

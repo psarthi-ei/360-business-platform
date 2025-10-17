@@ -6,6 +6,7 @@ import { TranslationProvider } from '../contexts/TranslationContext';
 const mockProps = {
   onShowLeadManagement: jest.fn(),
   onShowQuotationOrders: jest.fn(),
+  onShowSales: jest.fn(),
   onShowSalesOrders: jest.fn(),
   onShowPayments: jest.fn(),
   onShowInvoices: jest.fn(),

@@ -119,7 +119,7 @@
   margin: 0 auto;
   padding: 0 10px;
   display: grid;
-  gap: var(--ds-space-sm);
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -262,7 +262,11 @@
   font-style: italic;
 }
 
-/* pageContent wrapper - no styling to match LeadManagement behavior */
+/* pageContent wrapper - consistent with other sales tabs */
+.pageContent {
+  height: 100%;
+  padding: 0;
+}
 
 
 

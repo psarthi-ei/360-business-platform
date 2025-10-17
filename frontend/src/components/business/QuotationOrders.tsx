@@ -370,8 +370,6 @@ function QuotationOrders({
         })}
         </div>
       </div>
-
-
     </div>
   );
 }

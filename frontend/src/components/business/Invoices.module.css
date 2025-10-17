@@ -61,7 +61,7 @@
 
 /* ===== TEMPLATE CONTENT CLASSES ===== */
 .cardHeader {
-  font-size: var(--font-xl);
+  font-size: 20px;                 /* Visual Design Spec exact - match other tabs */
   font-weight: 600;
   color: var(--ds-text-primary);
   margin: 0 0 var(--ds-space-xs) 0;
@@ -118,29 +118,29 @@
   color: var(--ds-primary);
 }
 
-/* Status-based border colors */
+/* Status-based border colors - Mapped to existing design system tokens */
 .pendingInvoice {
-  border-left-color: var(--ds-warning);
+  border-left-color: var(--ds-status-pending);  /* Amber/yellow for pending payments */
 }
 
 .paidInvoice {
-  border-left-color: var(--ds-success);
+  border-left-color: var(--ds-status-active);   /* Green for completed payments */
 }
 
 .payment_receivedInvoice {
-  border-left-color: var(--ds-success);
+  border-left-color: var(--ds-status-active);   /* Green for received payments */
 }
 
 .overdueInvoice {
-  border-left-color: var(--ds-danger);
+  border-left-color: var(--ds-priority-high);   /* Orange/red for overdue payments */
 }
 
 .sentInvoice {
-  border-left-color: var(--ds-primary);
+  border-left-color: var(--color-primary);      /* Blue for sent invoices */
 }
 
 .expiredInvoice {
-  border-left-color: var(--ds-danger);
+  border-left-color: var(--ds-priority-high);   /* Orange/red for expired invoices */
 }
 
 /* Expanded Section Styling */

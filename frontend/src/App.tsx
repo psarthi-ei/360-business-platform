@@ -121,6 +121,7 @@ function AppContent() {
     showDashboard,
     showLeadManagement,
     showQuotationOrders,
+    showSales,
     showSalesOrders,
     showPayments,
     showInvoices,
@@ -245,6 +246,7 @@ function AppContent() {
         <Dashboard
           onShowLeadManagement={showLeadManagement}
           onShowQuotationOrders={showQuotationOrders}
+          onShowSales={showSales}
           onShowSalesOrders={showSalesOrders}
           onShowPayments={showPayments}
           onShowInvoices={showInvoices}
