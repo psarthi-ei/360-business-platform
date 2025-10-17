@@ -816,8 +816,8 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     quoteId: 'QT-001',
     leadId: 'L-001',
     businessProfileId: 'bp-gujarat-garments',
-    issueDate: 'March 18, 2024',
-    dueDate: 'April 2, 2024',
+    issueDate: 'October 10, 2025',
+    dueDate: 'October 25, 2025',  // Future: 8 days from today (pending)
     subtotal: 1850000,
     gstAmount: 92500,
     totalAmount: 1942500,
@@ -831,8 +831,8 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     quoteId: 'QT-004',
     leadId: 'L-004', 
     businessProfileId: 'bp-baroda-fashion',
-    issueDate: 'March 25, 2024',
-    dueDate: 'April 10, 2024',
+    issueDate: 'October 12, 2025',
+    dueDate: 'October 27, 2025',  // Future: 10 days from today (pending)
     subtotal: 825000,
     gstAmount: 41250,
     totalAmount: 866250,
@@ -846,15 +846,45 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     quoteId: 'QT-005',
     leadId: 'L-005',
     businessProfileId: 'bp-gujarat-garments',
-    issueDate: 'March 28, 2024',
-    dueDate: 'April 15, 2024',
+    issueDate: 'October 8, 2025',
+    dueDate: 'October 23, 2025',  // Future: 6 days from today (pending)
     subtotal: 9175000,
     gstAmount: 458750,
     totalAmount: 9633750,
     advanceAmount: 3853500,
     bankDetails: companyBankDetails,
-    status: 'sent',
+    status: 'pending',
     paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee'
+  },
+  {
+    id: 'PI-2024-004',
+    quoteId: 'QT-003',
+    leadId: 'L-003',
+    businessProfileId: 'bp-baroda-fashion',
+    issueDate: 'September 28, 2025',
+    dueDate: 'October 8, 2025',  // Past: 9 days ago (expired - overdue proforma)
+    subtotal: 650000,
+    gstAmount: 32500,
+    totalAmount: 682500,
+    advanceAmount: 204750,
+    bankDetails: companyBankDetails,
+    status: 'expired',
+    paymentInstructions: '30% advance payment (₹2,04,750) required - payment overdue, order may be cancelled'
+  },
+  {
+    id: 'PI-2024-005',
+    quoteId: 'QT-002',
+    leadId: 'L-002',
+    businessProfileId: 'bp-gujarat-garments',
+    issueDate: 'September 30, 2025',
+    dueDate: 'October 12, 2025',  // Past: 5 days ago (payment received)
+    subtotal: 1200000,
+    gstAmount: 60000,
+    totalAmount: 1260000,
+    advanceAmount: 630000,
+    bankDetails: companyBankDetails,
+    status: 'payment_received',
+    paymentInstructions: '50% advance payment (₹6,30,000) received on October 10, 2025 - order confirmed'
   }
 ];
 
@@ -1501,8 +1531,8 @@ export const mockFinalInvoices: FinalInvoice[] = [
     id: 'INV-2024-001',
     salesOrderId: 'SO-004',
     businessProfileId: 'bp-baroda-fashion',
-    invoiceDate: 'April 26, 2024',
-    dueDate: 'May 11, 2024',
+    invoiceDate: 'September 28, 2025',
+    dueDate: 'October 13, 2025',  // Past: 4 days ago (paid early)
     subtotal: 1500000,
     gstRate: 5,
     gstAmount: 75000,
@@ -1510,15 +1540,15 @@ export const mockFinalInvoices: FinalInvoice[] = [
     advanceAdjusted: 750000,
     balanceAmount: 825000,
     status: 'paid',
-    paymentReceivedDate: 'May 8, 2024',
+    paymentReceivedDate: 'October 10, 2025',  // Paid 3 days before due date
     notes: 'Premium customer - paid before due date. Excellent relationship.'
   },
   {
     id: 'INV-2024-002',
     salesOrderId: 'SO-002',
     businessProfileId: 'bp-gujarat-garments',
-    invoiceDate: 'April 12, 2024',
-    dueDate: 'April 27, 2024',
+    invoiceDate: 'September 25, 2025',
+    dueDate: 'October 10, 2025',  // Past: 7 days ago (paid early)
     subtotal: 1100000,
     gstRate: 5,
     gstAmount: 55000,
@@ -1526,15 +1556,15 @@ export const mockFinalInvoices: FinalInvoice[] = [
     advanceAdjusted: 550000,
     balanceAmount: 605000,
     status: 'paid',
-    paymentReceivedDate: 'April 25, 2024',
+    paymentReceivedDate: 'October 8, 2025',  // Paid 2 days before due date
     notes: 'Regular customer - standard payment terms honored.'
   },
   {
     id: 'INV-2024-003',
     salesOrderId: 'SO-001',
     businessProfileId: 'bp-gujarat-garments',
-    invoiceDate: 'April 16, 2024',
-    dueDate: 'May 1, 2024',
+    invoiceDate: 'September 20, 2025',
+    dueDate: 'October 10, 2025',  // Past: 7 days ago (overdue)
     subtotal: 1850000,
     gstRate: 5,
     gstAmount: 92500,
@@ -1542,14 +1572,14 @@ export const mockFinalInvoices: FinalInvoice[] = [
     advanceAdjusted: 971250,
     balanceAmount: 971250,
     status: 'overdue',
-    notes: 'Balance payment overdue by 8 days. Follow-up required.'
+    notes: 'Balance payment overdue by 7 days. Follow-up required.'
   },
   {
     id: 'INV-2024-004',
     salesOrderId: 'SO-003',
     businessProfileId: 'bp-baroda-fashion',
-    invoiceDate: 'April 21, 2024',
-    dueDate: 'May 6, 2024',
+    invoiceDate: 'October 5, 2025',
+    dueDate: 'October 30, 2025',  // Future: 13 days from today (pending)
     subtotal: 825000,
     gstRate: 5,
     gstAmount: 41250,
@@ -1568,9 +1598,9 @@ export const mockFinalPayments: FinalPayment[] = [
     finalInvoiceId: 'INV-2024-001',
     businessProfileId: 'bp-baroda-fashion',
     amount: 825000,
-    paymentDate: 'May 8, 2024',
+    paymentDate: 'October 10, 2025',  // Matches paymentReceivedDate in invoice
     paymentMethod: 'RTGS',
-    transactionReference: 'ICICI240508RT97531',
+    transactionReference: 'ICICI251010RT97531',
     status: 'reconciled',
     notes: 'Final payment received on time. Order closed successfully.'
   },
@@ -1579,9 +1609,9 @@ export const mockFinalPayments: FinalPayment[] = [
     finalInvoiceId: 'INV-2024-002',
     businessProfileId: 'bp-gujarat-garments',
     amount: 605000,
-    paymentDate: 'April 25, 2024',
+    paymentDate: 'October 8, 2025',  // Matches paymentReceivedDate in invoice
     paymentMethod: 'RTGS',
-    transactionReference: 'BOB240425RT86420',
+    transactionReference: 'BOB251008RT86420',
     status: 'reconciled',
     notes: 'Regular customer - prompt payment as usual. Order completed.'
   }

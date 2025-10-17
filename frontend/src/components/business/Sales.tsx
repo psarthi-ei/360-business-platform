@@ -303,6 +303,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'invoices':
         return (
           <Invoices
+            onShowQuotationOrders={() => setActiveTab('quotes')}
             onShowSalesOrders={() => setActiveTab('orders')}
             onShowCustomerProfile={onShowCustomerProfile}
             filterState={invoiceFilterState}

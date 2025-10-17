@@ -3,7 +3,9 @@ import {
   mockProformaInvoices, 
   mockFinalInvoices, 
   formatCurrency, 
-  getBusinessProfileById
+  getBusinessProfileById,
+  getAdvancePaymentByProformaId,
+  mockAdvancePayments
 } from '../../data/mockData';
 import styles from './Invoices.module.css';
 
@@ -154,6 +156,35 @@ function Invoices({
     // Implementation: Send follow-up reminder
   };
 
+  const formatDueDate = (dueDate: string, status: InvoiceRecord['status']): string => {
+    const date = new Date(dueDate);
+    const today = new Date();
+    const diffDays = Math.ceil((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    
+    // For paid invoices, show "Paid on" with the date
+    if (status === 'paid' || status === 'payment_received') {
+      return `Paid on ${date.toLocaleDateString('en-IN')}`;
+    }
+    
+    // For unpaid invoices, show urgency messaging
+    switch (status) {
+      case 'pending':
+      case 'sent':
+        if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`;
+        if (diffDays === 0) return 'Due today';
+        return `Due by ${date.toLocaleDateString('en-IN')}`;
+        
+      case 'overdue':
+        return `${Math.abs(diffDays)} days overdue`;
+        
+      case 'expired':
+        return 'Expired';
+        
+      default:
+        return date.toLocaleDateString('en-IN');
+    }
+  };
+
   const getInvoiceStatusInfo = (status: InvoiceRecord['status']) => {
     switch (status) {
       case 'pending':
@@ -244,13 +275,13 @@ function Invoices({
                       Status: {statusInfo.icon} {statusInfo.label} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
                     </div>
                     
-                    {/* Template Meta - 2 lines */}
+                    {/* Template Meta - Business Critical Information */}
                     <div 
                       className={styles.cardMeta}
-                      title={`${invoice.location} • Due: ${invoice.dueDate} • Amount: ${formatCurrency(invoice.totalAmount)} • ${invoice.paymentTerms}`}
+                      title={`${invoice.type} Invoice • Amount: ${formatCurrency(invoice.totalAmount)} • Due: ${invoice.dueDate} • ${invoice.invoiceNumber}`}
                     >
-                      📍 {invoice.location} • Due: {invoice.dueDate}<br />
-                      💰 {formatCurrency(invoice.totalAmount)} • {invoice.paymentTerms}
+                      {invoice.type === 'proforma' ? 'Proforma' : 'Final Invoice'} • ₹{invoice.totalAmount.toLocaleString()}<br />
+                      {formatDueDate(invoice.dueDate, invoice.status)} • {invoice.invoiceNumber}
                     </div>
 
                     {/* Expand Indicator */}
@@ -299,6 +330,39 @@ function Invoices({
                           </div>
                         </div>
                       )}
+
+                      {/* Payment Details Section - For Paid Invoices */}
+                      {(invoice.status === 'paid' || invoice.status === 'payment_received') && (() => {
+                        // Get payment data for this invoice
+                        const paymentData = invoice.type === 'proforma' 
+                          ? getAdvancePaymentByProformaId(invoice.id)
+                          : mockAdvancePayments.find(p => p.businessProfileId === invoice.businessProfileId);
+                        
+                        if (!paymentData) return null;
+                        
+                        return (
+                          <div className={styles.relationshipSection}>
+                            <h4>💰 Payment Details</h4>
+                            <div className={styles.detailsGrid}>
+                              <p><strong>Payment Method:</strong> {paymentData.paymentMethod}</p>
+                              <p><strong>Payment Date:</strong> {paymentData.receivedDate || paymentData.dueDate}</p>
+                              <p><strong>Amount Paid:</strong> {formatCurrency(paymentData.receivedAmount || paymentData.amount)}</p>
+                              <p><strong>Bank Reference:</strong> {paymentData.bankReference}</p>
+                              <p>
+                                <strong>Payment ID:</strong> 
+                                <span 
+                                  className={styles.mappingLink}
+                                  onClick={() => {
+                                    if (onShowPayments) onShowPayments();
+                                  }}
+                                >
+                                  {paymentData.id} →
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                       {/* Action Buttons - Proper 44px Touch Targets */}
                       <div className={styles.expandedActions}>

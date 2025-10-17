@@ -1,10 +1,14 @@
 /* Invoices Component - Sales Container Integration */
 .invoicesScreen {
   min-height: 100vh;
-  padding: 0;                      /* Remove screen padding to match LeadManagement */
+  padding: var(--ds-padding-screen);
   text-align: left !important;
   background: var(--ds-bg-primary);
   color: var(--ds-text-primary);
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 .pageContent {
@@ -12,36 +16,29 @@
   padding: 0;
 }
 
-/* Invoices Container - Match LeadManagement Pattern */
+/* Invoices Container - Match Order/Quote Pattern */
 .invoicesContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;                /* Increased padding for mobile debug */
+  padding: 0 10px;
   display: grid;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
 }
 
-/* Tablet support removed - Only mobile (480px) and desktop supported */
-
-/* Old filter styles removed - Sales container handles filtering */
-
-/* 140px Template Card Structure */
+/* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
 .invoiceCardContainer {
-  margin-bottom: 12px;
+  margin-bottom: var(--ds-space-sm);
 }
 
 .invoiceCard {
-  width: 100% !important;           /* Force width to 100% */
-  max-width: 100% !important;       /* Prevent any width override */
-  box-sizing: border-box !important; /* Force box-sizing */
-  height: 140px;                    /* Match LeadManagement exactly */
-  padding: 16px;                    /* Symmetric padding for professional look */
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #E5E7EB;
-  border-left: 4px solid;           /* Status color applied by priority classes */
+  height: 140px;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-card);
+  border: 1px solid var(--ds-border-primary);
+  border-left: 4px solid;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -50,88 +47,58 @@
 }
 
 .invoiceCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--ds-shadow-elevated);
   transform: translateY(-2px);
 }
 
 .invoiceCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
+  box-shadow: 0 0 0 1px var(--color-primary);
   position: relative;
-  z-index: 1;                           /* Ensure card stays above others */
+  z-index: 1;
 }
 
-/* Customer/Prospect visual differentiation */
-.customerCard {
-  border-left: 4px solid #10B981;
-}
-
-.prospectCard {
-  border-left: 4px solid #F59E0B;
-}
-
-/* Status-based border colors - Match Quote/Order working pattern */
-.pendingInvoice {
-  border-left-color: #F59E0B;  /* Orange for pending invoices */
-}
-
-.paidInvoice {
-  border-left-color: #10B981;  /* Green for paid invoices */
-}
-
-.overdueInvoice {
-  border-left-color: #EF4444;  /* Red for overdue invoices */
-}
-
-.sentInvoice {
-  border-left-color: #3B82F6;  /* Blue for sent invoices */
-}
-
-.expiredInvoice {
-  border-left-color: #EF4444;  /* Red for expired invoices */
-}
-
-/* Template header - Company name */
+/* ===== TEMPLATE CONTENT CLASSES ===== */
 .cardHeader {
-  font-size: 20px;                 /* Visual Design Spec exact */
+  font-size: var(--font-xl);
   font-weight: 600;
-  color: #111827;                  /* Visual Design Spec exact */
-  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  line-height: 1.2;                /* Tighter line height for single line */
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+  line-height: 1.2;
   overflow: hidden;
-  white-space: nowrap;              /* Force single line */
-  text-overflow: ellipsis;          /* Clean truncation with ... */
-  flex-shrink: 0;                  /* Prevent header compression */
-  height: 24px;                    /* Fixed height for consistency */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  height: 24px;
 }
 
-/* Template status line */
 .cardStatus {
-  font-size: 16px;                 /* Visual Design Spec exact */
+  font-size: 16px;
   font-weight: 500;
-  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
+  margin: 0 0 6px 0;
   color: #374151;
   line-height: 1.3;
-  flex-shrink: 0;                  /* Prevent status compression */
-  height: 21px;                    /* Fixed height for consistency */
+  flex-shrink: 0;
+  height: 21px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-/* Template meta information - 2 lines */
 .cardMeta {
-  font-size: 14px;                 /* Visual Design Spec exact */
-  color: #6B7280;                  /* Visual Design Spec exact */
-  margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
-  line-height: 1.2;                /* Tighter line height for 2-line content */
+  font-size: 14px;
+  color: #6B7280;
+  margin: 2px 0 8px 0;
+  line-height: 1.2;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;           /* Exactly 2 lines with ellipsis */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  flex-shrink: 0;                  /* Prevent compression affecting header */
-  max-height: 34px;                /* Enforce exact height for 2 lines */
+  flex-shrink: 0;
+  max-height: 34px;
 }
 
-/* Expand indicator - Match LeadManagement superior styling */
 .expandIndicator {
   font-size: 12px;
   color: #1D4ED8;
@@ -151,245 +118,41 @@
   color: #1D4ED8;
 }
 
-/* Progressive disclosure and mapping */
-.invoiceMapping {
-  margin: 16px 0;
-  padding: 12px;
-  background: #F9FAFB;
-  border-radius: 6px;
-  border: 1px solid #E5E7EB;
+/* Status-based border colors */
+.pendingInvoice {
+  border-left-color: #F59E0B;
 }
 
-.mappingInfo p {
-  margin: 8px 0;
-  font-size: 14px;
-  color: #6B7280;
+.paidInvoice {
+  border-left-color: #10B981;
 }
 
-.mappingLink {
-  color: #1D4ED8;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 500;
-  margin-left: 4px;
+.payment_receivedInvoice {
+  border-left-color: #10B981;
 }
 
-.mappingLink:hover {
-  text-decoration: underline;
+.overdueInvoice {
+  border-left-color: #EF4444;
 }
 
-/* Old card actions removed - using expandedActions pattern */
-
-.invoiceHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
+.sentInvoice {
+  border-left-color: #3B82F6;
 }
 
-.invoiceTitle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+.expiredInvoice {
+  border-left-color: #EF4444;
 }
 
-.invoiceTitle h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: var(--color-primary, #ffd700);
-  font-weight: 600;
-}
-
-.statusBadge {
-  padding: 8px 16px;
-  border-radius: var(--radius-large, 25px);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.statusBadge.statusPending {
-  background: linear-gradient(135deg, #ffa502, #ff9500);
-  color: var(--color-text, white);
-  box-shadow: 0 4px 15px rgba(255, 165, 2, 0.4);
-}
-
-.statusBadge.statusSent {
-  background: linear-gradient(135deg, #5352ed, #3742fa);
-  color: var(--color-text, white);
-  box-shadow: 0 4px 15px rgba(83, 82, 237, 0.4);
-}
-
-.statusBadge.statusPaid {
-  background: linear-gradient(135deg, #2ed573, #20bf6b);
-  color: var(--color-text, white);
-  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
-}
-
-.statusBadge.statusExpired {
-  background: linear-gradient(135deg, #ff4757, #ff3742);
-  color: var(--color-text, white);
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-}
-
-.invoiceDetails {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.invoiceDetails p {
-  margin: 8px 0;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--color-textSecondary, rgba(255, 255, 255, 0.9));
-}
-
-.invoiceDetails strong {
-  color: var(--color-primary, #ffd700);
-  font-weight: 600;
-}
-
-.invoiceActions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-.invoiceActions .actionBtn {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.actionBtn.viewBtn {
-  background: #5352ed;
-  color: var(--color-text, white);
-}
-
-.actionBtn.viewBtn:hover {
-  background: #3742fa;
-  transform: translateY(-2px);
-}
-
-.actionBtn.downloadBtn {
-  background: #2ed573;
-  color: var(--color-text, white);
-}
-
-.actionBtn.downloadBtn:hover {
-  background: #20bf6b;
-  transform: translateY(-2px);
-}
-
-.actionBtn.quoteBtn {
-  background: var(--gradient-button, #ffd700);
-  color: var(--color-secondary, #1e3c72);
-  font-weight: 700;
-}
-
-.actionBtn.quoteBtn:hover {
-  background: var(--gradient-button, #ffed4e);
-  transform: translateY(-2px);
-}
-
-.actionBtn.customerBtn {
-  background: #ff6b6b;
-  color: var(--color-text, white);
-}
-
-.actionBtn.customerBtn:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
-.emptyState {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--color-textSecondary, rgba(255, 255, 255, 0.7));
-}
-
-.emptyState h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: var(--color-primary, #ffd700);
-}
-
-.emptyState p {
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.quickActions {
-  max-width: 1400px;
-  margin: 30px auto;
-  padding: 0 10px;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.quickActionBtn {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: var(--gradient-card, rgba(255, 255, 255, 0.1));
-  color: var(--color-text, white);
-  border: 2px solid var(--color-primary, rgba(255, 255, 255, 0.2));
-  backdrop-filter: blur(10px);
-}
-
-.quickActionBtn:hover {
-  background: var(--gradient-card, rgba(255, 255, 255, 0.2));
-  border-color: var(--color-primary, rgba(255, 255, 255, 0.4));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
-}
-
-.voiceCommands {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px 10px;
-  background: rgba(255, 215, 0, 0.08);
-  border-radius: var(--radius-large, 16px);
-  border: 2px solid rgba(255, 215, 0, 0.2);
-  text-align: center;
-}
-
-.voiceHint {
-  margin: 0;
-  font-size: 1.1rem;
-  color: var(--color-primary, #ffd700);
-  font-weight: 500;
-}
-
-/* Expanded Section Styling - Match LeadManagement Pattern */
+/* Expanded Section Styling */
 .expandedSection {
   background: var(--ds-bg-subtle);
   border: 1px solid var(--ds-border-light);
-  border-top: 2px solid var(--ds-primary);       /* Clear visual connection */
+  border-top: 2px solid var(--ds-primary);
   border-radius: 0 0 8px 8px;
   padding: 20px;
-  margin-top: -1px;                     /* Overlap by 1px for seamless connection */
-  animation: expandDown 0.25s ease-out; /* Slightly longer for smooth appearance */
-  text-align: left !important;         /* Force left alignment for all content */
+  margin-top: -1px;
+  animation: expandDown 0.25s ease-out;
+  text-align: left !important;
 }
 
 @keyframes expandDown {
@@ -398,40 +161,18 @@
     max-height: 0;
     padding-top: 0;
     padding-bottom: 0;
-    transform: translateY(-10px);        /* Start slightly above */
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     max-height: 1000px;
     padding-top: 20px;
     padding-bottom: 20px;
-    transform: translateY(0);            /* Slide down to natural position */
+    transform: translateY(0);
   }
 }
 
-.expandedActions {
-  display: flex;
-  gap: 8px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 2px solid #E5E7EB;
-  flex-wrap: wrap;
-}
-
-.expandedActions .ds-btn {
-  min-height: 44px !important;
-  padding: 12px 16px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-  transition: all 0.2s ease !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-}
-
-/* Detail Sections Styling */
+/* Detail Sections */
 .invoiceDetailsSection h4,
 .relationshipSection h4 {
   margin: 0 0 12px 0;
@@ -460,316 +201,39 @@
   margin-top: 20px;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .expandedActions {
-    gap: 6px;
-  }
-  
-  .expandedActions .ds-btn {
-    flex: 1;
-    min-width: calc(50% - 3px);
-  }
-  
-  .detailsGrid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  
-  .expandedSection {
-    padding: 16px;
-  }
-}
-
-
-/* Filter Section */
-.filtersSection {
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.filterLabel {
-  color: white;
-  font-weight: 500;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.filterButtons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.filterBtn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 20px;
+.mappingLink {
+  color: #1D4ED8;
   cursor: pointer;
+  text-decoration: none;
   font-weight: 500;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  margin-left: 4px;
 }
 
-.filterBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.filterBtn.active {
-  background: #ffd700;
-  color: #333;
-  border-color: #ffd700;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-}
-
-/* Summary Section */
-.summarySection {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.summaryCard {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 25px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
-}
-
-.summaryCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.summaryIcon {
-  font-size: 2.5rem;
-  opacity: 0.8;
-}
-
-.summaryContent {
-  flex: 1;
-}
-
-.summaryValue {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #ffd700;
-  margin-bottom: 5px;
-}
-
-.summaryLabel {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  color: white;
-}
-
-/* REMOVED: Duplicate Invoice Records - Using template styles above */
-
-.invoiceHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f1f1f1;
-}
-
-.customerInfo h3 {
-  margin: 0 0 8px 0;
-  color: #2c3e50;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-.customerLink {
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.customerLink:hover {
-  color: #667eea;
+.mappingLink:hover {
   text-decoration: underline;
-}
-
-.invoiceNumber {
-  background: #e3f2fd;
-  color: #1976d2;
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.invoiceTypeBadge {
-  background: #f3e5f5;
-  color: #7b1fa2;
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-top: 8px;
-}
-
-.invoiceStatus {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-align: center;
-  min-width: 100px;
-}
-
-.invoiceInfo {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.detailRow {
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.detailRow strong {
-  color: #2c3e50;
-}
-
-.relatedLink {
-  color: #1976d2;
-  cursor: pointer;
-  margin-left: 5px;
-  transition: all 0.3s ease;
-}
-
-.relatedLink:hover {
-  color: #0d47a1;
-  text-decoration: underline;
-}
-
-.amountBreakdown {
-  background: #fff;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.amountRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  font-size: 0.95rem;
-}
-
-.amountRow:not(:last-child) {
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.totalRow {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 2px solid #e9ecef;
-  font-weight: 600;
-}
-
-.totalAmount {
-  color: #27ae60;
-  font-size: 1.1rem;
-}
-
-/* Customer Contact */
-.customerContact {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-left: 4px solid #667eea;
-}
-
-.contactHeader {
-  color: #2c3e50;
-  font-size: 0.95rem;
 }
 
 /* Action Buttons */
-.actionButtons {
+.expandedActions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px solid #E5E7EB;
   flex-wrap: wrap;
-  justify-content: center;
-  padding-top: 15px;
-  border-top: 2px solid #f1f1f1;
 }
 
-.actionButtons button {
-  flex: 1;
-  min-width: 120px;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.viewBtn {
-  background: linear-gradient(135deg, #6c757d, #495057);
-  color: white;
-}
-
-.viewBtn:hover {
-  background: linear-gradient(135deg, #495057, #343a40);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
-}
-
-.sendBtn {
-  background: linear-gradient(135deg, #28a745, #20c997);
-  color: white;
-}
-
-.sendBtn:hover {
-  background: linear-gradient(135deg, #20c997, #17a2b8);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
-}
-
-.paymentsBtn {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
-}
-
-.paymentsBtn:hover {
-  background: linear-gradient(135deg, #0056b3, #004085);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-}
-
-.followUpBtn {
-  background: linear-gradient(135deg, #ffc107, #e0a800);
-  color: #333;
-}
-
-.followUpBtn:hover {
-  background: linear-gradient(135deg, #e0a800, #d39e00);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+.expandedActions .ds-btn {
+  min-height: 44px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
 }
 
 /* Empty State */
@@ -804,194 +268,45 @@
   font-size: 1rem;
 }
 
-/* Voice Commands Section - Override existing */
-.voiceSection {
-  margin-top: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 25px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.voiceSection h3 {
-  color: white;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 1.3rem;
-}
-
-.voiceCommands {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  background: none;
-  border-radius: 0;
-  border: none;
-  text-align: left;
-}
-
-.voiceCommand {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 12px 16px;
-  border-radius: 8px;
-  color: white;
-  font-size: 0.9rem;
-  border-left: 4px solid #ffd700;
-  margin: 0;
-}
-
-.voiceCommand strong {
-  color: #ffd700;
-}
-
-/* Mobile responsive styles using fluid design principles - Match LeadManagement */
-@media (max-width: 768px) {
-  .invoicesScreen {
-    padding: 20px 0 0 0 !important;     /* Add proper top padding like LeadManagement */
-    margin-top: 0 !important;           /* Force remove any inherited top margin */
-  }
-  
+/* Mobile Responsive - Match Order/Quote Pattern */
+@media (max-width: 480px) {
+  /* Container mobile pattern - exactly like Order/Quote */
   .invoicesContainer {
-    margin: 0 auto;                     /* Remove any inherited top margin */
-    margin-bottom: 20px;                /* Keep bottom margin */
-    /* Mobile padding for proper edge spacing - increased to see effect */
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .invoiceCard {
-    width: 100% !important;             /* Force cards to fit container width */
-    box-sizing: border-box !important;  /* Force include padding/border in width */
-    padding: 14px;                      /* Reduced padding for mobile like LeadManagement */
     margin-left: 0;
     margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Card mobile pattern - match Order/Quote */
+  .invoiceCard {
+    padding: 14px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Expanded section mobile adjustments */
+  .expandedSection {
+    padding: 16px;
   }
 
   .expandedActions {
     gap: 6px;
   }
-  
+
   .expandedActions .ds-btn {
-    flex: 1;
-    min-width: calc(50% - 3px);
-    min-height: 48px;                   /* Mobile touch targets */
+    min-height: 48px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    font-weight: 600;
   }
-  
+
   .expandedActions .ds-btn:hover,
   .expandedActions .ds-btn:active {
     transform: scale(0.98);
   }
-  
+
   .detailsGrid {
     grid-template-columns: 1fr;
     gap: 8px;
-  }
-  
-  .expandedSection {
-    padding: 16px;
-  }
-}
-
-/* Tablet and mobile responsive */
-@media (max-width: 768px) {
-  .invoicesScreen {
-    padding: 70px 10px 20px 10px;
-  }
-  
-  
-  
-  .filterButtons {
-    gap: 8px;
-  }
-  
-  .filterBtn {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-  }
-  
-  .summarySection {
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin-bottom: 25px;
-  }
-  
-  .summaryCard {
-    padding: 20px;
-  }
-  
-  .summaryValue {
-    font-size: 1.5rem;
-  }
-  
-  .invoiceCard {
-    padding: 20px;
-  }
-  
-  .invoiceHeader {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  
-  .invoiceDetails {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .actionButtons {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .actionButtons button {
-    min-width: auto;
-    width: 100%;
-  }
-  
-  .voiceCommands {
-    gap: 8px;
-  }
-  
-  .voiceCommand {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  
-  .filterBtn {
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-  
-  .summaryCard {
-    padding: 15px;
-    gap: 15px;
-  }
-  
-  .summaryIcon {
-    font-size: 2rem;
-  }
-  
-  .summaryValue {
-    font-size: 1.3rem;
-  }
-  
-  .invoiceCard {
-    padding: 15px;
-  }
-  
-  .customerInfo h3 {
-    font-size: 1.1rem;
   }
 }
