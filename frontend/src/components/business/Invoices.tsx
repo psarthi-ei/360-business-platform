@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   mockProformaInvoices, 
   mockFinalInvoices, 
@@ -31,6 +31,7 @@ interface InvoiceRecord {
   paymentTerms: string;
   gstAmount?: number;
   netAmount?: number;
+  businessProfileId: string; // For customer status lookup
 }
 
 function Invoices({
@@ -42,13 +43,38 @@ function Invoices({
   onFilterChange
 }: InvoicesProps) {
   
-  // Invoice type filter state
-  const [invoiceType, setInvoiceType] = useState<'proforma' | 'final' | 'all'>('all');
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // Progressive disclosure state for 140px template cards
+  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  
+  // Sequential expansion toggle function - smooth visual flow
+  const toggleDetails = useCallback(async (invoiceId: string) => {
+    if (expandedDetails.has(invoiceId)) {
+      // Simple collapse - no sequencing needed
+      setExpandedDetails(new Set());
+    } else {
+      // Sequential: First collapse any open card
+      if (expandedDetails.size > 0) {
+        setExpandedDetails(new Set());
+        // Wait for collapse animation to complete
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+      
+      // Then expand the new card
+      setExpandedDetails(new Set([invoiceId]));
+      
+      // Scroll to ensure the card is visible
+      setTimeout(() => {
+        const cardElement = document.querySelector(`[data-invoice-id="${invoiceId}"]`);
+        if (cardElement) {
+          cardElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }, 100);
+    }
+  }, [expandedDetails]);
 
   // Create combined invoice records from both proforma and final invoices
   const createInvoiceRecords = (): InvoiceRecord[] => {
@@ -59,7 +85,7 @@ function Invoices({
         id: invoice.id,
         type: 'proforma' as const,
         invoiceNumber: invoice.id, // Use ID as invoice number
-        customerName: businessProfile?.companyName || `Company (${invoice.businessProfileId})`,
+        customerName: businessProfile?.companyName || `Customer ${invoice.businessProfileId}`,
         location: businessProfile ? `${businessProfile.registeredAddress.city}, ${businessProfile.registeredAddress.state}` : 'Location not available',
         totalAmount: invoice.totalAmount,
         status: invoice.status,
@@ -69,18 +95,19 @@ function Invoices({
         contactInfo: businessProfile?.phone || 'No contact available',
         paymentTerms: 'Advance payment required', // Default for proforma invoices
         gstAmount: invoice.gstAmount,
-        netAmount: invoice.subtotal // Use subtotal as net amount
+        netAmount: invoice.subtotal, // Use subtotal as net amount
+        businessProfileId: invoice.businessProfileId
       };
     });
 
     const finalRecords: InvoiceRecord[] = mockFinalInvoices.map(invoice => {
-      const businessProfile = getBusinessProfileById(invoice.customerId);
+      const businessProfile = getBusinessProfileById(invoice.businessProfileId);
       
       return {
         id: invoice.id,
         type: 'final' as const,
         invoiceNumber: invoice.id, // Use ID as invoice number
-        customerName: businessProfile?.companyName || invoice.customerName,
+        customerName: businessProfile?.companyName || `Customer ${invoice.businessProfileId}`,
         location: businessProfile ? `${businessProfile.registeredAddress.city}, ${businessProfile.registeredAddress.state}` : 'Location not available',
         totalAmount: invoice.totalAmount,
         status: invoice.status === 'paid' ? 'paid' : (invoice.status === 'pending' ? 'pending' : 'overdue'),
@@ -90,7 +117,8 @@ function Invoices({
         contactInfo: businessProfile?.phone || 'No contact available',
         paymentTerms: 'As per sales order', // Default for final invoices
         gstAmount: invoice.gstAmount,
-        netAmount: invoice.subtotal // Use subtotal as net amount
+        netAmount: invoice.subtotal, // Use subtotal as net amount
+        businessProfileId: invoice.businessProfileId
       };
     });
 
@@ -99,14 +127,9 @@ function Invoices({
 
   const allInvoiceRecords = createInvoiceRecords();
 
-  // Filter invoice records based on both type and status
+  // Filter invoice records based on status
   const getFilteredInvoices = () => {
     let filtered = allInvoiceRecords;
-    
-    // Filter by invoice type
-    if (invoiceType !== 'all') {
-      filtered = filtered.filter(invoice => invoice.type === invoiceType);
-    }
     
     // Filter by status
     if (filterState !== 'all') {
@@ -125,10 +148,6 @@ function Invoices({
   const filteredInvoices = getFilteredInvoices();
 
 
-  const handleSendInvoice = (invoiceId: string, customerName: string, contactInfo: string) => {
-    
-    // Implementation: Send invoice via WhatsApp/Email
-  };
 
   const handleFollowUp = (invoiceId: string, customerName: string, contactInfo: string) => {
     
@@ -184,105 +203,10 @@ function Invoices({
   };
 
   return (
-    <div className={styles.invoicesScreen} style={{ paddingTop: '80px' }}>
+    <div className={styles.invoicesScreen}>
       <div className={styles.pageContent}>
 
-        {/* Invoice Type Filter */}
-        <div className={styles.filtersSection}>
-          <div className={styles.filterLabel}>Invoice Type:</div>
-          <div className={styles.filterButtons}>
-            <button 
-              className={invoiceType === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setInvoiceType('all')}
-            >
-              All Invoices
-            </button>
-            <button 
-              className={invoiceType === 'proforma' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setInvoiceType('proforma')}
-            >
-              📋 Proforma
-            </button>
-            <button 
-              className={invoiceType === 'final' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => setInvoiceType('final')}
-            >
-              📄 Final
-            </button>
-          </div>
-        </div>
-
-        {/* Status Filter Section */}
-        <div className={styles.filtersSection}>
-          <div className={styles.filterLabel}>Invoice Status:</div>
-          <div className={styles.filterButtons}>
-            <button 
-              className={filterState === 'all' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('all')}
-            >
-              Show All
-            </button>
-            <button 
-              className={filterState === 'pending' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('pending')}
-            >
-              ⏳ Pending
-            </button>
-            <button 
-              className={filterState === 'paid' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('paid')}
-            >
-              ✅ Paid
-            </button>
-            <button 
-              className={filterState === 'expired' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('expired')}
-            >
-              🔴 Expired
-            </button>
-            <button 
-              className={filterState === 'overdue' ? `${styles.filterBtn} ${styles.active}` : styles.filterBtn}
-              onClick={() => onFilterChange('overdue')}
-            >
-              ⚠️ Overdue
-            </button>
-          </div>
-        </div>
-
-        {/* Summary Cards */}
-        <div className={styles.summarySection}>
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryIcon}>📄</div>
-            <div className={styles.summaryContent}>
-              <div className={styles.summaryValue}>
-                {allInvoiceRecords.length}
-              </div>
-              <div className={styles.summaryLabel}>Total Invoices</div>
-            </div>
-          </div>
-          
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryIcon}>⏳</div>
-            <div className={styles.summaryContent}>
-              <div className={styles.summaryValue}>
-                {allInvoiceRecords.filter(i => i.status === 'pending' || i.status === 'sent').length}
-              </div>
-              <div className={styles.summaryLabel}>Pending Payment</div>
-            </div>
-          </div>
-          
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryIcon}>💰</div>
-            <div className={styles.summaryContent}>
-              <div className={styles.summaryValue}>
-                {formatCurrency(allInvoiceRecords.reduce((sum, i) => sum + i.totalAmount, 0))}
-              </div>
-              <div className={styles.summaryLabel}>Total Invoice Value</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Invoice Records */}
+        {/* Invoice Records - 140px Template */}
         <div className={styles.invoicesContainer}>
           {filteredInvoices.length === 0 ? (
             <div className={styles.noInvoices}>
@@ -296,145 +220,132 @@ function Invoices({
             filteredInvoices.map(invoice => {
               const statusInfo = getInvoiceStatusInfo(invoice.status);
               
+              // Determine customer status for visual differentiation
+              const businessProfile = getBusinessProfileById(invoice.businessProfileId);
+              const isCustomer = businessProfile?.customerStatus === 'customer';
+              
               return (
-                <div key={invoice.id} className={styles.invoiceCard}>
-                  <div className={styles.invoiceHeader}>
-                    <div className={styles.customerInfo}>
-                      <h3 
-                        className={styles.customerLink}
-                        onClick={() => onShowCustomerProfile && onShowCustomerProfile(invoice.customerName.toLowerCase().replace(/\s/g, '-'))}
-                      >
-                        {invoice.customerName} - {invoice.location}
-                      </h3>
-                      <div className={styles.invoiceDetails}>
-                        <span className={styles.invoiceNumber}>
-                          {invoice.invoiceNumber}
-                        </span>
-                        <div className={styles.invoiceTypeBadge}>
-                          {invoice.type === 'proforma' ? '📋 Proforma Invoice' : '📄 Final Invoice'}
-                        </div>
-                      </div>
-                    </div>
+                <div key={invoice.id} className={styles.invoiceCardContainer} data-invoice-id={invoice.id}>
+                  {/* Clickable Card Summary - 140px Template */}
+                  <div 
+                    className={`${styles.invoiceCard} ${styles[invoice.status + 'Invoice']} ${expandedDetails.has(invoice.id) ? styles.expanded : ''}`}
+                    onClick={() => toggleDetails(invoice.id)}
+                  >
+                    {/* Template Header - Company Name Only */}
                     <div 
-                      className={styles.invoiceStatus}
-                      style={{ 
-                        backgroundColor: statusInfo.bgColor,
-                        color: statusInfo.color
-                      }}
+                      className={styles.cardHeader}
+                      title={`${invoice.customerName} (Invoice ID: ${invoice.invoiceNumber})`}
                     >
-                      {statusInfo.icon} {statusInfo.label}
+                      {invoice.customerName}
+                    </div>
+                    
+                    {/* Template Status */}
+                    <div className={styles.cardStatus}>
+                      Status: {statusInfo.icon} {statusInfo.label} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                    </div>
+                    
+                    {/* Template Meta - 2 lines */}
+                    <div 
+                      className={styles.cardMeta}
+                      title={`${invoice.location} • Due: ${invoice.dueDate} • Amount: ${formatCurrency(invoice.totalAmount)} • ${invoice.paymentTerms}`}
+                    >
+                      📍 {invoice.location} • Due: {invoice.dueDate}<br />
+                      💰 {formatCurrency(invoice.totalAmount)} • {invoice.paymentTerms}
+                    </div>
+
+                    {/* Expand Indicator */}
+                    <div className={styles.expandIndicator}>
+                      {expandedDetails.has(invoice.id) ? 'Less' : 'More'}
                     </div>
                   </div>
 
-                  <div className={styles.invoiceDetails}>
-                    <div className={styles.invoiceInfo}>
-                      <div className={styles.detailRow}>
-                        <strong>Issue Date:</strong> {invoice.issueDate}
+                  {/* Expanded Details - Match LeadManagement Structure */}
+                  {expandedDetails.has(invoice.id) && (
+                    <div className={styles.expandedSection}>
+                      {/* Invoice Details Section */}
+                      <div className={styles.invoiceDetailsSection}>
+                        <h4>Invoice Details</h4>
+                        <div className={styles.detailsGrid}>
+                          <p><strong>Company:</strong> {invoice.customerName} - {invoice.location}</p>
+                          <p><strong>Issue Date:</strong> {invoice.issueDate} | <strong>Due Date:</strong> {invoice.dueDate}</p>
+                          <p><strong>Type:</strong> {invoice.type === 'proforma' ? '📋 Proforma Invoice' : '📄 Final Invoice'}</p>
+                          <p><strong>Amount:</strong> {formatCurrency(invoice.totalAmount)} (incl. GST)</p>
+                          <p><strong>Status:</strong> {statusInfo.label}</p>
+                        </div>
                       </div>
-                      <div className={styles.detailRow}>
-                        <strong>Due Date:</strong> {invoice.dueDate}
-                      </div>
+
+                      {/* Related Record Information */}
                       {invoice.relatedId && (
-                        <div className={styles.detailRow}>
-                          <strong>
-                            {invoice.type === 'proforma' ? 'Quote:' : 'Sales Order:'}
-                          </strong> 
-                          <span 
-                            className={styles.relatedLink}
-                            onClick={() => {
-                              if (invoice.type === 'proforma' && onShowQuotationOrders) {
-                                onShowQuotationOrders();
-                              } else if (invoice.type === 'final' && onShowSalesOrders) {
-                                onShowSalesOrders();
-                              }
-                            }}
+                        <div className={styles.relationshipSection}>
+                          <h4>Related Records</h4>
+                          <div className={styles.detailsGrid}>
+                            <p>
+                              <strong>
+                                {invoice.type === 'proforma' ? '📋 From Quote:' : '📦 From Order:'}
+                              </strong> 
+                              <span 
+                                className={styles.mappingLink}
+                                onClick={() => {
+                                  if (invoice.type === 'proforma' && onShowQuotationOrders) {
+                                    onShowQuotationOrders();
+                                  } else if (invoice.type === 'final' && onShowSalesOrders) {
+                                    onShowSalesOrders();
+                                  }
+                                }}
+                              >
+                                {invoice.relatedId} →
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action Buttons - Proper 44px Touch Targets */}
+                      <div className={styles.expandedActions}>
+                        <button className="ds-btn ds-btn-secondary">
+                          📞 Call
+                        </button>
+                        <button className="ds-btn ds-btn-secondary">
+                          📱 WhatsApp
+                        </button>
+                        <button className="ds-btn ds-btn-primary">
+                          📄 View PDF
+                        </button>
+                        
+                        {/* Type-specific actions */}
+                        {invoice.type === 'proforma' && onShowPayments && (
+                          <button 
+                            className="ds-btn ds-btn-primary"
+                            onClick={() => onShowPayments()}
                           >
-                            {invoice.relatedId} →
-                          </span>
-                        </div>
-                      )}
-                      <div className={styles.detailRow}>
-                        <strong>Payment Terms:</strong> {invoice.paymentTerms}
+                            💰 View Payments
+                          </button>
+                        )}
+                        
+                        {invoice.type === 'final' && invoice.status === 'paid' && (
+                          <button className="ds-btn ds-btn-secondary">
+                            📋 Delivery Receipt
+                          </button>
+                        )}
+                        
+                        {(invoice.status === 'sent' || invoice.status === 'pending' || invoice.status === 'overdue') && (
+                          <button 
+                            className="ds-btn ds-btn-primary"
+                            onClick={() => handleFollowUp(invoice.id, invoice.customerName, invoice.contactInfo)}
+                          >
+                            📢 Follow Up
+                          </button>
+                        )}
                       </div>
                     </div>
-
-                    <div className={styles.amountBreakdown}>
-                      {invoice.netAmount && (
-                        <div className={styles.amountRow}>
-                          <span>Net Amount:</span>
-                          <strong>{formatCurrency(invoice.netAmount)}</strong>
-                        </div>
-                      )}
-                      {invoice.gstAmount && (
-                        <div className={styles.amountRow}>
-                          <span>GST Amount:</span>
-                          <strong>{formatCurrency(invoice.gstAmount)}</strong>
-                        </div>
-                      )}
-                      <div className={`${styles.amountRow} ${styles.totalRow}`}>
-                        <span>Total Amount:</span>
-                        <strong className={styles.totalAmount}>
-                          {formatCurrency(invoice.totalAmount)}
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Customer Contact Section */}
-                  <div className={styles.customerContact}>
-                    <div className={styles.contactHeader}>
-                      <strong>Contact: {invoice.customerName.split(' ')[0]} - {invoice.contactInfo}</strong>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className={styles.actionButtons}>
-                    <button 
-                      className={styles.viewBtn}
-                      onClick={() => {}}
-                    >
-                      📄 View PDF
-                    </button>
-                    <button 
-                      className={styles.sendBtn}
-                      onClick={() => handleSendInvoice(invoice.id, invoice.customerName, invoice.contactInfo)}
-                    >
-                      📱 Send Invoice
-                    </button>
-                    {invoice.type === 'proforma' && onShowPayments && (
-                      <button 
-                        className={styles.paymentsBtn}
-                        onClick={() => onShowPayments()}
-                      >
-                        💰 View Payments
-                      </button>
-                    )}
-                    {(invoice.status === 'sent' || invoice.status === 'pending' || invoice.status === 'overdue') && (
-                      <button 
-                        className={styles.followUpBtn}
-                        onClick={() => handleFollowUp(invoice.id, invoice.customerName, invoice.contactInfo)}
-                      >
-                        📢 Follow Up
-                      </button>
-                    )}
-                  </div>
+                  )}
                 </div>
               );
             })
           )}
         </div>
 
-        {/* Voice Commands Section */}
-        <div className={styles.voiceSection}>
-          <h3>🎤 Voice Commands</h3>
-          <div className={styles.voiceCommands}>
-            <div className={styles.voiceCommand}>
-              <strong>Commands:</strong> "Show pending invoices" • "Send invoice" • "Follow up overdue" • "Go to payments"
-            </div>
-          </div>
-        </div>
       </div>
-
     </div>
   );
 }

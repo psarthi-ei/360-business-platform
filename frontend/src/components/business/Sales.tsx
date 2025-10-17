@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ActionParams } from '../../services/nlp/types';
 import { mockLeads, mockQuotes } from '../../data/mockData';
 import styles from './Sales.module.css';
@@ -38,6 +38,9 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   const [orderFilterState, setOrderFilterState] = useState('all');
   const [invoiceFilterState, setInvoiceFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
+  
+  // Intelligent scroll behavior state
+  const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
   
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
@@ -101,9 +104,69 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   };
 
   // Calculate dynamic count based on current filters
-  const getFilteredCount = () => {
-    const currentStatusFilters = statusFilterConfigs[activeTab];
-    const currentStatusFilter = getCurrentFilterState();
+  const getFilteredCount = useCallback(() => {
+    // Inline getCurrentFilterState logic to avoid external dependency
+    const currentStatusFilter = (() => {
+      switch(activeTab) {
+        case 'leads': return leadFilterState;
+        case 'quotes': return quoteFilterState;
+        case 'orders': return orderFilterState;
+        case 'invoices': return invoiceFilterState;
+        default: return 'all';
+      }
+    })();
+    
+    // Inline statusFilterConfigs access with count calculations to avoid external dependency
+    const getStatusFilters = () => {
+      switch(activeTab) {
+        case 'leads': {
+          const leadCounts = {
+            all: mockLeads.length,
+            hot: mockLeads.filter(l => l.priority === 'hot').length,
+            warm: mockLeads.filter(l => l.priority === 'warm').length,
+            cold: mockLeads.filter(l => l.priority === 'cold').length
+          };
+          return [
+            { value: 'all', label: 'All Leads', count: leadCounts.all },
+            { value: 'hot', label: '🔥 Hot Leads', count: leadCounts.hot },
+            { value: 'warm', label: '🔶 Warm Leads', count: leadCounts.warm },
+            { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
+          ];
+        }
+        case 'quotes': {
+          const quoteCounts = {
+            all: mockQuotes.length,
+            pending: mockQuotes.filter(q => q.status === 'pending').length,
+            approved: mockQuotes.filter(q => q.status === 'approved').length,
+            expired: mockQuotes.filter(q => q.status === 'expired').length
+          };
+          return [
+            { value: 'all', label: 'All Quotes', count: quoteCounts.all },
+            { value: 'pending', label: '⏳ Pending', count: quoteCounts.pending },
+            { value: 'approved', label: '✅ Approved', count: quoteCounts.approved },
+            { value: 'expired', label: '❌ Expired', count: quoteCounts.expired }
+          ];
+        }
+        case 'orders':
+          return [
+            { value: 'all', label: 'All Orders', count: 5 },
+            { value: 'production', label: '🟡 Production', count: 2 },
+            { value: 'blocked', label: '⚠️ Blocked', count: 1 },
+            { value: 'delivered', label: '✅ Delivered', count: 2 }
+          ];
+        case 'invoices':
+          return [
+            { value: 'all', label: 'All Invoices', count: 15 },
+            { value: 'paid', label: '💰 Paid', count: 8 },
+            { value: 'pending', label: '🟡 Pending', count: 5 },
+            { value: 'overdue', label: '🔴 Overdue', count: 2 }
+          ];
+        default:
+          return [];
+      }
+    };
+    
+    const currentStatusFilters = getStatusFilters();
     
     // Find the selected status filter's count
     const statusFilter = currentStatusFilters.find(filter => filter.value === currentStatusFilter);
@@ -120,7 +183,43 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     }
     
     return Math.round(baseCount * timelineModifier);
-  };
+  }, [activeTab, leadFilterState, quoteFilterState, orderFilterState, invoiceFilterState, timelineFilter]);
+
+  // Intelligent scroll calculation
+  const calculateScrollBehavior = useCallback(() => {
+    const filteredCount = getFilteredCount();
+    
+    // Card template specifications (140px template)
+    const cardHeight = 140;
+    const cardSpacing = 16; // Gap between cards
+    const containerPadding = 32; // Top/bottom padding in container
+    
+    // Calculate total content height needed
+    const totalContentHeight = filteredCount > 0 
+      ? (filteredCount * cardHeight) + ((filteredCount - 1) * cardSpacing) + containerPadding
+      : 200; // Minimum height for empty state
+    
+    // Calculate available height (viewport minus fixed elements)
+    const tabHeight = 48;
+    const filterHeight = 44;  
+    const ctaHeight = 56;
+    const availableHeight = window.innerHeight - tabHeight - filterHeight - ctaHeight;
+    
+    // Show scrollbar if content exceeds available space
+    const needsScroll = totalContentHeight > availableHeight;
+    setShouldShowScrollbar(needsScroll);
+  }, [getFilteredCount]);
+
+  // Update scroll behavior when filters or tab changes
+  useEffect(() => {
+    calculateScrollBehavior();
+    
+    // Also recalculate on window resize
+    const handleResize = () => calculateScrollBehavior();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [calculateScrollBehavior]);
 
   // Render business filters for current tab
   const renderTabFilters = () => {
@@ -267,7 +366,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       </div>
       
       {/* Content Area */}
-      <div className={styles.salesContent}>
+      <div className={`${styles.salesContent} ${shouldShowScrollbar ? styles.scrollable : ''}`}>
         {renderTabContent()}
       </div>
       

@@ -77,16 +77,16 @@ function Payments({
     });
 
     const finalRecords: PaymentRecord[] = mockFinalPayments.map(payment => {
-      const customer = getBusinessProfileById(payment.customerId);
+      const customer = getBusinessProfileById(payment.businessProfileId);
       const finalInvoice = getFinalInvoiceById(payment.finalInvoiceId);
       
       return {
         id: payment.id,
         type: 'final' as const,
         invoiceId: payment.finalInvoiceId,
-        businessProfileId: payment.customerId,
+        businessProfileId: payment.businessProfileId,
         salesOrderId: finalInvoice?.salesOrderId,
-        customerName: customer?.companyName || payment.customerName,
+        customerName: customer?.companyName || `Customer ${payment.businessProfileId}`,
         location: customer ? `${customer.registeredAddress.city}, ${customer.registeredAddress.state}` : 'Location not available',
         invoiceAmount: finalInvoice?.totalAmount || 0,
         paymentAmount: payment.amount,

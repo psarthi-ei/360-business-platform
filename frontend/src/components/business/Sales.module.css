@@ -122,11 +122,17 @@
   white-space: nowrap;
 }
 
-/* Content Area */
+/* Content Area - Intelligent Scroll Behavior */
 .salesContent {
-  overflow-y: auto;
+  overflow: hidden; /* Default: no scrollbars for minimal content */
   background: var(--background-primary);
   grid-row: 3;
+  transition: all 0.2s ease; /* Smooth transition when scroll behavior changes */
+}
+
+/* Applied dynamically when scrolling is needed */
+.salesContent.scrollable {
+  overflow-y: auto;
 }
 
 /* Components now style themselves - no global overrides needed */

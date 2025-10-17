@@ -237,8 +237,7 @@ export interface FabricSpecification {
 export interface WorkOrder {
   id: string;
   salesOrderId: string;
-  customerId: string;
-  customerName: string;
+  businessProfileId: string; // Updated to use unified businessProfileId
   fabricType: string;
   quantity: number;
   unit: string;
@@ -306,8 +305,7 @@ export interface ProductionRecord {
 export interface FinalInvoice {
   id: string;
   salesOrderId: string;
-  customerId: string;
-  customerName: string;
+  businessProfileId: string; // Updated to use unified businessProfileId
   invoiceDate: string;
   dueDate: string;
   subtotal: number;
@@ -325,8 +323,7 @@ export interface FinalInvoice {
 export interface FinalPayment {
   id: string;
   finalInvoiceId: string;
-  customerId: string;
-  customerName: string;
+  businessProfileId: string; // Updated to use unified businessProfileId
   amount: number;
   paymentDate: string;
   paymentMethod: 'RTGS' | 'NEFT' | 'Cash' | 'Cheque' | 'UPI';
@@ -338,8 +335,7 @@ export interface FinalPayment {
 // Customer Feedback - Module 11: Post-delivery experience tracking
 export interface CustomerFeedback {
   id: string;
-  customerId: string;
-  customerName: string;
+  businessProfileId: string; // Updated to use unified businessProfileId
   salesOrderId: string;
   feedbackDate: string;
   overallRating: number; // 1-5 stars
@@ -355,8 +351,7 @@ export interface CustomerFeedback {
 // Loyalty Point Transactions - Module 11: Customer loyalty program tracking
 export interface LoyaltyTransaction {
   id: string;
-  customerId: string;
-  customerName: string;
+  businessProfileId: string; // Updated to use unified businessProfileId
   transactionDate: string;
   type: 'earned' | 'redeemed';
   points: number;
@@ -820,7 +815,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     id: 'PI-2024-001',
     quoteId: 'QT-001',
     leadId: 'L-001',
-    businessProfileId: 'rajesh-textiles',
+    businessProfileId: 'bp-gujarat-garments',
     issueDate: 'March 18, 2024',
     dueDate: 'April 2, 2024',
     subtotal: 1850000,
@@ -835,7 +830,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     id: 'PI-2024-002',
     quoteId: 'QT-004',
     leadId: 'L-004', 
-    businessProfileId: 'morbi-cotton-mills',
+    businessProfileId: 'bp-baroda-fashion',
     issueDate: 'March 25, 2024',
     dueDate: 'April 10, 2024',
     subtotal: 825000,
@@ -850,7 +845,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     id: 'PI-2024-003',
     quoteId: 'QT-005',
     leadId: 'L-005',
-    businessProfileId: 'bhavnagar-export-house',
+    businessProfileId: 'bp-gujarat-garments',
     issueDate: 'March 28, 2024',
     dueDate: 'April 15, 2024',
     subtotal: 9175000,
@@ -858,7 +853,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     totalAmount: 9633750,
     advanceAmount: 3853500,
     bankDetails: companyBankDetails,
-    status: 'pending',
+    status: 'sent',
     paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee'
   }
 ];
@@ -1118,8 +1113,7 @@ export const mockWorkOrders: WorkOrder[] = [
   {
     id: 'WO-2024-001',
     salesOrderId: 'SO-001',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    businessProfileId: 'bp-gujarat-garments',
     fabricType: 'High-grade Export Cotton Fabric',
     quantity: 10000,
     unit: 'yards',
@@ -1135,8 +1129,7 @@ export const mockWorkOrders: WorkOrder[] = [
   {
     id: 'WO-2024-002',
     salesOrderId: 'SO-002',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     fabricType: 'Standard Cotton Fabric',
     quantity: 5000,
     unit: 'yards',
@@ -1152,8 +1145,7 @@ export const mockWorkOrders: WorkOrder[] = [
   {
     id: 'WO-2024-003',
     salesOrderId: 'SO-003',
-    customerId: 'morbi-cotton-mills',
-    customerName: 'Morbi Cotton Mills',
+    businessProfileId: 'bp-baroda-fashion',
     fabricType: 'Industrial Cotton Canvas',
     quantity: 5000,
     unit: 'yards',
@@ -1169,8 +1161,7 @@ export const mockWorkOrders: WorkOrder[] = [
   {
     id: 'WO-2024-004',
     salesOrderId: 'SO-004',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     fabricType: 'Premium Cotton Blend',
     quantity: 8000,
     unit: 'yards',
@@ -1186,8 +1177,7 @@ export const mockWorkOrders: WorkOrder[] = [
   {
     id: 'WO-2024-005',
     salesOrderId: 'SO-005',
-    customerId: 'surat-silk-mills',
-    customerName: 'Surat Silk Mills',
+    businessProfileId: 'bp-gujarat-garments',
     fabricType: 'Cotton-Silk Blend Fabric',
     quantity: 3000,
     unit: 'yards',
@@ -1455,7 +1445,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     proformaInvoiceId: 'PI-2024-001',
     quoteId: 'QT-001',
     leadId: 'L-001',
-    businessProfileId: 'rajesh-textiles',
+    businessProfileId: 'bp-gujarat-garments',
     amount: 971250,
     dueDate: 'April 2, 2024',
     status: 'received',
@@ -1469,7 +1459,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     proformaInvoiceId: 'PI-2024-002',
     quoteId: 'QT-004',
     leadId: 'L-004',
-    businessProfileId: 'morbi-cotton-mills',
+    businessProfileId: 'bp-baroda-fashion',
     amount: 259875,
     dueDate: 'April 10, 2024',
     status: 'received',
@@ -1483,7 +1473,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     proformaInvoiceId: 'PI-2024-003',
     quoteId: 'QT-005',
     leadId: 'L-005',
-    businessProfileId: 'bhavnagar-export-house',
+    businessProfileId: 'bp-gujarat-garments',
     amount: 3853500,
     dueDate: 'April 15, 2024',
     status: 'pending',
@@ -1494,7 +1484,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     proformaInvoiceId: 'PI-2024-004',
     quoteId: 'QT-006',
     leadId: 'L-006',
-    businessProfileId: 'gujarat-fabrics',
+    businessProfileId: 'bp-baroda-fashion',
     amount: 750000,
     dueDate: 'April 20, 2024',
     status: 'received',
@@ -1510,8 +1500,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
   {
     id: 'INV-2024-001',
     salesOrderId: 'SO-004',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'April 26, 2024',
     dueDate: 'May 11, 2024',
     subtotal: 1500000,
@@ -1527,8 +1516,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
   {
     id: 'INV-2024-002',
     salesOrderId: 'SO-002',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'April 12, 2024',
     dueDate: 'April 27, 2024',
     subtotal: 1100000,
@@ -1544,8 +1532,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
   {
     id: 'INV-2024-003',
     salesOrderId: 'SO-001',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'April 16, 2024',
     dueDate: 'May 1, 2024',
     subtotal: 1850000,
@@ -1560,8 +1547,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
   {
     id: 'INV-2024-004',
     salesOrderId: 'SO-003',
-    customerId: 'morbi-cotton-mills',
-    customerName: 'Morbi Cotton Mills',
+    businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'April 21, 2024',
     dueDate: 'May 6, 2024',
     subtotal: 825000,
@@ -1580,8 +1566,7 @@ export const mockFinalPayments: FinalPayment[] = [
   {
     id: 'FP-2024-001',
     finalInvoiceId: 'INV-2024-001',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     amount: 825000,
     paymentDate: 'May 8, 2024',
     paymentMethod: 'RTGS',
@@ -1592,8 +1577,7 @@ export const mockFinalPayments: FinalPayment[] = [
   {
     id: 'FP-2024-002',
     finalInvoiceId: 'INV-2024-002',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     amount: 605000,
     paymentDate: 'April 25, 2024',
     paymentMethod: 'RTGS',
@@ -1607,8 +1591,7 @@ export const mockFinalPayments: FinalPayment[] = [
 export const mockCustomerFeedback: CustomerFeedback[] = [
   {
     id: 'CF-2024-001',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-004',
     feedbackDate: 'May 10, 2024',
     overallRating: 5,
@@ -1622,8 +1605,7 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
   },
   {
     id: 'CF-2024-002',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     salesOrderId: 'SO-002',
     feedbackDate: 'April 30, 2024',
     overallRating: 4,
@@ -1637,8 +1619,7 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
   },
   {
     id: 'CF-2024-003',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    businessProfileId: 'bp-gujarat-garments',
     salesOrderId: 'SO-001',
     feedbackDate: 'April 20, 2024',
     overallRating: 4,
@@ -1652,8 +1633,7 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
   },
   {
     id: 'CF-2024-004',
-    customerId: 'morbi-cotton-mills',
-    customerName: 'Morbi Cotton Mills',
+    businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-003',
     feedbackDate: 'April 25, 2024',
     overallRating: 4,
@@ -1667,8 +1647,7 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
   },
   {
     id: 'CF-2024-005',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-001-PREV',
     feedbackDate: 'February 15, 2024',
     overallRating: 4,
@@ -1686,8 +1665,7 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
 export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   {
     id: 'LT-2024-001',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     transactionDate: 'May 10, 2024',
     type: 'earned',
     points: 150,
@@ -1698,8 +1676,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-002',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     transactionDate: 'April 26, 2024',
     type: 'earned',
     points: 75,
@@ -1709,8 +1686,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-003',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     transactionDate: 'April 30, 2024',
     type: 'earned',
     points: 110,
@@ -1721,8 +1697,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-004',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     transactionDate: 'April 12, 2024',
     type: 'earned',
     points: 55,
@@ -1732,8 +1707,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-005',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    businessProfileId: 'bp-gujarat-garments',
     transactionDate: 'April 20, 2024',
     type: 'earned',
     points: 100,
@@ -1744,8 +1718,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-006',
-    customerId: 'morbi-cotton-mills',
-    customerName: 'Morbi Cotton Mills',
+    businessProfileId: 'bp-baroda-fashion',
     transactionDate: 'April 25, 2024',
     type: 'earned',
     points: 85,
@@ -1756,8 +1729,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-007',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     transactionDate: 'March 15, 2024',
     type: 'redeemed',
     points: 200,
@@ -1767,8 +1739,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-008',
-    customerId: 'gujarat-fabrics',
-    customerName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-baroda-fashion',
     transactionDate: 'February 15, 2024',
     type: 'earned',
     points: 120,
@@ -1778,8 +1749,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-009',
-    customerId: 'ahmedabad-mills',
-    customerName: 'Ahmedabad Cotton Mills',
+    businessProfileId: 'bp-gujarat-garments',
     transactionDate: 'January 15, 2024',
     type: 'earned',
     points: 50,
@@ -1788,8 +1758,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   },
   {
     id: 'LT-2024-010',
-    customerId: 'rajesh-textiles',
-    customerName: 'Rajesh Textiles',
+    businessProfileId: 'bp-gujarat-garments',
     transactionDate: 'March 1, 2024',
     type: 'earned',
     points: 300,
@@ -1873,8 +1842,13 @@ export const getFinalInvoicesBySalesOrderId = (salesOrderId: string): FinalInvoi
   return mockFinalInvoices.filter(inv => inv.salesOrderId === salesOrderId);
 };
 
+export const getFinalPaymentsByBusinessProfileId = (businessProfileId: string): FinalPayment[] => {
+  return mockFinalPayments.filter(fp => fp.businessProfileId === businessProfileId);
+};
+
+// Legacy compatibility function
 export const getFinalPaymentsByCustomerId = (customerId: string): FinalPayment[] => {
-  return mockFinalPayments.filter(fp => fp.customerId === customerId);
+  return getFinalPaymentsByBusinessProfileId(customerId);
 };
 
 // Customer Experience Functions
@@ -1882,8 +1856,13 @@ export const getCustomerFeedbackByOrderId = (salesOrderId: string): CustomerFeed
   return mockCustomerFeedback.find(cf => cf.salesOrderId === salesOrderId);
 };
 
+export const getCustomerFeedbackByBusinessProfileId = (businessProfileId: string): CustomerFeedback[] => {
+  return mockCustomerFeedback.filter(cf => cf.businessProfileId === businessProfileId);
+};
+
+// Legacy compatibility function
 export const getCustomerFeedbackByCustomerId = (customerId: string): CustomerFeedback[] => {
-  return mockCustomerFeedback.filter(cf => cf.customerId === customerId);
+  return getCustomerFeedbackByBusinessProfileId(customerId);
 };
 
 export const getAverageCustomerRating = (customerId: string): number => {
@@ -1894,8 +1873,13 @@ export const getAverageCustomerRating = (customerId: string): number => {
 };
 
 // Loyalty Program Functions
+export const getLoyaltyTransactionsByBusinessProfileId = (businessProfileId: string): LoyaltyTransaction[] => {
+  return mockLoyaltyTransactions.filter(lt => lt.businessProfileId === businessProfileId);
+};
+
+// Legacy compatibility function
 export const getLoyaltyTransactionsByCustomerId = (customerId: string): LoyaltyTransaction[] => {
-  return mockLoyaltyTransactions.filter(lt => lt.customerId === customerId);
+  return getLoyaltyTransactionsByBusinessProfileId(customerId);
 };
 
 export const getCustomerLoyaltyPoints = (customerId: string): number => {
