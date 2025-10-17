@@ -13,7 +13,7 @@
   display: flex;
   height: 48px;
   background: white;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid var(--ds-border-primary);
   grid-row: 1;
 }
 
@@ -22,36 +22,49 @@
   height: 48px;
   border: none;
   background: transparent;
-  color: #6B7280;
+  color: var(--ds-text-secondary);
   font-family: var(--font-family);
-  font-size: 16px;
+  font-size: var(--font-base);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  border-bottom: 3px solid transparent;
+  letter-spacing: 0.02em;
 }
 
 .tabButton.active {
-  color: #1D4ED8; /* Visual Design Spec primary */
-  border-bottom: 2px solid #1D4ED8;
-  background: rgba(29, 78, 216, 0.05);
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background: var(--ds-bg-priority-low-subtle);
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
 }
 
 .tabButton:hover:not(.active) {
-  background: rgba(107, 114, 128, 0.05);
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  transform: translateY(-0.5px);
+}
+
+.tabButton:active {
+  transform: translateY(0);
+  transition: all 0.1s;
 }
 
 /* 44px Business Filters */
 .salesFilters {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--ds-space-sm);
   height: 44px;
-  padding: 0 16px;
-  background: #F9FAFB;
-  border-bottom: 1px solid #E5E7EB;
+  padding: 0 var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border-bottom: 1px solid var(--ds-border-primary);
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -67,23 +80,23 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 12px;
+  gap: var(--ds-space-sm);
 }
 
 .filterDropdowns {
   display: flex;
-  gap: 12px;
+  gap: var(--ds-space-sm);
   align-items: center;
 }
 
 .filterDropdown {
   height: 32px;
-  padding: 6px 12px;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
   background: white;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 14px;
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -97,26 +110,26 @@
 }
 
 .filterDropdown:hover {
-  background-color: #F3F4F6;
-  border-color: #9CA3AF;
+  background-color: var(--ds-bg-hover);
+  border-color: var(--ds-border-hover);
 }
 
 .filterDropdown:focus {
   outline: none;
-  border-color: #1D4ED8;
-  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.1);
+  border-color: var(--ds-primary);
+  box-shadow: 0 0 0 2px var(--ds-focus-ring);
 }
 
 .countIndicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  background: #F3F4F6;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 14px;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
   font-weight: 600;
   min-height: 32px;
   white-space: nowrap;
@@ -140,9 +153,9 @@
 /* 56px Fixed Bottom CTA - Grid Positioned */
 .salesCTA {
   height: 56px;
-  padding: 8px 16px;
+  padding: var(--ds-space-sm) var(--ds-space-md);
   background: white;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid var(--ds-border-primary);
   display: flex;
   align-items: center;
   z-index: 10;
@@ -153,11 +166,11 @@
 .salesCTAButton {
   width: 100%;
   height: 40px;
-  background: #1D4ED8;
+  background: var(--ds-primary);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
@@ -168,41 +181,41 @@
 }
 
 .salesCTAButton:hover {
-  background: #1E40AF;
+  background: var(--ds-primary-hover);
 }
 
 .salesCTAButton:active {
-  background: #1E3A8A;
+  background: var(--ds-primary-active);
   transform: translateY(1px);
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .salesFilters {
-    padding: 0 12px;
+    padding: 0 var(--ds-space-sm);
   }
   
   .filterBtn {
-    padding: 4px 8px;
-    font-size: 12px;
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+    font-size: var(--font-xs);
   }
   
   .salesCTA {
-    padding: 8px 12px;
+    padding: var(--ds-space-sm) var(--ds-space-sm);
   }
   
   .tabButton {
-    font-size: 14px;
+    font-size: var(--font-sm);
   }
 }
 
 /* Specific content type classes instead of broad selector */
 .tabContentWithPadding {
-  padding: 16px;
+  padding: var(--ds-space-md);
 }
 
 .listContent {
-  padding: 16px 10px 0 10px;  /* For list components like leads */
+  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);  /* For list components like leads */
 }
 
 /* Clean component integration - no !important needed */

@@ -251,9 +251,6 @@ function Invoices({
             filteredInvoices.map(invoice => {
               const statusInfo = getInvoiceStatusInfo(invoice.status);
               
-              // Determine customer status for visual differentiation
-              const businessProfile = getBusinessProfileById(invoice.businessProfileId);
-              const isCustomer = businessProfile?.customerStatus === 'customer';
               
               return (
                 <div key={invoice.id} className={styles.invoiceCardContainer} data-invoice-id={invoice.id}>
@@ -272,7 +269,7 @@ function Invoices({
                     
                     {/* Template Status */}
                     <div className={styles.cardStatus}>
-                      Status: {statusInfo.icon} {statusInfo.label} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                      {invoice.type === 'proforma' ? '📋 Proforma' : '📄 Final'} • {statusInfo.icon} {statusInfo.label}
                     </div>
                     
                     {/* Template Meta - Business Critical Information */}

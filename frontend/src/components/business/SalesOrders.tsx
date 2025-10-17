@@ -150,7 +150,7 @@ function SalesOrders({
                 
                 {/* Template Status */}
                 <div className={styles.cardStatus}>
-                  Status: {statusIcons[order.status]} {statusLabels[order.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                  {statusIcons[order.status]} {statusLabels[order.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
                 </div>
                 
                 {/* Template Meta - 2 lines */}

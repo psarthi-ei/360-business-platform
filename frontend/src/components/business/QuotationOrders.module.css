@@ -13,17 +13,16 @@
 
 .quotationOrdersScreen .languageSwitcher {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: var(--ds-space-lg);
+  right: var(--ds-space-lg);
   z-index: 10;
 }
 
 
-/* REMOVED: Duplicate addButton CSS - migrated to Design System V2 below */
 .backButton {
-  padding: 12px 24px;
+  padding: var(--ds-space-sm) var(--ds-space-xl);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
@@ -72,7 +71,7 @@
 .filtersSection {
   max-width: 1400px;
   margin: 0 auto 30px auto;
-  padding: 20px 10px;
+  padding: var(--ds-space-lg) var(--ds-space-sm);
   background: var(--gradient-card, rgba(255, 255, 255, 0.05));
   border-radius: var(--radius-large, 16px);
   border: 1px solid var(--color-primary, rgba(255, 255, 255, 0.1));
@@ -80,13 +79,13 @@
 
 .filterButtons {
   display: flex;
-  gap: 12px;
+  gap: var(--ds-space-sm);
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .filterBtn {
-  padding: 12px 20px;
+  padding: var(--ds-space-sm) var(--ds-space-lg);
   border: 2px solid var(--color-primary, rgba(255, 255, 255, 0.2));
   border-radius: var(--radius-large, 25px);
   background: var(--gradient-card, rgba(255, 255, 255, 0.08));
@@ -107,7 +106,7 @@
 }
 
 .filterBtn.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  background: linear-gradient(135deg, var(--ds-warning), var(--ds-warning-light));
   color: var(--color-secondary, #1e3c72);
   border-color: var(--color-primary, #ffd700);
   font-weight: 700;
@@ -120,7 +119,7 @@
   margin: 0 auto;
   padding: 0 10px;
   display: grid;
-  gap: 12px;
+  gap: var(--ds-space-sm);
   margin-bottom: 20px;
 }
 
@@ -150,19 +149,19 @@
 }
 
 .statusBadge.pending {
-  background: linear-gradient(135deg, var(--ds-status-pending), #ff9500);
+  background: linear-gradient(135deg, var(--ds-status-pending), var(--ds-warning));
   color: var(--color-text, white);
   box-shadow: 0 4px 15px var(--ds-hover-priority-medium);
 }
 
 .statusBadge.approved {
-  background: linear-gradient(135deg, var(--ds-status-active), #20bf6b);
+  background: linear-gradient(135deg, var(--ds-status-active), var(--ds-success));
   color: var(--color-text, white);
   box-shadow: 0 4px 15px var(--ds-hover-status-active);
 }
 
 .statusBadge.expired {
-  background: linear-gradient(135deg, var(--ds-priority-high), #ff3742);
+  background: linear-gradient(135deg, var(--ds-priority-high), var(--ds-danger));
   color: var(--color-text, white);
   box-shadow: 0 4px 15px var(--ds-hover-priority-high);
 }
@@ -201,9 +200,7 @@
   margin-top: var(--ds-space-md);
 }
 
-/* REMOVED: All button classes migrated to global .ds-btn system in index.css */
 
-/* REMOVED: Voice commands CSS migrated to global .ds-voice-commands system in index.css */
 
 
 .customerStatusBadge {
@@ -218,14 +215,14 @@
 }
 
 .customerBadge {
-  background: linear-gradient(135deg, var(--ds-status-active), #45a049);
+  background: linear-gradient(135deg, var(--ds-status-active), var(--ds-success-dark));
   color: white;
   border-color: var(--ds-status-active);
   box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .prospectBadge {
-  background: linear-gradient(135deg, var(--ds-status-inactive), #757575);
+  background: linear-gradient(135deg, var(--ds-status-inactive), var(--ds-text-disabled));
   color: white;
   border-color: var(--ds-status-inactive);
   box-shadow: 0 2px 8px rgba(158, 158, 158, 0.3);
@@ -236,7 +233,7 @@
   background: var(--gradient-card, rgba(255, 255, 255, 0.05));
   padding: 15px;
   margin: 15px 0;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   border-left: 4px solid var(--color-primary, #ffd700);
 }
 
@@ -268,7 +265,6 @@
 /* pageContent wrapper - no styling to match LeadManagement behavior */
 
 
-/* REMOVED: Unified header CSS migrated to App.css (common patterns) */
 
 /* Unified Header Pattern Components */
 .filterDropdownContainer {
@@ -278,7 +274,6 @@
   min-width: 0;
 }
 
-/* REMOVED: Filter dropdown CSS migrated to global .ds-filter-dropdown system in index.css */
 
 .quoteCounter {
   font-size: var(--font-sm);
@@ -356,17 +351,16 @@
 
 /* Workflow Action Button Styles */
 .actionBtn.checkBtn {
-  background: #3742fa;
+  background: var(--ds-secondary);
   color: white;
 }
 
 .actionBtn.checkBtn:hover {
-  background: #2f3542;
+  background: var(--ds-secondary-dark);
   transform: translateY(-2px);
 }
 
 
-/* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
 /* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
 .quoteCardContainer {
@@ -377,9 +371,9 @@
   height: 140px;                    /* Template fixed height */
   padding: 16px;                    /* Symmetric padding for professional look */
   background: white;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--ds-border-primary);
   border-left: 4px solid;           /* Status color applied by quote status classes */
   display: flex;
   flex-direction: column;
@@ -396,7 +390,7 @@
 .quoteCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
+  box-shadow: 0 0 0 1px var(--ds-primary);        /* Subtle highlight when expanded */
   position: relative;
   z-index: 1;                           /* Ensure card stays above others */
 }
@@ -405,7 +399,7 @@
 .cardHeader {
   font-size: 20px;                 /* Visual Design Spec exact */
   font-weight: 600;
-  color: #111827;                  /* Visual Design Spec exact */
+  color: var(--ds-text-primary);                  /* Visual Design Spec exact */
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
   line-height: 1.2;                /* Tighter line height for single line */
   overflow: hidden;
@@ -419,7 +413,7 @@
   font-size: 16px;                 /* Visual Design Spec exact */
   font-weight: 500;
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  color: #374151;
+  color: var(--ds-text-secondary);
   line-height: 1.3;
   flex-shrink: 0;                  /* Prevent status compression */
   height: 21px;                    /* Fixed height for consistency */
@@ -430,7 +424,7 @@
 
 .cardMeta {
   font-size: 14px;                 /* Visual Design Spec exact */
-  color: #6B7280;                  /* Visual Design Spec exact */
+  color: var(--ds-text-tertiary);                  /* Visual Design Spec exact */
   margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
   line-height: 1.2;                /* Tighter line height for 2-line content */
   overflow: hidden;
@@ -443,7 +437,7 @@
 
 .expandIndicator {
   font-size: 12px;
-  color: #1D4ED8;
+  color: var(--ds-primary);
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.2s ease;
@@ -457,7 +451,7 @@
 .quoteCard:hover .expandIndicator {
   opacity: 1;
   background: rgba(29, 78, 216, 0.15);
-  color: #1D4ED8;
+  color: var(--ds-primary);
 }
 
 /* Update customer/prospect card styling */
@@ -473,10 +467,10 @@
 
 /* Workflow Message Styles */
 .workflowMessage {
-  background: linear-gradient(135deg, var(--ds-status-active), #1dd1a1);
+  background: linear-gradient(135deg, var(--ds-status-active), var(--ds-success-light));
   color: white;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   margin-top: 12px;
   font-size: var(--font-sm);
   font-weight: 500;

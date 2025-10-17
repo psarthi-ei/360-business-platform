@@ -20,7 +20,7 @@
 .invoicesContainer {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 var(--ds-space-sm);
   display: grid;
   gap: var(--ds-space-sm);
   margin-bottom: var(--ds-space-lg);
@@ -54,7 +54,7 @@
 .invoiceCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 0 0 1px var(--color-primary);
+  box-shadow: 0 0 0 1px var(--ds-primary);
   position: relative;
   z-index: 1;
 }
@@ -74,22 +74,22 @@
 }
 
 .cardStatus {
-  font-size: 16px;
+  font-size: var(--font-base);
   font-weight: 500;
-  margin: 0 0 6px 0;
-  color: #374151;
+  margin: 0 0 var(--ds-space-xs) 0;
+  color: var(--ds-text-secondary);
   line-height: 1.3;
   flex-shrink: 0;
   height: 21px;
   display: flex;
-  gap: 8px;
+  gap: var(--ds-space-sm);
   align-items: center;
 }
 
 .cardMeta {
-  font-size: 14px;
-  color: #6B7280;
-  margin: 2px 0 8px 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-tertiary);
+  margin: 2px 0 var(--ds-space-sm) 0;
   line-height: 1.2;
   overflow: hidden;
   display: -webkit-box;
@@ -101,7 +101,7 @@
 
 .expandIndicator {
   font-size: 12px;
-  color: #1D4ED8;
+  color: var(--ds-primary);
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.2s ease;
@@ -114,33 +114,33 @@
 
 .invoiceCard:hover .expandIndicator {
   opacity: 1;
-  background: rgba(29, 78, 216, 0.15);
-  color: #1D4ED8;
+  background: var(--ds-primary-subtle);
+  color: var(--ds-primary);
 }
 
 /* Status-based border colors */
 .pendingInvoice {
-  border-left-color: #F59E0B;
+  border-left-color: var(--ds-warning);
 }
 
 .paidInvoice {
-  border-left-color: #10B981;
+  border-left-color: var(--ds-success);
 }
 
 .payment_receivedInvoice {
-  border-left-color: #10B981;
+  border-left-color: var(--ds-success);
 }
 
 .overdueInvoice {
-  border-left-color: #EF4444;
+  border-left-color: var(--ds-danger);
 }
 
 .sentInvoice {
-  border-left-color: #3B82F6;
+  border-left-color: var(--ds-primary);
 }
 
 .expiredInvoice {
-  border-left-color: #EF4444;
+  border-left-color: var(--ds-danger);
 }
 
 /* Expanded Section Styling */
@@ -176,10 +176,10 @@
 .invoiceDetailsSection h4,
 .relationshipSection h4 {
   margin: 0 0 12px 0;
-  font-size: 16px;
+  font-size: var(--font-base);
   font-weight: 600;
-  color: #111827;
-  border-bottom: 2px solid #E5E7EB;
+  color: var(--ds-text-primary);
+  border-bottom: 2px solid var(--ds-border-primary);
   padding-bottom: 8px;
 }
 
@@ -192,7 +192,7 @@
 
 .detailsGrid p {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-sm);
   color: var(--ds-text-primary);
   text-align: left !important;
 }
@@ -202,7 +202,7 @@
 }
 
 .mappingLink {
-  color: #1D4ED8;
+  color: var(--ds-primary);
   cursor: pointer;
   text-decoration: none;
   font-weight: 500;
@@ -216,10 +216,10 @@
 /* Action Buttons */
 .expandedActions {
   display: flex;
-  gap: 8px;
+  gap: var(--ds-space-sm);
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 2px solid #E5E7EB;
+  border-top: 2px solid var(--ds-border-primary);
   flex-wrap: wrap;
 }
 
@@ -307,6 +307,6 @@
 
   .detailsGrid {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: var(--ds-space-sm);
   }
 }

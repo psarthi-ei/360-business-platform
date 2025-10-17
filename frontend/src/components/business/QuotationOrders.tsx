@@ -249,7 +249,7 @@ function QuotationOrders({
                 
                 {/* Template Status */}
                 <div className={styles.cardStatus}>
-                  Status: {statusIcons[quote.status]} {statusLabels[quote.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                  {statusIcons[quote.status]} {statusLabels[quote.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
                 </div>
                 
                 {/* Template Meta - 2 lines */}

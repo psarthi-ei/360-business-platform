@@ -221,7 +221,7 @@ function LeadManagement({
                 
                 {/* Visual Design Spec Status */}
                 <div className={styles.cardStatus}>
-                  Status: {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
+                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
                 </div>
                 
                 {/* Visual Design Spec Meta */}

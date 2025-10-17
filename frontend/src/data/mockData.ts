@@ -1522,6 +1522,20 @@ export const mockAdvancePayments: AdvancePayment[] = [
     receivedAmount: 750000,
     bankReference: 'ICICI240331RT13579',
     paymentMethod: 'RTGS'
+  },
+  {
+    id: 'AP-2024-005',
+    proformaInvoiceId: 'PI-2024-005',
+    quoteId: 'QT-002',
+    leadId: 'L-002',
+    businessProfileId: 'bp-gujarat-garments',
+    amount: 630000,
+    dueDate: 'October 12, 2025',
+    status: 'received',
+    receivedDate: 'October 10, 2025',
+    receivedAmount: 630000,
+    bankReference: 'HDFC251010RT24681',
+    paymentMethod: 'RTGS'
   }
 ];
 

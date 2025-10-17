@@ -437,7 +437,6 @@
   }
 }
 
-/* REMOVED: Voice commands CSS migrated to global .ds-voice-commands system in index.css */
 
 /* Data Mapping Styles */
 .leadMapping {
@@ -484,7 +483,6 @@
   margin-top: var(--ds-space-md);
 }
 
-/* REMOVED: All button classes migrated to global .ds-btn system in index.css */
 
 
 /* Essential Preview Section */
@@ -503,7 +501,6 @@
   line-height: 1.4;
 }
 
-/* REMOVED: Expanded details CSS migrated to global .ds-expanded-details system in index.css */
 
 /* Component-specific styling for action buttons in expanded sections */
 .expandedActions {
