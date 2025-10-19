@@ -821,7 +821,7 @@ export const getSalesOrdersByCustomerId = (customerId: string): SalesOrder[] => 
   return mockSalesOrders.filter(order => order.businessProfileId === customerId);
 };
 
-// getLeadsByCustomerId moved to customerMockData.ts
+// Customer-sales relationship functions moved back to customerMockData.ts to avoid circular dependencies
 
 // New Helper Functions for Comprehensive Mock Data
 

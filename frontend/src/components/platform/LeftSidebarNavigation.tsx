@@ -62,7 +62,7 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
     }
     
     if (path === '/platform/procurement') {
-      return ['/platform/procurement', '/platform/purchase-orders', '/platform/inventory', '/platform/suppliers'].includes(currentPath);
+      return ['/platform/procurement', '/platform/purchase-orders', '/platform/suppliers'].includes(currentPath);
     }
     
     if (path === '/platform/customers') {

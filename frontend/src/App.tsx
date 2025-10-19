@@ -11,12 +11,7 @@ import SalesOrders from './components/business/SalesOrders';
 import Sales from './components/business/Sales';
 import Payments from './components/business/Payments';
 import Invoices from './components/business/Invoices';
-import CustomerList from './components/business/CustomerList';
-import CustomerProfile from './components/business/CustomerProfile';
 import ExternalProfileForm, { BusinessProfileFormData } from './components/auth/ExternalProfileForm';
-import InventoryManagement from './components/business/InventoryManagement';
-import FulfillmentManagement from './components/business/FulfillmentManagement';
-import AnalyticsManagement from './components/business/AnalyticsManagement';
 import Production from './components/business/Production';
 import Procurement from './components/business/Procurement';
 import Customers from './components/business/Customers';
@@ -69,9 +64,6 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/platform/invoices') return 'invoices';
   if (pathname.startsWith('/platform/customers/')) return 'customerprofile';
   if (pathname === '/platform/customers') return 'customers';
-  if (pathname === '/platform/inventory') return 'inventory';
-  if (pathname === '/platform/fulfillment') return 'fulfillment';
-  if (pathname === '/platform/analytics') return 'analytics';
   if (pathname === '/platform/sales') return 'sales';
   if (pathname === '/platform/production') return 'production';
   if (pathname === '/platform/procurement') return 'procurement';
@@ -94,8 +86,6 @@ function AppContent() {
   const [orderFilter, setOrderFilter] = useState('all');
   const [paymentFilter, setPaymentFilter] = useState('all');
   const [invoiceFilter, setInvoiceFilter] = useState('all');
-  const [customerSearch, setCustomerSearch] = useState('');
-  const [selectedCustomerId, setSelectedCustomerId] = useState('rajesh-textiles');
   const [profileLinkId] = useState('');
   const [profileQuoteId] = useState('');
   
@@ -112,7 +102,6 @@ function AppContent() {
 
   // Shared navigation helpers - single source of truth
   const navigationHelpers = createNavigationHelpers(navigate, {
-    setSelectedCustomerId,
     setServicesHubResetKey,
     setCurrentBlogPostSlug
   });
@@ -188,9 +177,6 @@ function AppContent() {
     if (path.startsWith('/blog/')) {
       const slug = path.replace('/blog/', '');
       setCurrentBlogPostSlug(slug);
-    } else if (path.startsWith('/customers/')) {
-      const customerId = path.replace('/customers/', '');
-      setSelectedCustomerId(customerId);
     }
   }, [location.pathname]);
 
@@ -352,26 +338,7 @@ function AppContent() {
     );
   }
 
-  function renderCustomerProfile() {
-    return (
-      <CustomerProfile
-        customerId={selectedCustomerId}
-      />
-    );
-  }
 
-  function renderCustomerList() {
-    return (
-      <div className="platformPageContent">
-        <CustomerList
-          mobile={isMobile}
-          onShowCustomerProfile={showCustomerProfileWithState}
-          customerSearch={customerSearch}
-          onCustomerSearchChange={setCustomerSearch}
-        />
-      </div>
-    );
-  }
 
   function renderAuthentication() {
     return (
@@ -425,30 +392,8 @@ function AppContent() {
     );
   }
 
-  function renderInventoryManagement() {
-    return (
-      <InventoryManagement
-        onBackToDashboard={showDashboard}
-      />
-    );
-  }
 
-  function renderFulfillmentManagement() {
-    return (
-      <FulfillmentManagement
-        onBackToDashboard={showDashboard}
-      />
-    );
-  }
 
-  function renderAnalyticsManagement() {
-    return (
-      <AnalyticsManagement
-        mobile={isMobile}
-        onBackToDashboard={showDashboard}
-      />
-    );
-  }
 
   function renderProduction() {
     return (
@@ -588,11 +533,6 @@ function AppContent() {
     renderSalesOrders,
     renderPayments,
     renderInvoices,
-    renderCustomerList,
-    renderCustomerProfile,
-    renderInventoryManagement,
-    renderFulfillmentManagement,
-    renderAnalyticsManagement,
     renderProduction,
     renderProcurement,
     renderCustomers,

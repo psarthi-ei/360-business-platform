@@ -23,7 +23,6 @@ Disallow: /customerprofile
 Disallow: /customerlist
 Disallow: /inventory
 Disallow: /fulfillment
-Disallow: /analytics
 
 # Sitemap location
 Sitemap: https://elevateidea.com/sitemap.xml

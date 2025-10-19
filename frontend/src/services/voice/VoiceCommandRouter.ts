@@ -56,11 +56,13 @@ export class VoiceCommandRouter {
         break;
       case 'NAVIGATE_TO_INVENTORY':
       case 'SHOW_INVENTORY':
-        this.navigate('/inventory');
+      case 'NAVIGATE_TO_PROCUREMENT':
+      case 'SHOW_PROCUREMENT':
+        this.navigate('/procurement');
         break;
       case 'NAVIGATE_TO_ANALYTICS':
       case 'SHOW_ANALYTICS':
-        this.navigate('/analytics');
+        this.navigate('/production');
         break;
 
       // ============================================================================
@@ -129,12 +131,14 @@ export class VoiceCommandRouter {
         }
         break;
 
-      // Inventory Management Actions
+      // Procurement Management Actions (formerly Inventory)
       case 'UPDATE_INVENTORY':
-        this.navigate('/inventory?action=update-inventory');
+      case 'UPDATE_PROCUREMENT':
+        this.navigate('/procurement?action=update-inventory');
         break;
       case 'ADD_NEW_ITEM':
-        this.navigate('/inventory?action=add-item');
+      case 'ADD_PROCUREMENT_ITEM':
+        this.navigate('/procurement?action=add-item');
         break;
 
       // Invoice Management Actions
@@ -149,12 +153,12 @@ export class VoiceCommandRouter {
         }
         break;
 
-      // Analytics Actions
+      // Analytics Actions - redirected to production
       case 'GENERATE_REPORT':
-        this.navigate('/analytics?action=generate-report');
+        this.navigate('/production?action=generate-report');
         break;
       case 'EXPORT_DATA':
-        this.navigate('/analytics?action=export-data');
+        this.navigate('/production?action=export-data');
         break;
 
       // ============================================================================
@@ -187,8 +191,7 @@ export class VoiceCommandRouter {
         'NAVIGATE_TO_DASHBOARD', 'NAVIGATE_TO_LEADS', 'SHOW_LEADS',
         'NAVIGATE_TO_QUOTES', 'SHOW_QUOTES', 'NAVIGATE_TO_ORDERS', 'SHOW_ORDERS',
         'NAVIGATE_TO_PAYMENTS', 'SHOW_PAYMENTS', 'NAVIGATE_TO_INVOICES', 'SHOW_INVOICES',
-        'NAVIGATE_TO_CUSTOMERS', 'SHOW_CUSTOMERS', 'NAVIGATE_TO_INVENTORY', 'SHOW_INVENTORY',
-        'NAVIGATE_TO_ANALYTICS', 'SHOW_ANALYTICS'
+        'NAVIGATE_TO_CUSTOMERS', 'SHOW_CUSTOMERS', 'NAVIGATE_TO_INVENTORY', 'SHOW_INVENTORY', 'NAVIGATE_TO_PROCUREMENT', 'SHOW_PROCUREMENT'
       ],
       'Lead Actions': [
         'ADD_NEW_LEAD', 'SET_PRIORITY'
@@ -205,15 +208,12 @@ export class VoiceCommandRouter {
       'Customer Actions': [
         'ADD_NEW_CUSTOMER', 'UPDATE_CUSTOMER_INFO'
       ],
-      'Inventory Actions': [
-        'UPDATE_INVENTORY', 'ADD_NEW_ITEM'
+      'Procurement Actions': [
+        'UPDATE_INVENTORY', 'UPDATE_PROCUREMENT', 'ADD_NEW_ITEM', 'ADD_PROCUREMENT_ITEM'
       ],
       'Invoice Actions': [
         'GENERATE_INVOICE', 'SEND_INVOICE'
       ],
-      'Analytics Actions': [
-        'GENERATE_REPORT', 'EXPORT_DATA'
-      ]
     };
   }
 

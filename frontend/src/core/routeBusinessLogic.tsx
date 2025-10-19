@@ -11,11 +11,6 @@ export interface RenderFunctions {
   renderSalesOrders: () => React.ReactElement;
   renderPayments: () => React.ReactElement;
   renderInvoices: () => React.ReactElement;
-  renderCustomerList: () => React.ReactElement;
-  renderCustomerProfile: () => React.ReactElement;
-  renderInventoryManagement: () => React.ReactElement;
-  renderFulfillmentManagement: () => React.ReactElement;
-  renderAnalyticsManagement: () => React.ReactElement;
   renderProduction: () => React.ReactElement;
   renderProcurement: () => React.ReactElement;
   renderCustomers: () => React.ReactElement;
@@ -43,10 +38,6 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
     <Route key="payments" path="payments" element={renderFunctions.renderPayments()} />,
     <Route key="invoices" path="invoices" element={renderFunctions.renderInvoices()} />,
     <Route key="customers" path="customers" element={renderFunctions.renderCustomers()} />,
-    <Route key="customers/:customerId" path="customers/:customerId" element={renderFunctions.renderCustomerProfile()} />,
-    <Route key="inventory" path="inventory" element={renderFunctions.renderInventoryManagement()} />,
-    <Route key="fulfillment" path="fulfillment" element={renderFunctions.renderFulfillmentManagement()} />,
-    <Route key="analytics" path="analytics" element={renderFunctions.renderAnalyticsManagement()} />,
     
     <Route key="sales" path="sales" element={renderFunctions.renderSales()} />,
     <Route key="production" path="production" element={renderFunctions.renderProduction()} />,

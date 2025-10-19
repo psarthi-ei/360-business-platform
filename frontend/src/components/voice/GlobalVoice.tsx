@@ -196,10 +196,6 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
         'स्टॉक चेक करें',
         'સ્ટોક ચેક કરો'
       ],
-      'fulfillment': [
-        'शिपमेंट तैयार करें',
-        'શિપિંગ સ્ટેટસ બતાવો'
-      ],
       'customers': [
         'कस्टमर प्रोफाइल देखें',
         'વીઆઈપી ગ્રાહકો શોધો'
@@ -255,16 +251,13 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
         actionType = 'NAVIGATE_TO_INVOICES';
         break;
       case 'inventory':
-        actionType = 'NAVIGATE_TO_INVENTORY';
+        actionType = 'NAVIGATE_TO_PROCUREMENT';
         break;
       case 'analytics':
         actionType = 'NAVIGATE_TO_ANALYTICS';
         break;
       case 'production':
         actionType = 'NAVIGATE_TO_ORDERS'; // Production is handled by orders page
-        break;
-      case 'fulfillment':
-        actionType = 'NAVIGATE_TO_FULFILLMENT';
         break;
       case 'dashboard':
         actionType = 'NAVIGATE_TO_DASHBOARD';
@@ -1062,8 +1055,7 @@ const GlobalVoice = forwardRef<VoiceControlRef, GlobalVoiceProps>(function Globa
       'quotes': '📋 Quotations Context',
       'payments': '💰 Payments Context',
       'production': '🏭 Production Context',
-      'inventory': '📦 Inventory Context',
-      'fulfillment': '🚚 Fulfillment Context',
+      'inventory': '📦 Procurement Context',
       'customers': '🤝 Customers Context',
       'analytics': '📊 Analytics Context'
     };
