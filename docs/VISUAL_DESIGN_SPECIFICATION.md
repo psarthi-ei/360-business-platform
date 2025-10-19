@@ -77,17 +77,23 @@
 ### **6. Complete Mobile Screen Specifications**
 - [HOME DASHBOARD - Central Command Center](#home-dashboard---central-command-center)
 - [SALES TAB - Revenue Pipeline Management](#sales-tab---revenue-pipeline-management)
-  - [Sales → Orders List (Default View)](#sales--orders-list-default-view)
-  - [Create New Order Flow (3-Step Process)](#create-new-order-flow-3-step-process)
-  - [Payment Recording (Critical Business Gate)](#payment-recording-critical-business-gate)
+  - [Sales Module Overview](#sales-module-overview)
+  - [Leads Tab - Lead Management](#leads-tab---lead-management)
+  - [Quotes Tab - Quotation Management](#quotes-tab---quotation-management)
+  - [Orders Tab - Sales Order Management](#orders-tab---sales-order-management)
+  - [Invoices Tab - Invoice Management](#invoices-tab---invoice-management)
+  - [Sales Navigation Flows & Integration](#sales-navigation-flows--integration)
 - [PRODUCTION TAB - Manufacturing Execution](#production-tab---manufacturing-execution)
   - [Work Orders List](#work-orders-list)
-  - [Work Order Detail (Operator Interface)](#work-order-detail-operator-interface)
+  - [Work Order Detail (Worker Interface)](#work-order-detail-worker-interface)
   - [Quality Control Screen](#quality-control-screen)
 - [PROCUREMENT TAB - Supply Chain Management](#procurement-tab---supply-chain-management)
-  - [Material Requirements (Auto-Generated)](#material-requirements-auto-generated)
-  - [Create Purchase Request](#create-purchase-request)
-  - [Goods Receipt Note (GRN)](#goods-receipt-note-grn)
+  - [Procurement Module Overview](#procurement-module-overview)
+  - [MR Tab - Material Requirements](#mr-tab---material-requirements)
+  - [PRs Tab - Purchase Requests](#prs-tab---purchase-requests)
+  - [POs Tab - Purchase Orders](#pos-tab---purchase-orders)
+  - [GRNs Tab - Goods Receipt Notes](#grns-tab---goods-receipt-notes)
+  - [Inventory Management (Connected Screens)](#inventory-management-connected-screens)
 - [CUSTOMERS TAB - Relationship Management](#customers-tab---relationship-management)
   - [Customer List View](#customer-list-view)
   - [Customer 360° View (Most Important Screen)](#customer-360-view-most-important-screen)
@@ -955,8 +961,190 @@ Key Visual Elements:
 
 ### 💼 **SALES TAB** - Revenue Pipeline Management
 
-#### **Sales → Orders List** (Default View)
+#### **Sales Module Overview**
 
+The Sales module manages the complete Lead-to-Invoice business workflow through 4 integrated sub-tabs. It serves as the primary revenue pipeline management system for textile manufacturers.
+
+**Business Context**: Addresses the daily owner question: "કોણ call કર્યો? કયા leads hot છે? આજે કોને quotes મોકલવા?" (Who called? Which leads are hot? Who should I send quotes to today?)
+
+**Module Structure:**
+```
+💼 SALES (Main Tab)
+├── Leads - Lead capture and qualification (Default landing)
+├── Quotes - Quotation creation and tracking
+├── Orders - Sales order management (after payment)
+└── Invoices - Invoice generation and payment tracking
+```
+
+**Complete Business Flow:**
+```
+📞 Lead Capture → 📋 Quote Creation → 💰 Advance Payment → 
+📦 Sales Order → 🏭 Production → 🚚 Delivery → 💳 Final Invoice
+```
+
+**Cross-Module Integration:**
+- **From Leads**: Hot leads → Customer creation (automated)
+- **From Orders**: Paid orders → Production work orders (automated)
+- **To Procurement**: Order materials → Material requirements (automated)
+- **To Customers**: Order completion → Customer 360° profiles (automated)
+
+---
+
+#### **Leads Tab - Lead Management**
+
+**Purpose**: Capture, qualify, and prioritize leads for quote conversion
+
+**Access Flow**: `💼 Sales → Leads Tab` (Default landing)
+
+##### **Leads List View**
+```
+┌─────────────────────────────────────┐
+│ Sales    [ Leads│Quotes│Orders│Inv ]│ Sub-tabs: 48px
+│ [All▼] [Hot▼] [Warm▼] [Cold▼] [📊12]│ Priority filters: 44px
+├─────────────────────────────────────┤
+│ 🔥 3 HOT LEADS NEED FOLLOW-UP       │ Alert header: 48px
+│                                     │ Red background
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ Suresh Textiles Pvt Ltd         │ │ Company name: 20px
+│ │ Status: 🔥 Hot Lead             │ │ Priority status: 16px
+│ │ Cotton fabric • ₹2.5L           │ │ Requirements: 14px
+│ │ 15 days delivery | Follow: Today│ │ Timeline: 14px
+│ │ [Call] [Quote] [WhatsApp]       │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ Ramesh Mills & Co               │ │
+│ │ Status: 🔶 Warm Lead            │ │ Orange priority
+│ │ Silk blend • Budget ₹1.8L      │ │
+│ │ Follow-up: Tomorrow | Called 2d │ │
+│ │ [Call] [Send Samples] [Details] │ │
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│          [+ Add Lead]               │ 56px CTA
+└─────────────────────────────────────┘
+```
+
+**Lead Priority System:**
+- **🔥 Hot**: Immediate quote needed, high value, short timeline
+- **🔶 Warm**: Interested, needs follow-up, medium priority
+- **🔵 Cold**: Long-term prospect, periodic follow-up
+
+##### **Lead Creation Flow**
+```
+┌─────────────────────────────────────┐
+│ Add New Lead                    [×] │ Modal header
+│ Lead Source: Phone Inquiry          │ Context: 32px
+├─────────────────────────────────────┤
+│ 🏢 Company Information              │ Section header
+│ Company Name: [                   ] │ Required field: 44px
+│ Contact Person: [                 ] │ Name input: 44px
+│ Phone: [+91                      ] │ Phone input: 44px
+│ WhatsApp: [Same as phone ☑      ] │ Checkbox option
+├─────────────────────────────────────┤
+│ 📋 Requirements                     │
+│ Product Type:                       │
+│ ● Cotton ○ Silk ○ Polyester ○ Blend│ Radio options: 40px
+│ Quantity: [        ] meters         │ Quantity input: 44px
+│ Budget Range: [₹       ] per meter  │ Budget input: 44px
+├─────────────────────────────────────┤
+│ ⚡ Priority & Timeline              │
+│ Priority: ● Hot ○ Warm ○ Cold      │ Priority radio: 40px
+│ Required By: [DD/MM/YYYY]          │ Date picker: 48px
+│ Follow-up: [Today ▼]               │ Schedule dropdown
+├─────────────────────────────────────┤
+│ 📝 Notes                            │
+│ ┌─────────────────────────────────┐ │
+│ │ [Customer mentioned they need   │ │ Notes area: 60px
+│ │  premium quality for exports]   │ │
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│         [Save Lead] [Save & Quote]  │ Action buttons: 56px
+└─────────────────────────────────────┘
+```
+
+---
+
+#### **Quotes Tab - Quotation Management**
+
+**Purpose**: Create, send, and track quotations for leads
+
+**Access Flow**: `💼 Sales → Quotes Tab` or `Leads Tab → [Quote] button`
+
+##### **Quotes List View**
+```
+┌─────────────────────────────────────┐
+│ Sales    [ Leads│Quotes│Orders│Inv ]│ Tab bar: 48px
+│ [All▼] [Pending▼] [Approved▼] [📊6]│ Status filters: 44px
+├─────────────────────────────────────┤
+│ ⏳ 4 QUOTES AWAITING RESPONSE       │ Alert header: 48px
+│                                     │ Orange background
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ Q#2024-105 — Suresh Textiles    │ │ Quote ID + Company: 20px
+│ │ Status: ⏳ Pending Response      │ │ Status: 16px
+│ │ ₹2,50,000 | Cotton 1000m       │ │ Value + Product: 14px
+│ │ Sent: 2 days ago | Valid: 5d   │ │ Timeline: 14px
+│ │ [Follow-up] [Revise] [Approve]  │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ Q#2024-104 — Ramesh Mills       │ │
+│ │ Status: ✅ Approved             │ │ Green approved
+│ │ ₹1,80,000 | Silk blend 800m    │ │
+│ │ Approved: Today | Payment Due   │ │ Ready for order
+│ │ [Create Order] [Send Proforma]  │ │ Conversion actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│         [+ Create Quote]            │ 56px CTA
+└─────────────────────────────────────┘
+```
+
+**Quote Status Flow:**
+- **⏳ Pending**: Sent, awaiting customer response
+- **🔄 Under Discussion**: Customer questions, revisions needed
+- **✅ Approved**: Customer accepted, ready for payment
+- **❌ Rejected**: Customer declined or expired
+- **🔄 Revised**: New version created with updates
+
+##### **Quote Creation Flow**
+```
+┌─────────────────────────────────────┐
+│ Create Quote                    [×] │ Modal header
+│ From Lead: Suresh Textiles          │ Context: 32px
+│ Step 1 of 3 ●●○                     │ Progress indicator
+├─────────────────────────────────────┤
+│ 📋 Product Specifications           │ Section header
+│ Product Type: Cotton Fabric         │ Pre-filled from lead
+│ Width: [150] cm                     │ Input: 44px
+│ GSM: [200] g/m²                     │ Quality specification
+│ Quantity: [1000] meters             │ From lead requirements
+│ Color: [Natural White ▼]           │ Color selection
+├─────────────────────────────────────┤
+│ 💰 Pricing                          │
+│ Base Price: [₹250] per meter        │ Cost calculation
+│ Treatment: [₹30] per meter          │ Additional processing
+│ Total: ₹2,80,000                    │ Auto-calculated
+│ Margin: 20% | Profit: ₹56,000      │ Business metrics
+├─────────────────────────────────────┤
+│ 📅 Terms & Conditions               │
+│ Delivery: [25] days from advance    │ Timeline: 44px
+│ Advance: [50%] = ₹1,40,000         │ Payment terms
+│ Validity: [15] days                 │ Quote validity
+├─────────────────────────────────────┤
+│     [Save Draft] [Preview & Send]   │ Action buttons: 56px
+└─────────────────────────────────────┘
+```
+
+---
+
+#### **Orders Tab - Sales Order Management**
+
+**Purpose**: Manage confirmed orders after advance payment received
+
+**Access Flow**: `💼 Sales → Orders Tab` or `Quotes Tab → [Create Order] button`
+
+##### **Orders List View**
 ```
 ┌─────────────────────────────────────┐
 │ Sales    [ Leads│Quotes│Orders│Inv ]│ Tab bar: 48px
@@ -1143,54 +1331,448 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
-### 🏭 **PRODUCTION TAB** - Manufacturing Execution
+---
 
-#### **Work Orders List**
+#### **Invoices Tab - Invoice Management**
 
+**Purpose**: Generate, send, and track invoices for completed orders
+
+**Access Flow**: `💼 Sales → Invoices Tab` or `Orders Tab → [Invoice] button`
+
+##### **Invoices List View**
 ```
 ┌─────────────────────────────────────┐
-│ Production  [ Today│Progress│Done ]  │ Sub-tabs: 48px
-│ [🔍 Search work orders... (🎙)]     │ Search: 44px
+│ Sales    [ Leads│Quotes│Orders│Inv ]│ Tab bar: 48px
+│ [All▼] [Paid▼] [Pending▼] [Due▼] [📊8]│ Payment filters: 44px
+├─────────────────────────────────────┤
+│ 💰 3 INVOICES OVERDUE > 15 DAYS     │ Alert header: 48px
+│                                     │ Red background
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
-│ │ WO#451 — Order #O-2345          │ │ Header: 20px
-│ │ 🎯 Dyed Fabric                  │ │ Product icon
-│ │ Operator: Vikram | Line 2       │ │ Assignment: 14px
-│ │ Progress: [████████░░] 80%      │ │ Progress bar
-│ │ Target: 1000m | Done: 800m      │ │ Metrics: 14px
-│ │ [View Job] [Pause] [Complete]   │ │ Actions: 32px
+│ │ INV#2024-089 — Suresh Textiles  │ │ Invoice ID + Company: 20px
+│ │ Status: 💰 Paid                 │ │ Payment status: 16px
+│ │ ₹1,20,000 | Due: 15 Oct        │ │ Amount + Due date: 14px
+│ │ Paid: 12 Oct | On time ✅      │ │ Payment history: 14px
+│ │ [View] [Receipt] [WhatsApp]     │ │ Actions: 32px
 │ └─────────────────────────────────┘ │ Card: 140px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
-│ │ WO#452 — Order #O-2344          │ │
-│ │ 🧵 Cotton 40s                   │ │ Different icon
-│ │ Operator: Rahul | Line 1        │ │ per product type
-│ │ Status: 🔴 Ready to Start       │ │ Red = not started
-│ │ Target: 500m | ETA: 6 hours     │ │ Time estimate
-│ │ [Start Job] [View Details]      │ │ Start prominent
-│ └─────────────────────────────────┘ │
-│                                     │
-│ ┌─────────────────────────────────┐ │
-│ │ WO#450 — Order #O-2340          │ │
-│ │ 🎨 Silk Blend                   │ │
-│ │ Operator: Priya | Line 3        │ │
-│ │ Status: ⚠️ QC Pending           │ │ Yellow = QC needed
-│ │ Target: 300m | Done: 300m ✅    │ │ Complete quantity
-│ │ [QC Check] [View Results]       │ │ QC action
+│ │ INV#2024-088 — Ramesh Mills     │ │
+│ │ Status: 🔴 Overdue              │ │ Red overdue
+│ │ ₹85,000 | Due: 5 Oct           │ │
+│ │ Overdue: 10 days | Interest Due │ │ Warning info
+│ │ [Send Reminder] [Call] [Details]│ │ Collection actions
 │ └─────────────────────────────────┘ │
 ├─────────────────────────────────────┤
-│            [+ Create WO]            │ 56px CTA
+│        [+ Generate Invoice]         │ 56px CTA
+└─────────────────────────────────────┘
+```
+
+**Invoice Status Flow:**
+- **🟡 Pending**: Generated, not yet sent to customer
+- **📤 Sent**: Delivered to customer, payment pending
+- **💰 Paid**: Payment received, transaction complete
+- **🔴 Overdue**: Past due date, collection required
+- **❌ Cancelled**: Invoice cancelled or credited
+
+##### **Invoice Generation Flow**
+```
+┌─────────────────────────────────────┐
+│ Generate Invoice                [×] │ Modal header
+│ From Order: #O-2345                 │ Context: 32px
+├─────────────────────────────────────┤
+│ 📋 Order Summary                    │ Section header
+│ Customer: Suresh Textiles           │ Pre-filled data
+│ Product: Cotton Fabric (1000m)      │ Order details
+│ Total Amount: ₹2,50,000             │ Order value
+│ Advance Paid: ₹1,25,000 ✅         │ Payment status
+│ Balance Due: ₹1,25,000              │ Outstanding amount
+├─────────────────────────────────────┤
+│ 📅 Invoice Details                  │
+│ Invoice Date: [Today ▼]             │ Date picker: 44px
+│ Due Date: [15 days ▼]              │ Terms dropdown
+│ GSTIN: [Auto-filled]                │ Tax details
+│ Place of Supply: [Gujarat]          │ State for GST
+├─────────────────────────────────────┤
+│ 💰 Amount Breakdown                 │
+│ Taxable Amount: ₹1,06,000           │ Pre-tax amount
+│ CGST (9%): ₹9,540                  │ Central GST
+│ SGST (9%): ₹9,540                  │ State GST
+│ Total Amount: ₹1,25,080             │ Final amount
+├─────────────────────────────────────┤
+│ 📝 Payment Instructions             │
+│ Bank: [HDFC Bank ▼]                │ Account dropdown
+│ Account: [Auto-filled]              │ Bank details
+│ UPI ID: [business@paytm]            │ Digital payment
+├─────────────────────────────────────┤
+│     [Preview] [Generate & Send]     │ Action buttons: 56px
+└─────────────────────────────────────┘
+```
+
+---
+
+#### **Sales Navigation Flows & Integration**
+
+**Complete Sales Workflow:**
+```
+1. 📞 Leads Tab: Capture lead → [Create Quote]
+2. 📋 Quotes Tab: Send quote → [Approve] → [Create Order]
+3. 💰 Payment: Record advance → Auto-create customer & sales order
+4. 📦 Orders Tab: Track production → [Generate Invoice]
+5. 💳 Invoices Tab: Send invoice → Track payment → Complete cycle
+```
+
+**Cross-Tab Navigation:**
+```
+Leads Tab → [Quote] → Auto-switch to Quotes Tab
+Quotes Tab → [Create Order] → Auto-switch to Orders Tab  
+Orders Tab → [Invoice] → Auto-switch to Invoices Tab
+Any Tab → [Call/WhatsApp] → Customer communication
+```
+
+**Integration Points:**
+- **Lead → Customer**: Hot leads auto-create customer profiles
+- **Order → Production**: Paid orders auto-create work orders
+- **Order → Procurement**: Material requirements auto-generated
+- **Invoice → Accounts**: Payments auto-update financial records
+
+**Status Transitions:**
+```
+Lead Priority: Cold → Warm → Hot → Quote Created
+Quote Status: Draft → Sent → Approved → Order Created
+Order Status: Payment Pending → Confirmed → Production → Delivered
+Invoice Status: Generated → Sent → Paid → Completed
+```
+
+### 🏭 **PRODUCTION TAB** - Manufacturing Execution
+
+#### **Production Module Overview**
+
+The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 4 main sub-tabs with integrated cross-module functionality.
+
+**Business Context**: Addresses the daily production questions: "કયા orders production માં છે? આજે શું બનાવવું? Quality કેમ છે?" (Which orders are in production? What to make today? How is quality?)
+
+**Module Structure:**
+```
+🏭 PRODUCTION (Main Tab)
+├── Plan - Sales Order to Work Order conversion and scheduling
+├── Active - Live production tracking and worker interface  
+├── QC - Quality control processes and grading
+└── Ready - Completed orders ready for delivery and fulfillment
+```
+
+**Cross-Module Integration:**
+- **From Sales**: Sales Orders automatically appear in Plan tab for WO creation
+- **To Customer**: Delivery notifications and tracking updates
+- **To Procurement**: Material requirements calculated per Work Order
+- **To Inventory**: Automatic stock updates on production completion
+
+---
+
+#### **Plan Tab - Work Order Planning & Creation**
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
+│ [🔍 Search orders... (🎙)]          │ Search: 44px
+├─────────────────────────────────────┤
+│ 📋 SALES ORDERS → WORK ORDERS       │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Order #O-2345 — Cotton Fabric   │ │ Source order
+│ │ Customer: Ajay Textiles         │ │ Customer context
+│ │ Qty: 1000m | Due: Dec 25        │ │ Requirements
+│ │ Status: ⚠️ Needs Work Orders    │ │ Action required
+│ │ [Create WOs] [View Details]     │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ Order #O-2344 — Silk Blend      │ │ Another order
+│ │ Customer: Ravi Industries       │ │ Different customer
+│ │ Qty: 500m | Due: Dec 22         │ │ Urgent order
+│ │ Status: ✅ 2 WOs Created        │ │ Already planned
+│ │ [View WOs] [Edit Planning]      │ │ Management
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 🏭 MACHINE & WORKER AVAILABILITY    │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Loom A1: 🟢 Available           │ │ Machine status
+│ │ Type: Weaving | Capacity: 100m/h │ │ Machine specs
+│ │ Current: None assigned          │ │ Availability
+│ │ [Assign WO] [Schedule]          │ │ Actions
+│ └─────────────────────────────────┘ │ Card: 100px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ Loom B2: 🟡 Busy (3h left)      │ │ Busy status
+│ │ Current: WO#451 (Vikram)        │ │ Active assignment
+│ │ Next Available: 2:00 PM         │ │ Schedule info
+│ │ [Monitor] [Queue Next WO]       │ │ Planning actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│     [+ Bulk Create Work Orders]     │ 56px CTA
 ├─────────────────────────────────────┤
 │ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
 └─────────────────────────────────────┘
 ```
 
-#### **Work Order Detail** (Operator Interface)
+#### **Bulk Work Order Creation Wizard** (Plan Tab Action)
 
 ```
 ┌─────────────────────────────────────┐
-│ WO#451 — Dyed Fabric           [←] │ Header with back
-│ Order: #O-2345 | Machine: Line 2    │ Context: 32px
+│ Bulk WO Creation — Order #O-2345 [←] │ Wizard header
+│ Cotton Fabric | 1000m | Due: Dec 25  │ Order context
+├─────────────────────────────────────┤
+│ 📊 Batch Planning Strategy          │ Section header
+│ ● Daily Batches (Recommended)       │ Strategy options
+│   250m per day × 4 days            │ Breakdown details
+│ ○ Machine-based Batches             │ Alternative option
+│   500m per machine × 2 machines    │ Machine allocation
+│ ○ Custom Batch Sizes               │ Manual control
+│   Define sizes manually            │ Custom option
+├─────────────────────────────────────┤
+│ 🏭 Machine & Worker Assignment      │ Assignment section
+│ Batch 1: 250m (Dec 22)             │ Batch details
+│ Machine: [Loom A1 ▼] | Worker: [Vikram ▼] │ Dropdowns
+│ Est. Time: 6 hours                  │ Time calculation
+│                                     │
+│ Batch 2: 250m (Dec 23)             │ Next batch
+│ Machine: [Loom B2 ▼] | Worker: [Priya ▼] │ Different assignment
+│ Est. Time: 6 hours                  │ Parallel work
+├─────────────────────────────────────┤
+│ ⚠️ Material Requirements            │ Dependencies
+│ Cotton Yarn: 1100kg required        │ Raw material
+│ Available: 800kg | Short: 300kg     │ Shortage alert
+│ [Create Purchase Request]           │ Auto-procurement
+├─────────────────────────────────────┤
+│ 📅 Production Schedule              │ Timeline view
+│ Dec 22: Batch 1 (Loom A1) + Batch 2 (Loom B2) │ Parallel work
+│ Dec 23: Batch 3 (Loom A1) + Batch 4 (Loom B2) │ Continued production
+│ Dec 24: QC for all batches         │ Quality check
+│ Dec 25: Ready for delivery         │ On-time completion
+├─────────────────────────────────────┤
+│                                     │ Action area
+│   [Cancel]      [Create 4 WOs]      │ Primary actions
+│                                     │ 56px height
+└─────────────────────────────────────┘
+```
+
+#### **Production Floor Dashboard** (Active Tab Management Tool)
+
+```
+┌─────────────────────────────────────┐
+│ Production Floor Dashboard      [←] │ Dashboard header
+│ Live Status | Updated: 30 sec ago   │ Real-time context
+├─────────────────────────────────────┤
+│ 📊 Today's Overview                 │ Summary section
+│ Target: 2500m | Completed: 1800m    │ Progress metrics
+│ Progress: [██████████████░░] 72%    │ Visual progress
+│ Active WOs: 3 | Completed: 5        │ Work order stats
+│ Quality Rate: 95% A-Grade           │ Quality metrics
+├─────────────────────────────────────┤
+│ 🏭 Machine Utilization              │ Machine section
+│ ┌─────────────────────────────────┐ │
+│ │ Loom A1: 🟢 Running (6h left)   │ │ Machine status
+│ │ WO#451 | Worker: Vikram         │ │ Current assignment
+│ │ Efficiency: 85% | Output: 142m/h │ │ Performance
+│ └─────────────────────────────────┘ │ Machine card
+│ ┌─────────────────────────────────┐ │
+│ │ Loom B2: 🟡 Setup (15 min)      │ │ Setup status
+│ │ Next: WO#453 | Worker: Priya    │ │ Upcoming work
+│ │ Est. Start: 3:15 PM             │ │ Schedule info
+│ └─────────────────────────────────┘ │
+│ ┌─────────────────────────────────┐ │
+│ │ Loom C1: 🔴 Maintenance          │ │ Down for service
+│ │ Issue: Thread tension adjustment │ │ Maintenance reason
+│ │ ETA: 1 hour | Technician: Ravi  │ │ Resolution timeline
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 👥 Worker Status                    │ Worker section
+│ Active: 4/8 workers                 │ Utilization summary
+│ Shift: Day (8 AM - 6 PM)           │ Current shift
+│ Break: 2 workers (12:00-12:30)     │ Break tracking
+│ Overtime: 1 worker scheduled       │ Extra hours
+├─────────────────────────────────────┤
+│ ⚠️ Alerts & Issues                  │ Alert section
+│ 🔴 WO#452: QC overdue (2 hours)     │ Quality alert
+│ 🟡 Material: Cotton yarn low (1 day) │ Supply warning
+│ 🟢 All machines within temperature  │ Normal conditions
+├─────────────────────────────────────┤
+│ [Shift Handover] [Export Report]    │ Management actions
+└─────────────────────────────────────┘
+```
+
+#### **Shift Handover Interface** (Production Management Tool)
+
+```
+┌─────────────────────────────────────┐
+│ Shift Handover — Day to Night   [←] │ Handover header
+│ From: Ravi Sharma | To: Suresh Patel │ Supervisor transition
+├─────────────────────────────────────┤
+│ 📋 Day Shift Summary                │ Outgoing summary
+│ Shift: 8 AM - 6 PM (10 hours)      │ Shift duration
+│ Target: 2500m | Achieved: 2400m     │ Performance summary
+│ Completion Rate: 96%                │ Success metric
+│ A-Grade Output: 2280m (95%)         │ Quality achievement
+├─────────────────────────────────────┤
+│ 🏭 Machine Status Handover          │ Equipment status
+│ Loom A1: Running WO#451 (2h left)  │ Continuing work
+│ Loom B2: Ready for WO#453          │ Next assignment
+│ Loom C1: Maintenance completed ✅   │ Resolved issues
+├─────────────────────────────────────┤
+│ ⚠️ Issues to Address                │ Pending issues
+│ ┌─────────────────────────────────┐ │
+│ │ WO#452: QC failed, needs rework │ │ Quality issue
+│ │ Assigned to: Night shift        │ │ Responsibility
+│ │ Priority: High | Due: Tomorrow  │ │ Urgency level
+│ └─────────────────────────────────┘ │ Issue card
+├─────────────────────────────────────┤
+│ 📝 Additional Notes                 │ Communication
+│ ┌─────────────────────────────────┐ │
+│ │ [New cotton yarn batch received │ │ Notes area
+│ │  this morning. Quality looks    │ │ Free-form text
+│ │  good. Loom B2 tension adjusted] │ │ Shift details
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 👤 Night Shift Acknowledgment      │ Incoming supervisor
+│ Received by: Suresh Patel          │ Supervisor name
+│ Time: 6:00 PM, Dec 20, 2024        │ Handover timestamp
+│ ☑️ All points understood           │ Confirmation
+├─────────────────────────────────────┤
+│     [Complete Handover]             │ Finalize transition
+└─────────────────────────────────────┘
+```
+
+#### **Active Tab - Live Production Tracking**
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
+│ [🔍 Search active work... (🎙)]     │ Search: 44px
+├─────────────────────────────────────┤
+│ 🎯 ACTIVE WORK ORDERS               │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ WO#451 — Cotton Fabric Batch 1  │ │ Work order title
+│ │ Machine: Loom A1 | Worker: Vikram │ │ Assignment info
+│ │ Status: 🟡 In Progress          │ │ Live status
+│ │ Progress: [████████░░] 80%      │ │ Progress bar
+│ │ Target: 1000m | Done: 800m      │ │ Metrics: 14px
+│ │ [Update Status] [View Details]  │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ WO#452 — Silk Blend Batch 1     │ │ Another WO
+│ │ Machine: Loom B2 | Worker: Priya │ │ Different assignment
+│ │ Status: 🔴 Ready to Start       │ │ Not started
+│ │ Target: 500m | ETA: 6 hours     │ │ Time estimate
+│ │ [Start Production] [Assign]     │ │ Start actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ ⏱️ PRODUCTION TIMELINE              │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Today's Target: 1500m           │ │ Daily goal
+│ │ Completed: 800m (53%)           │ │ Progress
+│ │ Active Workers: 2/5             │ │ Utilization
+│ │ Machines Running: 2/3           │ │ Machine status
+│ │ [Floor Dashboard] [Reports]     │ │ Management tools
+│ └─────────────────────────────────┘ │ Summary card
+├─────────────────────────────────────┤
+│            [+ Start New WO]         │ 56px CTA
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
+└─────────────────────────────────────┘
+```
+
+#### **QC Tab - Quality Control Management**
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
+│ [🔍 Search QC items... (🎙)]        │ Search: 44px
+├─────────────────────────────────────┤
+│ ⚠️ PENDING QUALITY CHECKS           │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ WO#451 — Cotton Fabric Batch 1  │ │ Work order
+│ │ Completed: 2 hours ago          │ │ Timing context
+│ │ Worker: Vikram | Machine: Loom A1 │ │ Production info
+│ │ Status: ⏳ QC Required          │ │ Urgent status
+│ │ [Start QC] [View Details]       │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 120px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ WO#452 — Silk Blend Batch 2     │ │ Another item
+│ │ Completed: 30 mins ago          │ │ Recent completion
+│ │ Worker: Priya | Machine: Loom B2 │ │ Assignment record
+│ │ Status: 🔴 Overdue QC           │ │ Alert status
+│ │ [Urgent QC] [Escalate]          │ │ Priority actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ ✅ QC COMPLETED TODAY               │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ WO#450 — Cotton Yarn Batch 3    │ │ Completed work
+│ │ QC Inspector: Ravi Sharma       │ │ Inspector record
+│ │ Grade: A Grade (Premium) ✅     │ │ Quality result
+│ │ QC Time: 1:30 PM                │ │ Completion time
+│ │ [View Report] [Approve]         │ │ Follow-up actions
+│ └─────────────────────────────────┘ │ Card: 120px
+│      [📊 QC Dashboard] [Reports]     │ Management tools
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
+└─────────────────────────────────────┘
+```
+
+#### **Ready Tab - Delivery & Fulfillment Management**
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
+│ [🔍 Search ready orders... (🎙)]    │ Search: 44px
+├─────────────────────────────────────┤
+│ 📦 READY FOR DELIVERY               │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Order #O-2345 — Cotton Fabric   │ │ Completed order
+│ │ Customer: Ajay Textiles         │ │ Customer info
+│ │ Qty: 1000m | QC: A Grade ✅     │ │ Quality confirmed
+│ │ Ready Since: Dec 20, 2:30 PM    │ │ Completion time
+│ │ [Assign Delivery] [Pack Order]  │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ Order #O-2340 — Silk Blend      │ │ Another order
+│ │ Customer: Ravi Industries       │ │ Different customer
+│ │ Qty: 500m | QC: A Grade ✅      │ │ High quality
+│ │ Status: 🚚 Delivery Assigned    │ │ In progress
+│ │ [Track Delivery] [Update]       │ │ Management
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 🚚 DELIVERY ASSIGNMENTS             │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Vehicle: GJ-01-AB-1234          │ │ Vehicle info
+│ │ Driver: Suresh Patel            │ │ Driver details
+│ │ Orders: 3 | Total: 2000m        │ │ Load summary
+│ │ Route: Surat → Ahmedabad        │ │ Delivery route
+│ │ [Track Live] [Contact Driver]   │ │ Tracking actions
+│ └─────────────────────────────────┘ │ Card: 120px
+├─────────────────────────────────────┤
+│ ✅ DELIVERED TODAY                  │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Order #O-2338 — Cotton Yarn     │ │ Delivered order
+│ │ Customer: Jay Fabrics           │ │ Customer record
+│ │ Delivered: 11:30 AM ✅          │ │ Success status
+│ │ Proof: Signature + Photo        │ │ Evidence captured
+│ │ [View Proof] [Invoice]          │ │ Follow-up actions
+│ └─────────────────────────────────┘ │ Card: 120px
+├─────────────────────────────────────┤
+│        [+ Schedule Delivery]        │ 56px CTA
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
+└─────────────────────────────────────┘
+```
+
+#### **Work Order Detail Interface** (Active Tab Drill-down)
+
+```
+┌─────────────────────────────────────┐
+│ WO#451 — Cotton Fabric Batch 1 [←] │ Header with back
+│ Order: #O-2345 | Machine: Loom A1   │ Context: 32px
 ├─────────────────────────────────────┤
 │ 🎯 Job Information                  │ Section header
 │ Target Quantity: 1000m             │ Large text: 18px
@@ -1228,12 +1810,12 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
-#### **Quality Control Screen**
+#### **Quality Control Detail Interface** (QC Tab Drill-down)
 
 ```
 ┌─────────────────────────────────────┐
 │ Quality Check — WO#451         [←] │ QC header
-│ Dyed Fabric | Batch: B2024-045     │ Product context
+│ Cotton Fabric | Batch: B2024-045    │ Product context
 ├─────────────────────────────────────┤
 │ ✅ Quality Checklist                │ Checklist section
 │ ☑️ Color match within tolerance     │ Completed items
@@ -1267,9 +1849,172 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
+#### **Delivery Assignment Wizard** (Ready Tab Action)
+
+```
+┌─────────────────────────────────────┐
+│ Assign Delivery — Order #O-2345 [←] │ Wizard header
+│ Cotton Fabric | 1000m | Ajay Textiles │ Order context
+├─────────────────────────────────────┤
+│ 🚚 Vehicle Selection                │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ ● GJ-01-AB-1234 (Available)     │ │ Radio selection
+│ │   Capacity: 5000m | Load: 2000m │ │ Vehicle details
+│ │   Driver: Suresh Patel          │ │ Driver info
+│ └─────────────────────────────────┘ │ Option card
+│ ┌─────────────────────────────────┐ │
+│ │ ○ GJ-02-CD-5678 (Returning 3PM) │ │ Alternative option
+│ │   Capacity: 3000m | Load: 0m    │ │ Different capacity
+│ │   Driver: Ramesh Kumar          │ │ Different driver
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 📍 Route & Schedule                 │ Section header
+│ From: Surat Factory                │ Fixed origin
+│ To: [Ajay Textiles, Ahmedabad]     │ Customer location
+│ Distance: 264 km | ETA: 4.5 hours  │ Route calculation
+│ Departure: [Today 2:00 PM ▼]       │ Time selection
+├─────────────────────────────────────┤
+│ 📞 Customer Notification            │ Section header
+│ ☑️ SMS: Order dispatched            │ Auto-notifications
+│ ☑️ Call: Delivery confirmation      │ Manual follow-up
+│ ☑️ WhatsApp: Live tracking link     │ Modern communication
+├─────────────────────────────────────┤
+│                                     │ Action area
+│   [Cancel]        [Assign Delivery] │ Primary actions
+│                                     │ 56px height
+└─────────────────────────────────────┘
+```
+
+#### **Delivery Tracking Interface** (Ready Tab Live Tracking)
+
+```
+┌─────────────────────────────────────┐
+│ Track Delivery — Order #O-2345  [←] │ Tracking header
+│ Vehicle: GJ-01-AB-1234 | Suresh Patel │ Vehicle context
+├─────────────────────────────────────┤
+│ 📍 Live Location                    │ Section header
+│ Current: NH-8, Bharuch              │ Live GPS location
+│ Distance from destination: 120 km   │ Remaining distance
+│ ETA: 2 hours 15 minutes            │ Updated ETA
+│ Last updated: 2 minutes ago         │ Data freshness
+├─────────────────────────────────────┤
+│ 🛣️ Delivery Progress                │ Timeline section
+│ ✅ 2:00 PM — Departed Surat        │ Completed milestone
+│ ✅ 3:15 PM — Crossed Bharuch       │ Current location
+│ 🚚 5:30 PM — Est. Ahmedabad arrival │ Upcoming milestone
+│ ⏳ TBD — Customer delivery          │ Final step
+├─────────────────────────────────────┤
+│ 📞 Communication                    │ Action section
+│ [📱 Call Driver] [📍 Share Location] │ Contact options
+│ [💬 WhatsApp] [📩 Notify Customer]  │ Communication tools
+├─────────────────────────────────────┤
+│ 🔔 Delivery Alerts                 │ Status section
+│ ☑️ Customer notified of dispatch    │ Confirmation sent
+│ ⏳ Driver will call before delivery │ Pending action
+│ ⏳ Proof of delivery required       │ Required evidence
+└─────────────────────────────────────┘
+```
+
+#### **Proof of Delivery Capture** (Ready Tab Final Step)
+
+```
+┌─────────────────────────────────────┐
+│ Delivery Proof — Order #O-2345  [←] │ Proof header
+│ Customer: Ajay Textiles | 1000m      │ Delivery context
+├─────────────────────────────────────┤
+│ 📷 Photo Evidence (Required)        │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │     [📷 Take Delivery Photo]    │ │ Camera button
+│ │                                 │ │ Photo capture area
+│ └─────────────────────────────────┘ │ 120px area
+│ [Delivered_Cotton_Fabric_Dec20.jpg] │ Captured photo
+├─────────────────────────────────────┤
+│ ✍️ Customer Signature              │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │                                 │ │ Signature canvas
+│ │    [Customer signs here]        │ │ Touch signature
+│ │                                 │ │ area
+│ └─────────────────────────────────┘ │ 100px area
+│ [Clear Signature] [Retake]          │ Signature controls
+├─────────────────────────────────────┤
+│ 📝 Delivery Notes                   │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ [Material delivered in good     │ │ Notes area: 60px
+│ │  condition. Customer satisfied] │ │ Optional details
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 👤 Received By                      │ Customer details
+│ Name: [Ajay Patel]                  │ Person receiving
+│ Designation: [Purchase Manager]     │ Role confirmation
+│ Time: Dec 20, 2024 — 5:45 PM       │ Delivery timestamp
+├─────────────────────────────────────┤
+│                                     │ Final actions
+│     [Complete Delivery]             │ Primary action
+│                                     │ 56px height
+└─────────────────────────────────────┘
+```
+
+---
+
+### **🔗 Production Module Cross-Integration Workflows**
+
+#### **Sales → Production Integration**
+- **Sales Orders automatically appear in Plan tab** when payment confirmation received
+- **Order status updates**: Production → In Progress, Quality Check → QC Complete, Ready → Delivered
+- **Material requirements calculated** from Sales Order specifications and auto-fed to Procurement
+- **Customer notifications** sent automatically at key production milestones
+
+#### **Production → Customer Integration**  
+- **Delivery notifications**: SMS + WhatsApp alerts when order ready and dispatched
+- **Live tracking links** shared with customers for real-time delivery visibility
+- **Delivery confirmations** with photo proof and digital signatures auto-saved to Customer records
+- **Invoice triggering**: Automatic invoice generation upon delivery confirmation
+
+#### **Production → Procurement Integration**
+- **Material shortage detection**: Bulk WO creation wizard calculates total material needs
+- **Purchase request auto-creation** when material shortages detected during WO planning
+- **Inventory consumption tracking**: Raw materials auto-deducted when Work Orders started
+- **Stock level alerts** integrated into Production Floor Dashboard
+
+#### **Production → Inventory Integration**
+- **Finished goods auto-addition**: Completed WOs automatically add finished products to inventory
+- **Quality grade tracking**: A/B grade classifications maintained through inventory system
+- **Batch tracking**: Work Order numbers become batch identifiers for inventory management
+- **Location updates**: Finished goods moved to "Ready for Delivery" warehouse location
+
+#### **Production → Accounts Integration**
+- **Cost tracking**: Work Order labor and material costs auto-calculated for COGS
+- **Production expense allocation**: Machine usage, worker wages allocated per WO
+- **Quality impact on pricing**: A/B grade classification affects final invoice amounts
+- **Delivery completion triggers**: Final invoice generation and payment tracking
+
+---
+
 ### 📦 **PROCUREMENT TAB** - Supply Chain Management
 
-#### **Material Requirements** (Auto-Generated)
+#### **Procurement Module Overview**
+
+The Procurement module manages the complete supply chain workflow from material shortage detection through inventory updates. It operates through 4 main sub-tabs with integrated inventory management.
+
+**Business Context**: Addresses the daily owner question: "કેટલો stock છે? શું material ઓર્ડર કરવું?" (How much stock? What materials to order?)
+
+**Module Structure:**
+```
+📦 PROCUREMENT (Main Tab)
+├── MR (Material Requirements) - Default landing tab
+├── PRs (Purchase Requests) - Internal procurement requests  
+├── POs (Purchase Orders) - Supplier orders and tracking
+└── GRNs (Goods Receipt Notes) - Delivery recording and stock updates
+```
+
+**Cross-Module Integration:**
+- **From Production**: Work orders generate material requirements
+- **To Inventory**: GRNs automatically update stock levels
+- **To Accounts**: Purchase orders create payable records
+
+---
+
+#### **MR Tab - Material Requirements**
 
 ```
 ┌─────────────────────────────────────┐
@@ -1345,8 +2090,139 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
-#### **Goods Receipt Note (GRN)**
+---
 
+#### **PRs Tab - Purchase Requests**
+
+**Purpose**: Manage all internal purchase requests from creation to approval
+
+**Access Flow**: `📦 Procurement → PRs Tab`
+
+##### **PR List View**
+```
+┌─────────────────────────────────────┐
+│ Purchase Requests [ Draft│Sent│App ]│ Sub-tabs: 48px
+│ [🔍 Search PRs... (🎙)]             │ Search: 44px
+├─────────────────────────────────────┤
+│ ⚠️ 3 PENDING APPROVALS              │ Alert header: 48px
+│                                     │ Orange background
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ PR#2024-089 — Cotton Yarn       │ │ PR header
+│ │ 📅 Created: 15 Oct | Urgent     │ │ Timeline + priority
+│ │ Items: Cotton Yarn 30s (300kg)  │ │ Item summary
+│ │ Est. Value: ₹22,500             │ │ Financial estimate
+│ │ [Review] [Approve] [Edit]       │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ PR#2024-088 — Reactive Dyes     │ │
+│ │ 📅 Created: 14 Oct | Normal     │ │
+│ │ Items: Blue Dye (50kg)          │ │
+│ │ Status: ✅ Approved → PO Created │ │ Success state
+│ │ [View PO] [Details]             │ │ Follow-up actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│          [+ Create New PR]          │ 56px CTA
+└─────────────────────────────────────┘
+```
+
+**PR Status Flow:**
+- **Draft**: Being created, can be edited
+- **Sent**: Submitted for approval  
+- **Approved**: Ready to convert to PO
+- **Rejected**: Requires revision
+- **Converted**: PO created from this PR
+
+---
+
+#### **POs Tab - Purchase Orders**
+
+**Purpose**: Track official purchase orders sent to suppliers
+
+**Access Flow**: `📦 Procurement → POs Tab`
+
+##### **PO List View**
+```
+┌─────────────────────────────────────┐
+│ Purchase Orders [ Pending│Sent│Rec ]│ Sub-tabs: 48px
+│ [🔍 Search POs... (🎙)]             │ Search: 44px
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ PO#2401 — Gujarat Spinning      │ │ PO header
+│ │ 📅 Sent: 12 Oct | Due: 20 Oct   │ │ Timeline info
+│ │ Items: Cotton Yarn (500kg)      │ │ Order summary
+│ │ Value: ₹22,500 | Status: ⏳ Sent │ │ Financial & status
+│ │ [Track] [Contact] [Cancel]      │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ PO#2400 — Chemical Industries   │ │
+│ │ 📅 Sent: 10 Oct | Due: 18 Oct   │ │
+│ │ Items: Reactive Dyes (100kg)    │ │
+│ │ Value: ₹12,000 | Status: 🚚 Ship│ │ In transit
+│ │ [Track] [Receive] [Details]     │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+```
+
+**PO Status Flow:**
+- **Pending**: Created but not sent to supplier
+- **Sent**: Delivered to supplier, awaiting confirmation
+- **Confirmed**: Supplier accepted, in production
+- **Shipped**: Material in transit
+- **Received**: Material delivered (triggers GRN creation)
+
+---
+
+#### **GRNs Tab - Goods Receipt Notes**
+
+**Purpose**: Record material deliveries and update inventory
+
+**Access Flow**: `📦 Procurement → GRNs Tab`
+
+##### **GRN List View**
+```
+┌─────────────────────────────────────┐
+│ Goods Receipt [ Today│Week│Month ]  │ Sub-tabs: 48px
+│ [🔍 Search GRNs... (🎙)]            │ Search: 44px
+├─────────────────────────────────────┤
+│ 📦 2 DELIVERIES PENDING             │ Alert header: 48px
+│                                     │ Blue background
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ 🚚 Delivery from Gujarat Spinning │ │ Pending delivery
+│ │ PO#2401 | Cotton Yarn (500kg)    │ │ PO reference
+│ │ Expected: Today 2:00 PM          │ │ Timeline info
+│ │ Truck: GJ-01-AB-1234             │ │ Vehicle details
+│ │ [📋 Create GRN] [📱 Call Supplier] │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ ✅ GRN#2024-045 — Chemicals      │ │ Completed GRN
+│ │ PO#2400 | Reactive Dyes (100kg)  │ │ PO reference
+│ │ Received: 15 Oct | Quality: Good │ │ Completion info
+│ │ Batch: RD-2024-089               │ │ Batch tracking
+│ │ [View Details] [Print]           │ │ Review actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 📊 MONTHLY SUMMARY                  │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ GRNs Processed: 24               │ │ Monthly stats
+│ │ Total Value: ₹4.5L | Avg: ₹18.8K │ │ Financial summary
+│ │ Quality Issues: 2 (8.3%)         │ │ Quality metrics
+│ │ [View Report] [Export Data]      │ │ Analytics actions
+│ └─────────────────────────────────┘ │ Card: 100px
+└─────────────────────────────────────┘
+```
+
+**GRN Status Flow:**
+- **Pending**: Delivery expected, GRN not created
+- **In Progress**: Material being inspected and recorded
+- **Completed**: Material received, quality approved, stock updated
+- **Rejected**: Quality issues, material returned to supplier
+
+##### **GRN Detail/Create Screen**
 ```
 ┌─────────────────────────────────────┐
 │ GRN — PO#56 ABC Suppliers      [←] │ GRN header
@@ -1389,13 +2265,125 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
+---
+
+#### **Inventory Management (Connected Screens)**
+
+**Purpose**: Full inventory visibility and management across all materials
+
+**Access Flow**: Multiple entry points from main tabs
+
+##### **Materials Inventory List View**
+```
+┌─────────────────────────────────────┐
+│ Inventory [ Materials│Stock│Alerts ] │ Sub-tabs: 48px
+│ [🔍 Search materials... (🎙)]       │ Search: 44px
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ 🧵 Cotton Yarn 30s Count       │ │ Material icon
+│ │ Stock: 1,200 kg | Min: 500 kg  │ │ Current vs minimum
+│ │ Supplier: Gujarat Spinning     │ │ Primary supplier
+│ │ Last Order: 15 Oct | ₹45/kg    │ │ Recent info
+│ │ [View Details] [Reorder]       │ │ Actions: 32px
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 12px gap
+│ │ ⚠️ Reactive Dyes - Blue         │ │ Low stock warning
+│ │ Stock: 25 kg | Min: 50 kg       │ │ Red indicator
+│ │ Supplier: Chemical Industries   │ │
+│ │ Last Order: 08 Oct | ₹120/kg    │ │
+│ │ [🚨 Urgent Reorder] [Details]   │ │ Urgent action
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+```
+
+#### **Stock Level Dashboard**
+```
+┌─────────────────────────────────────┐
+│ Stock Dashboard                     │ Header: 56px
+│ [🔍 Search stock... (🎙)]           │ Search: 44px
+├─────────────────────────────────────┤
+│ 🎯 STOCK OVERVIEW                   │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Materials: 85% | Finished: 60%  │ │ Quick metrics
+│ │ Low Stock: 3 items | Alerts: 2  │ │ Warning indicators
+│ └─────────────────────────────────┘ │ 48px summary card
+├─────────────────────────────────────┤
+│ 📦 MATERIAL ALLOCATION              │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Order #O-2345: 80% allocated    │ │ Order progress
+│ │ Cotton Yarn: ✅ Available       │ │ Material status
+│ │ Dyes: ⚠️ Partial (Blue missing) │ │ Issue highlight
+│ │ [View Details] [Allocate More]  │ │ Actions
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │
+│ │ Order #O-2344: 100% allocated   │ │
+│ │ All Materials: ✅ Ready         │ │ Complete status
+│ │ Production: Ready to start      │ │ Next step
+│ │ [Start Production] [Details]    │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+```
+
+##### **Navigation Flow Documentation**
+
+**From MR Tab to Inventory:**
+```
+📦 Procurement → MR Tab → [Click Material Name] → Materials Inventory List View
+📦 Procurement → MR Tab → [View All Materials] → Materials Inventory List View
+```
+
+**From POs Tab to GRN:**
+```
+📦 Procurement → POs Tab → [Receive] → GRN Detail/Create Screen
+📦 Procurement → POs Tab → [Track] → PO Detail → [Create GRN]
+```
+
+**Complete Procurement Workflow:**
+```
+1. 📦 MR Tab: Detect shortage → [Create PR]
+2. 📦 PRs Tab: Review PR → [Approve] → [Convert to PO]  
+3. 📦 POs Tab: Track PO → [Receive] → [Create GRN]
+4. 📦 GRNs Tab: Process delivery → [Mark Received] → Stock Updated
+5. Inventory: Updated automatically, visible in Materials Inventory List View
+```
+
+**Cross-Module Integration:**
+- **Production Work Orders** → **MR Tab** (automatic material requirements)
+- **GRN Completion** → **Inventory Update** (automatic stock increase)
+- **Stock Alerts** → **PR Creation** (manual procurement trigger)
+
+---
+
 ### 👥 **CUSTOMERS TAB** - Relationship Management
 
-#### **Customer List View**
+#### **Customer CRM Module Overview**
+
+The Customer tab functions as a complete CRM system with two main sections:
+
+**Module Structure:**
+```
+👥 CUSTOMER CRM (Main Tab)
+├── Customers - Customer list and 360° management
+└── Support - Support ticket management and resolution
+```
+
+**Business Context**: Addresses customer relationship management needs: "Customer કેવો છે? Payment કેમ છે? Support issues કયા છે?" (How is the customer? How are payments? What support issues exist?)
+
+**Cross-Module Integration:**
+- **From Sales**: Lead conversion creates customer profiles automatically
+- **From Production**: Order status updates reflected in customer 360° view
+- **To Accounts**: Payment behavior feeds into customer credit management
+- **To Support**: Seamless ticket creation with customer context
+
+---
+
+#### **Customer List View** (Default Landing)
 
 ```
 ┌─────────────────────────────────────┐
-│ Customers                           │ Tab header: 56px
+│ Customers  [ Customers│Support ]     │ Two-section toggle: 56px
 │ [🔍 Search customers... (🎙)]       │ Search: 44px
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
@@ -1506,6 +2494,112 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
+#### **Customer Payments Tab**
+
+```
+┌─────────────────────────────────────┐
+│ Suresh Textiles — Payments     [←] │ Sub-page header
+├─────────────────────────────────────┤
+│ [Summary│Orders│Payments│Tickets│📊] │ Tab navigation
+├─────────────────────────────────────┤
+│ 💳 PAYMENTS & OUTSTANDING           │ Section header
+│                                     │
+│ Outstanding Summary:                │ Financial overview
+│ • Current Outstanding: ₹12,000      │ Total due amount
+│ • Overdue Amount: ₹5,000 (2 invoices)│ Aging breakdown
+│ • Credit Limit: ₹50,000             │ Credit facility
+│ • Available Credit: ₹38,000         │ Remaining limit
+├─────────────────────────────────────┤
+│ 📋 PAYMENT HISTORY                  │ Transaction section
+│                                     │
+│ ┌─────────────────────────────────┐ │
+│ │ Invoice #2024-089 | ₹1,20,000   │ │ Payment record
+│ │ Status: 💰 Paid | 12 Oct 2024   │ │ Paid status: green
+│ │ Method: Bank Transfer            │ │ Payment method
+│ │ Due: 10 Oct | Paid: On-time ✅  │ │ Timing performance
+│ │ [View Invoice] [Receipt]        │ │ Document access
+│ └─────────────────────────────────┘ │ Card: 120px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 8px gap
+│ │ Invoice #2024-088 | ₹85,000     │ │ Overdue payment
+│ │ Status: 🔴 Overdue (10 days)    │ │ Red overdue status
+│ │ Method: Bank Transfer           │ │ Payment preference
+│ │ Due: 5 Oct | Late by 10 days   │ │ Delay tracking
+│ │ [Send Reminder] [Call Customer] │ │ Collection actions
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ┌─────────────────────────────────┐ │
+│ │ Invoice #2024-087 | ₹90,000     │ │ Completed payment
+│ │ Status: 💰 Paid | 28 Sep 2024   │ │ Historical record
+│ │ Method: UPI Payment             │ │ Digital payment
+│ │ Due: 25 Sep | Paid: 3 days late│ │ Performance tracking
+│ │ [View Invoice] [Receipt]        │ │ Documentation
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 📊 Payment Analytics                │ Insights section
+│ • Average payment time: 12 days     │ Behavior metric
+│ • Payment reliability: 85%          │ Performance score
+│ • Preferred method: Bank Transfer   │ Method preference
+│ • On-time payments: 8/12 invoices   │ Reliability ratio
+│ • Credit utilization: 24%           │ Credit usage
+├─────────────────────────────────────┤
+│ 🔔 Payment Alerts                   │ Action section
+│ • 2 invoices overdue (₹5,000)      │ Priority alert
+│ • Credit limit usage: Normal        │ Risk assessment
+│ • Next payment due: 25 Oct (₹8,000) │ Upcoming payment
+├─────────────────────────────────────┤
+│ [Send Payment Reminder] [Update Credit]│ 56px action buttons
+└─────────────────────────────────────┘
+```
+
+#### **Customer Tickets Tab**
+
+```
+┌─────────────────────────────────────┐
+│ Suresh Textiles — Tickets      [←] │ Sub-page header
+├─────────────────────────────────────┤
+│ [Summary│Orders│Payments│Tickets│📊] │ Tab navigation
+├─────────────────────────────────────┤
+│ 🎫 SUPPORT TICKETS                  │ Section header
+│                                     │
+│ Active Tickets (2):                 │ Current issues
+│ ┌─────────────────────────────────┐ │
+│ │ Ticket #T-001 | Quality Issue   │ │ Active ticket
+│ │ Priority: 🔴 High               │ │ Priority indicator
+│ │ Status: 🟡 In Progress          │ │ Current status
+│ │ Created: 2 hours ago            │ │ Timing info
+│ │ Order: #O-2345 | Assigned: QC   │ │ Context & assignment
+│ │ [View Details] [Update Status]  │ │ Management actions
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 8px gap
+│ │ Ticket #T-003 | Delivery Delay  │ │ Another active ticket
+│ │ Priority: 🟡 Medium             │ │ Lower priority
+│ │ Status: 🟢 Investigating        │ │ Progress status
+│ │ Created: 1 day ago              │ │ Older ticket
+│ │ Order: #O-2341 | Assigned: Ops  │ │ Operations team
+│ │ [View Details] [Update Status]  │ │ Same actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ Recently Resolved (3):              │ Historical section
+│ ┌─────────────────────────────────┐ │
+│ │ Ticket #T-002 | Color Mismatch  │ │ Resolved ticket
+│ │ Resolved: 1 week ago ✅         │ │ Resolution status
+│ │ Resolution: ₹2,000 credit given │ │ Outcome details
+│ │ Resolution time: 4 hours        │ │ Efficiency metric
+│ │ [View Details] [Customer Rating]│ │ Review options
+│ └─────────────────────────────────┘ │ Card: 120px
+├─────────────────────────────────────┤
+│ 📊 Support Summary                  │ Analytics section
+│ • Total tickets: 8                 │ Volume metric
+│ • Average resolution: 6 hours      │ Efficiency score
+│ • Customer satisfaction: 95%       │ Quality metric
+│ • Most common: Quality issues (50%)│ Pattern analysis
+├─────────────────────────────────────┤
+│ [Create New Ticket] [View All Support]│ 56px action buttons
+└─────────────────────────────────────┘
+```
+
 #### **Customer Insights Tab**
 
 ```
@@ -1545,6 +2639,193 @@ Key Visual Elements:
 │        [Create Targeted Offer]      │ 56px primary CTA
 └─────────────────────────────────────┘
 ```
+
+---
+
+### **👥 Customer CRM Support Management Section**
+
+#### **Support Tickets Dashboard** (Customer Tab Main View)
+
+```
+┌─────────────────────────────────────┐
+│ Customers  [ Customers│Support ]     │ Two-section toggle
+│ [🔍 Search tickets... (🎙)]         │ Search: 44px
+├─────────────────────────────────────┤
+│ [Open] [In Progress] [Resolved]     │ Status filter tabs
+├─────────────────────────────────────┤
+│ 🎫 ACTIVE SUPPORT TICKETS           │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ Ticket #T-001 | Quality Issue   │ │ High priority ticket
+│ │ Customer: Suresh Textiles       │ │ Customer context
+│ │ Priority: 🔴 High | 2 hours ago │ │ Priority & timing
+│ │ Order: #O-2345 | Assigned: QC   │ │ Order link & team
+│ │ Status: 🟡 In Progress          │ │ Current status
+│ │ [View Details] [Update] [Call]  │ │ Quick actions
+│ └─────────────────────────────────┘ │ Card: 140px
+│                                     │
+│ ┌─────────────────────────────────┐ │ 8px gap
+│ │ Ticket #T-003 | Delivery Issue  │ │ Medium priority
+│ │ Customer: Ramesh Mills          │ │ Different customer
+│ │ Priority: 🟡 Medium | 1 day ago │ │ Lower priority
+│ │ Order: #O-2341 | Assigned: Ops  │ │ Operations team
+│ │ Status: 🔄 Investigating        │ │ Progress status
+│ │ [View Details] [Update] [Call]  │ │ Consistent actions
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 📊 Support Overview                 │ Quick stats
+│ • Open tickets: 5 | Average: 6 hrs │ Performance metrics
+│ • High priority: 2 | Overdue: 1    │ Priority tracking
+│ • Most common: Quality (40%)       │ Issue categories
+├─────────────────────────────────────┤
+│        [+ Create New Ticket]        │ 56px CTA
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭   📦   👥•         [+] │ Active: Customers
+└─────────────────────────────────────┘
+```
+
+#### **Ticket Creation Workflow**
+
+```
+┌─────────────────────────────────────┐
+│ Create Support Ticket           [×] │ Modal header
+├─────────────────────────────────────┤
+│ 👤 Customer Selection               │ Step 1
+│ Customer: [Suresh Textiles ▼]       │ Customer dropdown
+│ Phone: +91 9876543210              │ Auto-filled contact
+│ Email: suresh@textiles.com         │ Customer details
+├─────────────────────────────────────┤
+│ 🎫 Ticket Details                   │ Step 2
+│ Subject: [Quality issue with fabric]│ Issue title: 44px
+│ Category: [Quality Issue ▼]        │ Category dropdown
+│ Priority: ● High ○ Medium ○ Low    │ Priority selection
+│ Related Order: [#O-2345 ▼]         │ Order association
+├─────────────────────────────────────┤
+│ 📝 Issue Description                │ Step 3
+│ ┌─────────────────────────────────┐ │
+│ │ [Customer reports color         │ │ Description area
+│ │  variation in latest fabric     │ │ 80px text area
+│ │  delivery. Blue shade is off.]  │ │ Detailed description
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 👥 Assignment                       │ Step 4
+│ Assign to: [Quality Control Team ▼]│ Team assignment
+│ Due date: [Today + 4 hours ▼]      │ SLA compliance
+│ Notify customer: ☑️ Yes via WhatsApp│ Communication
+├─────────────────────────────────────┤
+│     [Cancel]     [Create Ticket]    │ Action buttons
+└─────────────────────────────────────┘
+```
+
+#### **Ticket Detail View with Conversation Thread**
+
+```
+┌─────────────────────────────────────┐
+│ Ticket #T-001 — Quality Issue   [←] │ Header with back
+│ Customer: Suresh Textiles | High Priority │ Context bar
+├─────────────────────────────────────┤
+│ 📋 Ticket Information               │ Details section
+│ Created: 04 Oct, 2:30 PM            │ Timestamp
+│ Category: Quality Issue             │ Type classification
+│ Order: #O-2345 | Cotton Fabric     │ Order context
+│ Assigned: Quality Control Team     │ Current assignment
+│ Status: 🟡 In Progress | Due: 6:30 PM │ Status & deadline
+├─────────────────────────────────────┤
+│ 💬 Conversation Thread              │ Communication log
+│ ┌─────────────────────────────────┐ │
+│ │ 👤 Customer (2:30 PM):          │ │ Customer message
+│ │ "The blue shade is not matching │ │ Issue description
+│ │  the sample. Please check."     │ │ Original complaint
+│ └─────────────────────────────────┘ │ Message card: 60px
+│ ┌─────────────────────────────────┐ │
+│ │ 🎧 Support (2:45 PM):           │ │ Support response
+│ │ "Thank you for reporting. Our   │ │ Acknowledgment
+│ │  QC team will investigate."     │ │ Action commitment
+│ └─────────────────────────────────┘ │
+│ ┌─────────────────────────────────┐ │
+│ │ 🔧 QC Team (3:15 PM):           │ │ Team update
+│ │ "Inspecting batch B2024-045.    │ │ Progress update
+│ │  Will report findings in 2h."   │ │ Timeline commitment
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 📷 Evidence & Attachments           │ Documentation
+│ [fabric_sample_issue.jpg] 📎        │ Customer photo
+│ [batch_inspection_report.pdf] 📄    │ Internal document
+│ [+ Add Attachment]                  │ Upload option
+├─────────────────────────────────────┤
+│ ✍️ Add Update                       │ Response section
+│ ┌─────────────────────────────────┐ │
+│ │ [Batch inspection complete.     │ │ Update text area
+│ │  Found minor color variation.   │ │ 60px height
+│ │  Offering replacement/credit.]  │ │ Resolution details
+│ └─────────────────────────────────┘ │
+│ Notify: ☑️ Customer ☑️ Internal Team │ Notification options
+├─────────────────────────────────────┤
+│ 🎯 Resolution Actions               │ Action section
+│ [Mark Resolved] [Escalate] [Update] │ Primary actions: 44px
+│ [Call Customer] [Schedule Follow-up] │ Communication options
+├─────────────────────────────────────┤
+│ 📊 Ticket Metrics                   │ Performance tracking
+│ • Response time: 15 minutes         │ Efficiency metrics
+│ • Total time: 3 hours 45 minutes   │ Duration tracking
+│ • Customer satisfaction: Pending   │ Feedback status
+└─────────────────────────────────────┘
+```
+
+#### **Support Analytics Dashboard**
+
+```
+┌─────────────────────────────────────┐
+│ Support Analytics               [←] │ Analytics header
+├─────────────────────────────────────┤
+│ 📊 Performance Overview             │ KPI section
+│ Today: 8 tickets | Resolved: 5     │ Daily metrics
+│ Avg Response: 12 minutes           │ Response time
+│ Avg Resolution: 4.2 hours          │ Resolution time
+│ Customer Satisfaction: 94%         │ Quality score
+├─────────────────────────────────────┤
+│ 🎯 Ticket Categories (This Month)   │ Category breakdown
+│ • Quality Issues: 15 (40%)         │ Most common
+│ • Delivery Problems: 10 (27%)      │ Operations related
+│ • Payment Queries: 8 (21%)         │ Financial issues
+│ • Product Information: 4 (12%)     │ Information requests
+├─────────────────────────────────────┤
+│ 👥 Team Performance                 │ Team metrics
+│ • QC Team: 6 tickets | 3.5h avg    │ Quality team
+│ • Operations: 4 tickets | 5.2h avg │ Ops team performance
+│ • Support: 2 tickets | 1.8h avg    │ General support
+├─────────────────────────────────────┤
+│ ⚠️ Priority Management              │ Priority tracking
+│ • High Priority: 2 open            │ Urgent issues
+│ • Medium Priority: 3 open          │ Standard issues
+│ • Overdue Tickets: 1               │ Escalation needed
+├─────────────────────────────────────┤
+│ [Export Report] [Team Assignment]   │ Management actions
+└─────────────────────────────────────┘
+```
+
+---
+
+### **🔗 Customer CRM Integration Workflows**
+
+#### **Sales → Customer Integration**
+- **Lead conversion**: Hot leads automatically create customer profiles with relationship score
+- **Order confirmation**: Sales orders appear in customer order history with real-time status
+- **Payment updates**: Payment confirmations update customer payment analytics instantly
+
+#### **Production → Customer Integration**
+- **Production milestones**: Customers receive automated WhatsApp updates on key milestones
+- **Quality updates**: QC completion triggers customer notifications with quality grade
+- **Delivery ready**: Production completion creates delivery notifications with tracking
+
+#### **Support → Customer Integration**
+- **Ticket creation**: Support tickets automatically link to customer 360° view
+- **Resolution updates**: Ticket resolutions update customer satisfaction scores
+- **Issue patterns**: Support data feeds into customer insights for proactive service
+
+#### **Accounts → Customer Integration**
+- **Invoice generation**: New invoices appear in customer payment history instantly
+- **Payment processing**: Payment confirmations update customer financial status
+- **Credit management**: Credit limit utilization monitored in customer 360° view
 
 ---
 
@@ -1611,8 +2892,8 @@ Key Visual Elements:
 │ │ • QC Pending: 1                     │ │ • Good: 18                          ││
 │ │ • Delayed >24h: 1                   │ │ • At Risk: 2                        ││
 │ │                                     │ │                                     ││
-│ │ Production Efficiency: 78%          │ │ Recent Feedback:                    ││
-│ │ Target: 85% | Gap: 7%              │ │ • 4.2/5.0 average rating           ││
+│ │ Active Work Orders: 8               │ │ Recent Feedback:                    ││
+│ │ Completed Today: 3 | Pending: 5   │ │ • 4.2/5.0 average rating           ││
 │ │               [View Production] ────→│ │ • 1 complaint pending               ││
 │ └─────────────────────────────────────┘ └─────────────────────────────────────┘│
 │                                                                                 │
@@ -1731,9 +3012,9 @@ Order Detail Drawer (slides in from right):
 │ ┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐        │
 │ │ 📈 Sales Performance│ │ 🏭 Production Metrics│ │ 💰 Financial Summary│        │
 │ │                     │ │                     │ │                     │        │
-│ │ Revenue: ₹12.4L     │ │ Efficiency: 78%     │ │ Profit: ₹2.1L       │        │
-│ │ Growth: +15%        │ │ Target: 85%         │ │ Margin: 17%         │        │
-│ │ Orders: 24          │ │ WOs Completed: 18   │ │ Outstanding: ₹45K   │        │
+│ │ Revenue: ₹12.4L     │ │ Active WOs: 5       │ │ Profit: ₹2.1L       │        │
+│ │ Growth: +15%        │ │ Completed: 18       │ │ Margin: 17%         │        │
+│ │ Orders: 24          │ │ Pending QC: 2       │ │ Outstanding: ₹45K   │        │
 │ └─────────────────────┘ └─────────────────────┘ └─────────────────────┘        │
 │                                                                                 │
 │ ┌─────────────────────────────────────────────────────────────────────────────┐│
@@ -2013,9 +3294,9 @@ Target: 1000m | Done: 800m | Remaining: 200m
 
 Circular Progress (Dashboard KPIs):
     ╭─────╮
-   ╱ 78%  ╲  Production
-  ╱ ##### ╲ Efficiency
-  ╲ ##### ╱ Target: 85%
+   ╱  8   ╲  Active
+  ╱ ##### ╲ Work Orders
+  ╲ ##### ╱ Today: 3/8 done
    ╲_____╱
 
 Step Progress (Multi-step flows):
