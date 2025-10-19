@@ -1,5 +1,6 @@
 import React from 'react';
-import { mockBusinessProfiles, mockSalesOrders, formatCurrency } from '../../data/mockData';
+import { mockBusinessProfiles, formatCurrency } from '../../data/customerMockData';
+import { mockSalesOrders } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './CustomerList.module.css';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
-import { mockLeads, Lead } from '../../data/mockData';
+import { mockLeads, Lead } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './LeadManagement.module.css';
 

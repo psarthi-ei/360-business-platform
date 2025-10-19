@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { mockAdvancePayments, mockFinalPayments, formatCurrency, getBusinessProfileById, getProformaInvoiceById, getFinalInvoiceById } from '../../data/mockData';
+import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
+import { mockAdvancePayments, mockFinalPayments, getProformaInvoiceById, getFinalInvoiceById } from '../../data/salesMockData';
 import styles from './Payments.module.css';
 
 interface PaymentsProps {

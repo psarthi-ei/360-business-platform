@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { Lead, Quote, SalesOrder, BusinessProfile } from '../../data/mockData';
+import { BusinessProfile } from '../../data/customerMockData';
+import { Lead, Quote, SalesOrder } from '../../data/salesMockData';
 
 // Types for search functionality
 export interface SearchResult {

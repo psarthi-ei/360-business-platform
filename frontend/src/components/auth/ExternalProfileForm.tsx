@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { mockBusinessProfiles, mockQuotes } from '../../data/mockData';
+import { mockBusinessProfiles } from '../../data/customerMockData';
+import { mockQuotes } from '../../data/salesMockData';
 import styles from './ExternalProfileForm.module.css';
 
 interface ExternalProfileFormProps {

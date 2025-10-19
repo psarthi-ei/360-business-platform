@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { mockQuotes, mockLeads, mockSalesOrders, formatCurrency, getBusinessProfileById, mockBusinessProfiles } from '../../data/mockData';
+import { mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
+import { mockQuotes, mockLeads, mockSalesOrders } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './QuotationOrders.module.css';
 

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { mockLeads, mockQuotes } from '../../data/mockData';
+import { mockLeads, mockQuotes } from '../../data/salesMockData';
 import styles from './Sales.module.css';
 import LeadManagement from './LeadManagement';
 import QuotationOrders from './QuotationOrders';

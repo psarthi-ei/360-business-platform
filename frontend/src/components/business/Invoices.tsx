@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from 'react';
+import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
 import { 
   mockProformaInvoices, 
   mockFinalInvoices, 
-  formatCurrency, 
-  getBusinessProfileById,
   getAdvancePaymentByProformaId,
   mockAdvancePayments
-} from '../../data/mockData';
+} from '../../data/salesMockData';
 import styles from './Invoices.module.css';
 
 interface InvoicesProps {

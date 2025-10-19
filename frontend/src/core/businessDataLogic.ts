@@ -1,4 +1,5 @@
-import { mockLeads, mockSalesOrders, mockBusinessProfiles } from '../data/mockData';
+import { mockBusinessProfiles } from '../data/customerMockData';
+import { mockLeads, mockSalesOrders } from '../data/salesMockData';
 
 // Single source of truth for business calculations
 export function getBusinessData() {

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { mockSalesOrders, mockQuotes, mockLeads, formatCurrency, getBusinessProfileById } from '../../data/mockData';
+import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
+import { mockSalesOrders, mockQuotes, mockLeads } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './SalesOrders.module.css';
 

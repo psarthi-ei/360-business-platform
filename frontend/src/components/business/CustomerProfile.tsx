@@ -1,5 +1,6 @@
 import React from 'react';
-import { getBusinessProfileById, getQuotesByCustomerId, getSalesOrdersByCustomerId, mockCommunications, formatCurrency } from '../../data/mockData';
+import { getBusinessProfileById, getQuotesByCustomerId, formatCurrency } from '../../data/customerMockData';
+import { getSalesOrdersByCustomerId, mockCommunications } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './CustomerProfile.module.css';
 

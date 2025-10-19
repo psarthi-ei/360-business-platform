@@ -1,5 +1,5 @@
 import React from 'react';
-import { mockLeads, mockQuotes, mockSalesOrders } from '../../data/mockData';
+import { mockLeads, mockQuotes, mockSalesOrders } from '../../data/salesMockData';
 import styles from './dashboard.module.css';
 
 interface DashboardProps {

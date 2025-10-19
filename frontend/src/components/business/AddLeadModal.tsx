@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lead, FabricRequirements } from '../../data/mockData';
+import { Lead, FabricRequirements } from '../../data/salesMockData';
 import styles from './AddLeadModal.module.css';
 
 interface AddLeadModalProps {
