@@ -27,16 +27,16 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
       description: 'Leads → Quotes → Orders'
     },
     { 
-      path: '/platform/production', 
-      icon: '🏭', 
-      label: 'Production',
-      description: 'Manufacturing & Work Orders'
-    },
-    { 
       path: '/platform/procurement', 
       icon: '📦', 
       label: 'Procurement',
       description: 'Purchasing & Materials'
+    },
+    { 
+      path: '/platform/production', 
+      icon: '🏭', 
+      label: 'Production',
+      description: 'Manufacturing & Work Orders'
     },
     { 
       path: '/platform/customers', 

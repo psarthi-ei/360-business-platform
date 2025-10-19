@@ -17,6 +17,7 @@ date  # ALWAYS run first - validates project timeline context
 # MANDATORY SESSION CONTEXT (read in order):
 /docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all documents and Quick Decision Matrix  
 /docs/IMPLEMENTATION_ROADMAP.md       # SECOND: Primary implementation roadmap with streamlined phases
+/docs/ARCHITECTURE_GUIDELINES.md     # THIRD: Architecture compliance rules (MANDATORY for all coding sessions)
 
 # Supporting references:
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes

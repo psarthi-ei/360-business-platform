@@ -16,6 +16,7 @@ export interface RenderFunctions {
   renderInventoryManagement: () => React.ReactElement;
   renderFulfillmentManagement: () => React.ReactElement;
   renderAnalyticsManagement: () => React.ReactElement;
+  renderProcurement: () => React.ReactElement;
   renderAuthentication: () => React.ReactElement;
   renderProfileCompletion: () => React.ReactElement;
   renderServicesHub: () => React.ReactElement;
@@ -47,7 +48,7 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
     
     <Route key="sales" path="sales" element={renderFunctions.renderSales()} />,
     <Route key="production" path="production" element={renderFunctions.renderInventoryManagement()} />,
-    <Route key="procurement" path="procurement" element={renderFunctions.renderInventoryManagement()} />,
+    <Route key="procurement" path="procurement" element={renderFunctions.renderProcurement()} />,
     
     // Default platform route - redirect to dashboard
     <Route key="platform-index" index element={renderFunctions.renderDashboard()} />
