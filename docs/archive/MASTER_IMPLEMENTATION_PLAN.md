@@ -21,10 +21,10 @@
 - [PHASE 2: 5-TAB NAVIGATION IMPLEMENTATION](#phase-2-5-tab-navigation-implementation) ✅ **COMPLETED**
 - [PHASE 3: HOME DASHBOARD TRANSFORMATION](#phase-3-home-dashboard-transformation) ✅ **COMPLETED**
 - [PHASE 4: SALES MODULE TRANSFORMATION](#phase-4-sales-module-transformation) ✅ **COMPLETED**
-- [PHASE 5: PROCUREMENT MODULE IMPLEMENTATION](#phase-5-procurement-module-implementation) ⏳ **NEXT PRIORITY**
-- [PHASE 6: PRODUCTION MODULE IMPLEMENTATION](#phase-6-production-module-implementation) ⏳ **PENDING**
-- [PHASE 7: CUSTOMER MODULE IMPLEMENTATION](#phase-7-customer-module-implementation) ⏳ **PENDING**
-- [PHASE 8: CROSS-MODULE INTEGRATION](#phase-8-cross-module-integration) ⏳ **PENDING**
+- [PHASE 5: PROCUREMENT MODULE](#phase-5-procurement-module) ⏳ **NEXT PRIORITY**
+- [PHASE 6: PRODUCTION MODULE](#phase-6-production-module) ⏳ **PENDING**
+- [PHASE 7: CUSTOMER MODULE](#phase-7-customer-module) ⏳ **PENDING**
+- [PHASE 8: CROSS-MODULE NAVIGATION](#phase-8-cross-module-navigation) ⏳ **PENDING**
 - [PHASE 9: CREATE/UPDATE/DELETE FUNCTIONALITY](#phase-9-createupdatedelete-functionality) ⏳ **PENDING**
 - [FINAL DELIVERABLES](#-final-deliverables)
 - [SUCCESS METRICS](#-success-metrics)
@@ -255,7 +255,7 @@ git reset --hard <commit-hash>  # Rollback to safe state
 
 ---
 
-## **PHASE 1: UPDATE EXISTING SYSTEMS WITH VISUAL DESIGN SPEC** 
+## **PHASE 5: PROCUREMENT MODULE** ⏳ **NEXT PRIORITY** 
 *Duration: 1.5-2 hours | Sub-phases: 3*
 
 ### **Sub-Phase 1.1: Transform Global Variables** ⏱️ *30 minutes*
@@ -1100,630 +1100,128 @@ Platform Routes (Business Application):
 
 ---
 
-## **PHASE 5: PROCUREMENT MODULE IMPLEMENTATION** ⏳ **NEXT PRIORITY**
-*Duration: 2.5-3 hours | Sub-phases: 4*
+## **PHASE 5: PROCUREMENT MODULE** ⏳ **NEXT PRIORITY**
+*Duration: 1.5 hours | Sub-phases: 4*
 
-**Strategic Focus**: Complete supply chain visualization for end-to-end business flow understanding
+### **Sub-Phase 5.1: Create Procurement Module Shell** ⏱️ *20 minutes*
+**Objective**: Build procurement module structure with 4-tab navigation (MR | PRs | POs | GRNs)
+**References**: [PROCUREMENT TAB - Supply Chain Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#procurement-tab---supply-chain-management)
 
-### **Sub-Phase 5.1: Materials Inventory Management** ⏱️ *45 minutes*
+### **Sub-Phase 5.2: Material Requirements Tab** ⏱️ *25 minutes*
+**Objective**: Implement MR list and detail views with status tracking
+**References**: [MR Tab - Material Requirements](../docs/VISUAL_DESIGN_SPECIFICATION.md#mr-tab---material-requirements)
 
-**Objective**: CREATE Materials Inventory list and expanded views using existing architectural patterns
+### **Sub-Phase 5.3: Purchase Requests & Orders Tabs** ⏱️ *30 minutes*
+**Objective**: Implement PRs and POs tabs with supplier management and workflow status
+**References**: [PRs Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#prs-tab---purchase-requests) | [POs Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#pos-tab---purchase-orders)
 
-**References**: 
-- **Visual Design Specification** - [PROCUREMENT TAB - Supply Chain Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#procurement-tab---supply-chain-management)
-- **Business Processes** - [Stage 5: Supply Chain & Materials Management](../docs/BUSINESS_PROCESSES.md#stage-5-supply-chain--materials-management)
-
-**Technical Implementation**:
-```
-1. CREATE Inventory Component Following Architecture Patterns
-   /frontend/src/components/business/ (existing folder)
-   ├── Inventory.tsx (NEW: Following existing component patterns)
-   └── Inventory.module.css (NEW: Using existing CSS architecture)
-
-2. Implement Materials List with Expanded Views
-   - Materials inventory list with 140px card template
-   - Stock level indicators and low-stock alerts  
-   - Material specifications (yarn types, chemicals, etc.)
-   - Expandable details showing supplier info, costs, usage history
-   - Search and filtering by material type, supplier, stock status
-```
-
-**Files Modified**:
-- **NEW** `Inventory.tsx` - Materials inventory management
-- **NEW** `Inventory.module.css` - Inventory styling following design system
-- `App.tsx` - Add inventory routing
-- `BottomNavigation.tsx` - Add procurement tab navigation
-
-**Validation Criteria**:
-- [ ] Materials list displays with expandable cards
-- [ ] Stock levels and alerts function correctly
-- [ ] Search and filtering work properly
-- [ ] Follows existing design system patterns
+### **Sub-Phase 5.4: Goods Receipt Notes Tab** ⏱️ *15 minutes*
+**Objective**: Implement GRNs tab with quality inspection and inventory integration
+**References**: [GRNs Tab - Goods Receipt Notes](../docs/VISUAL_DESIGN_SPECIFICATION.md#grns-tab---goods-receipt-notes)
 
 ---
 
-### **Sub-Phase 5.2: Purchase Order Management** ⏱️ *45 minutes*
+## **PHASE 6: PRODUCTION MODULE** ⏳ **PENDING**
+*Duration: 1.5 hours | Sub-phases: 4*
 
-**Objective**: CREATE Purchase Order list and expanded views for supplier management
+### **Sub-Phase 6.1: Create Production Module Shell** ⏱️ *20 minutes*
+**Objective**: Build production module structure with 4-tab navigation (Plan | Active | QC | Ready)
+**References**: [PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution)
 
-**Technical Implementation**:
-```
-1. Purchase Order List Implementation
-   - PO list with 140px card template consistency
-   - PO status tracking (draft, sent, confirmed, received)
-   - Supplier information and contact details
-   - Expandable details showing line items, costs, delivery dates
+### **Sub-Phase 6.2: Plan & Active Tabs** ⏱️ *35 minutes*
+**Objective**: Implement work order planning and live production tracking tabs
+**References**: [Plan Tab - Work Order Planning](../docs/VISUAL_DESIGN_SPECIFICATION.md#plan-tab---work-order-planning--creation) | [Active Tab - Live Production Tracking](../docs/VISUAL_DESIGN_SPECIFICATION.md#active-tab---live-production-tracking)
 
-2. Supplier Management Integration
-   - Supplier profiles with contact information
-   - Purchase history and performance tracking
-   - Payment terms and credit status
-   - Expandable supplier details with order history
-```
+### **Sub-Phase 6.3: Quality Control Tab** ⏱️ *25 minutes*
+**Objective**: Implement QC tab with inspection management and quality documentation
+**References**: [QC Tab - Quality Control Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#qc-tab---quality-control-management)
 
-**Files Modified**:
-- `Inventory.tsx` - Add PO management tab
-- `Inventory.module.css` - PO styling
-- Mock data - Purchase orders and suppliers
-
-**Validation Criteria**:
-- [ ] PO list displays with proper status indicators
-- [ ] Supplier information accessible from expanded views
-- [ ] Purchase history tracking functional
+### **Sub-Phase 6.4: Ready for Delivery Tab** ⏱️ *10 minutes*
+**Objective**: Implement delivery management and customer notification tab
+**References**: [Ready Tab - Delivery & Fulfillment Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#ready-tab---delivery--fulfillment-management)
 
 ---
 
-### **Sub-Phase 5.3: Stock Level Dashboard** ⏱️ *45 minutes*
+## **PHASE 7: CUSTOMER MODULE** ⏳ **PENDING**
+*Duration: 1 hour | Sub-phases: 3*
 
-**Objective**: CREATE stock monitoring dashboard with real-time inventory visibility
+### **Sub-Phase 7.1: Customer List & 360° Structure** ⏱️ *25 minutes*
+**Objective**: Build customer list view and Customer 360° detail structure
+**References**: [Customer List View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-list-view) | [Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen)
 
-**Technical Implementation**:
-```
-1. Stock Dashboard Implementation
-   - Current stock levels by material type
-   - Low-stock alerts and reorder recommendations  
-   - Stock allocation to active orders
-   - Material usage trends and forecasting
+### **Sub-Phase 7.2: Customer 360° Tabs Implementation** ⏱️ *25 minutes*
+**Objective**: Implement 4-tab navigation within Customer 360° (Orders | Payments | Tickets | Insights)
+**References**: [Customer Orders Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-orders-tab) | [Customer Payments Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-payments-tab) | [Customer Tickets Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-tickets-tab) | [Customer Insights Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-insights-tab)
 
-2. Integration with Production Planning
-   - Material requirements for pending orders
-   - Stock availability for production scheduling
-   - Material consumption tracking
-   - Waste and efficiency metrics
-```
-
-**Files Modified**:
-- `Inventory.tsx` - Add stock dashboard tab
-- `Inventory.module.css` - Dashboard styling
-- Mock data - Stock levels and consumption data
-
-**Validation Criteria**:
-- [ ] Stock dashboard shows current levels
-- [ ] Low-stock alerts display correctly
-- [ ] Material allocation tracking works
+### **Sub-Phase 7.3: Customer Module Integration** ⏱️ *10 minutes*
+**Objective**: Integrate with navigation and apply design system styling
+**References**: [CUSTOMERS TAB - Relationship Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#customers-tab---relationship-management)
 
 ---
 
-### **Sub-Phase 5.4: Procurement Module Integration** ⏱️ *45 minutes*
-
-**Objective**: Integrate procurement module with existing navigation and ensure design consistency
-
-**Technical Implementation**:
-```
-1. Navigation Integration
-   - Add procurement tab to bottom navigation
-   - Update routing for procurement screens
-   - Ensure consistent navigation patterns
-
-2. Design System Compliance
-   - Apply Visual Design Specification styling
-   - Ensure 140px card template consistency
-   - Implement proper spacing and typography
-   - Mobile-first responsive design
-
-3. Mock Data Enhancement
-   - Rich procurement data for realistic testing
-   - Material specifications and supplier details
-   - Purchase order workflows and status tracking
-```
-
-**Files Modified**:
-- `BottomNavigation.tsx` - Add procurement navigation
-- `App.tsx` - Procurement routing
-- Mock data files - Enhanced procurement data
-
-**Validation Criteria**:
-- [ ] Procurement tab accessible from navigation
-- [ ] All screens follow design system patterns
-- [ ] Mock data provides realistic scenarios
-- [ ] Mobile responsiveness works correctly
-
----
-
-## **PHASE 6: PRODUCTION MODULE IMPLEMENTATION** ⏳ **PENDING**
-*Duration: 2.5-3 hours | Sub-phases: 4*
-
-**Strategic Focus**: Complete manufacturing execution visualization
-
-### **Sub-Phase 6.1: Work Order Management** ⏱️ *45 minutes*
-
-**Objective**: CREATE Work Order list and expanded views using existing architectural patterns
-
-**References**:
-- **Visual Design Specification** - [PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution)
-- **Business Processes** - [Stage 4: Manufacturing Execution & Work Order Management](../docs/BUSINESS_PROCESSES.md#stage-4-manufacturing-execution--work-order-management)
-
-**Technical Implementation**:
-```
-1. CREATE Production Component Following Architecture Patterns
-   /frontend/src/components/business/ (existing folder)
-   ├── Production.tsx (NEW: Following existing component patterns)
-   └── Production.module.css (NEW: Using existing CSS architecture)
-
-2. Work Order List Implementation
-   - Work order list with 140px card template
-   - Order status tracking (pending, in-progress, completed)
-   - Customer and product information
-   - Expandable details showing production specifications
-   - Priority and deadline management
-```
-
-**Files Modified**:
-- **NEW** `Production.tsx` - Work order management
-- **NEW** `Production.module.css` - Production styling
-- `App.tsx` - Add production routing
-- Mock data - Work orders and production data
-
-**Validation Criteria**:
-- [ ] Work order list displays correctly
-- [ ] Status tracking functional
-- [ ] Expandable details show complete information
-
----
-
-### **Sub-Phase 6.2: Production Planning & Scheduling** ⏱️ *45 minutes*
-
-**Objective**: CREATE production planning interface with capacity and resource management
-
-**Technical Implementation**:
-```
-1. Production Planning Dashboard
-   - Machine capacity and scheduling
-   - Resource allocation (operators, materials)
-   - Production timeline and milestones
-   - Bottleneck identification and alerts
-
-2. Resource Management
-   - Operator assignment and skills tracking
-   - Machine availability and maintenance schedules
-   - Material requirements and allocation
-   - Quality checkpoint planning
-```
-
-**Files Modified**:
-- `Production.tsx` - Add planning tab
-- `Production.module.css` - Planning interface styling
-- Mock data - Resource and capacity data
-
-**Validation Criteria**:
-- [ ] Planning dashboard shows resource allocation
-- [ ] Scheduling interface functional
-- [ ] Resource conflicts identified
-
----
-
-### **Sub-Phase 6.3: Manufacturing Execution Tracking** ⏱️ *45 minutes*
-
-**Objective**: CREATE real-time production tracking with progress monitoring
-
-**Technical Implementation**:
-```
-1. Production Tracking Interface
-   - Real-time production progress
-   - Quality checkpoints and results
-   - Production rate and efficiency metrics
-   - Issue tracking and resolution
-
-2. Shop Floor Integration
-   - Live production status updates
-   - Operator input and feedback
-   - Machine status and performance
-   - Quality control integration
-```
-
-**Files Modified**:
-- `Production.tsx` - Add tracking tab
-- `Production.module.css` - Tracking interface styling
-- Mock data - Live production data
-
-**Validation Criteria**:
-- [ ] Production tracking shows live status
-- [ ] Progress monitoring functional
-- [ ] Quality integration works
-
----
-
-### **Sub-Phase 6.4: Quality Control Management** ⏱️ *45 minutes*
-
-**Objective**: CREATE quality control workflow with inspection and approval processes
-
-**Technical Implementation**:
-```
-1. Quality Control Interface
-   - Quality inspection checklists
-   - Grade assignment (A-Grade, B-Grade, Reject)
-   - Quality documentation and photo evidence
-   - Inspector assignment and accountability
-
-2. Quality Metrics Tracking
-   - Quality trends and patterns
-   - Defect tracking and root cause analysis
-   - Customer satisfaction correlation
-   - Continuous improvement recommendations
-```
-
-**Files Modified**:
-- `Production.tsx` - Add quality control tab
-- `Production.module.css` - QC interface styling
-- Mock data - Quality control data
-
-**Validation Criteria**:
-- [ ] Quality control workflow functional
-- [ ] Inspection checklists work correctly
-- [ ] Quality metrics display properly
-
----
-
-## **PHASE 7: CUSTOMER MODULE IMPLEMENTATION** ⏳ **PENDING**
-*Duration: 1.5-2 hours | Sub-phases: 3*
-
-**Strategic Focus**: Complete customer relationship management visualization
-
-### **Sub-Phase 7.1: Customer List & Profile Management** ⏱️ *45 minutes*
-
-**Objective**: CREATE Customer list and expanded profile views
-
-**References**:
-- **Visual Design Specification** - [CUSTOMERS TAB - Relationship Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#customers-tab---relationship-management)
-- **Business Processes** - [Stage 7: Customer Relationship & Lifecycle Management](../docs/BUSINESS_PROCESSES.md#stage-7-customer-relationship--lifecycle-management)
-
-**Technical Implementation**:
-```
-1. Customer List Implementation
-   - Customer list with 140px card template
-   - Customer status and priority indicators
-   - Contact information and communication history
-   - Expandable details showing complete customer profile
-
-2. Customer Profile Views
-   - Complete customer 360° view
-   - Order history and relationship timeline
-   - Payment history and credit status
-   - Communication preferences and notes
-```
-
-**Files Modified**:
-- **NEW** `Customers.tsx` - Customer management
-- **NEW** `Customers.module.css` - Customer styling
-- Update existing `CustomerProfile.tsx` - Enhanced profile view
-- Mock data - Customer profiles and history
-
-**Validation Criteria**:
-- [ ] Customer list displays with proper information
-- [ ] Profile views show complete customer data
-- [ ] Navigation between list and profile works
-
----
-
-### **Sub-Phase 7.2: Customer 360° Views** ⏱️ *30 minutes*
-
-**Objective**: Enhance customer profile with comprehensive relationship data
-
-**Technical Implementation**:
-```
-1. Comprehensive Customer View
-   - Order history across all stages
-   - Payment and credit history
-   - Communication log and preferences
-   - Quality feedback and satisfaction scores
-
-2. Relationship Analytics
-   - Customer lifetime value
-   - Purchase patterns and trends
-   - Loyalty and retention metrics
-   - Growth opportunities identification
-```
-
-**Files Modified**:
-- `CustomerProfile.tsx` - Enhanced 360° view
-- `CustomerProfile.module.css` - Comprehensive styling
-- Mock data - Relationship analytics data
-
-**Validation Criteria**:
-- [ ] 360° view shows complete customer relationship
-- [ ] Analytics and metrics display correctly
-- [ ] Historical data accessible
-
----
-
-### **Sub-Phase 7.3: Customer Relationship Tracking** ⏱️ *30 minutes*
-
-**Objective**: CREATE customer interaction and satisfaction tracking
-
-**Technical Implementation**:
-```
-1. Interaction Tracking
-   - Communication history and touchpoints
-   - Follow-up reminders and tasks
-   - Relationship milestones and events
-   - Customer feedback and satisfaction
-
-2. Loyalty Management
-   - Repeat order patterns
-   - Customer retention metrics
-   - Referral tracking and rewards
-   - VIP customer identification
-```
-
-**Files Modified**:
-- `Customers.tsx` - Add relationship tracking
-- `Customers.module.css` - Tracking interface styling
-- Mock data - Interaction and loyalty data
-
-**Validation Criteria**:
-- [ ] Interaction tracking functional
-- [ ] Loyalty metrics display correctly
-- [ ] Follow-up system works
-
----
-
-## **PHASE 8: CROSS-MODULE INTEGRATION** ⏳ **PENDING**
-*Duration: 2-2.5 hours | Sub-phases: 3*
-
-**Strategic Focus**: Connect all modules with seamless navigation and business flow
-
-### **Sub-Phase 8.1: Sales Flow Navigation** ⏱️ *45 minutes*
-
-**Objective**: Implement cross-module navigation for Lead → Quote → Order → Customer flow
-
-**References**:
-- **Visual Design Specification** - [Cross-Module Integration Points](../docs/VISUAL_DESIGN_SPECIFICATION.md#cross-module-integration-points)
-- **Business Processes** - [Complete Commercial-to-Production Workflow](../docs/BUSINESS_PROCESSES.md#complete-commercial-to-production-workflow-summary)
-
-**Technical Implementation**:
-```
-1. Sales Pipeline Integration
-   - Lead expanded view: "View Quotes for this Lead" button
-   - Quote expanded view: "View Related Lead" + "View Order" buttons
-   - Order expanded view: "View Quote" + "View Customer Profile" buttons
-   - Auto-filtered views when navigating between modules
-
-2. Business Flow Navigation
-   - Automatic filtering based on relationships
-   - Breadcrumb navigation for context
-   - Back navigation maintaining state
-   - Deep linking to specific items
-```
-
-**Files Modified**:
-- Sales module components - Add navigation buttons
-- Customer module - Add sales history navigation
-- Navigation utilities - Cross-module routing
-
-**Validation Criteria**:
-- [ ] Sales flow navigation works seamlessly
-- [ ] Filtered views display correctly
-- [ ] Context maintained during navigation
-
----
-
-### **Sub-Phase 8.2: Operations Flow Integration** ⏱️ *45 minutes*
-
-**Objective**: Connect Order → Procurement → Production → Delivery flow
-
-**References**:
-- **Visual Design Specification** - [Cross-Module Integration Points](../docs/VISUAL_DESIGN_SPECIFICATION.md#cross-module-integration-points)
-- **Business Processes** - [8-Stage Business Pipeline Overview](../docs/BUSINESS_PROCESSES.md#8-stage-business-pipeline-overview)
-
-**Technical Implementation**:
-```
-1. Operations Pipeline Integration
-   - Order expanded view: "View Production Status" button
-   - Production expanded view: "View Materials Required" button
-   - Inventory expanded view: "View Usage in Orders" button
-   - Status synchronization across modules
-
-2. Process Flow Visualization
-   - Visual indicators of process progression
-   - Status updates across related modules
-   - Bottleneck identification and alerts
-   - Timeline and milestone tracking
-```
-
-**Files Modified**:
-- Production and Inventory modules - Add integration buttons
-- Sales module - Add production status links
-- Cross-module status synchronization
-
-**Validation Criteria**:
-- [ ] Operations flow navigation functional
-- [ ] Status synchronization works
-- [ ] Process visualization clear
-
----
-
-### **Sub-Phase 8.3: Customer Journey Integration** ⏱️ *30 minutes*
-
-**Objective**: Complete customer journey tracking across all touchpoints
-
-**References**:
-- **Visual Design Specification** - [Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen)
-- **Business Processes** - [Automated Lead-to-Customer Conversion System](../docs/BUSINESS_PROCESSES.md#automated-lead-to-customer-conversion-system)
-
-**Technical Implementation**:
-```
-1. Complete Customer Journey
-   - Customer expanded view: Navigation to quotes, orders, payments
-   - All modules: "View Customer Profile" integration
-   - Customer timeline with all interactions
-   - Journey analytics and insights
-
-2. Unified Customer Experience
-   - Consistent customer information across modules
-   - Communication history integration
-   - Customer satisfaction tracking
-   - Relationship milestone recognition
-```
-
-**Files Modified**:
-- All module components - Add customer profile links
-- Customer module - Journey visualization
-- Unified customer data integration
-
-**Validation Criteria**:
-- [ ] Customer journey visible across all modules
-- [ ] Information consistency maintained
-- [ ] Journey analytics functional
+## **PHASE 8: CROSS-MODULE NAVIGATION** ⏳ **PENDING**
+*Duration: 1.5 hours | Sub-phases: 4*
+
+### **Sub-Phase 8.1: Sales Order Cross-Navigation** ⏱️ *25 minutes*
+**Objective**: Add clickable links in Sales Order detail views (Quote ID, Payment ID, Invoice ID, Customer)
+**References**: [Orders Tab - Sales Order Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management)
+
+### **Sub-Phase 8.2: Customer 360° Cross-Navigation** ⏱️ *25 minutes*
+**Objective**: Add clickable links in Customer 360° tabs (Order items, Quote items, Payment items)
+**References**: [Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen)
+
+### **Sub-Phase 8.3: Production Work Order Cross-Navigation** ⏱️ *30 minutes*
+**Objective**: Add clickable links in Work Order details (Sales Order ID, Material items, Customer, QC records)
+**References**: [Work Order Detail Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-interface-active-tab-drill-down)
+
+### **Sub-Phase 8.4: Procurement PO Cross-Navigation** ⏱️ *20 minutes*
+**Objective**: Add clickable links in Purchase Order details (Work Order IDs, Material items, Supplier)
+**References**: [POs Tab - Purchase Orders](../docs/VISUAL_DESIGN_SPECIFICATION.md#pos-tab---purchase-orders)
 
 ---
 
 ## **PHASE 9: CREATE/UPDATE/DELETE FUNCTIONALITY** ⏳ **PENDING**
-*Duration: 3-4 hours | Sub-phases: 3*
+*Duration: 3 hours | Sub-phases: 6*
 
-**Strategic Focus**: Add creation and editing capabilities after all viewing screens are perfect
+### **Sub-Phase 9.1: Lead & Quote Creation** ⏱️ *30 minutes*
+**Objective**: Implement lead capture and quote generation workflows
+**References**: [Lead Creation Flow](../docs/VISUAL_DESIGN_SPECIFICATION.md#lead-creation-flow) | [Quote Creation Flow](../docs/VISUAL_DESIGN_SPECIFICATION.md#quote-creation-flow)
 
-### **Sub-Phase 9.1: Sales Creation Workflows** ⏱️ *90 minutes*
+### **Sub-Phase 9.2: Order Creation** ⏱️ *30 minutes*
+**Objective**: Implement 3-step order creation process with payment terms
+**References**: [Create New Order Flow (3-Step Process)](../docs/VISUAL_DESIGN_SPECIFICATION.md#create-new-order-flow-3-step-process)
 
-**Objective**: Implement creation workflows for leads, quotes, and orders
+### **Sub-Phase 9.3: Work Order Creation** ⏱️ *30 minutes*
+**Objective**: Implement work order generation from sales orders with resource allocation
+**References**: [Bulk Work Order Creation Wizard](../docs/VISUAL_DESIGN_SPECIFICATION.md#bulk-work-order-creation-wizard-plan-tab-action)
 
-**References**:
-- **Visual Design Specification** - [Create New Order Flow (3-Step Process)](../docs/VISUAL_DESIGN_SPECIFICATION.md#create-new-order-flow-3-step-process)
-- **Business Processes** - [Stage 2: Commercial Document Management](../docs/BUSINESS_PROCESSES.md#stage-2-commercial-document-management)
+### **Sub-Phase 9.4: Purchase Order Creation** ⏱️ *30 minutes*
+**Objective**: Implement material requirement to purchase order workflows
+**References**: [Create Purchase Request](../docs/VISUAL_DESIGN_SPECIFICATION.md#create-purchase-request)
 
-**Technical Implementation**:
-```
-1. Lead Creation Workflow
-   - Lead capture form with validation
-   - Contact information and requirements
-   - Priority and source tracking
-   - Follow-up scheduling
+### **Sub-Phase 9.5: Customer & Support Creation** ⏱️ *30 minutes*
+**Objective**: Implement customer profile creation and support ticket workflows
+**References**: [Ticket Creation Workflow](../docs/VISUAL_DESIGN_SPECIFICATION.md#ticket-creation-workflow)
 
-2. Quote Creation Workflow
-   - 3-step quote creation process per Visual Design Spec
-   - Customer and items selection
-   - Pricing and terms configuration
-   - Quote generation and delivery
-
-3. Order Creation Workflow
-   - Convert quote to order process
-   - Order confirmation and payment terms
-   - Production authorization
-   - Customer notification
-```
-
-**Files Modified**:
-- Sales module - Add creation modals and workflows
-- Form components - Creation interfaces
-- Validation utilities - Input validation
-
-**Validation Criteria**:
-- [ ] Creation workflows functional
-- [ ] Validation prevents errors
-- [ ] Data integration works correctly
+### **Sub-Phase 9.6: Update & Delete Operations** ⏱️ *30 minutes*
+**Objective**: Implement edit and delete functionality across all modules with validation
+**References**: [Business Processes - Data Management](../docs/BUSINESS_PROCESSES.md#stage-8-analytics--reporting)
 
 ---
 
-### **Sub-Phase 9.2: Production/Procurement Creation** ⏱️ *90 minutes*
+## **COMPLETED PHASES SUMMARY**
 
-**Objective**: Implement creation workflows for work orders and purchase orders
+### **Phase 1-4: Foundation & Core Modules** ✅ **COMPLETED**
+- **Phase 1**: Visual Design System Updates (Design tokens, mobile-first layout, navigation architecture)
+- **Phase 2**: 5-Tab Navigation Implementation (Unified header, routing, state management) 
+- **Phase 3**: Home Dashboard Transformation (KPI strip, business intelligence cards)
+- **Phase 4**: Sales Module Transformation (4-tab sales pipeline: Leads | Quotes | Orders | Payments)
 
-**Technical Implementation**:
-```
-1. Work Order Creation
-   - Convert sales order to work orders
-   - Resource allocation and scheduling
-   - Production specifications
-   - Quality requirements
+## **📝 MASTER PLAN UPDATE PROTOCOL**
 
-2. Purchase Order Creation
-   - Material requirements calculation
-   - Supplier selection and comparison
-   - Purchase order generation
-   - Approval workflow
+### **🚨 MANDATORY: Update This Plan After Each Sub-Phase**
 
-3. Inventory Management
-   - Material receipt processing
-   - Stock updates and allocation
-   - Quality inspection workflows
-   - Waste tracking and reporting
-```
-
-**Files Modified**:
-- Production and Inventory modules - Creation workflows
-- Workflow components - Multi-step processes
-- Data management - CRUD operations
-
-**Validation Criteria**:
-- [ ] Work order creation functional
-- [ ] Purchase order workflow works
-- [ ] Inventory updates correctly
-
----
-
-### **Sub-Phase 9.3: Data Management & Integration** ⏱️ *60 minutes*
-
-**Objective**: Implement comprehensive CRUD operations and data validation
-
-**Technical Implementation**:
-```
-1. Data Validation & Error Handling
-   - Form validation across all modules
-   - Error messaging and recovery
-   - Data consistency checks
-   - Conflict resolution
-
-2. Advanced CRUD Operations
-   - Bulk operations and batch processing
-   - Undo/redo functionality
-   - Version tracking and history
-   - Data export and reporting
-
-3. Integration Testing
-   - End-to-end workflow testing
-   - Cross-module data consistency
-   - Performance optimization
-   - User acceptance testing
-```
-
-**Files Modified**:
-- All modules - Enhanced CRUD operations
-- Validation utilities - Comprehensive validation
-- Testing utilities - Integration tests
-
-**Validation Criteria**:
-- [ ] All CRUD operations functional
-- [ ] Data validation comprehensive
-- [ ] Integration testing passes
-
-### **Sub-Phase 5.1: Production Module Creation** ⏱️ *90 minutes*
-
-**Objective**: CREATE new Production module using existing architectural patterns
-
-**Reference**: **Visual Design Specification Section 6** - [🏭 PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution) *(Lines 654-737)*
-
-**Technical Implementation**:
-```
-1. CREATE Production Component Following Architecture Patterns
-   /frontend/src/components/business/ (existing folder)
-   ├── Production.tsx (NEW: Following existing component patterns)
-   └── Production.module.css (NEW: Using existing CSS architecture)
-
-2. Implement 3-Tab Production Interface
-   - Create tab component with Today | Progress | Done states
-   - Implement tab switching logic and state management
-   - Add search functionality with voice integration hooks
-   - Build work order card components with interactive elements
-   - Integrate with existing production data and business logic
+**After completing ANY sub-phase, ALWAYS follow this protocol:**
 
 3. Production Status System
    - 🔴 Ready to Start: Materials allocated, awaiting operator

@@ -9,16 +9,16 @@ date  # ALWAYS run first - validates project timeline context
 
 **Current Timeline:**
 - **Project Start**: August 27, 2025
-- **Implementation Strategy**: 6-phase Visual Design Specification implementation
-- **Phase Details**: Check Master Implementation Plan for current status
+- **Implementation Strategy**: Core Views → Cross-Module → CRUD sequence
+- **Phase Details**: Check Implementation Roadmap for current status
 
 ### **STEP 2: READ MANDATORY SESSION CONTEXT**
 ```bash
 # MANDATORY SESSION CONTEXT (read in order):
-/docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all 11 documents and Quick Decision Matrix  
-/docs/MASTER_IMPLEMENTATION_PLAN.md   # SECOND: Primary implementation strategy with Visual Design references
+/docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all documents and Quick Decision Matrix  
+/docs/IMPLEMENTATION_ROADMAP.md       # SECOND: Primary implementation roadmap with streamlined phases
 
-# Supporting design reference (when referenced by Master Plan):
+# Supporting references:
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes
 ```
 
@@ -56,16 +56,16 @@ if (params && 'leadId' in params) {
 }
 ```
 
-### **3. MASTER IMPLEMENTATION PLAN COMPLIANCE (MANDATORY)**
+### **3. IMPLEMENTATION ROADMAP COMPLIANCE (MANDATORY)**
 **❌ Common Mistake**: Creating new files instead of updating existing systems
 
 **✅ Required Standards**:
-- ALL updates MUST follow existing architectural patterns per Master Implementation Plan
-- ALL designs MUST reference Visual Design Spec via Master Plan
+- ALL updates MUST follow existing architectural patterns per Implementation Roadmap
+- ALL designs MUST reference Visual Design Spec via Implementation Roadmap
 - ALL colors MUST use Visual Design Spec (#1D4ED8 primary, #F97316 secondary)
 - ALL fonts MUST use Inter typography hierarchy
 - ALL touch targets MUST meet 44px minimum
-- Follow Master Implementation Plan in `/docs/MASTER_IMPLEMENTATION_PLAN.md`
+- Follow Implementation Roadmap in `/docs/IMPLEMENTATION_ROADMAP.md`
 
 ### **4. FILE EDITING PROTOCOL**
 **❌ Common Mistake**: Using Edit tool without reading file first
@@ -75,19 +75,39 @@ if (params && 'leadId' in params) {
 2. `Edit` tool with exact string matching
 3. `BashOutput` verification after changes
 
+### **5. DOCUMENTATION FORMATTING STANDARDS (MANDATORY)**
+**❌ FORBIDDEN**: Emojis in document headers (breaks TOC navigation)
+
+**✅ REQUIRED STANDARDS**:
+- NO emojis in any header levels (`#`, `##`, `###`, `####`)
+- Headers must use clean text for proper anchor link generation
+- TOC links break when headers contain special characters/emojis
+- Use emojis in content body only, never in navigation structure
+
+**Example Violations Fixed**:
+```markdown
+❌ ### 🎯 Design Mission          → breaks TOC links
+❌ ## 📱 Mobile Design           → navigation failure
+❌ #### 🔥 Implementation        → anchor link issues
+
+✅ ### Design Mission            → proper TOC navigation
+✅ ## Mobile Design              → clean anchor links  
+✅ #### Implementation           → working navigation
+```
+
 ---
 
 ## 🎯 IMPLEMENTATION PRINCIPLES
 
-### **Master Implementation Plan Reference**
-- **Current Status**: Check `/docs/MASTER_IMPLEMENTATION_PLAN.md` for live phase status
+### **Implementation Roadmap Reference**
+- **Current Status**: Check `/docs/IMPLEMENTATION_ROADMAP.md` for live phase status
 - **Todo Tracking**: Check `/TODO.md` for current priorities and session context
 
 ### **Core Implementation Standards**
 1. UPDATE existing systems (NOT create new files)
 2. EXTEND existing Design System classes following Visual Design Spec
 3. PRESERVE all existing architectural patterns while applying Visual Design styling
-4. FOLLOW Master Implementation Plan phase structure
+4. FOLLOW Implementation Roadmap phase structure (Core Views → Cross-Module → CRUD)
 
 ---
 
@@ -143,5 +163,5 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
-**📍 For detailed implementation steps, refer to the Master Implementation Plan.**  
+**📍 For detailed implementation steps, refer to the Implementation Roadmap.**  
 **🎯 This guide focuses on session protocol and mistake prevention only.**

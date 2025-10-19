@@ -18,17 +18,17 @@
 
 ### **1. Design Vision & Context**
 - [Design Mission](#design-mission)
-- [Design Promise](#design-promise)  
+- [Design Promise](#design-promise)
 - [Design Success Criteria](#design-success-criteria)
 
 ### **2. Design Philosophy & Principles**
 - [Visual Design Philosophy](#visual-design-philosophy)
-  - [Clarity Over Complexity](#1️⃣-clarity-over-complexity)
-  - [Professional Trust-Building](#2️⃣-professional-trust-building)
-  - [Factory-Optimized Visibility](#3️⃣-factory-optimized-visibility)
-  - [Progress-Driven Interface](#4️⃣-progress-driven-interface)
-  - [Role-Based Visual Hierarchy](#5️⃣-role-based-visual-hierarchy)
-  - [Multilingual Design Consideration](#6️⃣-multilingual-design-consideration)
+  - [Clarity Over Complexity](#clarity-over-complexity)
+  - [Professional Trust-Building](#professional-trust-building)
+  - [Factory-Optimized Visibility](#factory-optimized-visibility)
+  - [Progress-Driven Interface](#progress-driven-interface)
+  - [Role-Based Visual Hierarchy](#role-based-visual-hierarchy)
+  - [Multilingual Design Consideration](#multilingual-design-consideration)
 
 ### **3. User Roles & Design Context**
 - [Design Personas & Interface Needs](#design-personas--interface-needs)
@@ -51,13 +51,13 @@
   - [Font Hierarchy](#font-hierarchy)
   - [Typography Rules](#typography-rules)
 - [Spacing & Layout System](#spacing--layout-system)
-  - [Spacing Scale (8px baseline)](#spacing-scale)
+  - [Spacing Scale (8px baseline)](#spacing-scale-8px-baseline)
   - [Layout Grid](#layout-grid)
 - [Component Design System](#component-design-system)
   - [Button Styles](#button-styles)
   - [Card Styles](#card-styles)
   - [Navigation Styles](#navigation-styles)
-- [DESIGN DECISION: FAB vs Bottom CTA](#design-decision-fab-vs-bottom-cta-for-non-tech-users)
+- [DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users](#design-decision-fab-vs-bottom-cta-for-non-tech-users)
 
 ### **5. Mobile Design Architecture**
 - [Core Mobile Navigation Structure](#core-mobile-navigation-structure)
@@ -84,9 +84,12 @@
   - [Invoices Tab - Invoice Management](#invoices-tab---invoice-management)
   - [Sales Navigation Flows & Integration](#sales-navigation-flows--integration)
 - [PRODUCTION TAB - Manufacturing Execution](#production-tab---manufacturing-execution)
-  - [Work Orders List](#work-orders-list)
-  - [Work Order Detail (Worker Interface)](#work-order-detail-worker-interface)
-  - [Quality Control Screen](#quality-control-screen)
+  - [Production Module Overview](#production-module-overview)
+  - [Plan Tab - Work Order Planning & Creation](#plan-tab---work-order-planning--creation)
+  - [Active Tab - Live Production Tracking](#active-tab---live-production-tracking)
+  - [QC Tab - Quality Control Management](#qc-tab---quality-control-management)
+  - [Ready Tab - Delivery & Fulfillment Management](#ready-tab---delivery--fulfillment-management)
+- [Production Module Cross-Integration Workflows](#production-module-cross-integration-workflows)
 - [PROCUREMENT TAB - Supply Chain Management](#procurement-tab---supply-chain-management)
   - [Procurement Module Overview](#procurement-module-overview)
   - [MR Tab - Material Requirements](#mr-tab---material-requirements)
@@ -95,10 +98,14 @@
   - [GRNs Tab - Goods Receipt Notes](#grns-tab---goods-receipt-notes)
   - [Inventory Management (Connected Screens)](#inventory-management-connected-screens)
 - [CUSTOMERS TAB - Relationship Management](#customers-tab---relationship-management)
+  - [Customer CRM Module Overview](#customer-crm-module-overview)
   - [Customer List View](#customer-list-view)
   - [Customer 360° View (Most Important Screen)](#customer-360-view-most-important-screen)
   - [Customer Orders Tab](#customer-orders-tab)
+  - [Customer Payments Tab](#customer-payments-tab)
+  - [Customer Tickets Tab](#customer-tickets-tab)
   - [Customer Insights Tab](#customer-insights-tab)
+- [Customer CRM Integration Workflows](#customer-crm-integration-workflows)
 
 ### **7. Web Desktop Design Specifications**
 - [Desktop Layout Architecture](#desktop-layout-architecture)
@@ -161,28 +168,18 @@
 
 ---
 
-### **📊 Document Statistics**
-- **Total Lines**: 1,849
-- **Mobile Screens**: 45+ detailed specifications  
-- **Desktop Layouts**: 15+ responsive designs
-- **Reusable Components**: 25+ design system elements  
-- **User Flows**: 10+ complete business workflows
-- **Demo Scripts**: Production-ready presentation guides
-
----
-
 ## 1. Design Vision & Context
 
-### 🎯 Design Mission
+### Design Mission
 Create a **mobile-first visual experience** that transforms MSME textile manufacturing operations through intuitive, voice-enabled, multilingual interface design that provides complete 360° business visibility.
 
-### 📱 Design Promise
+### Design Promise
 - **WhatsApp-level simplicity** with professional appearance
 - **Voice-enabled interface** optimized for factory environments
 - **Complete business overview** in single-glance dashboard design
 - **Offline-capable visual indicators** for unreliable connectivity
 
-### 🎯 Design Success Criteria
+### Design Success Criteria
 When MSME owners see the interface, they should immediately think: **"This looks simple but professional - I can use this!"**
 
 **Visual Success Metrics:**
@@ -195,34 +192,34 @@ When MSME owners see the interface, they should immediately think: **"This looks
 
 ## 2. Design Philosophy & Principles
 
-### 🧠 Visual Design Philosophy
+### Visual Design Philosophy
 
-#### 1️⃣ **Clarity Over Complexity**
+#### **Clarity Over Complexity**
 - **Principle**: One dominant action per screen
 - **Visual Application**: Large, clear buttons; minimal visual noise
 - **Layout Rule**: Maximum 3 primary elements visible at once
 
-#### 2️⃣ **Professional Trust-Building**
+#### **Professional Trust-Building**
 - **Color Strategy**: Industrial blues + professional grays
 - **Typography**: Clean, readable fonts (Inter/Roboto)
 - **Visual Tone**: Serious business tool, not consumer app
 
-#### 3️⃣ **Factory-Optimized Visibility**
+#### **Factory-Optimized Visibility**
 - **Size Requirements**: Minimum 44px touch targets
 - **Contrast**: High contrast for various lighting conditions
 - **Visual Feedback**: Clear states (active, disabled, processing)
 
-#### 4️⃣ **Progress-Driven Interface**
+#### **Progress-Driven Interface**
 - **Visual Pattern**: Always show "where we are" in workflows
 - **Progress Indicators**: Steps, percentages, status badges
 - **Completion Signals**: Strong visual confirmation of actions
 
-#### 5️⃣ **Role-Based Visual Hierarchy**
+#### **Role-Based Visual Hierarchy**
 - **Owner View**: Dashboard + overview focus
 - **Operator View**: Simple, task-focused layouts
 - **Manager View**: Balanced detail + overview
 
-#### 6️⃣ **Multilingual Design Consideration**
+#### **Multilingual Design Consideration**
 - **Text Space**: Allow 30% extra space for Hindi/Gujarati
 - **Icon Support**: Universal icons for key actions
 - **RTL Consideration**: Flexible layouts for future expansion
@@ -231,7 +228,7 @@ When MSME owners see the interface, they should immediately think: **"This looks
 
 ## 3. User Roles & Design Context
 
-### 👥 Design Personas & Interface Needs
+### Design Personas & Interface Needs
 
 #### **Owner/Manager** (Primary Design Focus)
 - **Visual Needs**: Business overview, financial clarity, decision support
@@ -253,7 +250,7 @@ When MSME owners see the interface, they should immediately think: **"This looks
 - **Screen Priority**: Procurement, Material Requirements, GRN
 - **Design Approach**: List-heavy, photo-focused, quantity-emphasized
 
-### 🏭 Design Environment Context
+### Design Environment Context
 
 #### **Physical Design Constraints**
 - **Device**: Mid-range Android phones (5-6 inch screens)
@@ -271,7 +268,7 @@ When MSME owners see the interface, they should immediately think: **"This looks
 
 ## 4. Visual Design System
 
-### 🎨 Color Palette
+### Color Palette
 
 #### **Primary Colors**
 ```
@@ -322,7 +319,7 @@ Text Muted:      #9CA3AF  █ (Light gray - disabled text)
 3. **Consistent status colors** across all modules
 4. **Professional color relationships** (avoid consumer app aesthetics)
 
-### ✍️ Typography System
+### Typography System
 
 #### **Font Hierarchy**
 ```
@@ -346,7 +343,7 @@ Label:         14px / Medium   (Form labels, chips)
 - **No italic text** (difficult on mobile)
 - **ALL CAPS only for buttons** and critical alerts
 
-### 📐 Spacing & Layout System
+### Spacing & Layout System
 
 #### **Spacing Scale (8px baseline)**
 ```
@@ -369,7 +366,7 @@ Margins: 16px mobile, 24px tablet, 32px desktop
 Gutters: 12px mobile, 16px tablet, 24px desktop
 ```
 
-### 🧩 Component Design System
+### Component Design System
 
 #### **Button Styles**
 ```
@@ -395,7 +392,7 @@ FLOATING ACTION BUTTON (FAB)
     └─────┘ Fixed bottom-right
 ```
 
-### **🚨 DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users**
+### **DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users**
 
 #### **Original Specification:**
 - Floating Action Button (FAB) with contextual meaning per tab
@@ -482,7 +479,7 @@ SIDEBAR NAVIGATION (Desktop)
 
 ## 5. Mobile Design Architecture
 
-### 📱 Core Mobile Navigation Structure
+### Core Mobile Navigation Structure
 
 #### **5-Tab Bottom Navigation System**
 ```
@@ -529,9 +526,9 @@ SIDEBAR NAVIGATION (Desktop)
 └─────────────────────────────────────┘
 ```
 
-### 🗂️ Tab Content Structure
+### Tab Content Structure
 
-#### **🏠 HOME Tab - Business Intelligence Dashboard**
+#### **HOME Tab - Business Intelligence Dashboard**
 ```
 Purpose: Single-glance business health + priority actions
 Layout: Vertical scroll with card sections
@@ -542,7 +539,7 @@ Key Visual Elements:
 - Activity timeline
 ```
 
-#### **💼 SALES Tab - Revenue Pipeline Management (ENHANCED)**
+#### **SALES Tab - Revenue Pipeline Management (ENHANCED)**
 
 **Purpose**: Complete Lead → Quote → Order → Invoice workflow
 **Architecture**: Unified 4-tab interface with existing component integration
@@ -605,7 +602,7 @@ Key Visual Elements:
 - Component Integration: LeadManagement → Leads, QuotationOrders → Quotes, etc.
 - Visual Compliance: 140px card template applied to all tabs
 
-### **🎬 ANIMATION SYSTEM: Sequential Card Expansion**
+### **ANIMATION SYSTEM: Sequential Card Expansion**
 
 #### **Animation Design Philosophy:**
 **Problem**: When expanding Card B while Card A is open, users lose visual connection between action and result.
@@ -676,7 +673,7 @@ const toggleDetails = async (itemId: string) => {
 - ✅ **Professional Feel**: Smooth, intentional animations build trust
 - ✅ **Accessible**: Screen readers can follow logical progression
 
-### **📐 CARD TEMPLATE SPECIFICATION: 140px Standard**
+### **CARD TEMPLATE SPECIFICATION: 140px Standard**
 
 #### **Master Card Architecture (Lead Management Template):**
 
@@ -794,7 +791,7 @@ Total Height: 140px (with 16px padding = 108px content)
 - ✅ Blue border highlight when expanded
 - ✅ Data attributes for scroll targeting
 
-### **🔍 DESIGN DECISION: Universal Search Architecture**
+### **DESIGN DECISION: Universal Search Architecture**
 
 #### **Original Specification:**
 - Contextual search per tab: "Search orders...", "Search leads...", etc.
@@ -826,7 +823,7 @@ Total Height: 140px (with 16px padding = 108px content)
 - Orders: All/Production/Blocked/Delivered filters
 - Invoices: All/Paid/Pending/Overdue filters
 
-### **🔧 DESIGN DECISION: Fixed Layout Architecture**
+### **DESIGN DECISION: Fixed Layout Architecture**
 
 #### **UX Analysis for Non-Technical Users:**
 **Target**: Gujarat textile manufacturers (35-55 years) in factory environments
@@ -869,7 +866,7 @@ Total Height: 140px (with 16px padding = 108px content)
 - **Z-Index Management**: Ensure fixed elements layer correctly
 - **Touch Targets**: Maintain 44px minimum for factory environment use
 
-#### **🏭 PRODUCTION Tab - Manufacturing**
+#### **PRODUCTION Tab - Manufacturing**
 ```
 Purpose: Work order execution and quality control
 Sub-tabs: Today | In Progress | Completed
@@ -881,7 +878,7 @@ Key Visual Elements:
 - Photo capture areas
 ```
 
-#### **📦 PROCUREMENT Tab - Supply Chain**
+#### **PROCUREMENT Tab - Supply Chain**
 ```
 Purpose: Material requirements and purchasing
 Sub-tabs: Material Req | PRs | POs | GRNs
@@ -893,7 +890,7 @@ Key Visual Elements:
 - Vendor information
 ```
 
-#### **👥 CUSTOMERS Tab - Relationship Management**
+#### **CUSTOMERS Tab - Relationship Management**
 ```
 Purpose: Customer 360° view and communication
 Layout: List → Detail drill-down
@@ -908,7 +905,7 @@ Key Visual Elements:
 
 ## 6. Complete Mobile Screen Specifications
 
-### 🏠 **HOME DASHBOARD** - Central Command Center
+### **HOME DASHBOARD** - Central Command Center
 
 ```
 ┌─────────────────────────────────────┐
@@ -959,7 +956,7 @@ Key Visual Elements:
 - **Activity Items**: Icons + timestamp + description
 - **Sync Status**: Small text, color-coded (green/yellow/red)
 
-### 💼 **SALES TAB** - Revenue Pipeline Management
+### **SALES TAB** - Revenue Pipeline Management
 
 #### **Sales Module Overview**
 
@@ -1444,7 +1441,7 @@ Order Status: Payment Pending → Confirmed → Production → Delivered
 Invoice Status: Generated → Sent → Paid → Completed
 ```
 
-### 🏭 **PRODUCTION TAB** - Manufacturing Execution
+### **PRODUCTION TAB** - Manufacturing Execution
 
 #### **Production Module Overview**
 
@@ -1956,7 +1953,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ---
 
-### **🔗 Production Module Cross-Integration Workflows**
+### **Production Module Cross-Integration Workflows**
 
 #### **Sales → Production Integration**
 - **Sales Orders automatically appear in Plan tab** when payment confirmation received
@@ -1990,7 +1987,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ---
 
-### 📦 **PROCUREMENT TAB** - Supply Chain Management
+### **PROCUREMENT TAB** - Supply Chain Management
 
 #### **Procurement Module Overview**
 
@@ -2356,7 +2353,7 @@ The Procurement module manages the complete supply chain workflow from material 
 
 ---
 
-### 👥 **CUSTOMERS TAB** - Relationship Management
+### **CUSTOMERS TAB** - Relationship Management
 
 #### **Customer CRM Module Overview**
 
@@ -2642,7 +2639,7 @@ The Customer tab functions as a complete CRM system with two main sections:
 
 ---
 
-### **👥 Customer CRM Support Management Section**
+### **Customer CRM Support Management Section**
 
 #### **Support Tickets Dashboard** (Customer Tab Main View)
 
@@ -2805,7 +2802,7 @@ The Customer tab functions as a complete CRM system with two main sections:
 
 ---
 
-### **🔗 Customer CRM Integration Workflows**
+### **Customer CRM Integration Workflows**
 
 #### **Sales → Customer Integration**
 - **Lead conversion**: Hot leads automatically create customer profiles with relationship score
@@ -2831,7 +2828,7 @@ The Customer tab functions as a complete CRM system with two main sections:
 
 ## 7. Web Desktop Design Specifications
 
-### 💻 Desktop Layout Architecture
+### Desktop Layout Architecture
 
 #### **Sidebar Navigation System**
 ```
@@ -2858,7 +2855,7 @@ The Customer tab functions as a complete CRM system with two main sections:
 - **Breadcrumb navigation** in header for context
 - **Multi-column layouts** utilize larger screen space
 
-### 🏠 **Desktop Home Dashboard**
+### **Desktop Home Dashboard**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -2909,7 +2906,7 @@ The Customer tab functions as a complete CRM system with two main sections:
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 💼 **Desktop Sales Module**
+### **Desktop Sales Module**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -2967,7 +2964,7 @@ Order Detail Drawer (slides in from right):
 └─────────────────────────────────────────┘
 ```
 
-### 👥 **Desktop Customer 360° View**
+### **Desktop Customer 360° View**
 
 ```
 ┌─────────────────┬─────────────────────────────────────────────────────────────────┐
@@ -3003,7 +3000,7 @@ Order Detail Drawer (slides in from right):
 240px list width   Remaining space for details
 ```
 
-### 📊 **Desktop Reports & Analytics**
+### **Desktop Reports & Analytics**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -3048,7 +3045,7 @@ Order Detail Drawer (slides in from right):
 
 ## 8. User Flow Diagrams
 
-### 🔄 Primary Business Flows
+### Primary Business Flows
 
 #### **Lead to Customer Conversion Flow**
 ```
@@ -3082,7 +3079,7 @@ Order Detail Drawer (slides in from right):
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### 📱 Mobile Navigation Flow
+### Mobile Navigation Flow
 
 #### **Tab-Based Navigation Structure**
 ```
@@ -3111,7 +3108,7 @@ Order Detail Drawer (slides in from right):
                              Progress                        360°
 ```
 
-### 🔄 Cross-Module Integration Points
+### Cross-Module Integration Points
 
 #### **Automated Workflow Triggers**
 ```
@@ -3138,7 +3135,7 @@ Auto-QC Workflow      ←──→  Manual Quality Check
 
 ## 9. Interactive Design Patterns
 
-### 🎯 Touch Interaction Design
+### Touch Interaction Design
 
 #### **Button Interaction States**
 ```
@@ -3182,7 +3179,7 @@ Interaction Feedback:
 • Success: Green checkmark + toast message
 ```
 
-### 🗣️ Voice Interaction Design
+### Voice Interaction Design
 
 #### **Voice Input Visual Patterns**
 ```
@@ -3223,7 +3220,7 @@ Query Commands:
 • "What's overdue?" → Show overdue items
 ```
 
-### 📸 Photo Capture Patterns
+### Photo Capture Patterns
 
 #### **Photo Capture UI Flow**
 ```
@@ -3259,7 +3256,7 @@ Photo Review:
 └─────────────────────────────────────┘
 ```
 
-### 🔄 Sync Status Indicators
+### Sync Status Indicators
 
 #### **Offline/Online State Design**
 ```
@@ -3284,7 +3281,7 @@ Sync Failed:
 └─────────────────────────────────────┘
 ```
 
-### 📊 Progress Visualization
+### Progress Visualization
 
 #### **Progress Indicator Patterns**
 ```
@@ -3311,7 +3308,7 @@ Status Progress (Order lifecycle):
 
 ## 10. Design Validation & Demo Guidelines
 
-### 🎯 Design Validation Framework
+### Design Validation Framework
 
 #### **Usability Testing Checklist**
 ```
@@ -3359,7 +3356,7 @@ Cultural Appropriateness:
 • Visual metaphors culturally relevant
 ```
 
-### 🎪 Live Demo Execution Guide
+### Live Demo Execution Guide
 
 #### **Demo Environment Setup**
 ```
@@ -3440,7 +3437,7 @@ Technical Comfort:
 • "Works offline - good for my factory"
 ```
 
-### 📊 Success Metrics & KPIs
+### Success Metrics & KPIs
 
 #### **Demo Success Indicators**
 ```
@@ -3486,9 +3483,9 @@ Validation Criteria for Next Version:
 
 ---
 
-## 📋 Visual Design Implementation Checklist
+## Visual Design Implementation Checklist
 
-### ✅ Design System Implementation
+### Design System Implementation
 - [ ] **Color Palette**
   - [ ] Primary colors defined and implemented
   - [ ] Status colors consistent across all modules
@@ -3508,7 +3505,7 @@ Validation Criteria for Next Version:
   - [ ] Navigation components
   - [ ] Modal and overlay patterns
 
-### **📱 MOBILE UX PRINCIPLES FOR NON-TECH USERS**
+### **MOBILE UX PRINCIPLES FOR NON-TECH USERS**
 
 **Target Demographics**: Gujarat textile manufacturers, 35-55 years, basic smartphone usage
 
@@ -3539,7 +3536,7 @@ Validation Criteria for Next Version:
 
 ---
 
-### ✅ Mobile Design Implementation
+### Mobile Design Implementation
 - [ ] **Core Navigation**
   - [ ] 5-tab bottom navigation
   - [ ] Contextual CTA implementation (Bottom CTA with clear text)
@@ -3553,7 +3550,7 @@ Validation Criteria for Next Version:
   - [ ] Procurement workflow screens
   - [ ] Customer 360° implementation
 
-### ✅ Desktop Design Implementation
+### Desktop Design Implementation
 - [ ] **Layout Adaptation**
   - [ ] Sidebar navigation system
   - [ ] Multi-column layouts
@@ -3567,7 +3564,7 @@ Validation Criteria for Next Version:
   - [ ] Export functionality
   - [ ] Detailed reporting views
 
-### ✅ Interaction Design
+### Interaction Design
 - [ ] **Touch Interactions**
   - [ ] 44px minimum touch targets
   - [ ] Clear button states and feedback
@@ -3586,7 +3583,7 @@ Validation Criteria for Next Version:
   - [ ] Quality validation feedback
   - [ ] Batch photo handling
 
-### ✅ Visual Feedback Systems
+### Visual Feedback Systems
 - [ ] **Status Indicators**
   - [ ] Sync status visualization
   - [ ] Progress bars and completion states
@@ -3601,11 +3598,11 @@ Validation Criteria for Next Version:
 
 ---
 
-## 🎯 Conclusion
+## Conclusion
 
 This **Complete Visual Design Specification** provides a comprehensive blueprint for creating ElevateBusiness 360° - a mobile-first platform that transforms MSME textile manufacturing through intuitive, professional, and culturally-appropriate interface design.
 
-### 🏆 Design Achievements
+### Design Achievements
 
 **User Experience Excellence:**
 - **2-tap rule compliance** for all primary tasks
@@ -3625,7 +3622,7 @@ This **Complete Visual Design Specification** provides a comprehensive blueprint
 - **Accessibility compliance** meeting WCAG AA standards
 - **Scalable visual patterns** ready for future expansion
 
-### 📱 Ready for Implementation
+### Ready for Implementation
 
 This specification provides:
 - **Complete screen layouts** with precise measurements
@@ -3634,7 +3631,7 @@ This specification provides:
 - **User flow documentation** covering all business processes
 - **Demo guidelines** for market validation
 
-### 🚀 Next Steps
+### Next Steps
 
 1. **Design System Setup**: Implement the color palette, typography, and component library
 2. **Mobile Screens Development**: Build each screen following the ASCII wireframe specifications
