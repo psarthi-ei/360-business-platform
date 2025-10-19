@@ -198,7 +198,6 @@
 .leadCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 0 0 1px #1D4ED8;        /* Subtle highlight when expanded */
   position: relative;
   z-index: 1;                           /* Ensure card stays above others */
 }

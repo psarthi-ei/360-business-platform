@@ -57,18 +57,35 @@ if (params && 'leadId' in params) {
 }
 ```
 
-### **3. IMPLEMENTATION ROADMAP COMPLIANCE (MANDATORY)**
+### **3. DESIGN SYSTEM COMPLIANCE (MANDATORY - ZERO TOLERANCE)**
+**❌ CRITICAL MISTAKE**: Using ANY hardcoded values instead of design system tokens
+
+**✅ MANDATORY DESIGN SYSTEM RULES**:
+- **ZERO hardcoded font-family**: Use `var(--font-family)` ONLY
+- **ZERO hardcoded font-size**: Use `var(--font-xs/sm/base/lg/xl)` ONLY  
+- **ZERO hardcoded colors**: Use `var(--ds-color-*)`, `var(--ds-text-*)`, `var(--ds-bg-*)` ONLY
+- **ZERO hardcoded spacing**: Use `var(--ds-space-xs/sm/md/lg/xl)` ONLY
+- **ZERO hardcoded heights/widths**: Use `var(--ds-touch-target-*)` ONLY
+- **Audit with grep**: Always check `grep '[0-9]+px' *.css` for violations
+
+**✅ VERIFICATION PROTOCOL**:
+1. Read existing component first to understand design system usage
+2. Use ONLY design system tokens from `/frontend/src/index.css`
+3. Run `grep` audit to verify zero hardcoded values
+4. Test build compilation to confirm no errors
+
+### **4. IMPLEMENTATION ROADMAP COMPLIANCE (MANDATORY)**
 **❌ Common Mistake**: Creating new files instead of updating existing systems
 
 **✅ Required Standards**:
 - ALL updates MUST follow existing architectural patterns per Implementation Roadmap
 - ALL designs MUST reference Visual Design Spec via Implementation Roadmap
-- ALL colors MUST use Visual Design Spec (#1D4ED8 primary, #F97316 secondary)
-- ALL fonts MUST use Inter typography hierarchy
-- ALL touch targets MUST meet 44px minimum
+- ALL colors MUST use design system tokens (NO hardcoded #1D4ED8, #F97316)
+- ALL fonts MUST use design system tokens (NO hardcoded Inter)
+- ALL touch targets MUST use design system tokens (NO hardcoded 44px)
 - Follow Implementation Roadmap in `/docs/IMPLEMENTATION_ROADMAP.md`
 
-### **4. FILE EDITING PROTOCOL**
+### **5. FILE EDITING PROTOCOL**
 **❌ Common Mistake**: Using Edit tool without reading file first
 
 **✅ Required Protocol**:
@@ -76,7 +93,7 @@ if (params && 'leadId' in params) {
 2. `Edit` tool with exact string matching
 3. `BashOutput` verification after changes
 
-### **5. DOCUMENTATION FORMATTING STANDARDS (MANDATORY)**
+### **6. DOCUMENTATION FORMATTING STANDARDS (MANDATORY)**
 **❌ FORBIDDEN**: Emojis in document headers (breaks TOC navigation)
 
 **✅ REQUIRED STANDARDS**:

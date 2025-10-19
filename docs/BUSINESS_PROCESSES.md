@@ -604,9 +604,58 @@ This business area manages manufacturing execution from sales orders to complete
 
 **Stock Management Daily Pattern**:
 - **Stock Checking**: Review available finished goods vs. incoming orders
-- **Material Planning**: Calculate yarn and chemical requirements for work orders
+- **Material Planning**: Calculate yarn and chemical requirements for sales orders and work orders
 - **Procurement Decisions**: Balance cash flow with material availability
 - **Allocation Strategy**: Reserve stock for confirmed orders, plan production for shortfall
+
+#### **Material Requirements Architecture (MVP Implementation)**
+
+**Two-Level Material Requirements System:**
+
+**Level 1: Sales Order Level Material Requirements (MVP - Current Implementation)**
+- **Created**: Automatically when Sales Order is placed (after 30% advance payment)
+- **Purpose**: High-level material planning and procurement decision making
+- **Scope**: Total materials needed for entire customer order
+- **Business Logic**: "What materials do I need to buy for Order SO-002?"
+
+```
+Sales Order SO-002: 1000m Cotton Fabric, Red Color
+↓
+Material Requirements:
+- MR-SO-002-001: Cotton Yarn 30s Count (500kg total for order)
+- MR-SO-002-002: Red Dye Chemical (50kg total for order)  
+- MR-SO-002-003: Processing Chemicals (25kg total for order)
+```
+
+**Level 2: Work Order Level Material Requirements (Future Enhancement)**
+- **Created**: When Sales Order breaks down into Work Orders during production planning
+- **Purpose**: Process-specific material allocation and just-in-time procurement
+- **Scope**: Materials needed for specific manufacturing processes
+- **Business Logic**: "What materials does the dyeing department need this week?"
+
+```
+Sales Order SO-002 → Work Orders:
+├── WO-2024-001A (Weaving): Cotton Yarn 500kg
+├── WO-2024-001B (Dyeing): Red Dye 50kg + Dyeing Chemicals 15kg
+└── WO-2024-001C (Finishing): Finishing Chemicals 10kg
+```
+
+**Flexible Purchase Request Creation (Future Enhancement):**
+- **Option A**: Sales Order Level PR (Bulk procurement for entire order)
+- **Option B**: Work Order Level PR (Just-in-time procurement per process)
+- **Option C**: Mixed Approach (Strategic timing based on cash flow and production schedule)
+
+**MVP Business Rules:**
+1. Material Requirements created at Sales Order level for procurement planning
+2. Shortage detection and alerts based on current inventory vs. order requirements  
+3. Purchase Requests can be created at Sales Order level for bulk procurement
+4. Work Order breakdown and granular material allocation reserved for future enhancement
+5. Business users see order-centric material planning: "Materials needed for Customer XYZ's order"
+
+**Future Enhancement Path:**
+- **Phase 2**: Add Work Order level Material Requirements during production module implementation
+- **Phase 3**: Enable flexible PR creation (choose Sales Order or Work Order level)
+- **Phase 4**: Smart procurement timing recommendations and cash flow optimization
 
 #### **Production Workflow**
 1. **Material Inspection**: Incoming yarn quality check and approval

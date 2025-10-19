@@ -1,0 +1,579 @@
+/* MaterialRequirements.module.css - Complete Visual Design Specification Styling */
+
+.materialRequirements {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background-primary);
+  position: relative;
+}
+
+/* Alert Header System - 48px height */
+.alertHeader {
+  height: var(--ds-touch-target-comfortable);
+  background: var(--ds-text-critical);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ds-space-md);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Order Grouping Headers */
+.orderHeader {
+  height: var(--ds-touch-target-min);
+  background: var(--ds-bg-interactive);
+  border-left: 4px solid;
+  padding: 0 var(--ds-space-md);
+  display: flex;
+  align-items: center;
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.orderHeader.shortage {
+  border-left-color: var(--ds-text-critical);
+  background: var(--ds-bg-priority-high-subtle);
+  color: var(--ds-text-critical);
+}
+
+.orderHeader.success {
+  border-left-color: var(--ds-text-positive);
+  background: var(--ds-bg-status-active-subtle);
+  color: var(--ds-text-positive);
+}
+
+.orderHeader.mixed {
+  border-left-color: var(--ds-text-attention);
+  background: var(--ds-bg-priority-medium-subtle);
+  color: var(--ds-text-attention);
+}
+
+/* Material Requirements Table */
+.materialTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  background: white;
+}
+
+.materialTable thead th {
+  height: var(--ds-touch-target-min);
+  background: var(--ds-bg-interactive);
+  border-bottom: 2px solid var(--ds-border-primary);
+  padding: 0 var(--ds-space-sm);
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.materialRow {
+  height: var(--ds-touch-target-comfortable);
+  border-bottom: 1px solid var(--ds-border-primary);
+  transition: background-color 0.2s ease;
+}
+
+.materialRow:hover {
+  background: var(--ds-bg-interactive);
+}
+
+.materialRow td {
+  padding: 0 var(--ds-space-sm);
+  vertical-align: middle;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+}
+
+/* Status-based row styling */
+.materialRow.shortage {
+  background: var(--ds-bg-priority-high-subtle);
+  border-left: 3px solid var(--ds-text-critical);
+}
+
+.materialRow.shortage:hover {
+  background: var(--ds-bg-priority-high-subtle);
+}
+
+.materialRow.available {
+  background: var(--ds-bg-status-active-subtle);
+  border-left: 3px solid var(--ds-text-positive);
+}
+
+.materialRow.available:hover {
+  background: var(--ds-bg-status-active-subtle);
+}
+
+.materialRow.ordered {
+  background: var(--ds-bg-priority-medium-subtle);
+  border-left: 3px solid var(--ds-text-attention);
+}
+
+.materialRow.ordered:hover {
+  background: var(--ds-bg-priority-medium-subtle);
+}
+
+/* Material name column */
+.materialName {
+  font-weight: 500;
+  color: var(--ds-text-primary);
+}
+
+.materialUnit {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 400;
+}
+
+/* Quantity columns */
+.quantityCell {
+  text-align: right;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Shortfall column - emphasized for shortages */
+.shortfallCell {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.shortfallCell.hasShortage {
+  color: var(--ds-color-error);
+  background: var(--ds-bg-error-subtle);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-xs);
+}
+
+.shortfallCell.noShortage {
+  color: var(--ds-color-success);
+  font-weight: 500;
+}
+
+/* Action buttons */
+.actionCell {
+  text-align: center;
+  width: var(--ds-space-xxl);
+}
+
+.prButton {
+  background: var(--ds-btn-primary);
+  color: white;
+  border: 1px solid var(--ds-btn-primary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: var(--ds-touch-target-min);
+}
+
+.prButton:hover {
+  background: var(--ds-btn-primary-hover);
+  border-color: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(29, 78, 216, 0.25);
+}
+
+.prButton:active {
+  background: var(--ds-btn-primary-active);
+  border-color: var(--ds-btn-primary-active);
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.25);
+}
+
+/* Empty state for orders with no materials */
+.emptyOrderState {
+  padding: var(--ds-space-xl);
+  text-align: center;
+  color: var(--ds-text-secondary);
+  font-style: italic;
+  background: var(--ds-bg-subtle);
+  border: 1px dashed var(--ds-border-secondary);
+  border-radius: var(--ds-radius-md);
+  margin: var(--ds-space-sm) var(--ds-space-md);
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .materialTable {
+    font-size: var(--font-xs);
+    min-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .materialTable thead th {
+    padding: 0 var(--ds-space-xs);
+    font-size: var(--font-xs);
+  }
+  
+  .materialRow {
+    min-height: var(--ds-touch-target-comfortable);
+  }
+  
+  .materialRow td {
+    padding: 0 var(--ds-space-xs);
+    font-size: var(--font-xs);
+  }
+  
+  .prButton {
+    padding: var(--ds-space-xs) var(--ds-space-xs);
+    font-size: var(--font-xs);
+    min-width: var(--ds-touch-target-min);
+    min-height: var(--ds-touch-target-min);
+  }
+  
+  .alertHeader {
+    padding: 0 var(--ds-space-sm);
+    font-size: var(--font-sm);
+  }
+  
+  .orderHeader {
+    padding: 0 var(--ds-space-sm);
+    font-size: var(--font-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .materialTable {
+    font-size: var(--font-sm);
+  }
+  
+  .materialRow td {
+    padding: 0 var(--ds-space-md);
+  }
+}
+
+/* Table container for horizontal scrolling on mobile */
+.tableContainer {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+
+/* Content wrapper */
+.contentWrapper {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--ds-bg-interactive);
+  padding: var(--ds-space-md);
+}
+
+/* Cards container */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+/* Order Card Layout */
+.orderCard {
+  background: white;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.orderCard:hover {
+  border-color: var(--ds-border-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.orderCard.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Order Status Color System - matches Lead Management pattern */
+.orderCard.shortage {
+  border-left: 4px solid var(--ds-priority-high);  /* Red/Orange for critical shortages */
+  background: white;
+}
+
+.orderCard.mixed {
+  border-left: 4px solid var(--ds-priority-medium);  /* Amber for mixed status needs attention */
+  background: white;
+}
+
+.orderCard.success {
+  border-left: 4px solid var(--ds-status-active);  /* Green for all materials available */
+  background: white;
+}
+
+/* Card Header (Always Visible) */
+.cardHeader {
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.cardHeader:hover {
+  background: var(--ds-bg-subtle);
+}
+
+.cardHeader.expanded {
+  background: var(--ds-bg-priority-low-subtle);
+  border-bottom-color: var(--ds-border-primary);
+}
+
+/* Order Title */
+.orderTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.orderTitleText {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+
+/* Expand Indicator - positioned like Lead Management */
+.expandIndicator {
+  font-size: var(--font-xs);
+  color: var(--color-primary);
+  font-weight: 500;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  position: absolute;
+  bottom: var(--ds-space-xs);
+  right: var(--ds-space-sm);
+  padding: var(--ds-space-xs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-sm);
+}
+
+/* Order Summary */
+.orderSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-md);
+  align-items: center;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.summaryItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+}
+
+.summaryItem.shortage {
+  color: var(--ds-color-error);
+  font-weight: 500;
+}
+
+.summaryItem.success {
+  color: var(--ds-color-success);
+  font-weight: 500;
+}
+
+/* Quick Actions */
+.quickActions {
+  display: flex;
+  gap: var(--ds-space-xs);
+  flex-wrap: wrap;
+}
+
+.quickActionButton {
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-secondary);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--ds-touch-target-min);
+}
+
+.quickActionButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-text-primary);
+  border-color: var(--ds-border-hover);
+}
+
+.quickActionButton.primary {
+  background: var(--ds-btn-primary);
+  color: white;
+  border-color: var(--ds-btn-primary);
+}
+
+.quickActionButton.primary:hover {
+  background: var(--ds-btn-primary-hover);
+  border-color: var(--ds-btn-primary-hover);
+}
+
+/* Expanded Content */
+.expandedContent {
+  background: var(--ds-bg-interactive);
+  border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg);
+  animation: expandDown 0.25s ease-out;
+  overflow: hidden;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+
+/* Expanded Actions styling - matches Lead Management */
+.expandedActions {
+  display: flex;
+  gap: var(--ds-space-xs);
+  margin-top: var(--ds-space-xl);
+  padding-top: var(--ds-space-lg);
+  border-top: 2px solid var(--ds-border-secondary);
+  flex-wrap: wrap;
+}
+
+.expandedActions .ds-btn {
+  min-height: var(--ds-touch-target-comfortable) !important;
+  padding: var(--ds-space-sm) var(--ds-space-md) !important;
+  font-size: var(--font-sm) !important;
+  font-weight: 600 !important;
+  border-radius: var(--ds-radius-md) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--ds-space-xs) !important;
+}
+
+/* Material Details in Expanded View */
+.materialDetails {
+  padding: var(--ds-space-lg);
+}
+
+.materialDetailsHeader {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+/* Table container for expanded view */
+.expandedTableContainer {
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  overflow: hidden;
+}
+
+/* Empty state styling */
+.emptyState {
+  text-align: center;
+  padding: var(--ds-space-3xl) var(--ds-space-lg);
+  color: var(--ds-text-secondary);
+  background: white;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border-primary);
+}
+
+.emptyStateIcon {
+  font-size: var(--font-xl);
+  margin-bottom: var(--ds-space-md);
+  color: var(--ds-text-muted);
+}
+
+.emptyStateText {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  margin-bottom: var(--ds-space-xs);
+}
+
+.emptyStateSubtext {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-muted);
+}
+
+/* Responsive adjustments for cards */
+@media (max-width: 767px) {
+  .contentWrapper {
+    padding: var(--ds-space-sm);
+  }
+  
+  .cardsContainer {
+    gap: var(--ds-space-sm);
+  }
+  
+  .cardHeader {
+    padding: var(--ds-space-md);
+  }
+  
+  .orderTitleText {
+    font-size: var(--font-base);
+  }
+  
+  .summaryItem {
+    font-size: var(--font-xs);
+  }
+  
+  .quickActions {
+    gap: var(--ds-space-xs);
+  }
+  
+  .quickActionButton {
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+    font-size: var(--font-xs);
+    min-height: var(--ds-touch-target-min);
+  }
+  
+  .materialDetails {
+    padding: var(--ds-space-md);
+  }
+  
+  .expandedActions {
+    gap: var(--ds-space-xs);
+  }
+  
+  .expandedActions .ds-btn {
+    flex: 1;
+    min-width: calc(50% - 3px);
+  }
+}

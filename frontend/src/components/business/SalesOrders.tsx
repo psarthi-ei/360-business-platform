@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
 import { mockSalesOrders, mockQuotes, mockLeads } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
+import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './SalesOrders.module.css';
 
 interface SalesOrdersProps {
@@ -21,38 +22,13 @@ function SalesOrders({
 }: SalesOrdersProps) {
   const { t } = useTranslation();
   
-  // Progressive disclosure state for 140px template cards
-  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  // Use card expansion hook for consistent single-card expansion behavior
+  const { toggleExpansion, isExpanded } = useCardExpansion();
   
-  // Sequential expansion toggle function - smooth visual flow
-  const toggleDetails = useCallback(async (orderId: string) => {
-    if (expandedDetails.has(orderId)) {
-      // Simple collapse - no sequencing needed
-      setExpandedDetails(new Set());
-    } else {
-      // Sequential: First collapse any open card
-      if (expandedDetails.size > 0) {
-        setExpandedDetails(new Set());
-        // Wait for collapse animation to complete
-        await new Promise(resolve => setTimeout(resolve, 200));
-      }
-      
-      // Then expand the new card
-      setExpandedDetails(new Set([orderId]));
-      
-      // Scroll to ensure the card is visible
-      setTimeout(() => {
-        const cardElement = document.querySelector(`[data-order-id="${orderId}"]`);
-        if (cardElement) {
-          cardElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start',
-            inline: 'nearest'
-          });
-        }
-      }, 100);
-    }
-  }, [expandedDetails]);
+  // Use the hook's toggle function with our custom data attribute
+  const toggleDetails = useCallback((orderId: string) => {
+    toggleExpansion(orderId, 'data-order-id');
+  }, [toggleExpansion]);
   
   
   // Helper function to calculate payment details for an order
@@ -136,7 +112,7 @@ function SalesOrders({
             <div key={order.id} className={styles.orderCardContainer} data-order-id={order.id}>
               {/* Clickable Card Summary - 140px Template */}
               <div 
-                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${expandedDetails.has(order.id) ? styles.expanded : ''}`}
+                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${isExpanded(order.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(order.id)}
               >
                 {/* Template Header - Company Name Only */}
@@ -163,12 +139,12 @@ function SalesOrders({
 
                 {/* Expand Indicator */}
                 <div className={styles.expandIndicator}>
-                  {expandedDetails.has(order.id) ? 'Less' : 'More'}
+                  {isExpanded(order.id) ? 'Less' : 'More'}
                 </div>
               </div>
 
               {/* Progressive Disclosure - Detailed Information */}
-              {expandedDetails.has(order.id) && (
+              {isExpanded(order.id) && (
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
                     <p><strong>{t('customerName')}:</strong> {companyName} - {businessProfile?.registeredAddress.city || 'Unknown'}</p>

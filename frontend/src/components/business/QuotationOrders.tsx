@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { mockBusinessProfiles, formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
 import { mockQuotes, mockLeads, mockSalesOrders } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
+import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './QuotationOrders.module.css';
 
 interface QuotationOrdersProps {
@@ -32,38 +33,13 @@ function QuotationOrders({
   });
   const [workflowMessages, setWorkflowMessages] = useState<{[key: string]: string}>({});
   
-  // Progressive disclosure state for 140px template cards
-  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  // Use card expansion hook for consistent single-card expansion behavior
+  const { toggleExpansion, isExpanded } = useCardExpansion();
   
-  // Sequential expansion toggle function - smooth visual flow
-  const toggleDetails = useCallback(async (quoteId: string) => {
-    if (expandedDetails.has(quoteId)) {
-      // Simple collapse - no sequencing needed
-      setExpandedDetails(new Set());
-    } else {
-      // Sequential: First collapse any open card
-      if (expandedDetails.size > 0) {
-        setExpandedDetails(new Set());
-        // Wait for collapse animation to complete
-        await new Promise(resolve => setTimeout(resolve, 200));
-      }
-      
-      // Then expand the new card
-      setExpandedDetails(new Set([quoteId]));
-      
-      // Scroll to ensure the card is visible
-      setTimeout(() => {
-        const cardElement = document.querySelector(`[data-quote-id="${quoteId}"]`);
-        if (cardElement) {
-          cardElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start',
-            inline: 'nearest'
-          });
-        }
-      }, 100);
-    }
-  }, [expandedDetails]);
+  // Use the hook's toggle function with our custom data attribute
+  const toggleDetails = useCallback((quoteId: string) => {
+    toggleExpansion(quoteId, 'data-quote-id');
+  }, [toggleExpansion]);
 
   // Workflow Method 1: Handle Quote Approval
   const handleQuoteApproval = useCallback((quoteId: string) => {
@@ -247,7 +223,7 @@ function QuotationOrders({
             <div key={quote.id} className={styles.quoteCardContainer} data-quote-id={quote.id}>
               {/* Clickable Card Summary - 140px Template */}
               <div 
-                className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${expandedDetails.has(quote.id) ? styles.expanded : ''}`}
+                className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${isExpanded(quote.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(quote.id)}
               >
                 {/* Template Header - Company Name Only */}
@@ -274,12 +250,12 @@ function QuotationOrders({
 
                 {/* Expand Indicator */}
                 <div className={styles.expandIndicator}>
-                  {expandedDetails.has(quote.id) ? 'Less' : 'More'}
+                  {isExpanded(quote.id) ? 'Less' : 'More'}
                 </div>
               </div>
 
               {/* Progressive Disclosure - Detailed Information */}
-              {expandedDetails.has(quote.id) && (
+              {isExpanded(quote.id) && (
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
                     <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
