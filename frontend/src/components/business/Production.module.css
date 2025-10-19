@@ -1,0 +1,234 @@
+/* Production.module.css - Complete Visual Design Specification Styling */
+
+.productionModule {
+  display: grid;
+  grid-template-rows: 48px 44px 1fr 56px;
+  height: 100%;
+  background: var(--background-primary);
+  position: relative;
+}
+
+/* 48px Tab Navigation - Visual Design Spec */
+.productionTabs {
+  display: flex;
+  height: 48px;
+  background: white;
+  border-bottom: 1px solid var(--ds-border-primary);
+  grid-row: 1;
+}
+
+.tabButton {
+  flex: 1;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 3px solid transparent;
+  letter-spacing: 0.02em;
+}
+
+.tabButton.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background: var(--ds-bg-priority-low-subtle);
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+}
+
+.tabButton:hover:not(.active) {
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  transform: translateY(-0.5px);
+}
+
+.tabButton:active {
+  transform: translateY(0);
+  transition: all 0.1s;
+}
+
+/* 44px Business Filters */
+.productionFilters {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  height: 44px;
+  padding: 0 var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border-bottom: 1px solid var(--ds-border-primary);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  grid-row: 2;
+}
+
+.productionFilters::-webkit-scrollbar {
+  display: none;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--ds-space-sm);
+}
+
+.filterDropdowns {
+  display: flex;
+  gap: var(--ds-space-sm);
+  align-items: center;
+}
+
+.filterDropdown {
+  height: 36px;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: white;
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.filterDropdown:hover {
+  background-color: var(--ds-bg-hover);
+  border-color: var(--ds-border-hover);
+}
+
+.filterDropdown:focus {
+  outline: none;
+  border-color: var(--ds-btn-primary);
+  box-shadow: 0 0 0 2px var(--ds-focus-ring);
+}
+
+.countIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  min-height: 32px;
+  white-space: nowrap;
+}
+
+/* Content Area - Intelligent Scroll Behavior */
+.productionContent {
+  overflow: hidden; /* Default: no scrollbars for minimal content */
+  background: var(--background-primary);
+  grid-row: 3;
+  transition: all 0.2s ease; /* Smooth transition when scroll behavior changes */
+}
+
+/* Applied dynamically when scrolling is needed */
+.productionContent.scrollable {
+  overflow-y: auto;
+}
+
+/* Components now style themselves - no global overrides needed */
+
+/* 56px Fixed Bottom CTA - Grid Positioned */
+.productionCTA {
+  height: 56px;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: white;
+  border-top: 1px solid var(--ds-border-primary);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  grid-row: 4;
+}
+
+.productionCTAButton {
+  width: 100%;
+  height: 40px;
+  background: var(--ds-btn-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px; /* Visual Design Spec touch target */
+}
+
+.productionCTAButton:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.productionCTAButton:active {
+  background: var(--ds-btn-primary-active);
+  transform: translateY(1px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .productionFilters {
+    padding: 0 var(--ds-space-sm);
+  }
+  
+  .filterBtn {
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+    font-size: var(--font-xs);
+  }
+  
+  .productionCTA {
+    padding: var(--ds-space-sm) var(--ds-space-sm);
+  }
+  
+  .tabButton {
+    font-size: var(--font-sm);
+  }
+}
+
+/* Specific content type classes instead of broad selector */
+.tabContentWithPadding {
+  padding: var(--ds-space-md);
+}
+
+.listContent {
+  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);  /* For list components like work orders */
+}
+
+/* Clean component integration - no !important needed */
+.productionContent .componentWrapper {
+  background: transparent;
+  /* Natural CSS cascade - no conflicts */
+}
+
+/* Remove voice commands from child components */
+.productionContent :global([class*="voiceCommands"]) {
+  display: none;
+}

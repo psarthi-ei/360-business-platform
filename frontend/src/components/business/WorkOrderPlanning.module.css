@@ -1,0 +1,224 @@
+/* WorkOrderPlanning.module.css - Visual Design Specification Styling */
+
+.workOrderPlanning {
+  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+.sectionHeader {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-primary);
+  margin-bottom: var(--ds-space-sm);
+  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
+  padding-left: var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+}
+
+.ordersSection,
+.machinesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.orderCard,
+.machineCard {
+  background: white;
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.orderCard:hover,
+.machineCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+  border-color: var(--ds-border-hover);
+}
+
+.orderHeader,
+.machineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.orderId,
+.machineName {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  flex: 1;
+}
+
+.urgentBadge {
+  background: var(--color-danger);
+  color: white;
+  padding: 2px 8px;
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orderDetails,
+.machineDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  margin-bottom: var(--ds-space-sm);
+}
+
+.orderInfo,
+.machineSpecs {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  line-height: 1.4;
+}
+
+.orderStatus,
+.machineStatus {
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.orderActions,
+.machineActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  align-items: center;
+}
+
+.primaryAction {
+  background: var(--ds-btn-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 32px;
+  flex: 1;
+}
+
+.primaryAction:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.primaryAction:active {
+  background: var(--ds-btn-primary-active);
+  transform: translateY(0);
+}
+
+.secondaryAction {
+  background: transparent;
+  color: var(--ds-text-primary);
+  border: 1px solid var(--ds-border-secondary);
+  padding: 8px 16px;
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 32px;
+  flex: 1;
+}
+
+.secondaryAction:hover {
+  background: var(--ds-bg-hover);
+  border-color: var(--ds-border-hover);
+  transform: translateY(-1px);
+}
+
+.secondaryAction:active {
+  background: var(--ds-bg-subtle);
+  transform: translateY(0);
+}
+
+.comingSoon {
+  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
+  border: 2px dashed var(--ds-border-secondary);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-xl);
+  text-align: center;
+  margin-top: var(--ds-space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-md);
+}
+
+.comingSoonIcon {
+  font-size: 48px;
+  opacity: 0.7;
+}
+
+.comingSoonText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.comingSoonText h3 {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.comingSoonText p {
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .workOrderPlanning {
+    padding: var(--ds-space-sm);
+  }
+  
+  .orderCard,
+  .machineCard {
+    padding: var(--ds-space-sm);
+  }
+  
+  .orderActions,
+  .machineActions {
+    flex-direction: column;
+  }
+  
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+  
+  .comingSoon {
+    padding: var(--ds-space-lg);
+  }
+  
+  .comingSoonIcon {
+    font-size: 36px;
+  }
+}

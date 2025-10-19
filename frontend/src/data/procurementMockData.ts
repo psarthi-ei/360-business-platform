@@ -68,12 +68,12 @@ export interface GoodsReceiptNote {
 
 // ==================== PROCUREMENT MOCK DATA ====================
 
-// Material Requirements grouped by Order - matching Visual Design Spec exactly
+// Material Requirements grouped by Order - using proper sales order IDs
 export const mockMaterialRequirements: MaterialRequirement[] = [
-  // Order #O-2345 — Cotton Yarn Short (from Visual Design Spec)
+  // Order SO-002 — Mixed fabric for casual wear - Cotton Yarn Short
   {
     id: 'MR-001',
-    orderId: 'O-2345',
+    orderId: 'SO-002', // References existing sales order
     materialName: 'Cotton Yarn 30s Count',
     requiredQuantity: 500,
     currentStock: 200,
@@ -85,10 +85,10 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
     notes: 'Production blocked without this material'
   },
   
-  // Order #O-2344 — All Materials OK ✅ (from Visual Design Spec)
+  // Order SO-004 — Updated seasonal collection - All Materials OK ✅
   {
     id: 'MR-002',
-    orderId: 'O-2344',
+    orderId: 'SO-004', // References existing sales order
     materialName: 'Polyester Thread',
     requiredQuantity: 100,
     currentStock: 150,
@@ -100,7 +100,7 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
   },
   {
     id: 'MR-002B',
-    orderId: 'O-2344',
+    orderId: 'SO-004', // References existing sales order
     materialName: 'Cotton Fabric Base',
     requiredQuantity: 200,
     currentStock: 220,
@@ -111,10 +111,10 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
     requiredDate: '2024-10-30'
   },
   
-  // Order #O-2340 — Dye Shortage (from Visual Design Spec)
+  // Order SO-002 — Mixed fabric batch 2 - Dye Shortage
   {
     id: 'MR-003',
-    orderId: 'O-2340',
+    orderId: 'SO-002', // Second batch of same order
     materialName: 'Red Dye Chemical',
     requiredQuantity: 50,
     currentStock: 10,
@@ -126,10 +126,10 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
     notes: 'Dyeing process cannot start without this'
   },
   
-  // Additional orders for completeness
+  // Additional orders for completeness - using work order materials
   {
     id: 'MR-004',
-    orderId: 'O-2339',
+    orderId: 'SO-002', // Additional materials for large order
     materialName: 'Cotton Fabric 150 GSM',
     requiredQuantity: 1000,
     currentStock: 800,
@@ -141,7 +141,7 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
   },
   {
     id: 'MR-005',
-    orderId: 'O-2338',
+    orderId: 'SO-004', // Accessories for seasonal collection
     materialName: 'Zipper - Metal 12 inch',
     requiredQuantity: 200,
     currentStock: 250,
@@ -155,7 +155,7 @@ export const mockMaterialRequirements: MaterialRequirement[] = [
 
 // Purchase Requests matching Visual Design Spec format
 export const mockPurchaseRequests: PurchaseRequest[] = [
-  // PR#2024-089 — Cotton Yarn (from Visual Design Spec)
+  // PR#2024-089 — Cotton Yarn for SO-002
   {
     id: 'PR-2024-089',
     mrId: 'MR-001',
@@ -165,7 +165,7 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     quantity: 300,
     unit: 'kg',
     estimatedCost: 22500,
-    justification: 'Critical shortage blocking Order O-2345',
+    justification: 'Critical shortage blocking Order SO-002 (Gujarat Garments)',
     status: 'pending',
     requestDate: '2024-10-15',
     notes: 'Urgent approval needed'
@@ -179,7 +179,7 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     quantity: 40,
     unit: 'kg',
     estimatedCost: 8000,
-    justification: 'Shortage for dyeing process Order O-2340',
+    justification: 'Shortage for dyeing process Order SO-002 batch 2',
     status: 'approved',
     requestDate: '2024-10-18',
     reviewedBy: 'Suresh Patel',
@@ -195,7 +195,7 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     quantity: 200,
     unit: 'meters',
     estimatedCost: 12000,
-    justification: 'Additional requirement for Order O-2339',
+    justification: 'Additional requirement for Order SO-002 (Gujarat Garments)',
     status: 'rejected',
     requestDate: '2024-10-17',
     reviewedBy: 'Suresh Patel',

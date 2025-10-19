@@ -17,6 +17,7 @@ import ExternalProfileForm, { BusinessProfileFormData } from './components/auth/
 import InventoryManagement from './components/business/InventoryManagement';
 import FulfillmentManagement from './components/business/FulfillmentManagement';
 import AnalyticsManagement from './components/business/AnalyticsManagement';
+import Production from './components/business/Production';
 import Procurement from './components/business/Procurement';
 import WebsiteHeader from './components/ui/WebsiteHeader';
 import Authentication from './components/auth/Authentication';
@@ -448,6 +449,16 @@ function AppContent() {
     );
   }
 
+  function renderProduction() {
+    return (
+      <Production
+        mobile={isMobile}
+        onShowCustomerProfile={showCustomerProfileWithState}
+        onUniversalAction={handleUniversalAction}
+      />
+    );
+  }
+
   function renderProcurement() {
     return (
       <Procurement
@@ -571,6 +582,7 @@ function AppContent() {
     renderInventoryManagement,
     renderFulfillmentManagement,
     renderAnalyticsManagement,
+    renderProduction,
     renderProcurement,
     renderAuthentication,
     renderProfileCompletion,
