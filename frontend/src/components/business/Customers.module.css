@@ -1,0 +1,218 @@
+/* Customers.module.css - Complete Visual Design Specification Styling */
+
+.customersModule {
+  display: grid;
+  grid-template-rows: 48px 44px 1fr 56px;
+  height: 100%;
+  background: var(--background-primary);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 48px Section Navigation - Visual Design Spec */
+.customersSections {
+  display: flex;
+  height: 48px;
+  background: white;
+  border-bottom: 1px solid var(--ds-border-primary);
+  grid-row: 1;
+}
+
+.sectionButton {
+  flex: 1;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 3px solid transparent;
+  letter-spacing: 0.02em;
+}
+
+.sectionButton.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background: var(--ds-bg-priority-low-subtle);
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+}
+
+.sectionButton:hover:not(.active) {
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  transform: translateY(-0.5px);
+}
+
+/* 44px Filters Row - Visual Design Spec */
+.customersFilters {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  height: 44px;
+  padding: 0 var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border-bottom: 1px solid var(--ds-border-primary);
+  margin-top: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  grid-row: 2;
+}
+
+.customersFilters::-webkit-scrollbar {
+  display: none;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--ds-space-sm);
+}
+
+.filterDropdowns {
+  display: flex;
+  gap: var(--ds-space-sm);
+  align-items: center;
+}
+
+.filterDropdown {
+  height: 36px;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: white;
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 90px;
+  max-width: 140px;
+  flex: 1;
+}
+
+.filterDropdown:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.filterDropdown:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+.countIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  min-height: 32px;
+  white-space: nowrap;
+}
+
+/* Content Area - Variable Height with Intelligent Scrolling */
+.customersContent {
+  grid-row: 3;
+  background: var(--background-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.customersContent.scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.customersContent.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.customersContent.scrollable::-webkit-scrollbar-track {
+  background: var(--ds-bg-subtle);
+  border-radius: 3px;
+}
+
+.customersContent.scrollable::-webkit-scrollbar-thumb {
+  background: var(--ds-border-primary);
+  border-radius: 3px;
+}
+
+.customersContent.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-text-secondary);
+}
+
+/* 56px Bottom CTA - Visual Design Spec */
+.customersCTA {
+  height: 56px;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: white;
+  border-top: 1px solid var(--ds-border-primary);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  grid-row: 4;
+}
+
+.customersCTAButton {
+  width: 100%;
+  height: 40px;
+  background: var(--ds-btn-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.customersCTAButton:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.customersCTAButton:active {
+  background: var(--ds-btn-primary-active);
+  transform: translateY(1px);
+}
+
+/* Touch targets - 44px minimum per Visual Design Spec */
+@media (max-width: 768px) {
+  .sectionButton {
+    min-height: 44px;
+  }
+  
+  .filterDropdown {
+    min-height: 44px;
+    font-size: var(--font-base);
+  }
+  
+  .customersCTAButton {
+    min-height: 44px;
+    font-size: var(--font-base);
+  }
+}

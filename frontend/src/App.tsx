@@ -19,6 +19,7 @@ import FulfillmentManagement from './components/business/FulfillmentManagement';
 import AnalyticsManagement from './components/business/AnalyticsManagement';
 import Production from './components/business/Production';
 import Procurement from './components/business/Procurement';
+import Customers from './components/business/Customers';
 import WebsiteHeader from './components/ui/WebsiteHeader';
 import Authentication from './components/auth/Authentication';
 import ServicesHub from './website/components/ServicesHub';
@@ -469,6 +470,16 @@ function AppContent() {
     );
   }
 
+  function renderCustomers() {
+    return (
+      <Customers
+        mobile={isMobile}
+        onShowCustomerProfile={showCustomerProfileWithState}
+        onUniversalAction={handleUniversalAction}
+      />
+    );
+  }
+
   function renderServicesHub() {
     return (
       <ServicesHub
@@ -584,6 +595,7 @@ function AppContent() {
     renderAnalyticsManagement,
     renderProduction,
     renderProcurement,
+    renderCustomers,
     renderAuthentication,
     renderProfileCompletion,
     renderServicesHub,
