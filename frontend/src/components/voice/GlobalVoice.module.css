@@ -585,10 +585,10 @@
 /* Mobile responsive for debug panel */
 @media (max-width: 768px) {
   .debugToggleButton {
-    /* Position debug button at extreme left for better separation */
+    /* Position debug button higher up above CTA */
     position: fixed;
-    bottom: 100px;
-    left: 20px; /* Extreme left position */
+    bottom: 160px; /* Further up from bottom */
+    right: 20px; /* Bottom right position */
     z-index: 99999;
     width: 36px;
     height: 36px;

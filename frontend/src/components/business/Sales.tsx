@@ -42,6 +42,9 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
   
+  // Modal trigger states for CTA button functionality
+  const [triggerLeadModal, setTriggerLeadModal] = useState(false);
+  
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
     { value: 'all', label: '📅 All Time' },
@@ -278,6 +281,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             onShowSalesOrders={() => setActiveTab('orders')}
             filterState={leadFilterState}
             onFilterChange={setLeadFilterState}
+            openAddModal={triggerLeadModal}
+            onAddModalHandled={handleLeadModalHandled}
           />
         );
       case 'quotes':
@@ -328,7 +333,30 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
 
   // Handle CTA click based on active tab
   const handleCTAClick = () => {
-    // TODO: Connect to existing component add functions when re-integrating
+    switch(activeTab) {
+      case 'leads':
+        setTriggerLeadModal(true);
+        break;
+      case 'quotes':
+        // For now, show alert since no dedicated add modal exists
+        alert('Add Quote functionality coming soon!');
+        break;
+      case 'orders':
+        // For now, show alert since no dedicated add modal exists
+        alert('Add Order functionality coming soon!');
+        break;
+      case 'invoices':
+        // For now, show alert since no dedicated add modal exists
+        alert('Add Invoice functionality coming soon!');
+        break;
+      default:
+        // Unknown tab - no action needed
+    }
+  };
+
+  // Handle when LeadManagement modal is handled
+  const handleLeadModalHandled = () => {
+    setTriggerLeadModal(false);
   };
 
   return (

@@ -1,16 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import FloatingActionButton from './FloatingActionButton';
 import styles from './BottomNavigation.module.css';
 
 interface BottomNavigationProps {
   className?: string;
-  onFABAction?: (action: string) => void;
 }
 
 const BottomNavigation: React.FC<BottomNavigationProps> = ({ 
-  className = '', 
-  onFABAction 
+  className = '' 
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -76,19 +73,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
     return currentPath === path;
   };
 
-  // Get currently active tab for FAB context
-  const getActiveTab = () => {
-    // Find the active tab based on current path
-    const activeTab = tabs.find(tab => isActiveTab(tab.path));
-    return activeTab?.path || '/home';
-  };
-
   return (
     <div className={styles.bottomNavigationContainer}>
-      <FloatingActionButton 
-        activeTab={getActiveTab()}
-        onClick={onFABAction}
-      />
       <nav className={`${styles.bottomTabs} ${className}`}>
         {tabs.map((tab, index) => {
           const workflowNames = ['home', 'sales', 'production', 'procurement', 'customers'];

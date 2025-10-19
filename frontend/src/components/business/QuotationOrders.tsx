@@ -210,18 +210,28 @@ function QuotationOrders({
 
           const statusIcons = {
             pending: '⏳',
+            under_review: '👁️',
             approved: '✅',
-            expired: '❌',
             rejected: '🚫',
-            converted_to_proforma: '📋'
+            expired: '❌',
+            proforma_sent: '📋',
+            advance_requested: '💰',
+            advance_overdue: '⚠️',
+            advance_received: '✅',
+            order_created: '🏭'
           };
 
           const statusLabels = {
-            pending: t('pending'),
-            approved: t('approved'),
-            expired: t('expired'),
+            pending: t('pending') || 'Pending',
+            under_review: 'Under Review',
+            approved: t('approved') || 'Approved',
             rejected: 'Rejected',
-            converted_to_proforma: 'Converted'
+            expired: t('expired') || 'Expired',
+            proforma_sent: 'Proforma Sent',
+            advance_requested: 'Advance Requested',
+            advance_overdue: 'Payment Overdue',
+            advance_received: 'Advance Received',
+            order_created: 'Order Created'
           };
 
           const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);

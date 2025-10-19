@@ -90,7 +90,7 @@
 }
 
 .filterDropdown {
-  height: 32px;
+  height: 36px;
   padding: var(--ds-space-xs) var(--ds-space-sm);
   background: white;
   border: 1px solid var(--ds-border-secondary);
@@ -98,6 +98,7 @@
   color: var(--ds-text-primary);
   font-size: var(--font-sm);
   font-weight: 500;
+  line-height: 1.2;
   cursor: pointer;
   transition: all 0.2s;
   min-width: 120px;
@@ -107,6 +108,8 @@
   background-position: right 8px center;
   background-size: 16px;
   padding-right: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .filterDropdown:hover {
@@ -116,7 +119,7 @@
 
 .filterDropdown:focus {
   outline: none;
-  border-color: var(--ds-primary);
+  border-color: var(--ds-btn-primary);
   box-shadow: 0 0 0 2px var(--ds-focus-ring);
 }
 
@@ -166,14 +169,14 @@
 .salesCTAButton {
   width: 100%;
   height: 40px;
-  background: var(--ds-primary);
+  background: var(--ds-btn-primary);
   color: white;
   border: none;
   border-radius: var(--ds-radius-md);
   font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,11 +184,12 @@
 }
 
 .salesCTAButton:hover {
-  background: var(--ds-primary-hover);
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
 }
 
 .salesCTAButton:active {
-  background: var(--ds-primary-active);
+  background: var(--ds-btn-primary-active);
   transform: translateY(1px);
 }
 

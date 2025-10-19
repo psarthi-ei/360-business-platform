@@ -93,10 +93,15 @@ function CustomerProfile({
           {customerQuotes.length > 0 ? customerQuotes.map(quote => {
             const statusIcons = {
               pending: '⏳',
+              under_review: '👁️',
               approved: '✅',
-              expired: '❌',
               rejected: '🚫',
-              converted_to_proforma: '📋'
+              expired: '❌',
+              proforma_sent: '📋',
+              advance_requested: '💰',
+              advance_overdue: '⚠️',
+              advance_received: '✅',
+              order_created: '🏭'
             };
             
             return (

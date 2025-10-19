@@ -59,7 +59,9 @@ export interface Quote {
   validUntil: string;
   items: string;
   totalAmount: number;
-  status: 'pending' | 'approved' | 'expired' | 'rejected' | 'converted_to_proforma';
+  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'expired' | 
+          'proforma_sent' | 'advance_requested' | 'advance_overdue' | 
+          'advance_received' | 'order_created';
   statusMessage: string;
   approvalDate?: string;
   proformaInvoiceId?: string;
@@ -625,8 +627,8 @@ export const mockQuotes: Quote[] = [
     validUntil: 'March 30, 2024',
     items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard',
     totalAmount: 1480000,
-    status: 'pending',
-    statusMessage: 'Quote sent - Awaiting customer response',
+    status: 'under_review',
+    statusMessage: 'Customer is reviewing quote - Expecting response by end of week',
     advancePaymentRequired: 740000, // 50% advance
     advancePaymentStatus: 'not_requested'
   },
@@ -639,8 +641,8 @@ export const mockQuotes: Quote[] = [
     validUntil: 'April 5, 2024',
     items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
     totalAmount: 1320000,
-    status: 'approved',
-    statusMessage: 'Quote approved - Ready for proforma invoice and advance payment',
+    status: 'proforma_sent',
+    statusMessage: 'Proforma invoice sent - Advance payment requested',
     advancePaymentRequired: 660000, // 50% advance
     advancePaymentStatus: 'awaiting'
   },
@@ -655,8 +657,8 @@ export const mockQuotes: Quote[] = [
     validUntil: 'March 25, 2024',
     items: 'Export quality cotton fabric - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
-    status: 'approved',
-    statusMessage: 'Quote approved - Advance payment received, customer created',
+    status: 'order_created',
+    statusMessage: 'Order created successfully - Quote completed',
     approvalDate: 'March 12, 2024',
     proformaInvoiceId: 'PI-GJ-002',
     advancePaymentRequired: 487500, // 50% advance

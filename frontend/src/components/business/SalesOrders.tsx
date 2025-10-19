@@ -81,7 +81,7 @@ function SalesOrders({
       paymentStatus
     };
   };
-  
+
   return (
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
@@ -130,13 +130,12 @@ function SalesOrders({
 
           const businessProfile = getBusinessProfileById(order.businessProfileId);
           const companyName = businessProfile?.companyName || 'Unknown Company';
-          const isCustomer = businessProfile?.customerStatus === 'customer';
 
           return (
             <div key={order.id} className={styles.orderCardContainer} data-order-id={order.id}>
               {/* Clickable Card Summary - 140px Template */}
               <div 
-                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${expandedDetails.has(order.id) ? styles.expanded : ''}`}
+                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${expandedDetails.has(order.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(order.id)}
               >
                 {/* Template Header - Company Name Only */}
@@ -149,7 +148,7 @@ function SalesOrders({
                 
                 {/* Template Status */}
                 <div className={styles.cardStatus}>
-                  {statusIcons[order.status]} {statusLabels[order.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                  {statusIcons[order.status]} {statusLabels[order.status]}
                 </div>
                 
                 {/* Template Meta - 2 lines */}
