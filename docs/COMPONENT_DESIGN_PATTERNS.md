@@ -14,6 +14,7 @@
 3. [**Design System Token Reference**](#🎨-design-system-token-reference)
 4. [**Parent Container Integration Patterns**](#🔗-parent-container-integration-patterns)
    - [Horizontal Scroll Architecture Patterns](#horizontal-scroll-architecture-patterns)
+   - [Mobile Container Padding Pattern](#mobile-container-padding-pattern)
 5. [**Action Button Patterns**](#🔘-action-button-patterns)
 6. [**Common Pitfalls & Solutions**](#⚠️-common-pitfalls--solutions)
 7. [**Validation Checklist**](#✅-validation-checklist)
@@ -513,6 +514,93 @@ const filteredItems = useMemo(() => {
 ✅ **Performance:** No unnecessary scrollbars cluttering interface  
 ✅ **Maintainability:** Single source of scroll control per module
 
+### **Mobile Container Padding Pattern**
+
+**CRITICAL PRINCIPLE:** Container padding must be removed on mobile for consistent card spacing across all business components.
+
+#### **Container Padding Requirements**
+
+All business components must follow this mobile padding pattern to ensure visual consistency:
+
+**❌ WRONG: Keeping container padding on mobile**
+```css
+.componentContainer {
+  padding: 0 var(--ds-space-sm);  /* Causes cramped appearance on mobile */
+}
+/* No mobile override = cards appear cramped */
+```
+
+**✅ CORRECT: Remove container padding on mobile**
+```css
+.componentContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-sm);  /* Desktop padding */
+  display: grid;
+  gap: var(--ds-space-sm);
+}
+
+/* MANDATORY: Remove padding on mobile */
+@media (max-width: 767px) {
+  .componentContainer {
+    padding-left: 0;     /* Remove padding on mobile */
+    padding-right: 0;    /* Remove padding on mobile */
+  }
+}
+```
+
+#### **Implementation Examples**
+
+**Purchase Requests (Reference Pattern):**
+```css
+.prContainer {
+  padding: 0 10px;
+}
+
+@media (max-width: 1024px) {
+  .prContainer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+```
+
+**Material Requirements (Fixed Pattern):**
+```css
+.materialRequirementsContainer {
+  padding: 0 var(--ds-space-sm);
+}
+
+@media (max-width: 767px) {
+  .materialRequirementsContainer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+```
+
+#### **Why This Matters**
+
+**Without mobile padding removal:**
+- Cards appear cramped and inconsistent
+- Visual spacing differs from other components
+- Poor mobile UX compared to platform standard
+
+**With mobile padding removal:**
+- ✅ **Edge-to-edge cards** on mobile
+- ✅ **Consistent spacing** across all business components  
+- ✅ **Platform-standard mobile UX**
+- ✅ **Visual harmony** with Purchase Requests and other components
+
+#### **Validation Pattern**
+
+Always verify mobile container padding is removed:
+```bash
+# Check for missing mobile padding override
+grep -A 10 "@media.*max-width.*767px" ComponentName.module.css
+# Should include: padding-left: 0; padding-right: 0;
+```
+
 ---
 
 ## 🔘 **ACTION BUTTON PATTERNS**
@@ -773,6 +861,12 @@ Using wrong variables or colors for status indication.
 - [ ] **Child components**: Remove `overflow: hidden` that blocks parent scroll
 - [ ] **Horizontal scroll**: Added to business module `.scrollable` classes
 - [ ] **Mobile optimization**: `-webkit-overflow-scrolling: touch` included
+
+#### **Mobile Container Padding**
+- [ ] **Container padding**: Removed on mobile (`padding-left: 0; padding-right: 0;`)
+- [ ] **Edge-to-edge cards**: Cards extend to screen edges on mobile
+- [ ] **Consistent spacing**: Matches Purchase Requests mobile behavior
+- [ ] **Responsive breakpoint**: Uses `@media (max-width: 767px)` or appropriate breakpoint
 
 #### **Action Buttons**
 - [ ] Only actionable buttons included

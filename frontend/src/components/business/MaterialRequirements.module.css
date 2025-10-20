@@ -48,7 +48,7 @@
 
 .card {
   height: 140px;                    /* Template fixed height - NEVER change */
-  padding: var(--ds-space-md);      /* Symmetric padding for professional look */
+  padding: 16px;                    /* Match platform-wide standard (16px) */
   background: white;
   border-radius: var(--ds-radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -79,14 +79,12 @@
   font-weight: 600;
   color: var(--ds-text-primary);   /* CORRECT variable usage */
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  line-height: 1.0;                /* Adjusted to prevent text cutoff in 24px container */
+  line-height: 1.2;                /* Match Purchase Requests: 20px * 1.2 = 24px with proper font spacing */
   overflow: hidden;
   white-space: nowrap;              /* Force single line */
   text-overflow: ellipsis;          /* Clean truncation with ... */
   flex-shrink: 0;                  /* Prevent header compression */
   height: 24px;                    /* Fixed height for consistency */
-  display: flex;                   /* Added flex for better text alignment */
-  align-items: center;             /* Center text vertically in container */
 }
 
 .cardStatus {
@@ -632,13 +630,15 @@
     padding: var(--ds-space-sm);
   }
   
+  .materialRequirementsContainer {
+    padding-left: 0;     /* Remove padding on mobile */
+    padding-right: 0;    /* Remove padding on mobile */
+  }
+  
   .cardsContainer {
     gap: var(--ds-space-sm);
   }
   
-  .cardHeader {
-    padding: var(--ds-space-md);
-  }
   
   .orderTitleText {
     font-size: var(--font-base);
