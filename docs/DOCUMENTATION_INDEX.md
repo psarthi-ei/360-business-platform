@@ -272,6 +272,21 @@ This is the master navigation document that guides you to all project informatio
 
 ### **DESIGN & USER EXPERIENCE**
 
+### **8. COMPONENT_DESIGN_PATTERNS.md** - Business Component Implementation Guide
+**Purpose**: Comprehensive implementation patterns for business components following established architectural standards
+
+**Contains**:
+- **Card Component Template System**: Complete 140px fixed height card template with JSX/CSS patterns
+- **Design System Token Reference**: Correct CSS variable mappings preventing black/default colors
+- **Parent Container Integration Patterns**: Scroll behavior, filter state, and platform integration requirements
+- **Action Button Patterns**: Status-based conditional rendering with internal vs external workflow actions
+- **Common Pitfalls & Solutions**: Real fixes from Purchase Requests development preventing future issues
+- **Validation Checklist**: Pre-development, during development, and post-development validation steps
+- **Complete Implementation Examples**: Working PurchaseRequests component with full code
+
+**Update Schedule**: When new component patterns are established or existing patterns evolve
+
+---
 
 ### **MARKETING & STRATEGY**
 
@@ -345,6 +360,9 @@ This is the master navigation document that guides you to all project informatio
 | "What are the next implementation priorities?" | **IMPLEMENTATION_ROADMAP.md** | **PRIMARY**: Phase 5-9 with clear sub-phases and manageable timelines |
 | "What's our development velocity?" | **DAILY_PROGRESS_LOG.md** | Development timeline, productivity metrics, and progress tracking |
 | "How many commits per day are we doing?" | **DAILY_PROGRESS_LOG.md** | Daily work analysis and development patterns |
+| "How do I implement consistent business components?" | **COMPONENT_DESIGN_PATTERNS.md** | Complete component implementation patterns with templates and examples |
+| "What are the correct CSS variables to use?" | **COMPONENT_DESIGN_PATTERNS.md** | Design system token reference with correct variable mappings |
+| "How do I fix scroll integration issues?" | **COMPONENT_DESIGN_PATTERNS.md** | Parent container integration patterns and scroll behavior solutions |
 
 ### **Document Purpose Framework**
 
@@ -492,6 +510,9 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **Implementation Roadmap (remaining phases 5-9)** | IMPLEMENTATION_ROADMAP.md | **PRIMARY**: Core views → cross-module → CRUD implementation sequence |
 | **Phase Structure with Clear Priorities** | IMPLEMENTATION_ROADMAP.md | Small manageable sub-phases with Visual Design Spec references |
 | **Development Timeline & Velocity (commits per week, productivity)** | WEEKLY_PROGRESS_LOG.md | Development analytics and tracking |
+| **Component Implementation Patterns (card templates, CSS variables, action buttons)** | COMPONENT_DESIGN_PATTERNS.md | Complete component development guide with templates and solutions |
+| **Scroll Integration & Parent Container Patterns** | COMPONENT_DESIGN_PATTERNS.md | Parent-child integration patterns for platform scroll behavior |
+| **Design System Token Usage & CSS Variable Reference** | COMPONENT_DESIGN_PATTERNS.md | Correct CSS variables preventing black/default colors |
 
 ### **🔄 Critical Synchronization Rules**
 

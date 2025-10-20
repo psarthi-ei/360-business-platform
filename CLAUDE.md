@@ -21,6 +21,7 @@ date  # ALWAYS run first - validates project timeline context
 
 # Supporting references:
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes
+/docs/COMPONENT_DESIGN_PATTERNS.md    # Component implementation patterns with templates and CSS variables
 ```
 
 ### **STEP 3: CHECK TODO STATUS**
@@ -71,8 +72,9 @@ if (params && 'leadId' in params) {
 **✅ VERIFICATION PROTOCOL**:
 1. Read existing component first to understand design system usage
 2. Use ONLY design system tokens from `/frontend/src/index.css`
-3. Run `grep` audit to verify zero hardcoded values
-4. Test build compilation to confirm no errors
+3. **Reference COMPONENT_DESIGN_PATTERNS.md** for correct variable mappings and templates
+4. Run `grep` audit to verify zero hardcoded values
+5. Test build compilation to confirm no errors
 
 ### **4. IMPLEMENTATION ROADMAP COMPLIANCE (MANDATORY)**
 **❌ Common Mistake**: Creating new files instead of updating existing systems
@@ -168,6 +170,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
   - Architecture questions → UNIFIED_ARCHITECTURE.md
   - Use case status → USE_CASES_MASTER.md
   - Visual design details → VISUAL_DESIGN_SPECIFICATION.md
+  - Component implementation patterns → COMPONENT_DESIGN_PATTERNS.md
 
 ---
 

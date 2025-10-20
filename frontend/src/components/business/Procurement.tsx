@@ -188,8 +188,15 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     return Math.round(baseCount * timelineModifier);
   }, [activeTab, mrFilterState, prFilterState, poFilterState, grnFilterState, timelineFilter]);
 
-  // Intelligent scroll calculation
+  // Intelligent scroll calculation - focused on ensuring scroll appears
   const calculateScrollBehavior = useCallback(() => {
+    // For PR and MR tabs, force scroll to be enabled since they have content
+    if (activeTab === 'prs' || activeTab === 'mr') {
+      setShouldShowScrollbar(true);
+      return;
+    }
+    
+    // For other tabs, use existing calculation
     const filteredCount = getFilteredCount();
     
     // Card template specifications (140px template)
@@ -211,7 +218,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     // Show scrollbar if content exceeds available space
     const needsScroll = totalContentHeight > availableHeight;
     setShouldShowScrollbar(needsScroll);
-  }, [getFilteredCount]);
+  }, [activeTab, getFilteredCount]);
 
   // Update scroll behavior when filters or tab changes
   useEffect(() => {

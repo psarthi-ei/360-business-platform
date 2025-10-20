@@ -33,25 +33,31 @@
 ## **PENDING IMPLEMENTATION** ⏳
 
 ## **PHASE 5: PROCUREMENT MODULE** 🔄 **IN PROGRESS** 
-*Duration: 0.85 hours remaining | Sub-phases: 4 (2 completed) | **Focus: UI + Mock Data Only***
+*Duration: 0.75 hours remaining | Sub-phases: 5 (2 completed) | **Focus: UI + Mock Data Only***
 
 ### **Sub-Phase 5.1: Create Procurement Module Shell** ⏱️ *20 minutes* ✅ **COMPLETED**
 **Objective**: Build procurement module structure with 4-tab navigation (MR | PRs | POs | GRNs)  
 **References**: [PROCUREMENT TAB - Supply Chain Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#procurement-tab---supply-chain-management)
 **Status**: Module shell, 4-tab navigation, and individual components fully implemented
 
-### **Sub-Phase 5.2: Material Requirements Tab** ⏱️ *25 minutes* ✅ **COMPLETED**
+### **Sub-Phase 5.2: Material Requirements Tab + Visual Design Alignment** ⏱️ *25 minutes* ✅ **COMPLETED**
 **Objective**: Implement MR list and detail views with status tracking (**UI + Mock Data Only**)  
 **References**: [MR Tab - Material Requirements](../docs/VISUAL_DESIGN_SPECIFICATION.md#mr-tab---material-requirements) | [Material Requirements Architecture](../docs/BUSINESS_PROCESSES.md#material-requirements-architecture-mvp-implementation)  
 **Approach**: Professional UI displaying existing mock data with order grouping, shortage alerts, and status-based styling  
 **Architecture**: Sales Order level Material Requirements (MVP approach) - see Business Processes documentation for complete architecture decision and future enhancement path
+**BONUS**: Updated Visual Design Specification to align with implemented 2-filter dropdown architecture (replaced inconsistent sub-tab references)
 
-### **Sub-Phase 5.3: Purchase Requests & Orders Tabs** ⏱️ *30 minutes* ⏳ **NEXT PRIORITY**
-**Objective**: Implement PRs and POs tabs with supplier management and workflow status (**UI + Mock Data Only**)  
-**References**: [PRs Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#prs-tab---purchase-requests) | [POs Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#pos-tab---purchase-orders) | [Material Requirements Architecture](../docs/BUSINESS_PROCESSES.md#material-requirements-architecture-mvp-implementation)  
-**Approach**: Professional UI for Purchase Requests and Purchase Orders with Sales Order level integration (MVP approach)
+### **Sub-Phase 5.3: Purchase Requests (PRs) Tab** ⏱️ *15 minutes* ⏳ **NEXT PRIORITY**
+**Objective**: Implement PRs tab with internal purchase request management and approval workflow status (**UI + Mock Data Only**)  
+**References**: [PRs Tab - Purchase Requests](../docs/VISUAL_DESIGN_SPECIFICATION.md#prs-tab---purchase-requests) | [Material Requirements Architecture](../docs/BUSINESS_PROCESSES.md#material-requirements-architecture-mvp-implementation)  
+**Approach**: Professional UI displaying Purchase Requests with 2-filter dropdown architecture (Status + Timeline)
 
-### **Sub-Phase 5.4: Goods Receipt Notes Tab** ⏱️ *15 minutes*
+### **Sub-Phase 5.4: Purchase Orders (POs) Tab** ⏱️ *15 minutes*
+**Objective**: Implement POs tab with supplier order tracking and delivery management (**UI + Mock Data Only**)  
+**References**: [POs Tab - Purchase Orders](../docs/VISUAL_DESIGN_SPECIFICATION.md#pos-tab---purchase-orders) | [Material Requirements Architecture](../docs/BUSINESS_PROCESSES.md#material-requirements-architecture-mvp-implementation)  
+**Approach**: Professional UI displaying Purchase Orders with 2-filter dropdown architecture (Status + Timeline)
+
+### **Sub-Phase 5.5: Goods Receipt Notes Tab** ⏱️ *15 minutes*
 **Objective**: Implement GRNs tab with quality inspection and inventory integration  
 **References**: [GRNs Tab - Goods Receipt Notes](../docs/VISUAL_DESIGN_SPECIFICATION.md#grns-tab---goods-receipt-notes)
 
@@ -168,10 +174,11 @@
 ### **Core Principles**
 1. **Update Existing Systems**: Never create new files when existing patterns work
 2. **Design System Compliance**: 100% design system token usage - NO hardcoded values (fonts, colors, spacing)
-3. **Visual Design Compliance**: 100% adherence to Visual Design Specification
-4. **Mobile-First**: Touch-friendly, factory floor optimized interface
-5. **Professional Quality**: Production-ready B2B application
-6. **UI Excellence**: Focus on presenting mock data beautifully and professionally
+3. **Component Pattern Compliance**: Follow COMPONENT_DESIGN_PATTERNS.md for templates, CSS variables, and scroll integration
+4. **Visual Design Compliance**: 100% adherence to Visual Design Specification
+5. **Mobile-First**: Touch-friendly, factory floor optimized interface
+6. **Professional Quality**: Production-ready B2B application
+7. **UI Excellence**: Focus on presenting mock data beautifully and professionally
 
 ### **Git Workflow**
 - Commit after each sub-phase: `MOBILE UX V3 - SUB-PHASE [X.Y]: [Description]`
@@ -182,6 +189,7 @@
 - TypeScript compliance (zero `any` types)
 - Build verification after each phase
 - **MANDATORY Design System Token Audit**: Zero hardcoded fonts, colors, spacing values
+- **Component Pattern Validation**: Follow COMPONENT_DESIGN_PATTERNS.md checklist for templates and integration
 - Mobile responsiveness testing
 - Design system compliance verification (use `grep` to check for hardcoded values)
 

@@ -440,7 +440,7 @@
 
 .expandIndicator {
   font-size: 12px;
-  color: var(--ds-primary);
+  color: var(--color-primary);
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.2s ease;
@@ -454,7 +454,7 @@
 .quoteCard:hover .expandIndicator {
   opacity: 1;
   background: rgba(29, 78, 216, 0.15);
-  color: var(--ds-primary);
+  color: var(--color-primary);
 }
 
 /* Update customer/prospect card styling */

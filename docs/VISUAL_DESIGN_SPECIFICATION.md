@@ -578,11 +578,28 @@ Key Visual Elements:
 └─────────────────────────────────────┘
 ```
 
-**Business Filter Configurations:**
-- **Leads**: All Leads | 🔥 Hot | 🔶 Warm | 🔵 Cold | This Week
-- **Quotes**: All Quotes | ⏳ Pending | ✅ Approved | ❌ Expired | This Month  
-- **Orders**: All Orders | 🟡 Production | ⚠️ Blocked | ✅ Delivered | This Quarter
-- **Invoices**: All Invoices | 💰 Paid | 🟡 Pending | 🔴 Overdue | This Month
+**2-Filter Dropdown Architecture (Standardized Across All Modules):**
+
+**Filter Structure**: `[Status/Priority Filter ▼] [📅 Timeline Filter ▼] 📦{count}`
+
+**Filter 1 - Status/Priority** (Module-specific):
+- **Sales-Leads**: All Leads | 🔥 Hot | 🔶 Warm | 🔵 Cold
+- **Sales-Quotes**: All Quotes | ⏳ Pending | ✅ Approved | ❌ Expired
+- **Sales-Orders**: All Orders | 🟡 Production | ⚠️ Blocked | ✅ Delivered
+- **Sales-Invoices**: All Invoices | 💰 Paid | 🟡 Pending | 🔴 Overdue
+- **Production**: All Orders | 🟡 Planned | 🟠 Active | ✅ Complete
+- **Procurement-MR**: All Materials | ⚠️ Shortages | ✅ Available | 🟡 Ordered
+- **Procurement-PRs**: All Requests | ⏳ Pending | ✅ Approved | ❌ Rejected
+- **Procurement-POs**: All Orders | 🟡 Open | ✅ Delivered | ❌ Cancelled
+- **Customers**: All Customers | 🟢 Good | ⚠️ Late | ⭐ Excellent
+
+**Filter 2 - Timeline** (Standardized across all modules):
+- 📅 All Time
+- 📅 Today
+- 📅 This Week
+- 📅 This Month
+
+**Count Indicator**: Shows filtered results count (📦{number})
 
 **Status Color System:**
 - **Lead Priority**: Hot (Red), Warm (Orange), Cold (Blue)  
@@ -823,6 +840,8 @@ Total Height: 140px (with 16px padding = 108px content)
 - Orders: All/Production/Blocked/Delivered filters
 - Invoices: All/Paid/Pending/Overdue filters
 
+---
+
 ### **DESIGN DECISION: Fixed Layout Architecture**
 
 #### **UX Analysis for Non-Technical Users:**
@@ -960,7 +979,7 @@ Key Visual Elements:
 
 #### **Sales Module Overview**
 
-The Sales module manages the complete Lead-to-Invoice business workflow through 4 integrated sub-tabs. It serves as the primary revenue pipeline management system for textile manufacturers.
+The Sales module manages the complete Lead-to-Invoice business workflow through 4 integrated main tabs (Leads│Quotes│Orders│Invoices). Each tab uses 2-filter dropdowns for status and timeline filtering. It serves as the primary revenue pipeline management system for textile manufacturers.
 
 **Business Context**: Addresses the daily owner question: "કોણ call કર્યો? કયા leads hot છે? આજે કોને quotes મોકલવા?" (Who called? Which leads are hot? Who should I send quotes to today?)
 
@@ -1445,7 +1464,7 @@ Invoice Status: Generated → Sent → Paid → Completed
 
 #### **Production Module Overview**
 
-The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 4 main sub-tabs with integrated cross-module functionality.
+The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 4 main tabs (Plan│Active│QC│Ready) with 2-filter dropdowns and integrated cross-module functionality.
 
 **Business Context**: Addresses the daily production questions: "કયા orders production માં છે? આજે શું બનાવવું? Quality કેમ છે?" (Which orders are in production? What to make today? How is quality?)
 
@@ -1991,7 +2010,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 #### **Procurement Module Overview**
 
-The Procurement module manages the complete supply chain workflow from material shortage detection through inventory updates. It operates through 4 main sub-tabs with integrated inventory management.
+The Procurement module manages the complete supply chain workflow from material shortage detection through inventory updates. It operates through 4 main tabs (MR│PRs│POs│GRNs) with 2-filter dropdowns and integrated inventory management.
 
 **Business Context**: Addresses the daily owner question: "કેટલો stock છે? શું material ઓર્ડર કરવું?" (How much stock? What materials to order?)
 
@@ -2015,8 +2034,8 @@ The Procurement module manages the complete supply chain workflow from material 
 
 ```
 ┌─────────────────────────────────────┐
-│ Procurement [ MR│PRs│POs│GRNs ]     │ Sub-tabs: 48px
-│ [🔍 Search materials... (🎙)]       │ Search: 44px
+│ Procurement [ MR│PRs│POs│GRNs ]     │ Main tabs: 48px
+│ [All Materials ▼] [📅 All Time ▼] 📦8│ 2 filters: 44px
 ├─────────────────────────────────────┤
 │ ⚠️ MATERIAL SHORTAGES DETECTED      │ Alert header: 48px
 │                                     │ Red background
@@ -2098,10 +2117,10 @@ The Procurement module manages the complete supply chain workflow from material 
 ##### **PR List View**
 ```
 ┌─────────────────────────────────────┐
-│ Purchase Requests [ Draft│Sent│App ]│ Sub-tabs: 48px
-│ [🔍 Search PRs... (🎙)]             │ Search: 44px
+│ PRs (Purchase Requests)             │ Tab header
+│ [All Requests ▼] [📅 All Time ▼] 📦4│ 2 filters: 44px
 ├─────────────────────────────────────┤
-│ ⚠️ 3 PENDING APPROVALS              │ Alert header: 48px
+│ ⚠️ 2 PENDING APPROVALS              │ Alert header: 48px
 │                                     │ Orange background
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
@@ -2142,8 +2161,8 @@ The Procurement module manages the complete supply chain workflow from material 
 ##### **PO List View**
 ```
 ┌─────────────────────────────────────┐
-│ Purchase Orders [ Pending│Sent│Rec ]│ Sub-tabs: 48px
-│ [🔍 Search POs... (🎙)]             │ Search: 44px
+│ POs (Purchase Orders)               │ Tab header
+│ [All Orders ▼] [📅 All Time ▼] 📦12│ 2 filters: 44px
 ├─────────────────────────────────────┤
 │ ┌─────────────────────────────────┐ │
 │ │ PO#2401 — Gujarat Spinning      │ │ PO header
@@ -3545,7 +3564,7 @@ Validation Criteria for Next Version:
 
 - [ ] **Screen Implementations**
   - [ ] Home dashboard with all sections
-  - [ ] Sales module (4 sub-tabs)
+  - [ ] Sales module (4 main tabs with 2-filter dropdowns)
   - [ ] Production module with operator view
   - [ ] Procurement workflow screens
   - [ ] Customer 360° implementation

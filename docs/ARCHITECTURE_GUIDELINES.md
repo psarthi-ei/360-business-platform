@@ -195,6 +195,7 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 - [ ] Contains ONLY business logic (no voice/search/navigation code)
 - [ ] Follows Visual Design Spec (48px tabs, 44px filters, 56px CTA)
 - [ ] Uses design system tokens (--ds-btn-primary, etc.)
+- [ ] Follows COMPONENT_DESIGN_PATTERNS.md for card templates and CSS variables
 - [ ] Adds data types to platformConfig GLOBAL_SCOPE
 - [ ] Extends GlobalSearch scope for new data
 - [ ] Adds voice commands to VoiceCommandRouter
@@ -202,6 +203,7 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ### **For Every Session:**
 - [ ] Read ARCHITECTURE_GUIDELINES.md (this document)
+- [ ] Read COMPONENT_DESIGN_PATTERNS.md for implementation templates
 - [ ] Verify platformConfig compliance
 - [ ] Check zero code duplication
 - [ ] Validate Visual Design Spec compliance
