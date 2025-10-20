@@ -278,5 +278,59 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     qualityStatus: 'pending',
     receiptDate: '2024-10-19',
     notes: 'Short delivery - 10kg less than ordered'
+  },
+  {
+    id: 'GRN-003',
+    poId: 'PO-001',
+    receivedBy: 'Warehouse Team',
+    materialName: 'Blue Dye Chemical',
+    orderedQuantity: 50,
+    receivedQuantity: 50,
+    unit: 'kg',
+    qualityStatus: 'rejected',
+    receiptDate: '2024-10-17',
+    inspectedBy: 'Quality Team',
+    inspectionDate: '2024-10-17',
+    notes: 'Color consistency issues - returned to supplier'
+  },
+  {
+    id: 'GRN-004',
+    poId: 'PO-004',
+    receivedBy: 'Warehouse Team',
+    materialName: 'Cotton Fabric 120 GSM',
+    orderedQuantity: 300,
+    receivedQuantity: 300,
+    unit: 'meters',
+    qualityStatus: 'approved',
+    receiptDate: '2024-10-16',
+    inspectedBy: 'Quality Team',
+    inspectionDate: '2024-10-16',
+    notes: 'Excellent quality, meets specifications'
+  },
+  {
+    id: 'GRN-005',
+    poId: 'PO-005',
+    receivedBy: 'Warehouse Team',
+    materialName: 'Metal Zippers 12 inch',
+    orderedQuantity: 1000,
+    receivedQuantity: 950,
+    unit: 'pieces',
+    qualityStatus: 'pending',
+    receiptDate: '2024-10-20',
+    notes: 'Partial delivery - 50 pieces short, quality check in progress'
+  },
+  {
+    id: 'GRN-006',
+    poId: 'PO-006',
+    receivedBy: 'Warehouse Team',
+    materialName: 'Reactive Dyes - Red',
+    orderedQuantity: 25,
+    receivedQuantity: 30,
+    unit: 'kg',
+    qualityStatus: 'approved',
+    receiptDate: '2024-10-15',
+    inspectedBy: 'Quality Team',
+    inspectionDate: '2024-10-15',
+    notes: 'Over delivery - bonus 5kg received, excellent quality'
   }
 ];
