@@ -139,6 +139,7 @@
 
 .customersContent.scrollable {
   overflow-y: auto;
+  overflow-x: auto; /* Add horizontal scroll support */
   -webkit-overflow-scrolling: touch;
 }
 

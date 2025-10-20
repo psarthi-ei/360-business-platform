@@ -594,7 +594,7 @@
   background: var(--ds-bg-subtle);
   border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-border-primary);
-  overflow: hidden;
+  /* Remove overflow: hidden - let parent container handle scroll */
 }
 
 /* Empty state styling */

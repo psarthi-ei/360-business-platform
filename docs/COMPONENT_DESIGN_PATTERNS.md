@@ -13,6 +13,7 @@
 2. [**Card Component Template System**](#🃏-card-component-template-system)
 3. [**Design System Token Reference**](#🎨-design-system-token-reference)
 4. [**Parent Container Integration Patterns**](#🔗-parent-container-integration-patterns)
+   - [Horizontal Scroll Architecture Patterns](#horizontal-scroll-architecture-patterns)
 5. [**Action Button Patterns**](#🔘-action-button-patterns)
 6. [**Common Pitfalls & Solutions**](#⚠️-common-pitfalls--solutions)
 7. [**Validation Checklist**](#✅-validation-checklist)
@@ -354,6 +355,8 @@ const calculateScrollBehavior = useCallback(() => {
 /* Applied dynamically when scrolling is needed */
 .contentArea.scrollable {
   overflow-y: auto;
+  overflow-x: auto; /* Add horizontal scroll support */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
 }
 ```
 
@@ -416,6 +419,99 @@ const filteredItems = useMemo(() => {
   return mockItems.filter(item => item.status === filterState);
 }, [filterState]);
 ```
+
+### **Horizontal Scroll Architecture Patterns**
+
+**CRITICAL PRINCIPLE:** Horizontal scroll should be controlled at the **container level**, following the same intelligent pattern as vertical scroll.
+
+#### **Business Module Pattern (Sales, Procurement, Production, Customers)**
+
+**Architecture:** Container-level scroll management with intelligent activation.
+
+```css
+/* Content Area - Intelligent Scroll Behavior */
+.moduleContent {
+  overflow: hidden; /* Default: clean appearance, no scrollbars */
+  background: var(--ds-bg-primary);
+  grid-row: 3;
+  transition: all 0.2s ease; /* Smooth transition when scroll behavior changes */
+}
+
+/* Applied dynamically when scrolling is needed */
+.moduleContent.scrollable {
+  overflow-y: auto;                    /* Vertical scroll when needed */
+  overflow-x: auto;                    /* Horizontal scroll when needed */
+  -webkit-overflow-scrolling: touch;   /* Smooth mobile scroll */
+}
+```
+
+**Implementation Examples:**
+- `.salesContent.scrollable` - Sales module
+- `.procurementContent.scrollable` - Procurement module  
+- `.productionContent.scrollable` - Production module
+- `.customersContent.scrollable` - Customers module
+
+#### **Dashboard/Home Pattern (Component-Level)**
+
+**Architecture:** Individual components handle their own overflow needs.
+
+```css
+/* KPI Strip with horizontal scroll */
+.kpiStrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;                    /* Component-level horizontal scroll */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;   /* Smooth mobile scroll */
+  -ms-overflow-style: none;            /* Hide scrollbars */
+  scrollbar-width: none;
+}
+
+/* Responsive behavior - switch to grid on mobile */
+@media (max-width: 1024px) {
+  .kpiStrip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: visible;                  /* No scroll needed in grid mode */
+  }
+}
+```
+
+#### **Child Component Requirements**
+
+**❌ WRONG: Blocking parent scroll**
+```css
+.expandedTableContainer {
+  overflow: hidden;  /* Blocks horizontal scroll from parent */
+}
+```
+
+**✅ CORRECT: Let parent handle scroll**
+```css
+.expandedTableContainer {
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+  /* Remove overflow: hidden - let parent container handle scroll */
+}
+```
+
+#### **Architecture Decision Matrix**
+
+| **Context** | **Pattern** | **Implementation** | **Example** |
+|-------------|-------------|-------------------|-------------|
+| **Business Module Tabs** | Container-Level | `.moduleContent.scrollable` | Sales, Procurement, Production |
+| **Dashboard Components** | Component-Level | `.componentName { overflow-x: auto; }` | KPI strip, widget areas |
+| **Table Containers** | Inherit from Parent | Remove `overflow: hidden` | Material Requirements table |
+| **Modal/Dialog Content** | Component-Level | Handle within modal container | Forms, detail views |
+
+#### **Benefits of Container-Level Approach**
+
+✅ **Consistent UX:** All tabs have identical scroll behavior  
+✅ **Intelligent Activation:** Scrollbars only appear when content overflows  
+✅ **Platform Integration:** Works seamlessly with responsive design  
+✅ **Performance:** No unnecessary scrollbars cluttering interface  
+✅ **Maintainability:** Single source of scroll control per module
 
 ---
 
@@ -671,6 +767,13 @@ Using wrong variables or colors for status indication.
 - [ ] Proper integration with parent scroll system
 - [ ] Filter state props implemented correctly
 
+#### **Scroll Architecture**
+- [ ] **Business modules**: Use container-level `.moduleContent.scrollable` pattern
+- [ ] **Dashboard components**: Use component-level `overflow-x: auto` where appropriate
+- [ ] **Child components**: Remove `overflow: hidden` that blocks parent scroll
+- [ ] **Horizontal scroll**: Added to business module `.scrollable` classes
+- [ ] **Mobile optimization**: `-webkit-overflow-scrolling: touch` included
+
 #### **Action Buttons**
 - [ ] Only actionable buttons included
 - [ ] No redundant "View Details" buttons
@@ -686,7 +789,9 @@ Using wrong variables or colors for status indication.
 - [ ] Cards maintain 140px height consistently
 
 #### **Functional Tests**
-- [ ] Scroll bar appears when content exceeds viewport
+- [ ] **Vertical scroll**: Scroll bar appears when content exceeds viewport height
+- [ ] **Horizontal scroll**: Scroll bar appears when content exceeds viewport width
+- [ ] **Tables**: Wide tables scroll horizontally within expanded cards
 - [ ] Card expansion/collapse works smoothly
 - [ ] Action buttons appear only when expanded
 - [ ] Filter changes update content correctly
@@ -710,6 +815,14 @@ grep -r "var(--color-primary)" src/components/
 # Check compilation
 npm run build
 # Should complete without errors
+
+# Verify horizontal scroll architecture
+grep -r "overflow-x: auto" src/components/business/*.module.css
+# Should return: Sales, Procurement, Production, Customers modules
+
+# Check for overflow blocking patterns
+grep -r "overflow: hidden" src/components/business/ | grep -v "Default:"
+# Should return: minimal results, no table containers blocking scroll
 ```
 
 ---

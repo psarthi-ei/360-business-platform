@@ -149,6 +149,8 @@
 /* Applied dynamically when scrolling is needed */
 .procurementContent.scrollable {
   overflow-y: auto;
+  overflow-x: auto; /* Add horizontal scroll support */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
 }
 
 /* Components now style themselves - no global overrides needed */
