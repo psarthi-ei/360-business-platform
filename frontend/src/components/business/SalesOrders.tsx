@@ -115,26 +115,26 @@ function SalesOrders({
                 className={`${styles.orderCard} ${styles[order.status + 'Order']} ${isExpanded(order.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(order.id)}
               >
-                {/* Template Header - Company Name Only */}
+                {/* Enhanced Header - Company Name + Items Context */}
                 <div 
                   className={styles.cardHeader}
-                  title={`${companyName} (Order ID: ${order.id})`}
+                  title={`${companyName} - ${order.items} (Order ID: ${order.id})`}
                 >
-                  {companyName}
+                  {companyName} — {order.items}
                 </div>
                 
-                {/* Template Status */}
+                {/* Optimized Status - Primary Order Status Only */}
                 <div className={styles.cardStatus}>
                   {statusIcons[order.status]} {statusLabels[order.status]}
                 </div>
                 
-                {/* Template Meta - 2 lines */}
+                {/* Business-Optimized Meta - Value + Urgency + Delivery Timeline */}
                 <div 
                   className={styles.cardMeta}
-                  title={`${order.items} • ${formatCurrency(order.totalAmount)} • ${order.id} • Delivery: ${order.deliveryDate}`}
+                  title={`${formatCurrency(order.totalAmount)} • Due: ${order.deliveryDate} • ${order.orderDate}`}
                 >
-                  {order.items} • {formatCurrency(order.totalAmount)}<br />
-                  {order.id} • Delivery: {order.deliveryDate}
+                  {formatCurrency(order.totalAmount)} • Due: {order.deliveryDate}<br />
+                  {order.id} • {order.orderDate}
                 </div>
 
                 {/* Expand Indicator */}

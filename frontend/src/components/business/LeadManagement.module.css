@@ -352,16 +352,29 @@
 
 /* Visual Design Specification Card Classes */
 .cardHeader {
-  font-size: 20px;                 /* Visual Design Spec exact */
+  font-size: var(--font-lg);       /* Responsive 18-20px - reduces overcrowding */
   font-weight: 600;
   color: #111827;                  /* Visual Design Spec exact */
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  line-height: 1.2;                /* Tighter line height for single line */
+  line-height: 1.2;                /* Responsive line height based on font-lg */
+  
+  /* Dynamic 1-2 row behavior */
+  min-height: 22px;                /* Minimum 1 row (18px * 1.2) */
+  max-height: 44px;                /* Maximum 2 rows (22px × 2) */
+  height: auto;                    /* Allow natural flow */
+  
+  /* Smart truncation after 2 rows */
   overflow: hidden;
-  white-space: nowrap;              /* Force single line */
-  text-overflow: ellipsis;          /* Clean truncation with ... */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Maximum 2 lines */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  
+  /* Mobile container respect */
+  word-wrap: break-word;
+  word-break: break-word;
+  
   flex-shrink: 0;                  /* Prevent header compression */
-  height: 24px;                    /* Fixed height for consistency */
 }
 
 .cardStatus {
@@ -372,6 +385,11 @@
   line-height: 1.3;
   flex-shrink: 0;                  /* Prevent status compression */
   height: 21px;                    /* Fixed height for consistency */
+  
+  /* Single line enforcement */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .cardMeta {

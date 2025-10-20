@@ -226,25 +226,33 @@ function QuotationOrders({
                 className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${isExpanded(quote.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(quote.id)}
               >
-                {/* Template Header - Company Name Only */}
+                {/* Enhanced Header - Company Name + Items Context */}
                 <div 
                   className={styles.cardHeader}
-                  title={`${quote.companyName} (Quote ID: ${quote.id})`}
+                  title={`${quote.companyName} - ${quote.items} (Quote ID: ${quote.id})`}
                 >
-                  {quote.companyName}
+                  {quote.companyName} — {quote.items}
                 </div>
                 
-                {/* Template Status */}
+                {/* Enhanced Status - Quote Status + Payment Progress */}
                 <div className={styles.cardStatus}>
-                  {statusIcons[quote.status]} {statusLabels[quote.status]} • {isCustomer ? '✅ Customer' : '🔸 Prospect'}
+                  {statusIcons[quote.status]} {statusLabels[quote.status]} • {(() => {
+                    const paymentLabels = {
+                      not_requested: 'Payment Not Requested',
+                      awaiting: '⏳ Payment Awaiting',
+                      overdue: '⚠️ Payment Overdue', 
+                      received: '✅ Payment Received'
+                    };
+                    return paymentLabels[quote.advancePaymentStatus as keyof typeof paymentLabels] || 'Pending';
+                  })()}
                 </div>
                 
-                {/* Template Meta - 2 lines */}
+                {/* Business-Optimized Meta - Financial + Urgency + Timing */}
                 <div 
                   className={styles.cardMeta}
-                  title={`${quote.items} • ${formatCurrency(quote.totalAmount)} • ${quote.id} • ${quote.quoteDate}`}
+                  title={`${formatCurrency(quote.totalAmount)} • Due: ${quote.validUntil} • ${quote.quoteDate}`}
                 >
-                  {quote.items} • {formatCurrency(quote.totalAmount)}<br />
+                  {formatCurrency(quote.totalAmount)} • Due: {quote.validUntil}<br />
                   {quote.id} • {quote.quoteDate}
                 </div>
 

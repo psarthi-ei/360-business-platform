@@ -75,7 +75,7 @@
 
 /* ===== TEMPLATE CONTENT CLASSES ===== */
 .cardHeader {
-  font-size: 20px;                 /* Visual Design Spec exact */
+  font-size: var(--font-lg);       /* Responsive 18-20px - reduces overcrowding */
   font-weight: 600;
   color: var(--ds-text-primary);                  /* Visual Design Spec exact */
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
@@ -111,6 +111,10 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  /* Single line enforcement */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .cardMeta {

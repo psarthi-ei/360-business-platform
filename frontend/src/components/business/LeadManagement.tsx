@@ -211,25 +211,36 @@ function LeadManagement({
                 className={`${styles.leadCard} ${styles[lead.priority + 'Lead']} ${expandedDetails.has(lead.id) ? styles.expanded : ''}`}
                 onClick={() => toggleDetails(lead.id)}
               >
-                {/* Visual Design Spec Header - Company Name Only */}
+                {/* Enhanced Header - Company Name + Inquiry Context */}
                 <div 
                   className={styles.cardHeader}
-                  title={`${lead.companyName} (Lead ID: ${lead.id})`}
+                  title={`${lead.companyName} - ${lead.inquiry} (Lead ID: ${lead.id})`}
                 >
-                  {lead.companyName}
+                  {lead.companyName} — {lead.inquiry}
                 </div>
                 
-                {/* Visual Design Spec Status */}
+                {/* Enhanced Status - Priority + Conversion Stage */}
                 <div className={styles.cardStatus}>
-                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}
+                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
+                    const conversionLabels = {
+                      active_lead: 'Active Lead',
+                      quote_sent: 'Quote Sent',
+                      verbally_approved: 'Approved',
+                      profile_pending: 'Profile Pending',
+                      proforma_sent: 'Proforma Sent',
+                      awaiting_payment: 'Payment Pending',
+                      converted_to_customer: 'Customer'
+                    };
+                    return conversionLabels[lead.conversionStatus] || 'Active Lead';
+                  })()}
                 </div>
                 
-                {/* Visual Design Spec Meta */}
+                {/* Business-Optimized Meta - Financial + Urgency + Geography */}
                 <div 
                   className={styles.cardMeta}
-                  title={`${lead.fabricRequirements?.fabricType || lead.inquiry} • ${lead.budget} • ${lead.timeline}`}
+                  title={`${lead.budget} • ${lead.timeline} • ${lead.location}`}
                 >
-                  {lead.fabricRequirements?.fabricType || lead.inquiry} • {lead.budget} • {lead.timeline}
+                  {lead.budget} • {lead.timeline} • {lead.location}
                 </div>
 
                 {/* Expand Indicator */}

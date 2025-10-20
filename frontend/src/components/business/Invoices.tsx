@@ -258,12 +258,12 @@ function Invoices({
                     className={`${styles.invoiceCard} ${styles[invoice.status + 'Invoice']} ${expandedDetails.has(invoice.id) ? styles.expanded : ''}`}
                     onClick={() => toggleDetails(invoice.id)}
                   >
-                    {/* Template Header - Company Name Only */}
+                    {/* Enhanced Header - Customer Name + Financial Value */}
                     <div 
                       className={styles.cardHeader}
-                      title={`${invoice.customerName} (Invoice ID: ${invoice.invoiceNumber})`}
+                      title={`${invoice.customerName} - ${formatCurrency(invoice.totalAmount)} (Invoice ID: ${invoice.invoiceNumber})`}
                     >
-                      {invoice.customerName}
+                      {invoice.customerName} — {formatCurrency(invoice.totalAmount)}
                     </div>
                     
                     {/* Template Status */}
@@ -271,13 +271,13 @@ function Invoices({
                       {invoice.type === 'proforma' ? '📋 Proforma' : '📄 Final'} • {statusInfo.icon} {statusInfo.label}
                     </div>
                     
-                    {/* Template Meta - Business Critical Information */}
+                    {/* Business-Optimized Meta - Financial Value + Urgency + Reference */}
                     <div 
                       className={styles.cardMeta}
-                      title={`${invoice.type} Invoice • Amount: ${formatCurrency(invoice.totalAmount)} • Due: ${invoice.dueDate} • ${invoice.invoiceNumber}`}
+                      title={`${formatCurrency(invoice.totalAmount)} • ${formatDueDate(invoice.dueDate, invoice.status)} • ${invoice.invoiceNumber}`}
                     >
-                      {invoice.type === 'proforma' ? 'Proforma' : 'Final Invoice'} • ₹{invoice.totalAmount.toLocaleString()}<br />
-                      {formatDueDate(invoice.dueDate, invoice.status)} • {invoice.invoiceNumber}
+                      {formatCurrency(invoice.totalAmount)} • {formatDueDate(invoice.dueDate, invoice.status)}<br />
+                      {invoice.invoiceNumber} • {invoice.issueDate}
                     </div>
 
                     {/* Expand Indicator */}

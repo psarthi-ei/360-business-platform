@@ -61,16 +61,29 @@
 
 /* ===== TEMPLATE CONTENT CLASSES ===== */
 .cardHeader {
-  font-size: 20px;                 /* Visual Design Spec exact - match other tabs */
+  font-size: var(--font-lg);       /* Responsive 18-20px - reduces overcrowding */
   font-weight: 600;
   color: var(--ds-text-primary);
   margin: 0 0 var(--ds-space-xs) 0;
-  line-height: 1.2;
+  line-height: 1.2;                /* Responsive line height based on font-lg */
+  
+  /* Dynamic 1-2 row behavior */
+  min-height: 22px;                /* Minimum 1 row (18px * 1.2) */
+  max-height: 44px;                /* Maximum 2 rows (22px × 2) */
+  height: auto;                    /* Allow natural flow */
+  
+  /* Smart truncation after 2 rows */
   overflow: hidden;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Maximum 2 lines */
+  -webkit-box-orient: vertical;
   text-overflow: ellipsis;
+  
+  /* Mobile container respect */
+  word-wrap: break-word;
+  word-break: break-word;
+  
   flex-shrink: 0;
-  height: 24px;
 }
 
 .cardStatus {
@@ -84,6 +97,11 @@
   display: flex;
   gap: var(--ds-space-sm);
   align-items: center;
+  
+  /* Single line enforcement */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .cardMeta {

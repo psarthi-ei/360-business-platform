@@ -376,16 +376,16 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
           Quotes
         </button>
         <button 
-          className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
-          onClick={() => setActiveTab('orders')}
-        >
-          Orders
-        </button>
-        <button 
           className={`${styles.tabButton} ${activeTab === 'invoices' ? styles.active : ''}`}
           onClick={() => setActiveTab('invoices')}
         >
           Invoices
+        </button>
+        <button 
+          className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
+          onClick={() => setActiveTab('orders')}
+        >
+          Orders
         </button>
       </div>
       
