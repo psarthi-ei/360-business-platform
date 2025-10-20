@@ -236,126 +236,15 @@
 }
 
 /* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
-.orderCardContainer {
-  margin-bottom: 12px;              /* Visual Design Spec exact */
-}
-
-.orderCard {
-  height: 140px;                    /* Template fixed height */
-  padding: 16px;                    /* Symmetric padding for professional look */
-  background: white;
-  border-radius: var(--ds-radius-md);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--ds-border-primary);
-  border-left: 4px solid;           /* Status color applied by order status classes */
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.orderCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.orderCard.expanded {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  position: relative;
-  z-index: 1;                           /* Ensure card stays above others */
-}
+/* Order card styles now handled by global .ds-card system in index.css */
 
 /* ===== TEMPLATE CONTENT CLASSES ===== */
-.cardHeader {
-  font-size: var(--font-lg);       /* Responsive 18-20px - reduces overcrowding */
-  font-weight: 600;
-  color: var(--ds-text-primary);                  /* Visual Design Spec exact */
-  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  line-height: 1.2;                /* Responsive line height based on font-lg */
-  
-  /* Dynamic 1-2 row behavior */
-  min-height: 22px;                /* Minimum 1 row (18px * 1.2) */
-  max-height: 44px;                /* Maximum 2 rows (22px × 2) */
-  height: auto;                    /* Allow natural flow */
-  
-  /* Smart truncation after 2 rows */
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;           /* Maximum 2 lines */
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  
-  /* Mobile container respect */
-  word-wrap: break-word;
-  word-break: break-word;
-  
-  flex-shrink: 0;                  /* Prevent header compression */
-}
+/* Card content styles now handled by global .ds-card-* system in index.css */
 
-.cardStatus {
-  font-size: 16px;                 /* Visual Design Spec exact */
-  font-weight: 500;
-  margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  color: var(--ds-text-secondary);
-  line-height: 1.3;
-  flex-shrink: 0;                  /* Prevent status compression */
-  height: 21px;                    /* Fixed height for consistency */
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  
-  /* Single line enforcement */
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.cardMeta {
-  font-size: 14px;                 /* Visual Design Spec exact */
-  color: var(--ds-text-tertiary);                  /* Visual Design Spec exact */
-  margin: 2px 0 8px 0;             /* Reduced margins to prevent header overlap */
-  line-height: 1.2;                /* Tighter line height for 2-line content */
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;           /* Exactly 2 lines with ellipsis */
-  -webkit-box-orient: vertical;
-  flex-shrink: 0;                  /* Prevent compression affecting header */
-  max-height: 34px;                /* Enforce exact height for 2 lines */
-}
-
-.expandIndicator {
-  font-size: 12px;
-  color: var(--color-primary);
-  font-weight: 500;
-  opacity: 0.8;
-  transition: all 0.2s ease;
-  position: absolute;
-  bottom: 8px;
-  right: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.orderCard:hover .expandIndicator {
-  opacity: 1;
-  background: rgba(29, 78, 216, 0.15);
-  color: var(--color-primary);
-}
+/* Expand indicator styles now handled by global .ds-card-expand-indicator system in index.css */
 
 /* Update order status card styling to use border colors */
-.orderCard.order_confirmedOrder {
-  border-left-color: var(--ds-status-active);
-}
-
-.orderCard.production_startedOrder {
-  border-left-color: var(--ds-status-pending);
-}
-
-.orderCard.completedOrder {
-  border-left-color: var(--ds-status-active);
-}
+/* Order status border colors now handled by global .ds-card-status-* system in index.css */
 
 /* Update customer/prospect card styling */
 .customerCard {

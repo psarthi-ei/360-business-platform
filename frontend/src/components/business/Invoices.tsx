@@ -252,28 +252,28 @@ function Invoices({
               
               
               return (
-                <div key={invoice.id} className={styles.invoiceCardContainer} data-invoice-id={invoice.id}>
-                  {/* Clickable Card Summary - 140px Template */}
+                <div key={invoice.id} className="ds-card-container" data-invoice-id={invoice.id}>
+                  {/* Clickable Card Summary - Global Design System 140px Template */}
                   <div 
-                    className={`${styles.invoiceCard} ${styles[invoice.status + 'Invoice']} ${expandedDetails.has(invoice.id) ? styles.expanded : ''}`}
+                    className={`ds-card ${invoice.status === 'paid' || invoice.status === 'payment_received' ? 'ds-card-status-active' : invoice.status === 'overdue' || invoice.status === 'expired' ? 'ds-card-priority-high' : invoice.status === 'sent' ? 'ds-card-priority-low' : 'ds-card-status-pending'} ${expandedDetails.has(invoice.id) ? 'ds-card-expanded' : ''}`}
                     onClick={() => toggleDetails(invoice.id)}
                   >
                     {/* Enhanced Header - Customer Name + Financial Value */}
                     <div 
-                      className={styles.cardHeader}
+                      className="ds-card-header"
                       title={`${invoice.customerName} - ${formatCurrency(invoice.totalAmount)} (Invoice ID: ${invoice.invoiceNumber})`}
                     >
                       {invoice.customerName} — {formatCurrency(invoice.totalAmount)}
                     </div>
                     
                     {/* Template Status */}
-                    <div className={styles.cardStatus}>
+                    <div className="ds-card-status">
                       {invoice.type === 'proforma' ? '📋 Proforma' : '📄 Final'} • {statusInfo.icon} {statusInfo.label}
                     </div>
                     
                     {/* Business-Optimized Meta - Financial Value + Urgency + Reference */}
                     <div 
-                      className={styles.cardMeta}
+                      className="ds-card-meta"
                       title={`${formatCurrency(invoice.totalAmount)} • ${formatDueDate(invoice.dueDate, invoice.status)} • ${invoice.invoiceNumber}`}
                     >
                       {formatCurrency(invoice.totalAmount)} • {formatDueDate(invoice.dueDate, invoice.status)}<br />
@@ -281,7 +281,7 @@ function Invoices({
                     </div>
 
                     {/* Expand Indicator */}
-                    <div className={styles.expandIndicator}>
+                    <div className="ds-card-expand-indicator">
                       {expandedDetails.has(invoice.id) ? 'Less' : 'More'}
                     </div>
                   </div>

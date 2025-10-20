@@ -76,28 +76,28 @@ const PurchaseOrders = ({
             const materialContext = getMaterialContext(po);
 
             return (
-              <div key={po.id} className={styles.poCardContainer} data-po-id={po.id}>
+              <div key={po.id} className="ds-card-container" data-po-id={po.id}>
                 {/* Clickable Card Summary - 140px Template */}
                 <div 
-                  className={`${styles.poCard} ${styles[statusInfo.className]} ${isExpanded(po.id) ? styles.expanded : ''}`}
+                  className={`ds-card ${po.status === 'delivered' ? 'ds-card-status-active' : po.status === 'open' ? 'ds-card-status-pending' : 'ds-card-status-inactive'} ${isExpanded(po.id) ? 'ds-card-expanded' : ''}`}
                   onClick={() => toggleDetails(po.id)}
                 >
                   {/* Template Header - PO# + Supplier Format */}
                   <div 
-                    className={styles.cardHeader}
+                    className="ds-card-header"
                     title={`${po.materialName} (PO ID: ${po.id}) - ${po.supplierName}`}
                   >
                     PO#{po.id.replace('PO-', '')} — {po.supplierName}
                   </div>
                   
                   {/* Template Status - Remove due date duplicate */}
-                  <div className={styles.cardStatus}>
+                  <div className="ds-card-status">
                     {statusInfo.icon} {statusInfo.label} • {materialContext}
                   </div>
                   
                   {/* Template Meta - Delivery tracking: financial + timeline + quantity (remove supplier duplicate) */}
                   <div 
-                    className={styles.cardMeta}
+                    className="ds-card-meta"
                     title={`₹${po.totalAmount.toLocaleString()} order • Due: ${formatDate(po.expectedDelivery)} • ${po.quantity}${po.unit}`}
                   >
                     ₹{po.totalAmount.toLocaleString()} • Due: {formatDate(po.expectedDelivery)}<br />
@@ -111,7 +111,7 @@ const PurchaseOrders = ({
                   </div>
 
                   {/* Expand Indicator */}
-                  <div className={styles.expandIndicator}>
+                  <div className="ds-card-expand-indicator">
                     {isExpanded(po.id) ? 'Less' : 'More'}
                   </div>
                 </div>

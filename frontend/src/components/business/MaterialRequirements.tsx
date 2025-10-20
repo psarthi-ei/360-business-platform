@@ -210,22 +210,22 @@ const MaterialRequirements = ({
                 const orderMeta = getOrderMeta(group);
                 
                 return (
-                  <div key={group.orderId} className={styles.cardContainer} data-item-id={group.orderId}>
+                  <div key={group.orderId} className="ds-card-container" data-order-id={group.orderId}>
                   {/* 140px Fixed Height Card Template */}
                   <div 
-                    className={`${styles.card} ${styles[group.orderStatus]} ${isExpandedCard ? styles.expanded : ''}`}
+                    className={`ds-card ${group.orderStatus === 'success' ? 'ds-card-status-active' : group.orderStatus === 'shortage' ? 'ds-card-priority-high' : 'ds-card-status-pending'} ${isExpandedCard ? 'ds-card-expanded' : ''}`}
                     onClick={() => toggleOrderExpansion(group.orderId)}
                   >
                     {/* Template Header - 20px font, dynamic 1-2 rows with material context */}
                     <div 
-                      className={styles.cardHeader}
+                      className="ds-card-header"
                       title={`Order ${group.orderId} - ${materialStatus.text}`}
                     >
                       {getOrderTitle(group.orderId, group)}
                     </div>
                     
                     {/* Template Status - 16px font, 21px height - Remove urgency duplicate */}
-                    <div className={styles.cardStatus}>
+                    <div className="ds-card-status">
                       <span>{materialStatus.icon} {materialStatus.text}</span>
                       <span>•</span>
                       <span>{getOrderStatus(group)}</span>
@@ -233,14 +233,14 @@ const MaterialRequirements = ({
                     
                     {/* Template Meta - 14px font, 34px max height, 2-line clamp - Real MR data */}
                     <div 
-                      className={styles.cardMeta}
+                      className="ds-card-meta"
                       title={orderMeta}
                     >
                       {orderMeta}
                     </div>
 
                     {/* Expand Indicator - Standard positioning */}
-                    <div className={styles.expandIndicator}>
+                    <div className="ds-card-expand-indicator">
                       {isExpandedCard ? 'Less' : 'More'}
                     </div>
                   </div>

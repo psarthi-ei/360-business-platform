@@ -95,28 +95,28 @@ const PurchaseRequests = ({
             const requestContext = getRequestContext(pr.justification);
 
             return (
-              <div key={pr.id} className={styles.prCardContainer} data-pr-id={pr.id}>
+              <div key={pr.id} className="ds-card-container" data-pr-id={pr.id}>
                 {/* Clickable Card Summary - 140px Template */}
                 <div 
-                  className={`${styles.prCard} ${styles[statusInfo.className]} ${isExpanded(pr.id) ? styles.expanded : ''}`}
+                  className={`ds-card ${pr.status === 'approved' ? 'ds-card-status-active' : pr.status === 'pending' ? 'ds-card-status-pending' : 'ds-card-status-inactive'} ${isExpanded(pr.id) ? 'ds-card-expanded' : ''}`}
                   onClick={() => toggleDetails(pr.id)}
                 >
                   {/* Template Header - Optimized PR# Format */}
                   <div 
-                    className={styles.cardHeader}
+                    className="ds-card-header"
                     title={`${pr.materialName} (PR ID: ${pr.id})`}
                   >
                     PR#{pr.id.replace('PR-', '').replace('2024-', '')} — {pr.materialName}
                   </div>
                   
                   {/* Template Status - Remove priority duplicate */}
-                  <div className={styles.cardStatus}>
+                  <div className="ds-card-status">
                     {statusInfo.icon} {statusInfo.label} • {requestContext}
                   </div>
                   
                   {/* Template Meta - Approval screening: cost + accountability (remove priority duplicate) */}
                   <div 
-                    className={styles.cardMeta}
+                    className="ds-card-meta"
                     title={`₹${pr.estimatedCost.toLocaleString()} request by ${pr.requestedBy} • ${pr.justification}`}
                   >
                     ₹{pr.estimatedCost.toLocaleString()} • {pr.requestedBy}<br />
@@ -124,7 +124,7 @@ const PurchaseRequests = ({
                   </div>
 
                   {/* Expand Indicator */}
-                  <div className={styles.expandIndicator}>
+                  <div className="ds-card-expand-indicator">
                     {isExpanded(pr.id) ? 'Less' : 'More'}
                   </div>
                 </div>

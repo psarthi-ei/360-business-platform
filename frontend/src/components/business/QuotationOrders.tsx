@@ -220,22 +220,22 @@ function QuotationOrders({
           const isProspect = !businessProfile || businessProfile.customerStatus === 'prospect';
 
           return (
-            <div key={quote.id} className={styles.quoteCardContainer} data-quote-id={quote.id}>
-              {/* Clickable Card Summary - 140px Template */}
+            <div key={quote.id} className="ds-card-container" data-quote-id={quote.id}>
+              {/* Clickable Card Summary - Global Design System 140px Template */}
               <div 
-                className={`${styles.quoteCard} ${styles[quote.status + 'Quote']} ${isCustomer ? styles.customerCard : styles.prospectCard} ${isExpanded(quote.id) ? styles.expanded : ''}`}
+                className={`ds-card ${quote.status === 'approved' ? 'ds-card-status-active' : (quote.status === 'pending' || quote.status === 'under_review') ? 'ds-card-status-pending' : quote.status === 'expired' ? 'ds-card-priority-high' : 'ds-card-status-inactive'} ${isExpanded(quote.id) ? 'ds-card-expanded' : ''}`}
                 onClick={() => toggleDetails(quote.id)}
               >
                 {/* Enhanced Header - Company Name + Items Context */}
                 <div 
-                  className={styles.cardHeader}
+                  className="ds-card-header"
                   title={`${quote.companyName} - ${quote.items} (Quote ID: ${quote.id})`}
                 >
                   {quote.companyName} — {quote.items}
                 </div>
                 
                 {/* Enhanced Status - Quote Status + Payment Progress */}
-                <div className={styles.cardStatus}>
+                <div className="ds-card-status">
                   {statusIcons[quote.status]} {statusLabels[quote.status]} • {(() => {
                     const paymentLabels = {
                       not_requested: 'Payment Not Requested',
@@ -249,7 +249,7 @@ function QuotationOrders({
                 
                 {/* Business-Optimized Meta - Financial + Urgency + Timing */}
                 <div 
-                  className={styles.cardMeta}
+                  className="ds-card-meta"
                   title={`${formatCurrency(quote.totalAmount)} • Due: ${quote.validUntil} • ${quote.quoteDate}`}
                 >
                   {formatCurrency(quote.totalAmount)} • Due: {quote.validUntil}<br />
@@ -257,7 +257,7 @@ function QuotationOrders({
                 </div>
 
                 {/* Expand Indicator */}
-                <div className={styles.expandIndicator}>
+                <div className="ds-card-expand-indicator">
                   {isExpanded(quote.id) ? 'Less' : 'More'}
                 </div>
               </div>

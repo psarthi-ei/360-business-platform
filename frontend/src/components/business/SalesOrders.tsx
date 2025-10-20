@@ -109,28 +109,28 @@ function SalesOrders({
           const companyName = businessProfile?.companyName || 'Unknown Company';
 
           return (
-            <div key={order.id} className={styles.orderCardContainer} data-order-id={order.id}>
-              {/* Clickable Card Summary - 140px Template */}
+            <div key={order.id} className="ds-card-container" data-order-id={order.id}>
+              {/* Clickable Card Summary - Global Design System 140px Template */}
               <div 
-                className={`${styles.orderCard} ${styles[order.status + 'Order']} ${isExpanded(order.id) ? styles.expanded : ''}`}
+                className={`ds-card ${order.status === 'completed' || order.status === 'delivered' ? 'ds-card-status-active' : order.status === 'order_confirmed' || order.status === 'production_started' || order.status === 'shipped' ? 'ds-card-status-pending' : 'ds-card-priority-medium'} ${isExpanded(order.id) ? 'ds-card-expanded' : ''}`}
                 onClick={() => toggleDetails(order.id)}
               >
                 {/* Enhanced Header - Company Name + Items Context */}
                 <div 
-                  className={styles.cardHeader}
+                  className="ds-card-header"
                   title={`${companyName} - ${order.items} (Order ID: ${order.id})`}
                 >
                   {companyName} — {order.items}
                 </div>
                 
                 {/* Optimized Status - Primary Order Status Only */}
-                <div className={styles.cardStatus}>
+                <div className="ds-card-status">
                   {statusIcons[order.status]} {statusLabels[order.status]}
                 </div>
                 
                 {/* Business-Optimized Meta - Value + Urgency + Delivery Timeline */}
                 <div 
-                  className={styles.cardMeta}
+                  className="ds-card-meta"
                   title={`${formatCurrency(order.totalAmount)} • Due: ${order.deliveryDate} • ${order.orderDate}`}
                 >
                   {formatCurrency(order.totalAmount)} • Due: {order.deliveryDate}<br />
@@ -138,7 +138,7 @@ function SalesOrders({
                 </div>
 
                 {/* Expand Indicator */}
-                <div className={styles.expandIndicator}>
+                <div className="ds-card-expand-indicator">
                   {isExpanded(order.id) ? 'Less' : 'More'}
                 </div>
               </div>

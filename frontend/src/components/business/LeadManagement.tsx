@@ -205,22 +205,22 @@ function LeadManagement({
 
 
           return (
-            <div key={lead.id} className={styles.leadCardContainer} data-lead-id={lead.id}>
-              {/* Clickable Card Summary - Visual Design Spec 120px */}
+            <div key={lead.id} className="ds-card-container" data-lead-id={lead.id}>
+              {/* Clickable Card Summary - Global Design System 140px Template */}
               <div 
-                className={`${styles.leadCard} ${styles[lead.priority + 'Lead']} ${expandedDetails.has(lead.id) ? styles.expanded : ''}`}
+                className={`ds-card ${lead.priority === 'hot' ? 'ds-card-priority-high' : lead.priority === 'warm' ? 'ds-card-priority-medium' : 'ds-card-priority-low'} ${expandedDetails.has(lead.id) ? 'ds-card-expanded' : ''}`}
                 onClick={() => toggleDetails(lead.id)}
               >
                 {/* Enhanced Header - Company Name + Inquiry Context */}
                 <div 
-                  className={styles.cardHeader}
+                  className="ds-card-header"
                   title={`${lead.companyName} - ${lead.inquiry} (Lead ID: ${lead.id})`}
                 >
                   {lead.companyName} — {lead.inquiry}
                 </div>
                 
                 {/* Enhanced Status - Priority + Conversion Stage */}
-                <div className={styles.cardStatus}>
+                <div className="ds-card-status">
                   {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
                     const conversionLabels = {
                       active_lead: 'Active Lead',
@@ -237,14 +237,14 @@ function LeadManagement({
                 
                 {/* Business-Optimized Meta - Financial + Urgency + Geography */}
                 <div 
-                  className={styles.cardMeta}
+                  className="ds-card-meta"
                   title={`${lead.budget} • ${lead.timeline} • ${lead.location}`}
                 >
                   {lead.budget} • {lead.timeline} • {lead.location}
                 </div>
 
                 {/* Expand Indicator */}
-                <div className={styles.expandIndicator}>
+                <div className="ds-card-expand-indicator">
                   {expandedDetails.has(lead.id) ? 'Less' : 'More'}
                 </div>
               </div>
