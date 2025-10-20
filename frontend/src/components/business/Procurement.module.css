@@ -140,18 +140,15 @@
 
 /* Content Area - Intelligent Scroll Behavior */
 .procurementContent {
-  overflow: hidden; /* Default: no scrollbars for minimal content */
+  overflow: auto; /* Universal scroll - always enabled, browser shows when needed */
+  overflow-x: auto; /* Horizontal scroll when content overflows */
+  overflow-y: auto; /* Vertical scroll when content overflows */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
   background: var(--background-primary);
   grid-row: 3;
-  transition: all 0.2s ease; /* Smooth transition when scroll behavior changes */
 }
 
-/* Applied dynamically when scrolling is needed */
-.procurementContent.scrollable {
-  overflow-y: auto;
-  overflow-x: auto; /* Add horizontal scroll support */
-  -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
-}
+/* Universal scroll - no conditional classes needed, always enabled */
 
 /* Components now style themselves - no global overrides needed */
 

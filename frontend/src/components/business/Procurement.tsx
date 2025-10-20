@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { mockMaterialRequirements, mockPurchaseRequests } from '../../data/procurementMockData';
+import { mockMaterialRequirements, mockPurchaseRequests, mockPurchaseOrders } from '../../data/procurementMockData';
 import styles from './Procurement.module.css';
 import MaterialRequirements from './MaterialRequirements';
 import PurchaseRequests from './PurchaseRequests';
@@ -30,6 +30,13 @@ const calculatePRCounts = () => ({
   rejected: mockPurchaseRequests.filter(pr => pr.status === 'rejected').length
 });
 
+const calculatePOCounts = () => ({
+  all: mockPurchaseOrders.length,
+  open: mockPurchaseOrders.filter(po => po.status === 'open').length,
+  delivered: mockPurchaseOrders.filter(po => po.status === 'delivered').length,
+  cancelled: mockPurchaseOrders.filter(po => po.status === 'cancelled').length
+});
+
 const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: ProcurementProps) => {
   // State Management
   const [activeTab, setActiveTab] = useState<ProcurementTabType>('mr');
@@ -39,8 +46,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   const [grnFilterState, setGrnFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
   
-  // Intelligent scroll behavior state
-  const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
+  // Universal scroll behavior - always enabled for business modules (CSS handles it)
   
   // Modal trigger states for CTA button functionality
   const [triggerMRModal, setTriggerMRModal] = useState(false);
@@ -56,6 +62,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   // Dynamic count calculations
   const mrCounts = calculateMRCounts();
   const prCounts = calculatePRCounts();
+  const poCounts = calculatePOCounts();
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
@@ -72,10 +79,10 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       { value: 'rejected', label: '❌ Rejected', count: prCounts.rejected }
     ],
     pos: [
-      { value: 'all', label: 'All Orders', count: 12 },
-      { value: 'open', label: '🟡 Open', count: 5 },
-      { value: 'delivered', label: '✅ Delivered', count: 4 },
-      { value: 'cancelled', label: '❌ Cancelled', count: 3 }
+      { value: 'all', label: 'All Orders', count: poCounts.all },
+      { value: 'open', label: '⏳ Open', count: poCounts.open },
+      { value: 'delivered', label: '✅ Delivered', count: poCounts.delivered },
+      { value: 'cancelled', label: '❌ Cancelled', count: poCounts.cancelled }
     ],
     grns: [
       { value: 'all', label: 'All Receipts', count: 18 },
@@ -150,13 +157,20 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
             { value: 'rejected', label: '❌ Rejected', count: prCounts.rejected }
           ];
         }
-        case 'pos':
+        case 'pos': {
+          const poCounts = {
+            all: mockPurchaseOrders.length,
+            open: mockPurchaseOrders.filter(po => po.status === 'open').length,
+            delivered: mockPurchaseOrders.filter(po => po.status === 'delivered').length,
+            cancelled: mockPurchaseOrders.filter(po => po.status === 'cancelled').length
+          };
           return [
-            { value: 'all', label: 'All Orders', count: 12 },
-            { value: 'open', label: '🟡 Open', count: 5 },
-            { value: 'delivered', label: '✅ Delivered', count: 4 },
-            { value: 'cancelled', label: '❌ Cancelled', count: 3 }
+            { value: 'all', label: 'All Orders', count: poCounts.all },
+            { value: 'open', label: '⏳ Open', count: poCounts.open },
+            { value: 'delivered', label: '✅ Delivered', count: poCounts.delivered },
+            { value: 'cancelled', label: '❌ Cancelled', count: poCounts.cancelled }
           ];
+        }
         case 'grns':
           return [
             { value: 'all', label: 'All Receipts', count: 18 },
@@ -188,48 +202,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     return Math.round(baseCount * timelineModifier);
   }, [activeTab, mrFilterState, prFilterState, poFilterState, grnFilterState, timelineFilter]);
 
-  // Intelligent scroll calculation - focused on ensuring scroll appears
-  const calculateScrollBehavior = useCallback(() => {
-    // For PR and MR tabs, force scroll to be enabled since they have content
-    if (activeTab === 'prs' || activeTab === 'mr') {
-      setShouldShowScrollbar(true);
-      return;
-    }
-    
-    // For other tabs, use existing calculation
-    const filteredCount = getFilteredCount();
-    
-    // Card template specifications (140px template)
-    const cardHeight = 140;
-    const cardSpacing = 16; // Gap between cards
-    const containerPadding = 32; // Top/bottom padding in container
-    
-    // Calculate total content height needed
-    const totalContentHeight = filteredCount > 0 
-      ? (filteredCount * cardHeight) + ((filteredCount - 1) * cardSpacing) + containerPadding
-      : 200; // Minimum height for empty state
-    
-    // Calculate available height (viewport minus fixed elements)
-    const tabHeight = 48;
-    const filterHeight = 44;  
-    const ctaHeight = 56;
-    const availableHeight = window.innerHeight - tabHeight - filterHeight - ctaHeight;
-    
-    // Show scrollbar if content exceeds available space
-    const needsScroll = totalContentHeight > availableHeight;
-    setShouldShowScrollbar(needsScroll);
-  }, [activeTab, getFilteredCount]);
-
-  // Update scroll behavior when filters or tab changes
-  useEffect(() => {
-    calculateScrollBehavior();
-    
-    // Also recalculate on window resize
-    const handleResize = () => calculateScrollBehavior();
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
-  }, [calculateScrollBehavior]);
+  // Universal scroll - no complex calculations needed, browser handles overflow automatically
 
   // Render business filters for current tab
   const renderTabFilters = () => {
@@ -387,7 +360,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       </div>
       
       {/* Content Area */}
-      <div className={`${styles.procurementContent} ${shouldShowScrollbar ? styles.scrollable : ''}`}>
+      <div className={styles.procurementContent}>
         {renderTabContent()}
       </div>
       

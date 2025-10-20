@@ -44,6 +44,23 @@ const PurchaseRequests = ({
       ? 'urgent' : 'normal';
   };
   
+  // Get request context for status (instead of priority duplicate)
+  const getRequestContext = (justification: string) => {
+    if (justification.toLowerCase().includes('critical') || justification.toLowerCase().includes('urgent')) {
+      return '🔥 Critical shortage';
+    } else if (justification.toLowerCase().includes('shortage') || justification.toLowerCase().includes('blocked')) {
+      return '⚠️ Production impact';
+    } else {
+      return '📋 Standard request';
+    }
+  };
+  
+  // Extract order ID from justification text
+  const extractOrderId = (justification: string) => {
+    const match = justification.match(/Order ([\w-]+)/);
+    return match ? match[1] : 'Production';
+  };
+  
   // Get status icon and styling
   const getStatusInfo = (status: string) => {
     switch (status) {
@@ -75,6 +92,7 @@ const PurchaseRequests = ({
           {filteredPRs.map(pr => {
             const statusInfo = getStatusInfo(pr.status);
             const priority = getPriority(pr.justification);
+            const requestContext = getRequestContext(pr.justification);
 
             return (
               <div key={pr.id} className={styles.prCardContainer} data-pr-id={pr.id}>
@@ -88,21 +106,21 @@ const PurchaseRequests = ({
                     className={styles.cardHeader}
                     title={`${pr.materialName} (PR ID: ${pr.id})`}
                   >
-                    PR#{pr.id.replace('PR-', '').replace('2024-', '')}
+                    PR#{pr.id.replace('PR-', '').replace('2024-', '')} — {pr.materialName}
                   </div>
                   
-                  {/* Template Status - Following established pattern */}
+                  {/* Template Status - Remove priority duplicate */}
                   <div className={styles.cardStatus}>
-                    {statusInfo.icon} {statusInfo.label} • {priority === 'urgent' ? '🔥 Urgent' : '📅 Normal'}
+                    {statusInfo.icon} {statusInfo.label} • {requestContext}
                   </div>
                   
-                  {/* Template Meta - 2 lines with material name first */}
+                  {/* Template Meta - Approval screening: cost + accountability (remove priority duplicate) */}
                   <div 
                     className={styles.cardMeta}
-                    title={`${pr.materialName} (${pr.quantity} ${pr.unit}) • Est. Value: ₹${pr.estimatedCost.toLocaleString()}`}
+                    title={`₹${pr.estimatedCost.toLocaleString()} request by ${pr.requestedBy} • ${pr.justification}`}
                   >
-                    {pr.materialName} ({pr.quantity} {pr.unit})<br />
-                    Est. Value: ₹{pr.estimatedCost.toLocaleString()}
+                    ₹{pr.estimatedCost.toLocaleString()} • {pr.requestedBy}<br />
+                    For Order {extractOrderId(pr.justification)}
                   </div>
 
                   {/* Expand Indicator */}
@@ -111,16 +129,19 @@ const PurchaseRequests = ({
                   </div>
                 </div>
 
-                {/* Progressive Disclosure - Detailed Information */}
+                {/* Progressive Disclosure - Approval Decision Context */}
                 {isExpanded(pr.id) && (
                   <div className="ds-expanded-details">
                     <div className="ds-details-content">
-                      <p><strong>Department:</strong> {pr.department} - {pr.requestedBy}</p>
-                      <p><strong>Request Date:</strong> {formatDate(pr.requestDate)} | <strong>Priority:</strong> {priority === 'urgent' ? '🔥 Urgent' : '📅 Normal'}</p>
-                      <p><strong>Material:</strong> {pr.materialName} ({pr.quantity} {pr.unit})</p>
-                      <p><strong>Estimated Cost:</strong> ₹{pr.estimatedCost.toLocaleString()}</p>
-                      <p><strong>Justification:</strong> {pr.justification}</p>
-                      {pr.reviewedBy && <p><strong>Reviewed By:</strong> {pr.reviewedBy} on {formatDate(pr.reviewDate!)}</p>}
+                      <h4>📋 Purchase Request Details</h4>
+                      
+                      <p><strong>Financial Impact:</strong> ₹{pr.estimatedCost.toLocaleString()} ({pr.quantity}{pr.unit} {pr.materialName})</p>
+                      <p><strong>Business Context:</strong> {pr.justification}</p>
+                      <p><strong>Request Timeline:</strong> {formatDate(pr.requestDate)} by {pr.requestedBy} ({pr.department})</p>
+                      <p><strong>Approval Status:</strong> {statusInfo.label} • {priority === 'urgent' ? '🔥 High priority' : '📅 Normal priority'}</p>
+                      <p><strong>Material Details:</strong> {pr.materialName} - {pr.quantity}{pr.unit} needed</p>
+                      {pr.reviewedBy && <p><strong>Review Status:</strong> {pr.reviewedBy} on {formatDate(pr.reviewDate!)}</p>}
+                      {pr.notes && <p><strong>Notes:</strong> {pr.notes}</p>}
                     </div>
                     
                     {/* Internal Workflow Actions - Only visible when expanded */}

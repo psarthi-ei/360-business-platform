@@ -1,5 +1,5 @@
-/* Purchase Requests Screen Styles - Platform Scroll Compatible */
-.purchaseRequestsScreen {
+/* Purchase Orders Screen Styles - Platform Scroll Compatible */
+.purchaseOrdersScreen {
   /* Remove min-height to work with platform scrolling */
   padding: var(--ds-padding-screen);
   text-align: left !important;
@@ -16,7 +16,7 @@
   padding: 0;
 }
 
-.prContainer {
+.poContainer {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 10px;
@@ -42,18 +42,18 @@
 }
 
 /* ===== TEMPLATE CARD SYSTEM - 140px Fixed Height ===== */
-.prCardContainer {
+.poCardContainer {
   margin-bottom: 12px;              /* Visual Design Spec exact */
 }
 
-.prCard {
+.poCard {
   height: 140px;                    /* Template fixed height */
-  padding: 16px;                    /* Symmetric padding for professional look */
+  padding: 16px;                    /* Match platform-wide standard (16px) */
   background: white;
   border-radius: var(--ds-radius-md);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--ds-border-primary);
-  border-left: 4px solid;           /* Status color applied by PR status classes */
+  border-left: 4px solid;           /* Status color applied by PO status classes */
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -61,12 +61,12 @@
   position: relative;
 }
 
-.prCard:hover {
+.poCard:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
-.prCard.expanded {
+.poCard.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   position: relative;
@@ -139,22 +139,22 @@
   border-radius: 4px;
 }
 
-.prCard:hover .expandIndicator {
+.poCard:hover .expandIndicator {
   opacity: 1;
   background: rgba(29, 78, 216, 0.15);
   color: var(--color-primary);
 }
 
-/* PR Status Color System */
-.prCard.pending {
+/* PO Status Color System */
+.poCard.open {
   border-left-color: var(--ds-status-pending);
 }
 
-.prCard.approved {
+.poCard.delivered {
   border-left-color: var(--ds-status-active);
 }
 
-.prCard.rejected {
+.poCard.cancelled {
   border-left-color: var(--ds-status-inactive);
 }
 
@@ -177,11 +177,11 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .purchaseRequestsScreen {
+  .purchaseOrdersScreen {
     /* Let Design System handle padding consistently */
   }
   
-  .prContainer {
+  .poContainer {
     margin-left: 0;
     margin-right: 0;
     padding-left: 0;     /* Remove padding on mobile */

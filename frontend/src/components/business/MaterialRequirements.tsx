@@ -104,13 +104,17 @@ const MaterialRequirements = ({
     alert(`Creating Bulk Purchase Request for Order ${orderId} - Mock functionality`);
   };
 
-  // Get order title - simple Order ID format
-  const getOrderTitle = (orderId: string) => {
-    return orderId; // Returns clean "SO-002", "SO-004", etc.
+  // Get order title with first material context - enhanced for 2-row display
+  const getOrderTitle = (orderId: string, group: GroupedMaterials) => {
+    // Get primary material context from the first material in the group
+    const primaryMaterial = group.materials[0];
+    const materialContext = primaryMaterial ? primaryMaterial.materialName : 'Materials';
+    
+    return `${orderId} — ${materialContext}`;
   };
 
 
-  // Get material status (without urgency)
+  // Get material status (without urgency duplicate)
   const getMaterialStatus = (group: GroupedMaterials) => {
     const shortageCount = group.materials.filter(m => m.status === 'shortage').length;
     const totalMaterials = group.materials.length;
@@ -136,53 +140,46 @@ const MaterialRequirements = ({
     }
   };
 
-  // Get urgency status with icons
-  const getUrgencyStatus = (group: GroupedMaterials) => {
-    const urgencies = group.materials.map(m => m.urgency);
-    const hasHigh = urgencies.includes('high');
-    const hasMedium = urgencies.includes('medium');
-    
-    if (hasHigh) {
-      return {
-        text: 'High',
-        icon: '🔥',
-        className: 'high-urgency'
-      };
-    } else if (hasMedium) {
-      return {
-        text: 'Medium',
-        icon: '⚡',
-        className: 'medium-urgency'
-      };
+  // Get order status without urgency (to avoid duplication)
+  const getOrderStatus = (group: GroupedMaterials) => {
+    if (group.orderStatus === 'success') {
+      return '📊 All available';
+    } else if (group.hasShortages) {
+      return '📊 Mixed status';
     } else {
-      return {
-        text: 'Low',
-        icon: '📅',
-        className: 'low-urgency'
-      };
+      return '📊 Pending';
     }
   };
 
-  // Get meta content using actual MR data (timeline + materials)
+  // Get aggregate meta content - financial impact focus
   const getOrderMeta = (group: GroupedMaterials) => {
-    // Get date range from actual MR data
+    // Get earliest (most urgent) date only
     const dates = group.materials.map(m => new Date(m.requiredDate)).sort((a, b) => a.getTime() - b.getTime());
     const earliestDate = dates[0].toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-    const latestDate = dates[dates.length - 1].toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-    const timeline = dates.length > 1 ? `${earliestDate}-${latestDate}` : earliestDate;
     
-    // Get material context
+    // Calculate estimated cost impact (rough estimate based on shortfall)
     const shortages = group.materials.filter(m => m.status === 'shortage');
-    if (shortages.length > 0) {
-      const materialNames = shortages.length === 1 
-        ? shortages[0].materialName
-        : shortages.length === 2
-        ? `${shortages[0].materialName}, ${shortages[1].materialName}`
-        : `${shortages[0].materialName} +${shortages.length - 1} more`;
-      return `Due ${timeline} • ${materialNames} short`;
+    let estimatedCost = 0;
+    
+    shortages.forEach(material => {
+      // Rough cost estimation: Cotton Yarn ~75/kg, Dye ~200/kg, Fabric ~60/meter
+      let unitCost = 75; // default
+      if (material.materialName.toLowerCase().includes('dye')) unitCost = 200;
+      if (material.materialName.toLowerCase().includes('fabric')) unitCost = 60;
+      if (material.materialName.toLowerCase().includes('zipper')) unitCost = 15;
+      
+      estimatedCost += material.shortfall * unitCost;
+    });
+    
+    // Create financial impact line
+    let statusLine;
+    if (shortages.length === 0) {
+      statusLine = 'All materials available';
     } else {
-      return `Due ${timeline} • Production ready`;
+      statusLine = `₹${estimatedCost.toLocaleString()} estimated cost`;
     }
+    
+    return `${statusLine}\nDue: ${earliestDate}`;
   };
 
   return (
@@ -210,7 +207,6 @@ const MaterialRequirements = ({
               {groupedMaterials.map(group => {
                 const isExpandedCard = isExpanded(group.orderId);
                 const materialStatus = getMaterialStatus(group);
-                const urgencyStatus = getUrgencyStatus(group);
                 const orderMeta = getOrderMeta(group);
                 
                 return (
@@ -220,19 +216,19 @@ const MaterialRequirements = ({
                     className={`${styles.card} ${styles[group.orderStatus]} ${isExpandedCard ? styles.expanded : ''}`}
                     onClick={() => toggleOrderExpansion(group.orderId)}
                   >
-                    {/* Template Header - 20px font, 24px height */}
+                    {/* Template Header - 20px font, dynamic 1-2 rows with material context */}
                     <div 
                       className={styles.cardHeader}
-                      title={`Order ${group.orderId} - ${materialStatus.text} - ${urgencyStatus.text}`}
+                      title={`Order ${group.orderId} - ${materialStatus.text}`}
                     >
-                      {getOrderTitle(group.orderId)}
+                      {getOrderTitle(group.orderId, group)}
                     </div>
                     
-                    {/* Template Status - 16px font, 21px height - Dual status display */}
+                    {/* Template Status - 16px font, 21px height - Remove urgency duplicate */}
                     <div className={styles.cardStatus}>
                       <span>{materialStatus.icon} {materialStatus.text}</span>
                       <span>•</span>
-                      <span>{urgencyStatus.icon} {urgencyStatus.text}</span>
+                      <span>{getOrderStatus(group)}</span>
                     </div>
                     
                     {/* Template Meta - 14px font, 34px max height, 2-line clamp - Real MR data */}
@@ -255,11 +251,26 @@ const MaterialRequirements = ({
                       <div className="ds-details-content">
                         <h4>📋 Material Details</h4>
                         
-                        {/* Order-level MR Information - 2 separate rows */}
+                        {/* Order-level Strategic Overview */}
                         <div className={styles.mrInfoSection}>
                           <div className={styles.mrInfo}>
-                            <span><strong>Urgency:</strong> {urgencyStatus.icon} {urgencyStatus.text}</span>
-                            <span><strong>Timeline:</strong> {orderMeta.split(' • ')[0].replace('Due ', '')}</span>
+                            <span><strong>Timeline:</strong> {(() => {
+                              const dates = group.materials.map(m => new Date(m.requiredDate)).sort((a, b) => a.getTime() - b.getTime());
+                              const earliestDate = dates[0].toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                              const latestDate = dates[dates.length - 1].toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                              return dates.length > 1 ? `${earliestDate} - ${latestDate}` : earliestDate;
+                            })()}</span>
+                            <span><strong>Materials:</strong> {(() => {
+                              const urgentCount = group.materials.filter(m => m.urgency === 'high').length;
+                              const mediumCount = group.materials.filter(m => m.urgency === 'medium').length;
+                              const lowCount = group.materials.filter(m => m.urgency === 'low').length;
+                              const parts = [];
+                              if (urgentCount > 0) parts.push(`${urgentCount} High`);
+                              if (mediumCount > 0) parts.push(`${mediumCount} Medium`);
+                              if (lowCount > 0) parts.push(`${lowCount} Low`);
+                              return `${group.materials.length} items (${parts.join(', ')} urgency)`;
+                            })()}</span>
+                            <span><strong>Status:</strong> {group.hasShortages ? `Production ${group.materials.some(m => m.notes?.includes('blocked')) ? 'blocked' : 'impacted'} - multiple shortages` : 'All materials available'}</span>
                           </div>
                         </div>
 
@@ -269,9 +280,9 @@ const MaterialRequirements = ({
                             <thead>
                               <tr>
                                 <th>Material</th>
-                                <th>Req</th>
-                                <th>Stock</th>
-                                <th>Short</th>
+                                <th>Due Date</th>
+                                <th>Urgency</th>
+                                <th>Shortfall</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -282,14 +293,16 @@ const MaterialRequirements = ({
                                     <div className={styles.materialName}>{material.materialName}</div>
                                     <div className={styles.materialUnit}>{material.unit}</div>
                                   </td>
-                                  <td className={styles.quantityCell}>
-                                    {material.requiredQuantity.toLocaleString()}
+                                  <td className={styles.dateCell}>
+                                    {new Date(material.requiredDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                                   </td>
-                                  <td className={styles.quantityCell}>
-                                    {material.currentStock.toLocaleString()}
+                                  <td className={styles.urgencyCell}>
+                                    <span className={`${styles.urgencyBadge} ${styles[material.urgency]}`}>
+                                      {material.urgency === 'high' ? '🔥 High' : material.urgency === 'medium' ? '⚡ Medium' : '📅 Low'}
+                                    </span>
                                   </td>
                                   <td className={`${styles.shortfallCell} ${material.shortfall > 0 ? styles.hasShortage : styles.noShortage}`}>
-                                    {material.shortfall > 0 ? material.shortfall.toLocaleString() : '—'}
+                                    {material.shortfall > 0 ? `${material.shortfall.toLocaleString()}${material.unit}` : '—'}
                                   </td>
                                   <td className={styles.actionCell}>
                                     {material.status === 'shortage' && (

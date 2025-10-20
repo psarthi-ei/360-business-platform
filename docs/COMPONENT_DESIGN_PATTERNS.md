@@ -421,40 +421,46 @@ const filteredItems = useMemo(() => {
 }, [filterState]);
 ```
 
-### **Horizontal Scroll Architecture Patterns**
+### **Universal Scroll Architecture Patterns**
 
-**CRITICAL PRINCIPLE:** Horizontal scroll should be controlled at the **container level**, following the same intelligent pattern as vertical scroll.
+**CRITICAL PRINCIPLE:** All business modules use **universal browser-native scroll** for consistent, predictable UX across all platforms and content types.
 
-#### **Business Module Pattern (Sales, Procurement, Production, Customers)**
+#### **Universal Business Module Pattern - UPDATED 2024**
 
-**Architecture:** Container-level scroll management with intelligent activation.
+**Architecture:** Simplified universal scroll that always works, no complex calculations required.
 
 ```css
-/* Content Area - Intelligent Scroll Behavior */
+/* Content Area - Universal Scroll (Always Enabled) */
 .moduleContent {
-  overflow: hidden; /* Default: clean appearance, no scrollbars */
+  overflow: auto;                      /* Universal scroll - always enabled */
+  overflow-x: auto;                    /* Horizontal scroll when content overflows */
+  overflow-y: auto;                    /* Vertical scroll when content overflows */
+  -webkit-overflow-scrolling: touch;   /* Smooth mobile scroll */
   background: var(--ds-bg-primary);
   grid-row: 3;
-  transition: all 0.2s ease; /* Smooth transition when scroll behavior changes */
-}
-
-/* Applied dynamically when scrolling is needed */
-.moduleContent.scrollable {
-  overflow-y: auto;                    /* Vertical scroll when needed */
-  overflow-x: auto;                    /* Horizontal scroll when needed */
-  -webkit-overflow-scrolling: touch;   /* Smooth mobile scroll */
 }
 ```
 
-**Implementation Examples:**
-- `.salesContent.scrollable` - Sales module
-- `.procurementContent.scrollable` - Procurement module  
-- `.productionContent.scrollable` - Production module
-- `.customersContent.scrollable` - Customers module
+**Universal Implementation - ALL Business Modules:**
+- `.salesContent` - Sales module (Leads, Quotes, Orders, Payments)
+- `.procurementContent` - Procurement module (MR, PRs, POs, GRNs)
+- `.productionContent` - Production module (Plan, Active, QC, Ready)
+- `.customersContent` - Customers module (All customer management tabs)
+
+**No JavaScript Required:**
+```typescript
+// ❌ OLD: Complex scroll calculations removed
+// const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
+
+// ✅ NEW: No JavaScript needed, CSS handles everything
+<div className={styles.moduleContent}>
+  {/* Content automatically scrolls when needed */}
+</div>
+```
 
 #### **Dashboard/Home Pattern (Component-Level)**
 
-**Architecture:** Individual components handle their own overflow needs.
+**Architecture:** Individual components handle their own overflow needs (unchanged).
 
 ```css
 /* KPI Strip with horizontal scroll */
@@ -478,7 +484,7 @@ const filteredItems = useMemo(() => {
 }
 ```
 
-#### **Child Component Requirements**
+#### **Child Component Requirements (Unchanged)**
 
 **❌ WRONG: Blocking parent scroll**
 ```css
@@ -497,22 +503,23 @@ const filteredItems = useMemo(() => {
 }
 ```
 
-#### **Architecture Decision Matrix**
+#### **Architecture Decision Matrix - UPDATED**
 
 | **Context** | **Pattern** | **Implementation** | **Example** |
 |-------------|-------------|-------------------|-------------|
-| **Business Module Tabs** | Container-Level | `.moduleContent.scrollable` | Sales, Procurement, Production |
+| **Business Module Tabs** | Universal Scroll | `.moduleContent { overflow: auto; }` | Sales, Procurement, Production |
 | **Dashboard Components** | Component-Level | `.componentName { overflow-x: auto; }` | KPI strip, widget areas |
 | **Table Containers** | Inherit from Parent | Remove `overflow: hidden` | Material Requirements table |
 | **Modal/Dialog Content** | Component-Level | Handle within modal container | Forms, detail views |
 
-#### **Benefits of Container-Level Approach**
+#### **Benefits of Universal Scroll Approach**
 
-✅ **Consistent UX:** All tabs have identical scroll behavior  
-✅ **Intelligent Activation:** Scrollbars only appear when content overflows  
-✅ **Platform Integration:** Works seamlessly with responsive design  
-✅ **Performance:** No unnecessary scrollbars cluttering interface  
-✅ **Maintainability:** Single source of scroll control per module
+✅ **Consistent UX:** Identical scroll behavior across ALL business modules  
+✅ **Zero Maintenance:** No tab-specific logic or calculations required  
+✅ **Browser Optimized:** Native overflow detection is faster and more reliable  
+✅ **Mobile Perfect:** Automatic touch scroll without custom implementations  
+✅ **Future Proof:** New tabs automatically inherit scroll behavior  
+✅ **Simplified Codebase:** Removes complex state management and calculations
 
 ### **Mobile Container Padding Pattern**
 
@@ -856,11 +863,12 @@ Using wrong variables or colors for status indication.
 - [ ] Filter state props implemented correctly
 
 #### **Scroll Architecture**
-- [ ] **Business modules**: Use container-level `.moduleContent.scrollable` pattern
+- [ ] **Business modules**: Use universal `.moduleContent { overflow: auto; }` pattern
+- [ ] **Universal scroll**: Business modules use `overflow: auto` (no conditional classes)
 - [ ] **Dashboard components**: Use component-level `overflow-x: auto` where appropriate
 - [ ] **Child components**: Remove `overflow: hidden` that blocks parent scroll
-- [ ] **Horizontal scroll**: Added to business module `.scrollable` classes
 - [ ] **Mobile optimization**: `-webkit-overflow-scrolling: touch` included
+- [ ] **No JavaScript scroll logic**: Remove complex calculations and dynamic classes
 
 #### **Mobile Container Padding**
 - [ ] **Container padding**: Removed on mobile (`padding-left: 0; padding-right: 0;`)

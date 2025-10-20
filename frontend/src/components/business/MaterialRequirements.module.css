@@ -79,12 +79,25 @@
   font-weight: 600;
   color: var(--ds-text-primary);   /* CORRECT variable usage */
   margin: 0 0 6px 0;               /* Optimized margin to prevent overlap */
-  line-height: 1.2;                /* Match Purchase Requests: 20px * 1.2 = 24px with proper font spacing */
+  line-height: 1.2;                /* 20px * 1.2 = 24px per row */
+  
+  /* Dynamic 1-2 row behavior */
+  min-height: 24px;                /* Minimum 1 row */
+  max-height: 48px;                /* Maximum 2 rows (24px × 2) */
+  height: auto;                    /* Allow natural flow */
+  
+  /* Smart truncation after 2 rows */
   overflow: hidden;
-  white-space: nowrap;              /* Force single line */
-  text-overflow: ellipsis;          /* Clean truncation with ... */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Maximum 2 lines */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  
+  /* Mobile container respect */
+  word-wrap: break-word;
+  word-break: break-word;
+  
   flex-shrink: 0;                  /* Prevent header compression */
-  height: 24px;                    /* Fixed height for consistency */
 }
 
 .cardStatus {

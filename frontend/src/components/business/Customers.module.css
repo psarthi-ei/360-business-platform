@@ -134,14 +134,13 @@
   grid-row: 3;
   background: var(--background-primary);
   position: relative;
-  overflow: hidden;
+  overflow: auto; /* Universal scroll - always enabled, browser shows when needed */
+  overflow-x: auto; /* Horizontal scroll when content overflows */
+  overflow-y: auto; /* Vertical scroll when content overflows */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
 }
 
-.customersContent.scrollable {
-  overflow-y: auto;
-  overflow-x: auto; /* Add horizontal scroll support */
-  -webkit-overflow-scrolling: touch;
-}
+/* Universal scroll - no conditional classes needed, always enabled */
 
 .customersContent.scrollable::-webkit-scrollbar {
   width: 6px;
