@@ -1,224 +1,544 @@
-/* WorkOrderPlanning.module.css - Visual Design Specification Styling */
+/* WorkOrderPlanning.module.css - MVP Implementation with Design System Compliance */
 
-.workOrderPlanning {
-  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-md);
-}
-
-.sectionHeader {
-  font-size: var(--font-base);
-  font-weight: 600;
+.workOrderPlanningScreen {
+  padding: var(--ds-padding-screen);
+  text-align: left !important;
+  background: var(--ds-bg-primary);
   color: var(--ds-text-primary);
-  padding: var(--ds-space-sm) 0;
-  border-bottom: 1px solid var(--ds-border-primary);
-  margin-bottom: var(--ds-space-sm);
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  padding-left: var(--ds-space-sm);
-  border-radius: var(--ds-radius-sm);
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
-.ordersSection,
-.machinesSection {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.pageContent {
+  padding: 0;
 }
 
-.orderCard,
-.machineCard {
+.workOrdersContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-sm);
+  display: grid;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.cardsContainer {
+  display: grid;
+  gap: var(--ds-space-sm);
+}
+
+/* Empty state styling */
+.emptyState {
+  text-align: center;
+  padding: var(--ds-space-3xl) var(--ds-space-lg);
+  color: var(--ds-text-secondary);
   background: white;
-  border: 1px solid var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-md);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border-primary);
 }
 
-.orderCard:hover,
-.machineCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
+.emptyStateIcon {
+  font-size: var(--font-xl);
+  margin-bottom: var(--ds-space-md);
+  color: var(--ds-text-muted);
+}
+
+.emptyStateText {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+  margin-bottom: var(--ds-space-xs);
+}
+
+.emptyStateSubtext {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-muted);
+}
+
+/* Assignment Controls */
+.assignmentSection {
+  margin-bottom: var(--ds-space-md);
+}
+
+.assignmentControl {
+  margin-top: var(--ds-space-xs);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.assignmentControl span {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+}
+
+/* Assignment Dropdown Styling */
+.assignmentDropdown {
+  width: 100%;
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.assignmentDropdown:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-focus);
+}
+
+.assignmentDropdown:hover {
   border-color: var(--ds-border-hover);
 }
 
-.orderHeader,
-.machineHeader {
+/* Read-only Assignment Display */
+.assignmentReadonly {
+  margin-top: var(--ds-space-xs);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.finalAssignment {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+}
+
+/* Reassignment Controls */
+.currentAssignment {
+  margin-top: var(--ds-space-xs);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.currentLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  margin-right: var(--ds-space-sm);
+}
+
+.reassignmentControl {
   display: flex;
+  gap: var(--ds-space-sm);
   align-items: center;
-  justify-content: space-between;
+  margin-top: var(--ds-space-sm);
+}
+
+.reassignmentControl select {
+  flex: 1;
+}
+
+.reassignmentControl button {
+  font-size: var(--font-sm);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  white-space: nowrap;
+}
+
+.reassignmentControl button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Progress Section */
+.progressSection {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.progressSection p {
+  margin: var(--ds-space-xs) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+}
+
+/* Enhanced Progress Controls */
+.progressInfo {
   margin-bottom: var(--ds-space-sm);
 }
 
-.orderId,
-.machineName {
+.progressDisplay {
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-primary);
+  text-align: center;
+}
+
+.progressText {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+/* Professional Progress & Update Section */
+.progressUpdateSection {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.currentQuantity {
+  margin-top: var(--ds-space-xs);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+/* Quantity controls - responsive layout */
+.quantityControls {
+  display: flex;
+  gap: var(--ds-space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Update button styling - responsive */
+.updateButton {
+  width: 100%;
+  padding: var(--ds-space-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  margin-top: var(--ds-space-sm);
+  order: 10; /* Put at end on mobile */
+}
+
+/* Desktop: Optimize for larger screens */
+@media (min-width: 769px) {
+  .progressUpdateSection {
+    gap: var(--ds-space-md);
+  }
+  
+  .progressDisplay {
+    margin-bottom: var(--ds-space-sm);
+  }
+  
+  .quantityControls {
+    justify-content: center;
+    margin-bottom: var(--ds-space-sm);
+  }
+  
+  .quantityInput {
+    width: 70px;
+    font-size: var(--font-sm);
+  }
+  
+  .quantityUnit {
+    font-size: var(--font-sm);
+    margin-left: var(--ds-space-sm);
+    margin-right: var(--ds-space-md);
+  }
+  
+  .updateButton {
+    width: auto;
+    padding: var(--ds-space-sm) var(--ds-space-lg);
+    align-self: flex-start;
+  }
+}
+
+.quantityIncrement {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
   font-size: var(--font-base);
+  border-radius: var(--ds-radius-sm);
+}
+
+.quantityInput {
+  width: 60px;
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.quantityInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-focus);
+}
+
+.quantityUnit {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.quantityInputGroup button:last-child {
+  font-size: var(--font-sm);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Timeline Information */
+.timelineInfo {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.timelineInfo p {
+  margin: var(--ds-space-xs) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+}
+
+/* Material Allocation Styles */
+.materialAllocationSection {
+  margin: var(--ds-space-md) 0;
+}
+
+.materialStatus {
+  margin-top: var(--ds-space-sm);
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.materialSuccess {
+  background: var(--ds-bg-success);
+  border-color: var(--ds-border-success);
+}
+
+.materialWarning {
+  background: var(--ds-bg-warning);
+  border-color: var(--ds-border-warning);
+}
+
+.materialStatusHeader {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.materialRequirements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.materialRequirement {
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-primary);
+}
+
+.materialName {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
   font-weight: 600;
   color: var(--ds-text-primary);
-  flex: 1;
+  margin-bottom: var(--ds-space-xs);
 }
 
-.urgentBadge {
-  background: var(--color-danger);
-  color: white;
-  padding: 2px 8px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.orderDetails,
-.machineDetails {
-  flex: 1;
+.materialQuantities {
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-xs);
-  margin-bottom: var(--ds-space-sm);
 }
 
-.orderInfo,
-.machineSpecs {
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  line-height: 1.4;
+.materialRequired,
+.materialAvailable,
+.materialShortage {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  padding: var(--ds-space-xs);
+  border-radius: var(--ds-radius-xs);
 }
 
-.orderStatus,
-.machineStatus {
-  font-size: var(--font-sm);
-  color: var(--ds-text-primary);
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.orderActions,
-.machineActions {
-  display: flex;
-  gap: var(--ds-space-sm);
-  align-items: center;
-}
-
-.primaryAction {
-  background: var(--ds-btn-primary);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.primaryAction:hover {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-}
-
-.primaryAction:active {
-  background: var(--ds-btn-primary-active);
-  transform: translateY(0);
-}
-
-.secondaryAction {
-  background: transparent;
-  color: var(--ds-text-primary);
-  border: 1px solid var(--ds-border-secondary);
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.secondaryAction:hover {
-  background: var(--ds-bg-hover);
-  border-color: var(--ds-border-hover);
-  transform: translateY(-1px);
-}
-
-.secondaryAction:active {
+.materialRequired {
   background: var(--ds-bg-subtle);
-  transform: translateY(0);
-}
-
-.comingSoon {
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  border: 2px dashed var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-xl);
-  text-align: center;
-  margin-top: var(--ds-space-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--ds-space-md);
-}
-
-.comingSoonIcon {
-  font-size: 48px;
-  opacity: 0.7;
-}
-
-.comingSoonText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.comingSoonText h3 {
-  font-size: var(--font-lg);
-  font-weight: 600;
   color: var(--ds-text-primary);
-  margin: 0;
 }
 
-.comingSoonText p {
-  font-size: var(--font-base);
-  color: var(--ds-text-secondary);
-  line-height: 1.5;
-  margin: 0;
-  max-width: 400px;
+.materialAvailable {
+  background: var(--ds-bg-success);
+  color: var(--ds-text-success);
 }
 
-/* Mobile responsiveness */
+.materialShortage {
+  background: var(--ds-bg-critical);
+  color: var(--ds-text-critical);
+  font-weight: 500;
+}
+
+/* Status Information */
+.statusInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-success);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-success);
+}
+
+.qcStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-success);
+  font-weight: 500;
+}
+
+/* Action Buttons - Following Component Design Patterns */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  margin-top: clamp(12px, 3vw, 16px);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .workOrderPlanning {
+  .workOrdersContainer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .actionButtons {
+    gap: var(--ds-space-xs);
+  }
+  
+  .actionButtons button {
+    flex: 1;
+    min-width: calc(50% - 3px);
+  }
+  
+  .assignmentControl {
     padding: var(--ds-space-sm);
   }
   
-  .orderCard,
-  .machineCard {
+  .assignmentDropdown {
+    font-size: var(--font-xs);
     padding: var(--ds-space-sm);
   }
   
-  .orderActions,
-  .machineActions {
+  .progressDisplay {
     flex-direction: column;
+    gap: var(--ds-space-sm);
+    align-items: stretch;
   }
   
-  .primaryAction,
-  .secondaryAction {
+  .progressDisplay button {
     width: 100%;
   }
   
-  .comingSoon {
-    padding: var(--ds-space-lg);
+  .quantityEdit {
+    padding: var(--ds-space-sm);
   }
   
-  .comingSoonIcon {
-    font-size: 36px;
+  .quantityInput {
+    width: 100%;
+    font-size: var(--font-sm);
+  }
+  
+  .quantityActions {
+    flex-direction: row;
+    gap: var(--ds-space-xs);
+  }
+  
+  /* Mobile: Keep 3-row layout clean */
+  .progressUpdateSection {
+    gap: var(--ds-space-sm);
+  }
+  
+  .quantityControls {
+    justify-content: center;
+    gap: var(--ds-space-sm);
+  }
+  
+  .quantityIncrement {
+    width: 44px;
+    height: 44px;
+    font-size: var(--font-base);
+  }
+  
+  .quantityInput {
+    width: 60px;
+    font-size: var(--font-sm);
+    padding: var(--ds-space-sm);
+  }
+  
+  .quantityUnit {
+    font-size: var(--font-sm);
+    margin-left: var(--ds-space-xs);
+  }
+  
+  .updateButton {
+    padding: var(--ds-space-md);
+    font-size: var(--font-sm);
+  }
+  
+  .materialStatus {
+    padding: var(--ds-space-sm);
+  }
+  
+  .materialRequirement {
+    padding: var(--ds-space-sm);
+  }
+  
+  .materialQuantities {
+    gap: var(--ds-space-xs);
+  }
+  
+  .materialRequired,
+  .materialAvailable,
+  .materialShortage {
+    font-size: var(--font-xs);
+    padding: var(--ds-space-xs);
   }
 }

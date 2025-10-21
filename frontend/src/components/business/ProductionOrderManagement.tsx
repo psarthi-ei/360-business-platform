@@ -3,7 +3,7 @@ import { mockSalesOrders, SalesOrder } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import ProgressBar from '../ui/ProgressBar';
-import WorkOrdersList from './WorkOrdersList';
+import { getWorkOrdersBySalesOrder } from '../../data/productionMockData';
 import styles from './ProductionOrderManagement.module.css';
 
 interface ProductionOrderManagementProps {
@@ -374,14 +374,20 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                           )}
                         </div>
                         
-                        {/* Tab Content */}
+                        {/* Tab Content - Simple Work Orders Status */}
                         {getActiveTab(order.id) === 'work_orders' && order.productionWorkflowStatus.status === 'in_production' && (
                           <div className={styles.tabContent}>
-                            <WorkOrdersList
-                              salesOrderId={order.id}
-                              isExpanded={true}
-                              onToggle={() => {}} // No longer needed
-                            />
+                            <div className={styles.workOrdersSimple}>
+                              {getWorkOrdersBySalesOrder(order.id).map(workOrder => (
+                                <div key={workOrder.id} className={styles.workOrderSimpleItem}>
+                                  <span className={styles.workOrderId}>- {workOrder.id}</span>
+                                  <span className={styles.workOrderStatus}>
+                                    {workOrder.progress === 100 ? '✅ Done' : 
+                                     workOrder.progress > 0 ? `🟡 Running (${workOrder.progress}%)` : '🔴 Not Started'}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         )}
                       </div>
