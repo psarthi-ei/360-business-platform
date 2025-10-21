@@ -102,15 +102,7 @@ const MaterialRequirements = ({
     toggleExpansion(orderId, 'data-order-id');
   };
 
-  // Mock action handler for Purchase Request creation
-  const handleCreatePR = (materialId: string, materialName: string) => {
-    alert(`Creating Purchase Request for ${materialName} (${materialId}) - Mock functionality`);
-  };
-
-  // Mock action handler for bulk PR creation
-  const handleCreateBulkPR = (orderId: string) => {
-    alert(`Creating Bulk Purchase Request for Order ${orderId} - Mock functionality`);
-  };
+  // Removed manual PR creation handlers - PRs are now auto-generated
 
   // Get order title with first material context - enhanced for 2-row display
   const getOrderTitle = (orderId: string, group: GroupedMaterials) => {
@@ -298,7 +290,7 @@ const MaterialRequirements = ({
                                 <th>Due Date</th>
                                 <th>Urgency</th>
                                 <th>Shortfall</th>
-                                <th>Action</th>
+                                <th>Status</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -321,16 +313,8 @@ const MaterialRequirements = ({
                                   <td className={`${styles.shortfallCell} ${availability.shortage > 0 ? styles.hasShortage : styles.noShortage}`}>
                                     {availability.shortage > 0 ? `${availability.shortage.toLocaleString()}${material.unit}` : '—'}
                                   </td>
-                                  <td className={styles.actionCell}>
-                                    {(availability.status === 'shortage' || availability.status === 'partial') && (
-                                      <button 
-                                        className={styles.prButton}
-                                        onClick={() => handleCreatePR(material.id, material.materialName)}
-                                        title={`Create Purchase Request for ${material.materialName}`}
-                                      >
-                                        PR
-                                      </button>
-                                    )}
+                                  <td className={styles.statusCell}>
+                                    <span className={styles.noAction}>—</span>
                                   </td>
                                 </tr>
                                 );
@@ -354,12 +338,18 @@ const MaterialRequirements = ({
                       {/* Action Buttons - Standard Pattern */}
                       <div className={styles.cardActions}>
                         <div className={styles.actionButtons}>
-                          {group.hasShortages && (
+  {group.hasShortages && (
                             <button 
                               className="ds-btn ds-btn-primary"
-                              onClick={() => handleCreateBulkPR(group.orderId)}
+                              onClick={() => alert('Navigate to Purchase Requests to view auto-generated PRs')}
                             >
-                              📋 Create Bulk PR for All Shortages
+                              📋 View Generated PRs ({(() => {
+                                const shortages = group.materials.filter(m => {
+                                  const availability = checkMaterialAvailability(m.materialName, m.requiredQuantity, m.unit);
+                                  return availability.status === 'shortage' || availability.status === 'partial';
+                                });
+                                return shortages.length;
+                              })()})
                             </button>
                           )}
                         </div>

@@ -212,39 +212,31 @@
   font-weight: 500;
 }
 
-/* Action buttons */
-.actionCell {
+/* Status column for PR automation indicators */
+.statusCell {
   text-align: center;
   width: var(--ds-space-xxl);
 }
 
-.prButton {
-  background: var(--ds-btn-primary);
-  color: white;
-  border: 1px solid var(--ds-btn-primary);
-  border-radius: var(--ds-radius-sm);
-  padding: var(--ds-space-xs) var(--ds-space-sm);
-  font-size: var(--font-sm);
+/* PR Status Indicators for Automation */
+.prCreated {
+  color: var(--ds-color-success);
   font-weight: 500;
-  font-family: var(--font-family);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: var(--ds-touch-target-min);
-  min-width: var(--ds-touch-target-min);
+  font-size: var(--font-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-xs);
+  background: var(--ds-bg-success-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-success-subtle);
 }
 
-.prButton:hover {
-  background: var(--ds-btn-primary-hover);
-  border-color: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(29, 78, 216, 0.25);
-}
-
-.prButton:active {
-  background: var(--ds-btn-primary-active);
-  border-color: var(--ds-btn-primary-active);
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.25);
+.noAction {
+  color: var(--ds-text-muted);
+  font-size: var(--font-sm);
+  text-align: center;
 }
 
 
