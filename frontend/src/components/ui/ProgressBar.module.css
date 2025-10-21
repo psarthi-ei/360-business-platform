@@ -1,0 +1,66 @@
+/* Progress Bar Component - Design System Compliant */
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  margin: var(--ds-space-xs) 0;
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-family: var(--font-family);
+}
+
+.visualBar {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.percentageText {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  min-width: 3ch; /* Ensure consistent spacing for 100% */
+}
+
+/* Size variants */
+.sm .visualBar {
+  font-size: var(--font-xs);
+}
+
+.sm .percentageText {
+  font-size: var(--font-xs);
+  min-width: 2.5ch;
+}
+
+.md .visualBar {
+  font-size: var(--font-sm);
+}
+
+.md .percentageText {
+  font-size: var(--font-sm);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .progressContainer {
+    gap: var(--ds-space-xs);
+  }
+  
+  .progressBar {
+    gap: var(--ds-space-xs);
+  }
+  
+  .visualBar {
+    font-size: var(--font-xs);
+  }
+  
+  .percentageText {
+    font-size: var(--font-xs);
+  }
+}

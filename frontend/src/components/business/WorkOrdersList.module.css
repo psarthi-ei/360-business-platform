@@ -1,0 +1,147 @@
+/* Work Orders List Component - Visual Design Specification Compliant */
+.workOrdersSection {
+  margin-top: var(--ds-space-md);
+  border-top: 1px solid var(--ds-border-secondary);
+  padding-top: var(--ds-space-md);
+}
+
+.toggleHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  cursor: pointer;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.toggleHeader:hover {
+  background: var(--ds-bg-secondary);
+}
+
+.toggleIcon {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  transition: transform 0.2s ease;
+  font-weight: bold;
+}
+
+.toggleText {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+}
+
+.workOrdersList {
+  background: var(--ds-bg-primary);
+  border: 1px solid var(--ds-border-secondary);
+  border-top: none;
+  border-radius: 0 0 var(--ds-radius-sm) var(--ds-radius-sm);
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.workOrderItem {
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.workOrderHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+}
+
+.workOrderId {
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-family: var(--font-family);
+}
+
+.machineAssignment {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+}
+
+.workOrderStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+}
+
+.statusIndicator {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+}
+
+.progressInfo {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+}
+
+.workerAssignment {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-style: italic;
+  font-family: var(--font-family);
+}
+
+.emptyWorkOrders {
+  text-align: center;
+  padding: var(--ds-space-lg);
+  color: var(--ds-text-secondary);
+}
+
+.emptyWorkOrders p {
+  margin: var(--ds-space-xs) 0;
+  font-size: var(--font-sm);
+  font-family: var(--font-family);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .workOrdersSection {
+    margin-top: var(--ds-space-sm);
+  }
+  
+  .toggleHeader {
+    padding: var(--ds-space-sm);
+  }
+  
+  .workOrdersList {
+    padding: var(--ds-space-sm);
+  }
+  
+  .workOrderItem {
+    padding: var(--ds-space-sm);
+  }
+  
+  .workOrderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+  
+  .workOrderStatus {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+}

@@ -8,6 +8,7 @@
   width: 100%;
   max-width: none;
   margin: 0;
+  overflow-x: auto; /* Allow horizontal scrolling only when needed */
 }
 
 /* Page content wrapper - let content determine height for scrolling */
@@ -87,6 +88,173 @@
   font-size: var(--font-sm);
 }
 
+/* Progress bar container within card meta */
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  margin-top: var(--ds-space-xs);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+}
+
+/* ===== MOBILE TEXT UTILITIES ===== */
+.truncateText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.statusLine {
+  font-size: var(--font-xs);
+  margin-bottom: var(--ds-space-xs);
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+.dueLine {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  word-wrap: break-word;
+}
+
+.quantity {
+  color: var(--ds-text-secondary);
+  font-size: var(--font-xs);
+  margin-left: var(--ds-space-xs);
+}
+
+/* ===== TAB SYSTEM FOR INFORMATION DISPLAY ===== */
+.tabSystem {
+  margin-top: var(--ds-space-md);
+}
+
+.tabButtons {
+  display: flex;
+  gap: var(--ds-space-xs);
+  margin-bottom: var(--ds-space-sm);
+  border-bottom: 1px solid var(--ds-border-secondary);
+  padding-bottom: var(--ds-space-sm);
+}
+
+.tabButtons button {
+  font-size: var(--font-sm);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border-radius: var(--ds-radius-sm);
+  transition: all 0.2s ease;
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.tabContent {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== INLINE ORDER DETAILS EXPANSION ===== */
+.orderDetailsSection {
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-md);
+  margin-top: 0; /* No extra margin since it's in tab content */
+  overflow: hidden;
+}
+
+@keyframes expandDetails {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.orderDetailsHeader {
+  background: var(--ds-bg-primary);
+  padding: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-primary);
+  font-weight: 600;
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+}
+
+.detailsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-md);
+  padding: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-tertiary);
+}
+
+.detailsRow:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+}
+
+.detailValue {
+  font-size: var(--font-sm);
+  font-weight: 400;
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+}
+
+.detailsSection {
+  padding: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-tertiary);
+}
+
+.detailsSection:last-child {
+  border-bottom: none;
+}
+
+.detailsSection h4 {
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+  border-bottom: 1px solid var(--ds-border-primary);
+  padding-bottom: var(--ds-space-xs);
+}
+
+.detailsSection p {
+  margin: 0 0 var(--ds-space-xs) 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+}
+
+.detailsSection ul {
+  margin: 0;
+  padding-left: var(--ds-space-lg);
+  color: var(--ds-text-primary);
+}
+
+.detailsSection li {
+  margin-bottom: var(--ds-space-xs);
+  font-size: var(--font-sm);
+  font-family: var(--font-family);
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .productionOrdersScreen {
@@ -100,12 +268,85 @@
     padding-right: 0;    /* Remove padding on mobile */
   }
   
-  .actionButtons {
+  /* Action buttons use natural wrapping like SalesOrders - no forced vertical layout */
+  
+  .progressBarContainer {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
   }
   
+  /* Mobile optimization for inline order details */
+  .orderDetailsSection {
+    margin-top: var(--ds-space-sm);
+  }
+  
+  .orderDetailsHeader {
+    padding: var(--ds-space-sm);
+    font-size: var(--font-sm);
+  }
+  
+  .detailsRow {
+    display: block; /* Stack vertically instead of grid */
+    padding: var(--ds-space-sm);
+    border-bottom: 1px solid var(--ds-border-tertiary);
+  }
+  
+  .detailLabel {
+    display: block;
+    margin-bottom: var(--ds-space-xs);
+    font-weight: 600;
+    font-size: var(--font-xs);
+  }
+  
+  .detailValue {
+    display: block;
+    margin-bottom: var(--ds-space-sm);
+    word-wrap: break-word;
+    hyphens: auto;
+    font-size: var(--font-xs);
+  }
+  
+  .detailsSection {
+    padding: var(--ds-space-sm);
+  }
+  
+  .detailsSection h4, .detailsSection h5 {
+    font-size: var(--font-xs);
+    margin-bottom: var(--ds-space-xs);
+  }
+  
+  /* Mobile text utilities */
+  .truncateText {
+    max-width: 250px; /* Specific mobile max-width */
+  }
+  
+  .statusLine, .dueLine {
+    font-size: var(--font-xs);
+    line-height: 1.2;
+  }
+  
+  /* Mobile action buttons - consistent with tab buttons */
   .actionButtons button {
     width: 100%;
+  }
+  
+  /* Mobile tab system */
+  .tabSystem {
+    margin-top: var(--ds-space-sm);
+  }
+  
+  .tabButtons {
+    flex-direction: column;
+    gap: var(--ds-space-xs);
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .tabButtons button {
+    width: 100%;
+    font-size: var(--font-xs);
+    padding: var(--ds-space-sm);
+    text-align: left;
   }
 }

@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { mockSalesOrders, SalesOrder } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+import ProgressBar from '../ui/ProgressBar';
+import WorkOrdersList from './WorkOrdersList';
 import styles from './ProductionOrderManagement.module.css';
 
 interface ProductionOrderManagementProps {
@@ -32,20 +34,32 @@ interface ProductionStatus {
 interface ProductionOrderEnhanced extends SalesOrder {
   materialStatus: MaterialStatus;
   productionWorkflowStatus: ProductionStatus; // Renamed to avoid conflict
+  productionProgress: number; // Progress percentage for in-production orders
   quantity: string; // Add quantity field for display
 }
 
 // Material availability checking logic
 const getMaterialStatus = (order: SalesOrder): MaterialStatus => {
-  // Simulate material availability based on order characteristics
-  const hasShortage = order.id === 'SO-002' || order.totalAmount > 500000; // High-value orders may have material complexity
-  
-  if (hasShortage) {
+  // Handle explicit material pending status from sales order
+  if (order.status === 'pending_materials') {
     return {
       status: 'shortage',
       icon: '⚠️',
       display: 'Shortage (Yarn, Dye)',
       details: ['Cotton Yarn 30s: 300kg short', 'Blue Dye: 50L short']
+    };
+  }
+  
+  // SO-002 has pending_materials status, so it will be handled above
+  // Simulate material availability for other orders
+  const hasShortage = order.totalAmount > 500000; // Very high-value orders may have complexity
+  
+  if (hasShortage) {
+    return {
+      status: 'shortage',
+      icon: '⚠️',
+      display: 'Shortage (Dye)',
+      details: ['Special Dye: 25L short']
     };
   }
   
@@ -59,7 +73,16 @@ const getMaterialStatus = (order: SalesOrder): MaterialStatus => {
 
 // Production status workflow mapping
 const getProductionStatus = (order: SalesOrder, materialStatus: MaterialStatus): ProductionStatus => {
-  // Material shortage blocks production
+  // Handle pending_materials status (explicit material shortage)
+  if (order.status === 'pending_materials') {
+    return {
+      status: 'material_pending',
+      icon: '🔴',
+      label: 'Material Pending'
+    };
+  }
+  
+  // Material shortage blocks production (for other statuses that haven't been handled above)
   if (materialStatus.status === 'shortage') {
     return {
       status: 'material_pending',
@@ -68,7 +91,7 @@ const getProductionStatus = (order: SalesOrder, materialStatus: MaterialStatus):
     };
   }
   
-  // Production workflow states
+  // Production workflow states based on sales order status
   if (order.status === 'order_confirmed') {
     return {
       status: 'not_started',
@@ -85,7 +108,7 @@ const getProductionStatus = (order: SalesOrder, materialStatus: MaterialStatus):
     };
   }
   
-  if (order.status === 'production_completed' || order.status === 'ready_to_ship') {
+  if (order.status === 'completed') {
     return {
       status: 'completed',
       icon: '🟢',
@@ -110,18 +133,38 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
 }) => {
   const { toggleExpansion, isExpanded } = useCardExpansion();
   
+  // State for tab-based information display
+  const [activeTab, setActiveTab] = useState<Map<string, 'work_orders' | 'details' | null>>(new Map());
+  
+  // Calculate production progress percentage
+  const calculateProductionProgress = (order: SalesOrder): number => {
+    // Completed orders show 100%
+    if (order.status === 'completed') return 100;
+    
+    // Production started orders show realistic progress
+    if (order.status === 'production_started') {
+      // SO-003: Matches "60% completed" from mock data statusMessage
+      if (order.id === 'SO-003') return 60; // "Production in progress - 60% completed"
+      return 80; // Default progress for other production_started orders
+    }
+    
+    return 0; // Not started or material pending
+  };
+  
   // Transform Sales Orders for production context
   const productionOrders = useMemo((): ProductionOrderEnhanced[] => {
     return mockSalesOrders
-      .filter(order => ['order_confirmed', 'production_started', 'production_completed'].includes(order.status))
+      .filter(order => ['order_confirmed', 'pending_materials', 'production_started', 'completed'].includes(order.status))
       .map(order => {
         const materialStatus = getMaterialStatus(order);
         const productionWorkflowStatus = getProductionStatus(order, materialStatus);
+        const productionProgress = calculateProductionProgress(order);
         
         return {
           ...order,
           materialStatus,
           productionWorkflowStatus,
+          productionProgress,
           quantity: '1000m' // Add default quantity for display
         };
       });
@@ -159,16 +202,25 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
     alert(`📦 Navigating to Procurement module for ${orderId}\n\n🔍 Material shortage details:\n• Cotton Yarn 30s: 300kg needed\n• Blue Dye: 50L needed\n\n(Mock functionality - will navigate to Procurement MR tab)`);
   };
   
-  const handleViewWorkOrders = (orderId: string) => {
-    alert(`📋 Viewing Work Orders for ${orderId}\n\n🔍 Work Orders:\n• WO#${orderId}-A: Loom A1, 400m\n• WO#${orderId}-B: Loom A2, 600m\n\n(Mock functionality - will show WO details or navigate to W.O. tab)`);
+  // Tab management functions
+  const handleTabChange = (orderId: string, tab: 'work_orders' | 'details') => {
+    setActiveTab(prev => {
+      const newMap = new Map(prev);
+      const currentTab = newMap.get(orderId);
+      
+      // Toggle off if clicking the same tab, otherwise switch to new tab
+      if (currentTab === tab) {
+        newMap.set(orderId, null);
+      } else {
+        newMap.set(orderId, tab);
+      }
+      
+      return newMap;
+    });
   };
   
-  const handleViewDetails = (orderId: string, customerId?: string) => {
-    if (customerId && onShowCustomerProfile) {
-      onShowCustomerProfile(customerId);
-    } else {
-      alert(`📄 Sales Order Details for ${orderId}\n\n(Mock functionality - will show complete order details)`);
-    }
+  const getActiveTab = (orderId: string) => {
+    return activeTab.get(orderId) || null;
   };
   
   // Format currency for display
@@ -210,21 +262,27 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                       className="ds-card-header"
                       title={`${order.id} - ${companyName} - ${order.items}`}
                     >
-                      {order.id} — {companyName}
+                      <span>{order.id} — </span>
+                      <span className={styles.truncateText}>{companyName}</span>
                     </div>
                     
-                    {/* Product Details Line */}
+                    {/* Status Information - Material & Production Status */}
                     <div className="ds-card-status">
-                      Product: {order.items} | Qty: {order.quantity || '1000m'}
+                      <div className={styles.statusLine}>
+                        {order.materialStatus.icon} {order.materialStatus.display}
+                      </div>
+                      <div className={styles.statusLine}>
+                        {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}
+                      </div>
                     </div>
                     
-                    {/* Material Status + Production Status */}
+                    {/* Meta Information - Product Details & Due Date */}
                     <div 
                       className="ds-card-meta"
-                      title={`${order.materialStatus.display} | ${order.productionWorkflowStatus.label} | Due: ${order.deliveryDate}`}
+                      title={`${order.items} | Qty: ${order.quantity} | Due: ${order.deliveryDate}`}
                     >
-                      Material: {order.materialStatus.icon} {order.materialStatus.display} | Due: {order.deliveryDate}<br />
-                      Status: {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}
+                      {order.items} • {order.quantity}<br />
+                      Due: {order.deliveryDate}
                     </div>
 
                     {/* Expand Indicator */}
@@ -233,7 +291,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                     </div>
                   </div>
 
-                  {/* Progressive Disclosure - Detailed Information */}
+                  {/* Expanded Content - Basic Information + Action Buttons */}
                   {isExpanded(order.id) && (
                     <div className="ds-expanded-details">
                       <div className="ds-details-content">
@@ -243,6 +301,21 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                         <p><strong>Order Value:</strong> {formatCurrency(order.totalAmount)} • Delivery: {order.deliveryDate}</p>
                         <p><strong>Material Status:</strong> {order.materialStatus.icon} {order.materialStatus.display}</p>
                         <p><strong>Production Status:</strong> {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}</p>
+                        <p><strong>Order Date:</strong> {order.orderDate}</p>
+                        <p><strong>Payment Status:</strong> {order.paymentStatus === 'advance_received' ? '✅ Advance Received' : 
+                           order.paymentStatus === 'completed' ? '✅ Fully Paid' : 
+                           '🔴 Payment Pending'}</p>
+                        {(order.balancePaymentDue !== undefined || order.paymentStatus === 'completed') && (
+                          <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue || 0)}</p>
+                        )}
+                        
+                        {/* Progress Bar for In-Production Orders */}
+                        {order.productionWorkflowStatus.status === 'in_production' && order.productionProgress > 0 && (
+                          <div className={styles.progressBarContainer}>
+                            <strong>Production Progress:</strong> <ProgressBar percentage={order.productionProgress} size="sm" />
+                            <span className={styles.progressText}>({order.productionProgress}% completed)</span>
+                          </div>
+                        )}
                         
                         {/* Material Details for Shortage */}
                         {order.materialStatus.status === 'shortage' && (
@@ -283,24 +356,34 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                             </button>
                           )}
                           
-                          {/* View Work Orders - For orders in production */}
+                          {/* No more duplicate buttons - replaced by tab system below */}
+                        </div>
+                      </div>
+                      
+                      {/* Tab System for Information Display */}
+                      <div className={styles.tabSystem}>
+                        <div className={styles.tabButtons}>
+                          {/* Work Orders Tab - Only show for in_production orders */}
                           {order.productionWorkflowStatus.status === 'in_production' && (
-                            <button 
-                              className="ds-btn ds-btn-secondary" 
-                              onClick={(e) => { e.stopPropagation(); handleViewWorkOrders(order.id); }}
+                            <button
+                              className={`ds-btn ${getActiveTab(order.id) === 'work_orders' || getActiveTab(order.id) === null ? 'ds-btn-primary' : 'ds-btn-secondary'}`}
+                              onClick={(e) => { e.stopPropagation(); handleTabChange(order.id, 'work_orders'); }}
                             >
-                              📋 View Work Orders ▾
+                              📋 Work Orders
                             </button>
                           )}
-                          
-                          {/* View Details - Always available */}
-                          <button 
-                            className="ds-btn ds-btn-secondary" 
-                            onClick={(e) => { e.stopPropagation(); handleViewDetails(order.id, order.businessProfileId); }}
-                          >
-                            📄 View Details
-                          </button>
                         </div>
+                        
+                        {/* Tab Content */}
+                        {getActiveTab(order.id) === 'work_orders' && order.productionWorkflowStatus.status === 'in_production' && (
+                          <div className={styles.tabContent}>
+                            <WorkOrdersList
+                              salesOrderId={order.id}
+                              isExpanded={true}
+                              onToggle={() => {}} // No longer needed
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

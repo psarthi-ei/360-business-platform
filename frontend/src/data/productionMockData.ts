@@ -262,6 +262,44 @@ export const mockWorkOrders: WorkOrder[] = [
     priority: 'normal',
     createdDate: '2025-10-19',
     qualityGrade: 'A Grade'
+  },
+  // Work Orders for SO-003 (production_started order)
+  {
+    id: 'WO#503-A',
+    salesOrderId: 'SO-003',
+    product: 'Polyester blend fabric - Batch A',
+    customer: 'Baroda Fashion',
+    batchNumber: 'B2025-503A',
+    targetQuantity: '1000m',
+    producedQuantity: '1000m',
+    remainingQuantity: '0m',
+    progress: 100,
+    status: 'completed',
+    assignedMachine: 'LOOM-A1',
+    assignedWorker: 'Vikram Patel',
+    startTime: '06:00 AM',
+    actualCompletion: '02:30 PM',
+    priority: 'normal',
+    createdDate: '2025-10-19',
+    qualityGrade: 'A Grade'
+  },
+  {
+    id: 'WO#503-B',
+    salesOrderId: 'SO-003',
+    product: 'Polyester blend fabric - Batch B',
+    customer: 'Baroda Fashion',
+    batchNumber: 'B2025-503B',
+    targetQuantity: '1000m',
+    producedQuantity: '200m',
+    remainingQuantity: '800m',
+    progress: 20,
+    status: 'in_progress',
+    assignedMachine: 'LOOM-A2',
+    assignedWorker: 'Priya Shah',
+    startTime: '08:00 AM',
+    estimatedCompletion: '05:00 PM',
+    priority: 'normal',
+    createdDate: '2025-10-21'
   }
 ];
 
