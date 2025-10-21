@@ -1,0 +1,111 @@
+/* Production Order Management Screen Styles - Platform Scroll Compatible */
+.productionOrdersScreen {
+  padding: var(--ds-padding-screen);
+  text-align: left !important;
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* Page content wrapper - let content determine height for scrolling */
+.pageContent {
+  padding: 0;
+}
+
+.ordersContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-sm);
+  display: grid;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+/* Empty state styling */
+.emptyState {
+  text-align: center;
+  padding: var(--ds-space-xl);
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-primary);
+}
+
+.emptyState p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+}
+
+/* ===== GLOBAL CARD SYSTEM REFERENCE ===== */
+/* Production Orders card styles now handled by global .ds-card system in index.css */
+/* Card container, hover and expanded states handled globally */
+/* Card content styles handled by global .ds-card-* classes */
+/* Status-based border colors handled by global .ds-card-status-* classes */
+
+/* ===== COMPONENT-SPECIFIC ACTION BUTTONS ===== */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  margin-top: clamp(12px, 3vw, 16px);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
+}
+
+/* Material shortage details styling */
+.materialShortageDetails {
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.materialShortageDetails p {
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-weight: 600;
+  color: var(--ds-text-critical);
+}
+
+.materialShortageDetails ul {
+  margin: 0;
+  padding-left: var(--ds-space-lg);
+  color: var(--ds-text-primary);
+}
+
+.materialShortageDetails li {
+  margin-bottom: var(--ds-space-xs);
+  font-size: var(--font-sm);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .productionOrdersScreen {
+    /* Let Design System handle padding consistently */
+  }
+  
+  .ordersContainer {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;     /* Remove padding on mobile */
+    padding-right: 0;    /* Remove padding on mobile */
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .actionButtons button {
+    width: 100%;
+  }
+}
