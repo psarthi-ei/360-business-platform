@@ -133,7 +133,7 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     email: 'kiran@gujaratgarments.com',
     
     customerStatus: 'customer',
-    becameCustomerDate: 'March 15, 2024',
+    becameCustomerDate: 'March 15, 2025',
     firstPaymentProjectId: 'SO-002',
     
     businessType: 'Garment Manufacturing & Trading',
@@ -178,7 +178,7 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     email: 'rajesh@barodafashion.com',
     
     customerStatus: 'customer',
-    becameCustomerDate: 'April 02, 2024',
+    becameCustomerDate: 'April 02, 2025',
     firstPaymentProjectId: 'SO-004',
     
     businessType: 'Fashion House & Seasonal Collections',
@@ -211,10 +211,10 @@ export const mockBusinessProfiles: BusinessProfile[] = [
 // Customer Feedback Data - Post-delivery experience tracking
 export const mockCustomerFeedback: CustomerFeedback[] = [
   {
-    id: 'CF-2024-001',
+    id: 'CF-2025-001',
     businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-004',
-    feedbackDate: 'May 10, 2024',
+    feedbackDate: 'May 10, 2025',
     overallRating: 5,
     qualityRating: 5,
     deliveryRating: 5,
@@ -225,10 +225,10 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
     improvements: 'Keep up the excellent work. Maybe offer more color variations.'
   },
   {
-    id: 'CF-2024-002',
+    id: 'CF-2025-002',
     businessProfileId: 'bp-gujarat-garments',
     salesOrderId: 'SO-002',
-    feedbackDate: 'April 30, 2024',
+    feedbackDate: 'April 30, 2025',
     overallRating: 4,
     qualityRating: 4,
     deliveryRating: 4,
@@ -239,10 +239,10 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
     improvements: 'Could improve packaging to prevent minor dust accumulation.'
   },
   {
-    id: 'CF-2024-003',
+    id: 'CF-2025-003',
     businessProfileId: 'bp-gujarat-garments',
     salesOrderId: 'SO-001',
-    feedbackDate: 'April 20, 2024',
+    feedbackDate: 'April 20, 2025',
     overallRating: 4,
     qualityRating: 5,
     deliveryRating: 3,
@@ -253,10 +253,10 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
     improvements: 'Please improve delivery timeline accuracy. Quality is excellent, maintain it.'
   },
   {
-    id: 'CF-2024-004',
+    id: 'CF-2025-004',
     businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-003',
-    feedbackDate: 'April 25, 2024',
+    feedbackDate: 'April 25, 2025',
     overallRating: 4,
     qualityRating: 4,
     deliveryRating: 4,
@@ -267,10 +267,10 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
     improvements: 'As a new customer, appreciate the guidance. Looking forward to long-term partnership.'
   },
   {
-    id: 'CF-2024-005',
+    id: 'CF-2025-005',
     businessProfileId: 'bp-baroda-fashion',
     salesOrderId: 'SO-001-PREV',
-    feedbackDate: 'February 15, 2024',
+    feedbackDate: 'February 15, 2025',
     overallRating: 4,
     qualityRating: 4,
     deliveryRating: 5,
@@ -285,20 +285,20 @@ export const mockCustomerFeedback: CustomerFeedback[] = [
 // Loyalty Point Transactions Data - Customer loyalty program tracking
 export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
   {
-    id: 'LT-2024-001',
+    id: 'LT-2025-001',
     businessProfileId: 'bp-baroda-fashion',
-    transactionDate: 'May 10, 2024',
+    transactionDate: 'May 10, 2025',
     type: 'earned',
     points: 150,
     source: 'feedback',
     description: 'Points earned for 5-star feedback on SO-004',
     relatedOrderId: 'SO-004',
-    relatedFeedbackId: 'CF-2024-001'
+    relatedFeedbackId: 'CF-2025-001'
   },
   {
-    id: 'LT-2024-002',
+    id: 'LT-2025-002',
     businessProfileId: 'bp-baroda-fashion',
-    transactionDate: 'April 26, 2024',
+    transactionDate: 'April 26, 2025',
     type: 'earned',
     points: 75,
     source: 'order_completion',
@@ -306,20 +306,20 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     relatedOrderId: 'SO-004'
   },
   {
-    id: 'LT-2024-003',
+    id: 'LT-2025-003',
     businessProfileId: 'bp-gujarat-garments',
-    transactionDate: 'April 30, 2024',
+    transactionDate: 'April 30, 2025',
     type: 'earned',
     points: 110,
     source: 'feedback',
     description: 'Points earned for 4-star feedback on SO-002',
     relatedOrderId: 'SO-002',
-    relatedFeedbackId: 'CF-2024-002'
+    relatedFeedbackId: 'CF-2025-002'
   },
   {
-    id: 'LT-2024-004',
+    id: 'LT-2025-004',
     businessProfileId: 'bp-gujarat-garments',
-    transactionDate: 'April 12, 2024',
+    transactionDate: 'April 12, 2025',
     type: 'earned',
     points: 55,
     source: 'order_completion',
@@ -327,31 +327,31 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     relatedOrderId: 'SO-002'
   },
   {
-    id: 'LT-2024-005',
+    id: 'LT-2025-005',
     businessProfileId: 'bp-gujarat-garments',
-    transactionDate: 'April 20, 2024',
+    transactionDate: 'April 20, 2025',
     type: 'earned',
     points: 100,
     source: 'feedback',
     description: 'Points earned for feedback on SO-001 (export quality)',
     relatedOrderId: 'SO-001',
-    relatedFeedbackId: 'CF-2024-003'
+    relatedFeedbackId: 'CF-2025-003'
   },
   {
-    id: 'LT-2024-006',
+    id: 'LT-2025-006',
     businessProfileId: 'bp-baroda-fashion',
-    transactionDate: 'April 25, 2024',
+    transactionDate: 'April 25, 2025',
     type: 'earned',
     points: 85,
     source: 'feedback',
     description: 'Welcome bonus + feedback points for first order SO-003',
     relatedOrderId: 'SO-003',
-    relatedFeedbackId: 'CF-2024-004'
+    relatedFeedbackId: 'CF-2025-004'
   },
   {
-    id: 'LT-2024-007',
+    id: 'LT-2025-007',
     businessProfileId: 'bp-baroda-fashion',
-    transactionDate: 'March 15, 2024',
+    transactionDate: 'March 15, 2025',
     type: 'redeemed',
     points: 200,
     source: 'discount_redemption',
@@ -359,28 +359,28 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     relatedOrderId: 'SO-004'
   },
   {
-    id: 'LT-2024-008',
+    id: 'LT-2025-008',
     businessProfileId: 'bp-baroda-fashion',
-    transactionDate: 'February 15, 2024',
+    transactionDate: 'February 15, 2025',
     type: 'earned',
     points: 120,
     source: 'feedback',
     description: 'Points earned for previous order feedback',
-    relatedFeedbackId: 'CF-2024-005'
+    relatedFeedbackId: 'CF-2025-005'
   },
   {
-    id: 'LT-2024-009',
+    id: 'LT-2025-009',
     businessProfileId: 'bp-gujarat-garments',
-    transactionDate: 'January 15, 2024',
+    transactionDate: 'January 15, 2025',
     type: 'earned',
     points: 50,
     source: 'anniversary',
     description: 'Customer anniversary bonus - 2 years partnership',
   },
   {
-    id: 'LT-2024-010',
+    id: 'LT-2025-010',
     businessProfileId: 'bp-gujarat-garments',
-    transactionDate: 'March 1, 2024',
+    transactionDate: 'March 1, 2025',
     type: 'earned',
     points: 300,
     source: 'referral',

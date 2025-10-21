@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { ActionParams } from '../../services/nlp/types';
 import { mockMaterialRequirements, mockPurchaseRequests, mockPurchaseOrders } from '../../data/procurementMockData';
+import { checkMaterialAvailability } from '../../data/materialHelpers';
 import styles from './Procurement.module.css';
 import MaterialRequirements from './MaterialRequirements';
 import PurchaseRequests from './PurchaseRequests';
@@ -15,12 +16,18 @@ interface ProcurementProps {
 
 type ProcurementTabType = 'mr' | 'prs' | 'pos' | 'grns';
 
-// Dynamic count calculator functions
+// Dynamic count calculator functions using new material availability system
 const calculateMRCounts = () => ({
   all: mockMaterialRequirements.length,
-  shortage: mockMaterialRequirements.filter(mr => mr.status === 'shortage').length,
-  available: mockMaterialRequirements.filter(mr => mr.status === 'available').length,
-  ordered: mockMaterialRequirements.filter(mr => mr.status === 'ordered').length
+  shortage: mockMaterialRequirements.filter(mr => {
+    const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
+    return availability.status === 'shortage' || availability.status === 'partial';
+  }).length,
+  available: mockMaterialRequirements.filter(mr => {
+    const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
+    return availability.status === 'available';
+  }).length,
+  ordered: 0 // This status doesn't exist in new system - would need to check purchase orders instead
 });
 
 const calculatePRCounts = () => ({
@@ -132,9 +139,15 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         case 'mr': {
           const mrCounts = {
             all: mockMaterialRequirements.length,
-            shortage: mockMaterialRequirements.filter(mr => mr.status === 'shortage').length,
-            available: mockMaterialRequirements.filter(mr => mr.status === 'available').length,
-            ordered: mockMaterialRequirements.filter(mr => mr.status === 'ordered').length
+            shortage: mockMaterialRequirements.filter(mr => {
+              const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
+              return availability.status === 'shortage' || availability.status === 'partial';
+            }).length,
+            available: mockMaterialRequirements.filter(mr => {
+              const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
+              return availability.status === 'available';
+            }).length,
+            ordered: 0 // This status doesn't exist in new system
           };
           return [
             { value: 'all', label: 'All Materials', count: mrCounts.all },

@@ -135,12 +135,6 @@ export interface SalesOrder {
 
 // Customer data moved to customerMockData.ts - import from there for customer-related functionality
 
-export interface Communication {
-  date: string;
-  time: string;
-  type: string;
-  message: string;
-}
 
 
 export interface BankDetails {
@@ -163,83 +157,10 @@ export interface ProformaItem {
 
 // Duplicate ProformaInvoice interface removed - using the one defined above
 
-export interface FabricSpecification {
-  type: string;
-  category: 'Cotton' | 'Synthetic' | 'Silk' | 'Traditional' | 'Blended';
-  gsm: number;
-  width: string;
-  composition: string;
-  finish: string;
-  pricePerYard: number;
-  minimumOrder: number;
-  leadTime: string;
-}
 
-// Work Order System - Module 5: Production authorization from sales orders
-export interface WorkOrder {
-  id: string;
-  salesOrderId: string;
-  businessProfileId: string; // Updated to use unified businessProfileId
-  fabricType: string;
-  quantity: number;
-  unit: string;
-  startDate: string;
-  targetDate: string;
-  status: 'pending' | 'materials_allocated' | 'in_progress' | 'completed';
-  statusMessage: string;
-  materialRequirements: string[];
-  priority: 'low' | 'medium' | 'high';
-  assignedOperator: string;
-  notes: string;
-}
 
-// Vendor/Supplier System - Module 6: Raw material procurement
-export interface Vendor {
-  id: string;
-  name: string;
-  contactPerson: string;
-  phone: string;
-  email: string;
-  location: string;
-  gstNumber: string;
-  materials: string[];
-  paymentTerms: string;
-  creditLimit: number;
-  rating: number; // 1-5 stars
-  isActive: boolean;
-  notes: string;
-}
 
-// Raw Material Inventory - Module 7: Three-tier inventory management
-export interface RawMaterial {
-  id: string;
-  name: string;
-  category: 'Yarn' | 'Dye' | 'Chemical' | 'Packaging';
-  currentStock: number;
-  unit: string;
-  reorderLevel: number;
-  maxStockLevel: number;
-  pricePerUnit: number;
-  vendorId: string;
-  lastUpdated: string;
-  location: string;
-}
 
-// Production Records - Module 8: Daily production tracking with quality
-export interface ProductionRecord {
-  id: string;
-  workOrderId: string;
-  date: string;
-  shift: 'Morning' | 'Evening' | 'Night';
-  operator: string;
-  machine: string;
-  quantityProduced: number;
-  qualityGradeA: number;
-  qualityGradeB: number;
-  rejectedQuantity: number;
-  notes: string;
-  efficiency: number; // percentage
-}
 
 // Duplicate AdvancePayment interface removed - using the one defined earlier
 
@@ -360,10 +281,10 @@ export const mockLeads: Lead[] = [
     budget: '₹8-10 lakhs',
     timeline: '30 days',
     priority: 'hot',
-    lastContact: 'Converted to customer on March 15, 2024',
+    lastContact: 'Converted to customer on March 15, 2025',
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'March 15, 2024'
+    convertedToCustomerDate: 'March 15, 2025'
   },
   {
     id: 'baroda-004',
@@ -381,10 +302,10 @@ export const mockLeads: Lead[] = [
     budget: '₹6-8 lakhs',
     timeline: '20 days',
     priority: 'warm',
-    lastContact: 'Converted to customer on April 02, 2024',
+    lastContact: 'Converted to customer on April 02, 2025',
     notes: 'Excellent payment behavior - completed first order successfully.',
     conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'April 02, 2024'
+    convertedToCustomerDate: 'April 02, 2025'
   },
   {
     id: 'lead-003',
@@ -428,11 +349,11 @@ export const mockLeads: Lead[] = [
     inquiry: 'Premium cotton blend - 8,000 yards',
     budget: '₹15-18 lakhs',
     timeline: '25 days',
-    lastContact: 'Converted to customer on March 31, 2024',
+    lastContact: 'Converted to customer on March 31, 2025',
     priority: 'hot',
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'March 31, 2024',
+    convertedToCustomerDate: 'March 31, 2025',
     businessProfileId: 'bp-gujarat-garments'
   }
 ];
@@ -444,8 +365,8 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-001',
     companyName: 'Mumbai Cotton Mills',
     location: 'Mumbai',
-    quoteDate: 'March 15, 2024',
-    validUntil: 'March 30, 2024',
+    quoteDate: 'March 15, 2025',
+    validUntil: 'March 30, 2025',
     items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard',
     totalAmount: 1480000,
     status: 'under_review',
@@ -458,8 +379,8 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-002',
     companyName: 'Surat Fashion House',
     location: 'Surat',
-    quoteDate: 'March 18, 2024',
-    validUntil: 'April 5, 2024',
+    quoteDate: 'March 18, 2025',
+    validUntil: 'April 5, 2025',
     items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
     totalAmount: 1320000,
     status: 'proforma_sent',
@@ -474,13 +395,13 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-gujarat-garments',
     companyName: 'Gujarat Garments',
     location: 'Surat',
-    quoteDate: 'March 10, 2024',
-    validUntil: 'March 25, 2024',
+    quoteDate: 'March 10, 2025',
+    validUntil: 'March 25, 2025',
     items: 'Export quality cotton fabric - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
     status: 'order_created',
     statusMessage: 'Order created successfully - Quote completed',
-    approvalDate: 'March 12, 2024',
+    approvalDate: 'March 12, 2025',
     proformaInvoiceId: 'PI-GJ-002',
     advancePaymentRequired: 487500, // 50% advance
     advancePaymentStatus: 'received' // This triggered customer creation
@@ -491,13 +412,13 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-baroda-fashion',
     companyName: 'Baroda Fashion House',
     location: 'Vadodara',
-    quoteDate: 'March 28, 2024',
-    validUntil: 'April 15, 2024',
+    quoteDate: 'March 28, 2025',
+    validUntil: 'April 15, 2025',
     items: 'Premium fashion fabric - 3,500 yards @ ₹210/yard',
     totalAmount: 735000,
     status: 'approved',
     statusMessage: 'Quote approved - Advance payment received, customer created',
-    approvalDate: 'March 30, 2024',
+    approvalDate: 'March 30, 2025',
     proformaInvoiceId: 'PI-BR-004',
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received' // This triggered customer creation
@@ -508,8 +429,8 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-gujarat-garments',
     companyName: 'Gujarat Garments',
     location: 'Surat',
-    quoteDate: 'March 10, 2024',
-    validUntil: 'March 25, 2024',
+    quoteDate: 'March 10, 2025',
+    validUntil: 'March 25, 2025',
     items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
     status: 'approved',
@@ -523,8 +444,8 @@ export const mockQuotes: Quote[] = [
     leadId: 'gujarat-002',
     companyName: 'Gujarat Garments',
     location: 'Surat',
-    quoteDate: 'March 12, 2024',
-    validUntil: 'March 30, 2024',
+    quoteDate: 'March 12, 2025',
+    validUntil: 'March 30, 2025',
     items: 'Budget fabric option - 6,000 yards @ ₹165/yard',
     totalAmount: 990000,
     status: 'rejected',
@@ -538,8 +459,8 @@ export const mockQuotes: Quote[] = [
     leadId: 'baroda-003',
     companyName: 'Baroda Fashion House',
     location: 'Vadodara',
-    quoteDate: 'February 20, 2024',
-    validUntil: 'March 5, 2024',
+    quoteDate: 'February 20, 2025',
+    validUntil: 'March 5, 2025',
     items: 'Seasonal fabric collection - 3,000 yards @ ₹220/yard',
     totalAmount: 660000,
     status: 'expired',
@@ -553,8 +474,8 @@ export const mockQuotes: Quote[] = [
     leadId: 'baroda-003',
     companyName: 'Baroda Fashion House',
     location: 'Vadodara',
-    quoteDate: 'March 8, 2024',
-    validUntil: 'March 25, 2024',
+    quoteDate: 'March 8, 2025',
+    validUntil: 'March 25, 2025',
     items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
     totalAmount: 735000,
     status: 'approved',
@@ -566,62 +487,106 @@ export const mockQuotes: Quote[] = [
 ];
 
 export const mockSalesOrders: SalesOrder[] = [
-  // SO-002: Created when QT-002 advance payment was received, triggering customer conversion
+  // SO-001: Premium customer with soft reservation (ready for production)
+  {
+    id: 'SO-001',
+    quoteId: 'QT-001',
+    businessProfileId: 'bp-gujarat-garments',
+    advancePaymentId: 'ADV-QT-001-001',
+    orderDate: 'October 20, 2025',
+    deliveryDate: 'November 15, 2025',
+    items: 'Premium Cotton Fabric - 1,500 meters @ ₹185/meter',
+    totalAmount: 277500,
+    status: 'order_confirmed' as const,
+    statusMessage: 'Advance payment received - Ready for production planning',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Materials reserved - Ready to start',
+    balancePaymentDue: 194250
+  },
+  // SO-002: Order with mixed materials (some available, some shortage)
   {
     id: 'SO-002',
     quoteId: 'QT-GUJ-001',
     businessProfileId: 'bp-gujarat-garments',
     advancePaymentId: 'ADV-QT-002-001',
-    orderDate: 'March 15, 2024',
-    deliveryDate: 'April 10, 2024',
-    items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
-    totalAmount: 975000,
-    status: 'ready_to_ship' as const,
-    statusMessage: 'Production completed - Ready for dispatch to customer',
-    paymentStatus: 'partial' as const,
-    productionStatus: 'In production - 60% completed',
-    balancePaymentDue: 487500
+    orderDate: 'October 20, 2025',
+    deliveryDate: 'November 20, 2025',
+    items: 'Mixed fabric for casual wear - 2,500 meters @ ₹195/meter',
+    totalAmount: 487500,
+    status: 'pending_materials' as const,
+    statusMessage: 'Material shortage - Procurement in progress',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Waiting for material availability',
+    balancePaymentDue: 341250
   },
-  // SO-004: Created when QT-004 advance payment was received, triggering customer conversion
+  // SO-003: Order in production (hard reservation)
+  {
+    id: 'SO-003',
+    quoteId: 'QT-003',
+    businessProfileId: 'bp-baroda-fashion',
+    advancePaymentId: 'ADV-QT-003-001',
+    orderDate: 'October 19, 2025',
+    deliveryDate: 'November 10, 2025',
+    items: 'Polyester blend fabric - 2,000 meters @ ₹165/meter',
+    totalAmount: 330000,
+    status: 'production_started' as const,
+    statusMessage: 'Production in progress - 60% completed',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Work Order WO-2025-003A active',
+    balancePaymentDue: 231000
+  },
+  // SO-004: Completed order
   {
     id: 'SO-004',
     quoteId: 'QT-004',
     businessProfileId: 'bp-baroda-fashion',
     advancePaymentId: 'ADV-QT-004-001',
-    orderDate: 'March 10, 2024',
-    deliveryDate: 'April 5, 2024',
-    items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
-    totalAmount: 735000,
+    orderDate: 'October 18, 2025',
+    deliveryDate: 'November 5, 2025',
+    items: 'Seasonal collection fabric - 1,800 meters @ ₹210/meter',
+    totalAmount: 378000,
     status: 'completed' as const,
-    statusMessage: 'Auto-created after advance payment - Order completed successfully',
+    statusMessage: 'Order completed and delivered successfully',
     paymentStatus: 'completed' as const,
     productionStatus: 'Completed and delivered',
     balancePaymentDue: 0
+  },
+  // SO-005: Order with soft reservation (competing for materials)
+  {
+    id: 'SO-005',
+    quoteId: 'QT-005',
+    businessProfileId: 'bp-gujarat-garments',
+    advancePaymentId: 'ADV-QT-005-001',
+    orderDate: 'October 21, 2025',
+    deliveryDate: 'November 25, 2025',
+    items: 'Cotton fabric bulk order - 3,000 meters @ ₹175/meter',
+    totalAmount: 525000,
+    status: 'order_confirmed' as const,
+    statusMessage: 'Advance payment received - Ready for production',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Ready for material allocation',
+    balancePaymentDue: 367500
+  },
+  // SO-006: Order that would show shortage due to material conflicts
+  {
+    id: 'SO-006',
+    quoteId: 'QT-006',
+    businessProfileId: 'bp-baroda-fashion',
+    advancePaymentId: 'ADV-QT-006-001',
+    orderDate: 'October 21, 2025',
+    deliveryDate: 'November 30, 2025',
+    items: 'Cotton yarn fabric - 2,200 meters @ ₹190/meter',
+    totalAmount: 418000,
+    status: 'order_confirmed' as const,
+    statusMessage: 'Advance payment received - Checking material availability',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Pending material availability check',
+    balancePaymentDue: 292600
   }
 ];
 
 // Customer data moved to customerMockData.ts
 
-export const mockCommunications: Communication[] = [
-  {
-    date: 'March 22, 2024',
-    time: '2:30 PM',
-    type: '📱 WhatsApp Message',
-    message: 'Payment reminder sent: "Dear Rajesh ji, your advance payment of ₹9,25,000 for order SO-001 is pending. Please complete payment to start production. Bank details: HDFC Bank A/c: 1234567890"'
-  },
-  {
-    date: 'March 20, 2024',
-    time: '11:00 AM',
-    type: '📞 Phone Call',
-    message: 'Order confirmation call: Discussed delivery timeline, payment terms, and quality specifications. Customer confirmed order and requested fabric sample for final approval.'
-  },
-  {
-    date: 'March 15, 2024',
-    time: '4:15 PM',
-    type: '💬 WhatsApp Business',
-    message: 'Quote sent and approved: "Thank you for the quick quote! The quality looks perfect. Please convert this to order. We\'ll arrange payment within 2 days."'
-  }
-];
 
 // Standard Bank Details for Proforma Invoices
 export const companyBankDetails: BankDetails = {
@@ -635,7 +600,7 @@ export const companyBankDetails: BankDetails = {
 // Proforma Invoice Data for Advance Payment Workflows
 export const mockProformaInvoices: ProformaInvoice[] = [
   {
-    id: 'PI-2024-001',
+    id: 'PI-2025-001',
     quoteId: 'QT-001',
     leadId: 'L-001',
     businessProfileId: 'bp-gujarat-garments',
@@ -650,7 +615,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     paymentInstructions: 'Please pay 50% advance (₹9,71,250) within 15 days to confirm order'
   },
   {
-    id: 'PI-2024-002',
+    id: 'PI-2025-002',
     quoteId: 'QT-004',
     leadId: 'L-004', 
     businessProfileId: 'bp-baroda-fashion',
@@ -665,7 +630,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     paymentInstructions: '30% advance payment (₹2,59,875) required for new customer'
   },
   {
-    id: 'PI-2024-003',
+    id: 'PI-2025-003',
     quoteId: 'QT-005',
     leadId: 'L-005',
     businessProfileId: 'bp-gujarat-garments',
@@ -680,7 +645,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee'
   },
   {
-    id: 'PI-2024-004',
+    id: 'PI-2025-004',
     quoteId: 'QT-003',
     leadId: 'L-003',
     businessProfileId: 'bp-baroda-fashion',
@@ -695,7 +660,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     paymentInstructions: '30% advance payment (₹2,04,750) required - payment overdue, order may be cancelled'
   },
   {
-    id: 'PI-2024-005',
+    id: 'PI-2025-005',
     quoteId: 'QT-002',
     leadId: 'L-002',
     businessProfileId: 'bp-gujarat-garments',
@@ -712,85 +677,6 @@ export const mockProformaInvoices: ProformaInvoice[] = [
 ];
 
 // Realistic Gujarat Textile Fabric Specifications
-export const mockFabricSpecifications: FabricSpecification[] = [
-  {
-    type: 'High-Grade Cotton',
-    category: 'Cotton',
-    gsm: 180,
-    width: '44 inches',
-    composition: '100% Cotton',
-    finish: 'Mercerized',
-    pricePerYard: 185,
-    minimumOrder: 1000,
-    leadTime: '15-20 days'
-  },
-  {
-    type: 'Art Silk Premium',
-    category: 'Synthetic',
-    gsm: 120,
-    width: '44 inches',
-    composition: '100% Viscose',
-    finish: 'Lustrous',
-    pricePerYard: 225,
-    minimumOrder: 500,
-    leadTime: '12-15 days'
-  },
-  {
-    type: 'Traditional Bandhani Base',
-    category: 'Traditional',
-    gsm: 140,
-    width: '36 inches',
-    composition: '100% Cotton',
-    finish: 'Soft finish',
-    pricePerYard: 165,
-    minimumOrder: 200,
-    leadTime: '20-25 days'
-  },
-  {
-    type: 'Polyester Georgette',
-    category: 'Synthetic',
-    gsm: 60,
-    width: '44 inches',
-    composition: '100% Polyester',
-    finish: 'Crinkle texture',
-    pricePerYard: 145,
-    minimumOrder: 300,
-    leadTime: '10-12 days'
-  },
-  {
-    type: 'Canvas Industrial',
-    category: 'Cotton',
-    gsm: 220,
-    width: '58 inches',
-    composition: '100% Cotton',
-    finish: 'Heavy duty',
-    pricePerYard: 165,
-    minimumOrder: 2000,
-    leadTime: '18-22 days'
-  },
-  {
-    type: 'Kutch Handloom',
-    category: 'Traditional',
-    gsm: 160,
-    width: '36 inches',
-    composition: '100% Cotton',
-    finish: 'Handwoven texture',
-    pricePerYard: 280,
-    minimumOrder: 100,
-    leadTime: '25-30 days'
-  },
-  {
-    type: 'Export Cotton Premium',
-    category: 'Cotton',
-    gsm: 150,
-    width: '44 inches',
-    composition: '100% Organic Cotton',
-    finish: 'Export grade',
-    pricePerYard: 220,
-    minimumOrder: 5000,
-    leadTime: '20-25 days'
-  }
-];
 
 // Helper functions
 export const formatCurrency = (amount: number): string => {
@@ -840,18 +726,6 @@ export const getProformaInvoiceByQuoteId = (quoteId: string): ProformaInvoice | 
 
 // Customer loyalty functions moved to customerMockData.ts
 
-// Fabric Specification Functions
-export const getFabricSpecByType = (type: string): FabricSpecification | undefined => {
-  return mockFabricSpecifications.find(spec => spec.type === type);
-};
-
-export const getFabricsByCategory = (category: 'Cotton' | 'Synthetic' | 'Silk' | 'Traditional' | 'Blended'): FabricSpecification[] => {
-  return mockFabricSpecifications.filter(spec => spec.category === category);
-};
-
-export const getFabricsByGSMRange = (minGSM: number, maxGSM: number): FabricSpecification[] => {
-  return mockFabricSpecifications.filter(spec => spec.gsm >= minGSM && spec.gsm <= maxGSM);
-};
 
 // Business analytics functions that depend on customer data moved to customerMockData.ts
 
@@ -873,393 +747,70 @@ export const calculateTotalWithGST = (amount: number, gstRate: number = 5): numb
 // Loyalty tier calculation functions moved to customerMockData.ts
 
 // Work Orders Data - Production authorization from sales orders
-export const mockWorkOrders: WorkOrder[] = [
-  {
-    id: 'WO-2024-001',
-    salesOrderId: 'SO-001',
-    businessProfileId: 'bp-gujarat-garments',
-    fabricType: 'High-grade Export Cotton Fabric',
-    quantity: 10000,
-    unit: 'yards',
-    startDate: 'March 20, 2024',
-    targetDate: 'April 15, 2024',
-    status: 'in_progress',
-    statusMessage: 'Production started - 60% completed',
-    materialRequirements: ['Cotton Yarn 40s - 1200kg', 'Reactive Blue Dye - 25kg', 'Finishing Chemicals - 15kg'],
-    priority: 'high',
-    assignedOperator: 'Ramesh Patel',
-    notes: 'Export quality - zero defect tolerance. Customer sample approved.'
-  },
-  {
-    id: 'WO-2024-002',
-    salesOrderId: 'SO-002',
-    businessProfileId: 'bp-gujarat-garments',
-    fabricType: 'Standard Cotton Fabric',
-    quantity: 5000,
-    unit: 'yards',
-    startDate: 'March 25, 2024',
-    targetDate: 'April 10, 2024',
-    status: 'materials_allocated',
-    statusMessage: 'Materials allocated - ready to start production',
-    materialRequirements: ['Cotton Yarn 30s - 600kg', 'Direct Red Dye - 12kg', 'Softener - 8kg'],
-    priority: 'medium',
-    assignedOperator: 'Suresh Shah',
-    notes: 'Standard quality for domestic market. Regular customer.'
-  },
-  {
-    id: 'WO-2024-003',
-    salesOrderId: 'SO-003',
-    businessProfileId: 'bp-baroda-fashion',
-    fabricType: 'Industrial Cotton Canvas',
-    quantity: 5000,
-    unit: 'yards',
-    startDate: 'March 30, 2024',
-    targetDate: 'April 20, 2024',
-    status: 'pending',
-    statusMessage: 'Waiting for advance payment confirmation',
-    materialRequirements: ['Cotton Yarn 20s - 800kg', 'Khaki Dye - 18kg', 'Starch - 20kg'],
-    priority: 'medium',
-    assignedOperator: 'Dinesh Kumar',
-    notes: 'New customer - first order. Quality inspection welcome.'
-  },
-  {
-    id: 'WO-2024-004',
-    salesOrderId: 'SO-004',
-    businessProfileId: 'bp-baroda-fashion',
-    fabricType: 'Premium Cotton Blend',
-    quantity: 8000,
-    unit: 'yards',
-    startDate: 'April 1, 2024',
-    targetDate: 'April 25, 2024',
-    status: 'completed',
-    statusMessage: 'Production completed - quality approved',
-    materialRequirements: ['Cotton Yarn 40s - 700kg', 'Polyester Yarn - 200kg', 'Navy Blue Dye - 22kg'],
-    priority: 'high',
-    assignedOperator: 'Mahesh Desai',
-    notes: 'Premium customer - repeat order. Customer satisfied with quality.'
-  },
-  {
-    id: 'WO-2024-005',
-    salesOrderId: 'SO-005',
-    businessProfileId: 'bp-gujarat-garments',
-    fabricType: 'Cotton-Silk Blend Fabric',
-    quantity: 3000,
-    unit: 'yards',
-    startDate: 'April 5, 2024',
-    targetDate: 'April 30, 2024',
-    status: 'pending',
-    statusMessage: 'Quote approved - awaiting work order confirmation',
-    materialRequirements: ['Cotton Yarn 60s - 300kg', 'Silk Yarn - 100kg', 'Golden Yellow Dye - 10kg'],
-    priority: 'medium',
-    assignedOperator: 'Kiran Joshi',
-    notes: 'Luxury blend fabric for premium market segment.'
-  }
-];
 
 // Vendors Data - Gujarat textile suppliers for raw material procurement
-export const mockVendors: Vendor[] = [
-  {
-    id: 'vendor-001',
-    name: 'Surat Yarn Suppliers',
-    contactPerson: 'Prakash Patel',
-    phone: '+91 98765 12345',
-    email: 'prakash@suratyarn.com',
-    location: 'Surat, Gujarat',
-    gstNumber: '24ABCDE1234F1Z5',
-    materials: ['Cotton Yarn 20s', 'Cotton Yarn 30s', 'Cotton Yarn 40s', 'Cotton Yarn 60s'],
-    paymentTerms: '30 days credit',
-    creditLimit: 500000,
-    rating: 4.5,
-    isActive: true,
-    notes: 'Reliable supplier since 2020. Consistent quality and timely delivery.'
-  },
-  {
-    id: 'vendor-002',
-    name: 'Gujarat Chemical Industries',
-    contactPerson: 'Nilesh Shah',
-    phone: '+91 98765 67890',
-    email: 'nilesh@gujaratchem.com',
-    location: 'Ahmedabad, Gujarat',
-    gstNumber: '24FGHIJ5678K2Z5',
-    materials: ['Reactive Blue Dye', 'Direct Red Dye', 'Khaki Dye', 'Navy Blue Dye', 'Golden Yellow Dye'],
-    paymentTerms: '15 days credit',
-    creditLimit: 300000,
-    rating: 4.2,
-    isActive: true,
-    notes: 'Quality dye manufacturer. Good for export quality requirements.'
-  },
-  {
-    id: 'vendor-003',
-    name: 'Vadodara Chemicals Ltd',
-    contactPerson: 'Ravi Kumar',
-    phone: '+91 98765 54321',
-    email: 'ravi@vadodarachem.com',
-    location: 'Vadodara, Gujarat',
-    gstNumber: '24LMNOP9012Q3Z5',
-    materials: ['Finishing Chemicals', 'Softener', 'Starch', 'Bleaching Powder', 'Caustic Soda'],
-    paymentTerms: '20 days credit',
-    creditLimit: 200000,
-    rating: 4.0,
-    isActive: true,
-    notes: 'Finishing chemicals specialist. Competitive pricing for bulk orders.'
-  },
-  {
-    id: 'vendor-004',
-    name: 'Rajkot Packaging Solutions',
-    contactPerson: 'Amit Joshi',
-    phone: '+91 98765 98765',
-    email: 'amit@rajkotpack.com',
-    location: 'Rajkot, Gujarat',
-    gstNumber: '24RSTUV3456W4Z5',
-    materials: ['Packaging Bags', 'Labels', 'Tags', 'Cartons', 'Plastic Covers'],
-    paymentTerms: '7 days credit',
-    creditLimit: 100000,
-    rating: 4.3,
-    isActive: true,
-    notes: 'Quality packaging materials. Quick turnaround for urgent requirements.'
-  }
-];
 
-// Raw Material Inventory Data - Three-tier inventory management
-export const mockRawMaterials: RawMaterial[] = [
-  {
-    id: 'rm-001',
-    name: 'Cotton Yarn 20s',
-    category: 'Yarn',
-    currentStock: 2500,
-    unit: 'kg',
-    reorderLevel: 500,
-    maxStockLevel: 5000,
-    pricePerUnit: 280,
-    vendorId: 'vendor-001',
-    lastUpdated: 'April 8, 2024',
-    location: 'Warehouse A - Section 1'
-  },
-  {
-    id: 'rm-002',
-    name: 'Cotton Yarn 30s',
-    category: 'Yarn',
-    currentStock: 1800,
-    unit: 'kg',
-    reorderLevel: 400,
-    maxStockLevel: 3000,
-    pricePerUnit: 320,
-    vendorId: 'vendor-001',
-    lastUpdated: 'April 8, 2024',
-    location: 'Warehouse A - Section 2'
-  },
-  {
-    id: 'rm-003',
-    name: 'Cotton Yarn 40s',
-    category: 'Yarn',
-    currentStock: 950,
-    unit: 'kg',
-    reorderLevel: 300,
-    maxStockLevel: 2000,
-    pricePerUnit: 380,
-    vendorId: 'vendor-001',
-    lastUpdated: 'April 8, 2024',
-    location: 'Warehouse A - Section 3'
-  },
-  {
-    id: 'rm-004',
-    name: 'Reactive Blue Dye',
-    category: 'Dye',
-    currentStock: 150,
-    unit: 'kg',
-    reorderLevel: 30,
-    maxStockLevel: 300,
-    pricePerUnit: 850,
-    vendorId: 'vendor-002',
-    lastUpdated: 'April 7, 2024',
-    location: 'Chemical Storage - Section A'
-  },
-  {
-    id: 'rm-005',
-    name: 'Direct Red Dye',
-    category: 'Dye',
-    currentStock: 120,
-    unit: 'kg',
-    reorderLevel: 25,
-    maxStockLevel: 250,
-    pricePerUnit: 780,
-    vendorId: 'vendor-002',
-    lastUpdated: 'April 7, 2024',
-    location: 'Chemical Storage - Section B'
-  },
-  {
-    id: 'rm-006',
-    name: 'Finishing Chemicals',
-    category: 'Chemical',
-    currentStock: 200,
-    unit: 'kg',
-    reorderLevel: 50,
-    maxStockLevel: 400,
-    pricePerUnit: 450,
-    vendorId: 'vendor-003',
-    lastUpdated: 'April 6, 2024',
-    location: 'Chemical Storage - Section C'
-  },
-  {
-    id: 'rm-007',
-    name: 'Packaging Bags',
-    category: 'Packaging',
-    currentStock: 5000,
-    unit: 'pieces',
-    reorderLevel: 1000,
-    maxStockLevel: 10000,
-    pricePerUnit: 12,
-    vendorId: 'vendor-004',
-    lastUpdated: 'April 5, 2024',
-    location: 'Packaging Store'
-  },
-  {
-    id: 'rm-008',
-    name: 'Cotton Yarn 60s',
-    category: 'Yarn',
-    currentStock: 500,
-    unit: 'kg',
-    reorderLevel: 100,
-    maxStockLevel: 1000,
-    pricePerUnit: 450,
-    vendorId: 'vendor-001',
-    lastUpdated: 'April 8, 2024',
-    location: 'Warehouse A - Section 4'
-  }
-];
 
 // Production Records Data - Daily production tracking with quality
-export const mockProductionRecords: ProductionRecord[] = [
-  {
-    id: 'PR-2024-001',
-    workOrderId: 'WO-2024-001',
-    date: 'April 8, 2024',
-    shift: 'Morning',
-    operator: 'Ramesh Patel',
-    machine: 'Loom-A1',
-    quantityProduced: 800,
-    qualityGradeA: 720,
-    qualityGradeB: 70,
-    rejectedQuantity: 10,
-    notes: 'Good production day. Minor thread breaks resolved quickly.',
-    efficiency: 90
-  },
-  {
-    id: 'PR-2024-002',
-    workOrderId: 'WO-2024-001',
-    date: 'April 7, 2024',
-    shift: 'Morning',
-    operator: 'Ramesh Patel',
-    machine: 'Loom-A1',
-    quantityProduced: 750,
-    qualityGradeA: 650,
-    qualityGradeB: 85,
-    rejectedQuantity: 15,
-    notes: 'Some dye variation in morning batch. Adjusted recipe.',
-    efficiency: 85
-  },
-  {
-    id: 'PR-2024-003',
-    workOrderId: 'WO-2024-002',
-    date: 'April 6, 2024',
-    shift: 'Evening',
-    operator: 'Suresh Shah',
-    machine: 'Loom-B2',
-    quantityProduced: 600,
-    qualityGradeA: 570,
-    qualityGradeB: 25,
-    rejectedQuantity: 5,
-    notes: 'Smooth production. Standard domestic quality achieved.',
-    efficiency: 95
-  },
-  {
-    id: 'PR-2024-004',
-    workOrderId: 'WO-2024-004',
-    date: 'April 5, 2024',
-    shift: 'Morning',
-    operator: 'Mahesh Desai',
-    machine: 'Loom-C3',
-    quantityProduced: 900,
-    qualityGradeA: 855,
-    qualityGradeB: 40,
-    rejectedQuantity: 5,
-    notes: 'Excellent production. Premium customer quality standards met.',
-    efficiency: 92
-  },
-  {
-    id: 'PR-2024-005',
-    workOrderId: 'WO-2024-004',
-    date: 'April 4, 2024',
-    shift: 'Evening',
-    operator: 'Mahesh Desai',
-    machine: 'Loom-C3',
-    quantityProduced: 850,
-    qualityGradeA: 800,
-    qualityGradeB: 45,
-    rejectedQuantity: 5,
-    notes: 'Consistent quality maintained. Customer sample approved.',
-    efficiency: 88
-  }
-];
 
 // Advance Payment Records Data - Actual payments against proforma invoices
 export const mockAdvancePayments: AdvancePayment[] = [
   {
-    id: 'AP-2024-001',
-    proformaInvoiceId: 'PI-2024-001',
+    id: 'AP-2025-001',
+    proformaInvoiceId: 'PI-2025-001',
     quoteId: 'QT-001',
     leadId: 'L-001',
     businessProfileId: 'bp-gujarat-garments',
     amount: 971250,
-    dueDate: 'April 2, 2024',
+    dueDate: 'April 2, 2025',
     status: 'received',
-    receivedDate: 'March 19, 2024',
+    receivedDate: 'March 19, 2025',
     receivedAmount: 971250,
     bankReference: 'HDFC240319RT12345',
     paymentMethod: 'RTGS'
   },
   {
-    id: 'AP-2024-002',
-    proformaInvoiceId: 'PI-2024-002',
+    id: 'AP-2025-002',
+    proformaInvoiceId: 'PI-2025-002',
     quoteId: 'QT-004',
     leadId: 'L-004',
     businessProfileId: 'bp-baroda-fashion',
     amount: 259875,
-    dueDate: 'April 10, 2024',
+    dueDate: 'April 10, 2025',
     status: 'received',
-    receivedDate: 'March 28, 2024',
+    receivedDate: 'March 28, 2025',
     receivedAmount: 259875,
     bankReference: 'SBI240328NF67890',
     paymentMethod: 'NEFT'
   },
   {
-    id: 'AP-2024-003',
-    proformaInvoiceId: 'PI-2024-003',
+    id: 'AP-2025-003',
+    proformaInvoiceId: 'PI-2025-003',
     quoteId: 'QT-005',
     leadId: 'L-005',
     businessProfileId: 'bp-gujarat-garments',
     amount: 3853500,
-    dueDate: 'April 15, 2024',
+    dueDate: 'April 15, 2025',
     status: 'pending',
     paymentMethod: 'RTGS'
   },
   {
-    id: 'AP-2024-004',
-    proformaInvoiceId: 'PI-2024-004',
+    id: 'AP-2025-004',
+    proformaInvoiceId: 'PI-2025-004',
     quoteId: 'QT-006',
     leadId: 'L-006',
     businessProfileId: 'bp-baroda-fashion',
     amount: 750000,
-    dueDate: 'April 20, 2024',
+    dueDate: 'April 20, 2025',
     status: 'received',
-    receivedDate: 'March 31, 2024',
+    receivedDate: 'March 31, 2025',
     receivedAmount: 750000,
     bankReference: 'ICICI240331RT13579',
     paymentMethod: 'RTGS'
   },
   {
-    id: 'AP-2024-005',
-    proformaInvoiceId: 'PI-2024-005',
+    id: 'AP-2025-005',
+    proformaInvoiceId: 'PI-2025-005',
     quoteId: 'QT-002',
     leadId: 'L-002',
     businessProfileId: 'bp-gujarat-garments',
@@ -1276,7 +827,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
 // Final GST Invoices Data - Post-delivery billing
 export const mockFinalInvoices: FinalInvoice[] = [
   {
-    id: 'INV-2024-001',
+    id: 'INV-2025-001',
     salesOrderId: 'SO-004',
     businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'September 28, 2025',
@@ -1292,7 +843,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     notes: 'Premium customer - paid before due date. Excellent relationship.'
   },
   {
-    id: 'INV-2024-002',
+    id: 'INV-2025-002',
     salesOrderId: 'SO-002',
     businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'September 25, 2025',
@@ -1308,7 +859,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     notes: 'Regular customer - standard payment terms honored.'
   },
   {
-    id: 'INV-2024-003',
+    id: 'INV-2025-003',
     salesOrderId: 'SO-001',
     businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'September 20, 2025',
@@ -1323,7 +874,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     notes: 'Balance payment overdue by 7 days. Follow-up required.'
   },
   {
-    id: 'INV-2024-004',
+    id: 'INV-2025-004',
     salesOrderId: 'SO-003',
     businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'October 5, 2025',
@@ -1342,8 +893,8 @@ export const mockFinalInvoices: FinalInvoice[] = [
 // Final Payment Records Data - Payment closure tracking
 export const mockFinalPayments: FinalPayment[] = [
   {
-    id: 'FP-2024-001',
-    finalInvoiceId: 'INV-2024-001',
+    id: 'FP-2025-001',
+    finalInvoiceId: 'INV-2025-001',
     businessProfileId: 'bp-baroda-fashion',
     amount: 825000,
     paymentDate: 'October 10, 2025',  // Matches paymentReceivedDate in invoice
@@ -1353,8 +904,8 @@ export const mockFinalPayments: FinalPayment[] = [
     notes: 'Final payment received on time. Order closed successfully.'
   },
   {
-    id: 'FP-2024-002',
-    finalInvoiceId: 'INV-2024-002',
+    id: 'FP-2025-002',
+    finalInvoiceId: 'INV-2025-002',
     businessProfileId: 'bp-gujarat-garments',
     amount: 605000,
     paymentDate: 'October 8, 2025',  // Matches paymentReceivedDate in invoice
@@ -1373,59 +924,8 @@ export const mockFinalPayments: FinalPayment[] = [
 // HOLISTIC BUSINESS RELATIONSHIP FUNCTIONS
 // ========================================
 
-// Work Order Management Functions
-export const getWorkOrderById = (id: string): WorkOrder | undefined => {
-  return mockWorkOrders.find(wo => wo.id === id);
-};
 
-export const getWorkOrdersBySalesOrderId = (salesOrderId: string): WorkOrder[] => {
-  return mockWorkOrders.filter(wo => wo.salesOrderId === salesOrderId);
-};
 
-export const getWorkOrdersByStatus = (status: 'pending' | 'materials_allocated' | 'in_progress' | 'completed'): WorkOrder[] => {
-  return mockWorkOrders.filter(wo => wo.status === status);
-};
-
-// Vendor Management Functions  
-export const getVendorById = (id: string): Vendor | undefined => {
-  return mockVendors.find(vendor => vendor.id === id);
-};
-
-export const getVendorsByMaterial = (material: string): Vendor[] => {
-  return mockVendors.filter(vendor => 
-    vendor.materials.some(m => m.toLowerCase().includes(material.toLowerCase()))
-  );
-};
-
-export const getActiveVendors = (): Vendor[] => {
-  return mockVendors.filter(vendor => vendor.isActive);
-};
-
-// Raw Material Inventory Functions
-export const getRawMaterialById = (id: string): RawMaterial | undefined => {
-  return mockRawMaterials.find(rm => rm.id === id);
-};
-
-export const getRawMaterialsByCategory = (category: 'Yarn' | 'Dye' | 'Chemical' | 'Packaging'): RawMaterial[] => {
-  return mockRawMaterials.filter(rm => rm.category === category);
-};
-
-export const getLowStockMaterials = (): RawMaterial[] => {
-  return mockRawMaterials.filter(rm => rm.currentStock <= rm.reorderLevel);
-};
-
-// Production Management Functions
-export const getProductionRecordsByWorkOrderId = (workOrderId: string): ProductionRecord[] => {
-  return mockProductionRecords.filter(pr => pr.workOrderId === workOrderId);
-};
-
-export const getProductionRecordsByDate = (date: string): ProductionRecord[] => {
-  return mockProductionRecords.filter(pr => pr.date === date);
-};
-
-export const getProductionRecordsByOperator = (operator: string): ProductionRecord[] => {
-  return mockProductionRecords.filter(pr => pr.operator === operator);
-};
 
 // Financial Management Functions
 export const getAdvancePaymentByProformaId = (proformaId: string): AdvancePayment | undefined => {
@@ -1469,11 +969,6 @@ export const getAverageOrderValueFromSalesOrders = (): number => {
   return Math.round(totalValue / mockSalesOrders.length);
 };
 
-export const getProductionEfficiency = (): number => {
-  if (mockProductionRecords.length === 0) return 0;
-  const totalEfficiency = mockProductionRecords.reduce((sum, record) => sum + record.efficiency, 0);
-  return Math.round(totalEfficiency / mockProductionRecords.length);
-};
 
 // getCustomerSatisfactionScore moved to customerMockData.ts
 
@@ -1483,29 +978,4 @@ export const getProductionEfficiency = (): number => {
 // getTopPerformingCustomers moved to customerMockData.ts
 
 // Material Requirements Planning
-export const calculateMaterialRequirements = (workOrderId: string): string[] => {
-  const workOrder = getWorkOrderById(workOrderId);
-  if (!workOrder) return [];
-  return workOrder.materialRequirements;
-};
 
-export const checkMaterialAvailability = (materialName: string, requiredQuantity: number): {
-  available: boolean;
-  currentStock: number;
-  shortfall: number;
-} => {
-  const material = mockRawMaterials.find(rm => 
-    rm.name.toLowerCase().includes(materialName.toLowerCase())
-  );
-  
-  if (!material) {
-    return { available: false, currentStock: 0, shortfall: requiredQuantity };
-  }
-  
-  const shortfall = Math.max(0, requiredQuantity - material.currentStock);
-  return {
-    available: material.currentStock >= requiredQuantity,
-    currentStock: material.currentStock,
-    shortfall
-  };
-};

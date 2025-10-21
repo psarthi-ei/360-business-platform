@@ -177,7 +177,7 @@ export const mockWorkOrders: WorkOrder[] = [
     salesOrderId: 'SO-002', // References existing sales order
     product: 'Mixed fabric for casual wear',
     customer: 'Gujarat Garments', // From bp-gujarat-garments
-    batchNumber: 'B2024-045',
+    batchNumber: 'B2025-045',
     targetQuantity: '1000m',
     producedQuantity: '800m',
     remainingQuantity: '200m',
@@ -188,7 +188,7 @@ export const mockWorkOrders: WorkOrder[] = [
     startTime: '08:15 AM',
     estimatedCompletion: '11:30 AM',
     priority: 'urgent',
-    createdDate: '2024-12-20',
+    createdDate: '2025-10-20',
     materialRequirements: [
       {
         material: 'Cotton Yarn 30s',
@@ -205,7 +205,7 @@ export const mockWorkOrders: WorkOrder[] = [
     salesOrderId: 'SO-004', // References existing sales order
     product: 'Updated seasonal collection',
     customer: 'Baroda Fashion', // From bp-baroda-fashion
-    batchNumber: 'B2024-046',
+    batchNumber: 'B2025-046',
     targetQuantity: '500m',
     producedQuantity: '0m',
     remainingQuantity: '500m',
@@ -214,7 +214,7 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: 'LOOM-B2',
     assignedWorker: 'Priya Shah',
     priority: 'normal',
-    createdDate: '2024-12-20',
+    createdDate: '2025-10-20',
     materialRequirements: [
       {
         material: 'Silk Yarn',
@@ -230,7 +230,7 @@ export const mockWorkOrders: WorkOrder[] = [
     salesOrderId: 'SO-002', // Second batch for same order
     product: 'Mixed fabric for casual wear - Batch 2',
     customer: 'Gujarat Garments',
-    batchNumber: 'B2024-047',
+    batchNumber: 'B2025-047',
     targetQuantity: '800m',
     producedQuantity: '800m',
     remainingQuantity: '0m',
@@ -241,7 +241,7 @@ export const mockWorkOrders: WorkOrder[] = [
     startTime: '06:00 AM',
     actualCompletion: '02:30 PM',
     priority: 'normal',
-    createdDate: '2024-12-19',
+    createdDate: '2025-10-19',
     qualityGrade: 'A Grade'
   },
   {
@@ -249,7 +249,7 @@ export const mockWorkOrders: WorkOrder[] = [
     salesOrderId: 'SO-004', // Additional batch for completed order
     product: 'Updated seasonal collection - Final batch',
     customer: 'Baroda Fashion',
-    batchNumber: 'B2024-044',
+    batchNumber: 'B2025-044',
     targetQuantity: '600m',
     producedQuantity: '600m',
     remainingQuantity: '0m',
@@ -260,7 +260,7 @@ export const mockWorkOrders: WorkOrder[] = [
     startTime: '06:00 AM',
     actualCompletion: '01:30 PM',
     priority: 'normal',
-    createdDate: '2024-12-19',
+    createdDate: '2025-10-19',
     qualityGrade: 'A Grade'
   }
 ];
@@ -270,7 +270,7 @@ export const mockQCItems: QualityControlItem[] = [
     id: 'QC#301',
     workOrderId: 'WO#451',
     product: 'Cotton Fabric',
-    batchNumber: 'B2024-045',
+    batchNumber: 'B2025-045',
     quantity: '800m',
     status: 'pending_inspection',
     submittedTime: '2:30 PM',
@@ -287,7 +287,7 @@ export const mockQCItems: QualityControlItem[] = [
     id: 'QC#302',
     workOrderId: 'WO#452',
     product: 'Silk Blend',
-    batchNumber: 'B2024-046',
+    batchNumber: 'B2025-046',
     quantity: '300m',
     inspector: 'Rajesh Patel',
     status: 'approved',
@@ -301,7 +301,7 @@ export const mockQCItems: QualityControlItem[] = [
     id: 'QC#300',
     workOrderId: 'WO#450',
     product: 'Cotton Yarn',
-    batchNumber: 'B2024-044',
+    batchNumber: 'B2025-044',
     quantity: '600m',
     inspector: 'Ravi Sharma',
     status: 'approved',
@@ -315,7 +315,7 @@ export const mockQCItems: QualityControlItem[] = [
     id: 'QC#299',
     workOrderId: 'WO#449',
     product: 'Dyed Cotton',
-    batchNumber: 'B2024-043',
+    batchNumber: 'B2025-043',
     quantity: '400m',
     inspector: 'Meera Singh',
     status: 'rejected',

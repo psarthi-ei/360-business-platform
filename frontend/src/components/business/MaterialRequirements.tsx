@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { mockMaterialRequirements, MaterialRequirement } from '../../data/procurementMockData';
+import { checkMaterialAvailability } from '../../data/materialHelpers';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './MaterialRequirements.module.css';
 
@@ -32,10 +33,13 @@ const MaterialRequirements = ({
   // Use card expansion hook for consistent single-card expansion behavior
   const { toggleExpansion, isExpanded } = useCardExpansion();
   
-  // Filter materials based on filter state
+  // Filter materials based on filter state using dynamic calculation
   const filteredMaterials = useMemo(() => {
     if (filterState === 'all') return mockMaterialRequirements;
-    return mockMaterialRequirements.filter(material => material.status === filterState);
+    return mockMaterialRequirements.filter(material => {
+      const availability = checkMaterialAvailability(material.materialName, material.requiredQuantity, material.unit);
+      return availability.status === filterState;
+    });
   }, [filterState]);
 
   // Group materials by Sales Order (for UI display convenience)
@@ -57,13 +61,14 @@ const MaterialRequirements = ({
       
       groups[orderId].materials.push(material);
       
-      // Update group status based on materials
-      if (material.status === 'shortage') {
+      // Update group status based on dynamic material availability
+      const availability = checkMaterialAvailability(material.materialName, material.requiredQuantity, material.unit);
+      if (availability.status === 'shortage' || availability.status === 'partial') {
         groups[orderId].hasShortages = true;
         groups[orderId].allAvailable = false;
       }
       
-      if (material.status !== 'available') {
+      if (availability.status !== 'available') {
         groups[orderId].allAvailable = false;
       }
     });
@@ -80,9 +85,12 @@ const MaterialRequirements = ({
     return Object.values(groups);
   }, [filteredMaterials]);
 
-  // Calculate shortage alert
+  // Calculate shortage alert using dynamic calculation
   const shortageAlert = useMemo(() => {
-    const shortages = mockMaterialRequirements.filter(mr => mr.status === 'shortage');
+    const shortages = mockMaterialRequirements.filter(mr => {
+      const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
+      return availability.status === 'shortage' || availability.status === 'partial';
+    });
     return {
       hasShortages: shortages.length > 0,
       count: shortages.length
@@ -114,9 +122,12 @@ const MaterialRequirements = ({
   };
 
 
-  // Get material status (without urgency duplicate)
+  // Get material status using dynamic calculation
   const getMaterialStatus = (group: GroupedMaterials) => {
-    const shortageCount = group.materials.filter(m => m.status === 'shortage').length;
+    const shortageCount = group.materials.filter(m => {
+      const availability = checkMaterialAvailability(m.materialName, m.requiredQuantity, m.unit);
+      return availability.status === 'shortage' || availability.status === 'partial';
+    }).length;
     const totalMaterials = group.materials.length;
     
     if (group.orderStatus === 'success') {
@@ -157,18 +168,22 @@ const MaterialRequirements = ({
     const dates = group.materials.map(m => new Date(m.requiredDate)).sort((a, b) => a.getTime() - b.getTime());
     const earliestDate = dates[0].toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
     
-    // Calculate estimated cost impact (rough estimate based on shortfall)
-    const shortages = group.materials.filter(m => m.status === 'shortage');
+    // Calculate estimated cost impact using dynamic calculation
+    const shortages = group.materials.filter(m => {
+      const availability = checkMaterialAvailability(m.materialName, m.requiredQuantity, m.unit);
+      return availability.status === 'shortage' || availability.status === 'partial';
+    });
     let estimatedCost = 0;
     
     shortages.forEach(material => {
+      const availability = checkMaterialAvailability(material.materialName, material.requiredQuantity, material.unit);
       // Rough cost estimation: Cotton Yarn ~75/kg, Dye ~200/kg, Fabric ~60/meter
       let unitCost = 75; // default
       if (material.materialName.toLowerCase().includes('dye')) unitCost = 200;
       if (material.materialName.toLowerCase().includes('fabric')) unitCost = 60;
       if (material.materialName.toLowerCase().includes('zipper')) unitCost = 15;
       
-      estimatedCost += material.shortfall * unitCost;
+      estimatedCost += availability.shortage * unitCost;
     });
     
     // Create financial impact line
@@ -287,8 +302,10 @@ const MaterialRequirements = ({
                               </tr>
                             </thead>
                             <tbody>
-                              {group.materials.map(material => (
-                                <tr key={material.id} className={`${styles.materialRow} ${styles[material.status]}`}>
+                              {group.materials.map(material => {
+                                const availability = checkMaterialAvailability(material.materialName, material.requiredQuantity, material.unit);
+                                return (
+                                <tr key={material.id} className={`${styles.materialRow} ${styles[availability.status]}`}>
                                   <td>
                                     <div className={styles.materialName}>{material.materialName}</div>
                                     <div className={styles.materialUnit}>{material.unit}</div>
@@ -301,11 +318,11 @@ const MaterialRequirements = ({
                                       {material.urgency === 'high' ? '🔥 High' : material.urgency === 'medium' ? '⚡ Medium' : '📅 Low'}
                                     </span>
                                   </td>
-                                  <td className={`${styles.shortfallCell} ${material.shortfall > 0 ? styles.hasShortage : styles.noShortage}`}>
-                                    {material.shortfall > 0 ? `${material.shortfall.toLocaleString()}${material.unit}` : '—'}
+                                  <td className={`${styles.shortfallCell} ${availability.shortage > 0 ? styles.hasShortage : styles.noShortage}`}>
+                                    {availability.shortage > 0 ? `${availability.shortage.toLocaleString()}${material.unit}` : '—'}
                                   </td>
                                   <td className={styles.actionCell}>
-                                    {material.status === 'shortage' && (
+                                    {(availability.status === 'shortage' || availability.status === 'partial') && (
                                       <button 
                                         className={styles.prButton}
                                         onClick={() => handleCreatePR(material.id, material.materialName)}
@@ -316,7 +333,8 @@ const MaterialRequirements = ({
                                     )}
                                   </td>
                                 </tr>
-                              ))}
+                                );
+                              })}
                             </tbody>
                           </table>
                         </div>

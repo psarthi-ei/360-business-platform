@@ -8,13 +8,11 @@ export interface MaterialRequirement {
   orderId: string;
   materialName: string;
   requiredQuantity: number;
-  currentStock: number;
-  shortfall: number;
   unit: string;
-  status: 'shortage' | 'available' | 'ordered';
   urgency: 'high' | 'medium' | 'low';
   requiredDate: string;
   notes?: string;
+  // ✅ REMOVED: currentStock, shortfall, status (these are dynamic and calculated)
 }
 
 export interface PurchaseRequest {
@@ -70,94 +68,143 @@ export interface GoodsReceiptNote {
 
 // Material Requirements grouped by Order - using proper sales order IDs
 export const mockMaterialRequirements: MaterialRequirement[] = [
-  // Order SO-002 — Mixed fabric for casual wear - Cotton Yarn Short
+  // Order SO-002 — Mixed fabric for casual wear - Cotton Yarn requirement
   {
     id: 'MR-001',
     orderId: 'SO-002', // References existing sales order
     materialName: 'Cotton Yarn 30s Count',
     requiredQuantity: 500,
-    currentStock: 200,
-    shortfall: 300,
     unit: 'kg',
-    status: 'shortage',
     urgency: 'high',
-    requiredDate: '2024-10-25',
-    notes: 'Production blocked without this material'
+    requiredDate: '2025-10-25',
+    notes: 'Critical material for production schedule'
   },
   
-  // Order SO-004 — Updated seasonal collection - All Materials OK ✅
+  // Order SO-004 — Updated seasonal collection - Polyester Thread requirement
   {
     id: 'MR-002',
     orderId: 'SO-004', // References existing sales order
     materialName: 'Polyester Thread',
     requiredQuantity: 100,
-    currentStock: 150,
-    shortfall: 0,
     unit: 'kg',
-    status: 'available',
     urgency: 'low',
-    requiredDate: '2024-10-30'
+    requiredDate: '2025-10-30'
   },
   {
     id: 'MR-002B',
     orderId: 'SO-004', // References existing sales order
     materialName: 'Cotton Fabric Base',
     requiredQuantity: 200,
-    currentStock: 220,
-    shortfall: 0,
     unit: 'meters',
-    status: 'available',
     urgency: 'low',
-    requiredDate: '2024-10-30'
+    requiredDate: '2025-10-30'
   },
   
-  // Order SO-002 — Mixed fabric batch 2 - Dye Shortage
+  // Order SO-002 — Red Dye Chemical requirement
   {
     id: 'MR-003',
-    orderId: 'SO-002', // Second batch of same order
+    orderId: 'SO-002', // Same order, different material
     materialName: 'Red Dye Chemical',
     requiredQuantity: 50,
-    currentStock: 10,
-    shortfall: 40,
     unit: 'kg',
-    status: 'shortage',
     urgency: 'high',
-    requiredDate: '2024-10-22',
-    notes: 'Dyeing process cannot start without this'
+    requiredDate: '2025-10-22',
+    notes: 'Dyeing process critical material'
   },
   
-  // Additional orders for completeness - using work order materials
+  // Order SO-002 — Additional fabric requirement
   {
     id: 'MR-004',
     orderId: 'SO-002', // Additional materials for large order
     materialName: 'Cotton Fabric 150 GSM',
     requiredQuantity: 1000,
-    currentStock: 800,
-    shortfall: 200,
     unit: 'meters',
-    status: 'shortage',
     urgency: 'medium',
-    requiredDate: '2024-11-01'
+    requiredDate: '2025-11-01'
   },
+  
+  // Order SO-004 — Accessories requirement
   {
     id: 'MR-005',
     orderId: 'SO-004', // Accessories for seasonal collection
     materialName: 'Zipper - Metal 12 inch',
     requiredQuantity: 200,
-    currentStock: 250,
-    shortfall: 0,
     unit: 'pieces',
-    status: 'available',
     urgency: 'low',
-    requiredDate: '2024-11-05'
+    requiredDate: '2025-11-05'
+  },
+  
+  // Order SO-001 — Cotton Yarn requirement
+  {
+    id: 'MR-006',
+    orderId: 'SO-001',
+    materialName: 'Cotton Yarn 40s Count',
+    requiredQuantity: 300,
+    unit: 'kg',
+    urgency: 'high',
+    requiredDate: '2025-10-24',
+    notes: 'Premium customer order priority'
+  },
+  
+  // Order SO-003 — Polyester requirements (in production)
+  {
+    id: 'MR-007',
+    orderId: 'SO-003',
+    materialName: 'Polyester Yarn 150D',
+    requiredQuantity: 400,
+    unit: 'kg',
+    urgency: 'medium',
+    requiredDate: '2025-10-28'
+  },
+  
+  // Order SO-005 — Cotton bulk order requirements
+  {
+    id: 'MR-008',
+    orderId: 'SO-005',
+    materialName: 'Cotton Yarn 40s Count',
+    requiredQuantity: 600,
+    unit: 'kg',
+    urgency: 'medium',
+    requiredDate: '2025-11-01',
+    notes: 'Bulk order - high volume requirement'
+  },
+  {
+    id: 'MR-009',
+    orderId: 'SO-005',
+    materialName: 'Blue Dye Chemical',
+    requiredQuantity: 45,
+    unit: 'kg',
+    urgency: 'medium',
+    requiredDate: '2025-11-01'
+  },
+  
+  // Order SO-006 — Cotton yarn fabric requirements (competing for same materials)
+  {
+    id: 'MR-010',
+    orderId: 'SO-006',
+    materialName: 'Cotton Yarn 40s Count',
+    requiredQuantity: 450,
+    unit: 'kg',
+    urgency: 'medium',
+    requiredDate: '2025-11-05',
+    notes: 'Competing for same Cotton Yarn 40s as SO-001 and SO-005'
+  },
+  {
+    id: 'MR-011',
+    orderId: 'SO-006',
+    materialName: 'Cotton Thread - White',
+    requiredQuantity: 80,
+    unit: 'kg',
+    urgency: 'low',
+    requiredDate: '2025-11-05'
   }
 ];
 
 // Purchase Requests matching Visual Design Spec format
 export const mockPurchaseRequests: PurchaseRequest[] = [
-  // PR#2024-089 — Cotton Yarn for SO-002
+  // PR#2025-089 — Cotton Yarn for SO-002
   {
-    id: 'PR-2024-089',
+    id: 'PR-2025-089',
     mrId: 'MR-001',
     requestedBy: 'Rajesh Kumar',
     department: 'Production',
@@ -167,11 +214,11 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     estimatedCost: 22500,
     justification: 'Critical shortage blocking Order SO-002 (Gujarat Garments)',
     status: 'pending',
-    requestDate: '2024-10-15',
+    requestDate: '2025-10-15',
     notes: 'Urgent approval needed'
   },
   {
-    id: 'PR-2024-090',
+    id: 'PR-2025-090',
     mrId: 'MR-003',
     requestedBy: 'Priya Sharma',
     department: 'Dyeing',
@@ -181,13 +228,13 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     estimatedCost: 8000,
     justification: 'Shortage for dyeing process Order SO-002 batch 2',
     status: 'approved',
-    requestDate: '2024-10-18',
+    requestDate: '2025-10-18',
     reviewedBy: 'Suresh Patel',
-    reviewDate: '2024-10-19',
+    reviewDate: '2025-10-19',
     notes: 'Approved for immediate procurement'
   },
   {
-    id: 'PR-2024-091',
+    id: 'PR-2025-091',
     mrId: 'MR-004',
     requestedBy: 'Amit Jain',
     department: 'Production',
@@ -197,13 +244,13 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     estimatedCost: 12000,
     justification: 'Additional requirement for Order SO-002 (Gujarat Garments)',
     status: 'rejected',
-    requestDate: '2024-10-17',
+    requestDate: '2025-10-17',
     reviewedBy: 'Suresh Patel',
-    reviewDate: '2024-10-18',
+    reviewDate: '2025-10-18',
     notes: 'Use existing stock from warehouse B'
   },
   {
-    id: 'PR-2024-092',
+    id: 'PR-2025-092',
     mrId: 'MR-001',
     requestedBy: 'Production Manager',
     department: 'Production',
@@ -213,7 +260,7 @@ export const mockPurchaseRequests: PurchaseRequest[] = [
     estimatedCost: 22500,
     justification: 'Urgent requirement for export order',
     status: 'pending',
-    requestDate: '2024-10-19',
+    requestDate: '2025-10-19',
     notes: 'High priority - customer waiting'
   }
 ];
@@ -230,8 +277,8 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     unitPrice: 200,
     totalAmount: 8000,
     status: 'open',
-    orderDate: '2024-10-19',
-    expectedDelivery: '2024-10-21',
+    orderDate: '2025-10-19',
+    expectedDelivery: '2025-10-21',
     notes: 'Rush order - production dependency'
   },
   {
@@ -245,9 +292,9 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     unitPrice: 140,
     totalAmount: 70000,
     status: 'delivered',
-    orderDate: '2024-10-15',
-    expectedDelivery: '2024-10-18',
-    actualDelivery: '2024-10-18',
+    orderDate: '2025-10-15',
+    expectedDelivery: '2025-10-18',
+    actualDelivery: '2025-10-18',
     notes: 'Delivered on time, good quality'
   }
 ];
@@ -262,9 +309,9 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 500,
     unit: 'kg',
     qualityStatus: 'approved',
-    receiptDate: '2024-10-18',
+    receiptDate: '2025-10-18',
     inspectedBy: 'Quality Team',
-    inspectionDate: '2024-10-18',
+    inspectionDate: '2025-10-18',
     notes: 'Good quality, no defects found'
   },
   {
@@ -276,7 +323,7 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 190,
     unit: 'kg',
     qualityStatus: 'pending',
-    receiptDate: '2024-10-19',
+    receiptDate: '2025-10-19',
     notes: 'Short delivery - 10kg less than ordered'
   },
   {
@@ -288,9 +335,9 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 50,
     unit: 'kg',
     qualityStatus: 'rejected',
-    receiptDate: '2024-10-17',
+    receiptDate: '2025-10-17',
     inspectedBy: 'Quality Team',
-    inspectionDate: '2024-10-17',
+    inspectionDate: '2025-10-17',
     notes: 'Color consistency issues - returned to supplier'
   },
   {
@@ -302,9 +349,9 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 300,
     unit: 'meters',
     qualityStatus: 'approved',
-    receiptDate: '2024-10-16',
+    receiptDate: '2025-10-16',
     inspectedBy: 'Quality Team',
-    inspectionDate: '2024-10-16',
+    inspectionDate: '2025-10-16',
     notes: 'Excellent quality, meets specifications'
   },
   {
@@ -316,7 +363,7 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 950,
     unit: 'pieces',
     qualityStatus: 'pending',
-    receiptDate: '2024-10-20',
+    receiptDate: '2025-10-20',
     notes: 'Partial delivery - 50 pieces short, quality check in progress'
   },
   {
@@ -328,9 +375,9 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     receivedQuantity: 30,
     unit: 'kg',
     qualityStatus: 'approved',
-    receiptDate: '2024-10-15',
+    receiptDate: '2025-10-15',
     inspectedBy: 'Quality Team',
-    inspectionDate: '2024-10-15',
+    inspectionDate: '2025-10-15',
     notes: 'Over delivery - bonus 5kg received, excellent quality'
   }
 ];
