@@ -657,6 +657,208 @@ Sales Order SO-002 → Work Orders:
 - **Phase 3**: Enable flexible PR creation (choose Sales Order or Work Order level)
 - **Phase 4**: Smart procurement timing recommendations and cash flow optimization
 
+#### **Stock Reservation & Material Allocation Workflow**
+
+**Business Problem Statement:**
+In textile manufacturing, multiple Sales Orders often compete for limited material stock. Without proper reservation management, businesses face over-allocation issues, production delays, and customer dissatisfaction. The challenge is balancing accurate material commitments with production flexibility.
+
+**Core Business Principle:**
+Material availability must be calculated dynamically to prevent over-promising while maintaining the flexibility to prioritize urgent orders based on business requirements.
+
+##### **End-to-End Workflow Sequence**
+
+**Complete Business Flow**: `SO → Material Check → Soft Reserve → Start Production (WO) → Hard Reserve → QC → Ready → Dispatch`
+
+```mermaid
+flowchart LR
+    A[Sales Order Created] --> B[Material Check]
+    B --> C{Materials Available?}
+    C -->|Yes| D[Soft Reserve Materials]
+    C -->|No| E[Material Shortage Alert]
+    E --> F[Procurement Process]
+    F --> B
+    D --> G[Start Production Action]
+    G --> H[Work Order Created]
+    H --> I[Hard Reserve Materials]
+    I --> J[Production Execution]
+    J --> K[Quality Control]
+    K --> L[Ready for Dispatch]
+    L --> M[Dispatch & Delivery]
+    M --> N[Stock Released & Consumed]
+```
+
+**Detailed Workflow Stages:**
+
+1. **Sales Order (SO) Created**: After advance payment confirmed
+   - **Business Context**: Customer commitment confirmed through financial transaction
+   - **System Action**: Automatic Material Requirements (MR) creation
+   - **Next Step**: Immediate material availability assessment
+
+2. **Material Check**: Dynamic availability calculation using Free Stock formula
+   - **Calculation**: `Free Stock = On-hand - Soft Reserved - Hard Reserved`
+   - **Business Logic**: Real-time assessment considering all existing reservations
+   - **Decision Point**: Proceed with soft reservation or trigger procurement
+
+3. **Soft Reserve**: Logical allocation if materials available, shortage alert if not
+   - **Success Path**: Materials logically allocated, order status "Ready for Production"
+   - **Shortage Path**: Material Requirements sent to Procurement, status "Material Pending"
+   - **Business Impact**: Production planning visibility and procurement prioritization
+
+4. **Start Production**: User action to begin manufacturing
+   - **Trigger**: Supervisor clicks "Start Production" in Production module
+   - **Validation**: Final availability check before hard reservation
+   - **Authorization**: Confirms commitment to use allocated materials
+
+5. **Work Order (WO) Created**: Production tasks breakdown from Sales Order
+   - **Process**: Sales Order decomposed into machine-specific production tasks
+   - **Resource Assignment**: Machines, workers, and processes allocated
+   - **Timeline**: Production schedule established with delivery commitments
+
+6. **Hard Reserve**: Physical stock blocking for production guarantee
+   - **Stock Lock**: Materials physically blocked from other orders
+   - **Irreversible**: Cannot be reallocated until production completes or cancels
+   - **Production Safety**: Guarantees no material shortage during manufacturing
+
+7. **Quality Control (QC)**: Production output inspection and approval
+   - **Inspection Process**: Comprehensive quality checks against specifications
+   - **Decision Points**: Approve, Rework, or Reject production output
+   - **Status Update**: Materials remain hard reserved until QC approval
+
+8. **Ready**: Approved products ready for customer dispatch
+   - **Quality Approved**: Products meet customer specifications
+   - **Packaging**: Professional packaging with documentation prepared
+   - **Dispatch Queue**: Orders ready for customer delivery
+
+9. **Dispatch**: Final delivery and stock consumption completion
+   - **Material Consumption**: Hard reserved materials marked as consumed
+   - **Stock Release**: Reserved quantities removed from inventory
+   - **Order Completion**: Full business cycle closure with customer satisfaction
+
+**Cross-Module Integration Points:**
+- **Sales → Production**: Material availability drives delivery commitments
+- **Production → Procurement**: Shortage alerts trigger purchase requirements
+- **Production → QC**: Quality control validates production output
+- **QC → Fulfillment**: Approved products enable dispatch operations
+- **Fulfillment → Inventory**: Stock consumption completes reservation cycle
+
+##### **Two-Stage Stock Reservation System**
+
+**Stage 1: Soft Reservation (Planning & Allocation)**
+- **Trigger Point**: Sales Order creation with confirmed advance payment (30% received)
+- **Business Purpose**: Logical material allocation for accurate production planning
+- **Business Rule**: Materials are "planned" for the order but can be reallocated for higher priority needs
+- **Flexibility Level**: High - Supervisor can release/reassign for urgent orders
+- **Industry Context**: Allows for customer priority management and seasonal demand fluctuations
+
+**Stage 2: Hard Reservation (Production Execution)**
+- **Trigger Point**: "Start Production" action (Work Order creation)
+- **Business Purpose**: Physical stock blocking to guarantee material availability during production
+- **Business Rule**: Materials are physically allocated and cannot be reassigned until production completes
+- **Flexibility Level**: Low - Materials locked until Work Order completion or cancellation
+- **Industry Context**: Prevents production stoppages due to material shortages
+
+##### **Material Availability Calculation Logic**
+
+**Free Stock Formula**: `Free Stock = On-hand Stock - Soft Reserved - Hard Reserved`
+
+**Business Rule**: All material availability checks must use Free Stock, never total on-hand stock
+
+**Multi-Order Conflict Resolution**:
+When multiple Sales Orders require the same materials with limited stock availability:
+
+```
+Scenario Example:
+Cotton Yarn 40s Count: 1000kg on-hand stock
+10 Sales Orders each requiring 200kg
+Business Reality: Only 5 orders can be fulfilled
+
+System Behavior:
+- First 5 orders (by creation date): Soft reservation granted
+- Remaining 5 orders: Material shortage status
+- Free stock after reservations: 0kg available for new orders
+```
+
+##### **Business Scenarios & Management Rules**
+
+**Scenario A: Priority Order Management**
+- **Business Need**: Urgent order from premium customer arrives
+- **Process**: Supervisor manually releases lower-priority soft reservations
+- **System Action**: Material reallocated to urgent order, original order moves to shortage status
+- **Business Impact**: Maintains customer relationships while optimizing revenue
+
+**Scenario B: Production Start Workflow**
+- **Process**: Sales Order with soft reservation → "Start Production" button → System checks current availability
+- **Validation**: Final confirmation that soft-reserved materials are still available
+- **Success Path**: Soft reservation converts to hard reservation, Work Orders created
+- **Failure Path**: If materials consumed by other orders, alert supervisor and block production start
+
+**Scenario C: Seasonal Planning**
+- **Business Context**: Cotton harvest season affects yarn availability
+- **Planning Rule**: Soft reservations provide visibility into future material needs
+- **Procurement Trigger**: Shortage calculations drive purchase order requirements
+- **Timeline Management**: Priority orders get preference during material scarcity periods
+
+##### **MSME Textile Industry Business Context**
+
+**Advance Payment Integration**:
+- Soft reservation only activated after 30% advance payment received
+- Ensures commitment from customer before blocking valuable materials
+- Aligns with traditional Gujarat textile business practices
+
+**Customer Relationship Management**:
+- Long-term customers may receive preferential material allocation
+- Festival season orders (Navratri, Diwali, wedding seasons) get priority treatment
+- Regional supplier relationships affect material procurement timing and allocation
+
+**Cash Flow Considerations**:
+- Soft reservations provide clear procurement requirements without premature stock blocking
+- Hard reservations ensure materials available when production investments are made
+- Balance between material commitment and financial flexibility
+
+##### **Cross-Module Business Impact**
+
+**Sales Module Integration**:
+- Sales team sees accurate material availability before confirming delivery dates
+- Customer commitments based on realistic material allocation scenarios
+- Prevents over-promising and customer relationship damage
+
+**Procurement Module Integration**:
+- Shortage calculations drive accurate purchase requirements
+- Material purchase timing based on actual production needs
+- Supplier negotiations informed by real material allocation demands
+
+**Production Module Integration**:
+- Work Orders created only with guaranteed material availability
+- Production scheduling based on material allocation priorities
+- Eliminates production delays due to material shortage surprises
+
+**Customer Communication Integration**:
+- Delivery commitments supported by actual material allocation
+- Proactive communication when material shortages affect delivery schedules
+- Customer expectations managed through transparent availability information
+
+##### **Business Benefits & Risk Mitigation**
+
+**Operational Benefits**:
+- **Accurate Planning**: Never over-promise materials to customers
+- **Efficient Production**: No surprise material shortages during production execution
+- **Optimized Cash Flow**: Clear procurement requirements based on actual allocation needs
+- **Customer Satisfaction**: Reliable delivery commitments supported by material availability
+
+**Risk Prevention**:
+- **Over-commitment Elimination**: Multiple orders cannot claim the same materials
+- **Production Delay Prevention**: Materials guaranteed before production starts
+- **Customer Relationship Protection**: Accurate delivery commitments prevent disappointment
+- **Working Capital Optimization**: Emergency procurement requirements minimized
+
+**Business Intelligence Value**:
+- Material utilization patterns for procurement optimization
+- Customer priority insights for business development
+- Seasonal demand forecasting for inventory planning
+- Production efficiency metrics based on material availability accuracy
+
+This stock reservation system transforms material management from reactive problem-solving to proactive business planning, essential for sustainable growth in competitive textile manufacturing markets.
+
 #### **Production Workflow**
 1. **Material Inspection**: Incoming yarn quality check and approval
 2. **Warping & Sizing**: Prepare warp yarn with required sizing chemicals

@@ -1464,7 +1464,7 @@ Invoice Status: Generated → Sent → Paid → Completed
 
 #### **Production Module Overview**
 
-The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 5 main tabs (Orders│W.O.│Machines│QC│Ready) with role-based navigation and integrated cross-module functionality.
+The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 5 main tabs (Orders│WO│Machines│QC│Ready) with role-based navigation and integrated cross-module functionality.
 
 **Business Context**: Addresses the daily production questions: "કયા orders production માં છે? આજે શું બનાવવું? Quality કેમ છે?" (Which orders are in production? What to make today? How is quality?)
 
