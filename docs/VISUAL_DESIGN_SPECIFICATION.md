@@ -1464,367 +1464,336 @@ Invoice Status: Generated → Sent → Paid → Completed
 
 #### **Production Module Overview**
 
-The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 4 main tabs (Plan│Active│QC│Ready) with 2-filter dropdowns and integrated cross-module functionality.
+The Production module manages the complete manufacturing workflow from Sales Order breakdown through delivery confirmation. It operates through 5 main tabs (Orders│W.O.│Machines│QC│Ready) with role-based navigation and integrated cross-module functionality.
 
 **Business Context**: Addresses the daily production questions: "કયા orders production માં છે? આજે શું બનાવવું? Quality કેમ છે?" (Which orders are in production? What to make today? How is quality?)
 
 **Module Structure:**
 ```
 🏭 PRODUCTION (Main Tab)
-├── Plan - Sales Order to Work Order conversion and scheduling
-├── Active - Live production tracking and worker interface  
-├── QC - Quality control processes and grading
-└── Ready - Completed orders ready for delivery and fulfillment
+├── Orders - Sales Order management and production initiation (Supervisor view)
+├── W.O. - Work Order planning, assignment and monitoring (Planner/Supervisor view)
+├── Machines - Live production execution and operator interface (Operator view)
+├── QC - Quality control processes and pass/rework decisions (QC Inspector view)
+└── Ready - Packing, dispatch and delivery management (Store/Dispatch view)
 ```
 
+**Role-Based Navigation:**
+- **Supervisor/Planner**: Default = Orders | Access: Orders, W.O., Machines, QC, Ready
+- **Operator**: Default = Machines | Access: Machines only
+- **QC Inspector**: Default = QC | Access: QC, Ready
+- **Store/Dispatch**: Default = Ready | Access: Ready only
+- **Owner**: Default = Orders | Access: All tabs
+
 **Cross-Module Integration:**
-- **From Sales**: Sales Orders automatically appear in Plan tab for WO creation
-- **To Customer**: Delivery notifications and tracking updates
-- **To Procurement**: Material requirements calculated per Work Order
-- **To Inventory**: Automatic stock updates on production completion
+- **From Sales**: Sales Orders automatically appear in Orders tab for production initiation
+- **To Customer**: Delivery notifications and tracking updates from Ready tab
+- **To Procurement**: Material requirements calculated and shortage alerts from W.O. tab
+- **To Inventory**: Automatic stock updates on QC completion
 
 ---
 
-#### **Plan Tab - Work Order Planning & Creation**
+#### **Orders Tab - Sales Order Management & Production Initiation**
+
+**Purpose**: Supervisor view of confirmed Sales Orders requiring Work Order creation and production planning. Central hub for starting production and monitoring material availability.
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
-│ [🔍 Search orders... (🎙)]          │ Search: 44px
+│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ [🔍 Search Order or Customer (🎙)]  │ Search: 44px
 ├─────────────────────────────────────┤
-│ 📋 SALES ORDERS → WORK ORDERS       │ Section header
+│ 📋 CONFIRMED SALES ORDERS           │ Section header
 │ ┌─────────────────────────────────┐ │
-│ │ Order #O-2345 — Cotton Fabric   │ │ Source order
-│ │ Customer: Ajay Textiles         │ │ Customer context
-│ │ Qty: 1000m | Due: Dec 25        │ │ Requirements
-│ │ Status: ⚠️ Needs Work Orders    │ │ Action required
-│ │ [Create WOs] [View Details]     │ │ Actions: 32px
+│ │ #SO-2345  Ajay Textiles         │ │ Order header
+│ │ Product: Cotton Fabric | Qty: 1000m │ │ Product details
+│ │ Material: ✅ Available | Due: 25 Dec │ │ Material status
+│ │ Status: 🟡 Not Started          │ │ Production status
+│ │ [Start Production] [View Details] │ │ Actions: 32px
 │ └─────────────────────────────────┘ │ Card: 140px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
-│ │ Order #O-2344 — Silk Blend      │ │ Another order
-│ │ Customer: Ravi Industries       │ │ Different customer
-│ │ Qty: 500m | Due: Dec 22         │ │ Urgent order
-│ │ Status: ✅ 2 WOs Created        │ │ Already planned
-│ │ [View WOs] [Edit Planning]      │ │ Management
+│ │ #SO-2346  Bharat Mills          │ │ Another order
+│ │ Product: Linen Fabric | Qty: 500m │ │ Different product
+│ │ Material: ⚠️ Shortage (Yarn, Dye) │ │ Material issue
+│ │ Status: 🔴 Material Pending     │ │ Blocked status
+│ │ [Go to Procurement]             │ │ Material action
 │ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 🏭 MACHINE & WORKER AVAILABILITY    │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ Loom A1: 🟢 Available           │ │ Machine status
-│ │ Type: Weaving | Capacity: 100m/h │ │ Machine specs
-│ │ Current: None assigned          │ │ Availability
-│ │ [Assign WO] [Schedule]          │ │ Actions
-│ └─────────────────────────────────┘ │ Card: 100px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
-│ │ Loom B2: 🟡 Busy (3h left)      │ │ Busy status
-│ │ Current: WO#451 (Vikram)        │ │ Active assignment
-│ │ Next Available: 2:00 PM         │ │ Schedule info
-│ │ [Monitor] [Queue Next WO]       │ │ Planning actions
+│ │ #SO-2347  Ramesh Exports        │ │ Active order
+│ │ Product: Grey Fabric | Qty: 1200m │ │ Large order
+│ │ Material: ✅ Available          │ │ Ready for production
+│ │ Status: 🔵 In Production        │ │ Active status
+│ │ Progress: [██████░░░░] 60%      │ │ Progress bar
+│ │ [View Work Orders ▾]            │ │ WO management
 │ └─────────────────────────────────┘ │
 ├─────────────────────────────────────┤
-│     [+ Bulk Create Work Orders]     │ 56px CTA
+│ ▼ Expand WOs (#SO-2347) - Optional  │ Expandable section
+│ ┌─────────────────────────────────┐ │
+│ │ - WO#2347-A  Loom A1 | 400m | Done ✅ │ │ Completed WO
+│ │ - WO#2347-B  Loom A2 | 300m | Running 🟡 │ │ Active WO
+│ │ - WO#2347-C  Loom A3 | 500m | Not Started 🔴 │ │ Pending WO
+│ └─────────────────────────────────┘ │
 ├─────────────────────────────────────┤
 │ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
 └─────────────────────────────────────┘
 ```
 
-#### **Bulk Work Order Creation Wizard** (Plan Tab Action)
+**Orders Tab Actions:**
+- **Start Production**: Creates Work Orders (auto-breakdown), reserves stock, moves to W.O. tab
+- **Go to Procurement**: Direct navigation to procurement module for material shortage resolution
+- **View Work Orders**: Expand inline WO details or navigate to W.O. tab for detailed management
+- **View Details**: Full Sales Order details including customer requirements and delivery terms
+
+**Material Status Indicators:**
+- **✅ Available**: All required materials in stock, production can start immediately
+- **⚠️ Shortage**: Specific materials missing (displayed in brackets), procurement required
+- **🔴 Material Pending**: Production blocked until materials are available
+
+**Production Status Flow:**
+- **🟡 Not Started**: Sales Order confirmed, ready for Work Order creation
+- **🔵 In Production**: Work Orders created and active production in progress
+- **🟢 Production Complete**: All Work Orders completed, ready for QC
+- **🔴 Material Pending**: Blocked due to material shortage, requires procurement action
+
+#### **W.O. Tab - Work Order Management & Planning**
+
+**Purpose**: Planner/Supervisor view for managing all work orders across machines. Central hub for work order assignment, progress monitoring, and resource allocation.
 
 ```
 ┌─────────────────────────────────────┐
-│ Bulk WO Creation — Order #O-2345 [←] │ Wizard header
-│ Cotton Fabric | 1000m | Due: Dec 25  │ Order context
+│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ [🗂 WORK ORDERS] [Filter: All ▾]    │ Search + filter: 44px
 ├─────────────────────────────────────┤
-│ 📊 Batch Planning Strategy          │ Section header
-│ ● Daily Batches (Recommended)       │ Strategy options
-│   250m per day × 4 days            │ Breakdown details
-│ ○ Machine-based Batches             │ Alternative option
-│   500m per machine × 2 machines    │ Machine allocation
-│ ○ Custom Batch Sizes               │ Manual control
-│   Define sizes manually            │ Custom option
-├─────────────────────────────────────┤
-│ 🏭 Machine & Worker Assignment      │ Assignment section
-│ Batch 1: 250m (Dec 22)             │ Batch details
-│ Machine: [Loom A1 ▼] | Worker: [Vikram ▼] │ Dropdowns
-│ Est. Time: 6 hours                  │ Time calculation
-│                                     │
-│ Batch 2: 250m (Dec 23)             │ Next batch
-│ Machine: [Loom B2 ▼] | Worker: [Priya ▼] │ Different assignment
-│ Est. Time: 6 hours                  │ Parallel work
-├─────────────────────────────────────┤
-│ ⚠️ Material Requirements            │ Dependencies
-│ Cotton Yarn: 1100kg required        │ Raw material
-│ Available: 800kg | Short: 300kg     │ Shortage alert
-│ [Create Purchase Request]           │ Auto-procurement
-├─────────────────────────────────────┤
-│ 📅 Production Schedule              │ Timeline view
-│ Dec 22: Batch 1 (Loom A1) + Batch 2 (Loom B2) │ Parallel work
-│ Dec 23: Batch 3 (Loom A1) + Batch 4 (Loom B2) │ Continued production
-│ Dec 24: QC for all batches         │ Quality check
-│ Dec 25: Ready for delivery         │ On-time completion
-├─────────────────────────────────────┤
-│                                     │ Action area
-│   [Cancel]      [Create 4 WOs]      │ Primary actions
-│                                     │ 56px height
-└─────────────────────────────────────┘
-```
-
-#### **Production Floor Dashboard** (Active Tab Management Tool)
-
-```
-┌─────────────────────────────────────┐
-│ Production Floor Dashboard      [←] │ Dashboard header
-│ Live Status | Updated: 30 sec ago   │ Real-time context
-├─────────────────────────────────────┤
-│ 📊 Today's Overview                 │ Summary section
-│ Target: 2500m | Completed: 1800m    │ Progress metrics
-│ Progress: [██████████████░░] 72%    │ Visual progress
-│ Active WOs: 3 | Completed: 5        │ Work order stats
-│ Quality Rate: 95% A-Grade           │ Quality metrics
-├─────────────────────────────────────┤
-│ 🏭 Machine Utilization              │ Machine section
+│ 📋 ALL WORK ORDERS                  │ Section header
 │ ┌─────────────────────────────────┐ │
-│ │ Loom A1: 🟢 Running (6h left)   │ │ Machine status
-│ │ WO#451 | Worker: Vikram         │ │ Current assignment
-│ │ Efficiency: 85% | Output: 142m/h │ │ Performance
-│ └─────────────────────────────────┘ │ Machine card
-│ ┌─────────────────────────────────┐ │
-│ │ Loom B2: 🟡 Setup (15 min)      │ │ Setup status
-│ │ Next: WO#453 | Worker: Priya    │ │ Upcoming work
-│ │ Est. Start: 3:15 PM             │ │ Schedule info
-│ └─────────────────────────────────┘ │
-│ ┌─────────────────────────────────┐ │
-│ │ Loom C1: 🔴 Maintenance          │ │ Down for service
-│ │ Issue: Thread tension adjustment │ │ Maintenance reason
-│ │ ETA: 1 hour | Technician: Ravi  │ │ Resolution timeline
-│ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 👥 Worker Status                    │ Worker section
-│ Active: 4/8 workers                 │ Utilization summary
-│ Shift: Day (8 AM - 6 PM)           │ Current shift
-│ Break: 2 workers (12:00-12:30)     │ Break tracking
-│ Overtime: 1 worker scheduled       │ Extra hours
-├─────────────────────────────────────┤
-│ ⚠️ Alerts & Issues                  │ Alert section
-│ 🔴 WO#452: QC overdue (2 hours)     │ Quality alert
-│ 🟡 Material: Cotton yarn low (1 day) │ Supply warning
-│ 🟢 All machines within temperature  │ Normal conditions
-├─────────────────────────────────────┤
-│ [Shift Handover] [Export Report]    │ Management actions
-└─────────────────────────────────────┘
-```
-
-#### **Shift Handover Interface** (Production Management Tool)
-
-```
-┌─────────────────────────────────────┐
-│ Shift Handover — Day to Night   [←] │ Handover header
-│ From: Ravi Sharma | To: Suresh Patel │ Supervisor transition
-├─────────────────────────────────────┤
-│ 📋 Day Shift Summary                │ Outgoing summary
-│ Shift: 8 AM - 6 PM (10 hours)      │ Shift duration
-│ Target: 2500m | Achieved: 2400m     │ Performance summary
-│ Completion Rate: 96%                │ Success metric
-│ A-Grade Output: 2280m (95%)         │ Quality achievement
-├─────────────────────────────────────┤
-│ 🏭 Machine Status Handover          │ Equipment status
-│ Loom A1: Running WO#451 (2h left)  │ Continuing work
-│ Loom B2: Ready for WO#453          │ Next assignment
-│ Loom C1: Maintenance completed ✅   │ Resolved issues
-├─────────────────────────────────────┤
-│ ⚠️ Issues to Address                │ Pending issues
-│ ┌─────────────────────────────────┐ │
-│ │ WO#452: QC failed, needs rework │ │ Quality issue
-│ │ Assigned to: Night shift        │ │ Responsibility
-│ │ Priority: High | Due: Tomorrow  │ │ Urgency level
-│ └─────────────────────────────────┘ │ Issue card
-├─────────────────────────────────────┤
-│ 📝 Additional Notes                 │ Communication
-│ ┌─────────────────────────────────┐ │
-│ │ [New cotton yarn batch received │ │ Notes area
-│ │  this morning. Quality looks    │ │ Free-form text
-│ │  good. Loom B2 tension adjusted] │ │ Shift details
-│ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 👤 Night Shift Acknowledgment      │ Incoming supervisor
-│ Received by: Suresh Patel          │ Supervisor name
-│ Time: 6:00 PM, Dec 20, 2024        │ Handover timestamp
-│ ☑️ All points understood           │ Confirmation
-├─────────────────────────────────────┤
-│     [Complete Handover]             │ Finalize transition
-└─────────────────────────────────────┘
-```
-
-#### **Active Tab - Live Production Tracking**
-
-```
-┌─────────────────────────────────────┐
-│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
-│ [🔍 Search active work... (🎙)]     │ Search: 44px
-├─────────────────────────────────────┤
-│ 🎯 ACTIVE WORK ORDERS               │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ WO#451 — Cotton Fabric Batch 1  │ │ Work order title
-│ │ Machine: Loom A1 | Worker: Vikram │ │ Assignment info
-│ │ Status: 🟡 In Progress          │ │ Live status
-│ │ Progress: [████████░░] 80%      │ │ Progress bar
-│ │ Target: 1000m | Done: 800m      │ │ Metrics: 14px
-│ │ [Update Status] [View Details]  │ │ Actions: 32px
+│ │ WO#2345-A  SO#2345 Ajay Textiles│ │ WO with SO context
+│ │ Machine: Loom A1 | Worker: Vikram │ │ Assignment details
+│ │ Planned: 400m | Done: 400m ✅ Completed │ │ Status: complete
+│ │ [View WO] [History]             │ │ Actions: 32px
 │ └─────────────────────────────────┘ │ Card: 140px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
-│ │ WO#452 — Silk Blend Batch 1     │ │ Another WO
-│ │ Machine: Loom B2 | Worker: Priya │ │ Different assignment
-│ │ Status: 🔴 Ready to Start       │ │ Not started
-│ │ Target: 500m | ETA: 6 hours     │ │ Time estimate
-│ │ [Start Production] [Assign]     │ │ Start actions
+│ │ WO#2345-B  SO#2345 Ajay Textiles│ │ Same order, another WO
+│ │ Machine: Loom A2 | Worker: Priya │ │ Different assignment
+│ │ Planned: 600m | Done: 300m 🟡 Running │ │ Status: active
+│ │ [+ Update Qty] [Reassign Machine] [View WO] │ │ Management actions
 │ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ ⏱️ PRODUCTION TIMELINE              │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ Today's Target: 1500m           │ │ Daily goal
-│ │ Completed: 800m (53%)           │ │ Progress
-│ │ Active Workers: 2/5             │ │ Utilization
-│ │ Machines Running: 2/3           │ │ Machine status
-│ │ [Floor Dashboard] [Reports]     │ │ Management tools
-│ └─────────────────────────────────┘ │ Summary card
-├─────────────────────────────────────┤
-│            [+ Start New WO]         │ 56px CTA
-├─────────────────────────────────────┤
-│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
-└─────────────────────────────────────┘
-```
-
-#### **QC Tab - Quality Control Management**
-
-```
-┌─────────────────────────────────────┐
-│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
-│ [🔍 Search QC items... (🎙)]        │ Search: 44px
-├─────────────────────────────────────┤
-│ ⚠️ PENDING QUALITY CHECKS           │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ WO#451 — Cotton Fabric Batch 1  │ │ Work order
-│ │ Completed: 2 hours ago          │ │ Timing context
-│ │ Worker: Vikram | Machine: Loom A1 │ │ Production info
-│ │ Status: ⏳ QC Required          │ │ Urgent status
-│ │ [Start QC] [View Details]       │ │ Actions: 32px
-│ └─────────────────────────────────┘ │ Card: 120px
 │                                     │
 │ ┌─────────────────────────────────┐ │ 12px gap
-│ │ WO#452 — Silk Blend Batch 2     │ │ Another item
-│ │ Completed: 30 mins ago          │ │ Recent completion
-│ │ Worker: Priya | Machine: Loom B2 │ │ Assignment record
-│ │ Status: 🔴 Overdue QC           │ │ Alert status
-│ │ [Urgent QC] [Escalate]          │ │ Priority actions
+│ │ WO#2346-A  SO#2346 Bharat Mills │ │ Different order
+│ │ Machine: Loom B1 | Worker: —    │ │ No worker assigned
+│ │ Planned: 500m | Done: 0m 🔴 Not Started │ │ Status: pending
+│ │ [Assign Machine]                │ │ Assignment needed
 │ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ ✅ QC COMPLETED TODAY               │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ WO#450 — Cotton Yarn Batch 3    │ │ Completed work
-│ │ QC Inspector: Ravi Sharma       │ │ Inspector record
-│ │ Grade: A Grade (Premium) ✅     │ │ Quality result
-│ │ QC Time: 1:30 PM                │ │ Completion time
-│ │ [View Report] [Approve]         │ │ Follow-up actions
-│ └─────────────────────────────────┘ │ Card: 120px
-│      [📊 QC Dashboard] [Reports]     │ Management tools
 ├─────────────────────────────────────┤
 │ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
 └─────────────────────────────────────┘
 ```
 
-#### **Ready Tab - Delivery & Fulfillment Management**
+**W.O. Tab Actions:**
+- **+ Update Qty**: Enter progress popup for recording daily/shift production
+- **Reassign Machine**: Pick from available machines for work order reassignment
+- **Assign Machine**: Assign work order to a machine and worker
+- **View WO**: Open detailed Work Order screen with full production history
+
+#### **Work Order Detail Interface** (W.O. Tab Drill-down)
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Plan│Active│QC│Ready ]  │ Sub-tabs: 48px
-│ [🔍 Search ready orders... (🎙)]    │ Search: 44px
+│ WO#2345-B — Ajay Textiles (SO#2345) [←] │ WO header with context
 ├─────────────────────────────────────┤
-│ 📦 READY FOR DELIVERY               │ Section header
+│ 🎯 Work Order Details               │ Section header
+│ Machine: Loom A2    [Change ▾]      │ Machine assignment
+│ Worker:  Priya      [Change ▾]      │ Worker assignment
+│ Planned: 600m | Produced: 300m | Remaining: 300m │ Progress metrics
+│ Material Allocated: Yarn ✅  Dye ✅ │ Material status
+│ Status: 🟡 Running                  │ Current status
+├─────────────────────────────────────┤
+│ [+ Update Quantity] [Pause] [Mark Complete] │ Primary actions: 44px
+├─────────────────────────────────────┤
+│ 📊 Production History ▼             │ Expandable history
+│ - 22 Dec 10:00 Started by Priya     │ Historical entries
+│ - 22 Dec 12:30 +150m                │ Progress updates
+│ - 22 Dec 4:00 +150m                 │ Daily tracking
+└─────────────────────────────────────┘
+```
+
+**Update Quantity Modal:**
+```
+┌─────────────────────────────────────┐
+│ Update Production Progress      [×] │ Modal header
+├─────────────────────────────────────┤
+│ Produced today: [ 250 ] m           │ Input field: 44px
+│ Scrap: [ 5 ] m                      │ Waste tracking
+│ Notes: [Optional]                   │ Comments area: 60px
+├─────────────────────────────────────┤
+│         [Save Progress]             │ Primary action: 44px
+└─────────────────────────────────────┘
+```
+
+#### **Machines Tab - Operator Production Interface**
+
+**Purpose**: Operator view for machine-level execution. Shows current work orders, enables progress updates, and manages job queue for assigned machines.
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+├─────────────────────────────────────┤
+│ 🏭 MACHINES                         │ Section header
+├─────────────────────────────────────┤
+│ Loom A2 (Priya) | Status: 🟡 Running │ Machine operator header
+├─────────────────────────────────────┤
+│ 🎯 CURRENT WORK ORDER               │ Active job section
 │ ┌─────────────────────────────────┐ │
-│ │ Order #O-2345 — Cotton Fabric   │ │ Completed order
-│ │ Customer: Ajay Textiles         │ │ Customer info
-│ │ Qty: 1000m | QC: A Grade ✅     │ │ Quality confirmed
-│ │ Ready Since: Dec 20, 2:30 PM    │ │ Completion time
-│ │ [Assign Delivery] [Pack Order]  │ │ Actions: 32px
+│ │ Current WO: WO#2345-B — Ajay Textiles │ │ Active assignment
+│ │ Qty: 600m | Produced: 300m | Remaining: 300m │ │ Progress metrics
+│ │ [Start WO] [+ Update Qty] [Pause] [Mark Complete] │ │ Operator actions
+│ └─────────────────────────────────┘ │ Current job card: 120px
+├─────────────────────────────────────┤
+│ 📋 NEXT IN QUEUE                    │ Queue section
+│ ┌─────────────────────────────────┐ │
+│ │ - WO#2348-A | Ajay Textiles | 0/400 🔴 │ │ Upcoming job
+│ │ - WO#2349-A | Bharat Mills  | 0/300 🔴 │ │ Queue item
+│ └─────────────────────────────────┘ │ Queue card: 80px
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
+└─────────────────────────────────────┘
+```
+
+**Machines Tab Operator Flow:**
+- **Start WO**: Tap when beginning a work order → WO status changes to Running
+- **+ Update Qty**: Record daily/shift progress with quantity produced and any scrap
+- **Pause**: Temporary stop due to issue (material shortage, machine problem, break)
+- **Mark Complete**: Finish work order → triggers automatic QC entry in QC tab
+
+**Operator Interface Notes:**
+- **Operators see only their assigned machine(s)** and work orders in their queue
+- **Supervisors see all machines** with operator names and current assignments
+- **Touch-optimized controls** for factory floor use with large, easy-to-tap buttons
+- **Voice input support** for hands-free quantity updates during production
+
+#### **QC Tab - Quality Control & Inspection Management**
+
+**Purpose**: QC Inspector/Supervisor view for inspecting completed Work Orders and recording quality status with pass/rework decisions.
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+├─────────────────────────────────────┤
+│ 🔎 QC QUEUE                         │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ WO#2345-B — Ajay Textiles | Loom A2 │ │ Work order context
+│ │ Qty: 600m | Completed: 22 Dec | Pending QC │ │ Completion details
+│ │ [Start QC]                      │ │ Primary action: 32px
+│ └─────────────────────────────────┘ │ Card: 120px
+├─────────────────────────────────────┤
+│ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
+└─────────────────────────────────────┘
+```
+
+#### **QC Form Interface** (QC Tab Action)
+
+```
+┌─────────────────────────────────────┐
+│ QC Inspection — WO#2345-B       [←] │ QC header
+│ Ajay Textiles | Cotton Fabric       │ Context details
+├─────────────────────────────────────┤
+│ ✅ QUALITY CHECKLIST                │ Inspection section
+│ Color match: [✓]                    │ Checkbox items: 32px
+│ GSM: [✓]                            │ Weight specification
+│ Defects: [0]                        │ Defect count input
+├─────────────────────────────────────┤
+│ 📷 PHOTO EVIDENCE                   │ Documentation section
+│ [📷 Capture]                        │ Photo button: 44px
+├─────────────────────────────────────┤
+│ 📝 QC REMARKS                       │ Notes section
+│ ┌─────────────────────────────────┐ │
+│ │ ________________________        │ │ Text area: 60px
+│ └─────────────────────────────────┘ │
+├─────────────────────────────────────┤
+│ 🎯 QC RESULT                        │ Decision section
+│ [ ✅ Pass ]      [ ⚠️ Rework ]      │ Primary actions: 56px
+└─────────────────────────────────────┘
+```
+
+**QC Tab Actions:**
+- **✅ Pass**: WO status = Completed (QC passed), moves to Ready tab when all SO work orders pass
+- **⚠️ Rework**: System creates new rework Work Order (WO#2345-B-R1), sends back to W.O. tab for reassignment
+
+**QC Process Flow:**
+1. **Completed Work Orders** automatically appear in QC Queue when operators mark them complete
+2. **QC Inspector** performs physical inspection using standard checklist
+3. **Photo Evidence** required for quality documentation and traceability
+4. **Pass/Rework Decision** determines next step in production workflow
+5. **Sales Order Completion**: When all Work Orders under a Sales Order pass QC → SO moves to Ready tab
+
+**QC Status Indicators:**
+- **⏳ Pending QC**: Work order completed, awaiting quality inspection
+- **✅ QC Passed**: Quality approved, ready for delivery preparation
+- **⚠️ Rework Required**: Quality issues found, new rework work order created
+- **🔴 QC Overdue**: Inspection delayed beyond standard timeframe
+
+#### **Ready Tab - Packing, Dispatch & Delivery Management**
+
+**Purpose**: Store/Dispatch view for managing packing, dispatch, and invoicing for Sales Orders ready for shipment after QC completion.
+
+```
+┌─────────────────────────────────────┐
+│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+├─────────────────────────────────────┤
+│ 📦 READY FOR DISPATCH               │ Section header
+│ ┌─────────────────────────────────┐ │
+│ │ SO#2345 Ajay Textiles           │ │ Sales Order header
+│ │ Product: Cotton Fabric | Qty: 1000m │ │ Product details
+│ │ All Work Orders QC Passed ✅    │ │ QC confirmation
+│ │ Ready Since: 23 Dec 10:00 AM    │ │ Completion timestamp
+│ │ [Pack & Dispatch]               │ │ Primary action: 32px
 │ └─────────────────────────────────┘ │ Card: 140px
-│                                     │
-│ ┌─────────────────────────────────┐ │ 12px gap
-│ │ Order #O-2340 — Silk Blend      │ │ Another order
-│ │ Customer: Ravi Industries       │ │ Different customer
-│ │ Qty: 500m | QC: A Grade ✅      │ │ High quality
-│ │ Status: 🚚 Delivery Assigned    │ │ In progress
-│ │ [Track Delivery] [Update]       │ │ Management
-│ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 🚚 DELIVERY ASSIGNMENTS             │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ Vehicle: GJ-01-AB-1234          │ │ Vehicle info
-│ │ Driver: Suresh Patel            │ │ Driver details
-│ │ Orders: 3 | Total: 2000m        │ │ Load summary
-│ │ Route: Surat → Ahmedabad        │ │ Delivery route
-│ │ [Track Live] [Contact Driver]   │ │ Tracking actions
-│ └─────────────────────────────────┘ │ Card: 120px
-├─────────────────────────────────────┤
-│ ✅ DELIVERED TODAY                  │ Section header
-│ ┌─────────────────────────────────┐ │
-│ │ Order #O-2338 — Cotton Yarn     │ │ Delivered order
-│ │ Customer: Jay Fabrics           │ │ Customer record
-│ │ Delivered: 11:30 AM ✅          │ │ Success status
-│ │ Proof: Signature + Photo        │ │ Evidence captured
-│ │ [View Proof] [Invoice]          │ │ Follow-up actions
-│ └─────────────────────────────────┘ │ Card: 120px
-├─────────────────────────────────────┤
-│        [+ Schedule Delivery]        │ 56px CTA
 ├─────────────────────────────────────┤
 │ 🏠   💼   🏭•  📦   👥         [+] │ Active: Production
 └─────────────────────────────────────┘
 ```
 
-#### **Work Order Detail Interface** (Active Tab Drill-down)
+#### **Pack & Dispatch Form** (Ready Tab Action)
 
 ```
 ┌─────────────────────────────────────┐
-│ WO#451 — Cotton Fabric Batch 1 [←] │ Header with back
-│ Order: #O-2345 | Machine: Loom A1   │ Context: 32px
+│ Pack & Dispatch — SO#2345       [←] │ Form header
+│ Ajay Textiles | Cotton Fabric       │ Context details
 ├─────────────────────────────────────┤
-│ 🎯 Job Information                  │ Section header
-│ Target Quantity: 1000m             │ Large text: 18px
-│ Produced: 800m                     │ Bold progress
-│ Remaining: 200m                    │ Calculated
-│ Progress: [████████░░] 80%         │ Visual progress
+│ 🚚 DISPATCH DETAILS                 │ Section header
+│ Vehicle: [ GJ-01-AB-1123 ▾ ]        │ Vehicle selection: 44px
+│ Driver:  [ Suresh Patel ▾ ]         │ Driver selection: 44px
+│ Invoice: Auto-generated (INV-00123) │ Invoice reference
 ├─────────────────────────────────────┤
-│ ⏱️ Time Tracking                    │
-│ Started: 08:15 AM                  │ Start time
-│ Running: 02:45:30                  │ Live timer: 24px
-│ Est. Completion: 11:30 AM          │ Calculated ETA
+│ 📞 CUSTOMER NOTIFICATION            │ Communication section
+│ Notify Customer: [WhatsApp ✓] [SMS ✓] │ Multi-channel notification
 ├─────────────────────────────────────┤
-│ 📊 Today's Production Entry         │
-│ ┌─────────────────────────────────┐ │
-│ │ Qty Produced: [50] m    [+][-] │ │ Number input
-│ └─────────────────────────────────┘ │ With +/- buttons
-│ ┌─────────────────────────────────┐ │
-│ │ Scrap/Waste:  [5 ] m    [+][-] │ │ Waste tracking
-│ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 📝 Issues/Notes                     │
-│ ┌─────────────────────────────────┐ │
-│ │ [Minor color variation noted]   │ │ Text area: 60px
-│ └─────────────────────────────────┘ │
-├─────────────────────────────────────┤
-│ 📷 Photo Evidence                   │
-│ [📷 Attach Progress Photo]          │ Photo button: 44px
-│ [Current quality looks good.jpg]    │ Attached file
-├─────────────────────────────────────┤
-│                                     │ Action area
-│    [Pause Job]    [Complete Job]    │ Large buttons: 56px
-│                                     │ Side by side
-├─────────────────────────────────────┤
-│ ⚠️ QC required before completion    │ Reminder: 32px
+│         [Confirm Dispatch]          │ Primary action: 56px
 └─────────────────────────────────────┘
 ```
+
+**Ready Tab Actions:**
+- **Pack & Dispatch**: Creates Delivery Challan + Invoice, marks SO as Dispatched
+- **Customer Notifications**: Automatic WhatsApp + SMS alerts with tracking details
+- **Invoice Generation**: Auto-generated invoice linked to Sales Order and dispatch
+- **Cross-Module Integration**: Dispatch details flow to Sales/Invoice/Payments modules
+
+**Ready Tab Process Flow:**
+1. **QC Completion**: Sales Orders appear in Ready tab when all Work Orders pass QC
+2. **Packing Preparation**: Store team prepares goods for dispatch with quality documentation
+3. **Dispatch Assignment**: Vehicle and driver assignment with delivery route planning
+4. **Invoice Creation**: Automatic invoice generation based on completed work and quality grades
+5. **Customer Communication**: Multi-channel notifications with tracking and delivery details
+6. **Integration**: Dispatch completion triggers updates in Sales, Customer, and Accounts modules
+
+**Ready Tab Status Indicators:**
+- **📦 Ready for Dispatch**: All QC passed, awaiting packing and vehicle assignment
+- **🚚 Dispatch Assigned**: Vehicle and driver assigned, preparing for departure
+- **✅ Dispatched**: Goods shipped, customer notified, invoice generated
+- **🎯 Delivered**: Final delivery confirmed with proof of delivery documentation
+
 
 #### **Quality Control Detail Interface** (QC Tab Drill-down)
 
@@ -1975,34 +1944,35 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 ### **Production Module Cross-Integration Workflows**
 
 #### **Sales → Production Integration**
-- **Sales Orders automatically appear in Plan tab** when payment confirmation received
-- **Order status updates**: Production → In Progress, Quality Check → QC Complete, Ready → Delivered
-- **Material requirements calculated** from Sales Order specifications and auto-fed to Procurement
-- **Customer notifications** sent automatically at key production milestones
+- **Sales Orders automatically appear in Orders tab** when payment confirmation received
+- **Material availability checking**: Orders tab displays real-time material status for production planning
+- **Production initiation**: "Start Production" creates Work Orders and moves workflow to W.O. tab
+- **Order status updates**: Orders → W.O. → Machines → QC → Ready workflow progression
+- **Customer notifications** sent automatically at key production milestones (started, QC passed, ready)
 
 #### **Production → Customer Integration**  
-- **Delivery notifications**: SMS + WhatsApp alerts when order ready and dispatched
-- **Live tracking links** shared with customers for real-time delivery visibility
-- **Delivery confirmations** with photo proof and digital signatures auto-saved to Customer records
-- **Invoice triggering**: Automatic invoice generation upon delivery confirmation
+- **Dispatch notifications**: Ready tab triggers SMS + WhatsApp alerts when goods are packed and dispatched
+- **Invoice generation**: Automatic invoice creation upon dispatch confirmation from Ready tab
+- **Quality documentation**: QC pass certificates attached to customer records for quality assurance
+- **Delivery tracking**: Multi-channel communication with real-time updates throughout production flow
 
 #### **Production → Procurement Integration**
-- **Material shortage detection**: Bulk WO creation wizard calculates total material needs
-- **Purchase request auto-creation** when material shortages detected during WO planning
-- **Inventory consumption tracking**: Raw materials auto-deducted when Work Orders started
-- **Stock level alerts** integrated into Production Floor Dashboard
+- **Material shortage alerts**: Orders tab displays material availability and triggers procurement alerts
+- **Automatic purchase requests**: Material shortages in Orders tab create immediate purchase requests
+- **W.O. tab material allocation**: Work Order creation reserves materials and updates availability
+- **Real-time stock integration**: All tabs display current material status for informed decision-making
 
 #### **Production → Inventory Integration**
-- **Finished goods auto-addition**: Completed WOs automatically add finished products to inventory
-- **Quality grade tracking**: A/B grade classifications maintained through inventory system
-- **Batch tracking**: Work Order numbers become batch identifiers for inventory management
-- **Location updates**: Finished goods moved to "Ready for Delivery" warehouse location
+- **Raw material consumption**: Work Orders in Machines tab auto-deduct materials when production starts
+- **Finished goods creation**: QC tab completion automatically adds finished products to inventory
+- **Quality-based inventory**: QC pass/rework decisions determine inventory quality grades
+- **Ready tab integration**: Dispatch from Ready tab updates inventory locations and availability
 
 #### **Production → Accounts Integration**
-- **Cost tracking**: Work Order labor and material costs auto-calculated for COGS
-- **Production expense allocation**: Machine usage, worker wages allocated per WO
-- **Quality impact on pricing**: A/B grade classification affects final invoice amounts
-- **Delivery completion triggers**: Final invoice generation and payment tracking
+- **Work Order costing**: W.O. and Machines tabs track labor and material costs per work order
+- **Quality-based pricing**: QC tab results affect final invoice amounts and quality premiums
+- **Dispatch-triggered invoicing**: Ready tab dispatch automatically generates invoices and delivery challans
+- **Cross-module cost tracking**: Production costs flow through to Sales, Customer, and Accounts modules
 
 ---
 

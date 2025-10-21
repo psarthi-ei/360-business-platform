@@ -1,0 +1,269 @@
+🏭 PRODUCTION MODULE — COMPLETE VISUAL FLOW
+1️⃣ Tabs Overview (Top Navigation inside “Production”)
+──────────────────────────────────────────────
+🏭 PRODUCTION
+──────────────────────────────────────────────
+[ Orders ] [ W.O. ] [ Machines ] [ QC ] [ Ready ]
+──────────────────────────────────────────────
+
+
+Default = Orders (Supervisor) or Machines (Operator)
+
+Tabs scroll horizontally if needed
+
+Each tab = role-specific stage in production
+
+2️⃣ ORDERS TAB (Supervisor – SO-level view)
+
+Purpose: See confirmed Sales Orders, start production, monitor progress.
+
+──────────────────────────────────────────────
+🔍 Search Order or Customer (🎙)
+──────────────────────────────────────────────
+#SO-2345  Ajay Textiles
+Product: Cotton Fabric  | Qty: 1000m
+Material: ✅ Available  |  Due: 25 Dec
+Status: 🟡 Not Started
+[ Start Production ]    [ View Details ]
+──────────────────────────────────────────────
+#SO-2346  Bharat Mills
+Product: Linen Fabric  | Qty: 500m
+Material: ⚠️ Shortage (Yarn, Dye)
+Status: 🔴 Material Pending
+[ Go to Procurement ]
+──────────────────────────────────────────────
+#SO-2347  Ramesh Exports
+Product: Grey Fabric   | Qty: 1200m
+Material: ✅ Available
+Status: 🔵 In Production
+Progress: █████░░░░ 60%
+[ View Work Orders ▾ ]
+──────────────────────────────────────────────
+▼ Expand WOs (optional)
+  - WO#2347-A  Loom A1 | 400m | Done ✅
+  - WO#2347-B  Loom A2 | 300m | Running 🟡
+  - WO#2347-C  Loom A3 | 500m | Not Started 🔴
+──────────────────────────────────────────────
+
+
+Actions:
+
+Start Production → Creates WOs (auto-breakdown), reserves stock, moves to W.O. tab
+
+Go to Procurement → jumps to procurement module
+
+View Work Orders → expand inline or go to W.O. tab
+
+3️⃣ W.O. TAB (Planner / Supervisor – WO-level view)
+
+Purpose: Manage all work orders across machines.
+
+──────────────────────────────────────────────
+🗂 WORK ORDERS   [Filter: All ▾]
+──────────────────────────────────────────────
+WO#2345-A  SO#2345 Ajay Textiles
+Machine: Loom A1  | Worker: Vikram
+Planned: 400m  | Done: 400m ✅ Completed
+[ View WO ]  [ History ]
+──────────────────────────────────────────────
+WO#2345-B  SO#2345 Ajay Textiles
+Machine: Loom A2  | Worker: Priya
+Planned: 600m  | Done: 300m 🟡 Running
+[ + Update Qty ] [ Reassign Machine ] [ View WO ]
+──────────────────────────────────────────────
+WO#2346-A  SO#2346 Bharat Mills
+Machine: Loom B1 | Worker: — 
+Planned: 500m | Done: 0m 🔴 Not Started
+[ Assign Machine ]
+──────────────────────────────────────────────
+
+
+Actions:
+
++ Update Qty → enter progress popup
+
+Reassign Machine → pick from available machines
+
+Assign Machine → assign WO to a machine/worker
+
+View WO → opens WO Detail screen
+
+➕ WO DETAIL SCREEN
+──────────────────────────────────────────────
+WO#2345-B — Ajay Textiles (SO#2345)
+──────────────────────────────────────────────
+Machine: Loom A2   [Change ▾]
+Worker:  Priya     [Change ▾]
+Planned: 600m | Produced: 300m | Remaining: 300m
+Material Allocated: Yarn ✅  Dye ✅
+Status: 🟡 Running
+──────────────────────────────────────────────
+[ + Update Quantity ]  [ Pause ]  [ Mark Complete ]
+──────────────────────────────────────────────
+History ▼
+- 22 Dec 10:00 Started by Priya
+- 22 Dec 12:30 +150m
+- 22 Dec 4:00 +150m
+──────────────────────────────────────────────
+
+
+Update Quantity Modal:
+
+Produced today: [ 250 ] m
+Scrap: [ 5 ] m
+Notes: [ Optional ]
+[ Save Progress ]
+
+4️⃣ MACHINES TAB (Operator view – machine-level execution)
+
+Purpose: Operator runs, updates, and completes WOs on their assigned machine.
+
+──────────────────────────────────────────────
+🏭 MACHINES
+──────────────────────────────────────────────
+Loom A2 (Priya)  |  Status: 🟡 Running
+──────────────────────────────────────────────
+Current WO: WO#2345-B — Ajay Textiles
+Qty: 600m | Produced: 300m | Remaining: 300m
+[ Start WO ]  [ + Update Qty ]  [ Pause ]  [ Mark Complete ]
+──────────────────────────────────────────────
+Next in Queue:
+- WO#2348-A  | Ajay Textiles  | 0/400 🔴
+- WO#2349-A  | Bharat Mills   | 0/300 🔴
+──────────────────────────────────────────────
+
+
+Operator Flow:
+
+Tap Start WO when run begins → WO status → Running
+
+Tap + Update Qty to record daily/shift progress
+
+Tap Pause if stopped due to issue
+
+Tap Mark Complete when done → triggers QC entry
+
+Notes:
+
+Operators see only their machine(s) and assigned WOs
+
+Supervisor sees all machines + operator names
+
+5️⃣ QC TAB (QC Inspector / Supervisor)
+
+Purpose: Inspect completed WOs, record quality status.
+
+──────────────────────────────────────────────
+🔎 QC QUEUE
+──────────────────────────────────────────────
+WO#2345-B — Ajay Textiles | Loom A2
+Qty: 600m | Completed: 22 Dec | Pending QC
+[ Start QC ]
+──────────────────────────────────────────────
+QC FORM:
+Color match: [✓]  GSM: [✓]  Defects: [0]
+Photo: [📷 Capture]
+Remarks: ________________________
+Result:  [ ✅ Pass ]   [ ⚠️ Rework ]
+──────────────────────────────────────────────
+
+
+Actions:
+
+Pass → WO status = Completed (QC passed)
+
+Rework → system creates new WO (WO#2345-B-R1), sends to W.O. tab
+
+Once all WOs under SO pass QC → SO moves to “Ready” tab
+
+6️⃣ READY TAB (Dispatch / Store view)
+
+Purpose: Manage packing, dispatch, and invoicing for Sales Orders ready for shipment.
+
+──────────────────────────────────────────────
+📦 READY FOR DISPATCH
+──────────────────────────────────────────────
+SO#2345 Ajay Textiles
+Product: Cotton Fabric | Qty: 1000m
+All Work Orders QC Passed ✅
+Ready Since: 23 Dec 10:00 AM
+[ Pack & Dispatch ]
+──────────────────────────────────────────────
+Pack & Dispatch Form
+──────────────────────────────────────────────
+Vehicle: [ GJ-01-AB-1123 ▾ ]
+Driver:  [ Suresh Patel ▾ ]
+Invoice: Auto-generated (INV-00123)
+Notify Customer: [WhatsApp ✓] [SMS ✓]
+[ Confirm Dispatch ]
+──────────────────────────────────────────────
+
+
+Actions:
+
+Pack & Dispatch → creates Delivery Challan + Invoice, marks SO → Dispatched
+
+Dispatch details go to Sales / Invoice / Payments module
+
+7️⃣ ROLE-BASED NAVIGATION SUMMARY
+Role	Default Tab	Visible Tabs	Typical Actions
+Supervisor / Planner	Orders	Orders, W.O., Machines, QC, Ready	Start Production, Assign Machines, Approve QC, Dispatch
+Operator	Machines	Machines	Start, Update, Pause, Complete WOs
+QC Inspector	QC	QC, Ready	QC Pass/Fail, Rework
+Store / Dispatch	Ready	Ready	Pack, Dispatch
+Owner	Orders	All	Review progress, oversee dispatch
+8️⃣ END-TO-END DATA FLOW (System Summary)
+Sales Order (SO)
+     │
+     ▼
+[ ORDERS TAB ]
+Supervisor taps → "Start Production"
+     │
+     ▼
+Work Orders (WO) auto-created
+     │
+     ▼
+[ W.O. TAB ]
+Plan, assign machines, monitor progress
+     │
+     ▼
+[ MACHINES TAB ]
+Operators produce, update, complete
+     │
+     ▼
+[ QC TAB ]
+Inspector validates, pass/rework
+     │
+     ▼
+[ READY TAB ]
+Dispatch, pack, invoice auto-generated
+     │
+     ▼
+Sales → Payment → Close Order
+
+💡 DESIGN PRINCIPLES IMPLEMENTED
+Principle	Implementation
+MSME Simplicity	1-tap actions, minimal typing
+Visual Consistency	Cards + CTAs + progress bars
+Role-based UX	Tabs auto-filtered per user
+Mobile-first	Scrollable tabs, 1 column layout
+Scalable	Can add Rework, Maintenance, Dashboard later
+ERP-compliant	WOs at core, SO linkage preserved
+Traceable	QC & Ready separated cleanly
+
+✅ Summary — Production module final layout
+
+🏭 PRODUCTION
+──────────────────────────────────────────────
+[ Orders ] [ W.O. ] [ Machines ] [ QC ] [ Ready ]
+──────────────────────────────────────────────
+ Orders → Start Production
+ W.O. → Manage and track all work orders
+ Machines → Operator runs jobs
+ QC → Quality validation
+ Ready → Packing & Dispatch
+──────────────────────────────────────────────
+
+
+Every tab has a single purpose,
+and all 5 together form the complete real-life production flow for MSMEs.

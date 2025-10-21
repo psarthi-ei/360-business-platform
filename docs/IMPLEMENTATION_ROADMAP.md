@@ -2,7 +2,7 @@
 
 **Project**: Complete UI implementation with mock data for Gujarat textile manufacturers  
 **Strategy**: Core Views → Cross-Module Navigation → CRUD Operations  
-**Timeline**: ~8.5 hours remaining implementation
+**Timeline**: ~9.5 hours remaining implementation
 
 ---
 
@@ -39,24 +39,46 @@
 
 ## **PENDING IMPLEMENTATION** ⏳
 
-## **PHASE 6: PRODUCTION MODULE** ⏳ **PENDING**
-*Duration: 1.5 hours | Sub-phases: 4*
+## **PHASE 6: PRODUCTION MODULE** 🔄 **IN PROGRESS** 
+*Duration: 2.5 hours remaining | Sub-phases: 6 (1 partially completed)*
 
-### **Sub-Phase 6.1: Create Production Module Shell** ⏱️ *20 minutes*
-**Objective**: Build production module structure with 4-tab navigation (Plan | Active | QC | Ready)  
+### **Sub-Phase 6.1: Update Production Module Shell** ⏱️ *25 minutes* 🔄 **IN PROGRESS**
+**Objective**: Update production module structure to 5-tab navigation (Orders | W.O. | Machines | QC | Ready) with role-based navigation  
 **References**: [PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution)
+**Status**: Requires update from 4-tab to 5-tab container with new filter configurations, role-based state management, and updated component routing
 
-### **Sub-Phase 6.2: Plan & Active Tabs** ⏱️ *35 minutes*
-**Objective**: Implement work order planning and live production tracking tabs  
-**References**: [Plan Tab - Work Order Planning](../docs/VISUAL_DESIGN_SPECIFICATION.md#plan-tab---work-order-planning--creation) | [Active Tab - Live Production Tracking](../docs/VISUAL_DESIGN_SPECIFICATION.md#active-tab---live-production-tracking)
+**Shell Architecture Changes Required**:
+- Update `ProductionTabType` from `'plan' | 'active' | 'qc' | 'ready'` to `'orders' | 'wo' | 'machines' | 'qc' | 'ready'`
+- Add role-based default tab logic (Supervisor→Orders, Operator→Machines, QC Inspector→QC, Store→Ready)
+- Update filter configurations for each new tab type
+- Update component imports: `WorkOrderPlanning` → `OrdersTab`, `LiveProductionTracking` → split into `WorkOrderTab` + `MachinesTab`
+- Update CTA button contextual text and actions for new workflow
+- Update count calculations and scroll behavior for 5-tab structure
 
-### **Sub-Phase 6.3: Quality Control Tab** ⏱️ *25 minutes*
-**Objective**: Implement QC tab with inspection management and quality documentation  
-**References**: [QC Tab - Quality Control Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#qc-tab---quality-control-management)
+### **Sub-Phase 6.2: Orders Tab - Sales Order Management** ⏱️ *25 minutes* ⏳ **NEXT PRIORITY**
+**Objective**: Implement Orders tab with Sales Order management and production initiation workflow (Supervisor view)  
+**References**: [Orders Tab - Sales Order Management & Production Initiation](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation)
+**Approach**: Sales Order cards with material availability checking, "Start Production" workflow, and material shortage alerts
 
-### **Sub-Phase 6.4: Ready for Delivery Tab** ⏱️ *10 minutes*
-**Objective**: Implement delivery management and customer notification tab  
-**References**: [Ready Tab - Delivery & Fulfillment Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#ready-tab---delivery--fulfillment-management)
+### **Sub-Phase 6.3: W.O. Tab - Work Order Planning** ⏱️ *25 minutes*
+**Objective**: Implement W.O. tab with Work Order management, assignment, and progress monitoring (Planner/Supervisor view)  
+**References**: [W.O. Tab - Work Order Management & Planning](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
+**Approach**: Work Order cards with machine assignment, progress tracking, and Work Order detail interface
+
+### **Sub-Phase 6.4: Machines Tab - Operator Interface** ⏱️ *25 minutes*
+**Objective**: Implement Machines tab with live production execution and operator controls (Operator view)  
+**References**: [Machines Tab - Operator Production Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#machines-tab---operator-production-interface)
+**Approach**: Machine-centric interface with current Work Order, progress updates, touch-optimized controls, and job queue
+
+### **Sub-Phase 6.5: QC Tab - Quality Control & Inspection** ⏱️ *25 minutes*
+**Objective**: Implement QC tab with inspection management and pass/rework decisions (QC Inspector view)  
+**References**: [QC Tab - Quality Control & Inspection Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#qc-tab---quality-control--inspection-management)
+**Approach**: QC queue with inspection workflow, pass/rework decisions, and photo evidence capture
+
+### **Sub-Phase 6.6: Ready Tab - Dispatch & Delivery** ⏱️ *25 minutes*
+**Objective**: Implement Ready tab with packing, dispatch, and delivery management (Store/Dispatch view)  
+**References**: [Ready Tab - Packing, Dispatch & Delivery Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#ready-tab---packing-dispatch--delivery-management)
+**Approach**: Dispatch workflow with vehicle assignment, customer notifications, automatic invoice generation, and cross-module integration
 
 ---
 
@@ -88,9 +110,9 @@
 **Objective**: Add clickable links in Customer 360° tabs (Order items, Quote items, Payment items)  
 **References**: [Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen)
 
-### **Sub-Phase 8.3: Production Work Order Cross-Navigation** ⏱️ *30 minutes*
-**Objective**: Add clickable links in Work Order details (Sales Order ID, Material items, Customer, QC records)  
-**References**: [Work Order Detail Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-interface-active-tab-drill-down)
+### **Sub-Phase 8.3: Production Cross-Module Navigation** ⏱️ *35 minutes*
+**Objective**: Add clickable links across production workflow (Orders → Sales Orders, W.O. → Orders, Machines → W.O., QC → Work Orders, Ready → Customer)  
+**References**: [W.O. Tab Work Order Detail Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-interface-wo-tab-drill-down) | [Orders Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation)
 
 ### **Sub-Phase 8.4: Procurement PO Cross-Navigation** ⏱️ *20 minutes*
 **Objective**: Add clickable links in Purchase Order details (Work Order IDs, Material items, Supplier)  
@@ -111,7 +133,7 @@
 
 ### **Sub-Phase 9.3: Work Order Creation** ⏱️ *30 minutes*
 **Objective**: Implement work order generation from sales orders with resource allocation  
-**References**: [Bulk Work Order Creation Wizard](../docs/VISUAL_DESIGN_SPECIFICATION.md#bulk-work-order-creation-wizard-plan-tab-action)
+**References**: [Orders Tab Start Production Workflow](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation) | [W.O. Tab Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
 
 ### **Sub-Phase 9.4: Purchase Order Creation** ⏱️ *30 minutes*
 **Objective**: Implement material requirement to purchase order workflows  
@@ -152,21 +174,52 @@
 2. **Design System Compliance**: 100% design system token usage - NO hardcoded values (fonts, colors, spacing)
 3. **Component Pattern Compliance**: Follow COMPONENT_DESIGN_PATTERNS.md for templates, CSS variables, and scroll integration
 4. **Visual Design Compliance**: 100% adherence to Visual Design Specification
-5. **Mobile-First**: Touch-friendly, factory floor optimized interface
-6. **Professional Quality**: Production-ready B2B application
-7. **UI Excellence**: Focus on presenting mock data beautifully and professionally
+5. **Role-Based Navigation**: Implement default tab assignments and access control per user role (Supervisor/Operator/QC Inspector/Store)
+6. **Mobile-First**: Touch-friendly, factory floor optimized interface with voice integration hooks
+7. **Professional Quality**: Production-ready B2B application
+8. **UI Excellence**: Focus on presenting mock data beautifully and professionally
 
 ### **Git Workflow**
 - Commit after each sub-phase: `MOBILE UX V3 - SUB-PHASE [X.Y]: [Description]`
 - Mandatory rollback points for safety
 - Clean commit history with descriptive messages
 
+### **Component File Structure Updates for 5-Tab Production**
+
+**Current Component Architecture** (4-tab):
+```
+Production.tsx (main shell)
+├── WorkOrderPlanning.tsx (Plan tab)
+├── LiveProductionTracking.tsx (Active tab)  
+├── QualityControlManagement.tsx (QC tab)
+└── DeliveryFulfillment.tsx (Ready tab)
+```
+
+**New Component Architecture** (5-tab):
+```
+Production.tsx (updated shell - 5 tabs)
+├── OrdersTab.tsx (Orders tab - NEW/renamed from WorkOrderPlanning)
+├── WorkOrderTab.tsx (W.O. tab - NEW split from LiveProductionTracking)
+├── MachinesTab.tsx (Machines tab - NEW split from LiveProductionTracking)  
+├── QualityControlManagement.tsx (QC tab - UPDATED workflow)
+└── DeliveryFulfillment.tsx (Ready tab - UPDATED dispatch process)
+```
+
+**Required File Changes**:
+- **Production.tsx**: Update tab types, routing, filters, state management for 5-tab structure
+- **WorkOrderPlanning.tsx** → **OrdersTab.tsx**: Rename and update for Sales Order management workflow
+- **LiveProductionTracking.tsx**: Split functionality between WorkOrderTab.tsx (planning view) and MachinesTab.tsx (operator view)
+- **QualityControlManagement.tsx**: Update for pass/rework QC workflow with photo evidence
+- **DeliveryFulfillment.tsx**: Update for dispatch workflow with automatic invoice generation
+- **productionMockData.ts**: Update mock data structure for new 5-tab workflow and role-based navigation
+
 ### **Validation Requirements**
 - TypeScript compliance (zero `any` types)
 - Build verification after each phase
 - **MANDATORY Design System Token Audit**: Zero hardcoded fonts, colors, spacing values
 - **Component Pattern Validation**: Follow COMPONENT_DESIGN_PATTERNS.md checklist for templates and integration
-- Mobile responsiveness testing
+- **Role-Based Navigation Testing**: Verify default tab assignments and role-specific access control
+- Mobile responsiveness testing with factory floor optimization
 - Design system compliance verification (use `grep` to check for hardcoded values)
 
 ---
@@ -174,22 +227,24 @@
 ## **SUCCESS METRICS**
 
 ### **Technical Deliverables**
-- **5-Module Application**: Sales, Production, Procurement, Customers, Dashboard
+- **5-Module Application**: Sales, Production (5-tab with role-based navigation), Procurement, Customers, Dashboard
+- **Role-Based Production Interface**: Supervisor, Operator, QC Inspector, and Store/Dispatch optimized views
 - **Cross-Module Navigation**: Clickable relationships between business entities
 - **Complete CRUD Operations**: Create, read, update, delete across all modules
-- **Professional Interface**: Enterprise-grade B2B design system
+- **Professional Interface**: Enterprise-grade B2B design system with factory floor optimization
 
 ### **Business Value**
-- **Complete Workflow Coverage**: End-to-end textile manufacturing UI workflows
+- **Complete Workflow Coverage**: End-to-end textile manufacturing UI workflows with role-specific optimization
+- **Operator-Optimized Interface**: Touch-friendly, voice-integration ready Machines Tab for factory floor use
 - **Realistic Mock Data**: 50+ customers, 200+ orders, complete business ecosystem presentation
-- **Voice Integration Ready**: All hooks prepared for future voice commands
-- **Demo Ready**: Professional UI suitable for customer demos with mock data
+- **Role-Based Access Control**: UI-level role management for different production team members
+- **Demo Ready**: Professional UI suitable for customer demos with role-specific workflows and mock data
 
 ---
 
 ## **NEXT STEPS**
 
-**Immediate**: Continue with Sub-Phase 5.4 (Purchase Orders Tab) - 30 minutes remaining for Phase 5  
-**Timeline**: Complete all phases within ~8 hours for full application delivery  
-**Validation**: Test each module thoroughly before moving to next phase
+**Immediate**: Continue with Sub-Phase 6.1 (Update Production Module Shell) - Transition from 4-tab to 5-tab structure  
+**Timeline**: Complete all phases within ~9.5 hours for full application delivery (+1 hour for role-based production complexity)  
+**Validation**: Test each module thoroughly before moving to next phase, with special attention to role-based navigation in production
 **Documentation**: COMPONENT_DESIGN_PATTERNS.md now available for consistent component implementation
