@@ -8,6 +8,11 @@
   position: relative;
 }
 
+/* Configuration-driven CTA hiding - no blank space */
+.productionModule.noCTA {
+  grid-template-rows: 48px 44px 1fr; /* Remove 56px CTA row */
+}
+
 /* 48px Tab Navigation - Visual Design Spec */
 .productionTabs {
   display: flex;

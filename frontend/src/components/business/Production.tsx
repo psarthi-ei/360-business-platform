@@ -15,6 +15,15 @@ interface ProductionProps {
 
 type ProductionTabType = 'orders' | 'wo' | 'machines' | 'qc' | 'ready';
 
+// CTA visibility configuration - easy to modify for any tab
+const CTA_CONFIG = {
+  orders: { showCTA: false },      // Hide CTA for Orders tab
+  wo: { showCTA: true },           // Show CTA for Work Orders
+  machines: { showCTA: true },     // Show CTA for Machines
+  qc: { showCTA: true },           // Show CTA for QC
+  ready: { showCTA: true }         // Show CTA for Ready
+} as const;
+
 // Mock data counts for dynamic filtering
 const calculateOrdersCounts = () => ({
   all: 8,
@@ -393,8 +402,11 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     setTriggerOrdersModal(false);
   };
 
+  // Dynamic CTA visibility control
+  const shouldHideCTA = !CTA_CONFIG[activeTab]?.showCTA;
+
   return (
-    <div className={styles.productionModule}>
+    <div className={`${styles.productionModule} ${shouldHideCTA ? styles.noCTA : ''}`}>
       {/* 48px Tab Navigation - Visual Design Spec */}
       <div className={styles.productionTabs}>
         <button 
@@ -439,12 +451,14 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         {renderTabContent()}
       </div>
       
-      {/* 56px Bottom CTA */}
-      <div className={styles.productionCTA}>
-        <button className={styles.productionCTAButton} onClick={handleCTAClick}>
-          {getContextualCTA(activeTab)}
-        </button>
-      </div>
+      {/* 56px Bottom CTA - Configuration-driven visibility */}
+      {!shouldHideCTA && (
+        <div className={styles.productionCTA}>
+          <button className={styles.productionCTAButton} onClick={handleCTAClick}>
+            {getContextualCTA(activeTab)}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
