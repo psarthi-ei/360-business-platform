@@ -68,7 +68,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   const [machinesFilterState, setMachinesFilterState] = useState('all');
   const [qcFilterState, setQcFilterState] = useState('all');
   const [readyFilterState, setReadyFilterState] = useState('all');
-  const [timelineFilter, setTimelineFilter] = useState('all');
+  const [machineFilter, setMachineFilter] = useState('all');
   
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
@@ -76,12 +76,13 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   // Modal trigger states for CTA button functionality
   const [triggerOrdersModal, setTriggerOrdersModal] = useState(false);
   
-  // Timeline filter configuration (Filter 2)
-  const timelineFilterConfig = [
-    { value: 'all', label: '📅 All Time' },
-    { value: 'today', label: '📅 Today' },
-    { value: 'thisweek', label: '📅 This Week' },
-    { value: 'thismonth', label: '📅 This Month' }
+  // Machine filter configuration (Filter 2) - Based on updated mock data
+  const machineFilterConfig = [
+    { value: 'all', label: '🏭 All Machines' },
+    { value: 'LOOM-A1', label: 'LOOM-A1' },
+    { value: 'LOOM-B1', label: 'LOOM-B1' },
+    { value: 'DYE-D1', label: 'DYE-D1' },
+    { value: 'FINISH-F1', label: 'FINISH-F1' }
   ];
   
   // Dynamic count calculations
@@ -103,7 +104,8 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
       { value: 'all', label: 'All Work Orders', count: woCounts.all },
       { value: 'pending', label: '🔴 Not Started', count: woCounts.pending },
       { value: 'running', label: '🟡 Running', count: woCounts.running },
-      { value: 'completed', label: '✅ Completed', count: woCounts.completed }
+      { value: 'completed', label: '✅ Completed', count: woCounts.completed },
+      { value: 'unassigned', label: '⚪ Unassigned', count: 0 }
     ],
     machines: [
       { value: 'all', label: 'All Machines', count: machinesCounts.all },
@@ -175,12 +177,13 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
           ];
         }
         case 'wo': {
-          const woCounts = { all: 15, pending: 5, running: 7, completed: 3 };
+          const woCounts = { all: 15, pending: 5, running: 7, completed: 3, unassigned: 0 };
           return [
             { value: 'all', label: 'All Work Orders', count: woCounts.all },
             { value: 'pending', label: '🔴 Not Started', count: woCounts.pending },
             { value: 'running', label: '🟡 Running', count: woCounts.running },
-            { value: 'completed', label: '✅ Completed', count: woCounts.completed }
+            { value: 'completed', label: '✅ Completed', count: woCounts.completed },
+            { value: 'unassigned', label: '⚪ Unassigned', count: woCounts.unassigned }
           ];
         }
         case 'machines': {
@@ -220,18 +223,15 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     const statusFilter = currentStatusFilters.find(filter => filter.value === currentStatusFilter);
     const baseCount = statusFilter ? statusFilter.count : 0;
     
-    // Apply timeline filter modifier (simplified calculation)
-    let timelineModifier = 1;
-    switch(timelineFilter) {
-      case 'today': timelineModifier = 0.1; break;
-      case 'thisweek': timelineModifier = 0.3; break;
-      case 'thismonth': timelineModifier = 0.7; break;
-      case 'all': 
-      default: timelineModifier = 1; break;
+    // Apply machine filter modifier for W.O. tab
+    let machineModifier = 1;
+    if (activeTab === 'wo' && machineFilter !== 'all') {
+      // Each machine handles roughly 25% of work orders
+      machineModifier = 0.25;
     }
     
-    return Math.round(baseCount * timelineModifier);
-  }, [activeTab, ordersFilterState, woFilterState, machinesFilterState, qcFilterState, readyFilterState, timelineFilter]);
+    return Math.round(baseCount * machineModifier);
+  }, [activeTab, ordersFilterState, woFilterState, machinesFilterState, qcFilterState, readyFilterState, machineFilter]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -291,18 +291,29 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
             ))}
           </select>
           
-          {/* Timeline Filter Dropdown */}
-          <select 
-            className={styles.filterDropdown} 
-            value={timelineFilter}
-            onChange={(e) => setTimelineFilter(e.target.value)}
-          >
-            {timelineFilterConfig.map(filter => (
-              <option key={filter.value} value={filter.value}>
-                {filter.label}
-              </option>
-            ))}
-          </select>
+          {/* Machine Filter Dropdown - Only for W.O. tab */}
+          {activeTab === 'wo' ? (
+            <select 
+              className={styles.filterDropdown} 
+              value={machineFilter}
+              onChange={(e) => setMachineFilter(e.target.value)}
+            >
+              {machineFilterConfig.map(filter => (
+                <option key={filter.value} value={filter.value}>
+                  {filter.label}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <select 
+              className={styles.filterDropdown} 
+              value="all"
+              onChange={() => {}}
+              disabled
+            >
+              <option value="all">📅 All Time</option>
+            </select>
+          )}
         </div>
         
         {/* Count Indicator - Dynamic */}
@@ -333,6 +344,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
             mobile={mobile}
             filterState={woFilterState}
             onFilterChange={setWoFilterState}
+            machineFilter={machineFilter}
           />
         );
       case 'machines':

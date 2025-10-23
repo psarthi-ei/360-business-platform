@@ -158,36 +158,39 @@ export const mockMachines: Machine[] = [
     status: 'busy',
     capacity: '100m/h',
     currentWorkOrder: 'WO#451',
-    assignedWorker: 'Vikram Patel',
+    assignedWorker: 'Priya',
     efficiency: 85,
     output: '142m/h',
     estimatedCompletion: '11:30 AM'
   },
   {
-    id: 'LOOM-B2',
-    name: 'Loom B2',
+    id: 'LOOM-B1',
+    name: 'Loom B1',
     type: 'Weaving',
     status: 'setup',
     capacity: '80m/h',
     nextAvailable: '3:15 PM',
-    assignedWorker: 'Priya Shah'
+    assignedWorker: 'Rahul'
   },
   {
-    id: 'LOOM-C1',
-    name: 'Loom C1',
-    type: 'Weaving',
-    status: 'maintenance',
-    capacity: '90m/h',
-    maintenanceReason: 'Thread tension adjustment',
-    nextAvailable: '1 hour',
-    assignedWorker: 'Ravi Kumar'
+    id: 'DYE-D1',
+    name: 'Dye Unit D1',
+    type: 'Dyeing',
+    status: 'busy',
+    capacity: '200kg/h',
+    currentWorkOrder: 'WO#454',
+    assignedWorker: 'Suresh',
+    efficiency: 92,
+    output: '180kg/h',
+    estimatedCompletion: '2:00 PM'
   },
   {
-    id: 'LOOM-D1',
-    name: 'Loom D1',
-    type: 'Weaving',
+    id: 'FINISH-F1',
+    name: 'Finishing Unit F1',
+    type: 'Finishing',
     status: 'available',
-    capacity: '95m/h'
+    capacity: '150m/h',
+    assignedWorker: 'Vikram'
   }
 ];
 
@@ -204,7 +207,7 @@ export const mockWorkOrders: WorkOrder[] = [
     progress: 80,
     status: 'in_progress',
     assignedMachine: 'LOOM-A1',
-    assignedWorker: 'Vikram Patel',
+    assignedWorker: 'Priya',
     startTime: '08:15 AM',
     estimatedCompletion: '11:30 AM',
     priority: 'urgent',
@@ -241,7 +244,7 @@ export const mockWorkOrders: WorkOrder[] = [
         timestamp: '2025-10-20 08:15',
         fromStatus: 'pending',
         toStatus: 'in_progress',
-        user: 'Vikram Patel',
+        user: 'Priya',
         reason: 'Production started on Loom A1'
       }
     ],
@@ -258,8 +261,8 @@ export const mockWorkOrders: WorkOrder[] = [
     remainingQuantity: '500m',
     progress: 0,
     status: 'pending',
-    assignedMachine: 'LOOM-B2',
-    assignedWorker: 'Priya Shah',
+    assignedMachine: 'LOOM-B1',
+    assignedWorker: 'Rahul',
     priority: 'normal',
     createdDate: '2025-10-20',
     materialAllocations: [
@@ -294,8 +297,8 @@ export const mockWorkOrders: WorkOrder[] = [
     remainingQuantity: '0m',
     progress: 100,
     status: 'completed',
-    assignedMachine: 'LOOM-C1',
-    assignedWorker: 'Ravi Kumar',
+    assignedMachine: 'DYE-D1',
+    assignedWorker: 'Suresh',
     startTime: '06:00 AM',
     actualCompletion: '02:30 PM',
     priority: 'normal',
@@ -324,14 +327,14 @@ export const mockWorkOrders: WorkOrder[] = [
         timestamp: '2025-10-19 06:30',
         fromStatus: 'pending',
         toStatus: 'in_progress',
-        user: 'Ravi Kumar',
-        reason: 'Production started on Loom C1'
+        user: 'Suresh',
+        reason: 'Production started on Dye Unit D1'
       },
       {
         timestamp: '2025-10-19 14:30',
         fromStatus: 'in_progress',
         toStatus: 'completed',
-        user: 'Ravi Kumar',
+        user: 'Suresh',
         reason: 'Production completed successfully'
       }
     ]
@@ -347,8 +350,8 @@ export const mockWorkOrders: WorkOrder[] = [
     remainingQuantity: '0m',
     progress: 100,
     status: 'ready_qc',
-    assignedMachine: 'LOOM-A1',
-    assignedWorker: 'Vikram Patel',
+    assignedMachine: 'FINISH-F1',
+    assignedWorker: 'Vikram',
     startTime: '06:00 AM',
     actualCompletion: '01:30 PM',
     priority: 'normal',
@@ -377,14 +380,14 @@ export const mockWorkOrders: WorkOrder[] = [
         timestamp: '2025-10-19 06:30',
         fromStatus: 'pending',
         toStatus: 'in_progress',
-        user: 'Vikram Patel',
-        reason: 'Production started on Loom A1'
+        user: 'Vikram',
+        reason: 'Production started on Finishing Unit F1'
       },
       {
         timestamp: '2025-10-19 13:30',
         fromStatus: 'in_progress',
         toStatus: 'completed',
-        user: 'Vikram Patel',
+        user: 'Vikram',
         reason: 'Production completed successfully'
       },
       {
@@ -409,7 +412,7 @@ export const mockWorkOrders: WorkOrder[] = [
     progress: 100,
     status: 'completed',
     assignedMachine: 'LOOM-A1',
-    assignedWorker: 'Vikram Patel',
+    assignedWorker: 'Priya',
     startTime: '06:00 AM',
     actualCompletion: '02:30 PM',
     priority: 'normal',
@@ -438,14 +441,14 @@ export const mockWorkOrders: WorkOrder[] = [
         timestamp: '2025-10-19 06:30',
         fromStatus: 'pending',
         toStatus: 'in_progress',
-        user: 'Vikram Patel',
+        user: 'Priya',
         reason: 'Production started on Loom A1'
       },
       {
         timestamp: '2025-10-19 14:30',
         fromStatus: 'in_progress',
         toStatus: 'completed',
-        user: 'Vikram Patel',
+        user: 'Priya',
         reason: 'Production completed successfully'
       }
     ]
@@ -461,8 +464,8 @@ export const mockWorkOrders: WorkOrder[] = [
     remainingQuantity: '800m',
     progress: 20,
     status: 'in_progress',
-    assignedMachine: 'LOOM-A2',
-    assignedWorker: 'Priya Shah',
+    assignedMachine: 'LOOM-B1',
+    assignedWorker: 'Rahul',
     startTime: '08:00 AM',
     estimatedCompletion: '05:00 PM',
     priority: 'normal',
@@ -490,8 +493,53 @@ export const mockWorkOrders: WorkOrder[] = [
         timestamp: '2025-10-21 08:00',
         fromStatus: 'pending',
         toStatus: 'in_progress',
-        user: 'Priya Shah',
-        reason: 'Production started on Loom A2'
+        user: 'Rahul',
+        reason: 'Production started on Loom B1'
+      }
+    ]
+  },
+  {
+    id: 'WO#454',
+    salesOrderId: 'SO-002',
+    product: 'Mixed fabric for casual wear - Dyeing',
+    customer: 'Gujarat Garments',
+    batchNumber: 'B2025-048',
+    targetQuantity: '500kg',
+    producedQuantity: '350kg',
+    remainingQuantity: '150kg',
+    progress: 70,
+    status: 'in_progress',
+    assignedMachine: 'DYE-D1',
+    assignedWorker: 'Suresh',
+    startTime: '09:00 AM',
+    estimatedCompletion: '2:00 PM',
+    priority: 'normal',
+    createdDate: '2025-10-21',
+    materialAllocations: [
+      {
+        material: 'Blue Dye',
+        allocatedQuantity: '75L',
+        consumedQuantity: '52L',
+        remainingQuantity: '23L',
+        unit: 'L',
+        allocationDate: '2025-10-21 08:00',
+        reservationType: 'hard_reserved'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-21 08:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created for dyeing process'
+      },
+      {
+        timestamp: '2025-10-21 09:00',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Suresh',
+        reason: 'Dyeing started on Dye Unit D1'
       }
     ]
   }
@@ -650,10 +698,10 @@ export const mockVehicles: Vehicle[] = [
 export const mockProductionWorkers: ProductionWorker[] = [
   {
     id: 'W001',
-    name: 'Vikram Patel',
+    name: 'Priya',
     shift: 'day',
     status: 'active',
-    assignedMachine: 'Loom A1',
+    assignedMachine: 'LOOM-A1',
     efficiency: 95,
     targetDaily: '800m',
     completedToday: '520m',
@@ -661,10 +709,10 @@ export const mockProductionWorkers: ProductionWorker[] = [
   },
   {
     id: 'W002',
-    name: 'Priya Shah',
+    name: 'Rahul',
     shift: 'day',
     status: 'active',
-    assignedMachine: 'Loom B2',
+    assignedMachine: 'LOOM-B1',
     efficiency: 88,
     targetDaily: '600m',
     completedToday: '180m',
@@ -672,20 +720,22 @@ export const mockProductionWorkers: ProductionWorker[] = [
   },
   {
     id: 'W003',
-    name: 'Ravi Kumar',
+    name: 'Suresh',
     shift: 'day',
     status: 'break',
+    assignedMachine: 'DYE-D1',
     efficiency: 92,
-    targetDaily: '700m',
-    completedToday: '400m',
+    targetDaily: '700kg',
+    completedToday: '400kg',
     startTime: '8:00 AM',
     breakTime: '12:00-12:30'
   },
   {
     id: 'W004',
-    name: 'Meera Singh',
+    name: 'Vikram',
     shift: 'day',
     status: 'active',
+    assignedMachine: 'FINISH-F1',
     efficiency: 90,
     targetDaily: '650m',
     completedToday: '300m',

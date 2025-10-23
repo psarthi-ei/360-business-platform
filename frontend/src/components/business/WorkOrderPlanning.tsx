@@ -10,6 +10,7 @@ interface WorkOrderPlanningProps {
   onFilterChange: (filter: string) => void;
   openAddModal?: boolean;
   onAddModalHandled?: () => void;
+  machineFilter?: string;
 }
 
 const WorkOrderPlanning = ({ 
@@ -18,23 +19,36 @@ const WorkOrderPlanning = ({
   filterState, 
   onFilterChange,
   openAddModal,
-  onAddModalHandled 
+  onAddModalHandled,
+  machineFilter = 'all'
 }: WorkOrderPlanningProps) => {
   const { toggleExpansion, isExpanded } = useCardExpansion();
   
   // Filter logic for work orders
   const filteredWorkOrders = useMemo(() => {
-    if (filterState === 'all') return mockWorkOrders;
-    return mockWorkOrders.filter(wo => {
-      switch(filterState) {
-        case 'pending': return wo.status === 'pending';
-        case 'running': return wo.status === 'in_progress';
-        case 'completed': return wo.status === 'completed';
-        case 'qc_ready': return wo.status === 'ready_qc';
-        default: return true;
-      }
-    });
-  }, [filterState]);
+    let filtered = mockWorkOrders;
+    
+    // Apply status filter
+    if (filterState !== 'all') {
+      filtered = filtered.filter(wo => {
+        switch(filterState) {
+          case 'pending': return wo.status === 'pending';
+          case 'running': return wo.status === 'in_progress';
+          case 'completed': return wo.status === 'completed';
+          case 'qc_ready': return wo.status === 'ready_qc';
+          case 'unassigned': return !wo.assignedMachine || wo.assignedMachine === '';
+          default: return true;
+        }
+      });
+    }
+    
+    // Apply machine filter
+    if (machineFilter !== 'all') {
+      filtered = filtered.filter(wo => wo.assignedMachine === machineFilter);
+    }
+    
+    return filtered;
+  }, [filterState, machineFilter]);
 
   // Status mapping functions
   const getWOStatusClass = (workOrder: WorkOrder) => {
