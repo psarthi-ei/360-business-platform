@@ -42,8 +42,8 @@ const WorkOrderPlanning = ({
       });
     }
     
-    // Apply machine filter
-    if (machineFilter !== 'all') {
+    // Apply machine filter if provided
+    if (machineFilter && machineFilter !== 'all') {
       filtered = filtered.filter(wo => wo.assignedMachine === machineFilter);
     }
     

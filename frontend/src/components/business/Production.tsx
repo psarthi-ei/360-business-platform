@@ -3,7 +3,6 @@ import { ActionParams } from '../../services/nlp/types';
 import styles from './Production.module.css';
 import ProductionOrderManagement from './ProductionOrderManagement';
 import WorkOrderPlanning from './WorkOrderPlanning';
-import MachineOperations from './MachineOperations';
 import QualityControlManagement from './QualityControlManagement';
 import DeliveryFulfillment from './DeliveryFulfillment';
 
@@ -13,13 +12,12 @@ interface ProductionProps {
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
-type ProductionTabType = 'orders' | 'wo' | 'machines' | 'qc' | 'ready';
+type ProductionTabType = 'orders' | 'wo' | 'qc' | 'ready';
 
 // CTA visibility configuration - easy to modify for any tab
 const CTA_CONFIG = {
   orders: { showCTA: false },      // Hide CTA for Orders tab
-  wo: { showCTA: true },           // Show CTA for Work Orders
-  machines: { showCTA: true },     // Show CTA for Machines
+  wo: { showCTA: false },          // Hide CTA for Work Orders (exception case usage)
   qc: { showCTA: true },           // Show CTA for QC
   ready: { showCTA: true }         // Show CTA for Ready
 } as const;
@@ -37,13 +35,6 @@ const calculateWOCounts = () => ({
   pending: 5,
   running: 7,
   completed: 3
-});
-
-const calculateMachinesCounts = () => ({
-  all: 6,
-  running: 3,
-  available: 2,
-  maintenance: 1
 });
 
 const calculateQCCounts = () => ({
@@ -65,7 +56,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   const [activeTab, setActiveTab] = useState<ProductionTabType>('orders');
   const [ordersFilterState, setOrdersFilterState] = useState('all');
   const [woFilterState, setWoFilterState] = useState('all');
-  const [machinesFilterState, setMachinesFilterState] = useState('all');
   const [qcFilterState, setQcFilterState] = useState('all');
   const [readyFilterState, setReadyFilterState] = useState('all');
   const [machineFilter, setMachineFilter] = useState('all');
@@ -76,7 +66,13 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   // Modal trigger states for CTA button functionality
   const [triggerOrdersModal, setTriggerOrdersModal] = useState(false);
   
-  // Machine filter configuration (Filter 2) - Based on updated mock data
+  // Dynamic count calculations
+  const ordersCounts = calculateOrdersCounts();
+  const woCounts = calculateWOCounts();
+  const qcCounts = calculateQCCounts();
+  const readyCounts = calculateReadyCounts();
+  
+  // Machine filter configuration for WO tab
   const machineFilterConfig = [
     { value: 'all', label: '🏭 All Machines' },
     { value: 'LOOM-A1', label: 'LOOM-A1' },
@@ -84,13 +80,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     { value: 'DYE-D1', label: 'DYE-D1' },
     { value: 'FINISH-F1', label: 'FINISH-F1' }
   ];
-  
-  // Dynamic count calculations
-  const ordersCounts = calculateOrdersCounts();
-  const woCounts = calculateWOCounts();
-  const machinesCounts = calculateMachinesCounts();
-  const qcCounts = calculateQCCounts();
-  const readyCounts = calculateReadyCounts();
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
@@ -106,12 +95,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
       { value: 'running', label: '🟡 Running', count: woCounts.running },
       { value: 'completed', label: '✅ Completed', count: woCounts.completed },
       { value: 'unassigned', label: '⚪ Unassigned', count: 0 }
-    ],
-    machines: [
-      { value: 'all', label: 'All Machines', count: machinesCounts.all },
-      { value: 'running', label: '🟡 Running', count: machinesCounts.running },
-      { value: 'available', label: '🟢 Available', count: machinesCounts.available },
-      { value: 'maintenance', label: '🔴 Maintenance', count: machinesCounts.maintenance }
     ],
     qc: [
       { value: 'all', label: 'All Items', count: qcCounts.all },
@@ -132,7 +115,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     switch(activeTab) {
       case 'orders': return ordersFilterState;
       case 'wo': return woFilterState;
-      case 'machines': return machinesFilterState;
       case 'qc': return qcFilterState;
       case 'ready': return readyFilterState;
       default: return 'all';
@@ -144,7 +126,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     switch(activeTab) {
       case 'orders': setOrdersFilterState(filter); break;
       case 'wo': setWoFilterState(filter); break;
-      case 'machines': setMachinesFilterState(filter); break;
       case 'qc': setQcFilterState(filter); break;
       case 'ready': setReadyFilterState(filter); break;
     }
@@ -157,7 +138,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
       switch(activeTab) {
         case 'orders': return ordersFilterState;
         case 'wo': return woFilterState;
-        case 'machines': return machinesFilterState;
         case 'qc': return qcFilterState;
         case 'ready': return readyFilterState;
         default: return 'all';
@@ -184,15 +164,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
             { value: 'running', label: '🟡 Running', count: woCounts.running },
             { value: 'completed', label: '✅ Completed', count: woCounts.completed },
             { value: 'unassigned', label: '⚪ Unassigned', count: woCounts.unassigned }
-          ];
-        }
-        case 'machines': {
-          const machinesCounts = { all: 6, running: 3, available: 2, maintenance: 1 };
-          return [
-            { value: 'all', label: 'All Machines', count: machinesCounts.all },
-            { value: 'running', label: '🟡 Running', count: machinesCounts.running },
-            { value: 'available', label: '🟢 Available', count: machinesCounts.available },
-            { value: 'maintenance', label: '🔴 Maintenance', count: machinesCounts.maintenance }
           ];
         }
         case 'qc': {
@@ -223,7 +194,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     const statusFilter = currentStatusFilters.find(filter => filter.value === currentStatusFilter);
     const baseCount = statusFilter ? statusFilter.count : 0;
     
-    // Apply machine filter modifier for W.O. tab
+    // Apply machine filter modifier for WO tab
     let machineModifier = 1;
     if (activeTab === 'wo' && machineFilter !== 'all') {
       // Each machine handles roughly 25% of work orders
@@ -231,7 +202,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     }
     
     return Math.round(baseCount * machineModifier);
-  }, [activeTab, ordersFilterState, woFilterState, machinesFilterState, qcFilterState, readyFilterState, machineFilter]);
+  }, [activeTab, ordersFilterState, woFilterState, qcFilterState, readyFilterState, machineFilter]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -291,7 +262,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
             ))}
           </select>
           
-          {/* Machine Filter Dropdown - Only for W.O. tab */}
+          {/* Machine Filter Dropdown - Only for WO tab */}
           {activeTab === 'wo' ? (
             <select 
               className={styles.filterDropdown} 
@@ -347,14 +318,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
             machineFilter={machineFilter}
           />
         );
-      case 'machines':
-        return (
-          <MachineOperations
-            mobile={mobile}
-            filterState={machinesFilterState}
-            onFilterChange={setMachinesFilterState}
-          />
-        );
       case 'qc':
         return (
           <QualityControlManagement
@@ -379,7 +342,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     switch(tab) {
       case 'orders': return '+ Start Production';
       case 'wo': return '+ Create Work Order';
-      case 'machines': return '+ Update Progress';
       case 'qc': return '+ Quality Check';
       case 'ready': return '+ Pack & Dispatch';
       default: return '+ Add';
@@ -394,9 +356,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         break;
       case 'wo':
         alert('Create Work Order functionality coming soon!');
-        break;
-      case 'machines':
-        alert('Update Progress functionality coming soon!');
         break;
       case 'qc':
         alert('Quality Check functionality coming soon!');
@@ -432,12 +391,6 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
           onClick={() => setActiveTab('wo')}
         >
           WO
-        </button>
-        <button 
-          className={`${styles.tabButton} ${activeTab === 'machines' ? styles.active : ''}`}
-          onClick={() => setActiveTab('machines')}
-        >
-          Machines
         </button>
         <button 
           className={`${styles.tabButton} ${activeTab === 'qc' ? styles.active : ''}`}

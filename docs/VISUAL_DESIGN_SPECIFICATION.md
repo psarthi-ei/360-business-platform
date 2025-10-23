@@ -129,6 +129,8 @@
 - [Touch Interaction Design](#touch-interaction-design)
   - [Button Interaction States](#button-interaction-states)
   - [Card Interaction Patterns](#card-interaction-patterns)
+- [Interface Control Patterns](#interface-control-patterns)
+  - [Configuration-Driven CTA Control](#configuration-driven-cta-control)
 - [Voice Interaction Design](#voice-interaction-design)
   - [Voice Input Visual Patterns](#voice-input-visual-patterns)
   - [Voice Command Categories](#voice-command-categories)
@@ -3334,6 +3336,143 @@ Interaction Feedback:
 • Loading state: Spinner + disabled appearance
 • Success: Green checkmark + toast message
 ```
+
+### Interface Control Patterns
+
+#### **Configuration-Driven CTA Control**
+
+**Purpose**: Flexible system for hiding/showing CTA buttons on specific tabs within business modules without layout disruption.
+
+**Problem Solved**: 
+- Tabs with individual card-level actions don't need ambiguous bottom CTAs
+- Need to maintain clean layout without blank spaces when CTA is hidden
+- Future-ready for any tab requiring CTA control across business modules
+
+**Implementation Pattern**:
+```typescript
+// CTA visibility configuration - easy to modify for any tab
+const CTA_CONFIG = {
+  orders: { showCTA: false },      // Hide CTA for Orders tab
+  wo: { showCTA: true },           // Show CTA for Work Orders
+  machines: { showCTA: true },     // Show CTA for Machines
+  qc: { showCTA: true },           // Show CTA for QC
+  ready: { showCTA: true }         // Show CTA for Ready
+} as const;
+
+// Dynamic CTA visibility control
+const shouldHideCTA = !CTA_CONFIG[activeTab]?.showCTA;
+
+// Dynamic layout adaptation with conditional CSS classes
+<div className={`${styles.businessModule} ${shouldHideCTA ? styles.noCTA : ''}`}>
+  {/* Standard tab and filter structure */}
+  <div className={styles.tabNavigation}>...</div>
+  <div className={styles.filterSection}>...</div>
+  <div className={styles.contentArea}>...</div>
+  
+  {/* Configuration-driven CTA rendering */}
+  {!shouldHideCTA && (
+    <div className={styles.ctaSection}>
+      <button className={styles.ctaButton} onClick={handleCTAClick}>
+        {getContextualCTA(activeTab)}
+      </button>
+    </div>
+  )}
+</div>
+```
+
+**CSS Grid Layout Adaptation**:
+```css
+/* Standard 4-row layout with CTA */
+.businessModule {
+  display: grid;
+  grid-template-rows: 48px 44px 1fr 56px; /* Tab | Filter | Content | CTA */
+  height: 100%;
+}
+
+/* Adaptive 3-row layout when CTA is hidden */
+.businessModule.noCTA {
+  grid-template-rows: 48px 44px 1fr; /* Tab | Filter | Content (no blank space) */
+}
+```
+
+**Visual Design Results**:
+```
+With CTA (Standard Tabs):           Without CTA (Orders Tab):
+┌─────────────────────────────────┐   ┌─────────────────────────────────┐
+│ Orders | WO | Machines | QC     │   │ Orders•| WO | Machines | QC     │
+├─────────────────────────────────┤   ├─────────────────────────────────┤
+│ All Orders ▼ | This Week ▼     │   │ All Orders ▼ | This Week ▼     │
+├─────────────────────────────────┤   ├─────────────────────────────────┤
+│                                 │   │                                 │
+│        Sales Order Cards        │   │        Sales Order Cards        │
+│     (individual actions)        │   │     (individual actions)        │
+│                                 │   │                                 │
+├─────────────────────────────────┤   └─────────────────────────────────┘
+│      [+ Create Work Order]      │   ← Clean, no blank space
+└─────────────────────────────────┘   ← No ambiguous bottom CTA
+```
+
+**Usage Guidelines**:
+- **Use When**: Tabs have individual card-level actions (Start Production, View Details, etc.)
+- **Avoid When**: Bottom CTA provides clear, unambiguous primary action
+- **Pattern Benefits**: 
+  - ✅ Eliminates action ambiguity (which order to start production?)
+  - ✅ Maintains visual hierarchy and clean layout
+  - ✅ Easy configuration for future tabs
+  - ✅ Consistent across business modules
+
+**Business Context Examples**:
+- **Production Orders Tab**: Individual "Start Production" buttons per Sales Order
+- **Procurement GRNs Tab**: Individual "Mark Received" buttons per GRN
+- **Quality Control Tab**: Individual "Pass/Reject" buttons per inspection
+
+**Implementation Notes**:
+- Configuration object acts as single source of truth
+- CSS Grid automatically adapts layout for optimal space usage
+- TypeScript safety with `as const` assertion
+- Easy to extend to new tabs or business modules
+
+#### **DESIGN DECISION: Machine Tab MVP Exclusion**
+
+**Decision**: Machine Tab is **NOT REQUIRED** for MVP in Production module.
+
+**Problem Context**: 
+Initial designs included a Machine Tab for live production tracking and operator interface, similar to large-scale manufacturing systems.
+
+**MSME Operational Reality Assessment**:
+- **Scale**: 3-4 machines maximum per MSME textile unit
+- **Operators**: 1 dedicated operator per machine (personal ownership model)
+- **Supervision**: Direct visual supervision in compact factory space
+- **Work Assignment**: Machine assignments are implicit and rarely change
+
+**Value vs. Complexity Analysis**:
+```
+Digital Machine View Benefits:        MSME Reality:
+• Machine status dashboard          → Operator sees machine directly
+• Real-time production metrics      → Simple output counting suffices  
+• Machine assignment management     → Assignments rarely change
+• Performance analytics             → Visual inspection & experience
+• Multi-machine coordination        → 3-4 machines manageable manually
+```
+
+**Alternative Solution Implemented**:
+- **Machine-based filtering in W.O. Tab**: Provides machine-level visibility when needed
+- **Individual W.O. cards show**: Current machine assignment and operator
+- **Supervisor access**: Can filter by any machine through W.O. Tab
+- **Operator workflow**: Uses W.O. Tab filtered to their specific machine
+
+**Decision Rationale**:
+1. **Operational Fit**: Digital overhead doesn't justify business value at MSME scale
+2. **User Experience**: Simpler interface reduces training burden
+3. **Development Efficiency**: Focus resources on higher-impact features
+4. **Customer Demand Strategy**: Add if customers specifically request after MVP usage
+
+**Future Consideration Trigger**:
+- Customer requests for machine analytics
+- Scaling to larger operations (10+ machines)
+- Integration with IoT sensors for automatic data collection
+
+**MVP Scope**: Focus on Sales Order → Work Order workflow optimization, not machine-level digitization.
 
 ### Voice Interaction Design
 

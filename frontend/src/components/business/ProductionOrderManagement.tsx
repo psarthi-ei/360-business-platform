@@ -201,6 +201,10 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   const handleGoToProcurement = (orderId: string) => {
     alert(`📦 Navigating to Procurement module for ${orderId}\n\n🔍 Material shortage details:\n• Cotton Yarn 30s: 300kg needed\n• Blue Dye: 50L needed\n\n(Mock functionality - will navigate to Procurement MR tab)`);
   };
+
+  const handleCreateWorkOrder = (orderId: string) => {
+    alert(`📋 Creating Work Order for ${orderId}\n\n✅ Manual WO creation initiated\n🔄 Will be added to WO tab\n📋 Available for assignment and scheduling\n\n(Mock functionality - will create additional WO for this Sales Order)`);
+  };
   
   // Tab management functions
   const handleTabChange = (orderId: string, tab: 'work_orders' | 'details') => {
@@ -387,6 +391,17 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                                   </span>
                                 </div>
                               ))}
+                            </div>
+                            
+                            {/* Create Work Order Button - Show after existing WOs */}
+                            <div className={styles.createWOSection}>
+                              <button 
+                                className="ds-btn ds-btn-secondary" 
+                                onClick={(e) => { e.stopPropagation(); handleCreateWorkOrder(order.id); }}
+                                style={{ marginTop: '12px', width: '100%' }}
+                              >
+                                📋 Create Additional WO
+                              </button>
                             </div>
                           </div>
                         )}
