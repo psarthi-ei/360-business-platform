@@ -243,6 +243,34 @@
 }
 
 /* ========================================
+   RESPONSIVE ACTION BUTTON DESKTOP OVERRIDES
+   ======================================== */
+
+/* Desktop-only overrides for natural button width (keeps existing mobile behavior intact) */
+@media (min-width: 769px) {
+  /* Override flex: 1 behavior on desktop for all button containers */
+  .ds-card-actions .ds-btn,
+  .ds-card-action-buttons .ds-btn,
+  .actionButtons .ds-btn {
+    flex: none !important;        /* Remove flex expansion */
+    width: auto !important;       /* Natural button width */
+    min-width: 100px;            /* Minimum for readability */
+    max-width: 200px;            /* Maximum to prevent excessive width */
+  }
+  
+  /* Ensure button containers use proper flex layout on desktop */
+  .ds-card-actions,
+  .ds-card-action-buttons,
+  .actionButtons {
+    display: flex;
+    gap: var(--ds-space-sm);
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;  /* Left-align buttons naturally */
+  }
+}
+
+/* ========================================
    UNIVERSAL VOICE COMMANDS SYSTEM
    ======================================== */
 
@@ -583,9 +611,9 @@ code {
   margin-bottom: 12px;              /* Visual Design Spec exact - consistent spacing */
 }
 
-/* Button distribution for card actions - single button takes full width, multiple buttons share space */
+/* Button distribution for card actions - mobile-first with desktop override */
 .ds-card-actions .ds-btn {
-  flex: 1;
+  flex: 1;               /* Mobile-first: buttons expand to fill space */
   min-width: 80px;
   min-height: 44px;
 }
@@ -614,7 +642,14 @@ code {
     gap: var(--ds-space-xs);
   }
   
+  /* Mobile: buttons expand to share available space */
   .ds-card-action-buttons .ds-btn {
+    flex: 1;
+    min-width: calc(50% - 3px);
+  }
+  
+  /* Mobile: card actions also expand to full width */
+  .ds-card-actions .ds-btn {
     flex: 1;
     min-width: calc(50% - 3px);
   }

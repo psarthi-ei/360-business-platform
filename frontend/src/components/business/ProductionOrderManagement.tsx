@@ -394,11 +394,10 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                             </div>
                             
                             {/* Create Work Order Button - Show after existing WOs */}
-                            <div className={styles.createWOSection}>
+                            <div className={styles.actionButtons}>
                               <button 
                                 className="ds-btn ds-btn-secondary" 
                                 onClick={(e) => { e.stopPropagation(); handleCreateWorkOrder(order.id); }}
-                                style={{ marginTop: '12px', width: '100%' }}
                               >
                                 📋 Create Additional WO
                               </button>
