@@ -439,7 +439,7 @@ code {
 
 /* Universal card base - consistent across all business modules */
 .ds-card {
-  height: 140px;                    /* Template fixed height - NEVER change */
+  min-height: 140px;                /* Template minimum height - allows expansion for actions */
   padding: 16px;                    /* Match platform-wide standard (16px) */
   background: white;
   border-radius: var(--ds-radius-md);
@@ -529,9 +529,9 @@ code {
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.2s ease;
-  position: absolute;
-  bottom: 8px;
-  right: 12px;
+  display: inline-block;
+  margin-left: auto;
+  margin-top: auto;
   padding: 4px 8px;
   border-radius: 4px;
 }
@@ -540,6 +540,34 @@ code {
   opacity: 1;
   background: rgba(29, 78, 216, 0.15);
   color: var(--color-primary);
+}
+
+/* ===== DS CARD ACTIONS EXTENSION ===== */
+.ds-card-actions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-sm);
+  padding-top: var(--ds-space-sm);
+  border-top: 1px solid var(--ds-border-subtle);
+  margin-bottom: var(--ds-space-lg); /* Space for expand indicator */
+  min-height: 44px; /* Factory-optimized touch targets */
+}
+
+/* Conditional height modifier for cards with actions */
+.ds-card.ds-card-with-actions {
+  min-height: 184px; /* 140px base + 44px actions */
+}
+
+/* No special positioning needed - normal flow handles all cases */
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .ds-card-actions {
+    gap: var(--ds-space-xs);
+    margin-bottom: var(--ds-space-md);
+  }
 }
 
 /* Universal status border colors - consistent across all business modules */
@@ -555,12 +583,11 @@ code {
   margin-bottom: 12px;              /* Visual Design Spec exact - consistent spacing */
 }
 
-/* Card actions - standardized button layout */
-.ds-card-actions {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 2vw, 12px);
-  margin-top: clamp(12px, 3vw, 16px);
+/* Button distribution for card actions - single button takes full width, multiple buttons share space */
+.ds-card-actions .ds-btn {
+  flex: 1;
+  min-width: 80px;
+  min-height: 44px;
 }
 
 /* Single-row button layout with natural wrapping */

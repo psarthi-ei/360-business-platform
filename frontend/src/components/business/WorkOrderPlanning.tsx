@@ -138,39 +138,22 @@ const WorkOrderPlanning = ({
     });
   };
 
-  // Quantity update handlers
-  const handleQuantityChange = (workOrderId: string, value: string) => {
-    setQuantityValues(prev => new Map(prev.set(workOrderId, value)));
-  };
-
-  const handleQuantityIncrement = (workOrderId: string) => {
-    const workOrder = mockWorkOrders.find(wo => wo.id === workOrderId);
-    const currentValue = quantityValues.get(workOrderId) || workOrder?.producedQuantity.replace('m', '') || '0';
-    const targetMax = parseInt(workOrder?.targetQuantity.replace('m', '') || '0');
-    const newValue = Math.min(parseInt(currentValue) + 10, targetMax); // Increment by 10m
-    setQuantityValues(prev => new Map(prev.set(workOrderId, newValue.toString())));
-  };
-
-  const handleQuantityDecrement = (workOrderId: string) => {
-    const workOrder = mockWorkOrders.find(wo => wo.id === workOrderId);
-    const currentValue = quantityValues.get(workOrderId) || workOrder?.producedQuantity.replace('m', '') || '0';
-    const newValue = Math.max(parseInt(currentValue) - 10, 0); // Decrement by 10m, minimum 0
-    setQuantityValues(prev => new Map(prev.set(workOrderId, newValue.toString())));
-  };
+  // Quantity update handler for surface-level Update button
 
   const handleQuantityUpdate = (workOrderId: string) => {
     const workOrder = mockWorkOrders.find(wo => wo.id === workOrderId);
-    const newQuantity = quantityValues.get(workOrderId) || workOrder?.producedQuantity.replace('m', '');
-    const oldQuantity = workOrder?.producedQuantity.replace('m', '');
+    const currentQuantity = workOrder?.producedQuantity.replace('m', '') || '0';
+    const targetQuantity = workOrder?.targetQuantity.replace('m', '') || '0';
     
-    alert(`📊 Updating Work Order ${workOrderId} Progress\n\nFrom: ${oldQuantity}m\nTo: ${newQuantity}m\n\n✅ Progress updated\n📈 Efficiency recalculated\n⏰ Completion time adjusted\n\n(Mock functionality)`);
+    const newQuantity = prompt(
+      `Update quantity for ${workOrderId}\n\nCurrent: ${currentQuantity}m\nTarget: ${targetQuantity}m\n\nEnter new quantity:`,
+      currentQuantity
+    );
     
-    // Clear the temporary value after update
-    setQuantityValues(prev => {
-      const newMap = new Map(prev);
-      newMap.delete(workOrderId);
-      return newMap;
-    });
+    if (newQuantity && !isNaN(Number(newQuantity))) {
+      const numValue = Math.max(0, Math.min(Number(newQuantity), Number(targetQuantity)));
+      alert(`📊 Updated Work Order ${workOrderId}\n\nFrom: ${currentQuantity}m\nTo: ${numValue}m\n\n✅ Progress updated\n📈 Efficiency recalculated\n⏰ Completion time adjusted\n\n(Mock functionality)`);
+    }
   };
 
   // Lifecycle action handlers
@@ -277,7 +260,7 @@ const WorkOrderPlanning = ({
               {filteredWorkOrders.map(workOrder => (
                 <div key={workOrder.id} className="ds-card-container" data-wo-id={workOrder.id}>
                   <div 
-                    className={`ds-card ${getWOStatusClass(workOrder)} ${isExpanded(workOrder.id) ? 'ds-card-expanded' : ''}`}
+                    className={`ds-card ${getWOStatusClass(workOrder)} ${isExpanded(workOrder.id) ? 'ds-card-expanded' : ''} ${(workOrder.status === 'pending' || workOrder.status === 'in_progress') ? 'ds-card-with-actions' : ''}`}
                     onClick={() => toggleDetails(workOrder.id)}
                   >
                     {/* Work Order Header */}
@@ -296,6 +279,52 @@ const WorkOrderPlanning = ({
                       {workOrder.producedQuantity} / {workOrder.targetQuantity} ({workOrder.progress}%)<br />
                       Machine: {workOrder.assignedMachine} • Worker: {workOrder.assignedWorker}
                     </div>
+
+                    {/* Surface Action Buttons */}
+                    {(workOrder.status === 'pending' || workOrder.status === 'in_progress') && (
+                      <div className="ds-card-actions" onClick={(e) => e.stopPropagation()}>
+                        {workOrder.status === 'pending' && (
+                          <button 
+                            className="ds-btn ds-btn-primary"
+                            onClick={(e) => { e.stopPropagation(); handleStartWork(workOrder.id); }}
+                          >
+                            ▶️ Start Work
+                          </button>
+                        )}
+                        
+                        {workOrder.status === 'in_progress' && !isWorkOrderPaused(workOrder.id) && (
+                          <>
+                            <button 
+                              className="ds-btn ds-btn-secondary"
+                              onClick={(e) => { e.stopPropagation(); handleQuantityUpdate(workOrder.id); }}
+                            >
+                              📊 Update
+                            </button>
+                            <button 
+                              className="ds-btn ds-btn-primary"
+                              onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
+                            >
+                              ✅ Done
+                            </button>
+                            <button 
+                              className="ds-btn ds-btn-secondary"
+                              onClick={(e) => { e.stopPropagation(); handlePauseWork(workOrder.id); }}
+                            >
+                              ⏸️ Pause
+                            </button>
+                          </>
+                        )}
+                        
+                        {workOrder.status === 'in_progress' && isWorkOrderPaused(workOrder.id) && (
+                          <button 
+                            className="ds-btn ds-btn-primary"
+                            onClick={(e) => { e.stopPropagation(); handleResumeWork(workOrder.id); }}
+                          >
+                            ▶️ Resume
+                          </button>
+                        )}
+                      </div>
+                    )}
 
                     {/* Expand Indicator */}
                     <div className="ds-card-expand-indicator">
@@ -430,70 +459,27 @@ const WorkOrderPlanning = ({
                           </>
                         )}
 
-                        {/* Professional Progress & Update Section */}
-                        {workOrder.status === 'in_progress' && (
-                          <div className={styles.progressUpdateSection}>
-                            <p><strong>📊 Progress & Update:</strong></p>
-                            
-                            {/* Progress Display */}
-                            <div className={styles.progressDisplay}>
-                              <span className={styles.progressText}>
-                                {workOrder.producedQuantity} / {workOrder.targetQuantity} ({workOrder.progress}%)
-                              </span>
-                            </div>
-                            
-                            {/* Quantity Controls */}
-                            <div className={styles.quantityControls}>
-                              <button 
-                                className={`ds-btn ds-btn-secondary ${styles.quantityIncrement}`}
-                                onClick={(e) => { e.stopPropagation(); handleQuantityDecrement(workOrder.id); }}
-                                disabled={isWorkOrderPaused(workOrder.id)}
-                              >
-                                -
-                              </button>
-                              <input
-                                type="number"
-                                value={quantityValues.get(workOrder.id) || workOrder.producedQuantity.replace('m', '')}
-                                onChange={(e) => handleQuantityChange(workOrder.id, e.target.value)}
-                                className={styles.quantityInput}
-                                onClick={(e) => e.stopPropagation()}
-                                min="0"
-                                max={workOrder.targetQuantity.replace('m', '')}
-                                placeholder={workOrder.producedQuantity.replace('m', '')}
-                                disabled={isWorkOrderPaused(workOrder.id)}
-                              />
-                              <button 
-                                className={`ds-btn ds-btn-secondary ${styles.quantityIncrement}`}
-                                onClick={(e) => { e.stopPropagation(); handleQuantityIncrement(workOrder.id); }}
-                                disabled={isWorkOrderPaused(workOrder.id)}
-                              >
-                                +
-                              </button>
-                              <span className={styles.quantityUnit}>m</span>
-                              
-                              {/* Update Action - inline on desktop, separate on mobile */}
-                              <button 
-                                className={`ds-btn ds-btn-primary ${styles.updateButton}`}
-                                onClick={(e) => { e.stopPropagation(); handleQuantityUpdate(workOrder.id); }}
-                                disabled={!quantityValues.get(workOrder.id) || quantityValues.get(workOrder.id) === workOrder.producedQuantity.replace('m', '') || isWorkOrderPaused(workOrder.id)}
-                              >
-                                📊 Update
-                              </button>
-                            </div>
-                            
-                            {/* Pause Status Display */}
-                            {isWorkOrderPaused(workOrder.id) && (
-                              <div className={styles.pauseStatus}>
-                                <div className={styles.pauseIndicator}>
-                                  ⏸️ Work Order Paused
-                                </div>
-                                <div className={styles.pauseReason}>
-                                  Reason: {getPauseReason(workOrder.id)}
-                                </div>
-                              </div>
-                            )}
+                        {/* Read-only Progress Information */}
+                        <div className={styles.progressInfoSection}>
+                          <p><strong>📊 Production Progress:</strong></p>
+                          <div className={styles.progressDisplay}>
+                            <span className={styles.progressText}>
+                              {workOrder.producedQuantity} / {workOrder.targetQuantity} ({workOrder.progress}%)
+                            </span>
                           </div>
-                        )}
+                          
+                          {/* Pause Status Display - Information Only */}
+                          {isWorkOrderPaused(workOrder.id) && (
+                            <div className={styles.pauseStatus}>
+                              <div className={styles.pauseIndicator}>
+                                ⏸️ Work Order Paused
+                              </div>
+                              <div className={styles.pauseReason}>
+                                Reason: {getPauseReason(workOrder.id)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                         
                         {/* Work Order Timeline */}
                         <div className={styles.timelineInfo}>
@@ -538,68 +524,12 @@ const WorkOrderPlanning = ({
                         )}
                       </div>
                       
-                      {/* Lifecycle Action Buttons */}
-                      <div className={styles.cardActions}>
-                        <div className={styles.actionButtons}>
-                          {/* Start Work - Available for pending orders */}
-                          {workOrder.status === 'pending' && (
-                            <button 
-                              className="ds-btn ds-btn-primary" 
-                              onClick={(e) => { e.stopPropagation(); handleStartWork(workOrder.id); }}
-                            >
-                              🚀 Start Work
-                            </button>
-                          )}
-                          
-                          {/* In-Progress Controls - Pause/Resume and Mark Complete */}
-                          {workOrder.status === 'in_progress' && (
-                            <>
-                              {/* Pause/Resume Button */}
-                              {!isWorkOrderPaused(workOrder.id) ? (
-                                <button 
-                                  className="ds-btn ds-btn-secondary" 
-                                  onClick={(e) => { e.stopPropagation(); handlePauseWork(workOrder.id); }}
-                                >
-                                  ⏸️ Pause
-                                </button>
-                              ) : (
-                                <button 
-                                  className="ds-btn ds-btn-primary" 
-                                  onClick={(e) => { e.stopPropagation(); handleResumeWork(workOrder.id); }}
-                                >
-                                  ▶️ Resume
-                                </button>
-                              )}
-                              
-                              {/* Mark Complete - Smart styling based on quantity status */}
-                              {(() => {
-                                const currentQuantity = quantityValues.get(workOrder.id) || workOrder.producedQuantity.replace('m', '');
-                                const targetQuantity = workOrder.targetQuantity.replace('m', '');
-                                const isQuantityComplete = parseInt(currentQuantity) >= parseInt(targetQuantity);
-                                const hasUnsavedChanges = quantityValues.get(workOrder.id) && quantityValues.get(workOrder.id) !== workOrder.producedQuantity.replace('m', '');
-                                
-                                return (
-                                  <button 
-                                    className={`ds-btn ${(isQuantityComplete && !hasUnsavedChanges) ? 'ds-btn-primary' : 'ds-btn-secondary'} ${styles.markCompleteButton}`}
-                                    onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
-                                    disabled={isWorkOrderPaused(workOrder.id)}
-                                    title={isQuantityComplete ? 'Mark work order complete' : 'Complete with auto-quantity update'}
-                                  >
-                                    ✅ Mark Complete
-                                  </button>
-                                );
-                              })()}
-                            </>
-                          )}
-                          
-                          {/* QC Ready Status - Read-only for completed orders */}
-                          {workOrder.status === 'ready_qc' && (
-                            <div className={styles.statusInfo}>
-                              <span className={styles.qcStatus}>🔍 Ready for QC Inspection</span>
-                            </div>
-                          )}
+                      {/* QC Ready Status - Read-only information only */}
+                      {workOrder.status === 'ready_qc' && (
+                        <div className={styles.statusInfo}>
+                          <span className={styles.qcStatus}>🔍 Ready for QC Inspection</span>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
                 </div>

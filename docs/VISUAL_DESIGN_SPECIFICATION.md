@@ -451,6 +451,65 @@ ALERT CARD
 └─────────────────────────────────┘
 ```
 
+#### **DS Card Actions Extension (NEW)**
+
+**Standard Card Actions Pattern**: Optional action buttons that can be added to any DS card for immediate operator access to key functions.
+
+```
+STANDARD CARD (Base)
+┌─────────────────────────────────┐
+│ Card Title                      │ Header: 24px
+│ Status indicators               │ Status: 21px  
+│ Meta information                │ Meta: 34px
+│                           More  │ Expand: 16px
+└─────────────────────────────────┘ Total: 140px
+
+ENHANCED CARD (With Actions)
+┌─────────────────────────────────┐
+│ Card Title                      │ Header: 24px
+│ Status indicators               │ Status: 21px
+│ Meta information                │ Meta: 34px
+│ [Action] [Action] [Action]      │ Actions: 44px ← NEW
+│                           More  │ Expand: 16px
+└─────────────────────────────────┘ Total: 184px ← CONDITIONAL HEIGHT
+```
+
+**Conditional Height System**:
+- **Base Cards (No Actions)**: 140px - maintains DS standard
+- **Enhanced Cards (With Actions)**: 184px - conditional increase only
+- **Implementation**: `.ds-card-with-actions` modifier class
+- **Mixed Grids**: Cards adapt height based on action presence
+
+**Action Button Guidelines**:
+- **Maximum 3-4 buttons** per card (mobile constraint: 343px width)
+- **Button priority**: Primary actions only (80% use case)
+- **Touch targets**: 44px minimum height for factory environment
+- **Flexible placement**: Actions can be moved between surface and expanded view
+
+**Button Capacity by Screen**:
+```
+Mobile (375px):  [80px] [80px] [80px]     = 3 buttons optimal
+Desktop (wider): [100px] [100px] [100px] [100px] = 4 buttons max
+```
+
+**Usage Examples**:
+- **Work Orders**: `[📊 Update] [✅ Done] [⏸️ Pause]`
+- **Sales Orders**: `[📞 Call] [📱 WhatsApp] [📄 Invoice]`  
+- **Purchase Orders**: `[✅ Approve] [❌ Reject] [📝 Edit]`
+- **Quality Control**: `[✅ Pass] [❌ Reject] [📸 Photo]`
+
+**Visual Update Interface**: Toggle mode for quantity updates
+```
+Normal Mode:    45m / 100m (45%)
+Update Mode:    [-] [65] [+] m / 100m (65%)
+```
+
+**Flexibility Benefits**:
+- **Action Migration**: Easy to move buttons between surface and expanded views
+- **Usage-Driven**: Surface the most frequent actions per user feedback
+- **Consistent Pattern**: Same implementation across all modules
+- **Factory Optimized**: Large touch targets, clear visual hierarchy
+
 #### **Navigation Styles**
 ```
 BOTTOM NAVIGATION (Mobile)

@@ -687,6 +687,112 @@ grep -A 10 "@media.*max-width.*767px" ComponentName.module.css
 - **Duplicate actions** across different statuses
 - **Too many buttons** - keep to 2-4 maximum per status
 
+### **DS Card Actions Pattern (NEW)**
+
+#### **Surface-Level Action Buttons**
+**Purpose**: Add immediate operator access to key actions while maintaining all existing expanded functionality.
+
+**Pattern Overview:**
+```tsx
+{/* Standard DS Card Structure */}
+<div className="ds-card">
+  <div className="ds-card-header">...</div>
+  <div className="ds-card-status">...</div>
+  <div className="ds-card-meta">...</div>
+  
+  {/* NEW: Optional Surface Actions */}
+  <div className="ds-card-actions" onClick={(e) => e.stopPropagation()}>
+    <button className="ds-btn ds-btn-primary">Primary Action</button>
+    <button className="ds-btn ds-btn-secondary">Secondary Action</button>
+  </div>
+  
+  <div className="ds-card-expand-indicator">More</div>
+</div>
+```
+
+#### **Implementation Guidelines**
+
+**Button Capacity Limits:**
+```javascript
+// Mobile-optimized button limits
+const MAX_BUTTONS = {
+  mobile: 3,    // 375px width: 3 × 80px + gaps = ~260px
+  desktop: 4    // Wider screens: 4 × 100px + gaps = ~420px
+}
+```
+
+**Conditional Height Classes:**
+```css
+/* Base card maintains DS standard */
+.ds-card {
+  min-height: 140px;
+}
+
+/* Enhanced card with actions */
+.ds-card.ds-card-with-actions {
+  min-height: 184px; /* 140px + 44px actions */
+}
+```
+
+**Action Priority Framework:**
+```typescript
+// Surface only the most frequent operator actions (80% use case)
+const surfaceActions = {
+  workOrders: ['📊 Update', '✅ Done', '⏸️ Pause'],
+  salesOrders: ['📞 Call', '📱 WhatsApp', '📄 Invoice'],
+  purchaseOrders: ['✅ Approve', '❌ Reject', '📝 Edit'],
+  qualityControl: ['✅ Pass', '❌ Reject', '📸 Photo']
+}
+
+// Keep secondary actions in expanded view
+const expandedActions = ['Reassign', 'View History', 'Advanced Controls']
+```
+
+#### **Flexible Action Migration**
+**Benefit**: Easy to move actions between surface and expanded views based on usage patterns.
+
+```tsx
+// Usage-driven action placement
+{workOrder.status === 'in_progress' && (
+  <div className="ds-card-actions">
+    {/* Most frequent actions surface-level */}
+    <button className="ds-btn ds-btn-secondary">📊 Update</button>
+    <button className="ds-btn ds-btn-primary">✅ Done</button>
+    <button className="ds-btn ds-btn-secondary">⏸️ Pause</button>
+  </div>
+)}
+
+// Less frequent actions remain in expanded view
+{isExpanded && (
+  <div className="ds-expanded-details">
+    <button className="ds-btn ds-btn-secondary">🔄 Reassign Machine</button>
+    <button className="ds-btn ds-btn-secondary">📋 View History</button>
+  </div>
+)}
+```
+
+#### **Factory-Optimized Features**
+- **Touch Targets**: 44px minimum height for factory environment
+- **Visual Update Interface**: Toggle mode for quantity updates
+- **Large Buttons**: 80-100px width for glove compatibility
+- **Clear Visual States**: Obvious when in edit/update mode
+
+#### **Cross-Module Consistency**
+**Reusable Pattern**: Same implementation across Sales, Production, Procurement, QC modules.
+
+```tsx
+// Universal usage pattern
+<div className={`ds-card ${hasActions ? 'ds-card-with-actions' : ''}`}>
+  {/* Standard card content */}
+  
+  {hasActions && (
+    <div className="ds-card-actions">
+      {/* Context-specific action buttons */}
+    </div>
+  )}
+</div>
+```
+
 ---
 
 ## ⚠️ **COMMON PITFALLS & SOLUTIONS**
