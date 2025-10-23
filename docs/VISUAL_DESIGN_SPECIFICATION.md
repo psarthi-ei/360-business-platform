@@ -885,6 +885,114 @@ Total Height: 140px (with 16px padding = 108px content)
 - **Z-Index Management**: Ensure fixed elements layer correctly
 - **Touch Targets**: Maintain 44px minimum for factory environment use
 
+### **DESIGN DECISION: No Auto-Hide Header (MVP)**
+
+#### **Decision Rationale:**
+**ALWAYS-VISIBLE HEADER/SEARCH ARCHITECTURE FOR SIMPLICITY**
+
+During MVP development, auto-hide header functionality was considered but **deliberately excluded** due to:
+
+**Technical Complexity:**
+- **Nested Scroll Containers**: Different modules (Sales, Production) use varying content architectures
+- **CSS Grid Constraints**: Height management across responsive breakpoints becomes complex
+- **Cross-Module Consistency**: Ensuring uniform behavior across all tabs requires significant architecture changes
+
+**Business Priority:**
+- **MVP Focus**: Core business functionality takes precedence over advanced UX features
+- **User Feedback Driven**: Feature can be added in future iterations based on actual user behavior
+- **Consistent Experience**: Always-visible navigation ensures predictable interface behavior
+
+**Implementation Status:**
+- ✅ **Fixed Header**: Always accessible for navigation and search
+- ✅ **Fixed Filters**: Business controls remain visible during scrolling
+- ✅ **Scrollable Content**: Cards area provides natural scrolling for data
+- 🔄 **Future Consideration**: Auto-hide can be revisited post-MVP with user testing data
+
+This decision maintains the **mobile-first, factory-optimized design principles** while keeping implementation focused on core business value delivery.
+
+#### **DETAILED TECHNICAL ANALYSIS: Nested Scroll Container Issue**
+
+**Root Cause Discovery:**
+Auto-hide header functionality failed due to **architectural inconsistency** between tab components:
+
+**Working Architecture (Dashboard Tab):**
+```typescript
+// Dashboard.tsx - Direct Content Rendering
+<main className={styles.contentArea}>
+  <div className={styles.dashboardCards}>
+    {/* Direct card content - scrolls in main content area */}
+    <Card />
+    <Card />
+  </div>
+</main>
+```
+
+**Problematic Architecture (Sales/Production Tabs):**
+```typescript
+// Sales.tsx - Nested Scroll Container
+<main className={styles.contentArea}>
+  <div className={styles.salesModule}>
+    <div className={styles.salesTabs}>...</div>
+    <div className={styles.salesFilters}>...</div>
+    <div className={`${styles.salesContent} ${styles.scrollable}`}>
+      {/* NESTED SCROLL CONTAINER - scroll events don't bubble to main */}
+      <Card />
+      <Card />
+    </div>
+  </div>
+</main>
+```
+
+**CSS Implementation Difference:**
+```css
+/* Dashboard - Direct scrolling */
+.contentArea {
+  overflow-y: auto; /* ✅ Scroll events fire on main container */
+}
+
+/* Sales/Production - Nested scrolling */
+.salesContent {
+  overflow-y: auto; /* ❌ Scroll events trapped in nested container */
+  height: calc(100vh - 200px); /* Internal scroll area */
+}
+```
+
+**Scroll Event Detection Failure:**
+```typescript
+// Auto-hide logic expects scroll events on main content area
+useEffect(() => {
+  const contentArea = document.querySelector('.contentArea');
+  contentArea?.addEventListener('scroll', handleScroll);
+  // ❌ FAILS: Sales/Production scroll events fire on nested .salesContent
+}, []);
+```
+
+**Architecture Solutions Required:**
+1. **Standardize Scroll Architecture**: All tabs must use main content area scrolling
+2. **Refactor Nested Components**: Remove internal scroll containers from Sales/Production
+3. **CSS Grid Redesign**: Ensure consistent height management across all modules
+4. **Event Delegation**: Implement scroll detection for multiple container patterns
+
+**Time Investment Analysis:**
+- **Investigation**: 2+ hours debugging scroll detection across tabs
+- **Root Cause**: 1 hour identifying nested container differences
+- **Solution Design**: 2-3 hours architectural redesign required
+- **Implementation**: 4-6 hours refactoring all tab components
+- **Testing**: 2 hours cross-module validation
+
+**Business Impact vs Development Cost:**
+- **Feature Value**: Nice-to-have UX enhancement
+- **Development Cost**: 10+ hours for comprehensive solution
+- **Maintenance Risk**: Ongoing complexity for future tab additions
+- **MVP Priority**: Core business functionality takes precedence
+
+**Future Implementation Guidance:**
+When revisiting auto-hide functionality post-MVP:
+1. **Standardize Architecture**: Ensure all tabs use main content area scrolling
+2. **Scroll Detection**: Implement robust event handling for nested containers
+3. **Performance Testing**: Validate smooth animations across all modules
+4. **User Testing**: Confirm actual user benefit before investment
+
 #### **PRODUCTION Tab - Manufacturing**
 ```
 Purpose: Work order execution and quality control
