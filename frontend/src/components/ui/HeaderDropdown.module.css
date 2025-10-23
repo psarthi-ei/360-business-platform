@@ -2,7 +2,7 @@
 .headerDropdown {
   position: relative;
   display: inline-block;
-  z-index: 100001; /* Even higher z-index for dropdown container */
+  z-index: 5000; /* Dropdown container z-index per hierarchy standard */
 }
 
 /* Dropdown Trigger Button */
@@ -59,7 +59,7 @@
   -webkit-backdrop-filter: blur(20px);
   min-width: 240px;
   max-width: 300px;
-  z-index: 100002; /* Highest z-index to ensure dropdown appears above everything */
+  z-index: 5000; /* Dropdown menu z-index per hierarchy standard */
   margin-top: 8px;
   animation: slideDown 0.2s ease;
 }

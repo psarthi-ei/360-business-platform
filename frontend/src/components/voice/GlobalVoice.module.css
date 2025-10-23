@@ -589,7 +589,7 @@
     position: fixed;
     bottom: 160px; /* Further up from bottom */
     right: 20px; /* Bottom right position */
-    z-index: 99999;
+    z-index: 10000;
     width: 36px;
     height: 36px;
     font-size: 10px;

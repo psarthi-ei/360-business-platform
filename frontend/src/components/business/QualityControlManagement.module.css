@@ -1,284 +1,346 @@
-/* QualityControlManagement.module.css - Visual Design Specification Styling */
+/* QualityControlManagement.module.css - Global Design System Compliant */
 
-.qualityControlManagement {
-  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-md);
+/* ===== GLOBAL CARD SYSTEM REFERENCE ===== */
+/* Card styles now handled by global .ds-card system in index.css */
+/* Card container, hover and expanded states handled globally */
+/* Card content styles handled by global .ds-card-* classes */
+/* Status-based border colors handled by global .ds-card-status-* classes */
+
+.qcManagementScreen {
+  padding: var(--ds-padding-screen);
+  text-align: left !important;
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.pageContent {
+  padding: 0;
 }
 
 .sectionHeader {
-  font-size: var(--font-base);
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  padding: var(--ds-space-sm) 0;
-  border-bottom: 1px solid var(--ds-border-primary);
-  margin-bottom: var(--ds-space-sm);
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  padding-left: var(--ds-space-sm);
-  border-radius: var(--ds-radius-sm);
-}
-
-.qcItemsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.qcItemCard {
-  background: white;
-  border: 1px solid var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-md);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.qcItemCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-  border-color: var(--ds-border-hover);
-}
-
-.qcItemHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--ds-space-xs);
-}
-
-.qcItemId {
-  font-size: var(--font-base);
-  font-weight: 600;
-  color: var(--ds-text-primary);
-}
-
-.statusBadge {
-  padding: 4px 12px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.qcItemDetails {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: var(--ds-space-sm);
-  margin-bottom: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-md);
+  font-family: var(--font-family);
 }
 
-.productInfo,
-.inspectionInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  line-height: 1.4;
-}
-
-.qcItemActions {
-  display: flex;
-  gap: var(--ds-space-sm);
-  align-items: center;
-}
-
-.approveAction {
-  background: var(--color-success);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.approveAction:hover {
-  background: var(--color-success-hover);
-  transform: translateY(-1px);
-}
-
-.rejectAction {
-  background: var(--color-danger);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.rejectAction:hover {
-  background: var(--color-danger-hover);
-  transform: translateY(-1px);
-}
-
-.primaryAction {
-  background: var(--ds-btn-primary);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.primaryAction:hover {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-}
-
-.primaryAction:active {
-  background: var(--ds-btn-primary-active);
-  transform: translateY(0);
-}
-
-.secondaryAction {
-  background: transparent;
-  color: var(--ds-text-primary);
-  border: 1px solid var(--ds-border-secondary);
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.secondaryAction:hover {
-  background: var(--ds-bg-hover);
-  border-color: var(--ds-border-hover);
-  transform: translateY(-1px);
-}
-
-.secondaryAction:active {
-  background: var(--ds-bg-subtle);
-  transform: translateY(0);
-}
-
-.metricsSection {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--ds-space-md);
-}
-
-.metricCard {
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  border: 1px solid var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-md);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-xs);
-}
-
-.metricValue {
-  font-size: var(--font-xl);
-  font-weight: 700;
-  color: var(--ds-text-primary);
-  line-height: 1;
-}
-
-.metricLabel {
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  font-weight: 500;
-}
-
-.comingSoon {
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  border: 2px dashed var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-xl);
-  text-align: center;
-  margin-top: var(--ds-space-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--ds-space-md);
-}
-
-.comingSoonIcon {
-  font-size: 48px;
-  opacity: 0.7;
-}
-
-.comingSoonText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.comingSoonText h3 {
+.sectionHeader h3 {
   font-size: var(--font-lg);
   font-weight: 600;
   color: var(--ds-text-primary);
   margin: 0;
 }
 
-.comingSoonText p {
-  font-size: var(--font-base);
+.queueCount {
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  font-size: var(--font-sm);
   color: var(--ds-text-secondary);
-  line-height: 1.5;
-  margin: 0;
-  max-width: 400px;
+  font-weight: 500;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .qualityControlManagement {
-    padding: var(--ds-space-sm);
+.qcContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-sm);
+  display: grid;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+/* ===== COMPONENT-SPECIFIC ACTION BUTTONS ===== */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  margin-top: clamp(12px, 3vw, 16px);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
+}
+
+/* ===== QC MODAL STYLES ===== */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25000;
+  padding: var(--ds-space-md);
+}
+
+.modalContent {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-elevated);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.modalHeader h3 {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.closeButton {
+  width: var(--ds-touch-target-min);
+  height: var(--ds-touch-target-min);
+  border: none;
+  background: none;
+  font-size: var(--font-lg);
+  color: var(--ds-text-muted);
+  cursor: pointer;
+  border-radius: var(--ds-radius-md);
+  transition: all 0.2s ease;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-expanded);
+  color: var(--ds-text-primary);
+}
+
+.modalBody {
+  padding: var(--ds-space-lg);
+}
+
+/* ===== QC FORM 4-SECTION LAYOUT ===== */
+.qcSection {
+  margin-bottom: var(--ds-space-lg);
+  padding-bottom: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.qcSection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.qcSection h4 {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+/* Section 1: Quality Checklist (32px items) */
+.checklistGrid {
+  display: grid;
+  gap: var(--ds-space-xs);
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  min-height: 32px;
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+}
+
+.checklistItem input[type="checkbox"] {
+  width: var(--ds-space-md);
+  height: var(--ds-space-md);
+  accent-color: var(--ds-btn-primary);
+}
+
+/* Section 2: Photo Evidence (44px button) */
+.photoButton {
+  width: 100%;
+  height: 44px;
+  background: var(--ds-bg-expanded);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.photoButton:hover {
+  background: var(--ds-bg-card);
+  border-color: var(--ds-btn-primary);
+}
+
+/* Section 3: QC Remarks (60px textarea) */
+.remarksTextarea {
+  width: 100%;
+  min-height: 60px;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  color: var(--ds-text-primary);
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.remarksTextarea:focus {
+  outline: none;
+  border-color: var(--ds-btn-primary);
+}
+
+.remarksTextarea::placeholder {
+  color: var(--ds-text-muted);
+}
+
+/* Section 4: QC Result (56px buttons) */
+.gradeSelection {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-md);
+}
+
+.gradeSelection label {
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+}
+
+.gradeSelect {
+  flex: 1;
+  height: var(--ds-touch-target-min);
+  padding: 0 var(--ds-space-sm);
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  color: var(--ds-text-primary);
+  cursor: pointer;
+}
+
+.resultButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+}
+
+/* QC Result buttons use design system classes */
+.resultButtons .ds-btn {
+  flex: 1;
+  height: 56px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+  .checklistGrid {
+    gap: var(--ds-space-xs);
   }
   
-  .qcItemCard {
-    padding: var(--ds-space-sm);
+  .checklistItem {
+    min-height: 36px;
   }
   
-  .qcItemDetails {
-    grid-template-columns: 1fr;
+  .photoButton {
+    height: 48px;
   }
   
-  .qcItemActions {
+  .remarksTextarea {
+    min-height: 64px;
+  }
+  
+  .resultButtons {
     flex-direction: column;
+    gap: var(--ds-space-sm);
   }
   
-  .approveAction,
-  .rejectAction,
-  .primaryAction,
-  .secondaryAction {
-    width: 100%;
+  .resultButtons .ds-btn {
+    height: 48px;
+  }
+}
+
+/* ===== QC EXPANDED CONTENT STYLING ===== */
+.qcSpecifications {
+  display: grid;
+  gap: var(--ds-space-md);
+}
+
+.qcSpecifications h4 {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.qcSpecifications p {
+  font-family: var(--font-family);
+  font-size: var(--ds-font-sm);
+  color: var(--ds-text-secondary);
+  margin: 0 0 var(--ds-space-xs) 0;
+}
+
+/* Mobile Container Padding Removal - MANDATORY */
+@media (max-width: 767px) {
+  .qcContainer {
+    padding-left: 0;
+    padding-right: 0;
   }
   
-  .metricsSection {
-    grid-template-columns: repeat(2, 1fr);
+  .modalContent {
+    margin: var(--ds-space-md);
+    max-height: calc(100vh - 2 * var(--ds-space-md));
   }
   
-  .comingSoon {
-    padding: var(--ds-space-lg);
+  .actionButtons {
+    gap: var(--ds-space-xs);
   }
   
-  .comingSoonIcon {
-    font-size: 36px;
+  .actionButtons button {
+    flex: 1;
+    min-width: calc(50% - 3px);
   }
 }

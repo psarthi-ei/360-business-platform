@@ -68,21 +68,35 @@ export interface StatusHistoryEntry {
 }
 
 export interface QualityControlItem {
-  id: string;
-  workOrderId: string;
-  product: string;
-  batchNumber: string;
-  quantity: string;
-  inspector?: string;
+  id: string;                    // QC#301
+  workOrderId: string;           // WO#451 (1:1 mapping)
   status: 'pending_inspection' | 'in_progress' | 'approved' | 'rejected';
+  inspector?: string;            // Ravi Sharma
   grade?: 'A Grade' | 'B Grade' | 'C Grade' | 'Reject';
-  completedTime?: string;
-  submittedTime: string;
-  checklist?: QCChecklistItem[];
-  notes?: string;
-  issues?: string[];
-  photos?: string[];
+  notes?: string;               // QC inspection notes
+  photos?: string[];            // Photo evidence
+  checklist?: QCChecklistItem[];// Quality checklist results
+  startedTime?: string;         // When QC inspection started
+  completedTime?: string;       // When QC completed
   priority: 'normal' | 'high' | 'urgent';
+  
+  // QC-specific quality specifications
+  qualitySpecs: {
+    targetGrade: string;         // A Grade
+    colorCode: string;           // Pantone 19-4052
+    gsmTarget: string;           // 180 ± 5
+    widthTarget: string;         // 58" ± 0.5"
+    shrinkageLimit: string;      // <3%
+  };
+  specialInstructions?: string[];
+  
+  // Batch information for QC context
+  batchInfo?: {
+    batchNumber: string;         // B2025-045
+    rawMaterial: string;         // Cotton Yarn 30s
+    dyeLot?: string;            // DL-2024-089
+    productionDates: string;     // 20-22 Dec 2024
+  };
 }
 
 export interface QCChecklistItem {
@@ -548,63 +562,149 @@ export const mockWorkOrders: WorkOrder[] = [
 export const mockQCItems: QualityControlItem[] = [
   {
     id: 'QC#301',
-    workOrderId: 'WO#451',
-    product: 'Cotton Fabric',
-    batchNumber: 'B2025-045',
-    quantity: '800m',
+    workOrderId: 'WO#453', // Maps to completed Work Order
     status: 'pending_inspection',
-    submittedTime: '2:30 PM',
     priority: 'high',
+    qualitySpecs: {
+      targetGrade: 'A Grade',
+      colorCode: 'Blue (Pantone 19-4052)',
+      gsmTarget: '180 ± 5',
+      widthTarget: '58" ± 0.5"',
+      shrinkageLimit: '<3%'
+    },
+    specialInstructions: [
+      'Customer requires strict color match',
+      'Photo documentation mandatory',
+      'Rush order - complete within 2hrs'
+    ],
+    batchInfo: {
+      batchNumber: 'B2025-047',
+      rawMaterial: 'Cotton Yarn 30s',
+      dyeLot: 'DL-2024-089',
+      productionDates: '19 Dec 2024'
+    },
     checklist: [
-      { item: 'Color match within tolerance', checked: true, required: true },
-      { item: 'Width specifications met', checked: true, required: true },
-      { item: 'Weight/GSM correct', checked: true, required: true },
-      { item: 'Shrinkage test pending', checked: false, required: true },
-      { item: 'No visible defects', checked: true, required: true }
+      { item: 'Color match verification', checked: false, required: true },
+      { item: 'GSM weight check', checked: false, required: true },
+      { item: 'Width measurement', checked: false, required: true },
+      { item: 'Shrinkage test', checked: false, required: true },
+      { item: 'Surface defect inspection', checked: false, required: true }
     ]
   },
   {
     id: 'QC#302',
-    workOrderId: 'WO#452',
-    product: 'Silk Blend',
-    batchNumber: 'B2025-046',
-    quantity: '300m',
-    inspector: 'Rajesh Patel',
-    status: 'approved',
-    grade: 'A Grade',
-    completedTime: '1:15 PM',
-    submittedTime: '12:45 PM',
+    workOrderId: 'WO#450', // Maps to ready_qc Work Order
+    status: 'pending_inspection',
     priority: 'normal',
-    notes: 'Excellent quality, meets all specifications'
+    qualitySpecs: {
+      targetGrade: 'A Grade',
+      colorCode: 'Mixed Colors',
+      gsmTarget: '160 ± 3',
+      widthTarget: '60" ± 0.5"',
+      shrinkageLimit: '<2%'
+    },
+    specialInstructions: [
+      'Multi-color pattern inspection required',
+      'Check color bleeding resistance'
+    ],
+    batchInfo: {
+      batchNumber: 'B2025-044',
+      rawMaterial: 'Polyester Yarn',
+      productionDates: '19 Dec 2024'
+    },
+    checklist: [
+      { item: 'Color match verification', checked: false, required: true },
+      { item: 'GSM weight check', checked: false, required: true },
+      { item: 'Width measurement', checked: false, required: true },
+      { item: 'Shrinkage test', checked: false, required: true },
+      { item: 'Surface defect inspection', checked: false, required: true }
+    ]
   },
   {
-    id: 'QC#300',
-    workOrderId: 'WO#450',
-    product: 'Cotton Yarn',
-    batchNumber: 'B2025-044',
-    quantity: '600m',
+    id: 'QC#303',
+    workOrderId: 'WO#503-A', // Maps to completed Work Order
+    status: 'approved',
     inspector: 'Ravi Sharma',
-    status: 'approved',
     grade: 'A Grade',
-    completedTime: '1:30 PM',
-    submittedTime: '1:00 PM',
+    startedTime: '2:30 PM',
+    completedTime: '3:45 PM',
     priority: 'normal',
-    notes: 'Premium quality batch'
+    qualitySpecs: {
+      targetGrade: 'A Grade',
+      colorCode: 'Navy Blue (Pantone 19-3928)',
+      gsmTarget: '200 ± 5',
+      widthTarget: '56" ± 0.5"',
+      shrinkageLimit: '<2.5%'
+    },
+    batchInfo: {
+      batchNumber: 'B2025-503A',
+      rawMaterial: 'Polyester Yarn',
+      productionDates: '19 Dec 2024'
+    },
+    checklist: [
+      { item: 'Color match verification', checked: true, required: true },
+      { item: 'GSM weight check', checked: true, required: true },
+      { item: 'Width measurement', checked: true, required: true },
+      { item: 'Shrinkage test', checked: true, required: true },
+      { item: 'Surface defect inspection', checked: true, required: true }
+    ],
+    notes: 'Excellent quality batch. Color consistency perfect. Meets all customer specifications.',
+    photos: ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']
   },
   {
-    id: 'QC#299',
-    workOrderId: 'WO#449',
-    product: 'Dyed Cotton',
-    batchNumber: 'B2025-043',
-    quantity: '400m',
-    inspector: 'Meera Singh',
-    status: 'rejected',
-    grade: 'Reject',
-    completedTime: '11:45 AM',
-    submittedTime: '11:00 AM',
+    id: 'QC#304',
+    workOrderId: 'WO#503-B', // In progress Work Order - will get QC when completed
+    status: 'pending_inspection',
     priority: 'normal',
-    issues: ['Color variation', 'Thread count below specification'],
-    notes: 'Requires rework - color inconsistency in batch'
+    qualitySpecs: {
+      targetGrade: 'A Grade',
+      colorCode: 'Navy Blue (Pantone 19-3928)',
+      gsmTarget: '200 ± 5',
+      widthTarget: '56" ± 0.5"',
+      shrinkageLimit: '<2.5%'
+    },
+    batchInfo: {
+      batchNumber: 'B2025-503B',
+      rawMaterial: 'Polyester Yarn',
+      productionDates: '21 Dec 2024'
+    },
+    checklist: [
+      { item: 'Color match verification', checked: false, required: true },
+      { item: 'GSM weight check', checked: false, required: true },
+      { item: 'Width measurement', checked: false, required: true },
+      { item: 'Shrinkage test', checked: false, required: true },
+      { item: 'Surface defect inspection', checked: false, required: true }
+    ]
+  },
+  {
+    id: 'QC#305',
+    workOrderId: 'WO#451', // Current in_progress Work Order
+    status: 'pending_inspection',
+    priority: 'urgent',
+    qualitySpecs: {
+      targetGrade: 'A Grade',
+      colorCode: 'Mixed Colors',
+      gsmTarget: '175 ± 5',
+      widthTarget: '58" ± 0.5"',
+      shrinkageLimit: '<3%'
+    },
+    specialInstructions: [
+      'Rush order - priority inspection',
+      'Customer very quality sensitive'
+    ],
+    batchInfo: {
+      batchNumber: 'B2025-045',
+      rawMaterial: 'Cotton Yarn 30s',
+      dyeLot: 'DL-2024-088',
+      productionDates: '20-21 Dec 2024'
+    },
+    checklist: [
+      { item: 'Color match verification', checked: false, required: true },
+      { item: 'GSM weight check', checked: false, required: true },
+      { item: 'Width measurement', checked: false, required: true },
+      { item: 'Shrinkage test', checked: false, required: true },
+      { item: 'Surface defect inspection', checked: false, required: true }
+    ]
   }
 ];
 

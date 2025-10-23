@@ -57,6 +57,7 @@
   - [Button Styles](#button-styles)
   - [Card Styles](#card-styles)
   - [Navigation Styles](#navigation-styles)
+  - [Z-index Hierarchy Standard](#z-index-hierarchy-standard)
 - [DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users](#design-decision-fab-vs-bottom-cta-for-non-tech-users)
 
 ### **5. Mobile Design Architecture**
@@ -394,6 +395,129 @@ FLOATING ACTION BUTTON (FAB)
     └─────┘ Fixed bottom-right
 ```
 
+#### **Z-index Hierarchy Standard**
+
+**CRITICAL**: Universal z-index hierarchy to prevent modal and overlay conflicts across the platform.
+
+##### **Current State Analysis** (October 2025)
+**Audit Results**: 58 z-index declarations found across codebase with overlapping ranges causing modal visibility issues.
+
+**Problem Examples**:
+- QC Modal: `z-index: 50000` (too low)
+- Search Bar: `z-index: 10000` (blocks modals)
+- Platform Header: `z-index: 100000` (very high)
+- Header Dropdown: `z-index: 100002` (highest)
+
+##### **Standardized Z-index Hierarchy**
+
+```
+📋 Z-INDEX LAYER SYSTEM
+┌─────────────────────────────────────┐
+│ **Layer 6: Critical System**       │ 200,000 - 999,999
+│ Emergency alerts, system errors     │ 
+├─────────────────────────────────────┤
+│ **Layer 5: Global System UI**      │ 100,000 - 199,999
+│ Header dropdowns, main navigation   │ 
+├─────────────────────────────────────┤
+│ **Layer 4: Modals & Overlays**     │ 50,000 - 99,999
+│ QC Modal, Lead Modal, Confirmations │ 
+├─────────────────────────────────────┤
+│ **Layer 3: Search & Fixed UI**     │ 10,000 - 49,999
+│ Global search, floating elements    │ 
+├─────────────────────────────────────┤
+│ **Layer 2: Navigation**            │ 1,000 - 9,999
+│ Bottom nav, tab navigation, voice   │ 
+├─────────────────────────────────────┤
+│ **Layer 1: Content & Components**  │ 1 - 999
+│ Cards, buttons, regular UI          │ 
+└─────────────────────────────────────┘
+```
+
+##### **Specific Z-index Assignments**
+
+**Layer 6: Critical System (200,000+)**
+```css
+.emergency-alert          { z-index: 500000; }
+.system-error-modal       { z-index: 400000; }
+```
+
+**Layer 5: Global System UI (100,000 - 199,999)**
+```css
+.header-dropdown          { z-index: 150000; }
+.platform-header-controls { z-index: 140000; }
+.main-navigation          { z-index: 130000; }
+```
+
+**Layer 4: Modals & Overlays (50,000 - 99,999)**
+```css
+.modal-overlay            { z-index: 80000; }  /* QC Modal, Lead Modal */
+.confirmation-dialog      { z-index: 75000; }
+.tooltip-overlay          { z-index: 70000; }
+```
+
+**Layer 3: Search & Fixed UI (10,000 - 49,999)**
+```css
+.global-search            { z-index: 30000; }
+.floating-action-button   { z-index: 20000; }
+.sticky-filters           { z-index: 15000; }
+```
+
+**Layer 2: Navigation (1,000 - 9,999)**
+```css
+.bottom-navigation        { z-index: 5000; }
+.tab-navigation           { z-index: 4000; }
+.voice-assistant          { z-index: 3000; }
+```
+
+**Layer 1: Content & Components (1 - 999)**
+```css
+.card-expanded            { z-index: 100; }
+.dropdown-menu            { z-index: 50; }
+.card-default             { z-index: 1; }
+```
+
+##### **Implementation Rules**
+
+**✅ REQUIRED**:
+- Use exact values from this specification
+- Never use arbitrary z-index values
+- Always reference this hierarchy for new components
+
+**❌ FORBIDDEN**:
+- `z-index: 999999` or similar arbitrary high values
+- Overlapping ranges between layers
+- Using `!important` for z-index conflicts
+
+##### **Modal Implementation Standard**
+
+**Standard Modal Z-index**: `80000`
+```css
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 80000;  /* Layer 4: Modals */
+  background: rgba(0, 0, 0, 0.5);
+}
+```
+
+**Usage Example**:
+```css
+/* ✅ CORRECT - QC Modal */
+.qc-modal-overlay { z-index: 80000; }
+
+/* ❌ WRONG - Arbitrary high value */
+.qc-modal-overlay { z-index: 999999; }
+```
+
+##### **Conflict Resolution Protocol**
+
+1. **Identify Layer**: Determine which layer the element belongs to
+2. **Check Range**: Ensure z-index is within correct layer range
+3. **Update Documentation**: Add new assignments to this specification
+4. **Test Stacking**: Verify no conflicts with existing elements
+
+---
+
 ### **DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users**
 
 #### **Original Specification:**
@@ -427,6 +551,118 @@ FLOATING ACTION BUTTON (FAB)
 - Quotes: [+ Add Quote]  
 - Orders: [+ New Order]
 - Invoices: [+ New Invoice]
+
+---
+
+### **DESIGN DECISION: Modal vs Expanded View for Actions and Information**
+
+#### **Original Challenge:**
+Need consistent patterns for when users interact with cards to either:
+- **Perform Actions** (QC inspection, edit lead, complete work order)
+- **View Information** (detailed specs, history, documentation)
+
+#### **Target Users Analysis:**
+**Context**: Gujarat textile manufacturers in factory environments
+**Device Usage**: Primarily mobile, often wearing gloves, need clear focus
+
+#### **DECISION: Hybrid Modal + Expanded View Pattern**
+
+**ACTIONS → MODAL INTERFACE**
+- **Use Case**: QC inspection, lead editing, order creation, invoice generation
+- **Rationale**: Actions require focus and completion
+- **UX Benefits**: 
+  - ✅ **Eliminate Distractions**: Modal overlay blocks other interface elements
+  - ✅ **Completion Focus**: Clear start/finish workflow with explicit save/cancel
+  - ✅ **Error Prevention**: Modal prevents accidental navigation away from incomplete actions
+  - ✅ **Mobile Optimized**: Full-screen on mobile provides maximum touch targets
+
+**INFORMATION → EXPANDED VIEW**
+- **Use Case**: QC specifications, batch details, order history, customer information
+- **Rationale**: Information viewing benefits from context preservation
+- **UX Benefits**:
+  - ✅ **Context Preservation**: Users can still see related cards and list context
+  - ✅ **Quick Scanning**: Easy to close and open multiple items for comparison
+  - ✅ **Progressive Disclosure**: Show summary first, expand for details when needed
+  - ✅ **Spatial Memory**: Information stays in its logical card position
+
+#### **Implementation Pattern:**
+
+**MODAL WORKFLOW - QC Inspection Example:**
+```
+User taps [Start QC] → Modal overlays entire screen
+┌─────────────────────────────────────┐
+│ QC Inspection — WO#451          [×] │ Modal header + close
+│ Gujarat Garments | Mixed fabric     │ Context details  
+├─────────────────────────────────────┤
+│ ✅ QUALITY CHECKLIST                │ Section 1: Interactive checkboxes
+│ 📷 PHOTO EVIDENCE                   │ Section 2: Photo capture
+│ 📝 QC REMARKS                       │ Section 3: Notes textarea
+│ 🎯 QC RESULT                        │ Section 4: Grade selection
+│ [    ✅ Pass    ] [  ⚠️ Rework   ] │ Final action buttons
+└─────────────────────────────────────┘
+Modal closes → Returns to QC queue → Card shows updated status
+```
+
+**EXPANDED VIEW - QC Specifications Example:**
+```
+User taps [More] → Card expands in place
+┌─────────────────────────────────────┐
+│ WO#451 — Gujarat Garments | Loom A1 │ ← Header (unchanged)
+│ ⏳ Pending QC • High Priority       │ ← Status (unchanged)
+│ 1000m • Mixed fabric                │ ← Meta (unchanged)
+│ [Start QC]                  [Less]  │ ← Actions (Less replaces More)
+├─────────────────────────────────────┤ ← Expansion begins
+│ 🎯 Quality Specifications           │ ← QC-focused information
+│ Target Grade: A Grade               │
+│ Color: Blue (Pantone 19-4052)       │
+│ GSM Target: 180 ± 5                 │
+│ 📋 QC Checklist Preview             │
+│ □ Color match verification          │
+│ □ GSM weight check                  │
+│ ⚠️ Special Instructions             │
+│ • Customer requires strict color match│
+│ • Photo documentation mandatory     │
+└─────────────────────────────────────┘
+```
+
+#### **Cross-Platform Application:**
+**SYSTEM-WIDE STANDARD**: This pattern applies to ALL modules across the entire platform:
+
+**SALES MODULE:**
+- **Actions**: Create quote, Update lead status, Send proposal, Generate invoice → **Modal**
+- **Information**: Lead history, Customer details, Quote specifications, Payment history → **Expanded View**
+
+**PRODUCTION MODULE:**
+- **Actions**: Start WO, Assign machine, QC inspection, Complete production → **Modal**  
+- **Information**: Production details, Material specs, Machine status, QC specifications → **Expanded View**
+
+**PROCUREMENT MODULE:**
+- **Actions**: Create PO, Adjust stock, Transfer material, Approve supplier → **Modal**
+- **Information**: Stock history, Supplier details, Material specifications, Audit trail → **Expanded View**
+
+**CUSTOMER MODULE:**
+- **Actions**: Update customer status, Send communication, Create support ticket → **Modal**
+- **Information**: Order history, Contact details, Communication timeline, Account summary → **Expanded View**
+
+**HOME DASHBOARD:**
+- **Actions**: Quick actions (Add lead, Create order, Generate report) → **Modal**
+- **Information**: Metrics details, Chart drill-downs, Activity timelines → **Expanded View**
+
+**UNIVERSAL RULE**: If user needs to INPUT/CHANGE data → Modal | If user needs to VIEW/ANALYZE data → Expanded View
+
+#### **Design System Integration:**
+- **Modal CSS Classes**: `.ds-modal-overlay`, `.ds-modal-content`, `.ds-modal-header`
+- **Expanded View CSS Classes**: `.ds-card-expanded`, `.ds-expansion-content`, `.ds-expansion-section`
+- **Button States**: `[Start QC]` → `[View Progress]` → `[View Report]` (action button evolution)
+- **Consistent Heights**: Modal sections follow Visual Design Spec measurements (32px/44px/56px/60px)
+
+#### **Success Metrics:**
+- ✅ **Action Completion Rate**: Higher completion for modal-based workflows
+- ✅ **Information Scanning**: Faster access to details via expanded views  
+- ✅ **User Satisfaction**: Clear expectations for action vs information patterns
+- ✅ **Mobile Performance**: Optimal touch targets and focus management
+
+---
 
 #### **Card Styles**
 ```

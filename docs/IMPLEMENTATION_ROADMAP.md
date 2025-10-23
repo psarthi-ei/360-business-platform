@@ -40,19 +40,19 @@
 ## **PENDING IMPLEMENTATION** ⏳
 
 ## **PHASE 6: PRODUCTION MODULE** 🔄 **IN PROGRESS** 
-*Duration: 2.5 hours remaining | Sub-phases: 6 (1 partially completed)*
+*Duration: 1 hour remaining | Sub-phases: 6 (4 completed, 2 remaining)*
 
 ### **Sub-Phase 6.1: Update Production Module Shell** ⏱️ *25 minutes* ✅ **COMPLETED**
-**Objective**: Update production module structure to 5-tab navigation (Orders | WO | Machines | QC | Ready) with industry-standard terminology  
+**Objective**: Update production module structure to 4-tab navigation (Orders | WO | QC | Ready) with industry-standard terminology  
 **References**: [PRODUCTION TAB - Manufacturing Execution](../docs/VISUAL_DESIGN_SPECIFICATION.md#production-tab---manufacturing-execution)
-**Status**: ✅ Complete 5-tab container with updated filter configurations, component routing, and placeholder components
+**Status**: ✅ Complete 4-tab container with updated filter configurations, component routing, and placeholder components
 
 **Completed Implementation**:
-- ✅ Updated `ProductionTabType` from `'plan' | 'active' | 'qc' | 'ready'` to `'orders' | 'wo' | 'machines' | 'qc' | 'ready'`
-- ✅ Updated filter configurations for all 5 tabs with appropriate status filters
-- ✅ Updated component imports: `ProductionOrderManagement`, `WorkOrderPlanning`, `MachineOperations`, `QualityControlManagement`, `DeliveryFulfillment`
+- ✅ Updated `ProductionTabType` from `'plan' | 'active' | 'qc' | 'ready'` to `'orders' | 'wo' | 'qc' | 'ready'`
+- ✅ Updated filter configurations for all 4 tabs with appropriate status filters
+- ✅ Updated component imports: `ProductionOrderManagement`, `WorkOrderPlanning`, `QualityControlManagement`, `DeliveryFulfillment`
 - ✅ Updated CTA button contextual text and actions for new workflow
-- ✅ Updated count calculations and state management for 5-tab structure
+- ✅ Updated count calculations and state management for 4-tab structure
 - ✅ Applied manufacturing industry standard "WO" (vs "W.O.") for Work Order tab
 - ✅ Created placeholder components for new tabs to ensure compilation success
 - ✅ Architecture compliance: Zero code duplication, 100% design system tokens, TypeScript compliance
@@ -90,12 +90,23 @@
 - ✅ Mobile-responsive design with proper touch targets and factory floor optimization
 - ✅ Architecture compliance: Design system tokens, TypeScript interfaces, zero hardcoded values
 
-### **Sub-Phase 6.4: Machines Tab - Operator Interface** ⏱️ *25 minutes* ⏳ **NEXT PRIORITY**
-**Objective**: Implement Machines tab with live production execution and operator controls (Operator view)  
-**References**: [Machines Tab - Operator Production Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#machines-tab---operator-production-interface)
-**Approach**: Machine-centric interface with current Work Order, progress updates, touch-optimized controls, and job queue
+### **Sub-Phase 6.4: Production Module Finalization & Machine Tab Decision** ⏱️ *25 minutes* ✅ **COMPLETED**
+**Objective**: Finalize Production module structure with Machine Tab MVP decision and restore machine filtering functionality  
+**References**: [Machine Tab MVP Decision - VISUAL_DESIGN_SPECIFICATION.md](../docs/VISUAL_DESIGN_SPECIFICATION.md#design-decision-machine-tab-mvp-exclusion)
+**Status**: ✅ Complete Production module with 4-tab structure (Orders | WO | QC | Ready) and machine filtering in WO tab
 
-### **Sub-Phase 6.5: QC Tab - Quality Control & Inspection** ⏱️ *25 minutes*
+**Completed Implementation**:
+- ✅ **Machine Tab MVP Decision**: Determined Machine Tab is NOT required for MVP based on MSME operational reality (3-4 machines, direct supervision)
+- ✅ **Machine Tab Removal**: Complete removal from Production module navigation and TypeScript types  
+- ✅ **Machine Filtering Restoration**: Restored machine-based filtering within WO tab for operational visibility
+- ✅ **Alternative Solution**: Machine assignments and filtering available through WO tab interface
+- ✅ **CTA Configuration System**: Implemented flexible CTA hiding system with configuration-driven approach
+- ✅ **Universal Responsive Button System**: Added desktop override system for natural button width
+- ✅ **Documentation**: Added comprehensive Machine Tab MVP decision analysis to Visual Design Spec
+- ✅ **Production Module Structure**: Finalized 4-tab Production module ready for QC and Ready tab implementation
+- ✅ **Architecture compliance**: Design system tokens, TypeScript compliance, mobile-first responsive design
+
+### **Sub-Phase 6.5: QC Tab - Quality Control & Inspection** ⏱️ *25 minutes* ⏳ **NEXT PRIORITY**
 **Objective**: Implement QC tab with inspection management and pass/rework decisions (QC Inspector view)  
 **References**: [QC Tab - Quality Control & Inspection Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#qc-tab---quality-control--inspection-management)
 **Approach**: QC queue with inspection workflow, pass/rework decisions, and photo evidence capture
