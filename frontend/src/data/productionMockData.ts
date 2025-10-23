@@ -32,7 +32,8 @@ export interface WorkOrder {
   estimatedCompletion?: string;
   actualCompletion?: string;
   priority: 'normal' | 'urgent' | 'high';
-  materialRequirements?: MaterialRequirement[];
+  materialAllocations?: WorkOrderMaterialAllocation[];
+  statusHistory?: StatusHistoryEntry[];
   qualityGrade?: string;
   notes?: string;
   issues?: string[];
@@ -45,6 +46,25 @@ export interface MaterialRequirement {
   available: string;
   shortage: string;
   unit: string;
+}
+
+export interface WorkOrderMaterialAllocation {
+  material: string;
+  allocatedQuantity: string;
+  consumedQuantity: string;
+  remainingQuantity: string;
+  unit: string;
+  allocationDate: string;
+  reservationType: 'soft_reserved' | 'hard_reserved' | 'consumed';
+}
+
+export interface StatusHistoryEntry {
+  timestamp: string;
+  fromStatus: string;
+  toStatus: string;
+  user: string;
+  reason?: string;
+  notes?: string;
 }
 
 export interface QualityControlItem {
@@ -189,13 +209,40 @@ export const mockWorkOrders: WorkOrder[] = [
     estimatedCompletion: '11:30 AM',
     priority: 'urgent',
     createdDate: '2025-10-20',
-    materialRequirements: [
+    materialAllocations: [
       {
         material: 'Cotton Yarn 30s',
-        required: '1100kg',
-        available: '800kg',
-        shortage: '300kg',
-        unit: 'kg'
+        allocatedQuantity: '1100kg',
+        consumedQuantity: '880kg',
+        remainingQuantity: '220kg',
+        unit: 'kg',
+        allocationDate: '2025-10-20 06:00',
+        reservationType: 'hard_reserved'
+      },
+      {
+        material: 'Blue Dye',
+        allocatedQuantity: '50L',
+        consumedQuantity: '40L',
+        remainingQuantity: '10L',
+        unit: 'L',
+        allocationDate: '2025-10-20 06:00',
+        reservationType: 'hard_reserved'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-20 06:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-002'
+      },
+      {
+        timestamp: '2025-10-20 08:15',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Vikram Patel',
+        reason: 'Production started on Loom A1'
       }
     ],
     notes: 'Minor color variation noted but within acceptable limits'
@@ -215,13 +262,24 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedWorker: 'Priya Shah',
     priority: 'normal',
     createdDate: '2025-10-20',
-    materialRequirements: [
+    materialAllocations: [
       {
         material: 'Silk Yarn',
-        required: '600kg',
-        available: '600kg',
-        shortage: '0kg',
-        unit: 'kg'
+        allocatedQuantity: '600kg',
+        consumedQuantity: '0kg',
+        remainingQuantity: '600kg',
+        unit: 'kg',
+        allocationDate: '2025-10-20 07:00',
+        reservationType: 'hard_reserved'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-20 07:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-004'
       }
     ]
   },
@@ -242,7 +300,41 @@ export const mockWorkOrders: WorkOrder[] = [
     actualCompletion: '02:30 PM',
     priority: 'normal',
     createdDate: '2025-10-19',
-    qualityGrade: 'A Grade'
+    qualityGrade: 'A Grade',
+    materialAllocations: [
+      {
+        material: 'Cotton Yarn 30s',
+        allocatedQuantity: '880kg',
+        consumedQuantity: '880kg',
+        remainingQuantity: '0kg',
+        unit: 'kg',
+        allocationDate: '2025-10-19 06:00',
+        reservationType: 'consumed'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-19 06:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-002'
+      },
+      {
+        timestamp: '2025-10-19 06:30',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Ravi Kumar',
+        reason: 'Production started on Loom C1'
+      },
+      {
+        timestamp: '2025-10-19 14:30',
+        fromStatus: 'in_progress',
+        toStatus: 'completed',
+        user: 'Ravi Kumar',
+        reason: 'Production completed successfully'
+      }
+    ]
   },
   {
     id: 'WO#450',
@@ -261,7 +353,48 @@ export const mockWorkOrders: WorkOrder[] = [
     actualCompletion: '01:30 PM',
     priority: 'normal',
     createdDate: '2025-10-19',
-    qualityGrade: 'A Grade'
+    qualityGrade: 'A Grade',
+    materialAllocations: [
+      {
+        material: 'Polyester Yarn',
+        allocatedQuantity: '650kg',
+        consumedQuantity: '650kg',
+        remainingQuantity: '0kg',
+        unit: 'kg',
+        allocationDate: '2025-10-19 06:00',
+        reservationType: 'consumed'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-19 06:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-004'
+      },
+      {
+        timestamp: '2025-10-19 06:30',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Vikram Patel',
+        reason: 'Production started on Loom A1'
+      },
+      {
+        timestamp: '2025-10-19 13:30',
+        fromStatus: 'in_progress',
+        toStatus: 'completed',
+        user: 'Vikram Patel',
+        reason: 'Production completed successfully'
+      },
+      {
+        timestamp: '2025-10-19 14:00',
+        fromStatus: 'completed',
+        toStatus: 'ready_qc',
+        user: 'System',
+        reason: 'Automatically moved to QC queue'
+      }
+    ]
   },
   // Work Orders for SO-003 (production_started order)
   {
@@ -281,7 +414,41 @@ export const mockWorkOrders: WorkOrder[] = [
     actualCompletion: '02:30 PM',
     priority: 'normal',
     createdDate: '2025-10-19',
-    qualityGrade: 'A Grade'
+    qualityGrade: 'A Grade',
+    materialAllocations: [
+      {
+        material: 'Polyester Yarn',
+        allocatedQuantity: '1100kg',
+        consumedQuantity: '1100kg',
+        remainingQuantity: '0kg',
+        unit: 'kg',
+        allocationDate: '2025-10-19 06:00',
+        reservationType: 'consumed'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-19 06:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-003'
+      },
+      {
+        timestamp: '2025-10-19 06:30',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Vikram Patel',
+        reason: 'Production started on Loom A1'
+      },
+      {
+        timestamp: '2025-10-19 14:30',
+        fromStatus: 'in_progress',
+        toStatus: 'completed',
+        user: 'Vikram Patel',
+        reason: 'Production completed successfully'
+      }
+    ]
   },
   {
     id: 'WO#503-B',
@@ -299,7 +466,34 @@ export const mockWorkOrders: WorkOrder[] = [
     startTime: '08:00 AM',
     estimatedCompletion: '05:00 PM',
     priority: 'normal',
-    createdDate: '2025-10-21'
+    createdDate: '2025-10-21',
+    materialAllocations: [
+      {
+        material: 'Polyester Yarn',
+        allocatedQuantity: '1100kg',
+        consumedQuantity: '220kg',
+        remainingQuantity: '880kg',
+        unit: 'kg',
+        allocationDate: '2025-10-21 06:00',
+        reservationType: 'hard_reserved'
+      }
+    ],
+    statusHistory: [
+      {
+        timestamp: '2025-10-21 06:00',
+        fromStatus: 'created',
+        toStatus: 'pending',
+        user: 'System',
+        reason: 'Work Order created from Sales Order SO-003'
+      },
+      {
+        timestamp: '2025-10-21 08:00',
+        fromStatus: 'pending',
+        toStatus: 'in_progress',
+        user: 'Priya Shah',
+        reason: 'Production started on Loom A2'
+      }
+    ]
   }
 ];
 

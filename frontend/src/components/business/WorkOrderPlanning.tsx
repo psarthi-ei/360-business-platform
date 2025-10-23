@@ -62,7 +62,7 @@ const WorkOrderPlanning = ({
 
   // Material allocation status helper
   const getMaterialAllocationStatus = (workOrder: WorkOrder) => {
-    if (!workOrder.materialRequirements || workOrder.materialRequirements.length === 0) {
+    if (!workOrder.materialAllocations || workOrder.materialAllocations.length === 0) {
       return {
         status: 'allocated',
         icon: '✅',
@@ -71,20 +71,18 @@ const WorkOrderPlanning = ({
       };
     }
 
-    const hasShortages = workOrder.materialRequirements.some(req => 
-      parseInt(req.shortage.replace(/[^\d]/g, '')) > 0
-    );
+    // Work Orders always have materials allocated (no shortages possible)
+    const totalAllocated = workOrder.materialAllocations.length;
+    const fullyConsumed = workOrder.materialAllocations.filter(alloc => 
+      parseInt(alloc.remainingQuantity.replace(/[^\d]/g, '')) === 0
+    ).length;
 
-    if (hasShortages) {
-      const shortageList = workOrder.materialRequirements
-        .filter(req => parseInt(req.shortage.replace(/[^\d]/g, '')) > 0)
-        .map(req => `${req.material}: ${req.shortage} short`);
-      
+    if (fullyConsumed === totalAllocated) {
       return {
-        status: 'partial',
-        icon: '⚠️',
-        text: 'Partial Allocation',
-        details: shortageList
+        status: 'consumed',
+        icon: '✅',
+        text: 'Materials Consumed',
+        details: 'All allocated materials used'
       };
     }
 
@@ -92,7 +90,7 @@ const WorkOrderPlanning = ({
       status: 'allocated',
       icon: '✅',
       text: 'Materials Allocated',
-      details: 'All materials reserved'
+      details: 'Materials reserved for production'
     };
   };
 
@@ -100,6 +98,11 @@ const WorkOrderPlanning = ({
   const [selectedMachines, setSelectedMachines] = useState<Map<string, string>>(new Map());
   const [selectedWorkers, setSelectedWorkers] = useState<Map<string, string>>(new Map());
   const [quantityValues, setQuantityValues] = useState<Map<string, string>>(new Map());
+  const [pausedWorkOrders, setPausedWorkOrders] = useState<Map<string, string>>(new Map()); // Track paused work orders with reason
+  
+  // State for collapsible sections within expanded cards
+  const [expandedMaterialSections, setExpandedMaterialSections] = useState<Set<string>>(new Set());
+  const [expandedHistorySections, setExpandedHistorySections] = useState<Set<string>>(new Set());
 
   // Available machines and workers for reassignment
   const availableMachines = mockMachines.filter(machine => machine.status === 'available');
@@ -176,12 +179,85 @@ const WorkOrderPlanning = ({
   };
 
   const handleMarkComplete = (workOrderId: string) => {
-    alert(`✅ Marking Work Order ${workOrderId} Complete\n\n🏁 Status automatically updated to "Ready for QC"\n📋 QC inspection queue updated\n📊 Final quantity recorded\n👤 Inspector will be notified\n\n(Mock functionality - auto-transitions to QC-ready)`);
+    const workOrder = mockWorkOrders.find(wo => wo.id === workOrderId);
+    const currentQuantity = quantityValues.get(workOrderId) || workOrder?.producedQuantity.replace('m', '') || '0';
+    const targetQuantity = workOrder?.targetQuantity.replace('m', '') || '0';
+    
+    if (parseInt(currentQuantity) < parseInt(targetQuantity)) {
+      const confirmed = window.confirm(
+        `Work Order ${workOrderId} - Complete Confirmation\n\n` +
+        `Current: ${currentQuantity}m\n` +
+        `Target: ${targetQuantity}m\n\n` +
+        `This will automatically set quantity to ${targetQuantity}m and mark as complete.\n\n` +
+        `Continue with completion?`
+      );
+      
+      if (confirmed) {
+        // Auto-update quantity to target
+        setQuantityValues(prev => new Map(prev.set(workOrderId, targetQuantity)));
+        alert(`✅ Work Order ${workOrderId} Completed\n\n📊 Quantity auto-updated to ${targetQuantity}m\n🏁 Status updated to "Ready for QC"\n📋 QC inspection queue updated\n👤 Inspector will be notified\n\n(Mock functionality - auto-transitions to QC-ready)`);
+      }
+    } else {
+      alert(`✅ Marking Work Order ${workOrderId} Complete\n\n🏁 Status automatically updated to "Ready for QC"\n📋 QC inspection queue updated\n📊 Final quantity recorded\n👤 Inspector will be notified\n\n(Mock functionality - auto-transitions to QC-ready)`);
+    }
+  };
+
+  // Pause/Resume handlers
+  const handlePauseWork = (workOrderId: string) => {
+    const reason = prompt('Reason for pausing work order:', 'Material shortage / Machine maintenance / Shift change');
+    if (reason) {
+      setPausedWorkOrders(prev => new Map(prev.set(workOrderId, reason)));
+      alert(`⏸️ Work Order ${workOrderId} Paused\n\nReason: ${reason}\n\n⏰ Timer stopped\n📊 Progress saved\n👤 Supervisor notified\n\n(Mock functionality)`);
+    }
+  };
+
+  const handleResumeWork = (workOrderId: string) => {
+    setPausedWorkOrders(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(workOrderId);
+      return newMap;
+    });
+    alert(`▶️ Work Order ${workOrderId} Resumed\n\n⏰ Timer restarted\n📊 Progress tracking active\n🔄 Production continues\n\n(Mock functionality)`);
+  };
+
+  // Check if work order is paused
+  const isWorkOrderPaused = (workOrderId: string) => {
+    return pausedWorkOrders.has(workOrderId);
+  };
+
+  // Get pause reason
+  const getPauseReason = (workOrderId: string) => {
+    return pausedWorkOrders.get(workOrderId) || '';
   };
 
   // Toggle card details
   const toggleDetails = (workOrderId: string) => {
     toggleExpansion(workOrderId, 'data-wo-id');
+  };
+
+  // Toggle collapsible sections within expanded cards
+  const toggleMaterialSection = (workOrderId: string) => {
+    setExpandedMaterialSections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(workOrderId)) {
+        newSet.delete(workOrderId);
+      } else {
+        newSet.add(workOrderId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleHistorySection = (workOrderId: string) => {
+    setExpandedHistorySections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(workOrderId)) {
+        newSet.delete(workOrderId);
+      } else {
+        newSet.add(workOrderId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -205,8 +281,8 @@ const WorkOrderPlanning = ({
                     onClick={() => toggleDetails(workOrder.id)}
                   >
                     {/* Work Order Header */}
-                    <div className="ds-card-header" title={`${workOrder.id} - ${workOrder.product} - Batch ${workOrder.batchNumber}`}>
-                      <span>{workOrder.id} — </span>
+                    <div className="ds-card-header" title={`${workOrder.id} (${workOrder.salesOrderId}) - ${workOrder.product} - Batch ${workOrder.batchNumber}`}>
+                      <span>{workOrder.id} ({workOrder.salesOrderId}) — </span>
                       <span className={styles.truncateText}>{workOrder.product}</span>
                     </div>
                     
@@ -237,31 +313,41 @@ const WorkOrderPlanning = ({
                         <p><strong>Batch:</strong> {workOrder.batchNumber}</p>
                         <p><strong>Priority:</strong> {workOrder.priority}</p>
                         
-                        {/* Material Allocation Details */}
-                        <div className={styles.materialAllocationSection}>
-                          <p><strong>📦 Material Allocation:</strong></p>
-                          <div className={`${styles.materialStatus} ${getMaterialAllocationStatus(workOrder).status === 'partial' ? styles.materialWarning : styles.materialSuccess}`}>
-                            <div className={styles.materialStatusHeader}>
+                        {/* Material Allocation Details - Collapsible */}
+                        <div className={styles.collapsibleSection}>
+                          <div 
+                            className={styles.collapsibleHeader}
+                            onClick={(e) => { e.stopPropagation(); toggleMaterialSection(workOrder.id); }}
+                          >
+                            <span className={styles.collapsibleTitle}>
+                              📦 Material Details {expandedMaterialSections.has(workOrder.id) ? '▼' : '▶'}
+                            </span>
+                            <span className={styles.collapsibleStatus}>
                               {getMaterialAllocationStatus(workOrder).icon} {getMaterialAllocationStatus(workOrder).text}
-                            </div>
-                            
-                            {workOrder.materialRequirements && workOrder.materialRequirements.length > 0 && (
-                              <div className={styles.materialRequirements}>
-                                {workOrder.materialRequirements.map((req, index) => (
-                                  <div key={index} className={styles.materialRequirement}>
-                                    <div className={styles.materialName}>{req.material}</div>
-                                    <div className={styles.materialQuantities}>
-                                      <div className={styles.materialRequired}>Required: {req.required}</div>
-                                      <div className={styles.materialAvailable}>Available: {req.available}</div>
-                                      {parseInt(req.shortage.replace(/[^\d]/g, '')) > 0 && (
-                                        <div className={styles.materialShortage}>Shortage: {req.shortage}</div>
-                                      )}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                            </span>
                           </div>
+                          
+                          {expandedMaterialSections.has(workOrder.id) && (
+                            <div className={styles.collapsibleContent}>
+                              <div className={`${styles.materialStatus} ${getMaterialAllocationStatus(workOrder).status === 'partial' ? styles.materialWarning : styles.materialSuccess}`}>
+                                {workOrder.materialAllocations && workOrder.materialAllocations.length > 0 && (
+                                  <div className={styles.materialRequirements}>
+                                    {workOrder.materialAllocations.map((allocation, index) => (
+                                      <div key={index} className={styles.materialRequirement}>
+                                        <div className={styles.materialName}>{allocation.material}</div>
+                                        <div className={styles.materialQuantities}>
+                                          <div className={styles.materialRequired}>Allocated: {allocation.allocatedQuantity}</div>
+                                          <div className={styles.materialAvailable}>Consumed: {allocation.consumedQuantity}</div>
+                                          <div className={styles.materialRemaining}>Remaining: {allocation.remainingQuantity}</div>
+                                          <div className={styles.materialStatus}>Status: {allocation.reservationType}</div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Conditional Assignment Controls */}
@@ -361,6 +447,7 @@ const WorkOrderPlanning = ({
                               <button 
                                 className={`ds-btn ds-btn-secondary ${styles.quantityIncrement}`}
                                 onClick={(e) => { e.stopPropagation(); handleQuantityDecrement(workOrder.id); }}
+                                disabled={isWorkOrderPaused(workOrder.id)}
                               >
                                 -
                               </button>
@@ -373,10 +460,12 @@ const WorkOrderPlanning = ({
                                 min="0"
                                 max={workOrder.targetQuantity.replace('m', '')}
                                 placeholder={workOrder.producedQuantity.replace('m', '')}
+                                disabled={isWorkOrderPaused(workOrder.id)}
                               />
                               <button 
                                 className={`ds-btn ds-btn-secondary ${styles.quantityIncrement}`}
                                 onClick={(e) => { e.stopPropagation(); handleQuantityIncrement(workOrder.id); }}
+                                disabled={isWorkOrderPaused(workOrder.id)}
                               >
                                 +
                               </button>
@@ -386,11 +475,23 @@ const WorkOrderPlanning = ({
                               <button 
                                 className={`ds-btn ds-btn-primary ${styles.updateButton}`}
                                 onClick={(e) => { e.stopPropagation(); handleQuantityUpdate(workOrder.id); }}
-                                disabled={!quantityValues.get(workOrder.id) || quantityValues.get(workOrder.id) === workOrder.producedQuantity.replace('m', '')}
+                                disabled={!quantityValues.get(workOrder.id) || quantityValues.get(workOrder.id) === workOrder.producedQuantity.replace('m', '') || isWorkOrderPaused(workOrder.id)}
                               >
                                 📊 Update
                               </button>
                             </div>
+                            
+                            {/* Pause Status Display */}
+                            {isWorkOrderPaused(workOrder.id) && (
+                              <div className={styles.pauseStatus}>
+                                <div className={styles.pauseIndicator}>
+                                  ⏸️ Work Order Paused
+                                </div>
+                                <div className={styles.pauseReason}>
+                                  Reason: {getPauseReason(workOrder.id)}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                         
@@ -399,6 +500,42 @@ const WorkOrderPlanning = ({
                           {workOrder.startTime && <p><strong>Started:</strong> {workOrder.startTime}</p>}
                           {workOrder.estimatedCompletion && <p><strong>Target:</strong> {workOrder.estimatedCompletion}</p>}
                         </div>
+
+                        {/* Status History - Collapsible */}
+                        {workOrder.statusHistory && workOrder.statusHistory.length > 0 && (
+                          <div className={styles.collapsibleSection}>
+                            <div 
+                              className={styles.collapsibleHeader}
+                              onClick={(e) => { e.stopPropagation(); toggleHistorySection(workOrder.id); }}
+                            >
+                              <span className={styles.collapsibleTitle}>
+                                📋 Status History {expandedHistorySections.has(workOrder.id) ? '▼' : '▶'}
+                              </span>
+                              <span className={styles.collapsibleStatus}>
+                                {workOrder.statusHistory.length} entries
+                              </span>
+                            </div>
+                            
+                            {expandedHistorySections.has(workOrder.id) && (
+                              <div className={styles.collapsibleContent}>
+                                <div className={styles.statusHistory}>
+                                  {workOrder.statusHistory.map((entry, index) => (
+                                    <div key={index} className={styles.statusHistoryEntry}>
+                                      <div className={styles.statusHistoryTime}>{entry.timestamp}</div>
+                                      <div className={styles.statusHistoryChange}>
+                                        {entry.fromStatus} → {entry.toStatus}
+                                      </div>
+                                      <div className={styles.statusHistoryUser}>by {entry.user}</div>
+                                      {entry.reason && (
+                                        <div className={styles.statusHistoryReason}>{entry.reason}</div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                       
                       {/* Lifecycle Action Buttons */}
@@ -414,14 +551,45 @@ const WorkOrderPlanning = ({
                             </button>
                           )}
                           
-                          {/* Mark Complete - Available for in-progress orders (auto-transitions to QC) */}
+                          {/* In-Progress Controls - Pause/Resume and Mark Complete */}
                           {workOrder.status === 'in_progress' && (
-                            <button 
-                              className="ds-btn ds-btn-primary" 
-                              onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
-                            >
-                              ✅ Mark Complete
-                            </button>
+                            <>
+                              {/* Pause/Resume Button */}
+                              {!isWorkOrderPaused(workOrder.id) ? (
+                                <button 
+                                  className="ds-btn ds-btn-secondary" 
+                                  onClick={(e) => { e.stopPropagation(); handlePauseWork(workOrder.id); }}
+                                >
+                                  ⏸️ Pause
+                                </button>
+                              ) : (
+                                <button 
+                                  className="ds-btn ds-btn-primary" 
+                                  onClick={(e) => { e.stopPropagation(); handleResumeWork(workOrder.id); }}
+                                >
+                                  ▶️ Resume
+                                </button>
+                              )}
+                              
+                              {/* Mark Complete - Smart styling based on quantity status */}
+                              {(() => {
+                                const currentQuantity = quantityValues.get(workOrder.id) || workOrder.producedQuantity.replace('m', '');
+                                const targetQuantity = workOrder.targetQuantity.replace('m', '');
+                                const isQuantityComplete = parseInt(currentQuantity) >= parseInt(targetQuantity);
+                                const hasUnsavedChanges = quantityValues.get(workOrder.id) && quantityValues.get(workOrder.id) !== workOrder.producedQuantity.replace('m', '');
+                                
+                                return (
+                                  <button 
+                                    className={`ds-btn ${(isQuantityComplete && !hasUnsavedChanges) ? 'ds-btn-primary' : 'ds-btn-secondary'} ${styles.markCompleteButton}`}
+                                    onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
+                                    disabled={isWorkOrderPaused(workOrder.id)}
+                                    title={isQuantityComplete ? 'Mark work order complete' : 'Complete with auto-quantity update'}
+                                  >
+                                    ✅ Mark Complete
+                                  </button>
+                                );
+                              })()}
+                            </>
                           )}
                           
                           {/* QC Ready Status - Read-only for completed orders */}

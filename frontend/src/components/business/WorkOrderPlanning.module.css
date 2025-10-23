@@ -219,18 +219,24 @@
   display: flex;
   gap: var(--ds-space-sm);
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
 }
 
 /* Update button styling - responsive */
 .updateButton {
-  width: 100%;
-  padding: var(--ds-space-md);
+  padding: var(--ds-space-sm) var(--ds-space-md);
   font-size: var(--font-sm);
   font-weight: 600;
-  margin-top: var(--ds-space-sm);
-  order: 10; /* Put at end on mobile */
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+/* Mark Complete button styling */
+.markCompleteButton {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Desktop: Optimize for larger screens */
@@ -246,6 +252,8 @@
   .quantityControls {
     justify-content: center;
     margin-bottom: var(--ds-space-sm);
+    flex-wrap: nowrap;
+    align-items: center;
   }
   
   .quantityInput {
@@ -256,13 +264,16 @@
   .quantityUnit {
     font-size: var(--font-sm);
     margin-left: var(--ds-space-sm);
-    margin-right: var(--ds-space-md);
+    margin-right: var(--ds-space-sm);
   }
   
   .updateButton {
-    width: auto;
     padding: var(--ds-space-sm) var(--ds-space-lg);
-    align-self: flex-start;
+    margin-left: var(--ds-space-sm);
+  }
+  
+  .markCompleteButton {
+    margin-left: var(--ds-space-sm);
   }
 }
 
@@ -419,11 +430,99 @@
   border: 1px solid var(--ds-border-success);
 }
 
+/* Material Status Additions */
+.materialRemaining,
+.materialStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  padding: var(--ds-space-xs);
+  border-radius: var(--ds-radius-xs);
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+}
+
+/* Status History Styling */
+.statusHistorySection {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-secondary);
+}
+
+.statusHistory {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-sm);
+}
+
+.statusHistoryEntry {
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-primary);
+}
+
+.statusHistoryTime {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-muted);
+  font-weight: 500;
+}
+
+.statusHistoryChange {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 600;
+  margin: var(--ds-space-xs) 0;
+}
+
+.statusHistoryUser {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+}
+
+.statusHistoryReason {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-muted);
+  font-style: italic;
+  margin-top: var(--ds-space-xs);
+}
+
 .qcStatus {
   font-family: var(--font-family);
   font-size: var(--font-sm);
   color: var(--ds-text-success);
   font-weight: 500;
+}
+
+/* Pause Status Styling */
+.pauseStatus {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-warning);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-warning);
+  text-align: center;
+}
+
+.pauseIndicator {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-xs);
+}
+
+.pauseReason {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-style: italic;
 }
 
 /* Action Buttons - Following Component Design Patterns */
@@ -499,6 +598,7 @@
   .quantityControls {
     justify-content: center;
     gap: var(--ds-space-sm);
+    flex-wrap: wrap;
   }
   
   .quantityIncrement {
@@ -519,8 +619,27 @@
   }
   
   .updateButton {
+    width: 100%;
     padding: var(--ds-space-md);
     font-size: var(--font-sm);
+    margin-top: var(--ds-space-sm);
+    order: 10;
+  }
+  
+  .markCompleteButton {
+    /* Let .actionButtons button rules handle the sizing for horizontal alignment */
+  }
+  
+  .pauseStatus {
+    padding: var(--ds-space-sm);
+  }
+  
+  .pauseIndicator {
+    font-size: var(--font-xs);
+  }
+  
+  .pauseReason {
+    font-size: var(--font-xs);
   }
   
   .materialStatus {
@@ -541,4 +660,64 @@
     font-size: var(--font-xs);
     padding: var(--ds-space-xs);
   }
+  
+  .collapsibleHeader {
+    padding: var(--ds-space-sm);
+  }
+  
+  .collapsibleTitle {
+    font-size: var(--font-sm);
+  }
+  
+  .collapsibleStatus {
+    font-size: var(--font-xs);
+  }
+}
+
+/* Collapsible Section Styling */
+.collapsibleSection {
+  margin-top: var(--ds-space-md);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+}
+
+.collapsibleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-md);
+  cursor: pointer;
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.collapsibleHeader:hover {
+  background: var(--ds-bg-hover);
+}
+
+.collapsibleTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.collapsibleStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.collapsibleContent {
+  padding: var(--ds-space-md);
+  border-top: 1px solid var(--ds-border-secondary);
+  background: var(--ds-bg-primary);
+  border-radius: 0 0 var(--ds-radius-sm) var(--ds-radius-sm);
 }
