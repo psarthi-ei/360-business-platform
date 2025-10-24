@@ -3,7 +3,7 @@
 ──────────────────────────────────────────────
 🏭 PRODUCTION
 ──────────────────────────────────────────────
-[ Orders ] [ W.O. ] [ Machines ] [ QC ] [ Ready ]
+[ Orders ] [ WO ] [ Machines ] [ QC ] [ Ready ]
 ──────────────────────────────────────────────
 
 
@@ -48,13 +48,13 @@ Progress: █████░░░░ 60%
 
 Actions:
 
-Start Production → Creates WOs (auto-breakdown), reserves stock, moves to W.O. tab
+Start Production → Creates WOs (auto-breakdown), reserves stock, moves to WO tab
 
 Go to Procurement → jumps to procurement module
 
-View Work Orders → expand inline or go to W.O. tab
+View Work Orders → expand inline or go to WO tab
 
-3️⃣ W.O. TAB (Planner / Supervisor – WO-level view)
+3️⃣ WO TAB (Planner / Supervisor – WO-level view)
 
 Purpose: Manage all work orders across machines.
 
@@ -172,7 +172,7 @@ Actions:
 
 Pass → WO status = Completed (QC passed)
 
-Rework → system creates new WO (WO#2345-B-R1), sends to W.O. tab
+Rework → system creates new WO (WO#2345-B-R1), sends to WO tab
 
 Once all WOs under SO pass QC → SO moves to “Ready” tab
 
@@ -207,7 +207,7 @@ Dispatch details go to Sales / Invoice / Payments module
 
 7️⃣ ROLE-BASED NAVIGATION SUMMARY
 Role	Default Tab	Visible Tabs	Typical Actions
-Supervisor / Planner	Orders	Orders, W.O., Machines, QC, Ready	Start Production, Assign Machines, Approve QC, Dispatch
+Supervisor / Planner	Orders	Orders, WO, Machines, QC, Ready	Start Production, Assign Machines, Approve QC, Dispatch
 Operator	Machines	Machines	Start, Update, Pause, Complete WOs
 QC Inspector	QC	QC, Ready	QC Pass/Fail, Rework
 Store / Dispatch	Ready	Ready	Pack, Dispatch
@@ -223,7 +223,7 @@ Supervisor taps → "Start Production"
 Work Orders (WO) auto-created
      │
      ▼
-[ W.O. TAB ]
+[ WO TAB ]
 Plan, assign machines, monitor progress
      │
      ▼
@@ -255,10 +255,10 @@ Traceable	QC & Ready separated cleanly
 
 🏭 PRODUCTION
 ──────────────────────────────────────────────
-[ Orders ] [ W.O. ] [ Machines ] [ QC ] [ Ready ]
+[ Orders ] [ WO ] [ Machines ] [ QC ] [ Ready ]
 ──────────────────────────────────────────────
  Orders → Start Production
- W.O. → Manage and track all work orders
+ WO → Manage and track all work orders
  Machines → Operator runs jobs
  QC → Quality validation
  Ready → Packing & Dispatch

@@ -73,9 +73,9 @@
 - ✅ Mobile-responsive design with proper touch targets and button widths
 - ✅ Architecture compliance: Design system tokens, TypeScript interfaces, zero hardcoded values
 
-### **Sub-Phase 6.3: W.O. Tab - Work Order Planning** ⏱️ *25 minutes* ✅ **COMPLETED**
-**Objective**: Implement W.O. tab with Work Order management, assignment, and progress monitoring (Planner/Supervisor view)  
-**References**: [W.O. Tab - Work Order Management & Planning](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
+### **Sub-Phase 6.3: WO Tab - Work Order Planning** ⏱️ *25 minutes* ✅ **COMPLETED**
+**Objective**: Implement WO tab with Work Order management, assignment, and progress monitoring (Planner/Supervisor view)  
+**References**: [WO Tab - Work Order Management & Planning](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
 **Status**: ✅ Complete Work Order Planning with interactive UI, collapsible design, and SO reference display
 
 **Completed Implementation**:
@@ -106,10 +106,18 @@
 - ✅ **Production Module Structure**: Finalized 4-tab Production module ready for QC and Ready tab implementation
 - ✅ **Architecture compliance**: Design system tokens, TypeScript compliance, mobile-first responsive design
 
-### **Sub-Phase 6.5: QC Tab - Quality Control & Inspection** ⏱️ *25 minutes* ⏳ **NEXT PRIORITY**
+### **Sub-Phase 6.5: QC Tab - Quality Control & Inspection** ⏱️ *25 minutes* ✅ **COMPLETED**
 **Objective**: Implement QC tab with inspection management and pass/rework decisions (QC Inspector view)  
 **References**: [QC Tab - Quality Control & Inspection Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#qc-tab---quality-control--inspection-management)
-**Approach**: QC queue with inspection workflow, pass/rework decisions, and photo evidence capture
+**Status**: ✅ Complete QC inspection workflow with modal overlay, 4-section form, and working UI interactions
+
+**Completed Implementation**:
+- ✅ QC Tab with inspection management cards and workflow
+- ✅ Modal overlay system with proper z-index hierarchy (16000)
+- ✅ 4-section inspection form: Inspection Details, Quality Metrics, Photos, Comments
+- ✅ Pass/Rework decision workflow with reason capture
+- ✅ Card-driven workflow (CTA hidden, actions through card interactions)
+- ✅ CSS Grid z-index architecture resolved (stacking context competition)
 
 ### **Sub-Phase 6.6: Ready Tab - Dispatch & Delivery** ⏱️ *25 minutes*
 **Objective**: Implement Ready tab with packing, dispatch, and delivery management (Store/Dispatch view)  
@@ -147,8 +155,8 @@
 **References**: [Customer 360° View](../docs/VISUAL_DESIGN_SPECIFICATION.md#customer-360-view-most-important-screen)
 
 ### **Sub-Phase 8.3: Production Cross-Module Navigation** ⏱️ *35 minutes*
-**Objective**: Add clickable links across production workflow (Orders → Sales Orders, W.O. → Orders, Machines → W.O., QC → Work Orders, Ready → Customer)  
-**References**: [W.O. Tab Work Order Detail Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-interface-wo-tab-drill-down) | [Orders Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation)
+**Objective**: Add clickable links across production workflow (Orders → Sales Orders, WO → Orders, Machines → WO, QC → Work Orders, Ready → Customer)  
+**References**: [WO Tab Work Order Detail Interface](../docs/VISUAL_DESIGN_SPECIFICATION.md#work-order-detail-interface-wo-tab-drill-down) | [Orders Tab](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation)
 
 ### **Sub-Phase 8.4: Procurement PO Cross-Navigation** ⏱️ *20 minutes*
 **Objective**: Add clickable links in Purchase Order details (Work Order IDs, Material items, Supplier)  
@@ -169,7 +177,7 @@
 
 ### **Sub-Phase 9.3: Work Order Creation** ⏱️ *30 minutes*
 **Objective**: Implement work order generation from sales orders with resource allocation  
-**References**: [Orders Tab Start Production Workflow](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation) | [W.O. Tab Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
+**References**: [Orders Tab Start Production Workflow](../docs/VISUAL_DESIGN_SPECIFICATION.md#orders-tab---sales-order-management--production-initiation) | [WO Tab Management](../docs/VISUAL_DESIGN_SPECIFICATION.md#wo-tab---work-order-management--planning)
 
 ### **Sub-Phase 9.4: Purchase Order Creation** ⏱️ *30 minutes*
 **Objective**: Implement material requirement to purchase order workflows  
@@ -235,7 +243,7 @@ Production.tsx (main shell)
 ```
 Production.tsx (updated shell - 5 tabs)
 ├── OrdersTab.tsx (Orders tab - NEW/renamed from WorkOrderPlanning)
-├── WorkOrderTab.tsx (W.O. tab - NEW split from LiveProductionTracking)
+├── WorkOrderTab.tsx (WO tab - NEW split from LiveProductionTracking)
 ├── MachinesTab.tsx (Machines tab - NEW split from LiveProductionTracking)  
 ├── QualityControlManagement.tsx (QC tab - UPDATED workflow)
 └── DeliveryFulfillment.tsx (Ready tab - UPDATED dispatch process)

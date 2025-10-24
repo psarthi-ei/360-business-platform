@@ -1880,14 +1880,14 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 ```
 🏭 PRODUCTION (Main Tab)
 ├── Orders - Sales Order management and production initiation (Supervisor view)
-├── W.O. - Work Order planning, assignment and monitoring (Planner/Supervisor view)
+├── WO - Work Order planning, assignment and monitoring (Planner/Supervisor view)
 ├── Machines - Live production execution and operator interface (Operator view)
 ├── QC - Quality control processes and pass/rework decisions (QC Inspector view)
 └── Ready - Packing, dispatch and delivery management (Store/Dispatch view)
 ```
 
 **Role-Based Navigation:**
-- **Supervisor/Planner**: Default = Orders | Access: Orders, W.O., Machines, QC, Ready
+- **Supervisor/Planner**: Default = Orders | Access: Orders, WO, Machines, QC, Ready
 - **Operator**: Default = Machines | Access: Machines only
 - **QC Inspector**: Default = QC | Access: QC, Ready
 - **Store/Dispatch**: Default = Ready | Access: Ready only
@@ -1896,7 +1896,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 **Cross-Module Integration:**
 - **From Sales**: Sales Orders automatically appear in Orders tab for production initiation
 - **To Customer**: Delivery notifications and tracking updates from Ready tab
-- **To Procurement**: Material requirements calculated and shortage alerts from W.O. tab
+- **To Procurement**: Material requirements calculated and shortage alerts from WO tab
 - **To Inventory**: Automatic stock updates on QC completion
 
 ---
@@ -1907,7 +1907,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ Production [ Orders│WO│Machines│QC│Ready ] │ Sub-tabs: 48px
 │ [🔍 Search Order or Customer (🎙)]  │ Search: 44px
 ├─────────────────────────────────────┤
 │ 📋 CONFIRMED SALES ORDERS           │ Section header
@@ -1948,9 +1948,9 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 ```
 
 **Orders Tab Actions:**
-- **Start Production**: Creates Work Orders (auto-breakdown), reserves stock, moves to W.O. tab
+- **Start Production**: Creates Work Orders (auto-breakdown), reserves stock, moves to WO tab
 - **Go to Procurement**: Direct navigation to procurement module for material shortage resolution
-- **View Work Orders**: Expand inline WO details or navigate to W.O. tab for detailed management
+- **View Work Orders**: Expand inline WO details or navigate to WO tab for detailed management
 - **View Details**: Full Sales Order details including customer requirements and delivery terms
 
 **Material Status Indicators:**
@@ -1964,13 +1964,13 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 - **🟢 Production Complete**: All Work Orders completed, ready for QC
 - **🔴 Material Pending**: Blocked due to material shortage, requires procurement action
 
-#### **W.O. Tab - Work Order Management & Planning**
+#### **WO Tab - Work Order Management & Planning**
 
 **Purpose**: Planner/Supervisor view for managing all work orders across machines. Central hub for work order assignment, progress monitoring, and resource allocation.
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ Production [ Orders│WO│Machines│QC│Ready ] │ Sub-tabs: 48px
 │ [🗂 WORK ORDERS] [Filter: All ▾]    │ Search + filter: 44px
 ├─────────────────────────────────────┤
 │ 📋 ALL WORK ORDERS                  │ Section header
@@ -1999,13 +1999,13 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 └─────────────────────────────────────┘
 ```
 
-**W.O. Tab Actions:**
+**WO Tab Actions:**
 - **+ Update Qty**: Enter progress popup for recording daily/shift production
 - **Reassign Machine**: Pick from available machines for work order reassignment
 - **Assign Machine**: Assign work order to a machine and worker
 - **View WO**: Open detailed Work Order screen with full production history
 
-#### **Work Order Detail Interface** (W.O. Tab Drill-down)
+#### **Work Order Detail Interface** (WO Tab Drill-down)
 
 ```
 ┌─────────────────────────────────────┐
@@ -2046,7 +2046,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ Production [ Orders│WO│Machines│QC│Ready ] │ Sub-tabs: 48px
 ├─────────────────────────────────────┤
 │ 🏭 MACHINES                         │ Section header
 ├─────────────────────────────────────┤
@@ -2087,7 +2087,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ Production [ Orders│WO│Machines│QC│Ready ] │ Sub-tabs: 48px
 ├─────────────────────────────────────┤
 │ 🔎 QC QUEUE                         │ Section header
 │ ┌─────────────────────────────────┐ │
@@ -2127,7 +2127,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 **QC Tab Actions:**
 - **✅ Pass**: WO status = Completed (QC passed), moves to Ready tab when all SO work orders pass
-- **⚠️ Rework**: System creates new rework Work Order (WO#2345-B-R1), sends back to W.O. tab for reassignment
+- **⚠️ Rework**: System creates new rework Work Order (WO#2345-B-R1), sends back to WO tab for reassignment
 
 **QC Process Flow:**
 1. **Completed Work Orders** automatically appear in QC Queue when operators mark them complete
@@ -2148,7 +2148,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 
 ```
 ┌─────────────────────────────────────┐
-│ Production [ Orders│W.O.│Machines│QC│Ready ] │ Sub-tabs: 48px
+│ Production [ Orders│WO│Machines│QC│Ready ] │ Sub-tabs: 48px
 ├─────────────────────────────────────┤
 │ 📦 READY FOR DISPATCH               │ Section header
 │ ┌─────────────────────────────────┐ │
@@ -2354,8 +2354,8 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 #### **Sales → Production Integration**
 - **Sales Orders automatically appear in Orders tab** when payment confirmation received
 - **Material availability checking**: Orders tab displays real-time material status for production planning
-- **Production initiation**: "Start Production" creates Work Orders and moves workflow to W.O. tab
-- **Order status updates**: Orders → W.O. → Machines → QC → Ready workflow progression
+- **Production initiation**: "Start Production" creates Work Orders and moves workflow to WO tab
+- **Order status updates**: Orders → WO → Machines → QC → Ready workflow progression
 - **Customer notifications** sent automatically at key production milestones (started, QC passed, ready)
 
 #### **Production → Customer Integration**  
@@ -2367,7 +2367,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 #### **Production → Procurement Integration**
 - **Material shortage alerts**: Orders tab displays material availability and triggers procurement alerts
 - **Automatic purchase requests**: Material shortages in Orders tab create immediate purchase requests
-- **W.O. tab material allocation**: Work Order creation reserves materials and updates availability
+- **WO tab material allocation**: Work Order creation reserves materials and updates availability
 - **Real-time stock integration**: All tabs display current material status for informed decision-making
 
 #### **Production → Inventory Integration**
@@ -2377,7 +2377,7 @@ The Production module manages the complete manufacturing workflow from Sales Ord
 - **Ready tab integration**: Dispatch from Ready tab updates inventory locations and availability
 
 #### **Production → Accounts Integration**
-- **Work Order costing**: W.O. and Machines tabs track labor and material costs per work order
+- **Work Order costing**: WO and Machines tabs track labor and material costs per work order
 - **Quality-based pricing**: QC tab results affect final invoice amounts and quality premiums
 - **Dispatch-triggered invoicing**: Ready tab dispatch automatically generates invoices and delivery challans
 - **Cross-module cost tracking**: Production costs flow through to Sales, Customer, and Accounts modules
@@ -3695,10 +3695,10 @@ Digital Machine View Benefits:        MSME Reality:
 ```
 
 **Alternative Solution Implemented**:
-- **Machine-based filtering in W.O. Tab**: Provides machine-level visibility when needed
-- **Individual W.O. cards show**: Current machine assignment and operator
-- **Supervisor access**: Can filter by any machine through W.O. Tab
-- **Operator workflow**: Uses W.O. Tab filtered to their specific machine
+- **Machine-based filtering in WO Tab**: Provides machine-level visibility when needed
+- **Individual WO cards show**: Current machine assignment and operator
+- **Supervisor access**: Can filter by any machine through WO Tab
+- **Operator workflow**: Uses WO Tab filtered to their specific machine
 
 **Decision Rationale**:
 1. **Operational Fit**: Digital overhead doesn't justify business value at MSME scale

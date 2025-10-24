@@ -18,8 +18,8 @@ type ProductionTabType = 'orders' | 'wo' | 'qc' | 'ready';
 const CTA_CONFIG = {
   orders: { showCTA: false },      // Hide CTA for Orders tab
   wo: { showCTA: false },          // Hide CTA for Work Orders (exception case usage)
-  qc: { showCTA: true },           // Show CTA for QC
-  ready: { showCTA: true }         // Show CTA for Ready
+  qc: { showCTA: false },          // Hide CTA for QC (card-driven workflow)
+  ready: { showCTA: false }        // Hide CTA for Ready (card-driven workflow)
 } as const;
 
 // Mock data counts for dynamic filtering
@@ -59,6 +59,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   const [qcFilterState, setQcFilterState] = useState('all');
   const [readyFilterState, setReadyFilterState] = useState('all');
   const [machineFilter, setMachineFilter] = useState('all');
+  const [timelineFilter, setTimelineFilter] = useState('all');
   
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
@@ -79,6 +80,14 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     { value: 'LOOM-B1', label: 'LOOM-B1' },
     { value: 'DYE-D1', label: 'DYE-D1' },
     { value: 'FINISH-F1', label: 'FINISH-F1' }
+  ];
+  
+  // Timeline filter configuration (Filter 2)
+  const timelineFilterConfig = [
+    { value: 'all', label: '📅 All Time' },
+    { value: 'today', label: '📅 Today' },
+    { value: 'thisweek', label: '📅 This Week' },
+    { value: 'thismonth', label: '📅 This Month' }
   ];
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
@@ -201,8 +210,18 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
       machineModifier = 0.25;
     }
     
-    return Math.round(baseCount * machineModifier);
-  }, [activeTab, ordersFilterState, woFilterState, qcFilterState, readyFilterState, machineFilter]);
+    // Apply timeline filter modifier (simplified calculation)
+    let timelineModifier = 1;
+    switch(timelineFilter) {
+      case 'today': timelineModifier = 0.1; break;
+      case 'thisweek': timelineModifier = 0.3; break;
+      case 'thismonth': timelineModifier = 0.7; break;
+      case 'all': 
+      default: timelineModifier = 1; break;
+    }
+    
+    return Math.round(baseCount * machineModifier * timelineModifier);
+  }, [activeTab, ordersFilterState, woFilterState, qcFilterState, readyFilterState, machineFilter, timelineFilter]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -278,11 +297,14 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
           ) : (
             <select 
               className={styles.filterDropdown} 
-              value="all"
-              onChange={() => {}}
-              disabled
+              value={timelineFilter}
+              onChange={(e) => setTimelineFilter(e.target.value)}
             >
-              <option value="all">📅 All Time</option>
+              {timelineFilterConfig.map(filter => (
+                <option key={filter.value} value={filter.value}>
+                  {filter.label}
+                </option>
+              ))}
             </select>
           )}
         </div>

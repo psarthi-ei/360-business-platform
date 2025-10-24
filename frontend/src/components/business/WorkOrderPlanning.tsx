@@ -315,16 +315,16 @@ const WorkOrderPlanning = ({
                               📊 Update
                             </button>
                             <button 
-                              className="ds-btn ds-btn-primary"
-                              onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
-                            >
-                              ✅ Done
-                            </button>
-                            <button 
                               className="ds-btn ds-btn-secondary"
                               onClick={(e) => { e.stopPropagation(); handlePauseWork(workOrder.id); }}
                             >
                               ⏸️ Pause
+                            </button>
+                            <button 
+                              className="ds-btn ds-btn-primary"
+                              onClick={(e) => { e.stopPropagation(); handleMarkComplete(workOrder.id); }}
+                            >
+                              ✅ Complete
                             </button>
                           </>
                         )}

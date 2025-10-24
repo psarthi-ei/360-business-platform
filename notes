@@ -1,5 +1,3 @@
 ### **ROUGH NOTE:**
 
-1. we need to delete machine tab speciric tsx and css file
-2. we need to remeove machine mock data as well to keep it clean
-3. Update all documentation to use "WO" instead of "W.O."
+1. We need to checjk the content relevant in each expanded view across all modules cards e.g. Lead shows too mcuh information
