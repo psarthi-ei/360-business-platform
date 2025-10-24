@@ -57,6 +57,7 @@
   - [Button Styles](#button-styles)
   - [Card Styles](#card-styles)
   - [Navigation Styles](#navigation-styles)
+  - [Modal Design System Standard](#modal-design-system-standard)
   - [Z-index Hierarchy Standard](#z-index-hierarchy-standard)
 - [DESIGN DECISION: FAB vs Bottom CTA for Non-Tech Users](#design-decision-fab-vs-bottom-cta-for-non-tech-users)
 
@@ -395,6 +396,80 @@ FLOATING ACTION BUTTON (FAB)
     └─────┘ Fixed bottom-right
 ```
 
+#### **Modal Design System Standard**
+
+**ESSENTIAL**: Global modal system ensuring consistent user experience across all modal interactions in the platform.
+
+##### **IMPLEMENTED: Global Modal Design System** (October 2025)
+
+**Solution Achieved**: React Portal-based modal system with global sizing standards and mobile-first optimization.
+
+**Architecture Overview**: Single ModalPortal component + global CSS standards provide consistent modal behavior across entire platform.
+
+##### **Global Modal Sizing Standard** ✅
+
+**Universal Modal Dimensions**:
+```css
+/* Global Design System Standard - index.css */
+.modal-portal-container .modalContent {
+  max-width: 500px;  /* Consistent maximum width for all modals */
+  width: 100%;       /* Full width on mobile, natural width on desktop */
+}
+```
+
+**Modal Behavior Specifications**:
+- **Desktop**: Content-responsive width up to 500px maximum
+- **Mobile**: Full width with appropriate padding (16px)
+- **Small Content**: Naturally sizes smaller (e.g., 350px for confirmations)
+- **Large Content**: Caps at 500px for consistency and mobile usability
+
+##### **Mobile-First Modal Architecture** ✅
+
+**React Portal Implementation**:
+```tsx
+// Standard Modal Pattern - All Modals Use This
+<ModalPortal isOpen={isOpen} onBackdropClick={handleClose}>
+  <div className={styles.modalContent}>
+    {/* Modal content automatically gets global sizing */}
+  </div>
+</ModalPortal>
+```
+
+**Mobile Optimization Features**:
+- **Body Scroll Prevention**: Automatic background scroll lock
+- **Viewport Handling**: Dynamic height support (100vh, 100dvh, -webkit-fill-available)
+- **Touch Optimization**: Safari mobile fixes and touch-friendly interactions
+- **Container Escape**: React Portal renders at document.body level, escaping CSS Grid constraints
+
+**Z-Index Simplification**: React Portal architecture eliminates complex z-index management - modals naturally appear above all page content without z-index conflicts.
+
+##### **Modal Content Guidelines** ✅
+
+**Content-Responsive Sizing Examples**:
+- **Simple Confirmations**: ~300-350px natural width
+- **Business Forms**: ~400-450px natural width  
+- **Complex Forms**: 500px maximum (capped for mobile usability)
+- **All Modals**: Consistent visual footprint and backdrop visibility
+
+**Visual Consistency Rules**:
+- ✅ **Identical backdrop behavior** across all modals
+- ✅ **Consistent centering and positioning** on all devices
+- ✅ **Same animation and interaction patterns** platform-wide
+- ✅ **Professional appearance** with standardized spacing and shadows
+
+##### **Implementation Examples** ✅
+
+**Current Working Modals**:
+- **AddLeadModal**: Business form using global 500px standard
+- **QC Inspection Modal**: Quality control form using global 500px standard
+- **Future Modals**: Automatically inherit consistent sizing and behavior
+
+**Migration Pattern for Existing Modals**:
+1. Wrap with `<ModalPortal>` component
+2. Remove individual `max-width` CSS rules
+3. Keep existing styling (colors, shadows, animations)
+4. Test on mobile devices for consistent behavior
+
 #### **Z-index Hierarchy Standard**
 
 **CRITICAL**: Universal z-index hierarchy to prevent modal and overlay conflicts across the platform.
@@ -404,13 +479,13 @@ FLOATING ACTION BUTTON (FAB)
 
 **Root Cause**: Grid areas with `position: relative` + `z-index` created isolated stacking contexts.
 
-**Solution Applied**: **Grid Z-Index Flattening** - Removed all z-index values from CSS Grid areas to enable global z-index competition.
+**Solution Applied**: **React Portal Modal System** - Modals now render at document.body level, eliminating z-index complexity entirely.
 
-**Working Implementation**:
-- QC Modal: `z-index: 16000` ✅ (working)
-- Search Results: `z-index: 10000` ✅ (working)  
-- Header Dropdown: `z-index: 15000` ✅ (working)
-- Grid Areas: **NO z-index** ✅ (enables global competition)
+**Current Implementation**:
+- **All Modals**: React Portal system (no z-index conflicts)
+- **Search Results**: `z-index: 10000` ✅ (still needed for dropdown positioning)  
+- **Header Dropdown**: `z-index: 15000` ✅ (still needed for layering)
+- **Grid Areas**: **NO z-index** ✅ (enables clean architecture)
 
 ##### **WORKING Z-index Hierarchy** ✅
 
@@ -419,8 +494,8 @@ FLOATING ACTION BUTTON (FAB)
 ```
 📋 PROVEN Z-INDEX SYSTEM (Global Competition)
 ┌─────────────────────────────────────┐
-│ **Layer 4: Modals & Critical UI**  │ 16,000 - 20,000
-│ QC Modal, Lead Modal, Confirmations │ ✅ HIGHEST PRIORITY
+│ **Layer 4: React Portal Modals**   │ Portal (no z-index needed)
+│ All Modals via ModalPortal         │ ✅ ABOVE ALL CONTENT
 ├─────────────────────────────────────┤
 │ **Layer 3: System Dropdowns**      │ 15,000 - 15,999  
 │ Header dropdowns, context menus     │ ✅ ABOVE CONTENT

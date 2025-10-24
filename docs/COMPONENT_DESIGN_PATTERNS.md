@@ -1420,20 +1420,20 @@ Every component follows the same successful migration pattern:
 
 ## 🔲 **OVERLAY IMPLEMENTATION PATTERNS**
 
-### **Modal Implementation Standard**
+### **ModalPortal Implementation Standard**
 
-**CRITICAL**: Use the proven working z-index architecture. Modal visibility issues were resolved through CSS Grid z-index flattening.
+**REVOLUTIONARY**: React Portal-based modal system eliminates z-index complexity and CSS Grid constraints. All modals now render at document.body level with automatic mobile optimization.
 
-#### **Working Modal Template** ✅
+#### **ModalPortal Component Usage** ✅
 
 ```tsx
-// Modal Component Pattern
-const ExampleModal = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
+// Modern Modal Pattern - Use for ALL Modals
+import ModalPortal from '../ui/ModalPortal';
 
+const ExampleModal = ({ isOpen, onClose, title, children }) => {
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+    <ModalPortal isOpen={isOpen} onBackdropClick={onClose}>
+      <div className={styles.modalContent}>
         <div className={styles.modalHeader}>
           <h3>{title}</h3>
           <button className={styles.closeButton} onClick={onClose}>×</button>
@@ -1442,7 +1442,7 @@ const ExampleModal = ({ isOpen, onClose, title, children }) => {
           {children}
         </div>
       </div>
-    </div>
+    </ModalPortal>
   );
 };
 ```
@@ -1450,27 +1450,27 @@ const ExampleModal = ({ isOpen, onClose, title, children }) => {
 #### **Required Modal CSS** ✅
 
 ```css
-/* Modal overlay - CRITICAL z-index value */
-.modalOverlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 16000; /* Layer 4: Modals - PROVEN WORKING VALUE */
-  padding: var(--ds-space-md);
-}
-
+/* Modal content - Global sizing handled automatically */
 .modalContent {
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-shadow-elevated);
-  width: 100%;
-  max-width: 500px;
+  /* max-width automatically 500px via global design system */
   max-height: 90vh;
   overflow-y: auto;
   animation: modalSlideIn 0.3s ease;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.modalBody {
+  padding: var(--ds-space-lg);
 }
 
 @keyframes modalSlideIn {
@@ -1479,61 +1479,106 @@ const ExampleModal = ({ isOpen, onClose, title, children }) => {
 }
 ```
 
-### **Z-Index Architecture Guidelines**
+#### **ModalPortal Component Features** ✅
 
-#### **CRITICAL ARCHITECTURE RULE** ⚠️
-**NEVER add z-index values to CSS Grid areas** (headerArea, searchArea, contentArea). This breaks the global overlay system.
+**Automatic Mobile Optimization**:
+- **Body Scroll Prevention**: Prevents background scrolling on mobile
+- **Viewport Handling**: Supports 100vh, 100dvh, -webkit-fill-available
+- **Touch Optimization**: Safari mobile fixes and touch-friendly interactions
+- **Container Escape**: Renders at document.body level, escaping all CSS Grid constraints
 
-#### **Working Z-Index Hierarchy** ✅
+**Global Design System Integration**:
+- **Consistent Sizing**: Automatic 500px max-width for all modals
+- **Content-Responsive**: Small modals naturally size smaller
+- **Mobile-First**: Full width on mobile, natural width on desktop
+- **Professional Appearance**: Standardized backdrop, centering, and animations
 
-```css
-/* Layer 4: Modals & Critical UI (16,000 - 20,000) */
-.modal-overlay            { z-index: 16000; }  /* QC Modal, Lead Modal */
-.confirmation-dialog      { z-index: 17000; }
-.emergency-alert          { z-index: 18000; }
+#### **Migration Guide: Old Modal → ModalPortal** ✅
 
-/* Layer 3: System Dropdowns (15,000 - 15,999) */
-.header-dropdown          { z-index: 15000; }  /* Header profile menu */
-.context-menu             { z-index: 15500; }
-.tooltip-overlay          { z-index: 15800; }
-
-/* Layer 2: Search & Voice UI (10,000 - 14,999) */
-.global-search-results    { z-index: 10000; }  /* Search overlay */
-.voice-assistant-overlay  { z-index: 10000; }  /* Voice interface */
-.floating-action-button   { z-index: 12000; }
-
-/* Layer 1: Navigation & UI (1,000 - 9,999) */
-.bottom-navigation        { z-index: 1000; }   /* Mobile nav */
-.tab-navigation           { z-index: 1000; }   /* Tab system */
-
-/* Layer 0: Content (1 - 999) */
-.ds-card                  { z-index: 1; }      /* Base cards */
+**Step 1: Import ModalPortal**
+```tsx
+import ModalPortal from '../ui/ModalPortal';
 ```
 
-#### **Implementation Rules** ✅
+**Step 2: Replace Modal Structure**
+```tsx
+// ❌ OLD PATTERN
+if (!isOpen) return null;
+return (
+  <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalContent}>
+      {/* content */}
+    </div>
+  </div>
+);
 
-**✅ REQUIRED**:
-- Use exact z-index values from hierarchy above
-- Test modal visibility with dropdown and search open
-- Always use `position: fixed` for modals
-- Include modal animation for professional feel
+// ✅ NEW PATTERN  
+return (
+  <ModalPortal isOpen={isOpen} onBackdropClick={onClose}>
+    <div className={styles.modalContent}>
+      {/* same content */}
+    </div>
+  </ModalPortal>
+);
+```
 
-**❌ FORBIDDEN**:
-- Adding z-index to CSS Grid areas (headerArea, searchArea, contentArea)
-- Using arbitrary extreme values (999999, etc.)
-- Using `!important` for z-index conflicts
-- Overlapping z-index ranges between layers
+**Step 3: Clean Up CSS**
+```css
+/* ❌ REMOVE - handled by ModalPortal */
+.modalOverlay { /* delete entire block */ }
 
-#### **Modal Integration Checklist** ✅
+/* ✅ KEEP - update for global sizing */
+.modalContent {
+  /* Remove max-width - now handled globally */
+  /* Keep colors, shadows, animations */
+}
+```
 
-1. **Z-Index**: Use `z-index: 16000` for modal overlay
-2. **Position**: Use `position: fixed` with full viewport coverage
-3. **Background**: Semi-transparent backdrop (`rgba(0, 0, 0, 0.5)`)
-4. **Click Outside**: Close modal when clicking overlay
-5. **Animation**: Include slide-in animation for smooth UX
-6. **Responsive**: Proper mobile margins and max-height
-7. **Accessibility**: ESC key handling, focus management
-8. **Testing**: Verify visibility with header dropdown and search open
+#### **Real Implementation Examples** ✅
+
+**AddLeadModal Pattern**:
+```tsx
+<ModalPortal isOpen={isOpen} onBackdropClick={handleClose}>
+  <div className={styles.modalContent}>
+    <div className={styles.modalHeader}>
+      <h2>{editingLead ? '✏️ Edit Lead' : '📋 Add New Lead'}</h2>
+      <button className={styles.closeButton} onClick={handleClose}>×</button>
+    </div>
+    <form onSubmit={handleSubmit} className={styles.modalForm}>
+      {/* Business form content */}
+    </form>
+  </div>
+</ModalPortal>
+```
+
+**QC Modal Pattern**:
+```tsx
+<ModalPortal isOpen={!!activeQCForm} onBackdropClick={closeQCForm}>
+  <div className={styles.modalContent}>
+    <div className={styles.modalHeader}>
+      <h3>QC Inspection — {activeQCForm}</h3>
+      <button className={styles.closeButton} onClick={closeQCForm}>×</button>
+    </div>
+    <div className={styles.modalBody}>
+      {/* QC inspection sections */}
+    </div>
+  </div>
+</ModalPortal>
+```
+
+#### **Architecture Benefits** ✅
+
+**Simplified Development**:
+- **No Z-Index Management**: React Portal naturally appears above all content
+- **No Grid Conflicts**: Escapes CSS Grid stacking context issues  
+- **Automatic Mobile**: Mobile optimization built-in to ModalPortal
+- **Global Consistency**: All modals automatically follow design system standards
+
+**Scalable System**:
+- **Single Component**: One ModalPortal for entire platform
+- **Future-Proof**: New modals automatically get correct behavior
+- **Easy Maintenance**: One place to update modal behavior
+- **Professional UX**: Consistent experience across all modal interactions
 
 ---
 
@@ -1546,7 +1591,7 @@ This document provides **complete implementation details** for building consiste
 2. **Map statuses to global classes** - `.ds-card-status-active`, `.ds-card-status-pending`, etc.
 3. **Reference global system in CSS** - replace duplicate CSS with reference comments
 4. **Follow component migration pattern** - TSX update → CSS cleanup → status mapping
-5. **Use proven overlay architecture** - `z-index: 16000` for modals, NO grid area z-index
+5. **Use ModalPortal for all modals** - React Portal system eliminates z-index complexity
 6. **Validate against updated checklist** - includes global system verification and modal testing
 
 ### **Global System Advantages**
