@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lead, FabricRequirements } from '../../data/salesMockData';
+import ModalPortal from '../ui/ModalPortal';
 import styles from './AddLeadModal.module.css';
 
 interface AddLeadModalProps {
@@ -272,11 +273,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={styles.modalOverlay} data-testid="modal-overlay" onClick={handleClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+    <ModalPortal isOpen={isOpen} onBackdropClick={handleClose}>
+      <div className={styles.modalContent} data-testid="modal-overlay" onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>{editingLead ? '✏️ Edit Lead' : '📋 Add New Lead'}</h2>
           <button className={styles.closeButton} onClick={handleClose}>×</button>
@@ -602,7 +601,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
           </div>
         </form>
       </div>
-    </div>
+    </ModalPortal>
   );
 }
 

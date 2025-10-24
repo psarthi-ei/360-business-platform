@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { mockWorkOrders, mockQCItems, WorkOrder, QualityControlItem } from '../../data/productionMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+import ModalPortal from '../ui/ModalPortal';
 import styles from './QualityControlManagement.module.css';
 
 interface QualityControlManagementProps {
@@ -287,9 +288,8 @@ const QualityControlManagement = ({
         </div>
 
         {/* QC Form Modal - 4-Section Visual Design Spec Layout */}
-        {activeQCForm && (
-          <div className={styles.modalOverlay} onClick={closeQCForm}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <ModalPortal isOpen={!!activeQCForm} onBackdropClick={closeQCForm}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
                 <h3>QC Inspection — {activeQCForm}</h3>
                 <button className={styles.closeButton} onClick={closeQCForm}>×</button>
@@ -351,13 +351,13 @@ const QualityControlManagement = ({
                   <div className={styles.resultButtons}>
                     <button 
                       className="ds-btn ds-btn-primary"
-                      onClick={() => completeQC(activeQCForm, { grade: 'A Grade', notes: 'QC Passed' })}
+                      onClick={() => activeQCForm && completeQC(activeQCForm, { grade: 'A Grade', notes: 'QC Passed' })}
                     >
                       ✅ Pass
                     </button>
                     <button 
                       className="ds-btn ds-btn-secondary"
-                      onClick={() => completeQC(activeQCForm, { grade: 'Reject', notes: 'Requires Rework' })}
+                      onClick={() => activeQCForm && completeQC(activeQCForm, { grade: 'Reject', notes: 'Requires Rework' })}
                     >
                       ⚠️ Rework
                     </button>
@@ -365,8 +365,7 @@ const QualityControlManagement = ({
                 </div>
               </div>
             </div>
-          </div>
-        )}
+        </ModalPortal>
       </div>
     </div>
   );
