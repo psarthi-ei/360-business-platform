@@ -77,8 +77,7 @@
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-shadow-elevated);
-  width: 100%;
-  max-width: 500px;
+  /* max-width now controlled by global design system */
   max-height: 90vh;
   overflow-y: auto;
   animation: modalSlideIn 0.3s ease;

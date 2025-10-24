@@ -644,6 +644,15 @@ body.modal-open {
   scroll-behavior: smooth;
 }
 
+/* ===== GLOBAL MODAL DESIGN SYSTEM STANDARD ===== */
+
+/* Universal modal content sizing - applies to all modals */
+.modal-portal-container .modalContent {
+  max-width: 500px;  /* Consistent maximum width for all modals */
+  width: 100%;       /* Full width on mobile, natural width on desktop */
+  /* Let content determine natural sizing up to max-width */
+}
+
 /* Universal status border colors - consistent across all business modules */
 .ds-card-priority-high { border-left-color: var(--ds-priority-high); }      /* Orange for urgent/hot */
 .ds-card-priority-medium { border-left-color: var(--ds-priority-medium); }  /* Amber for warm/pending */
