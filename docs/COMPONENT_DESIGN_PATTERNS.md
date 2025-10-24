@@ -16,9 +16,12 @@
    - [Horizontal Scroll Architecture Patterns](#horizontal-scroll-architecture-patterns)
    - [Mobile Container Padding Pattern](#mobile-container-padding-pattern)
 5. [**Action Button Patterns**](#🔘-action-button-patterns)
-6. [**Common Pitfalls & Solutions**](#⚠️-common-pitfalls--solutions)
-7. [**Validation Checklist**](#✅-validation-checklist)
-8. [**Complete Implementation Examples**](#💡-complete-implementation-examples)
+6. [**Overlay Implementation Patterns**](#🔲-overlay-implementation-patterns)
+   - [Modal Implementation Standard](#modal-implementation-standard)
+   - [Z-Index Architecture Guidelines](#z-index-architecture-guidelines)
+7. [**Common Pitfalls & Solutions**](#⚠️-common-pitfalls--solutions)
+8. [**Validation Checklist**](#✅-validation-checklist)
+9. [**Complete Implementation Examples**](#💡-complete-implementation-examples)
 
 ---
 
@@ -1415,6 +1418,125 @@ Every component follows the same successful migration pattern:
 
 ---
 
+## 🔲 **OVERLAY IMPLEMENTATION PATTERNS**
+
+### **Modal Implementation Standard**
+
+**CRITICAL**: Use the proven working z-index architecture. Modal visibility issues were resolved through CSS Grid z-index flattening.
+
+#### **Working Modal Template** ✅
+
+```tsx
+// Modal Component Pattern
+const ExampleModal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <h3>{title}</h3>
+          <button className={styles.closeButton} onClick={onClose}>×</button>
+        </div>
+        <div className={styles.modalBody}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+#### **Required Modal CSS** ✅
+
+```css
+/* Modal overlay - CRITICAL z-index value */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 16000; /* Layer 4: Modals - PROVEN WORKING VALUE */
+  padding: var(--ds-space-md);
+}
+
+.modalContent {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-elevated);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+```
+
+### **Z-Index Architecture Guidelines**
+
+#### **CRITICAL ARCHITECTURE RULE** ⚠️
+**NEVER add z-index values to CSS Grid areas** (headerArea, searchArea, contentArea). This breaks the global overlay system.
+
+#### **Working Z-Index Hierarchy** ✅
+
+```css
+/* Layer 4: Modals & Critical UI (16,000 - 20,000) */
+.modal-overlay            { z-index: 16000; }  /* QC Modal, Lead Modal */
+.confirmation-dialog      { z-index: 17000; }
+.emergency-alert          { z-index: 18000; }
+
+/* Layer 3: System Dropdowns (15,000 - 15,999) */
+.header-dropdown          { z-index: 15000; }  /* Header profile menu */
+.context-menu             { z-index: 15500; }
+.tooltip-overlay          { z-index: 15800; }
+
+/* Layer 2: Search & Voice UI (10,000 - 14,999) */
+.global-search-results    { z-index: 10000; }  /* Search overlay */
+.voice-assistant-overlay  { z-index: 10000; }  /* Voice interface */
+.floating-action-button   { z-index: 12000; }
+
+/* Layer 1: Navigation & UI (1,000 - 9,999) */
+.bottom-navigation        { z-index: 1000; }   /* Mobile nav */
+.tab-navigation           { z-index: 1000; }   /* Tab system */
+
+/* Layer 0: Content (1 - 999) */
+.ds-card                  { z-index: 1; }      /* Base cards */
+```
+
+#### **Implementation Rules** ✅
+
+**✅ REQUIRED**:
+- Use exact z-index values from hierarchy above
+- Test modal visibility with dropdown and search open
+- Always use `position: fixed` for modals
+- Include modal animation for professional feel
+
+**❌ FORBIDDEN**:
+- Adding z-index to CSS Grid areas (headerArea, searchArea, contentArea)
+- Using arbitrary extreme values (999999, etc.)
+- Using `!important` for z-index conflicts
+- Overlapping z-index ranges between layers
+
+#### **Modal Integration Checklist** ✅
+
+1. **Z-Index**: Use `z-index: 16000` for modal overlay
+2. **Position**: Use `position: fixed` with full viewport coverage
+3. **Background**: Semi-transparent backdrop (`rgba(0, 0, 0, 0.5)`)
+4. **Click Outside**: Close modal when clicking overlay
+5. **Animation**: Include slide-in animation for smooth UX
+6. **Responsive**: Proper mobile margins and max-height
+7. **Accessibility**: ESC key handling, focus management
+8. **Testing**: Verify visibility with header dropdown and search open
+
+---
+
 ## 🎯 **SUMMARY**
 
 This document provides **complete implementation details** for building consistent business components using the revolutionary global card system. Every pattern has been tested through real development and validated across all business components.
@@ -1424,7 +1546,8 @@ This document provides **complete implementation details** for building consiste
 2. **Map statuses to global classes** - `.ds-card-status-active`, `.ds-card-status-pending`, etc.
 3. **Reference global system in CSS** - replace duplicate CSS with reference comments
 4. **Follow component migration pattern** - TSX update → CSS cleanup → status mapping
-5. **Validate against updated checklist** - includes global system verification
+5. **Use proven overlay architecture** - `z-index: 16000` for modals, NO grid area z-index
+6. **Validate against updated checklist** - includes global system verification and modal testing
 
 ### **Global System Advantages**
 ✅ **Massive Code Reduction**: 400+ lines eliminated  

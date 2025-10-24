@@ -399,103 +399,106 @@ FLOATING ACTION BUTTON (FAB)
 
 **CRITICAL**: Universal z-index hierarchy to prevent modal and overlay conflicts across the platform.
 
-##### **Current State Analysis** (October 2025)
-**Audit Results**: 58 z-index declarations found across codebase with overlapping ranges causing modal visibility issues.
+##### **RESOLVED: Modal Visibility Architecture** (October 2025)
+**Problem Solved**: CSS Grid stacking context isolation was preventing proper overlay layering.
 
-**Problem Examples**:
-- QC Modal: `z-index: 50000` (too low)
-- Search Bar: `z-index: 10000` (blocks modals)
-- Platform Header: `z-index: 100000` (very high)
-- Header Dropdown: `z-index: 100002` (highest)
+**Root Cause**: Grid areas with `position: relative` + `z-index` created isolated stacking contexts.
 
-##### **Standardized Z-index Hierarchy**
+**Solution Applied**: **Grid Z-Index Flattening** - Removed all z-index values from CSS Grid areas to enable global z-index competition.
+
+**Working Implementation**:
+- QC Modal: `z-index: 16000` ✅ (working)
+- Search Results: `z-index: 10000` ✅ (working)  
+- Header Dropdown: `z-index: 15000` ✅ (working)
+- Grid Areas: **NO z-index** ✅ (enables global competition)
+
+##### **WORKING Z-index Hierarchy** ✅
+
+**Architecture Foundation**: CSS Grid areas have **NO z-index** to enable global competition.
 
 ```
-📋 Z-INDEX LAYER SYSTEM
+📋 PROVEN Z-INDEX SYSTEM (Global Competition)
 ┌─────────────────────────────────────┐
-│ **Layer 6: Critical System**       │ 200,000 - 999,999
-│ Emergency alerts, system errors     │ 
+│ **Layer 4: Modals & Critical UI**  │ 16,000 - 20,000
+│ QC Modal, Lead Modal, Confirmations │ ✅ HIGHEST PRIORITY
 ├─────────────────────────────────────┤
-│ **Layer 5: Global System UI**      │ 100,000 - 199,999
-│ Header dropdowns, main navigation   │ 
+│ **Layer 3: System Dropdowns**      │ 15,000 - 15,999  
+│ Header dropdowns, context menus     │ ✅ ABOVE CONTENT
 ├─────────────────────────────────────┤
-│ **Layer 4: Modals & Overlays**     │ 50,000 - 99,999
-│ QC Modal, Lead Modal, Confirmations │ 
+│ **Layer 2: Search & Voice UI**     │ 10,000 - 14,999
+│ Global search, voice assistant      │ ✅ FUNCTIONAL LAYER
 ├─────────────────────────────────────┤
-│ **Layer 3: Search & Fixed UI**     │ 10,000 - 49,999
-│ Global search, floating elements    │ 
+│ **Layer 1: Navigation & UI**       │ 1,000 - 9,999
+│ Bottom nav, tab nav, fixed elements │ ✅ STANDARD UI
 ├─────────────────────────────────────┤
-│ **Layer 2: Navigation**            │ 1,000 - 9,999
-│ Bottom nav, tab navigation, voice   │ 
-├─────────────────────────────────────┤
-│ **Layer 1: Content & Components**  │ 1 - 999
-│ Cards, buttons, regular UI          │ 
+│ **Layer 0: Content**               │ 1 - 999
+│ Cards, buttons, regular components  │ ✅ BASE LAYER
 └─────────────────────────────────────┘
 ```
 
-##### **Specific Z-index Assignments**
+**Key Architecture Principle**: **No CSS Grid Area Z-Index** enables clean global hierarchy.
 
-**Layer 6: Critical System (200,000+)**
+##### **WORKING Z-index Assignments** ✅
+
+**Layer 4: Modals & Critical UI (16,000 - 20,000)**
 ```css
-.emergency-alert          { z-index: 500000; }
-.system-error-modal       { z-index: 400000; }
+.modal-overlay            { z-index: 16000; }  /* QC Modal, Lead Modal ✅ */
+.confirmation-dialog      { z-index: 17000; }
+.emergency-alert          { z-index: 18000; }
 ```
 
-**Layer 5: Global System UI (100,000 - 199,999)**
+**Layer 3: System Dropdowns (15,000 - 15,999)**
 ```css
-.header-dropdown          { z-index: 150000; }
-.platform-header-controls { z-index: 140000; }
-.main-navigation          { z-index: 130000; }
+.header-dropdown          { z-index: 15000; }  /* Header profile menu ✅ */
+.context-menu             { z-index: 15500; }
+.tooltip-overlay          { z-index: 15800; }
 ```
 
-**Layer 4: Modals & Overlays (50,000 - 99,999)**
+**Layer 2: Search & Voice UI (10,000 - 14,999)**
 ```css
-.modal-overlay            { z-index: 80000; }  /* QC Modal, Lead Modal */
-.confirmation-dialog      { z-index: 75000; }
-.tooltip-overlay          { z-index: 70000; }
+.global-search-results    { z-index: 10000; }  /* Search overlay ✅ */
+.voice-assistant-overlay  { z-index: 10000; }  /* Voice interface ✅ */
+.floating-action-button   { z-index: 12000; }
 ```
 
-**Layer 3: Search & Fixed UI (10,000 - 49,999)**
+**Layer 1: Navigation & UI (1,000 - 9,999)**
 ```css
-.global-search            { z-index: 30000; }
-.floating-action-button   { z-index: 20000; }
-.sticky-filters           { z-index: 15000; }
+.bottom-navigation        { z-index: 1000; }   /* Mobile nav ✅ */
+.tab-navigation           { z-index: 1000; }   /* Tab system ✅ */
+.sticky-filters           { z-index: 2000; }
 ```
 
-**Layer 2: Navigation (1,000 - 9,999)**
+**Layer 0: Content (1 - 999)**
 ```css
-.bottom-navigation        { z-index: 5000; }
-.tab-navigation           { z-index: 4000; }
-.voice-assistant          { z-index: 3000; }
+.ds-card-expanded         { z-index: 100; }    /* Expanded cards */
+.ds-card                  { z-index: 1; }      /* Base cards ✅ */
+.page-content             { z-index: auto; }   /* Default content */
 ```
 
-**Layer 1: Content & Components (1 - 999)**
-```css
-.card-expanded            { z-index: 100; }
-.dropdown-menu            { z-index: 50; }
-.card-default             { z-index: 1; }
-```
+**CRITICAL**: CSS Grid areas (headerArea, searchArea, contentArea) have **NO z-index** values.
 
-##### **Implementation Rules**
+##### **Implementation Rules** ✅
 
 **✅ REQUIRED**:
-- Use exact values from this specification
-- Never use arbitrary z-index values
-- Always reference this hierarchy for new components
+- **NEVER add z-index to CSS Grid areas** (headerArea, searchArea, contentArea)
+- Use exact values from the WORKING hierarchy above
+- Always test modal visibility across all overlay types
+- Reference this proven hierarchy for new components
 
 **❌ FORBIDDEN**:
-- `z-index: 999999` or similar arbitrary high values
+- `z-index` on CSS Grid areas (breaks global competition)
+- `z-index: 999999` or arbitrary extreme values  
 - Overlapping ranges between layers
 - Using `!important` for z-index conflicts
 
-##### **Modal Implementation Standard**
+##### **Modal Implementation Standard** ✅
 
-**Standard Modal Z-index**: `80000`
+**Standard Modal Z-index**: `16000` (proven working value)
 ```css
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 80000;  /* Layer 4: Modals */
+  z-index: 16000;  /* Layer 4: Modals ✅ WORKING VALUE */
   background: rgba(0, 0, 0, 0.5);
 }
 ```

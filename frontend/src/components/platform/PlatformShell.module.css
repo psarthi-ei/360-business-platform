@@ -25,7 +25,7 @@
   grid-area: sidebar;
   background: var(--color-card-background, #FFFFFF);
   border-right: 1px solid var(--color-border, #E5E7EB);
-  z-index: 999;
+  /* z-index removed - enables global overlay z-index competition */
   overflow: visible;
   position: relative;
 }
@@ -34,7 +34,7 @@
   grid-area: header;
   background: var(--color-card-background, #FFFFFF);
   border-bottom: 1px solid var(--color-border, #E5E7EB);
-  z-index: 1001;
+  /* z-index removed - enables global overlay z-index competition */
   overflow: visible;
   position: relative;
 }
@@ -44,7 +44,7 @@
   background: var(--color-card-background, #FFFFFF);
   border-bottom: 1px solid var(--color-border, #E5E7EB);
   padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px);
-  z-index: 1000;
+  /* z-index removed - enables global overlay z-index competition */
   overflow: visible;
   position: relative;
 }
@@ -54,7 +54,7 @@
   overflow-y: auto;
   padding: var(--ds-space-m, 16px) var(--ds-space-l, 24px) var(--ds-space-l, 24px) var(--ds-space-l, 24px);
   background: var(--color-background, #F3F4F6);
-  z-index: 1;
+  /* z-index removed - enables global overlay z-index competition */
 }
 
 .navigationArea {

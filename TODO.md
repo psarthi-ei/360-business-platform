@@ -24,7 +24,7 @@
    - **Scope**: All documents, code comments, and UI labels
    - **Impact**: Consistency across codebase and documentation
 
-🔄 **4. QC Tab Implementation** - **COMPREHENSIVE PLAN DEFINED**
+🔄 **4. QC Tab Implementation** - **CRITICAL Z-INDEX ARCHITECTURE ISSUE**
 
 #### **4.1 ARCHITECTURAL DECISIONS**
 
@@ -388,3 +388,55 @@ switch (filterState) {
    - QC Fail → Create rework Work Order, return to WO tab for reassignment  
    - QC In Progress → Work Order remains in QC queue with progress visibility
    - Filter synchronization → QC status filters align with overall production workflow
+
+### **✅ RESOLVED: CSS GRID Z-INDEX STACKING CONTEXT SOLUTION**
+
+#### **Solution Summary**
+**Root Cause Identified**: CSS Grid areas with `position: relative` + `z-index` created **isolated stacking contexts** that prevented proper global overlay layering.
+
+**Solution Applied**: **Grid Z-Index Flattening** - Removed all z-index values from CSS Grid areas to enable global z-index competition.
+
+**Result**: **ALL OVERLAY TYPES NOW WORKING** ✅ - QC Modal, Header Dropdown, and Search Results work simultaneously.
+
+#### **SUCCESSFUL IMPLEMENTATION** ✅
+
+**Solution Applied**: **Option B - Grid Z-Index Flattening** (Proven Working)
+
+**Files Modified**:
+1. **PlatformShell.module.css** - Removed z-index from all grid areas
+2. **QualityControlManagement.module.css** - Set modal z-index to 16000
+
+**Working Architecture**:
+```css
+/* PlatformShell.module.css - NO stacking contexts */
+.headerArea { position: relative; /* NO z-index */ }
+.searchArea { position: relative; /* NO z-index */ }  
+.contentArea { /* NO z-index */ }
+
+/* Global Z-Index Competition (WORKING) */
+.modalOverlay { z-index: 16000; }     /* QC Modal ✅ */
+.headerDropdown { z-index: 15000; }   /* Header Menu ✅ */
+.searchResults { z-index: 10000; }    /* Search Overlay ✅ */
+```
+
+**Success Criteria Achieved**:
+- ✅ QC Modal appears above all content (search, header, content areas)
+- ✅ Header dropdown appears above content area  
+- ✅ Search results appear above content area
+- ✅ All three overlay types work simultaneously
+- ✅ Consistent behavior across desktop and mobile
+- ✅ No circular dependencies or whack-a-mole fixes
+
+#### **Architecture Standards Documented** ✅
+
+**Updated Documentation**:
+1. **VISUAL_DESIGN_SPECIFICATION.md** - Updated z-index hierarchy with working values
+2. **COMPONENT_DESIGN_PATTERNS.md** - Added overlay implementation patterns with working templates
+
+**Key Architecture Rule**: **NEVER add z-index to CSS Grid areas** - enables global overlay competition
+
+#### **Result**
+
+🎉 **MODAL VISIBILITY ISSUE COMPLETELY RESOLVED** 🎉
+
+**Status**: Sub-Phase 6.5 QC Tab can now be completed with fully functional modal workflows

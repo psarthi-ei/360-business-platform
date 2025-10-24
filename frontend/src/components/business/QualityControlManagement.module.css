@@ -82,7 +82,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 25000;
+  z-index: 16000; /* Modal layer - above dropdowns (15000) and search (global competition) */
   padding: var(--ds-space-md);
 }
 
