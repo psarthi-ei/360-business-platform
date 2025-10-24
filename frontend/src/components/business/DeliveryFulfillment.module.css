@@ -1,244 +1,88 @@
-/* DeliveryFulfillment.module.css - Visual Design Specification Styling */
+/* DeliveryFulfillment.module.css - Delivery Management Component Styles */
 
-.deliveryFulfillment {
-  padding: var(--ds-space-md) var(--ds-space-sm) 0 var(--ds-space-sm);
+.deliveryFulfillmentScreen {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--ds-space-md);
+  text-align: left !important; /* Safety fallback - global rule in index.css handles this */
 }
 
-.sectionHeader {
-  font-size: var(--font-base);
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  padding: var(--ds-space-sm) 0;
-  border-bottom: 1px solid var(--ds-border-primary);
-  margin-bottom: var(--ds-space-sm);
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  padding-left: var(--ds-space-sm);
-  border-radius: var(--ds-radius-sm);
-}
-
-.readyItemsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.readyItemCard {
-  background: white;
-  border: 1px solid var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
+.pageContent {
+  flex: 1;
   padding: var(--ds-space-md);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-  min-height: 140px;
+  overflow-y: auto;
+}
+
+.deliveryContainer {
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-sm);
 }
 
-.readyItemCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-  border-color: var(--ds-border-hover);
+/* Modal Styles */
+.modalContent {
+  background: white;
+  border-radius: var(--ds-radius-lg);
+  padding: 0;
+  max-width: 600px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.readyItemHeader {
+.modalHeader {
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-secondary);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--ds-space-xs);
 }
 
-.readyItemId {
-  font-size: var(--font-base);
-  font-weight: 600;
-  color: var(--ds-text-primary);
-}
-
-.statusBadge {
-  padding: 4px 12px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.readyItemDetails {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--ds-space-sm);
-  margin-bottom: var(--ds-space-sm);
-}
-
-.orderInfo,
-.statusInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  line-height: 1.4;
-}
-
-.readyItemActions {
-  display: flex;
-  gap: var(--ds-space-sm);
-  align-items: center;
-}
-
-.primaryAction {
-  background: var(--ds-btn-primary);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.primaryAction:hover {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-}
-
-.primaryAction:active {
-  background: var(--ds-btn-primary-active);
-  transform: translateY(0);
-}
-
-.secondaryAction {
-  background: transparent;
-  color: var(--ds-text-primary);
-  border: 1px solid var(--ds-border-secondary);
-  padding: 8px 16px;
-  border-radius: var(--ds-radius-sm);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 32px;
-  flex: 1;
-}
-
-.secondaryAction:hover {
-  background: var(--ds-bg-hover);
-  border-color: var(--ds-border-hover);
-  transform: translateY(-1px);
-}
-
-.secondaryAction:active {
-  background: var(--ds-bg-subtle);
-  transform: translateY(0);
-}
-
-.metricsSection {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--ds-space-md);
-}
-
-.metricCard {
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  border: 1px solid var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-md);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-xs);
-}
-
-.metricValue {
-  font-size: var(--font-xl);
-  font-weight: 700;
-  color: var(--ds-text-primary);
-  line-height: 1;
-}
-
-.metricLabel {
-  font-size: var(--font-sm);
-  color: var(--ds-text-secondary);
-  font-weight: 500;
-}
-
-.comingSoon {
-  background: linear-gradient(135deg, var(--ds-bg-subtle) 0%, white 100%);
-  border: 2px dashed var(--ds-border-secondary);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-xl);
-  text-align: center;
-  margin-top: var(--ds-space-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--ds-space-md);
-}
-
-.comingSoonIcon {
-  font-size: 48px;
-  opacity: 0.7;
-}
-
-.comingSoonText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-sm);
-}
-
-.comingSoonText h3 {
+.modalHeader h3 {
+  margin: 0;
   font-size: var(--font-lg);
   font-weight: 600;
   color: var(--ds-text-primary);
-  margin: 0;
 }
 
-.comingSoonText p {
-  font-size: var(--font-base);
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
   color: var(--ds-text-secondary);
-  line-line: 1.5;
-  margin: 0;
-  max-width: 400px;
+  padding: var(--ds-space-xs);
+  border-radius: var(--ds-radius-sm);
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-text-primary);
+}
+
+.modalBody {
+  padding: var(--ds-space-lg);
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .deliveryFulfillment {
+  .pageContent {
     padding: var(--ds-space-sm);
   }
   
-  .readyItemCard {
-    padding: var(--ds-space-sm);
+  .modalContent {
+    width: 95vw;
+    max-height: 90vh;
   }
   
-  .readyItemDetails {
-    grid-template-columns: 1fr;
-  }
-  
-  .readyItemActions {
-    flex-direction: column;
-  }
-  
-  .primaryAction,
-  .secondaryAction {
-    width: 100%;
-  }
-  
-  .metricsSection {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .comingSoon {
-    padding: var(--ds-space-lg);
-  }
-  
-  .comingSoonIcon {
-    font-size: 36px;
+  .modalHeader,
+  .modalBody {
+    padding: var(--ds-space-md);
   }
 }

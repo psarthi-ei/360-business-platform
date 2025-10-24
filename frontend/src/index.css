@@ -472,6 +472,7 @@ code {
   background: white;
   border-radius: var(--ds-radius-md);
   box-shadow: var(--ds-shadow-card);
+  text-align: left !important;      /* Global text alignment for all business modules */
   border: 1px solid var(--ds-border-primary);
   border-left: 4px solid var(--ds-border-primary);  /* Default border - overridden by status classes */
   display: flex;
@@ -608,6 +609,22 @@ body.modal-open {
   /* Prevent background scrolling on mobile */
   -webkit-overflow-scrolling: none;
   touch-action: none;
+}
+
+/* Emergency fallback for stuck modal states */
+body:not(.modal-open) {
+  overflow: auto !important;
+  position: static !important;
+  width: auto !important;
+  top: auto !important;
+}
+
+/* Additional mobile scroll recovery */
+@media (max-width: 768px) {
+  body:not(.modal-open) {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: auto !important;
+  }
 }
 
 /* Modal portal container base styles */

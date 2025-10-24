@@ -105,49 +105,7 @@ export interface QCChecklistItem {
   required: boolean;
 }
 
-export interface DeliveryItem {
-  id: string;
-  salesOrderId: string;
-  workOrderId: string;
-  product: string;
-  customer: string;
-  quantity: string;
-  qcGrade: string;
-  status: 'ready_dispatch' | 'assigned' | 'in_transit' | 'delivered';
-  readyTime: string;
-  assignedVehicle?: string;
-  assignedDriver?: string;
-  estimatedDelivery?: string;
-  actualDelivery?: string;
-  trackingInfo?: DeliveryTracking;
-  priority: 'normal' | 'urgent';
-}
-
-export interface DeliveryTracking {
-  currentLocation?: string;
-  distanceRemaining?: string;
-  eta?: string;
-  lastUpdated?: string;
-  milestones?: DeliveryMilestone[];
-}
-
-export interface DeliveryMilestone {
-  time: string;
-  status: string;
-  location: string;
-  completed: boolean;
-}
-
-export interface Vehicle {
-  id: string;
-  number: string;
-  capacity: string;
-  currentLoad: string;
-  driver: string;
-  status: 'available' | 'busy' | 'returning' | 'maintenance';
-  currentLocation?: string;
-  eta?: string;
-}
+// Delivery-related interfaces moved to deliveryMockData.ts
 
 export interface ProductionWorker {
   id: string;
@@ -708,92 +666,7 @@ export const mockQCItems: QualityControlItem[] = [
   }
 ];
 
-export const mockDeliveryItems: DeliveryItem[] = [
-  {
-    id: 'DEL#001',
-    salesOrderId: 'SO-002',
-    workOrderId: 'WO#451',
-    product: 'Mixed fabric for casual wear',
-    customer: 'Gujarat Garments',
-    quantity: '1000m',
-    qcGrade: 'A Grade',
-    status: 'ready_dispatch',
-    readyTime: 'Dec 20, 2:30 PM',
-    priority: 'urgent'
-  },
-  {
-    id: 'DEL#002',
-    salesOrderId: 'SO-002',
-    workOrderId: 'WO#453',
-    product: 'Mixed fabric for casual wear - Batch 2',
-    customer: 'Gujarat Garments',
-    quantity: '800m',
-    qcGrade: 'A Grade',
-    status: 'in_transit',
-    readyTime: 'Dec 19, 3:00 PM',
-    assignedVehicle: 'GJ-01-AB-1234',
-    assignedDriver: 'Suresh Patel',
-    estimatedDelivery: '6:00 PM',
-    priority: 'normal',
-    trackingInfo: {
-      currentLocation: 'NH-8, Bharuch',
-      distanceRemaining: '120 km',
-      eta: '2 hours 15 minutes',
-      lastUpdated: '2 minutes ago',
-      milestones: [
-        { time: '2:00 PM', status: 'Departed Surat', location: 'Surat Factory', completed: true },
-        { time: '3:30 PM', status: 'Passed Bharuch', location: 'Bharuch Toll', completed: true },
-        { time: '5:15 PM', status: 'In Transit', location: 'Highway', completed: false },
-        { time: '6:00 PM', status: 'Arrival at Destination', location: 'Ahmedabad', completed: false }
-      ]
-    }
-  },
-  {
-    id: 'DEL#003',
-    salesOrderId: 'SO-004',
-    workOrderId: 'WO#450',
-    product: 'Updated seasonal collection - Final batch',
-    customer: 'Baroda Fashion',
-    quantity: '600m',
-    qcGrade: 'A Grade',
-    status: 'delivered',
-    readyTime: 'Dec 19, 9:00 AM',
-    assignedVehicle: 'GJ-02-CD-5678',
-    assignedDriver: 'Ramesh Kumar',
-    actualDelivery: '11:30 AM',
-    priority: 'normal'
-  }
-];
-
-export const mockVehicles: Vehicle[] = [
-  {
-    id: 'VEH#001',
-    number: 'GJ-01-AB-1234',
-    capacity: '5000m',
-    currentLoad: '2000m',
-    driver: 'Suresh Patel',
-    status: 'busy',
-    currentLocation: 'NH-8, Bharuch',
-    eta: '2 hours'
-  },
-  {
-    id: 'VEH#002',
-    number: 'GJ-02-CD-5678',
-    capacity: '3000m',
-    currentLoad: '0m',
-    driver: 'Ramesh Kumar',
-    status: 'returning',
-    eta: '3:00 PM'
-  },
-  {
-    id: 'VEH#003',
-    number: 'GJ-03-EF-9012',
-    capacity: '4000m',
-    currentLoad: '0m',
-    driver: 'Vikram Singh',
-    status: 'available'
-  }
-];
+// Mock delivery data moved to deliveryMockData.ts
 
 export const mockProductionWorkers: ProductionWorker[] = [
   {
@@ -852,9 +725,7 @@ export const getQCItemsByWorkOrder = (workOrderId: string): QualityControlItem[]
   return mockQCItems.filter(qc => qc.workOrderId === workOrderId);
 };
 
-export const getDeliveryItemsBySalesOrder = (salesOrderId: string): DeliveryItem[] => {
-  return mockDeliveryItems.filter(del => del.salesOrderId === salesOrderId);
-};
+// getDeliveryItemsBySalesOrder moved to deliveryMockData.ts
 
 export const getMachineByWorkOrder = (workOrderId: string): Machine | undefined => {
   const workOrder = mockWorkOrders.find(wo => wo.id === workOrderId);

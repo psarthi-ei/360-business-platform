@@ -1,6 +1,23 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
+// Global scroll recovery function for emergency cases
+const forceScrollRecovery = () => {
+  document.body.classList.remove('modal-open');
+  document.body.style.removeProperty('overflow');
+  document.body.style.removeProperty('position');
+  document.body.style.removeProperty('width');
+  document.body.style.removeProperty('top');
+  document.body.style.removeProperty('touch-action');
+  document.body.style.removeProperty('-webkit-overflow-scrolling');
+  void document.body.offsetHeight; // Force reflow
+};
+
+// Expose recovery function globally for debugging
+if (typeof window !== 'undefined') {
+  (window as typeof window & { forceScrollRecovery?: () => void }).forceScrollRecovery = forceScrollRecovery;
+}
+
 interface ModalPortalProps {
   children: React.ReactNode;
   isOpen: boolean;
@@ -38,29 +55,62 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
       const originalPosition = document.body.style.position;
       const originalWidth = document.body.style.width;
       const originalTop = document.body.style.top;
+      const originalTouchAction = document.body.style.touchAction;
       
       // Get current scroll position before fixing
       const scrollY = window.scrollY;
       
-      // Apply mobile-optimized scroll prevention
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${scrollY}px`;
-      
-      // Add modal-open class for additional CSS control
+      // Use CSS class-based approach for better reliability
       document.body.classList.add('modal-open');
+      
+      // Apply inline styles only if CSS class doesn't work
+      document.body.style.top = `-${scrollY}px`;
+
+      // Safety timeout to auto-recover scroll if modal gets stuck
+      const safetyTimeout = setTimeout(() => {
+        if (document.body.classList.contains('modal-open')) {
+          forceScrollRecovery();
+        }
+      }, 30000); // 30 second safety net
 
       // Cleanup function to restore scroll
       return () => {
+        clearTimeout(safetyTimeout);
+        
+        // Force removal of modal-open class
+        document.body.classList.remove('modal-open');
+        
+        // Clear all inline styles that might have been set
         document.body.style.overflow = originalOverflow;
         document.body.style.position = originalPosition;
         document.body.style.width = originalWidth;
         document.body.style.top = originalTop;
-        document.body.classList.remove('modal-open');
+        document.body.style.touchAction = originalTouchAction;
         
-        // Restore scroll position on mobile
-        window.scrollTo(0, scrollY);
+        // Additional cleanup to ensure styles are fully removed
+        if (!originalOverflow) document.body.style.removeProperty('overflow');
+        if (!originalPosition) document.body.style.removeProperty('position');
+        if (!originalWidth) document.body.style.removeProperty('width');
+        if (!originalTop) document.body.style.removeProperty('top');
+        if (!originalTouchAction) document.body.style.removeProperty('touch-action');
+        
+        // Restore scroll position with error handling
+        try {
+          window.scrollTo(0, scrollY);
+        } catch {
+          // Fallback scroll restoration
+          document.documentElement.scrollTop = scrollY;
+        }
+        
+        // Force a reflow to ensure styles are applied
+        void document.body.offsetHeight;
+        
+        // Double-check that modal-open class is actually removed
+        setTimeout(() => {
+          if (document.body.classList.contains('modal-open')) {
+            forceScrollRecovery();
+          }
+        }, 100);
       };
     }
   }, [isOpen, preventScroll]);

@@ -164,22 +164,92 @@ export interface ProformaItem {
 
 // Duplicate AdvancePayment interface removed - using the one defined earlier
 
+// Supporting interfaces for comprehensive GST invoice
+export interface CompanyDetails {
+  name: string;
+  address: string;
+  gstNumber: string;
+  panNumber: string;
+  stateCode: string;
+  phone: string;
+  email: string;
+}
+
+export interface CustomerDetails {
+  name: string;
+  billingAddress: string;
+  gstNumber?: string;
+  panNumber?: string;
+  stateCode: string;
+  phone: string;
+}
+
+export interface InvoiceItem {
+  itemCode: string;
+  description: string;
+  hsnCode: string;
+  quantity: number;
+  unit: string;
+  rate: number;
+  discount: number;
+  taxableAmount: number;
+}
+
+export interface TaxDetails {
+  isInterstate: boolean; // true for IGST, false for CGST+SGST
+  cgstRate: number;
+  sgstRate: number;
+  igstRate: number;
+  cgstAmount: number;
+  sgstAmount: number;
+  igstAmount: number;
+}
+
+export interface PaymentDetails {
+  advanceReceived: number;
+  balanceDue: number;
+  paymentTerms: string;
+}
+
 // Final GST Invoices - Module 10: Post-delivery billing
 export interface FinalInvoice {
   id: string;
+  invoiceNumber: string;
   salesOrderId: string;
-  businessProfileId: string; // Updated to use unified businessProfileId
+  businessProfileId: string;
   invoiceDate: string;
   dueDate: string;
+  
+  // Company and Customer Details
+  company: CompanyDetails;
+  customer: CustomerDetails;
+  
+  // Invoice Items
+  items: InvoiceItem[];
+  
+  // Tax Calculations
+  taxDetails: TaxDetails;
+  
+  // Payment Information
+  paymentDetails: PaymentDetails;
+  
+  // Totals
   subtotal: number;
-  gstRate: number;
-  gstAmount: number;
+  totalDiscount: number;
+  taxableAmount: number;
+  totalTax: number;
   totalAmount: number;
-  advanceAdjusted: number;
-  balanceAmount: number;
+  
+  // Status and Notes
   status: 'pending' | 'paid' | 'overdue';
   paymentReceivedDate?: string;
   notes: string;
+  
+  // Legacy fields for backward compatibility
+  gstRate: number;
+  gstAmount: number;
+  advanceAdjusted: number;
+  balanceAmount: number;
 }
 
 // Final Payment Records - Module 10: Payment closure tracking
@@ -828,65 +898,507 @@ export const mockAdvancePayments: AdvancePayment[] = [
 export const mockFinalInvoices: FinalInvoice[] = [
   {
     id: 'INV-2025-001',
+    invoiceNumber: 'INV-2025-001',
     salesOrderId: 'SO-004',
     businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'September 28, 2025',
-    dueDate: 'October 13, 2025',  // Past: 4 days ago (paid early)
+    dueDate: 'October 13, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Baroda Fashion House',
+      billingAddress: 'Shop No. 12, Fashion Plaza, Vadodara - 390001, Gujarat',
+      gstNumber: '24FGHIJ5678K1L9',
+      panNumber: 'FGHIJ5678K',
+      stateCode: '24',
+      phone: '+91 98765 43201'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-SEAS-001',
+        description: 'Seasonal collection fabric - Premium Cotton Blend',
+        hsnCode: '5208',
+        quantity: 1800,
+        unit: 'Meters',
+        rate: 833.33,
+        discount: 0,
+        taxableAmount: 1500000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false, // Gujarat to Gujarat (intrastate)
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 37500,
+      sgstAmount: 37500,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 750000,
+      balanceDue: 825000,
+      paymentTerms: 'Net 15 days'
+    },
+    
     subtotal: 1500000,
+    totalDiscount: 0,
+    taxableAmount: 1500000,
+    totalTax: 75000,
+    totalAmount: 1575000,
+    
+    status: 'paid',
+    paymentReceivedDate: 'October 10, 2025',
+    notes: 'Premium customer - paid before due date. Excellent relationship.',
+    
+    // Legacy fields for backward compatibility
     gstRate: 5,
     gstAmount: 75000,
-    totalAmount: 1575000,
     advanceAdjusted: 750000,
-    balanceAmount: 825000,
-    status: 'paid',
-    paymentReceivedDate: 'October 10, 2025',  // Paid 3 days before due date
-    notes: 'Premium customer - paid before due date. Excellent relationship.'
+    balanceAmount: 825000
   },
   {
     id: 'INV-2025-002',
+    invoiceNumber: 'INV-2025-002',
     salesOrderId: 'SO-002',
     businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'September 25, 2025',
-    dueDate: 'October 10, 2025',  // Past: 7 days ago (paid early)
+    dueDate: 'October 10, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Gujarat Garments Co',
+      billingAddress: 'Block A-12, Textile Market, Ahmedabad - 380001, Gujarat',
+      gstNumber: '24LMNOP9876Q2R3',
+      panNumber: 'LMNOP9876Q',
+      stateCode: '24',
+      phone: '+91 98765 43202'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-PREM-002',
+        description: 'Premium Designer Collection - Silk Blend Fabric',
+        hsnCode: '5007',
+        quantity: 1200,
+        unit: 'Meters',
+        rate: 916.67,
+        discount: 0,
+        taxableAmount: 1100000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false,
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 27500,
+      sgstAmount: 27500,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 550000,
+      balanceDue: 605000,
+      paymentTerms: 'Net 15 days'
+    },
+    
     subtotal: 1100000,
+    totalDiscount: 0,
+    taxableAmount: 1100000,
+    totalTax: 55000,
+    totalAmount: 1155000,
+    
+    status: 'paid',
+    paymentReceivedDate: 'October 8, 2025',
+    notes: 'Regular customer - standard payment terms honored.',
+    
+    // Legacy fields for backward compatibility
     gstRate: 5,
     gstAmount: 55000,
-    totalAmount: 1155000,
     advanceAdjusted: 550000,
-    balanceAmount: 605000,
-    status: 'paid',
-    paymentReceivedDate: 'October 8, 2025',  // Paid 2 days before due date
-    notes: 'Regular customer - standard payment terms honored.'
+    balanceAmount: 605000
   },
   {
     id: 'INV-2025-003',
+    invoiceNumber: 'INV-2025-003',
     salesOrderId: 'SO-001',
     businessProfileId: 'bp-gujarat-garments',
     invoiceDate: 'September 20, 2025',
-    dueDate: 'October 10, 2025',  // Past: 7 days ago (overdue)
+    dueDate: 'October 10, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Gujarat Garments Co',
+      billingAddress: 'Block A-12, Textile Market, Ahmedabad - 380001, Gujarat',
+      gstNumber: '24LMNOP9876Q2R3',
+      panNumber: 'LMNOP9876Q',
+      stateCode: '24',
+      phone: '+91 98765 43202'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-BULK-003',
+        description: 'Bulk Order - Cotton Canvas Material',
+        hsnCode: '5208',
+        quantity: 2500,
+        unit: 'Meters',
+        rate: 740.00,
+        discount: 0,
+        taxableAmount: 1850000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false,
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 46250,
+      sgstAmount: 46250,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 971250,
+      balanceDue: 971250,
+      paymentTerms: 'Net 15 days'
+    },
+    
     subtotal: 1850000,
+    totalDiscount: 0,
+    taxableAmount: 1850000,
+    totalTax: 92500,
+    totalAmount: 1942500,
+    
+    status: 'overdue',
+    paymentReceivedDate: '',
+    notes: 'Balance payment overdue by 7 days. Follow-up required.',
+    
+    // Legacy fields for backward compatibility
     gstRate: 5,
     gstAmount: 92500,
-    totalAmount: 1942500,
     advanceAdjusted: 971250,
-    balanceAmount: 971250,
-    status: 'overdue',
-    notes: 'Balance payment overdue by 7 days. Follow-up required.'
+    balanceAmount: 971250
   },
   {
     id: 'INV-2025-004',
+    invoiceNumber: 'INV-2025-004',
     salesOrderId: 'SO-003',
     businessProfileId: 'bp-baroda-fashion',
     invoiceDate: 'October 5, 2025',
-    dueDate: 'October 30, 2025',  // Future: 13 days from today (pending)
+    dueDate: 'October 30, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Baroda Fashion House',
+      billingAddress: 'Shop No. 12, Fashion Plaza, Vadodara - 390001, Gujarat',
+      gstNumber: '24FGHIJ5678K1L9',
+      panNumber: 'FGHIJ5678K',
+      stateCode: '24',
+      phone: '+91 98765 43201'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-FASH-004',
+        description: 'Fashion Collection - Designer Print Fabric',
+        hsnCode: '5208',
+        quantity: 1100,
+        unit: 'Meters',
+        rate: 750.00,
+        discount: 0,
+        taxableAmount: 825000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false,
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 20625,
+      sgstAmount: 20625,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 259875,
+      balanceDue: 606375,
+      paymentTerms: 'Net 15 days'
+    },
+    
     subtotal: 825000,
+    totalDiscount: 0,
+    taxableAmount: 825000,
+    totalTax: 41250,
+    totalAmount: 866250,
+    
+    status: 'pending',
+    paymentReceivedDate: '',
+    notes: 'New customer - first invoice. Payment terms: 15 days.',
+    
+    // Legacy fields for backward compatibility
     gstRate: 5,
     gstAmount: 41250,
-    totalAmount: 866250,
     advanceAdjusted: 259875,
-    balanceAmount: 606375,
+    balanceAmount: 606375
+  },
+  {
+    id: 'INV-2025-005',
+    invoiceNumber: 'INV-2025-005',
+    salesOrderId: 'SO-005',
+    businessProfileId: 'bp-surat-wholesale',
+    invoiceDate: 'October 8, 2025',
+    dueDate: 'October 25, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Surat Wholesale Market',
+      billingAddress: 'Shop No. 45, Wholesale Complex, Surat - 394210, Gujarat',
+      gstNumber: '24STUVW1234X5Y6',
+      panNumber: 'STUVW1234X',
+      stateCode: '24',
+      phone: '+91 98765 43203'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-WHSL-005',
+        description: 'Wholesale Collection - Mixed Fabric Bundle',
+        hsnCode: '5208',
+        quantity: 1500,
+        unit: 'Meters',
+        rate: 666.67,
+        discount: 0,
+        taxableAmount: 1000000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false,
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 25000,
+      sgstAmount: 25000,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 300000,
+      balanceDue: 750000,
+      paymentTerms: 'Net 10 days'
+    },
+    
+    subtotal: 1000000,
+    totalDiscount: 0,
+    taxableAmount: 1000000,
+    totalTax: 50000,
+    totalAmount: 1050000,
+    
     status: 'pending',
-    notes: 'New customer - first invoice. Payment terms: 15 days.'
+    paymentReceivedDate: '',
+    notes: 'Wholesale order - fast delivery required.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 5,
+    gstAmount: 50000,
+    advanceAdjusted: 300000,
+    balanceAmount: 750000
+  },
+  {
+    id: 'INV-2025-006',
+    invoiceNumber: 'INV-2025-006',
+    salesOrderId: 'SO-006',
+    businessProfileId: 'bp-rajkot-mills',
+    invoiceDate: 'October 12, 2025',
+    dueDate: 'November 2, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Rajkot Cotton Mills',
+      billingAddress: 'Industrial Area Phase-2, Rajkot - 360003, Gujarat',
+      gstNumber: '24DEFGH5678I9J0',
+      panNumber: 'DEFGH5678I',
+      stateCode: '24',
+      phone: '+91 98765 43204'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-COTT-006',
+        description: 'Cotton Processing Material - Raw Blend',
+        hsnCode: '5201',
+        quantity: 2000,
+        unit: 'Kg',
+        rate: 450.00,
+        discount: 0,
+        taxableAmount: 900000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false,
+      cgstRate: 2.5,
+      sgstRate: 2.5,
+      igstRate: 0,
+      cgstAmount: 22500,
+      sgstAmount: 22500,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 450000,
+      balanceDue: 495000,
+      paymentTerms: 'Net 21 days'
+    },
+    
+    subtotal: 900000,
+    totalDiscount: 0,
+    taxableAmount: 900000,
+    totalTax: 45000,
+    totalAmount: 945000,
+    
+    status: 'pending',
+    paymentReceivedDate: '',
+    notes: 'Cotton processing order - quality inspection required.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 5,
+    gstAmount: 45000,
+    advanceAdjusted: 450000,
+    balanceAmount: 495000
+  },
+  {
+    id: 'INV-2025-007',
+    invoiceNumber: 'INV-2025-007',
+    salesOrderId: 'SO-007',
+    businessProfileId: 'bp-mumbai-exports',
+    invoiceDate: 'October 15, 2025',
+    dueDate: 'November 5, 2025',
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Mumbai Export House',
+      billingAddress: 'Trade Center, Nariman Point, Mumbai - 400021, Maharashtra',
+      gstNumber: '27KLMNO3456P7Q8',
+      panNumber: 'KLMNO3456P',
+      stateCode: '27',
+      phone: '+91 98765 43205'
+    },
+    
+    items: [
+      {
+        itemCode: 'TEX-EXPR-007',
+        description: 'Export Quality Fabric - Premium Finish',
+        hsnCode: '5208',
+        quantity: 800,
+        unit: 'Meters',
+        rate: 1250.00,
+        discount: 0,
+        taxableAmount: 1000000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: true, // Gujarat to Maharashtra
+      cgstRate: 0,
+      sgstRate: 0,
+      igstRate: 5,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      igstAmount: 50000
+    },
+    
+    paymentDetails: {
+      advanceReceived: 500000,
+      balanceDue: 550000,
+      paymentTerms: 'Net 21 days'
+    },
+    
+    subtotal: 1000000,
+    totalDiscount: 0,
+    taxableAmount: 1000000,
+    totalTax: 50000,
+    totalAmount: 1050000,
+    
+    status: 'pending',
+    paymentReceivedDate: '',
+    notes: 'Export order - documentation and compliance required.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 5,
+    gstAmount: 50000,
+    advanceAdjusted: 500000,
+    balanceAmount: 550000
   }
 ];
 
