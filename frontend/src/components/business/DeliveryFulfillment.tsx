@@ -133,6 +133,7 @@ const DeliveryFulfillment = ({
   };
 
   const closeInvoiceEdit = () => {
+    // Clear invoice edit state
     setActiveInvoiceEdit(null);
     setEditingInvoice(null);
     
@@ -164,6 +165,7 @@ const DeliveryFulfillment = ({
   };
 
   const closeInvoiceView = () => {
+    // Clear invoice view state
     setActiveInvoiceView(null);
     setViewingInvoice(null);
     
@@ -989,7 +991,14 @@ const DeliveryFulfillment = ({
           <ModalPortal isOpen={!!activeInvoiceEdit} onBackdropClick={closeInvoiceEdit}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h3>✏️ Edit Tax Invoice — {editingInvoice.id}</h3>
+                <div className={styles.modalTitle}>
+                  <h3>✏️ Edit Tax Invoice — {editingInvoice.id}</h3>
+                  {parentModalState && (
+                    <span className={styles.breadcrumb}>
+                      Delivery Details → Invoice Edit
+                    </span>
+                  )}
+                </div>
                 <button className={styles.closeButton} onClick={closeInvoiceEdit}>×</button>
               </div>
               <div className={styles.modalBody}>
@@ -1467,7 +1476,14 @@ const DeliveryFulfillment = ({
           <ModalPortal isOpen={!!activeInvoiceView} onBackdropClick={closeInvoiceView}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
-                <h3>📄 Tax Invoice — {viewingInvoice.invoiceNumber}</h3>
+                <div className={styles.modalTitle}>
+                  <h3>📄 Tax Invoice — {viewingInvoice.invoiceNumber}</h3>
+                  {parentModalState && (
+                    <span className={styles.breadcrumb}>
+                      Delivery Details → Invoice View
+                    </span>
+                  )}
+                </div>
                 <button className={styles.closeButton} onClick={closeInvoiceView}>×</button>
               </div>
               <div className={styles.modalBody}>

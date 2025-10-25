@@ -1,22 +1,7 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-// Global scroll recovery function for emergency cases
-const forceScrollRecovery = () => {
-  document.body.classList.remove('modal-open');
-  document.body.style.removeProperty('overflow');
-  document.body.style.removeProperty('position');
-  document.body.style.removeProperty('width');
-  document.body.style.removeProperty('top');
-  document.body.style.removeProperty('touch-action');
-  document.body.style.removeProperty('-webkit-overflow-scrolling');
-  void document.body.offsetHeight; // Force reflow
-};
-
-// Expose recovery function globally for debugging
-if (typeof window !== 'undefined') {
-  (window as typeof window & { forceScrollRecovery?: () => void }).forceScrollRecovery = forceScrollRecovery;
-}
+// Remove unnecessary global recovery functions - simpler approach
 
 interface ModalPortalProps {
   children: React.ReactNode;
@@ -26,17 +11,21 @@ interface ModalPortalProps {
 }
 
 /**
- * Mobile-First Modal Portal Component
+ * Simplified Modal Portal Component
  * 
  * Renders modals at document.body level to escape CSS Grid constraints
  * and ensure proper mobile behavior across all devices.
  * 
  * Features:
  * - React Portal for container escape
- * - Mobile-optimized body scroll prevention  
+ * - Clean body scroll prevention (no complex timeouts)
  * - Touch-friendly backdrop handling
- * - Dynamic viewport height support
- * - Cross-device compatibility
+ * - Simplified mobile optimization
+ * 
+ * SIMPLIFIED APPROACH (October 2025):
+ * - Removed 30-second timeout logic
+ * - Removed complex recovery functions
+ * - Basic scroll lock with reliable cleanup
  */
 const ModalPortal: React.FC<ModalPortalProps> = ({ 
   children, 
@@ -66,16 +55,8 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
       // Apply inline styles only if CSS class doesn't work
       document.body.style.top = `-${scrollY}px`;
 
-      // Safety timeout to auto-recover scroll if modal gets stuck
-      const safetyTimeout = setTimeout(() => {
-        if (document.body.classList.contains('modal-open')) {
-          forceScrollRecovery();
-        }
-      }, 30000); // 30 second safety net
-
       // Cleanup function to restore scroll
       return () => {
-        clearTimeout(safetyTimeout);
         
         // Force removal of modal-open class
         document.body.classList.remove('modal-open');
@@ -104,13 +85,6 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         
         // Force a reflow to ensure styles are applied
         void document.body.offsetHeight;
-        
-        // Double-check that modal-open class is actually removed
-        setTimeout(() => {
-          if (document.body.classList.contains('modal-open')) {
-            forceScrollRecovery();
-          }
-        }, 100);
       };
     }
   }, [isOpen, preventScroll]);
@@ -158,8 +132,8 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         justifyContent: 'center',
         padding: '16px',
         
-        // Smooth animation
-        animation: 'modalFadeIn 0.2s ease-out'
+        // Simple opacity transition
+        opacity: 1
       }}
     >
       {children}

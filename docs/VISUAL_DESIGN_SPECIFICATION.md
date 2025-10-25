@@ -437,11 +437,66 @@ FLOATING ACTION BUTTON (FAB)
 
 **Mobile Optimization Features**:
 - **Body Scroll Prevention**: Automatic background scroll lock
-- **Viewport Handling**: Dynamic height support (100vh, 100dvh, -webkit-fill-available)
-- **Touch Optimization**: Safari mobile fixes and touch-friendly interactions
+- **Touch Optimization**: Clean scroll lock without complex recovery logic
 - **Container Escape**: React Portal renders at document.body level, escaping CSS Grid constraints
 
 **Z-Index Simplification**: React Portal architecture eliminates complex z-index management - modals naturally appear above all page content without z-index conflicts.
+
+##### **Parent-Child Modal System** ✅ (October 2025)
+
+**IMPLEMENTED**: Simplified parent-child modal pattern for complex workflows without navigation confusion.
+
+**Architecture Overview**: Clean state management approach for modal hierarchies (e.g., Delivery → Invoice Edit/View).
+
+**Modal Navigation Philosophy**:
+- **Multiple Exit Options**: X button, Cancel button, backdrop click
+- **Context Awareness**: Breadcrumb navigation shows hierarchy
+- **No Back Buttons**: Eliminates redundant navigation confusion
+- **Automatic Restoration**: Parent modal restored when child closes
+
+**Implementation Pattern**:
+```tsx
+// State Management - Simple & Clean
+const [parentModal, setParentModal] = useState<string | null>(null);
+const [childModal, setChildModal] = useState<string | null>(null);
+const [parentState, setParentState] = useState<string | null>(null);
+
+// Opening Child Modal - Save Parent Context
+const openChildModal = (childId: string) => {
+  if (parentModal) {
+    setParentState(parentModal); // Save parent for restoration
+  }
+  setChildModal(childId);
+};
+
+// Closing Child Modal - Restore Parent
+const closeChildModal = () => {
+  setChildModal(null);
+  if (parentState) {
+    setParentModal(parentState); // Restore parent modal
+    setParentState(null);
+  }
+};
+```
+
+**Modal Rendering Logic**:
+```tsx
+{/* Parent Modal - Hidden when child is open */}
+{parentModal && !childModal && (
+  <ModalPortal><ParentContent /></ModalPortal>
+)}
+
+{/* Child Modal - Independent rendering */}
+{childModal && (
+  <ModalPortal><ChildContent /></ModalPortal>
+)}
+```
+
+**User Experience Benefits**:
+- **Clear Hierarchy**: Breadcrumbs show "Parent → Child" context
+- **Multiple Exits**: X (top-right), Cancel (bottom), backdrop click
+- **No Confusion**: Single navigation purpose per button
+- **Smooth Transitions**: Parent automatically restored when child closes
 
 ##### **Modal Content Guidelines** ✅
 
@@ -461,14 +516,16 @@ FLOATING ACTION BUTTON (FAB)
 
 **Current Working Modals**:
 - **AddLeadModal**: Business form using global 500px standard
-- **QC Inspection Modal**: Quality control form using global 500px standard
+- **QC Inspection Modal**: Quality control form using global 500px standard  
+- **Delivery Management Modals**: Parent-child modal pattern with invoice editing (October 2025)
 - **Future Modals**: Automatically inherit consistent sizing and behavior
 
 **Migration Pattern for Existing Modals**:
 1. Wrap with `<ModalPortal>` component
 2. Remove individual `max-width` CSS rules
-3. Keep existing styling (colors, shadows, animations)
-4. Test on mobile devices for consistent behavior
+3. **SIMPLIFIED**: Remove complex timeout/recovery logic, use basic scroll lock
+4. **CLEAN NAVIGATION**: Use X button + Cancel, remove redundant Back buttons
+5. Test on mobile devices for consistent behavior
 
 #### **Z-index Hierarchy Standard**
 
@@ -515,11 +572,15 @@ FLOATING ACTION BUTTON (FAB)
 
 ##### **WORKING Z-index Assignments** ✅
 
-**Layer 4: Modals & Critical UI (16,000 - 20,000)**
+**Layer 4: Modals & Critical UI (React Portal - No Z-Index Needed)**
 ```css
-.modal-overlay            { z-index: 16000; }  /* QC Modal, Lead Modal ✅ */
-.confirmation-dialog      { z-index: 17000; }
-.emergency-alert          { z-index: 18000; }
+/* ✅ SIMPLIFIED: React Portal modals render at document.body */
+/* ModalPortal component automatically appears above all content */
+/* No z-index management needed - React Portal handles layering */
+
+.legacy-modal-overlay     { z-index: 16000; }  /* Only for non-ModalPortal modals */
+.confirmation-dialog      { z-index: 17000; }  /* System confirmations */
+.emergency-alert          { z-index: 18000; }  /* Critical system alerts */
 ```
 
 **Layer 3: System Dropdowns (15,000 - 15,999)**
