@@ -2,6 +2,8 @@
 ### **PARKED NOTE:**
 
 1. Need to refactor the folder structure and create sub-folder inside business/ and organise all the components file if its easy - Will not do as its not value for time.
+2. We should have proper clean data with appropriate mapping for all in mock if possible.
+
 
 ### **ROUGH NOTE:**
 
@@ -9,14 +11,15 @@
 2. Is this modal portal width constraint applicable to mobile or desktop both ?
 3. Shall we get another expanded / close icon +- up arrow / down etc. insteda of More / Less just to keep card compact
 
-5. Desktop view of Customer should show only one card per row instead of 2. this would help to stay focus on one company at a time and will follow the same pattern as pther component
-6. We should have proper clean data with appropriate mapping for all in mock if possible.
 
 
 ### **DONE:**
 
 4. Only active quote should be shown w.r.t active lead (i.e. show quotes for only active leads and not converted to order)
 6. We should have some lead associated with existing customer
+5. Desktop view of Customer should show only one card per row instead of 2. this would help to stay focus on one company at a time and will follow the same pattern as pther component
+4. we should remove CTA from Customer as we can't create customer on our own
+
 
 
 

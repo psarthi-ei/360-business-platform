@@ -9,6 +9,7 @@
 ## 📚 **TABLE OF CONTENTS**
 
 ### **🎯 FOUNDATION & OVERVIEW**
+- [**LEAD MANAGEMENT TERMINOLOGY & SYSTEM ARCHITECTURE**](#lead-management-terminology--system-architecture)
 - [**OVERVIEW**](#overview)
 - [**8-STAGE BUSINESS PIPELINE OVERVIEW**](#8-stage-business-pipeline-overview)
 - [**DASHBOARD-TO-PROCESS MAPPING**](#dashboard-to-process-mapping)
@@ -53,6 +54,209 @@
 > - Click any section link above to jump directly to that content
 > - Use `Ctrl+F` (or `Cmd+F` on Mac) to search for specific terms
 > - This document focuses on **business workflows** - see `/docs/PRODUCT_REQUIREMENTS.md` for technical specifications
+
+---
+
+## Lead Management Terminology & System Architecture
+
+### Core Entity Architecture
+
+The ElevateIdea 360° platform uses a sophisticated lead management system built around two core entities that work together to handle both new prospect acquisition and existing customer relationship management.
+
+#### BusinessProfile: The Universal Company Record
+
+**BusinessProfile** serves as the master record for any company or organization, regardless of their current relationship status with our business.
+
+**Key Characteristics:**
+- **Universal Creation**: Every lead inquiry automatically creates or references a BusinessProfile
+- **Status Driven**: `customerStatus` field determines prospect vs customer treatment
+- **Single Source of Truth**: All company information, contact details, and business metrics centralized
+- **Relationship Evolution**: Status evolves from 'prospect' → 'customer' based on payment behavior
+
+**BusinessProfile Status Values:**
+- `prospect` - Company has made inquiries but no advance payments yet
+- `customer` - Company has made at least one advance payment (30% payment received)
+- `inactive` - Former customer with no recent business activity
+
+#### Lead: The Project-Specific Inquiry Record
+
+**Lead** represents a specific business inquiry or project from a company, whether they are a new prospect or existing customer.
+
+**Key Characteristics:**
+- **Project Specific**: Each inquiry creates a separate lead record
+- **BusinessProfile Linked**: Always references a BusinessProfile (created or existing)
+- **Conversion Tracking**: `conversionStatus` tracks progression through sales process
+- **Multiple Per Company**: One BusinessProfile can have many leads over time (repeat business)
+
+### Dual Lead Flow System
+
+The platform handles two fundamentally different types of business inquiries through the same lead management interface:
+
+#### Flow 1: New Prospect Acquisition
+
+```
+New Company Inquiry → Create Lead + Create New BusinessProfile (prospect status) → Quote Process → Advance Payment → Sales Order Creation + BusinessProfile Updated (customer status)
+```
+
+**Process Details:**
+1. **Inquiry Received**: New company contacts us for first time
+2. **Lead Creation**: System creates new Lead record
+3. **BusinessProfile Creation**: System creates new BusinessProfile with `customerStatus: 'prospect'`
+4. **Sales Process**: Lead progresses through quote → proforma → payment stages
+5. **Conversion**: Upon advance payment receipt, BusinessProfile status updates to 'customer'
+6. **Completion**: Sales order created, lead moves to historical status
+
+**Example from Mock Data:**
+- Lead ID: `lead-001` (Mumbai Cotton Mills)
+- BusinessProfile ID: `bp-mumbai-cotton-mills` 
+- Status: New prospect, never made payment before
+
+#### Flow 2: Existing Customer Repeat Business
+
+```
+Existing Customer Inquiry → Create Lead + Reference Existing BusinessProfile (customer status) → Quote Process → Advance Payment → Sales Order Creation (no status change needed)
+```
+
+**Process Details:**
+1. **Repeat Inquiry**: Existing customer makes new business inquiry
+2. **Lead Creation**: System creates new Lead record for this specific inquiry
+3. **BusinessProfile Reference**: Lead links to existing BusinessProfile with `customerStatus: 'customer'`
+4. **Sales Process**: Lead progresses through quote → proforma → payment stages
+5. **Order Creation**: Upon advance payment, new Sales Order created directly
+6. **Completion**: Lead moves to historical status, BusinessProfile status unchanged
+
+**Example from Mock Data:**
+- Lead ID: `lead-cust-001` (Gujarat Garments repeat business)
+- BusinessProfile ID: `bp-gujarat-garments` (existing customer)
+- Status: Existing customer making additional inquiry
+
+### Lead Lifecycle Stages
+
+Every lead progresses through defined stages tracked in the `conversionStatus` field:
+
+#### Active Lead Stages (Visible in Lead Management)
+
+1. **`active_lead`** - Initial inquiry received and recorded
+   - Lead created, basic requirements captured
+   - Initial contact and qualification in progress
+   - Ready for quote preparation
+
+2. **`quote_sent`** - Quote provided to prospect/customer
+   - Professional quote document sent
+   - Awaiting customer response and feedback
+   - Follow-up activities scheduled
+
+3. **`verbally_approved`** - Customer agreed to quote terms
+   - Verbal confirmation received from customer
+   - Preparing formal proforma invoice
+   - Moving toward payment collection
+
+4. **`proforma_sent`** - Formal proforma invoice sent
+   - Official payment request document delivered
+   - Advance payment amount specified
+   - Payment deadline communicated
+
+5. **`awaiting_payment`** - Payment collection in progress
+   - Customer committed to payment
+   - Following up on payment status
+   - Ready for conversion upon payment receipt
+
+#### Conversion Completion Stage
+
+6. **`converted_to_order`** - Sales order created, lead converted
+   - Advance payment received and verified
+   - Sales order automatically generated
+   - Lead moved to historical status
+   - **Critical**: Lead no longer appears in active lead management
+
+### Active vs Historical Data Management
+
+The platform maintains a clear distinction between active workflow data and historical records:
+
+#### Active Data Display Rules
+
+**Active Leads** (visible in Lead Management interface):
+- Include leads with status: `active_lead`, `quote_sent`, `verbally_approved`, `proforma_sent`, `awaiting_payment`
+- Exclude leads with status: `converted_to_order`
+- Used for daily workflow management and follow-up activities
+
+**Active Quotes** (visible in Quote Management interface):
+- Include quotes linked to active leads only
+- Exclude quotes from converted leads (sales order created)
+- Used for ongoing negotiations and quote management
+
+#### Historical Data Preservation
+
+**Historical Records** (available through reports and search):
+- All leads preserved in database regardless of conversion status
+- All quotes maintained for audit trail and reference
+- Complete interaction history maintained for business intelligence
+- Accessible through dedicated historical views when needed
+
+#### Sales Order Creation as Conversion Trigger
+
+**Critical Business Rule**: Sales Order creation marks the completion of lead conversion
+- Lead.conversionStatus automatically updates to `converted_to_order`
+- Lead disappears from active lead management workflow
+- Associated quotes disappear from active quote management
+- All data preserved for historical reference and compliance
+
+### Business Rules & Data Integrity
+
+#### Universal BusinessProfile Creation
+- **Rule**: Every lead inquiry must have an associated BusinessProfile
+- **New Prospects**: System creates new BusinessProfile with prospect status
+- **Existing Customers**: System references existing BusinessProfile with customer status
+- **Data Integrity**: No orphaned leads without BusinessProfile references
+
+#### Customer Status Evolution
+- **Prospect → Customer**: Triggered exclusively by advance payment receipt
+- **No Manual Override**: Customer status cannot be manually changed
+- **Payment Verification**: Bank reconciliation required before status update
+- **Audit Trail**: Complete history of status changes maintained
+
+#### Active Workflow Management
+- **Active Filter**: Only unconverted leads appear in daily workflow
+- **Historical Access**: Converted leads accessible through reports only
+- **Quote Visibility**: Quote active status follows lead active status
+- **Cross-Module Consistency**: All modules respect active vs historical distinction
+
+### Practical Examples from System Data
+
+#### New Prospect Example
+```
+Lead: lead-001 (Mumbai Cotton Mills - first inquiry)
+BusinessProfile: bp-mumbai-cotton-mills (prospect status)
+Quote: QT-001 (active quote for industrial cotton fabric)
+Status: quote_sent (visible in active lead management)
+```
+
+#### Existing Customer Example
+```
+Lead: lead-cust-001 (Gujarat Garments - repeat business)
+BusinessProfile: bp-gujarat-garments (customer status - already converted)
+Quote: QT-CUST-001 (active quote for seasonal collection)
+Status: quote_sent (visible in active lead management for this new inquiry)
+```
+
+#### Converted Lead Example
+```
+Lead: gujarat-002 (Gujarat Garments - completed conversion)
+BusinessProfile: bp-gujarat-garments (customer status)
+Quote: QT-GJ-002 (historical quote - order created)
+Status: converted_to_order (NOT visible in active lead management)
+Sales Order: SO-003 (created from this lead conversion)
+```
+
+### Integration with Business Process Flow
+
+This lead management system integrates seamlessly with the 8-stage business pipeline:
+
+- **Stage 1 (Lead Pipeline)**: Active leads and quotes managed here
+- **Stage 2 (Quotations & Orders)**: Active quotes transition to sales orders
+- **Stage 3 (Payments)**: Payment receipt triggers customer conversion
+- **Stage 7 (Customers)**: Customer 360° view shows BusinessProfile with customer status
+- **Stage 8 (Analytics)**: Historical data drives business intelligence and reporting
 
 ---
 
@@ -1737,12 +1941,13 @@ This comprehensive analysis provides complete clarity for systematic MVP impleme
 ---
 
 **Document Created**: September 3, 2025  
-**Last Updated**: September 18, 2025 - Complete business flow documentation with comprehensive use case matrix, implementation mapping, and MVP roadmap  
+**Last Updated**: October 26, 2025 - Added comprehensive Lead Management Terminology & System Architecture documentation
 **Purpose**: Complete business flow documentation with implementation guidance for ElevateIdea 360° Platform MVP development  
 **Next Review**: Monthly updates based on user feedback and business process refinements  
 **Target Users**: Gujarat textile manufacturers, garment producers, fabric traders, development team
 
 **Enhanced Features**: 
+- **Lead Management Terminology**: Comprehensive documentation of lead/prospect/customer distinctions and dual-flow system
 - **Complete Use Case Matrix**: 200+ detailed use cases across all 8 business stages
 - **Action-to-Module Mapping**: Specific module assignments for every user action  
 - **MVP Implementation Priority Matrix**: P0/P1/P2 prioritization with timelines
