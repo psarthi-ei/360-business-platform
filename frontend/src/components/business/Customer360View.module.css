@@ -1,0 +1,264 @@
+/* Customer360View.module.css - Full Page Customer 360° View */
+
+/* Main Container */
+.customer360Container {
+  display: grid;
+  grid-template-rows: 48px 48px auto 1fr 56px; /* Header | Tabs | Status | Content | CTA */
+  height: 100%;
+  background: var(--ds-bg-primary);
+  overflow: hidden;
+}
+
+/* Space reclamation when CTA is hidden */
+.customer360Container.noCTA {
+  grid-template-rows: 48px 48px auto 1fr; /* Header | Tabs | Status | Content (CTA space reclaimed) */
+}
+
+/* Header - 48px */
+.customer360Header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-primary);
+  gap: var(--ds-space-sm);
+}
+
+.backButton {
+  height: var(--ds-touch-target-md); /* 44px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--ds-space-sm);
+  background: transparent;
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-primary);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  min-width: auto;
+}
+
+.backButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-color-primary-hover);
+}
+
+.breadcrumbSeparator {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-tertiary);
+  margin: 0 var(--ds-space-xs);
+  flex-shrink: 0;
+}
+
+.customerName {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+/* Tab Navigation - 48px */
+.tabNavigation {
+  height: 48px;
+  display: flex;
+  border-bottom: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-primary);
+}
+
+.tabButton {
+  flex: 1;
+  height: 48px;
+  background: transparent;
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  text-transform: capitalize;
+}
+
+.tabButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-text-primary);
+}
+
+.tabButton.active {
+  color: var(--ds-color-primary);
+  border-bottom-color: var(--ds-color-primary);
+  background: var(--ds-bg-accent);
+}
+
+/* Customer Status Bar */
+.customerStatusBar {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-md);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-bottom: 1px solid var(--ds-border-subtle);
+  min-height: 40px;
+}
+
+.loyaltyBadge {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-color-gold);
+  color: var(--ds-text-inverse);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.paymentScore {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+}
+
+.creditStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.creditStatus.excellent {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.creditStatus.good {
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+}
+
+.creditStatus.watch {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.creditStatus.hold {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+/* Tab Content Area */
+.tabContent {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--ds-bg-primary);
+  min-height: 0; /* Allow grid item to shrink */
+}
+
+/* Context-Aware CTA - 56px */
+.customer360CTA {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border-top: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-primary);
+}
+
+.customer360CTAButton {
+  width: 100%;
+  height: 40px;
+  background: var(--ds-btn-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px; /* Visual Design Spec touch target */
+}
+
+.customer360CTAButton:hover {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.customer360CTAButton:active {
+  background: var(--ds-btn-primary-hover);
+  transform: translateY(1px);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .customer360Header {
+    padding: 0 var(--ds-space-sm);
+  }
+  
+  .customerStatusBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+  }
+  
+  .customerStatusBar > * {
+    align-self: stretch;
+    text-align: center;
+  }
+  
+  .tabButton {
+    font-size: var(--font-xs);
+  }
+  
+  .customer360CTA {
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+  }
+  
+  .customer360CTAButton {
+    min-height: 44px;
+    font-size: var(--font-base);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .backButton {
+    min-width: var(--ds-touch-target);
+    min-height: var(--ds-touch-target);
+  }
+  
+  .tabButton {
+    min-height: var(--ds-touch-target);
+  }
+  
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .backButton, .tabButton {
+    transition: none;
+  }
+}

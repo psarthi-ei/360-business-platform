@@ -9,6 +9,20 @@
   overflow-x: hidden;
 }
 
+/* Configuration-driven CTA hiding - following Production pattern */
+.customersModule.noCTA {
+  grid-template-rows: 48px 44px 1fr; /* Remove 56px CTA row */
+}
+
+/* 360° view mode - reclaim filter space for maximum content area */
+.customersModule.view360Mode {
+  grid-template-rows: 48px 1fr; /* Section tabs + full content (no filters, no CTA) */
+}
+
+.customersModule.view360Mode.noCTA {
+  grid-template-rows: 48px 1fr; /* Same as above - already no CTA in 360° mode */
+}
+
 /* 48px Section Navigation - Visual Design Spec */
 .customersSections {
   display: flex;

@@ -1,0 +1,179 @@
+/* CustomerOrdersTab.module.css - Customer Orders Tab Styles */
+
+/* Main Container */
+.ordersTabContainer {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ordersList {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Order Number and Status */
+.orderNumber {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+  letter-spacing: 0.5px;
+}
+
+.statusBadge {
+  font-size: var(--font-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.pending {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.statusBadge.confirmed {
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.production {
+  background: var(--ds-color-primary);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.quality {
+  background: var(--ds-color-accent);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.ready {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.delivered {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.cancelled {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+/* Product Description */
+.productDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+  line-height: 1.4;
+}
+
+/* Progress Indicator */
+.orderProgress {
+  margin: var(--ds-space-sm) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success));
+  transition: width 0.3s ease;
+  border-radius: var(--ds-radius-sm);
+}
+
+.progressText {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .ordersList {
+    padding: var(--ds-space-sm);
+  }
+  
+  .emptyStateContent {
+    padding: var(--ds-space-md);
+  }
+  
+  .emptyIcon {
+    font-size: 36px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .ordersList {
+    padding-bottom: var(--ds-space-lg); /* Extra padding for touch scrolling */
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+}

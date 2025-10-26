@@ -9,8 +9,7 @@ interface CustomerListManagementProps {
   onShowCustomerProfile?: (customerId: string) => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
-  openAddModal: boolean;
-  onAddModalHandled: () => void;
+  onShow360View?: (customer: BusinessProfile) => void;
 }
 
 interface CustomerMetrics {
@@ -25,12 +24,12 @@ const CustomerListManagement = ({
   mobile, 
   onShowCustomerProfile, 
   filterState, 
-  onFilterChange, 
-  openAddModal, 
-  onAddModalHandled 
+  onFilterChange,
+  onShow360View 
 }: CustomerListManagementProps) => {
   const [customers] = useState(mockBusinessProfiles.filter((bp: BusinessProfile) => bp.customerStatus === 'customer'));
   const [customerMetrics, setCustomerMetrics] = useState<Record<string, CustomerMetrics>>({});
+  
 
   // Calculate customer metrics
   useEffect(() => {
@@ -128,20 +127,15 @@ const CustomerListManagement = ({
     return '😴 Dormant Customer';
   };
 
-  const handleCall = (customer: BusinessProfile) => {
-    // eslint-disable-next-line no-console
-    console.log(`Calling ${customer.companyName}:`, customer.phone);
+
+  // Direct 360° view navigation
+  const handleViewCustomer = (customerId: string) => {
+    const customer = customers.find(c => c.id === customerId);
+    if (customer && onShow360View) {
+      onShow360View(customer);
+    }
   };
 
-  const handleWhatsApp = (customer: BusinessProfile) => {
-    const phone = customer.phone || '9876543210';
-    window.open(`https://wa.me/91${phone}`, '_blank');
-  };
-
-  const handleQuickPreview = (customerId: string) => {
-    // Future: Open quick preview modal
-    onShowCustomerProfile?.(customerId);
-  };
 
   return (
     <div className={styles.customerListContainer}>
@@ -174,22 +168,10 @@ const CustomerListManagement = ({
               {/* Action Buttons - 44px touch targets */}
               <div className="ds-card-actions">
                 <button 
-                  className="ds-btn ds-btn-secondary"
-                  onClick={() => handleCall(customer)}
-                >
-                  📞 Call
-                </button>
-                <button 
-                  className="ds-btn ds-btn-secondary"
-                  onClick={() => handleWhatsApp(customer)}
-                >
-                  📱 WhatsApp
-                </button>
-                <button 
                   className="ds-btn ds-btn-primary"
-                  onClick={() => handleQuickPreview(customer.id)}
+                  onClick={() => handleViewCustomer(customer.id)}
                 >
-                  👁️ View
+                  View 360° Details
                 </button>
               </div>
               </div>
@@ -213,6 +195,7 @@ const CustomerListManagement = ({
           </div>
         </div>
       )}
+
     </div>
   );
 };

@@ -3,6 +3,8 @@ import { ActionParams } from '../../services/nlp/types';
 import styles from './Customers.module.css';
 import CustomerListManagement from './CustomerListManagement';
 import SupportTicketManagement from './SupportTicketManagement';
+import Customer360View from './Customer360View';
+import { BusinessProfile } from '../../data/customerMockData';
 
 interface CustomersProps {
   mobile?: boolean;
@@ -11,6 +13,12 @@ interface CustomersProps {
 }
 
 type CustomerSectionType = 'customers' | 'support';
+
+// CTA visibility configuration - following Production pattern
+const CTA_CONFIG = {
+  customers: { showCTA: false },   // Hide CTA - customers created via lead conversion only
+  support: { showCTA: true }       // Support tickets can be created manually
+} as const;
 
 // Mock data counts for dynamic filtering
 const calculateCustomerCounts = () => ({
@@ -35,11 +43,12 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
   const [supportFilterState, setSupportFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
   
+  // 360° view state management
+  const [show360View, setShow360View] = useState(false);
+  const [selected360Customer, setSelected360Customer] = useState<BusinessProfile | null>(null);
+  
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
-  
-  // Modal trigger states for CTA button functionality
-  const [triggerCustomerModal, setTriggerCustomerModal] = useState(false);
   
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
@@ -225,6 +234,17 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
 
   // Clean render function using configuration - TypeScript-safe approach
   const renderSectionContent = () => {
+    // Show 360° view if active
+    if (show360View && selected360Customer) {
+      return (
+        <Customer360View
+          customer={selected360Customer}
+          onClose={handleClose360View}
+        />
+      );
+    }
+
+    // Show normal section content
     switch(activeSection) {
       case 'customers':
         return (
@@ -233,8 +253,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
             onShowCustomerProfile={onShowCustomerProfile}
             filterState={customerFilterState}
             onFilterChange={setCustomerFilterState}
-            openAddModal={triggerCustomerModal}
-            onAddModalHandled={handleCustomerModalHandled}
+            onShow360View={handleShow360View}
           />
         );
       case 'support':
@@ -261,9 +280,6 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
   // Handle CTA click based on active section
   const handleCTAClick = () => {
     switch(activeSection) {
-      case 'customers':
-        setTriggerCustomerModal(true);
-        break;
       case 'support':
         alert('Create Support Ticket functionality coming soon!');
         break;
@@ -272,18 +288,33 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
     }
   };
 
-  // Handle when CustomerListManagement modal is handled
-  const handleCustomerModalHandled = () => {
-    setTriggerCustomerModal(false);
+  // 360° view handlers
+  const handleShow360View = (customer: BusinessProfile) => {
+    setSelected360Customer(customer);
+    setShow360View(true);
   };
 
+  const handleClose360View = () => {
+    setShow360View(false);
+    setSelected360Customer(null);
+  };
+
+  // Dynamic CTA visibility control - following Production pattern
+  const shouldHideCTA = !CTA_CONFIG[activeSection]?.showCTA;
+
   return (
-    <div className={styles.customersModule}>
+    <div className={`${styles.customersModule} ${shouldHideCTA ? styles.noCTA : ''} ${show360View ? styles.view360Mode : ''}`}>
       {/* 48px Section Navigation - Visual Design Spec */}
       <div className={styles.customersSections}>
         <button 
           className={`${styles.sectionButton} ${activeSection === 'customers' ? styles.active : ''}`}
-          onClick={() => setActiveSection('customers')}
+          onClick={() => {
+            setActiveSection('customers');
+            if (show360View) {
+              setShow360View(false);
+              setSelected360Customer(null);
+            }
+          }}
         >
           Customers
         </button>
@@ -295,22 +326,26 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
         </button>
       </div>
       
-      {/* 44px Business Filters */}
-      <div className={styles.customersFilters}>
-        {renderSectionFilters()}
-      </div>
+      {/* 44px Business Filters - Hide during 360° view */}
+      {!show360View && (
+        <div className={styles.customersFilters}>
+          {renderSectionFilters()}
+        </div>
+      )}
       
       {/* Content Area */}
       <div className={`${styles.customersContent} ${shouldShowScrollbar ? styles.scrollable : ''}`}>
         {renderSectionContent()}
       </div>
       
-      {/* 56px Bottom CTA */}
-      <div className={styles.customersCTA}>
-        <button className={styles.customersCTAButton} onClick={handleCTAClick}>
-          {getContextualCTA(activeSection)}
-        </button>
-      </div>
+      {/* 56px Bottom CTA - Configuration-driven visibility */}
+      {!shouldHideCTA && (
+        <div className={styles.customersCTA}>
+          <button className={styles.customersCTAButton} onClick={handleCTAClick}>
+            {getContextualCTA(activeSection)}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

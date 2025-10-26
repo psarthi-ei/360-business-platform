@@ -122,6 +122,7 @@
   --ds-text-critical: #DC2626;         /* Errors, critical issues - Visual Design Spec error red */
   --ds-text-muted: #9ca3af;            /* Secondary info, placeholders */
   --ds-text-tertiary: #a0aec0;         /* Additional text hierarchy level */
+  --ds-text-inverse: white;            /* White text for dark backgrounds - CTA buttons */
   
   /* Primary Color System */
   --ds-color-primary: #1D4ED8;         /* Visual Design Spec primary blue */
@@ -554,6 +555,12 @@ code {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.ds-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .ds-card-meta {

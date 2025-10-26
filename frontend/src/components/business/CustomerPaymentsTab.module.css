@@ -1,0 +1,207 @@
+/* CustomerPaymentsTab.module.css - Customer Payments Tab Styles */
+
+/* Main Container */
+.paymentsTabContainer {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.paymentsList {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Payment Type and Status */
+.paymentType {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+  letter-spacing: 0.5px;
+}
+
+.statusBadge {
+  font-size: var(--font-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.completed {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.pending {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.statusBadge.failed {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.refunded {
+  background: var(--ds-color-neutral);
+  color: var(--ds-text-primary);
+}
+
+/* Payment Amount */
+.paymentAmount {
+  font-family: var(--font-family);
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--ds-color-success);
+  margin: var(--ds-space-xs) 0;
+  letter-spacing: -0.5px;
+}
+
+/* Transaction Information */
+.transactionId {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  margin-top: var(--ds-space-xs);
+  font-family: monospace;
+  background: var(--ds-bg-secondary);
+  padding: var(--ds-space-xs);
+  border-radius: var(--ds-radius-sm);
+  display: inline-block;
+}
+
+/* Payment Information */
+.paymentInfo {
+  margin: var(--ds-space-sm) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.orderReference {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-color-primary);
+  font-weight: 600;
+}
+
+.paymentNotes {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-secondary);
+  padding: var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  border-left: 3px solid var(--ds-color-info);
+  font-style: italic;
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0 0 var(--ds-space-md) 0;
+  line-height: 1.5;
+}
+
+.emptyAction {
+  background: var(--ds-color-primary);
+  color: var(--ds-text-inverse);
+  border: none;
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-sm) var(--ds-space-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--ds-touch-target-md);
+}
+
+.emptyAction:hover {
+  background: var(--ds-color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--ds-shadow-md);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .paymentsList {
+    padding: var(--ds-space-sm);
+  }
+  
+  .emptyStateContent {
+    padding: var(--ds-space-md);
+  }
+  
+  .emptyIcon {
+    font-size: 36px;
+  }
+  
+  .paymentAmount {
+    font-size: var(--font-lg);
+  }
+  
+  .paymentInfo {
+    margin: var(--ds-space-xs) 0;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .paymentsList {
+    padding-bottom: var(--ds-space-lg); /* Extra padding for touch scrolling */
+  }
+  
+  .emptyAction {
+    min-height: var(--ds-touch-target);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .emptyAction {
+    transition: none;
+  }
+  
+  .emptyAction:hover {
+    transform: none;
+  }
+}
