@@ -16,14 +16,9 @@ export interface FabricRequirements {
 
 export interface Lead {
   id: string;
-  businessProfileId?: string; // Links to company when BusinessProfile created
+  businessProfileId: string; // Required - Links to BusinessProfile (single source of truth)
   
-  // Company Information (will migrate to BusinessProfile)
-  companyName: string;
-  location: string;
-  business: string;
-  
-  // Contact Information (Individual Level)
+  // Contact Information (Individual Level - Lead-specific person)
   contactPerson: string;
   designation?: string;
   department?: string;
@@ -44,17 +39,15 @@ export interface Lead {
   lastContact: string;
   notes: string;
   
-  // Enhanced Conversion Status
-  conversionStatus: 'active_lead' | 'quote_sent' | 'verbally_approved' | 'profile_pending' | 'proforma_sent' | 'awaiting_payment' | 'converted_to_customer';
-  convertedToCustomerDate?: string;
+  // Enhanced Conversion Status - Sales Process Stages
+  conversionStatus: 'active_lead' | 'quote_sent' | 'verbally_approved' | 'proforma_sent' | 'awaiting_payment' | 'converted_to_order';
+  convertedToOrderDate?: string;
 }
 
 export interface Quote {
   id: string;
   leadId: string;
   businessProfileId?: string; // Links to company BusinessProfile
-  companyName: string;
-  location: string;
   quoteDate: string;
   validUntil: string;
   items: string;
@@ -128,7 +121,7 @@ export interface SalesOrder {
   totalAmount: number;
   status: 'order_confirmed' | 'production_planning' | 'pending_materials' | 'production_started' | 'quality_check' | 'production_completed' | 'ready_to_ship' | 'shipped' | 'in_transit' | 'delivered' | 'completed';
   statusMessage: string;
-  paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue';
+  paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue' | 'fully_paid';
   productionStatus: string;
   balancePaymentDue?: number; // Remaining balance after advance
 }
@@ -274,9 +267,7 @@ export const mockLeads: Lead[] = [
   // ACTIVE LEADS - Currently in lead management process (no BusinessProfile yet)
   {
     id: 'lead-001',
-    companyName: 'Mumbai Cotton Mills',
-    location: 'Mumbai',
-    business: 'Cotton fabric manufacturing, 300+ employees',
+    businessProfileId: 'bp-mumbai-cotton-mills', // New prospect BusinessProfile
     contactPerson: 'Pradeep Kumar',
     designation: 'Purchase Manager',
     department: 'Procurement',
@@ -305,9 +296,7 @@ export const mockLeads: Lead[] = [
   },
   {
     id: 'lead-002',
-    companyName: 'Surat Fashion House',
-    location: 'Surat',
-    business: 'Fashion garments, mid-scale operation',
+    businessProfileId: 'bp-surat-fashion-house', // New prospect BusinessProfile
     contactPerson: 'Meera Patel',
     designation: 'Production Head',
     department: 'Production',
@@ -338,9 +327,6 @@ export const mockLeads: Lead[] = [
   {
     id: 'gujarat-002',
     businessProfileId: 'bp-gujarat-garments',
-    companyName: 'Gujarat Garments',
-    location: 'Surat',
-    business: 'Garment Manufacturing & Trading',
     contactPerson: 'Kiran Patel',
     designation: 'Owner',
     department: 'Management',
@@ -351,17 +337,14 @@ export const mockLeads: Lead[] = [
     budget: '₹8-10 lakhs',
     timeline: '30 days',
     priority: 'hot',
-    lastContact: 'Converted to customer on March 15, 2025',
-    notes: 'Successfully converted to customer. First order completed successfully.',
-    conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'March 15, 2025'
+    lastContact: 'Converted to order on March 15, 2025',
+    notes: 'Successfully converted to order. First order completed successfully.',
+    conversionStatus: 'converted_to_order',
+    convertedToOrderDate: 'March 15, 2025'
   },
   {
     id: 'baroda-004',
     businessProfileId: 'bp-baroda-fashion',
-    companyName: 'Baroda Fashion House',
-    location: 'Vadodara',
-    business: 'Fashion House & Seasonal Collections',
     contactPerson: 'Rajesh Mehta',
     designation: 'Creative Director',
     department: 'Design',
@@ -372,18 +355,18 @@ export const mockLeads: Lead[] = [
     budget: '₹6-8 lakhs',
     timeline: '20 days',
     priority: 'warm',
-    lastContact: 'Converted to customer on April 02, 2025',
+    lastContact: 'Converted to order on April 02, 2025',
     notes: 'Excellent payment behavior - completed first order successfully.',
-    conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'April 02, 2025'
+    conversionStatus: 'converted_to_order',
+    convertedToOrderDate: 'April 02, 2025'
   },
   {
     id: 'lead-003',
-    companyName: 'Baroda Textiles Co',
+    businessProfileId: 'bp-baroda-textiles', // New prospect BusinessProfile
     contactPerson: 'Ashok Shah',
-    location: 'Vadodara',
     contact: '+91 97654 33333 | ashok@barodatextiles.com',
-    business: 'Textile trading company, 50+ employees',
+    phone: '+91 97654 33333',
+    email: 'ashok@barodatextiles.com',
     inquiry: 'Cotton fabric for retail - 4,000 yards',
     budget: '₹6-9 lakhs',
     timeline: '90 days',
@@ -395,11 +378,9 @@ export const mockLeads: Lead[] = [
   // LEADS WITH PENDING PAYMENTS - These will convert to customers once payment received
   {
     id: 'lead-004',
-    companyName: 'Rajesh Textiles',
+    businessProfileId: 'bp-rajesh-textiles', // New prospect BusinessProfile
     contactPerson: 'Rajesh Shah', 
-    location: 'Ahmedabad',
     contact: '+91 98765 43210 | rajesh@rateshtextiles.com',
-    business: 'Cotton fabric manufacturing, 500+ employees',
     inquiry: 'High-grade cotton fabric for export - 10,000 yards',
     budget: '₹18-22 lakhs',
     timeline: '30 days',
@@ -408,23 +389,23 @@ export const mockLeads: Lead[] = [
     notes: 'Quote approved. Proforma invoice sent. Advance payment expected tomorrow.',
     conversionStatus: 'proforma_sent'
   },
-  // CONVERTED LEADS - Examples of successful conversions
+  
+  // CONVERTED LEADS - Kept for historical tracking but filtered from active display
   {
     id: 'lead-005',
-    companyName: 'Gujarat Fabrics Ltd',
+    businessProfileId: 'bp-gujarat-garments',
     contactPerson: 'Kiran Desai',
-    location: 'Ahmedabad', 
     contact: '+91 98765 55555 | kiran@gujaratfabrics.com',
-    business: 'Premium fabric manufacturing, 800+ employees',
+    phone: '+91 98765 55555',
+    email: 'kiran@gujaratfabrics.com',
     inquiry: 'Premium cotton blend - 8,000 yards',
     budget: '₹15-18 lakhs',
     timeline: '25 days',
     lastContact: 'Converted to customer on March 31, 2025',
     priority: 'hot',
     notes: 'Successfully converted to customer. First order completed successfully.',
-    conversionStatus: 'converted_to_customer',
-    convertedToCustomerDate: 'March 31, 2025',
-    businessProfileId: 'bp-gujarat-garments'
+    conversionStatus: 'converted_to_order',
+    convertedToOrderDate: 'March 31, 2025'
   }
 ];
 
@@ -433,8 +414,6 @@ export const mockQuotes: Quote[] = [
   {
     id: 'QT-001',
     leadId: 'lead-001',
-    companyName: 'Mumbai Cotton Mills',
-    location: 'Mumbai',
     quoteDate: 'March 15, 2025',
     validUntil: 'March 30, 2025',
     items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard',
@@ -447,8 +426,6 @@ export const mockQuotes: Quote[] = [
   {
     id: 'QT-002',
     leadId: 'lead-002',
-    companyName: 'Surat Fashion House',
-    location: 'Surat',
     quoteDate: 'March 18, 2025',
     validUntil: 'April 5, 2025',
     items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
@@ -463,8 +440,6 @@ export const mockQuotes: Quote[] = [
     id: 'QT-GJ-002',
     leadId: 'gujarat-002',
     businessProfileId: 'bp-gujarat-garments',
-    companyName: 'Gujarat Garments',
-    location: 'Surat',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
     items: 'Export quality cotton fabric - 5,000 yards @ ₹195/yard',
@@ -480,8 +455,6 @@ export const mockQuotes: Quote[] = [
     id: 'QT-BR-004',
     leadId: 'baroda-004',
     businessProfileId: 'bp-baroda-fashion',
-    companyName: 'Baroda Fashion House',
-    location: 'Vadodara',
     quoteDate: 'March 28, 2025',
     validUntil: 'April 15, 2025',
     items: 'Premium fashion fabric - 3,500 yards @ ₹210/yard',
@@ -497,8 +470,6 @@ export const mockQuotes: Quote[] = [
     id: 'QT-GUJ-001',
     leadId: 'gujarat-002',
     businessProfileId: 'bp-gujarat-garments',
-    companyName: 'Gujarat Garments',
-    location: 'Surat',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
     items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
@@ -512,8 +483,6 @@ export const mockQuotes: Quote[] = [
   {
     id: 'QT-002B',
     leadId: 'gujarat-002',
-    companyName: 'Gujarat Garments',
-    location: 'Surat',
     quoteDate: 'March 12, 2025',
     validUntil: 'March 30, 2025',
     items: 'Budget fabric option - 6,000 yards @ ₹165/yard',
@@ -527,8 +496,6 @@ export const mockQuotes: Quote[] = [
   {
     id: 'QT-003',
     leadId: 'baroda-003',
-    companyName: 'Baroda Fashion House',
-    location: 'Vadodara',
     quoteDate: 'February 20, 2025',
     validUntil: 'March 5, 2025',
     items: 'Seasonal fabric collection - 3,000 yards @ ₹220/yard',
@@ -542,8 +509,6 @@ export const mockQuotes: Quote[] = [
   {
     id: 'QT-004',
     leadId: 'baroda-003',
-    companyName: 'Baroda Fashion House',
-    location: 'Vadodara',
     quoteDate: 'March 8, 2025',
     validUntil: 'March 25, 2025',
     items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
@@ -652,6 +617,53 @@ export const mockSalesOrders: SalesOrder[] = [
     paymentStatus: 'advance_received' as const,
     productionStatus: 'Pending material availability check',
     balancePaymentDue: 292600
+  },
+  
+  // Phase 3 New Customer Orders
+  {
+    id: 'SO-008',
+    quoteId: 'QT-030',
+    businessProfileId: 'bp-ahmedabad-fashion',
+    advancePaymentId: 'AP-2025-009',
+    orderDate: 'September 15, 2025',
+    deliveryDate: 'October 30, 2025',
+    items: 'Premium Export Fashion Fabric - 2,000 meters @ ₹787.50/meter',
+    totalAmount: 1575000,
+    status: 'delivered' as const,
+    statusMessage: 'Order completed and delivered - Invoice paid',
+    paymentStatus: 'fully_paid' as const,
+    productionStatus: 'Delivered and completed',
+    balancePaymentDue: 0
+  },
+  {
+    id: 'SO-009',
+    quoteId: 'QT-031',
+    businessProfileId: 'bp-bhavnagar-marine',
+    advancePaymentId: 'AP-2025-010',
+    orderDate: 'August 20, 2025',
+    deliveryDate: 'September 30, 2025',
+    items: 'Marine-grade Industrial Fabric - 1,200 meters @ ₹812.50/meter',
+    totalAmount: 975000,
+    status: 'delivered' as const,
+    statusMessage: 'Order delivered and paid - Excellent marine quality',
+    paymentStatus: 'fully_paid' as const,
+    productionStatus: 'Delivered and completed',
+    balancePaymentDue: 0
+  },
+  {
+    id: 'SO-010',
+    quoteId: 'QT-032',
+    businessProfileId: 'bp-vadodara-crafts',
+    advancePaymentId: 'AP-2025-011',
+    orderDate: 'July 10, 2025',
+    deliveryDate: 'August 15, 2025',
+    items: 'Traditional Handloom Fabric - 600 meters @ ₹625/meter',
+    totalAmount: 375000,
+    status: 'production_completed' as const,
+    statusMessage: 'Production completed - Ready for delivery',
+    paymentStatus: 'advance_received' as const,
+    productionStatus: 'Quality check completed - Ready for dispatch',
+    balancePaymentDue: 0
   }
 ];
 
@@ -891,6 +903,80 @@ export const mockAdvancePayments: AdvancePayment[] = [
     receivedAmount: 630000,
     bankReference: 'HDFC251010RT24681',
     paymentMethod: 'RTGS'
+  },
+  
+  // New Advance Payments - Converting Prospects to Customers
+  {
+    id: 'AP-2025-007',
+    proformaInvoiceId: 'PI-2025-007',
+    quoteId: 'QT-020',
+    leadId: 'L-020',
+    businessProfileId: 'bp-rajkot-mills',
+    amount: 1800000,
+    dueDate: 'November 15, 2025',
+    status: 'received',
+    receivedDate: 'October 25, 2025',
+    receivedAmount: 1800000,
+    bankReference: 'SBI251025NF98765',
+    paymentMethod: 'NEFT'
+  },
+  {
+    id: 'AP-2025-008',
+    proformaInvoiceId: 'PI-2025-008',
+    quoteId: 'QT-025',
+    leadId: 'L-025',
+    businessProfileId: 'bp-mumbai-exports',
+    amount: 2250000,
+    dueDate: 'November 20, 2025',
+    status: 'received',
+    receivedDate: 'October 28, 2025',
+    receivedAmount: 2250000,
+    bankReference: 'HDFC251028SW13579',
+    paymentMethod: 'RTGS'
+  },
+  
+  // Phase 3 New Customers - Advanced Payments
+  {
+    id: 'AP-2025-009',
+    proformaInvoiceId: 'PI-2025-009',
+    quoteId: 'QT-030',
+    leadId: 'L-030',
+    businessProfileId: 'bp-ahmedabad-fashion',
+    amount: 1575000,
+    dueDate: 'September 25, 2025',
+    status: 'received',
+    receivedDate: 'September 15, 2025',
+    receivedAmount: 1575000,
+    bankReference: 'ICICI250915SW24680',
+    paymentMethod: 'RTGS'
+  },
+  {
+    id: 'AP-2025-010',
+    proformaInvoiceId: 'PI-2025-010',
+    quoteId: 'QT-031',
+    leadId: 'L-031',
+    businessProfileId: 'bp-bhavnagar-marine',
+    amount: 975000,
+    dueDate: 'August 30, 2025',
+    status: 'received',
+    receivedDate: 'August 20, 2025',
+    receivedAmount: 975000,
+    bankReference: 'CANARA250820RT13591',
+    paymentMethod: 'RTGS'
+  },
+  {
+    id: 'AP-2025-011',
+    proformaInvoiceId: 'PI-2025-011',
+    quoteId: 'QT-032',
+    leadId: 'L-032',
+    businessProfileId: 'bp-vadodara-crafts',
+    amount: 375000,
+    dueDate: 'July 20, 2025',
+    status: 'received',
+    receivedDate: 'July 10, 2025',
+    receivedAmount: 375000,
+    bankReference: 'BOB250710NF97531',
+    paymentMethod: 'NEFT'
   }
 ];
 

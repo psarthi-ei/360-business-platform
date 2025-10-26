@@ -68,8 +68,8 @@ export interface BusinessProfile {
   // Credit & Payment Management
   creditLimit: number;
   paymentScore: number; // 1-100 rating based on payment history
-  creditStatus: 'excellent' | 'good' | 'watch' | 'hold';
-  paymentBehavior: 'excellent' | 'good' | 'fair' | 'poor';
+  creditStatus: 'excellent' | 'good' | 'watch' | 'hold' | 'new';
+  paymentBehavior: 'excellent' | 'good' | 'fair' | 'poor' | 'new';
   
   // Preferences and Relationships
   preferences: {
@@ -205,6 +205,689 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     },
     priority: 'warm',
     fabricPreferences: ['Seasonal fashion fabrics', 'Trendy designs', 'Premium quality materials']
+  },
+  
+  // Prospect Companies (have quotes/orders but no payments yet)
+  {
+    id: 'bp-surat-wholesale',
+    companyName: 'Surat Wholesale Market',
+    gstNumber: '24STUVW1234X5Y6',
+    panNumber: 'STUVW1234X',
+    registeredAddress: {
+      street: 'Shop No. 45, Wholesale Complex',
+      city: 'Surat',
+      state: 'Gujarat',
+      pincode: '394210',
+      country: 'India'
+    },
+    contactPerson: 'Kiran Shah',
+    phone: '+91 98765 43203',
+    email: 'kiran@suratmarket.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Wholesale Trading',
+    specialization: 'Bulk fabric trading, wholesale distribution',
+    employeeCount: '25+ employees',
+    establishedYear: '2022',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 1500000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'NEFT - Bank of India',
+      deliveryPreference: 'Wholesale market delivery',
+      qualityRequirements: 'Commercial grade, bulk quantities',
+      communication: 'WhatsApp for quick updates, phone for negotiations',
+      specialNotes: 'New prospect - wholesale trader with good market presence.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Bulk fabrics', 'Commercial grade', 'Wholesale quantities']
+  },
+  {
+    id: 'bp-rajkot-mills',
+    companyName: 'Rajkot Cotton Mills',
+    gstNumber: '24DEFGH5678I9J0',
+    panNumber: 'DEFGH5678I',
+    registeredAddress: {
+      street: 'Industrial Area Phase-2',
+      city: 'Rajkot',
+      state: 'Gujarat',
+      pincode: '360003',
+      country: 'India'
+    },
+    contactPerson: 'Suresh Jethwa',
+    phone: '+91 98765 43204',
+    email: 'suresh@rajkotmills.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'October 25, 2025',
+    firstPaymentProjectId: 'SO-006',
+    
+    businessType: 'Cotton Processing & Manufacturing',
+    specialization: 'Cotton yarn, cotton fabrics, processing',
+    employeeCount: '150+ employees',
+    establishedYear: '2019',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 1800000,
+    averageOrderValue: 1800000,
+    
+    creditLimit: 3000000,
+    paymentScore: 85,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    loyalty: {
+      tier: 'Silver',
+      points: 1800,
+      annualVolume: 1800000,
+      totalBusinessValue: 1800000,
+      discountPercentage: 3,
+      paymentTerms: 30,
+      priorityLevel: 3,
+      benefits: ['Quality assurance', 'Standard processing', 'Cotton expertise'],
+      anniversaryDate: 'October 25',
+      nextTierRequirement: '₹2.7L more for Gold'
+    },
+    
+    preferences: {
+      paymentMethod: 'RTGS - State Bank of India',
+      deliveryPreference: 'Factory delivery with quality inspection',
+      qualityRequirements: 'Cotton grade quality, consistent supply',
+      communication: 'Email preferred for documentation, calls for urgent matters',
+      specialNotes: 'Established cotton mill - potential for large volume orders.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Cotton fabrics', 'Cotton yarn', 'Raw cotton materials']
+  },
+  {
+    id: 'bp-mumbai-exports',
+    companyName: 'Mumbai Export House',
+    gstNumber: '27KLMNO3456P7Q8',
+    panNumber: 'KLMNO3456P',
+    registeredAddress: {
+      street: 'Trade Center, Nariman Point',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: '400021',
+      country: 'India'
+    },
+    contactPerson: 'Priya Merchant',
+    phone: '+91 98765 43205',
+    email: 'priya@mumbaiexports.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'October 28, 2025',
+    firstPaymentProjectId: 'SO-007',
+    
+    businessType: 'Export Trading House',
+    specialization: 'International textile exports, global trade',
+    employeeCount: '75+ employees',
+    establishedYear: '2020',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 2250000,
+    averageOrderValue: 2250000,
+    
+    creditLimit: 5000000,
+    paymentScore: 92,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    loyalty: {
+      tier: 'Gold',
+      points: 2250,
+      annualVolume: 2250000,
+      totalBusinessValue: 2250000,
+      discountPercentage: 5,
+      paymentTerms: 45,
+      priorityLevel: 2,
+      benefits: ['Export documentation', 'International support', 'Priority processing', 'Priority banking'],
+      anniversaryDate: 'October 28',
+      nextTierRequirement: '₹2.25L more for Platinum'
+    },
+    
+    preferences: {
+      paymentMethod: 'RTGS - HDFC Bank',
+      deliveryPreference: 'Port delivery with export documentation',
+      qualityRequirements: 'Export grade, international standards, proper certification',
+      communication: 'Email for all communications with documentation',
+      specialNotes: 'Export house - requires documentation support, potential for large orders.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Export quality fabrics', 'International standards', 'Certified materials']
+  },
+  
+  // Additional Customers (Phase 3)
+  {
+    id: 'bp-ahmedabad-fashion',
+    companyName: 'Ahmedabad Fashion Exports',
+    gstNumber: '24AHMED9876Q1R2',
+    panNumber: 'AHMED9876Q',
+    registeredAddress: {
+      street: 'Export House, C.G. Road',
+      city: 'Ahmedabad',
+      state: 'Gujarat',
+      pincode: '380009',
+      country: 'India'
+    },
+    contactPerson: 'Nikita Sharma',
+    phone: '+91 98765 43206',
+    email: 'nikita@ahmedabadfashion.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'September 15, 2025',
+    firstPaymentProjectId: 'SO-008',
+    
+    businessType: 'Fashion Export House',
+    specialization: 'Premium export fabrics, international fashion',
+    employeeCount: '100+ employees',
+    establishedYear: '2017',
+    
+    totalOrders: 2,
+    activeOrders: 1,
+    totalRevenue: 3150000,
+    averageOrderValue: 1575000,
+    
+    creditLimit: 4000000,
+    paymentScore: 98,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    loyalty: {
+      tier: 'Gold',
+      points: 3150,
+      annualVolume: 3150000,
+      totalBusinessValue: 3150000,
+      discountPercentage: 5,
+      paymentTerms: 45,
+      priorityLevel: 2,
+      benefits: ['Export documentation', 'International support', 'Priority processing', 'Priority banking'],
+      anniversaryDate: 'September 15',
+      nextTierRequirement: '₹1.35L more for Platinum'
+    },
+    
+    preferences: {
+      paymentMethod: 'RTGS - ICICI Bank',
+      deliveryPreference: 'Port delivery with full export documentation',
+      qualityRequirements: 'Premium export grade, international certifications',
+      communication: 'Email with documentation, WhatsApp for quick updates',
+      specialNotes: 'Premium export customer - excellent payment history, high volume orders.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Premium export fabrics', 'Designer quality', 'International fashion trends']
+  },
+  {
+    id: 'bp-bhavnagar-marine',
+    companyName: 'Bhavnagar Marine Textiles',
+    gstNumber: '24BHAVN5432S3T4',
+    panNumber: 'BHAVN5432S',
+    registeredAddress: {
+      street: 'Marine Drive, Port Area',
+      city: 'Bhavnagar',
+      state: 'Gujarat',
+      pincode: '364001',
+      country: 'India'
+    },
+    contactPerson: 'Captain Vikram Singh',
+    phone: '+91 98765 43207',
+    email: 'vikram@bhavnagarmarine.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'August 20, 2025',
+    firstPaymentProjectId: 'SO-009',
+    
+    businessType: 'Marine & Industrial Textiles',
+    specialization: 'Marine-grade fabrics, industrial applications',
+    employeeCount: '80+ employees',
+    establishedYear: '2021',
+    
+    totalOrders: 2,
+    activeOrders: 0,
+    totalRevenue: 1950000,
+    averageOrderValue: 975000,
+    
+    creditLimit: 2500000,
+    paymentScore: 88,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    loyalty: {
+      tier: 'Silver',
+      points: 1950,
+      annualVolume: 1950000,
+      totalBusinessValue: 1950000,
+      discountPercentage: 3,
+      paymentTerms: 30,
+      priorityLevel: 3,
+      benefits: ['Quality assurance', 'Marine expertise', 'Industrial support'],
+      anniversaryDate: 'August 20',
+      nextTierRequirement: '₹55K more for Gold'
+    },
+    
+    preferences: {
+      paymentMethod: 'RTGS - Canara Bank',
+      deliveryPreference: 'Direct port delivery, marine packaging',
+      qualityRequirements: 'Marine-grade quality, saltwater resistant',
+      communication: 'Phone preferred, email for documentation',
+      specialNotes: 'Specialized marine customer - unique requirements, consistent orders.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Marine-grade fabrics', 'Industrial textiles', 'Weather-resistant materials']
+  },
+  {
+    id: 'bp-vadodara-crafts',
+    companyName: 'Vadodara Handloom Crafts',
+    gstNumber: '24VADOD7654U5V6',
+    panNumber: 'VADOD7654U',
+    registeredAddress: {
+      street: 'Handloom Market, Sayajigunj',
+      city: 'Vadodara',
+      state: 'Gujarat',
+      pincode: '390005',
+      country: 'India'
+    },
+    contactPerson: 'Meera Desai',
+    phone: '+91 98765 43208',
+    email: 'meera@vadodaracrafts.com',
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'July 10, 2025',
+    firstPaymentProjectId: 'SO-010',
+    
+    businessType: 'Handloom & Craft Textiles',
+    specialization: 'Traditional handloom, ethnic wear fabrics',
+    employeeCount: '60+ employees',
+    establishedYear: '2016',
+    
+    totalOrders: 3,
+    activeOrders: 1,
+    totalRevenue: 1125000,
+    averageOrderValue: 375000,
+    
+    creditLimit: 1800000,
+    paymentScore: 82,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    loyalty: {
+      tier: 'Silver',
+      points: 1125,
+      annualVolume: 1125000,
+      totalBusinessValue: 1125000,
+      discountPercentage: 3,
+      paymentTerms: 30,
+      priorityLevel: 3,
+      benefits: ['Quality assurance', 'Traditional designs', 'Handloom expertise'],
+      anniversaryDate: 'July 10',
+      nextTierRequirement: '₹3.75L more for Gold'
+    },
+    
+    preferences: {
+      paymentMethod: 'NEFT - Bank of Baroda',
+      deliveryPreference: 'Warehouse delivery with careful handling',
+      qualityRequirements: 'Traditional handloom quality, authentic textures',
+      communication: 'WhatsApp for orders, calls for complex requirements',
+      specialNotes: 'Traditional handloom specialist - appreciates quality over speed.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Handloom fabrics', 'Traditional textiles', 'Ethnic wear materials']
+  },
+  
+  // Additional Prospects (Phase 3)
+  {
+    id: 'bp-morbi-ceramics',
+    companyName: 'Morbi Ceramics & Textiles',
+    gstNumber: '24MORBI1234W7X8',
+    panNumber: 'MORBI1234W',
+    registeredAddress: {
+      street: 'Industrial Estate, Wankaner Road',
+      city: 'Morbi',
+      state: 'Gujarat',
+      pincode: '363641',
+      country: 'India'
+    },
+    contactPerson: 'Harsh Patel',
+    phone: '+91 98765 43209',
+    email: 'harsh@morbiceramics.com',
+    
+    customerStatus: 'prospect',
+    originalLeadId: 'L-2025-015',
+    
+    businessType: 'Ceramics & Industrial Textiles',
+    specialization: 'Industrial fabrics, ceramic industry applications',
+    employeeCount: '120+ employees',
+    establishedYear: '2019',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 2000000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'RTGS - HDFC Bank',
+      deliveryPreference: 'Factory delivery, industrial packaging',
+      qualityRequirements: 'Industrial grade, heat resistant',
+      communication: 'Email preferred, WhatsApp for urgent matters',
+      specialNotes: 'Industrial prospect - ceramic industry expertise, potential for large orders.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Industrial fabrics', 'Heat-resistant materials', 'Ceramic industry applications']
+  },
+  {
+    id: 'bp-anand-dairy',
+    companyName: 'Anand Dairy Textiles',
+    gstNumber: '24ANAND8765Y9Z0',
+    panNumber: 'ANAND8765Y',
+    registeredAddress: {
+      street: 'Cooperative Society, Milk Road',
+      city: 'Anand',
+      state: 'Gujarat',
+      pincode: '388001',
+      country: 'India'
+    },
+    contactPerson: 'Ravi Thakkar',
+    phone: '+91 98765 43210',
+    email: 'ravi@ananddairy.com',
+    
+    customerStatus: 'prospect',
+    originalLeadId: 'L-2025-016',
+    
+    businessType: 'Dairy & Food Industry Textiles',
+    specialization: 'Food-grade fabrics, dairy industry applications',
+    employeeCount: '90+ employees',
+    establishedYear: '2020',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 1500000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'NEFT - State Bank of India',
+      deliveryPreference: 'Dairy facility delivery, food-grade packaging',
+      qualityRequirements: 'Food-grade, hygiene certified',
+      communication: 'Phone preferred, email for documentation',
+      specialNotes: 'Food industry prospect - requires certified materials, cooperative background.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Food-grade fabrics', 'Hygiene materials', 'Dairy industry applications']
+  },
+  {
+    id: 'bp-gandhinagar-coop',
+    companyName: 'Gandhinagar Textile Cooperative Society',
+    gstNumber: '24GANDH4321A1B2',
+    panNumber: 'GANDH4321A',
+    registeredAddress: {
+      street: 'Cooperative Complex, Sector 11',
+      city: 'Gandhinagar',
+      state: 'Gujarat',
+      pincode: '382011',
+      country: 'India'
+    },
+    contactPerson: 'Ramesh Patel',
+    phone: '+91 98765 43211',
+    email: 'ramesh@gandhinagarcoop.org',
+    
+    customerStatus: 'prospect',
+    originalLeadId: 'L-2025-017',
+    
+    businessType: 'Textile Cooperative Society',
+    specialization: 'Khadi, handloom fabrics, cooperative distribution',
+    employeeCount: '75+ cooperative members',
+    establishedYear: '2015',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 2500000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'NEFT - State Bank of India',
+      deliveryPreference: 'Cooperative warehouse, proper documentation',
+      qualityRequirements: 'Handloom quality, traditional weaves',
+      communication: 'WhatsApp for quick updates, email for formal documentation',
+      specialNotes: 'Cooperative society - community-focused, potential for regular orders.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Khadi fabrics', 'Handloom materials', 'Traditional weaves']
+  },
+  {
+    id: 'bp-jamnagar-petrochemical',
+    companyName: 'Jamnagar Petrochemical Textiles',
+    gstNumber: '24JAMNA6543C3D4',
+    panNumber: 'JAMNA6543C',
+    registeredAddress: {
+      street: 'Refinery Complex, GIDC Area',
+      city: 'Jamnagar',
+      state: 'Gujarat',
+      pincode: '361004',
+      country: 'India'
+    },
+    contactPerson: 'Arjun Rana',
+    phone: '+91 98765 43212',
+    email: 'arjun@jamnagarpetrochemical.com',
+    
+    customerStatus: 'prospect',
+    originalLeadId: 'L-2025-018',
+    
+    businessType: 'Petrochemical & Industrial Textiles',
+    specialization: 'Chemical-resistant fabrics, safety materials',
+    employeeCount: '200+ employees',
+    establishedYear: '2018',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 3000000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'RTGS - ICICI Bank',
+      deliveryPreference: 'Refinery delivery, safety compliance',
+      qualityRequirements: 'Chemical-resistant, safety certified',
+      communication: 'Email for safety documentation, calls for urgent matters',
+      specialNotes: 'Petrochemical prospect - requires safety compliance, potential for ongoing orders.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Chemical-resistant fabrics', 'Safety materials', 'Industrial protective textiles']
+  },
+  
+  // PROSPECT BUSINESS PROFILES - Linked to active leads
+  {
+    id: 'bp-mumbai-cotton-mills',
+    companyName: 'Mumbai Cotton Mills',
+    gstNumber: 'TBD', // To be collected when converting to customer
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Pradeep Kumar',
+    phone: '+91 98765 11111',
+    email: 'pradeep@mumbaicomills.com',
+    
+    customerStatus: 'prospect', // This is the key field for single source of truth
+    
+    businessType: 'Cotton fabric manufacturing',
+    specialization: '300+ employees, industrial cotton fabric',
+    employeeCount: '300+ employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 0, // To be set after first order
+    paymentScore: 0, // No payment history yet
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'TBD',
+      deliveryPreference: 'TBD',
+      qualityRequirements: 'Industrial grade cotton fabric',
+      communication: 'Email and phone',
+      specialNotes: 'New prospect - industrial cotton fabric manufacturer.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Industrial cotton fabric', 'Heavy-duty materials']
+  },
+  
+  {
+    id: 'bp-surat-fashion-house',
+    companyName: 'Surat Fashion House',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Surat',
+      state: 'Gujarat',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Meera Patel',
+    phone: '+91 99887 22222',
+    email: 'meera@suratfashion.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Fashion garments',
+    specialization: 'Mid-scale operation, seasonal wear',
+    employeeCount: 'TBD',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 0,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'TBD',
+      deliveryPreference: 'TBD',
+      qualityRequirements: 'Fashion-grade fabric for seasonal wear',
+      communication: 'Email and phone',
+      specialNotes: 'New prospect - fashion garments, seasonal focus.'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Cotton blend', 'Fashion fabrics', 'Seasonal materials']
+  },
+  
+  {
+    id: 'bp-baroda-textiles',
+    companyName: 'Baroda Textiles Co',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Vadodara',
+      state: 'Gujarat',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Ashok Shah',
+    phone: '+91 97654 33333',
+    email: 'ashok@barodatextiles.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Textile trading company',
+    specialization: '50+ employees, cotton fabric retail',
+    employeeCount: '50+ employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 0,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'TBD',
+      deliveryPreference: 'TBD',
+      qualityRequirements: 'Cotton fabric for retail distribution',
+      communication: 'Email and phone',
+      specialNotes: 'New prospect - textile trading, slow decision process.'
+    },
+    priority: 'cold',
+    fabricPreferences: ['Cotton fabric', 'Retail-grade materials', 'Trading volumes']
+  },
+  {
+    id: 'bp-rajesh-textiles',
+    companyName: 'Rajesh Textiles',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'Textile Market, Industrial Estate',
+      city: 'Ahmedabad',
+      state: 'Gujarat', 
+      pincode: '380001',
+      country: 'India'
+    },
+    contactPerson: 'Rajesh Shah',
+    phone: '+91 98765 43210',
+    email: 'rajesh@rateshtextiles.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Cotton fabric manufacturing',
+    specialization: '500+ employees, high-grade cotton fabrics for export',
+    employeeCount: '500+ employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 0,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'TBD',
+      deliveryPreference: 'TBD',
+      qualityRequirements: 'Export quality cotton fabrics',
+      communication: 'Email and phone',
+      specialNotes: 'New prospect - large cotton fabric manufacturer focused on export quality.'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Export quality cotton', 'High-grade fabrics', 'Cotton manufacturing']
   }
 ];
 

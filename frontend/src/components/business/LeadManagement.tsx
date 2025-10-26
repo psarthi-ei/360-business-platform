@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
 import { mockLeads, Lead } from '../../data/salesMockData';
+import { getBusinessProfileById } from '../../data/customerMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './LeadManagement.module.css';
 
@@ -31,9 +32,11 @@ function LeadManagement({
   const { t } = useTranslation();
   const location = useLocation();
   
-  // State for modal and leads
+  // State for modal and leads - Filter out converted leads for active display
   const [showAddModal, setShowAddModal] = useState(false);
-  const [leads, setLeads] = useState<Lead[]>(mockLeads);
+  const [leads, setLeads] = useState<Lead[]>(
+    mockLeads.filter(lead => lead.conversionStatus !== 'converted_to_order')
+  );
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
   
@@ -75,21 +78,29 @@ function LeadManagement({
     return `LEAD-${year}-${timestamp}-${random}`;
   };
 
+  // Get customer type indicator based on BusinessProfile status (single source of truth)
+  const getCustomerTypeIndicator = (lead: Lead) => {
+    const businessProfile = getBusinessProfileById(lead.businessProfileId);
+    if (!businessProfile) return '❓ Unknown';
+    
+    return businessProfile.customerStatus === 'prospect' ? '🆕 New' : '🔄 Existing';
+  };
+
   // Handle adding new lead
-  const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => {
+  const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
     const newLead: Lead = {
       ...leadData,
       id: generateLeadId(),
       lastContact: new Date().toLocaleDateString(),
       conversionStatus: 'active_lead',
-      convertedToCustomerDate: undefined
+      convertedToOrderDate: undefined
     };
 
     // Add new lead to the beginning of the list
     setLeads(prev => [newLead, ...prev]);
     
     // Show success message
-    setSuccessMessage(`Lead "${newLead.companyName}" has been successfully added!`);
+    setSuccessMessage(`Lead for "${newLead.contactPerson}" has been successfully added!`);
     
     // Clear success message after 3 seconds
     setTimeout(() => {
@@ -98,7 +109,7 @@ function LeadManagement({
   };
 
   // Handle updating existing lead
-  const handleUpdateLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => {
+  const handleUpdateLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
     if (!editingLead) return;
 
     const updatedLead: Lead = {
@@ -106,7 +117,7 @@ function LeadManagement({
       id: editingLead.id,
       lastContact: `Updated on ${new Date().toLocaleDateString()}`,
       conversionStatus: editingLead.conversionStatus,
-      convertedToCustomerDate: editingLead.convertedToCustomerDate
+      convertedToOrderDate: editingLead.convertedToOrderDate
     };
 
     // Update the lead in the list
@@ -115,7 +126,7 @@ function LeadManagement({
     ));
     
     // Show success message
-    setSuccessMessage(`Lead "${updatedLead.companyName}" has been updated!`);
+    setSuccessMessage(`Lead for "${updatedLead.contactPerson}" has been updated!`);
     
     // Clear editing state
     setEditingLead(null);
@@ -214,22 +225,21 @@ function LeadManagement({
                 {/* Enhanced Header - Company Name + Inquiry Context */}
                 <div 
                   className="ds-card-header"
-                  title={`${lead.companyName} - ${lead.inquiry} (Lead ID: ${lead.id})`}
+                  title={`${getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'} - ${lead.inquiry} (Lead ID: ${lead.id})`}
                 >
-                  {lead.companyName} — {lead.inquiry}
+                  {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'} — {lead.inquiry}
                 </div>
                 
-                {/* Enhanced Status - Priority + Conversion Stage */}
+                {/* Enhanced Status - Customer Type + Priority + Conversion Stage */}
                 <div className="ds-card-status">
-                  {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
+                  {getCustomerTypeIndicator(lead)} • {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
                     const conversionLabels = {
                       active_lead: 'Active Lead',
                       quote_sent: 'Quote Sent',
                       verbally_approved: 'Approved',
-                      profile_pending: 'Profile Pending',
                       proforma_sent: 'Proforma Sent',
                       awaiting_payment: 'Payment Pending',
-                      converted_to_customer: 'Customer'
+                      converted_to_order: 'Converted to Order'
                     };
                     return conversionLabels[lead.conversionStatus] || 'Active Lead';
                   })()}
@@ -238,9 +248,15 @@ function LeadManagement({
                 {/* Business-Optimized Meta - Financial + Urgency + Geography */}
                 <div 
                   className="ds-card-meta"
-                  title={`${lead.budget} • ${lead.timeline} • ${lead.location}`}
+                  title={`${lead.budget} • ${lead.timeline} • ${(() => {
+                    const bp = getBusinessProfileById(lead.businessProfileId);
+                    return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
+                  })()}`}
                 >
-                  {lead.budget} • {lead.timeline} • {lead.location}
+                  {lead.budget} • {lead.timeline} • {(() => {
+                    const bp = getBusinessProfileById(lead.businessProfileId);
+                    return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
+                  })()}
                 </div>
 
                 {/* Expand Indicator */}
@@ -259,7 +275,10 @@ function LeadManagement({
                       <p><strong>Lead ID:</strong> {lead.id}</p>
                       <p><strong>Priority:</strong> {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}</p>
                       <p><strong>Status:</strong> {lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
-                      <p><strong>Location:</strong> {lead.location}</p>
+                      <p><strong>Location:</strong> {(() => {
+                        const bp = getBusinessProfileById(lead.businessProfileId);
+                        return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
+                      })()}</p>
                     </div>
                   </div>
 
@@ -267,8 +286,11 @@ function LeadManagement({
                   <div className={styles.companySection}>
                     <h4>Company Information</h4>
                     <div className={styles.detailsGrid}>
-                      <p><strong>Company:</strong> {lead.companyName}</p>
-                      <p><strong>Business Type:</strong> {lead.business}</p>
+                      <p><strong>Company:</strong> {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'}</p>
+                      <p><strong>Business Type:</strong> {(() => {
+                        const bp = getBusinessProfileById(lead.businessProfileId);
+                        return bp ? `${bp.businessType} - ${bp.specialization}` : 'Unknown Business';
+                      })()}</p>
                       {lead.contactPerson && <p><strong>Contact Person:</strong> {lead.contactPerson}</p>}
                       {lead.designation && <p><strong>Designation:</strong> {lead.designation}</p>}
                       {lead.department && <p><strong>Department:</strong> {lead.department}</p>}
@@ -348,8 +370,8 @@ function LeadManagement({
                     <h4>Conversion Tracking</h4>
                     <div className={styles.detailsGrid}>
                       <p><strong>Conversion Status:</strong> {lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
-                      {lead.convertedToCustomerDate && (
-                        <p><strong>Converted Date:</strong> {lead.convertedToCustomerDate}</p>
+                      {lead.convertedToOrderDate && (
+                        <p><strong>Converted Date:</strong> {lead.convertedToOrderDate}</p>
                       )}
                     </div>
                   </div>

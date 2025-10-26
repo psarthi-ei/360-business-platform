@@ -3,6 +3,7 @@
 
 import { renderHook, act } from '@testing-library/react';
 import { useGlobalSearch } from '../components/search/useGlobalSearch';
+import { Lead } from '../data/salesMockData';
 
 describe('Core Search Functionality', () => {
   const mockNavigationHandlers = {
@@ -11,9 +12,11 @@ describe('Core Search Functionality', () => {
     onShowSalesOrders: jest.fn(),
     onShowCustomerList: jest.fn(),
     formatCurrency: jest.fn((amount: number) => `₹${amount.toLocaleString()}`),
-    getBusinessProfileById: jest.fn(() => ({
-      id: 'TEST-PROFILE-001',
-      companyName: 'Test Company',
+    getBusinessProfileById: jest.fn((id: string) => {
+      if (id === 'TEST-PROFILE-001') {
+        return {
+          id: 'TEST-PROFILE-001',
+          companyName: 'Mumbai Cotton Mills',
       gstNumber: 'GST24TESTTEST1Z5',
       registeredAddress: {
         street: '123 Test Street',
@@ -46,27 +49,44 @@ describe('Core Search Functionality', () => {
         specialNotes: 'Test notes'
       },
       priority: 'warm' as const
-    }))
+    };
+      }
+      return undefined;
+    })
   };
 
   const mockDataSources = {
     leads: [
       {
         id: 'LEAD-001',
-        companyName: 'Mumbai Cotton Mills',
-        location: 'Mumbai, Maharashtra',
-        business: 'Cotton Textile Manufacturing',
+        businessProfileId: 'TEST-PROFILE-001',
         contactPerson: 'Rajesh Patel',
         contact: '+91 98765 43210',
-        inquiry: 'Cotton fabric order - 500 meters',
+        phone: '+91 98765 43210',
+        email: 'rajesh@mumbaicontton.com',
+        inquiry: 'Mumbai Cotton fabric order - 500 meters',
         budget: '₹2-3 Lakhs',
         timeline: '2-3 weeks',
-        priority: 'hot' as const,
+        priority: 'hot',
         lastContact: '2024-01-15',
         notes: 'Interested in bulk cotton fabric order for export',
-        conversionStatus: 'active_lead' as const
+        conversionStatus: 'active_lead',
+        designation: 'Purchase Manager',
+        department: 'Procurement',
+        fabricRequirements: {
+          fabricType: 'Cotton',
+          gsm: 150,
+          width: '60 inches',
+          weaveType: 'Plain',
+          quantity: 500,
+          unit: 'meters',
+          colors: 'White, Beige',
+          qualityGrade: 'A-Grade',
+          specialProcessing: 'Mercerized',
+          deliveryTimeline: '2-3 weeks'
+        }
       }
-    ],
+    ] as Lead[],
     customers: [
       {
         id: 'CUST-001',
@@ -254,19 +274,33 @@ describe('Core Search Functionality', () => {
       const largeDataSet = {
         leads: Array.from({ length: 15 }, (_, i) => ({
           id: `LEAD-${String(i).padStart(3, '0')}`,
-          companyName: `Mumbai Cotton Company ${i}`,
-          location: `Mumbai, Maharashtra`,
-          business: 'Cotton Textile Manufacturing',
+          businessProfileId: `TEST-PROFILE-${String(i).padStart(3, '0')}`,
           contactPerson: `Contact Person ${i}`,
           contact: `+91 98765 ${String(i).padStart(5, '0')}`,
+          phone: `+91 98765 ${String(i).padStart(5, '0')}`,
+          email: `contact${i}@company.com`,
           inquiry: `Cotton inquiry ${i}`,
           budget: '₹2-3 Lakhs',
           timeline: '2-3 weeks',
-          priority: 'warm' as const,
+          priority: 'warm',
           lastContact: '2024-01-15',
           notes: `Notes for company ${i}`,
-          conversionStatus: 'active_lead' as const
-        }))
+          conversionStatus: 'active_lead',
+          designation: 'Manager',
+          department: 'Sales',
+          fabricRequirements: {
+            fabricType: 'Cotton',
+            gsm: 150,
+            width: '60 inches',
+            weaveType: 'Plain',
+            quantity: 100,
+            unit: 'meters',
+            colors: 'White',
+            qualityGrade: 'A-Grade',
+            specialProcessing: 'None',
+            deliveryTimeline: '2-3 weeks'
+          }
+        })) as Lead[]
       };
 
       const { result } = renderHook(() => 

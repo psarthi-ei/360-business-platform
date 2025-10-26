@@ -36,10 +36,12 @@
   /* Border & Dividers */
   --ds-border-primary: #e1e8ed;
   --ds-border-secondary: #cbd5e0;
+  --ds-border-subtle: #e2e8f0;
   
   /* Interactive States */
   --ds-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
   --ds-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
 
   /* Button Color System - Visual Design Specification */
   --ds-btn-primary: #1D4ED8;  /* Visual Design Spec primary blue */
@@ -80,6 +82,7 @@
   --ds-touch-target-min: clamp(42px, 8vw, 44px);
   --ds-touch-target-preferred: clamp(44px, 9vw, 48px);
   --ds-touch-target-comfortable: clamp(48px, 10vw, 56px);
+  --ds-touch-target-md: 44px;  /* Medium touch target for action buttons */
   --ds-touch-action: manipulation;
   --ds-tap-highlight: transparent;
 
@@ -109,6 +112,7 @@
   --ds-bg-interactive: #f8fafb;
   --ds-bg-hover: #f0f9ff;
   --ds-bg-subtle: rgba(255, 255, 255, 0.08);
+  --ds-bg-secondary: #f7fafc;
 
   /* Text Colors - Visual Design Specification text hierarchy */
   --ds-text-link: #1D4ED8;  /* Visual Design Spec primary blue */
@@ -117,6 +121,19 @@
   --ds-text-attention: #FBBF24;        /* Warnings, attention needed - Visual Design Spec amber */
   --ds-text-critical: #DC2626;         /* Errors, critical issues - Visual Design Spec error red */
   --ds-text-muted: #9ca3af;            /* Secondary info, placeholders */
+  --ds-text-tertiary: #a0aec0;         /* Additional text hierarchy level */
+  
+  /* Primary Color System */
+  --ds-color-primary: #1D4ED8;         /* Visual Design Spec primary blue */
+  --ds-color-success: #16A34A;         /* Success states */
+  --ds-color-info: #0ea5e9;            /* Info states */
+  --ds-color-warning: #FBBF24;         /* Warning states */
+  --ds-color-danger: #DC2626;          /* Danger states */
+  
+  /* Customer Loyalty Colors */
+  --ds-color-gold: #F59E0B;           /* Gold tier customers */
+  --ds-color-accent: #F97316;         /* Accent color for special tiers */
+  --ds-color-neutral: #6B7280;        /* Neutral tier customers */
 
   /* Interactive States - Universal hover/active */
   --ds-hover-priority-high: rgba(255, 71, 87, 0.3);

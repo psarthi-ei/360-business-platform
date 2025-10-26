@@ -6,19 +6,16 @@ import styles from './AddLeadModal.module.css';
 interface AddLeadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddLead: (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToCustomerDate'>) => void;
+  onAddLead: (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => void;
   editingLead?: Lead | null;
 }
 
 function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalProps) {
 
   const [formData, setFormData] = useState({
-    companyName: '',
     contactPerson: '',
     phone: '',
     email: '',
-    location: '',
-    business: '',
     inquiry: '',
     budget: '',
     timeline: '',
@@ -27,6 +24,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     contact: '', // Combined phone/email field
     designation: '',
     department: '',
+    businessProfileId: '',
     // Fabric Requirements
     fabricRequirements: {
       fabricType: '',
@@ -50,12 +48,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
   useEffect(() => {
     if (editingLead) {
       setFormData({
-        companyName: editingLead.companyName || '',
         contactPerson: editingLead.contactPerson || '',
         phone: editingLead.phone || '',
         email: editingLead.email || '',
-        location: editingLead.location || '',
-        business: editingLead.business || '',
         inquiry: editingLead.inquiry || '',
         budget: editingLead.budget || '',
         timeline: editingLead.timeline || '',
@@ -64,6 +59,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         contact: editingLead.contact || '',
         designation: editingLead.designation || '',
         department: editingLead.department || '',
+        businessProfileId: editingLead.businessProfileId || '',
         fabricRequirements: editingLead.fabricRequirements || {
           fabricType: '',
           gsm: undefined,
@@ -88,12 +84,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     } else {
       // Reset form for new lead
       setFormData({
-        companyName: '',
         contactPerson: '',
         phone: '',
         email: '',
-        location: '',
-        business: '',
         inquiry: '',
         budget: '',
         timeline: '',
@@ -102,6 +95,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         contact: '',
         designation: '',
         department: '',
+        businessProfileId: '',
         fabricRequirements: {
           fabricType: '',
           gsm: undefined,
@@ -119,18 +113,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     }
   }, [editingLead]);
 
-  // Gujarat textile cities for location dropdown
-  const gujaratCities = [
-    'Surat', 'Ahmedabad', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 
-    'Gandhinagar', 'Anand', 'Bharuch', 'Vapi', 'Other'
-  ];
-
-  // Textile business types
-  const businessTypes = [
-    'Cotton Textile Manufacturing', 'Silk Textile Manufacturing', 'Synthetic Textile Manufacturing',
-    'Fabric Dyeing & Printing', 'Garment Manufacturing', 'Home Textile Manufacturing',
-    'Technical Textiles', 'Yarn Manufacturing', 'Fabric Trading', 'Other'
-  ];
+  // Company options are now handled in the dropdown
 
   // Budget ranges for textile orders
   const budgetRanges = [
@@ -191,8 +174,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
 
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = 'Company name is required';
+    if (!formData.businessProfileId.trim()) {
+      newErrors.businessProfileId = 'Company selection is required';
     }
 
     if (!formData.contactPerson.trim()) {
@@ -229,19 +212,16 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     const leadData = {
       ...formData,
       contact: formData.phone, // Use phone as primary contact
-      businessProfileId: undefined, // Will be set when converted to customer
+      businessProfileId: formData.businessProfileId || 'bp-new-prospect', // Default for new prospects
     };
 
     onAddLead(leadData);
 
     // Reset form and close modal
     setFormData({
-      companyName: '',
       contactPerson: '',
       phone: '',
       email: '',
-      location: '',
-      business: '',
       inquiry: '',
       budget: '',
       timeline: '',
@@ -250,6 +230,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
       contact: '',
       designation: '',
       department: '',
+      businessProfileId: '',
       fabricRequirements: {
         fabricType: '',
         gsm: undefined,
@@ -284,20 +265,6 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         <form onSubmit={handleSubmit} className={styles.modalForm}>
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="companyName">Company Name *</label>
-              <input
-                id="companyName"
-                type="text"
-                value={formData.companyName}
-                onChange={(e) => handleInputChange('companyName', e.target.value)}
-                placeholder="e.g., Surat Textiles Ltd."
-                className={errors.companyName ? styles.errorInput : ''}
-                autoFocus
-              />
-              {errors.companyName && <span className={styles.errorText}>{errors.companyName}</span>}
-            </div>
-
-            <div className={styles.formGroup}>
               <label htmlFor="contactPerson">Contact Person *</label>
               <input
                 id="contactPerson"
@@ -306,8 +273,29 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
                 onChange={(e) => handleInputChange('contactPerson', e.target.value)}
                 placeholder="e.g., Rajesh Patel"
                 className={errors.contactPerson ? styles.errorInput : ''}
+                autoFocus
               />
               {errors.contactPerson && <span className={styles.errorText}>{errors.contactPerson}</span>}
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="businessProfileId">Company *</label>
+              <select
+                id="businessProfileId"
+                value={formData.businessProfileId}
+                onChange={(e) => handleInputChange('businessProfileId', e.target.value)}
+                className={errors.businessProfileId ? styles.errorInput : ''}
+              >
+                <option value="">Select Existing Company or Create New</option>
+                <option value="bp-new-prospect">Create New Company Profile</option>
+                <option value="bp-mumbai-cotton-mills">Mumbai Cotton Mills</option>
+                <option value="bp-surat-fashion-house">Surat Fashion House</option>
+                <option value="bp-baroda-textiles">Baroda Textiles Co</option>
+                <option value="bp-rajesh-textiles">Rajesh Textiles</option>
+                <option value="bp-gujarat-garments">Gujarat Garments</option>
+                <option value="bp-baroda-fashion">Baroda Fashion House</option>
+              </select>
+              {errors.businessProfileId && <span className={styles.errorText}>{errors.businessProfileId}</span>}
             </div>
           </div>
 
@@ -339,31 +327,25 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="location">Location</label>
-              <select
-                id="location"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-              >
-                <option value="">Select City</option>
-                {gujaratCities.map(city => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
+              <label htmlFor="designation">Designation</label>
+              <input
+                id="designation"
+                type="text"
+                value={formData.designation}
+                onChange={(e) => handleInputChange('designation', e.target.value)}
+                placeholder="e.g., Purchase Manager, Production Head"
+              />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="business">Business Type</label>
-              <select
-                id="business"
-                value={formData.business}
-                onChange={(e) => handleInputChange('business', e.target.value)}
-              >
-                <option value="">Select Business Type</option>
-                {businessTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
+              <label htmlFor="department">Department</label>
+              <input
+                id="department"
+                type="text"
+                value={formData.department}
+                onChange={(e) => handleInputChange('department', e.target.value)}
+                placeholder="e.g., Procurement, Production"
+              />
             </div>
           </div>
 

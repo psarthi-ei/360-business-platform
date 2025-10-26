@@ -968,6 +968,62 @@ className={`${styles.card} ${styles.pending}`}
 .ds-card-priority-low       /* Light blue - for low priority items */
 ```
 
+### **Issue 6: CSS Grid Layout Constraints Breaking Card Heights**
+
+#### **Problem**
+CSS Grid layout with `grid-auto-rows` constraints prevents design system cards from reaching their proper 184px height.
+
+#### **Symptoms**
+- Cards appear shorter than expected (especially cards with actions)
+- Action buttons overflow outside card boundaries
+- Design system `min-height: 184px` doesn't take effect
+- Cards with `.ds-card-with-actions` class don't reach 184px height
+
+#### **Root Cause**
+```css
+/* ❌ GRID LAYOUT CONSTRAINS CARDS */
+.cardContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(184px, auto); /* This constrains instead of helps */
+  /* Grid imposes its own sizing rules that conflict with design system */
+}
+```
+
+#### **Solution**
+```css
+/* ✅ FLEXBOX ALLOWS DESIGN SYSTEM TO WORK */
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  /* Let design system handle card sizing naturally */
+}
+```
+
+#### **Why This Works**
+- **CSS Grid** imposes sizing constraints that override design system flexbox-based card layout
+- **Flexbox** allows `.ds-card` and `.ds-card-with-actions` classes to control height naturally
+- Design system's `min-height: 184px` (for cards with actions) works properly without grid interference
+
+#### **Desktop 2-Column Layout Solution**
+```css
+/* ✅ DESKTOP: Use flexbox with wrap for 2-column layout */
+@media (min-width: 1024px) {
+  .cardContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .cardContainer > * {
+    flex: 0 0 calc(50% - var(--ds-space-sm) / 2);
+  }
+}
+```
+
+#### **Key Lesson**
+When using design system components, avoid wrapping them in layout systems (like CSS Grid) that might impose conflicting sizing constraints. Stick to simple flex containers that let the design system handle component sizing.
+
 ---
 
 ## ✅ **VALIDATION CHECKLIST**
@@ -993,6 +1049,12 @@ className={`${styles.card} ${styles.pending}`}
 - [ ] Using global status classes (`.ds-card-status-active`, `.ds-card-status-pending`, etc.)
 - [ ] No duplicate card CSS in component modules
 - [ ] Progressive disclosure uses global `.ds-expanded-details` class
+
+#### **Layout Constraints**
+- [ ] No CSS Grid with `grid-auto-rows` constraints on card containers
+- [ ] Using flexbox layout to allow design system card heights to work naturally
+- [ ] Card containers use `display: flex; flex-direction: column` pattern
+- [ ] Cards with actions reach proper 184px height without layout interference
 
 #### **Card Structure**
 - [ ] 140px fixed height maintained by global system

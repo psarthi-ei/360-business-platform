@@ -66,13 +66,15 @@ export function useGlobalSearch(
     // Search in leads
     if (dataSources.leads) {
       dataSources.leads.forEach(lead => {
-        if (lead.companyName.toLowerCase().includes(lowerQuery) ||
+        const customer = navigationHandlers.getBusinessProfileById(lead.businessProfileId);
+        const customerName = customer?.companyName || 'Unknown Customer';
+        if (customerName.toLowerCase().includes(lowerQuery) ||
             lead.contactPerson.toLowerCase().includes(lowerQuery) ||
             lead.inquiry.toLowerCase().includes(lowerQuery) ||
             lead.priority.toLowerCase().includes(lowerQuery)) {
           results.push({
             type: 'lead',
-            title: lead.companyName,
+            title: customerName,
             subtitle: `${lead.contactPerson} - ${lead.inquiry}`,
             priority: lead.priority,
             action: () => navigationHandlers.onShowLeadManagement(),
@@ -85,12 +87,14 @@ export function useGlobalSearch(
     // Search in quotes
     if (dataSources.quotes) {
       dataSources.quotes.forEach(quote => {
-        if (quote.companyName.toLowerCase().includes(lowerQuery) ||
+        const customer = quote.businessProfileId ? navigationHandlers.getBusinessProfileById(quote.businessProfileId) : null;
+        const customerName = customer?.companyName || 'Unknown Customer';
+        if (customerName.toLowerCase().includes(lowerQuery) ||
             quote.items.toLowerCase().includes(lowerQuery) ||
             quote.status.toLowerCase().includes(lowerQuery)) {
           results.push({
             type: 'quote',
-            title: quote.companyName,
+            title: customerName,
             subtitle: `${quote.items.split(' - ')[0]} - ${navigationHandlers.formatCurrency(quote.totalAmount)}`,
             status: quote.status,
             action: () => navigationHandlers.onShowQuotationOrders(),

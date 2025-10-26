@@ -1,0 +1,131 @@
+/* Customer List Management Styles - Layout Only */
+
+.customerListContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.customerGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-md);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Desktop 2-column layout */
+@media (min-width: 1024px) {
+  .customerGrid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--ds-space-md);
+  }
+  
+  .customerGrid > * {
+    flex: 0 0 calc(50% - var(--ds-space-md) / 2);
+  }
+}
+
+/* Customer-Specific Styling - Let design system handle layout */
+
+.loyaltyBadge {
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loyaltyBadge.platinum {
+  color: var(--ds-color-gold);
+}
+
+.loyaltyBadge.gold {
+  color: var(--ds-color-accent);
+}
+
+.loyaltyBadge.silver {
+  color: var(--ds-color-neutral);
+}
+
+.lastOrder {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+}
+
+.paymentStatus {
+  /* Removed font-size override - let design system handle sizing */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.paymentStatus.excellent {
+  color: var(--ds-color-success);
+}
+
+.paymentStatus.good {
+  color: var(--ds-color-info);
+}
+
+.paymentStatus.average {
+  color: var(--ds-color-warning);
+}
+
+.paymentStatus.poor {
+  color: var(--ds-color-danger);
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 300px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-size: var(--font-lg);
+  font-family: var(--font-family);
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-weight: 600;
+}
+
+.emptyDescription {
+  font-size: var(--font-sm);
+  font-family: var(--font-family);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .customerGrid {
+    padding: var(--ds-space-sm);
+  }
+  
+  .loyaltyBadge {
+    font-size: var(--font-xs);
+  }
+}

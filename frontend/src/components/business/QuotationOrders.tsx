@@ -24,6 +24,36 @@ function QuotationOrders({
   const { t } = useTranslation();
   const location = useLocation();
   
+  // Helper function to get company name from quote
+  const getQuoteCompanyName = (quote: any) => {
+    if (quote.businessProfileId) {
+      const bp = getBusinessProfileById(quote.businessProfileId);
+      return bp?.companyName || 'Unknown Company';
+    }
+    // For quotes without BusinessProfile, get from linked lead
+    const lead = mockLeads.find(l => l.id === quote.leadId);
+    if (lead?.businessProfileId) {
+      const bp = getBusinessProfileById(lead.businessProfileId);
+      return bp?.companyName || 'Unknown Company';
+    }
+    return 'Unknown Company';
+  };
+
+  // Helper function to get company location from quote
+  const getQuoteCompanyLocation = (quote: any) => {
+    if (quote.businessProfileId) {
+      const bp = getBusinessProfileById(quote.businessProfileId);
+      return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
+    }
+    // For quotes without BusinessProfile, get from linked lead
+    const lead = mockLeads.find(l => l.id === quote.leadId);
+    if (lead?.businessProfileId) {
+      const bp = getBusinessProfileById(lead.businessProfileId);
+      return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
+    }
+    return 'Unknown Location';
+  };
+  
   // Component state for workflow tracking
   const [workflowState, setWorkflowState] = useState({
     approvedQuotes: [] as string[],
@@ -94,7 +124,7 @@ function QuotationOrders({
 
     // Create shareable WhatsApp message
     const profileUrl = `${window.location.origin}/profile-complete/${linkId}`;
-    const whatsappMessage = `Hello ${quote.companyName}! 🏢\n\nThank you for approving our quote ${quoteId}. To proceed with your order, please complete your business profile using this secure link:\n\n${profileUrl}\n\n📋 This will take just 3 minutes\n🔒 Your information is secure\n⏰ Link expires in 7 days\n\nBest regards,\nElevateBusiness 360° Team`;
+    const whatsappMessage = `Hello ${getQuoteCompanyName(quote)}! 🏢\n\nThank you for approving our quote ${quoteId}. To proceed with your order, please complete your business profile using this secure link:\n\n${profileUrl}\n\n📋 This will take just 3 minutes\n🔒 Your information is secure\n⏰ Link expires in 7 days\n\nBest regards,\nElevateBusiness 360° Team`;
     
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
     
@@ -229,9 +259,9 @@ function QuotationOrders({
                 {/* Enhanced Header - Company Name + Items Context */}
                 <div 
                   className="ds-card-header"
-                  title={`${quote.companyName} - ${quote.items} (Quote ID: ${quote.id})`}
+                  title={`${getQuoteCompanyName(quote)} - ${quote.items} (Quote ID: ${quote.id})`}
                 >
-                  {quote.companyName} — {quote.items}
+                  {getQuoteCompanyName(quote)} — {quote.items}
                 </div>
                 
                 {/* Enhanced Status - Quote Status + Payment Progress */}
@@ -266,7 +296,7 @@ function QuotationOrders({
               {isExpanded(quote.id) && (
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
-                    <p><strong>Company:</strong> {quote.companyName} - {quote.location}</p>
+                    <p><strong>Company:</strong> {getQuoteCompanyName(quote)} - {getQuoteCompanyLocation(quote)}</p>
                     <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
                     <p><strong>Items:</strong> {quote.items}</p>
                     <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)} (incl. GST)</p>
