@@ -5,7 +5,6 @@
 > **Last Updated**: October 2025  
 > **Focus**: Pure Visual Design - All Screens, Layouts, User Flows (Mobile + Web)
 
----
 
 ## Table of Contents
 
@@ -800,6 +799,322 @@ User taps [More] → Card expands in place
 - ✅ **Information Scanning**: Faster access to details via expanded views  
 - ✅ **User Satisfaction**: Clear expectations for action vs information patterns
 - ✅ **Mobile Performance**: Optimal touch targets and focus management
+
+---
+
+### **DESIGN DECISION: Modal vs Full Page Navigation Framework**
+
+#### **Critical UX Decision Framework**
+
+**Context**: Based on analysis of Ready Tab success (task-focused 2-level modals) vs Customer 360° complexity (information-browsing requirements), establish definitive guidelines for when to use modals vs full page navigation.
+
+#### **Industry Research & Best Practices**
+
+**Leading CRM Mobile UX Patterns**:
+- **Salesforce Mobile**: List → Full page records, tabs within pages, modals only for focused tasks
+- **HubSpot Mobile**: Contact list → Full page contact view, minimal modal stacking
+- **Pipedrive Mobile**: Person list → Full page detail, dedicated pages for complex workflows
+- **Microsoft Dynamics**: Account list → Full page account view, bottom sheets for quick actions
+
+**Key Industry Insight**: **Complex multi-tab interfaces always use full pages on mobile**
+
+#### **Decision Matrix: Modal vs Full Page**
+
+##### **✅ USE MODALS WHEN**
+
+**1. Task-Focused Workflows (1-2 Levels Maximum)**
+```
+Examples:
+- Edit Invoice → Save/Cancel
+- QC Inspection → Pass/Reject
+- Send Payment Reminder → Confirm/Cancel
+- Record Payment → Amount/Method/Save
+```
+
+**2. Quick Actions (Single Purpose)**
+```
+Examples:
+- Call customer
+- Send WhatsApp message
+- Update status
+- Add note
+```
+
+**3. Simple Forms (1-3 Fields Maximum)**
+```
+Examples:
+- Add lead (name, phone, product)
+- Schedule delivery (date, time)
+- Record expense (amount, category)
+```
+
+**4. Confirmation Dialogs**
+```
+Examples:
+- Delete confirmation
+- Submit for approval
+- Mark as complete
+```
+
+##### **❌ USE FULL PAGES WHEN**
+
+**1. Multi-Tab Information Interfaces (3+ Tabs)**
+```
+Examples:
+- Customer 360° (Summary|Orders|Payments|Tickets|Insights)
+- Product Catalog Management
+- Comprehensive Reports Dashboard
+- Inventory Management System
+```
+
+**2. Complex Data Relationships**
+```
+Examples:
+- Order management with production tracking
+- Customer relationship with full history
+- Financial dashboard with multiple charts
+- Supplier management with performance metrics
+```
+
+**3. Extended User Sessions**
+```
+Examples:
+- Data analysis workflows
+- Report generation and editing
+- Multi-step configuration processes
+- Comprehensive form wizards (5+ steps)
+```
+
+**4. Information Exploration & Analysis**
+```
+Examples:
+- Business intelligence dashboards
+- Historical trend analysis
+- Cross-module data correlation
+- Documentation and help systems
+```
+
+#### **Modal Depth Guidelines**
+
+##### **Safe Pattern (Ready Tab Model) ✅**
+```
+Page → Task Modal → Edit Modal → STOP
+```
+**Example**: Ready Tab → Plan Delivery → Edit Invoice → Save & Close
+**Why it works**: Clear hierarchy, single purpose per level, obvious exit paths
+
+##### **Dangerous Pattern (Avoid) ❌**
+```
+Page → Info Modal → Tab Content → Action Modal → Sub-Action
+```
+**Example**: Customer List → Customer Modal → Orders Tab → Create Order → Add Items
+**Why it fails**: Too many contexts, lost navigation, cognitive overload
+
+#### **Implementation Patterns**
+
+##### **Pattern 1: Quick Preview → Full Details**
+```
+Customer List → [Quick View] → Summary Modal (Level 1)
+                               ↓ [Full Details]
+                               Customer 360° Page (Full Navigation)
+```
+
+##### **Pattern 2: Task-Focused Modal Chain**
+```
+Production List → [QC Inspect] → QC Modal (Level 1)
+                                 ↓ [Add Photo]
+                                 Photo Capture Modal (Level 2)
+                                 ↓ [Save]
+                                 Return to QC Modal → Save QC → Done
+```
+
+##### **Pattern 3: Direct Page Navigation**
+```
+Sales List → [View Customer] → Customer 360° Page
+                              ↓ Tab Navigation (Orders|Payments|etc)
+                              All content within page
+```
+
+#### **Mobile UX Optimization**
+
+##### **Modal on Mobile**
+- **Maximum 2 levels**: Beyond this, users lose context
+- **Full screen**: 500px max width, full width on mobile
+- **Touch-friendly**: 44px minimum touch targets
+- **Clear exits**: X button + Cancel + backdrop tap
+
+##### **Full Page on Mobile**
+- **Sticky headers**: Context always visible (customer name + key metric)
+- **Tab navigation**: Horizontal scrolling tabs within page
+- **Breadcrumbs**: Clear navigation path
+- **Bottom sheets**: For quick actions within pages
+
+#### **Content Complexity Thresholds**
+
+##### **Modal Appropriate**
+- **Text**: Under 200 words per screen
+- **Form fields**: 1-5 fields maximum
+- **Actions**: 1-3 primary actions
+- **Time**: 30 seconds to 2 minutes task duration
+
+##### **Full Page Required**
+- **Text**: Over 200 words, multiple sections
+- **Form fields**: 5+ fields, multiple sections
+- **Actions**: Multiple workflows, complex interactions
+- **Time**: 2+ minutes, exploratory sessions
+
+#### **Ready Tab Analysis: Why Modals Work**
+
+**Current Ready Tab Pattern** ✅:
+```
+Ready Tab → [Plan Delivery] → Delivery Planning Modal
+                             ↓ [Edit Invoice]
+                             Invoice Edit Modal
+                             ↓ [Save]
+                             Back to Delivery Modal → Complete
+```
+
+**Success Factors**:
+- ✅ **Linear workflow**: Each step has clear next action
+- ✅ **Task completion**: User accomplishes specific goal
+- ✅ **Context restoration**: Parent modal restored after child closes
+- ✅ **Single purpose**: Each modal serves one clear function
+
+#### **Customer 360° Analysis: Why Full Page Needed**
+
+**Proposed Customer 360° Pattern** ✅:
+```
+Customer List → [View 360°] → Customer 360° Page
+                             ├── Summary Tab
+                             ├── Orders Tab  
+                             ├── Payments Tab
+                             ├── Tickets Tab
+                             └── Insights Tab
+```
+
+**Full Page Requirements**:
+- ✅ **Information exploration**: User browses multiple data sets
+- ✅ **Extended sessions**: May spend 5+ minutes analyzing customer
+- ✅ **Multiple workflows**: Each tab may trigger different actions
+- ✅ **Screen real estate**: 5 tabs need proper navigation space
+
+#### **Implementation Guidelines**
+
+##### **For New Components:**
+
+**Step 1: Classify the Use Case**
+```
+Ask: "Is this task-focused or information-browsing?"
+Task-focused → Consider modal
+Information-browsing → Use full page
+```
+
+**Step 2: Count the Complexity**
+```
+Ask: "How many tabs/sections/workflows are involved?"
+1-2 focused tasks → Modal appropriate
+3+ tabs or complex workflows → Full page required
+```
+
+**Step 3: Estimate User Session**
+```
+Ask: "How long will users spend in this interface?"
+Under 2 minutes → Modal acceptable
+Over 2 minutes → Full page better UX
+```
+
+**Step 4: Consider Mobile Context**
+```
+Ask: "Does this work well on a 375px screen?"
+Simple, focused content → Modal works
+Complex, multi-section content → Full page needed
+```
+
+##### **Code Implementation Standards**
+
+**Modal Implementation**:
+```tsx
+// Task-focused modal pattern
+<ModalPortal isOpen={isOpen} onBackdropClick={handleClose}>
+  <div className={styles.modalContent}>
+    <div className={styles.modalHeader}>
+      <h3>Task Title</h3>
+      <button onClick={handleClose}>×</button>
+    </div>
+    <div className={styles.modalBody}>
+      {/* Focused task content */}
+    </div>
+    <div className={styles.modalFooter}>
+      <button onClick={handleCancel}>Cancel</button>
+      <button onClick={handleSave}>Save</button>
+    </div>
+  </div>
+</ModalPortal>
+```
+
+**Full Page Implementation**:
+```tsx
+// Information-browsing page pattern
+<div className={styles.fullPageContainer}>
+  <div className={styles.stickyHeader}>
+    <h1>Entity Name</h1>
+    <div className={styles.keyMetrics}>Key KPIs</div>
+  </div>
+  <div className={styles.tabNavigation}>
+    {tabs.map(tab => <TabButton key={tab.id} />)}
+  </div>
+  <div className={styles.pageContent}>
+    {/* Tab content rendered inline */}
+  </div>
+</div>
+```
+
+#### **Success Metrics & Validation**
+
+##### **Modal Success Indicators**
+- ✅ **High completion rates**: Users finish the intended task
+- ✅ **Quick task completion**: Under 2 minutes average
+- ✅ **Low abandonment**: Minimal modal exits without completion
+- ✅ **Clear user intent**: Users understand what they're doing
+
+##### **Full Page Success Indicators**
+- ✅ **Extended engagement**: Users spend 2+ minutes exploring
+- ✅ **Tab utilization**: Users navigate between multiple tabs
+- ✅ **Return visits**: Users come back to continue analysis
+- ✅ **Mobile usability**: Smooth navigation on small screens
+
+#### **Migration Strategy for Existing Components**
+
+**Phase 1: Audit Current Patterns**
+- Identify all current modal usage
+- Classify as task-focused vs information-browsing
+- Measure user session durations and completion rates
+
+**Phase 2: Apply Decision Framework**
+- Task-focused with clear completion → Keep as modal
+- Information-browsing or complex navigation → Migrate to full page
+- Multi-tab interfaces → Always migrate to full page
+
+**Phase 3: Implementation & Testing**
+- Implement new patterns following guidelines
+- A/B test modal vs full page for borderline cases
+- Measure user satisfaction and task completion
+
+**Phase 4: Platform Standardization**
+- Update all components to follow framework
+- Document patterns in component library
+- Train team on decision criteria
+
+#### **Framework Summary**
+
+**Golden Rules**:
+1. **2-level maximum** for modals
+2. **Task-focused** → Modal | **Information-browsing** → Full page  
+3. **3+ tabs** → Always full page
+4. **Mobile-first** decision making
+5. **Industry patterns** as validation
+
+**Ready Tab proves modals work for focused tasks. Customer 360° requires full page for complex workflows. This framework ensures consistent, user-friendly navigation patterns across the entire platform.**
 
 ---
 

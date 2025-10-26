@@ -1,14 +1,48 @@
-# Architecture Guidelines - Session Reference
-**Quick Architecture Compliance Rules for Development Sessions**
+# Architecture Decisions Index
+**Master Index for All Architectural Decisions - The Complete Architecture Bible**
 
-> **Purpose**: Essential architecture patterns that MUST be followed in every development session  
-> **Usage**: Read during session initialization to ensure compliance with unified architecture
+> **Purpose**: Single source of truth for ALL architectural decisions across the platform  
+> **Usage**: MANDATORY review before any new component, feature, or major change  
+> **Status**: Must be read during every session initialization per CLAUDE.md protocol
 
 ---
 
-## **🏗️ MANDATORY ARCHITECTURE PATTERNS**
+## Part 1: Architecture Decisions Bible (MANDATORY REVIEW)
 
-### **1. PlatformShell CSS Grid Architecture (MANDATORY)**
+**CRITICAL**: ALL decisions below MUST be considered before implementing any new component or feature. This is the comprehensive "bible" of architectural decisions across the entire platform.
+
+| **Category** | **Decision** | **Core Rule** | **Details Location** |
+|---|---|---|---|
+| **Navigation** | Modal vs Full Page Framework | Task-focused <2min → Modal; 3+ tabs → Full Page; Max 2 modal levels | [Visual Design Spec](#modal-vs-full-page-navigation-framework) |
+| **Navigation** | FAB vs Bottom CTA | Non-tech users need explicit CTAs, not abstract symbols | [Visual Design Spec](#fab-vs-bottom-cta-for-non-tech-users) |
+| **Navigation** | Universal Search Architecture | Global search bar in header for cross-module discovery | [Visual Design Spec](#universal-search-architecture) |
+| **Layout** | CSS Grid Architecture | Single PlatformShell container for all platform pages using CSS Grid | [Unified Architecture](#unified-platformshell-architecture) |
+| **Layout** | Fixed Layout Architecture | Fixed headers/navigation for factory environment stability | [Visual Design Spec](#fixed-layout-architecture) |
+| **Layout** | No Auto-Hide Header (MVP) | Headers remain visible for production environment reliability | [Visual Design Spec](#no-auto-hide-header-mvp) |
+| **Modals** | Global Modal Design System | 500px max width, mobile-first responsive, consistent Portal pattern | [Visual Design Spec](#modal-design-system-standard) |
+| **Modals** | Parent-Child Modal System | Clean state management for modal hierarchies with context preservation | [Visual Design Spec](#parent-child-modal-system) |
+| **Modals** | Z-index Hierarchy Standard | Systematic layering: Base(1) → Fixed(10) → Modals(1000) → Alerts(9999) | [Visual Design Spec](#z-index-hierarchy-standard) |
+| **Interaction** | Hybrid Modal + Expanded View | Quick preview modal → Full details page for complex workflows | [Visual Design Spec](#hybrid-modal-expanded-view-pattern) |
+| **Components** | Zero Code Duplication | Single instances: voice, search, navigation. No infrastructure in business components | [Unified Architecture](#zero-code-duplication-architecture) |
+| **Components** | Configuration-Driven Architecture | platformConfig.ts controls all behavior. Single source of truth | [Unified Architecture](#configuration-driven-architecture) |
+| **Components** | Component Structure Standards | Clean separation: Business components contain ONLY business logic | [Unified Architecture](#component-structure-standards) |
+| **Components** | 140px Card Template Standard | Consistent card height with structured information hierarchy | [Visual Design Spec](#card-standards-140px-template) |
+| **Design System** | Design System Token Compliance | ZERO hardcoded values: use var(--ds-*) tokens exclusively | [Visual Design Spec](#design-system-tokens-mandatory) |
+| **Design System** | 4-Layer CSS Architecture | Global → Component → Module → Utility layer separation | [Unified Architecture](#4-layer-css-architecture-system) |
+| **Design System** | Business-Neutral Color System | Universal color system works across all business domains | [Unified Architecture](#business-neutral-color-system-architecture) |
+| **Mobile** | 44px Touch Target Standard | Factory-optimized touch targets for industrial environment | [Visual Design Spec](#mobile-design-architecture) |
+| **Voice/Search** | Single Instance Pattern | One FloatingVoiceAssistant, one GlobalSearch serves entire platform | [Unified Architecture](#voice-search-integration-rules) |
+| **Routing** | Professional Routing Pattern | URL-based actions, service architecture, proper navigation | [Unified Architecture](#service-architecture-pattern) |
+| **Grid** | Grid Layout Architecture | Responsive single container system replaces multi-shell approach | [Unified Architecture](#grid-layout-architecture) |
+| **Module** | Machine Tab MVP Exclusion | Machine management deferred to post-MVP for complexity reasons | [Visual Design Spec](#machine-tab-mvp-exclusion) |
+
+---
+
+## Part 2: Architecture Compliance Rules (MANDATORY)
+
+### **🏗️ MANDATORY ARCHITECTURE PATTERNS**
+
+#### **1. PlatformShell CSS Grid Architecture (MANDATORY)**
 **Single Container for All Platform Pages**
 
 ```
@@ -33,7 +67,7 @@
 
 ---
 
-### **2. Zero Code Duplication Rules (MANDATORY)**
+#### **2. Zero Code Duplication Rules (MANDATORY)**
 **No Duplicate Infrastructure Code**
 
 **✅ SHARED INFRASTRUCTURE:**
@@ -54,7 +88,7 @@
 
 ---
 
-### **3. Configuration-Driven Architecture (MANDATORY)**
+#### **3. Configuration-Driven Architecture (MANDATORY)**
 **Single Source of Truth: platformConfig.ts**
 
 ```typescript
@@ -85,7 +119,7 @@ export const GLOBAL_SCOPE = [
 
 ---
 
-### **4. Component Structure Standards (MANDATORY)**
+#### **4. Component Structure Standards (MANDATORY)**
 **Clean Separation: Business vs Infrastructure**
 
 **✅ BUSINESS COMPONENT PATTERN:**
@@ -120,7 +154,7 @@ const BusinessModule = ({ mobile, onShowCustomerProfile, onUniversalAction }: Bu
 
 ---
 
-### **5. CSS Architecture Standards (MANDATORY)**
+#### **5. CSS Architecture Standards (MANDATORY)**
 **4-Layer Standardized System**
 
 **✅ REQUIRED CSS STRUCTURE:**
@@ -159,7 +193,7 @@ const BusinessModule = ({ mobile, onShowCustomerProfile, onUniversalAction }: Bu
 
 ---
 
-### **6. Voice/Search Integration Rules (MANDATORY)**
+#### **6. Voice/Search Integration Rules (MANDATORY)**
 **Single Instance Patterns**
 
 **✅ GLOBAL VOICE INTEGRATION:**
@@ -188,9 +222,11 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ---
 
-## **🎯 IMPLEMENTATION CHECKLIST**
+## Part 3: Implementation Standards
 
-### **For Every New Business Module:**
+### **🎯 IMPLEMENTATION CHECKLIST**
+
+#### **For Every New Business Module:**
 - [ ] Integrates into PlatformShell CSS Grid (no separate containers)
 - [ ] Contains ONLY business logic (no voice/search/navigation code)
 - [ ] Follows Visual Design Spec (48px tabs, 44px filters, 56px CTA)
@@ -201,8 +237,8 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 - [ ] Adds voice commands to VoiceCommandRouter
 - [ ] No TypeScript `any` types (causes Vercel deployment failures)
 
-### **For Every Session:**
-- [ ] Read ARCHITECTURE_GUIDELINES.md (this document)
+#### **For Every Session:**
+- [ ] Read ARCHITECTURE_GUIDELINES.md (this document) - Architecture Decisions Bible
 - [ ] Read COMPONENT_DESIGN_PATTERNS.md for implementation templates
 - [ ] Verify platformConfig compliance
 - [ ] Check zero code duplication
@@ -211,16 +247,16 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ---
 
-## **🚨 CRITICAL MISTAKES TO AVOID**
+### **🚨 CRITICAL MISTAKES TO AVOID**
 
-### **Architecture Violations:**
+#### **Architecture Violations:**
 ❌ Creating separate mobile app shells  
 ❌ Duplicating voice/search infrastructure  
 ❌ Hardcoding behavior instead of using platformConfig  
 ❌ Breaking Visual Design Spec measurements  
 ❌ Using TypeScript `any` types  
 
-### **Component Anti-Patterns:**
+#### **Component Anti-Patterns:**
 ❌ Business components with infrastructure code  
 ❌ Multiple instances of voice/search systems  
 ❌ Component-specific navigation implementations  
@@ -228,7 +264,7 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ---
 
-## **✅ SUCCESS INDICATORS**
+### **✅ SUCCESS INDICATORS**
 
 **Architecture Compliance:**
 - Single PlatformShell serves all platform pages
@@ -251,4 +287,4 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ---
 
-**🎯 This document ensures every development session maintains architectural excellence and unified platform consistency.**
+**🎯 This Architecture Decisions Bible ensures every development session maintains architectural excellence and unified platform consistency across all modules and features.**

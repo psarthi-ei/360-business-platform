@@ -17,11 +17,17 @@ date  # ALWAYS run first - validates project timeline context
 # MANDATORY SESSION CONTEXT (read in order):
 /docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all documents and Quick Decision Matrix  
 /docs/IMPLEMENTATION_ROADMAP.md       # SECOND: Primary implementation roadmap with streamlined phases
-/docs/ARCHITECTURE_GUIDELINES.md     # THIRD: Architecture compliance rules (MANDATORY for all coding sessions)
+/docs/ARCHITECTURE_DECISIONS_INDEX.md # THIRD: Master Architecture Decisions Index - ALL architectural decisions (MANDATORY)
 
 # Supporting references:
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes
 /docs/COMPONENT_DESIGN_PATTERNS.md    # Component implementation patterns with templates and CSS variables
+
+# CRITICAL: ARCHITECTURE DECISIONS REFERENCE
+# BEFORE any new component or major change, ALWAYS review:
+# 1. ARCHITECTURE_DECISIONS_INDEX.md - Complete master index of ALL 22+ architectural decisions
+# 2. Part 1: Architecture Decisions Bible (mandatory review table)
+# 3. Part 2: Architecture Compliance Rules and Implementation Standards
 ```
 
 ### **STEP 3: CHECK TODO STATUS**

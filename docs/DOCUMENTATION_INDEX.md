@@ -110,18 +110,19 @@ This is the master navigation document that guides you to all project informatio
 
 ## Documentation Files Structure
 
-**🎉 STREAMLINED: 8 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
+**🎉 STREAMLINED: 9 FOCUSED DOCUMENTS (Previously 13+ with overlaps)**
 
 ### **🎯 KEY DOCUMENTS - ESSENTIAL FOR CONTEXT BUILDING** 
-*Read these 6 documents first for complete project understanding*
+*Read these 7 documents first for complete project understanding*
 
 **Quick Reference - Key Documents:**
 1. **PRODUCT_REQUIREMENTS.md** 🔑 - What we're building & why
 2. **BUSINESS_PROCESSES.md** 🔑 - How textile business works
 3. **UNIFIED_ARCHITECTURE.md** 🔑 - Platform architecture & zero code duplication
-4. **MASTER_IMPLEMENTATION_PLAN.md** 🔑 - **PRIMARY**: Architecturally compliant implementation strategy
-5. **VISUAL_DESIGN_SPECIFICATION.md** 🔑 - **SUPPORTING**: Complete visual design for all screens
-6. **USE_CASES_MASTER.md** 🔑 - Implementation status & progress tracking
+4. **ARCHITECTURE_DECISIONS_INDEX.md** 🔑 - **PRIMARY**: Master index of ALL architectural decisions - The Complete Architecture Bible
+5. **MASTER_IMPLEMENTATION_PLAN.md** 🔑 - **PRIMARY**: Architecturally compliant implementation strategy
+6. **VISUAL_DESIGN_SPECIFICATION.md** 🔑 - **SUPPORTING**: Complete visual design for all screens
+7. **USE_CASES_MASTER.md** 🔑 - Implementation status & progress tracking
 
 ---
 
@@ -184,6 +185,24 @@ This is the master navigation document that guides you to all project informatio
 - **Performance & Scalability**: Single instances serving entire platform, ready for 13-module expansion
 
 **Update Schedule**: When major architectural changes occur or new integration patterns are established
+
+---
+
+### **3B. ARCHITECTURE_DECISIONS_INDEX.md** - Master Architecture Decisions Index 🔑 KEY DOCUMENT
+**Purpose**: Single source of truth for ALL architectural decisions across the platform - The Complete Architecture Bible
+
+**Contains**:
+- **Part 1: Architecture Decisions Bible**: Master table of ALL 22+ architectural decisions with instant reference
+- **Modal vs Full Page Framework**: Decision matrix with industry CRM validation (Salesforce/HubSpot patterns)
+- **Design System Token Compliance**: Zero hardcoded values policy with enforcement rules
+- **Component Structure Standards**: Clean separation between business logic and infrastructure
+- **CSS Architecture Standards**: 4-layer system (Global → Component → Module → Utility)
+- **Voice/Search Integration Rules**: Single instance patterns for platform-wide consistency
+- **Part 2: Architecture Compliance Rules**: MANDATORY patterns for all new components
+- **Part 3: Implementation Standards**: Checklists and success indicators
+
+**Key Value**: Prevents architectural inconsistencies by ensuring ALL decisions are reviewed before implementation
+**Update Schedule**: When any new architectural decision is made or existing decisions are modified
 
 ---
 
@@ -356,6 +375,10 @@ This is the master navigation document that guides you to all project informatio
 | "What's our technology strategy?" | **TECHNICAL_STRATEGY.md** | Architecture decisions and rationale |
 | "How does the complete platform architecture work?" | **UNIFIED_ARCHITECTURE.md** | Master architecture reference for voice, search, routing, and component integration |
 | "How do I add new voice commands or search capabilities?" | **UNIFIED_ARCHITECTURE.md** | Step-by-step guides for extending platform functionality |
+| "What are ALL the architectural decisions I need to follow?" | **ARCHITECTURE_DECISIONS_INDEX.md** | **PRIMARY**: Master index of ALL 22+ architectural decisions - Complete Architecture Bible |
+| "Should I use a modal or full page for this feature?" | **ARCHITECTURE_DECISIONS_INDEX.md** | Modal vs Full Page Framework with decision matrix and industry validation |
+| "What design system tokens must I use?" | **ARCHITECTURE_DECISIONS_INDEX.md** | Design System Token Compliance rules - zero hardcoded values policy |
+| "How should I structure my components?" | **ARCHITECTURE_DECISIONS_INDEX.md** | Component Structure Standards - business vs infrastructure separation |
 | "What's the Visual Design Specification for the dashboard?" | **VISUAL_DESIGN_SPECIFICATION.md** | **SUPPORTING**: Complete wireframes, component specs, mobile-first design |
 | "What are the next implementation priorities?" | **IMPLEMENTATION_ROADMAP.md** | **PRIMARY**: Phase 5-9 with clear sub-phases and manageable timelines |
 | "What's our development velocity?" | **DAILY_PROGRESS_LOG.md** | Development timeline, productivity metrics, and progress tracking |
@@ -507,6 +530,10 @@ DEVELOPMENT_GUIDE.md (SETUP & COMMANDS)
 | **Component Styling & Responsive Design** | VISUAL_DESIGN_SPECIFICATION.md | Complete component library and responsive design specifications |
 | **Complete Platform Architecture (voice, search, routing, components)** | UNIFIED_ARCHITECTURE.md | Master architecture reference and integration patterns |
 | **Adding New Voice Commands or Search Features** | UNIFIED_ARCHITECTURE.md | Step-by-step extension guides and architectural patterns |
+| **ALL Architectural Decisions (modal vs page, design tokens, component structure)** | ARCHITECTURE_DECISIONS_INDEX.md | **PRIMARY**: Master index of ALL 22+ architectural decisions - Complete Architecture Bible |
+| **Modal vs Full Page Decision Framework** | ARCHITECTURE_DECISIONS_INDEX.md | Decision matrix with industry CRM validation and UX patterns |
+| **Design System Token Compliance Rules** | ARCHITECTURE_DECISIONS_INDEX.md | Zero hardcoded values policy with enforcement guidelines |
+| **Component Architecture Standards** | ARCHITECTURE_DECISIONS_INDEX.md | Business vs infrastructure separation and CSS architecture standards |
 | **Implementation Roadmap (remaining phases 5-9)** | IMPLEMENTATION_ROADMAP.md | **PRIMARY**: Core views → cross-module → CRUD implementation sequence |
 | **Phase Structure with Clear Priorities** | IMPLEMENTATION_ROADMAP.md | Small manageable sub-phases with Visual Design Spec references |
 | **Development Timeline & Velocity (commits per week, productivity)** | WEEKLY_PROGRESS_LOG.md | Development analytics and tracking |
