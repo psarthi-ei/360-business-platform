@@ -25,7 +25,7 @@ function QuotationOrders({
   const location = useLocation();
   
   // Helper function to get company name from quote
-  const getQuoteCompanyName = (quote: any) => {
+  const getQuoteCompanyName = (quote: { businessProfileId?: string; leadId: string }) => {
     if (quote.businessProfileId) {
       const bp = getBusinessProfileById(quote.businessProfileId);
       return bp?.companyName || 'Unknown Company';
@@ -40,7 +40,7 @@ function QuotationOrders({
   };
 
   // Helper function to get company location from quote
-  const getQuoteCompanyLocation = (quote: any) => {
+  const getQuoteCompanyLocation = (quote: { businessProfileId?: string; leadId: string }) => {
     if (quote.businessProfileId) {
       const bp = getBusinessProfileById(quote.businessProfileId);
       return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
@@ -205,12 +205,18 @@ function QuotationOrders({
 
       <div className={styles.quotesContainer}>
         {mockQuotes.map(quote => {
-          // Filter logic
+          // Get related lead first for filtering and display logic
+          const linkedLead = mockLeads.find(lead => lead.id === quote.leadId);
+          
+          // Enhanced filter logic - Hide quotes from leads converted to orders
+          const isLeadConvertedToOrder = linkedLead?.conversionStatus === 'converted_to_order';
+          
           const shouldShow = (
-            filterState === 'all' ||
-            (filterState === 'pending' && quote.status === 'pending') ||
-            (filterState === 'approved' && quote.status === 'approved') ||
-            (filterState === 'expired' && quote.status === 'expired')
+            !isLeadConvertedToOrder && // NEW: Hide quotes from converted leads
+            (filterState === 'all' ||
+             (filterState === 'pending' && quote.status === 'pending') ||
+             (filterState === 'approved' && quote.status === 'approved') ||
+             (filterState === 'expired' && quote.status === 'expired'))
           );
 
           if (!shouldShow) return null;
@@ -240,8 +246,7 @@ function QuotationOrders({
             advance_received: 'Advance Received',
             order_created: 'Order Created'
           };
-
-          const relatedLead = mockLeads.find(lead => lead.id === quote.leadId);
+          
           const relatedOrder = mockSalesOrders.find(order => order.quoteId === quote.id);
           
           // Determine customer status for visual differentiation
@@ -305,12 +310,12 @@ function QuotationOrders({
                     {/* Related Lead and Order Information */}
                     <div className={styles.quoteMapping}>
                       <div className={styles.mappingInfo}>
-                        {relatedLead && (
+                        {linkedLead && (
                           <p><strong>📋 From Lead:</strong> 
                             <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
-                              {relatedLead.id}
+                              {linkedLead.id}
                             </span> 
-                          - {relatedLead.priority} priority ({relatedLead.budget})</p>
+                          - {linkedLead.priority} priority ({linkedLead.budget})</p>
                         )}
                         {relatedOrder ? (
                           <p><strong>📦 Converted to Order:</strong> 

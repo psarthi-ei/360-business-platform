@@ -406,10 +406,126 @@ export const mockLeads: Lead[] = [
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_order',
     convertedToOrderDate: 'March 31, 2025'
+  },
+  
+  // ========================================
+  // LEADS FOR EXISTING CUSTOMERS - ONGOING BUSINESS RELATIONSHIPS
+  // ========================================
+  
+  // Repeat Business Lead for Gujarat Garments (existing customer)
+  {
+    id: 'lead-cust-001',
+    businessProfileId: 'bp-gujarat-garments', // EXISTING CUSTOMER
+    contactPerson: 'Kiran Patel',
+    designation: 'Owner',
+    department: 'Management',
+    contact: '+91 99884 55667 | kiran@gujaratgarments.com',
+    phone: '+91 99884 55667',
+    email: 'kiran@gujaratgarments.com',
+    inquiry: 'Seasonal collection fabric - 6,000 yards for winter collection',
+    budget: '₹12-15 lakhs',
+    timeline: '35 days',
+    priority: 'hot',
+    fabricRequirements: {
+      fabricType: 'Cotton Blend',
+      gsm: 160,
+      width: '44 inches',
+      weaveType: 'Twill',
+      quantity: 6000,
+      unit: 'yards',
+      colors: 'Autumn colors - rust, burgundy, forest green',
+      qualityGrade: 'A-Grade',
+      specialProcessing: 'Water-resistant finish for winter wear',
+      deliveryTimeline: '35 days'
+    },
+    lastContact: 'Today 11:00 AM - "Need winter collection ready by December"',
+    notes: 'Existing customer - excellent payment history. Looking for repeat order with new specifications.',
+    conversionStatus: 'quote_sent'
+  },
+  
+  // Repeat Business Lead for Baroda Fashion House (existing customer)
+  {
+    id: 'lead-cust-002',
+    businessProfileId: 'bp-baroda-fashion', // EXISTING CUSTOMER
+    contactPerson: 'Rajesh Mehta',
+    designation: 'Creative Director',
+    department: 'Design',
+    contact: '+91 98765 43210 | rajesh@barodafashion.com',
+    phone: '+91 98765 43210',
+    email: 'rajesh@barodafashion.com',
+    inquiry: 'Premium fashion fabric expansion - 8,000 yards',
+    budget: '₹18-22 lakhs',
+    timeline: '40 days',
+    priority: 'warm',
+    fabricRequirements: {
+      fabricType: 'Silk Blend',
+      gsm: 140,
+      width: '58 inches',
+      weaveType: 'Satin',
+      quantity: 8000,
+      unit: 'yards',
+      colors: 'Pastel spring collection - mint, lavender, peach',
+      qualityGrade: 'Export-Grade',
+      specialProcessing: 'Anti-wrinkle treatment, luxury finish',
+      deliveryTimeline: '40 days'
+    },
+    lastContact: 'Yesterday - "Expanding our premium line, need your quality"',
+    notes: 'Trusted repeat customer. Previous orders always on-time payment. Premium pricing acceptable.',
+    conversionStatus: 'verbally_approved'
+  },
+  
+  // New Business Lead for Surat Wholesale Market (existing customer)
+  {
+    id: 'lead-cust-003',
+    businessProfileId: 'bp-surat-wholesale', // EXISTING CUSTOMER
+    contactPerson: 'Mehul Shah',
+    designation: 'Purchase Manager',
+    department: 'Procurement',
+    contact: '+91 98765 43203 | mehul@suratwholesale.com',
+    phone: '+91 98765 43203',
+    email: 'mehul@suratwholesale.com',
+    inquiry: 'Bulk wholesale fabric order - 15,000 yards',
+    budget: '₹25-30 lakhs',
+    timeline: '50 days',
+    priority: 'hot',
+    fabricRequirements: {
+      fabricType: 'Mixed Cotton',
+      gsm: 130,
+      width: '44 inches',
+      weaveType: 'Plain',
+      quantity: 15000,
+      unit: 'yards',
+      colors: 'Mixed assortment - 10 different colors',
+      qualityGrade: 'B-Grade',
+      specialProcessing: 'Bulk packaging, wholesale ready',
+      deliveryTimeline: '50 days'
+    },
+    lastContact: 'This morning - "Biggest order this year, need best pricing"',
+    notes: 'Large wholesale customer. Volume discount expected. Fast payment on delivery.',
+    conversionStatus: 'active_lead'
   }
 ];
 
 export const mockQuotes: Quote[] = [
+  // ========================================
+  // LEAD-QUOTE DATA RELATIONSHIP DOCUMENTATION
+  // ========================================
+  
+  // BUSINESS WORKFLOW: Lead Conversion Status → Quote Status Alignment
+  // 1. 'active_lead' → Quote status: 'pending' (quote prepared but not sent)
+  // 2. 'quote_sent' → Quote status: 'under_review' (quote sent, awaiting response)  
+  // 3. 'verbally_approved' → Quote status: 'approved' (customer agreed verbally)
+  // 4. 'proforma_sent' → Quote status: 'proforma_sent' (proforma invoice sent)
+  // 5. 'awaiting_payment' → Quote status: 'advance_requested' (payment pending)
+  // 6. 'converted_to_order' → Quote status: 'order_created' (payment received, customer created)
+  
+  // DATA INTEGRITY RULES:
+  // - Every lead with 'quote_sent'+ status MUST have at least one quote
+  // - Every lead with 'proforma_sent'+ status MUST have quote with proforma details
+  // - Every lead with 'converted_to_order' status MUST have received advance payment
+  // - Quote leadId MUST reference valid lead in mockLeads array
+  // - Quote businessProfileId MUST reference valid profile for converted customers
+  
   // Quotes for active leads (no BusinessProfile yet)
   {
     id: 'QT-001',
@@ -425,15 +541,15 @@ export const mockQuotes: Quote[] = [
   },
   {
     id: 'QT-002',
-    leadId: 'lead-002',
+    leadId: 'lead-002', // Lead status: 'quote_sent' - ALIGNED
     quoteDate: 'March 18, 2025',
     validUntil: 'April 5, 2025',
     items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
     totalAmount: 1320000,
-    status: 'proforma_sent',
-    statusMessage: 'Proforma invoice sent - Advance payment requested',
+    status: 'under_review', // ALIGNED: quote_sent → under_review status
+    statusMessage: 'Quote sent to customer - Awaiting response from production head',
     advancePaymentRequired: 660000, // 50% advance
-    advancePaymentStatus: 'awaiting'
+    advancePaymentStatus: 'not_requested' // No payment request yet until quote approved
   },
   // Quotes for converted customers (linked to BusinessProfile)
   {
@@ -495,7 +611,7 @@ export const mockQuotes: Quote[] = [
   },
   {
     id: 'QT-003',
-    leadId: 'baroda-003',
+    leadId: 'baroda-004',
     quoteDate: 'February 20, 2025',
     validUntil: 'March 5, 2025',
     items: 'Seasonal fabric collection - 3,000 yards @ ₹220/yard',
@@ -508,7 +624,7 @@ export const mockQuotes: Quote[] = [
   },
   {
     id: 'QT-004',
-    leadId: 'baroda-003',
+    leadId: 'baroda-004',
     quoteDate: 'March 8, 2025',
     validUntil: 'March 25, 2025',
     items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
@@ -518,6 +634,87 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: 'PI-004',
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received' // This triggered customer conversion
+  },
+  
+  // CRITICAL FIX: Missing quote for lead-004 (proforma_sent status)
+  {
+    id: 'QT-L004-001',
+    leadId: 'lead-004', // Links to lead with conversionStatus: 'proforma_sent'
+    businessProfileId: 'bp-rajesh-textiles',
+    quoteDate: 'October 15, 2025',
+    validUntil: 'November 5, 2025',
+    items: 'High-grade cotton fabric for export - 10,000 yards @ ₹200/yard',
+    totalAmount: 2000000,
+    status: 'proforma_sent', // Aligns with lead conversionStatus
+    statusMessage: 'Proforma invoice sent - Advance payment requested (₹10,00,000)',
+    proformaInvoiceId: 'PI-L004-001',
+    advancePaymentRequired: 1000000, // 50% advance for export quality
+    advancePaymentStatus: 'awaiting' // Waiting for payment to convert lead to customer
+  },
+  
+  // WORKFLOW COMPLETION: Missing quote for lead-003 (active lead stage)
+  {
+    id: 'QT-L003-001',
+    leadId: 'lead-003', // Links to lead with conversionStatus: 'active_lead'
+    businessProfileId: 'bp-baroda-textiles',
+    quoteDate: 'October 10, 2025',
+    validUntil: 'October 30, 2025',
+    items: 'Cotton fabric for retail - 4,000 yards @ ₹175/yard',
+    totalAmount: 700000,
+    status: 'pending', // Active lead stage - quote prepared but not yet sent
+    statusMessage: 'Quote prepared - Ready to send to prospect',
+    advancePaymentRequired: 350000, // 50% advance
+    advancePaymentStatus: 'not_requested' // No payment request yet in active lead stage
+  },
+  
+  // ========================================
+  // QUOTES FOR EXISTING CUSTOMER LEADS - REPEAT BUSINESS
+  // ========================================
+  
+  // Quote for existing customer Gujarat Garments (lead-cust-001: quote_sent status)
+  {
+    id: 'QT-CUST-001',
+    leadId: 'lead-cust-001', // EXISTING CUSTOMER repeat business
+    businessProfileId: 'bp-gujarat-garments',
+    quoteDate: 'October 20, 2025',
+    validUntil: 'November 10, 2025',
+    items: 'Seasonal collection fabric - 6,000 yards @ ₹225/yard (winter premium)',
+    totalAmount: 1350000,
+    status: 'under_review', // ALIGNED: quote_sent → under_review status
+    statusMessage: 'Quote sent to valued customer - Awaiting approval for winter collection',
+    advancePaymentRequired: 675000, // 50% advance
+    advancePaymentStatus: 'not_requested' // Quote sent, awaiting customer response
+  },
+  
+  // Quote for existing customer Baroda Fashion (lead-cust-002: verbally_approved status)
+  {
+    id: 'QT-CUST-002',
+    leadId: 'lead-cust-002', // EXISTING CUSTOMER repeat business
+    businessProfileId: 'bp-baroda-fashion',
+    quoteDate: 'October 18, 2025',
+    validUntil: 'November 8, 2025',
+    items: 'Premium fashion fabric expansion - 8,000 yards @ ₹275/yard (export grade)',
+    totalAmount: 2200000,
+    status: 'approved', // ALIGNED: verbally_approved → approved status
+    statusMessage: 'Quote verbally approved by Creative Director - Preparing proforma invoice',
+    proformaInvoiceId: 'PI-CUST-002',
+    advancePaymentRequired: 1100000, // 50% advance for premium order
+    advancePaymentStatus: 'not_requested' // Moving to proforma stage
+  },
+  
+  // Quote for existing customer Surat Wholesale (lead-cust-003: active_lead status)
+  {
+    id: 'QT-CUST-003',
+    leadId: 'lead-cust-003', // EXISTING CUSTOMER new inquiry
+    businessProfileId: 'bp-surat-wholesale',
+    quoteDate: 'October 22, 2025',
+    validUntil: 'November 12, 2025',
+    items: 'Bulk wholesale fabric order - 15,000 yards @ ₹180/yard (volume pricing)',
+    totalAmount: 2700000,
+    status: 'pending', // ALIGNED: active_lead → pending status
+    statusMessage: 'Large volume quote prepared - Reviewing final pricing with management',
+    advancePaymentRequired: 1350000, // 50% advance for bulk order
+    advancePaymentStatus: 'not_requested' // Quote being finalized
   }
 ];
 
@@ -684,7 +881,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2025-001',
     quoteId: 'QT-001',
-    leadId: 'L-001',
+    leadId: 'lead-001',
     businessProfileId: 'bp-gujarat-garments',
     issueDate: 'October 10, 2025',
     dueDate: 'October 25, 2025',  // Future: 8 days from today (pending)
@@ -699,7 +896,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2025-002',
     quoteId: 'QT-004',
-    leadId: 'L-004', 
+    leadId: 'lead-004',
     businessProfileId: 'bp-baroda-fashion',
     issueDate: 'October 12, 2025',
     dueDate: 'October 27, 2025',  // Future: 10 days from today (pending)
@@ -714,7 +911,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2025-003',
     quoteId: 'QT-005',
-    leadId: 'L-005',
+    leadId: 'lead-005',
     businessProfileId: 'bp-gujarat-garments',
     issueDate: 'October 8, 2025',
     dueDate: 'October 23, 2025',  // Future: 6 days from today (pending)
@@ -729,7 +926,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2025-004',
     quoteId: 'QT-003',
-    leadId: 'L-003',
+    leadId: 'lead-003',
     businessProfileId: 'bp-baroda-fashion',
     issueDate: 'September 28, 2025',
     dueDate: 'October 8, 2025',  // Past: 9 days ago (expired - overdue proforma)
@@ -744,7 +941,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
   {
     id: 'PI-2025-005',
     quoteId: 'QT-002',
-    leadId: 'L-002',
+    leadId: 'lead-002',
     businessProfileId: 'bp-gujarat-garments',
     issueDate: 'September 30, 2025',
     dueDate: 'October 12, 2025',  // Past: 5 days ago (payment received)
@@ -841,7 +1038,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-001',
     proformaInvoiceId: 'PI-2025-001',
     quoteId: 'QT-001',
-    leadId: 'L-001',
+    leadId: 'lead-001',
     businessProfileId: 'bp-gujarat-garments',
     amount: 971250,
     dueDate: 'April 2, 2025',
@@ -869,7 +1066,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-003',
     proformaInvoiceId: 'PI-2025-003',
     quoteId: 'QT-005',
-    leadId: 'L-005',
+    leadId: 'lead-005',
     businessProfileId: 'bp-gujarat-garments',
     amount: 3853500,
     dueDate: 'April 15, 2025',
@@ -880,7 +1077,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-004',
     proformaInvoiceId: 'PI-2025-004',
     quoteId: 'QT-006',
-    leadId: 'L-006',
+    leadId: 'lead-001',
     businessProfileId: 'bp-baroda-fashion',
     amount: 750000,
     dueDate: 'April 20, 2025',
@@ -894,7 +1091,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-005',
     proformaInvoiceId: 'PI-2025-005',
     quoteId: 'QT-002',
-    leadId: 'L-002',
+    leadId: 'lead-002',
     businessProfileId: 'bp-gujarat-garments',
     amount: 630000,
     dueDate: 'October 12, 2025',
@@ -910,7 +1107,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-007',
     proformaInvoiceId: 'PI-2025-007',
     quoteId: 'QT-020',
-    leadId: 'L-020',
+    leadId: 'lead-002',
     businessProfileId: 'bp-rajkot-mills',
     amount: 1800000,
     dueDate: 'November 15, 2025',
@@ -924,7 +1121,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-008',
     proformaInvoiceId: 'PI-2025-008',
     quoteId: 'QT-025',
-    leadId: 'L-025',
+    leadId: 'lead-003',
     businessProfileId: 'bp-mumbai-exports',
     amount: 2250000,
     dueDate: 'November 20, 2025',
@@ -940,7 +1137,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-009',
     proformaInvoiceId: 'PI-2025-009',
     quoteId: 'QT-030',
-    leadId: 'L-030',
+    leadId: 'lead-004',
     businessProfileId: 'bp-ahmedabad-fashion',
     amount: 1575000,
     dueDate: 'September 25, 2025',
@@ -954,7 +1151,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-010',
     proformaInvoiceId: 'PI-2025-010',
     quoteId: 'QT-031',
-    leadId: 'L-031',
+    leadId: 'lead-005',
     businessProfileId: 'bp-bhavnagar-marine',
     amount: 975000,
     dueDate: 'August 30, 2025',
@@ -968,7 +1165,7 @@ export const mockAdvancePayments: AdvancePayment[] = [
     id: 'AP-2025-011',
     proformaInvoiceId: 'PI-2025-011',
     quoteId: 'QT-032',
-    leadId: 'L-032',
+    leadId: 'lead-001',
     businessProfileId: 'bp-vadodara-crafts',
     amount: 375000,
     dueDate: 'July 20, 2025',

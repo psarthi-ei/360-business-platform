@@ -15,16 +15,10 @@
   flex: 1;
 }
 
-/* Desktop 2-column layout */
+/* Desktop single-column layout - matches other components pattern */
 @media (min-width: 1024px) {
   .customerGrid {
-    flex-direction: row;
-    flex-wrap: wrap;
     gap: var(--ds-space-md);
-  }
-  
-  .customerGrid > * {
-    flex: 0 0 calc(50% - var(--ds-space-md) / 2);
   }
 }
 
