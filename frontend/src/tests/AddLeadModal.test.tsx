@@ -40,7 +40,7 @@ describe('AddLeadModal - Basic Functionality', () => {
   test('renders required form fields', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} />);
     
-    expect(screen.getByLabelText('Company Name *')).toBeInTheDocument();
+    expect(screen.getByLabelText('Company *')).toBeInTheDocument();
     expect(screen.getByLabelText('Contact Person *')).toBeInTheDocument();
     expect(screen.getByLabelText('Phone Number *')).toBeInTheDocument();
     expect(screen.getByLabelText('Inquiry Details *')).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('AddLeadModal - Basic Functionality', () => {
     
     await userEvent.click(screen.getByRole('button', { name: /add lead/i }));
     
-    expect(screen.getByText('Company name is required')).toBeInTheDocument();
+    expect(screen.getByText('Company selection is required')).toBeInTheDocument();
     expect(screen.getByText('Contact person is required')).toBeInTheDocument();
   });
 

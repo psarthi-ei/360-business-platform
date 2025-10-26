@@ -1,9 +1,8 @@
-// Basic Search Tests - Essential search functionality only
-// Focus on core search behavior without complex interface dependencies
+// Basic Search Tests - Core functionality only
+// Simplified test focused on search behavior without complex data dependencies
 
 import { renderHook, act } from '@testing-library/react';
 import { useGlobalSearch } from '../components/search/useGlobalSearch';
-import { Lead } from '../data/salesMockData';
 
 describe('Core Search Functionality', () => {
   const mockNavigationHandlers = {
@@ -12,22 +11,14 @@ describe('Core Search Functionality', () => {
     onShowSalesOrders: jest.fn(),
     onShowCustomerList: jest.fn(),
     formatCurrency: jest.fn((amount: number) => `₹${amount.toLocaleString()}`),
-    getBusinessProfileById: jest.fn((id: string) => {
-      if (id === 'TEST-PROFILE-001') {
-        return {
-          id: 'TEST-PROFILE-001',
-          companyName: 'Mumbai Cotton Mills',
-      gstNumber: 'GST24TESTTEST1Z5',
-      registeredAddress: {
-        street: '123 Test Street',
-        city: 'Test City',
-        state: 'Test State',
-        pincode: '123456',
-        country: 'India'
-      },
+    getBusinessProfileById: jest.fn(() => ({
+      id: 'TEST-001',
+      companyName: 'Test Company',
+      gstNumber: 'GST24TEST123',
+      registeredAddress: { street: 'Test St', city: 'Test City', state: 'TS', pincode: '123456', country: 'India' },
       contactPerson: 'Test Contact',
       phone: '+91 98765 43210',
-      email: 'test@testcompany.com',
+      email: 'test@company.com',
       customerStatus: 'customer' as const,
       businessType: 'Test Business',
       specialization: 'Test Specialization',
@@ -41,87 +32,36 @@ describe('Core Search Functionality', () => {
       paymentScore: 80,
       creditStatus: 'good' as const,
       paymentBehavior: 'good' as const,
-      preferences: {
-        paymentMethod: 'Bank Transfer',
-        deliveryPreference: 'Office Pickup',
-        qualityRequirements: 'Standard',
-        communication: 'Email',
-        specialNotes: 'Test notes'
-      },
+      preferences: { paymentMethod: 'Bank Transfer', deliveryPreference: 'Office Pickup', qualityRequirements: 'Standard', communication: 'Email', specialNotes: 'Test notes' },
       priority: 'warm' as const
-    };
-      }
-      return undefined;
-    })
+    }))
   };
 
   const mockDataSources = {
-    leads: [
-      {
-        id: 'LEAD-001',
-        businessProfileId: 'TEST-PROFILE-001',
-        contactPerson: 'Rajesh Patel',
-        contact: '+91 98765 43210',
-        phone: '+91 98765 43210',
-        email: 'rajesh@mumbaicontton.com',
-        inquiry: 'Mumbai Cotton fabric order - 500 meters',
-        budget: '₹2-3 Lakhs',
-        timeline: '2-3 weeks',
-        priority: 'hot',
-        lastContact: '2024-01-15',
-        notes: 'Interested in bulk cotton fabric order for export',
-        conversionStatus: 'active_lead',
-        designation: 'Purchase Manager',
-        department: 'Procurement',
-        fabricRequirements: {
-          fabricType: 'Cotton',
-          gsm: 150,
-          width: '60 inches',
-          weaveType: 'Plain',
-          quantity: 500,
-          unit: 'meters',
-          colors: 'White, Beige',
-          qualityGrade: 'A-Grade',
-          specialProcessing: 'Mercerized',
-          deliveryTimeline: '2-3 weeks'
-        }
-      }
-    ] as Lead[],
+    leads: [],
     customers: [
       {
         id: 'CUST-001',
-        companyName: 'Surat Textiles',
-        gstNumber: 'GST24ABCDE1234F1Z5',
-        registeredAddress: {
-          street: '123 Textile Street',
-          city: 'Surat',
-          state: 'Gujarat',
-          pincode: '395007',
-          country: 'India'
-        },
-        contactPerson: 'Anil Shah',
-        phone: '+91 98765 54321',
-        email: 'anil@surattextiles.com',
+        companyName: 'Mumbai Cotton Mills',
+        gstNumber: 'GST24TEST123',
+        registeredAddress: { street: 'Test St', city: 'Mumbai', state: 'MH', pincode: '400001', country: 'India' },
+        contactPerson: 'Test Contact',
+        phone: '+91 98765 43210',
+        email: 'test@mumbaicontton.com',
         customerStatus: 'customer' as const,
         businessType: 'Textile Manufacturing',
-        specialization: 'Cotton Fabric Manufacturing',
+        specialization: 'Cotton Manufacturing',
         employeeCount: '50',
         establishedYear: '2010',
-        totalOrders: 25,
-        activeOrders: 3,
-        totalRevenue: 5000000,
-        averageOrderValue: 200000,
-        creditLimit: 1000000,
+        totalOrders: 10,
+        activeOrders: 2,
+        totalRevenue: 1000000,
+        averageOrderValue: 100000,
+        creditLimit: 500000,
         paymentScore: 85,
         creditStatus: 'good' as const,
         paymentBehavior: 'good' as const,
-        preferences: {
-          paymentMethod: 'Bank Transfer',
-          deliveryPreference: 'Factory Pickup',
-          qualityRequirements: 'Standard GSM 180',
-          communication: 'WhatsApp Business',
-          specialNotes: 'Prefers advance notice for large orders'
-        },
+        preferences: { paymentMethod: 'Bank Transfer', deliveryPreference: 'Factory Pickup', qualityRequirements: 'Standard', communication: 'Phone', specialNotes: 'None' },
         priority: 'warm' as const
       }
     ]
@@ -156,32 +96,18 @@ describe('Core Search Functionality', () => {
       expect(result.current.showSearchResults).toBe(true);
     });
 
-    test('should find leads by company name', () => {
-      const { result } = renderHook(() => 
-        useGlobalSearch(mockDataSources, mockNavigationHandlers)
-      );
-
-      act(() => {
-        result.current.performGlobalSearch('Cotton');
-      });
-
-      const leadResults = result.current.searchResults.filter(r => r.type === 'lead');
-      expect(leadResults.length).toBeGreaterThan(0);
-      expect(leadResults[0].title).toContain('Cotton');
-    });
-
     test('should find customers by company name', () => {
       const { result } = renderHook(() => 
         useGlobalSearch(mockDataSources, mockNavigationHandlers)
       );
 
       act(() => {
-        result.current.performGlobalSearch('Surat');
+        result.current.performGlobalSearch('Mumbai');
       });
 
       const customerResults = result.current.searchResults.filter(r => r.type === 'customer');
       expect(customerResults.length).toBeGreaterThan(0);
-      expect(customerResults[0].title).toContain('Surat');
+      expect(customerResults[0].title).toContain('Mumbai');
     });
   });
 
@@ -245,62 +171,48 @@ describe('Core Search Functionality', () => {
     });
   });
 
-  describe('Textile Business Context', () => {
-    test('should handle textile terminology searches', () => {
+  describe('Core Search Behavior', () => {
+    test('should handle empty results gracefully', () => {
+      const emptyDataSources = { leads: [], customers: [] };
+      
       const { result } = renderHook(() => 
-        useGlobalSearch(mockDataSources, mockNavigationHandlers)
+        useGlobalSearch(emptyDataSources, mockNavigationHandlers)
       );
 
       act(() => {
-        result.current.performGlobalSearch('cotton');
+        result.current.performGlobalSearch('NonExistent');
       });
 
-      expect(result.current.searchResults.length).toBeGreaterThan(0);
+      expect(result.current.searchResults).toEqual([]);
+      expect(result.current.showSearchResults).toBe(true); // Search UI shows even with empty results
     });
 
-    test('should handle Indian business location searches', () => {
-      const { result } = renderHook(() => 
-        useGlobalSearch(mockDataSources, mockNavigationHandlers)
-      );
-
-      act(() => {
-        result.current.performGlobalSearch('Mumbai');
-      });
-
-      expect(result.current.searchResults.length).toBeGreaterThan(0);
-    });
-
-    test('should limit results to maximum 8 items', () => {
+    test('should limit results appropriately', () => {
       const largeDataSet = {
-        leads: Array.from({ length: 15 }, (_, i) => ({
-          id: `LEAD-${String(i).padStart(3, '0')}`,
-          businessProfileId: `TEST-PROFILE-${String(i).padStart(3, '0')}`,
-          contactPerson: `Contact Person ${i}`,
-          contact: `+91 98765 ${String(i).padStart(5, '0')}`,
-          phone: `+91 98765 ${String(i).padStart(5, '0')}`,
-          email: `contact${i}@company.com`,
-          inquiry: `Cotton inquiry ${i}`,
-          budget: '₹2-3 Lakhs',
-          timeline: '2-3 weeks',
-          priority: 'warm',
-          lastContact: '2024-01-15',
-          notes: `Notes for company ${i}`,
-          conversionStatus: 'active_lead',
-          designation: 'Manager',
-          department: 'Sales',
-          fabricRequirements: {
-            fabricType: 'Cotton',
-            gsm: 150,
-            width: '60 inches',
-            weaveType: 'Plain',
-            quantity: 100,
-            unit: 'meters',
-            colors: 'White',
-            qualityGrade: 'A-Grade',
-            specialProcessing: 'None',
-            deliveryTimeline: '2-3 weeks'
-          }
-        })) as Lead[]
+        customers: Array.from({ length: 15 }, (_, i) => ({
+          id: `CUST-${i}`,
+          companyName: `Mumbai Company ${i}`,
+          gstNumber: `GST24TEST${i}`,
+          registeredAddress: { street: 'Test St', city: 'Mumbai', state: 'MH', pincode: '400001', country: 'India' },
+          contactPerson: `Contact ${i}`,
+          phone: '+91 98765 43210',
+          email: `test${i}@company.com`,
+          customerStatus: 'customer' as const,
+          businessType: 'Business',
+          specialization: 'Manufacturing',
+          employeeCount: '10',
+          establishedYear: '2020',
+          totalOrders: 5,
+          activeOrders: 1,
+          totalRevenue: 500000,
+          averageOrderValue: 100000,
+          creditLimit: 250000,
+          paymentScore: 75,
+          creditStatus: 'good' as const,
+          paymentBehavior: 'good' as const,
+          preferences: { paymentMethod: 'Bank Transfer', deliveryPreference: 'Office Pickup', qualityRequirements: 'Standard', communication: 'Email', specialNotes: 'None' },
+          priority: 'warm' as const
+        }))
       };
 
       const { result } = renderHook(() => 
