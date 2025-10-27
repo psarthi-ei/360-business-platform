@@ -22,8 +22,12 @@ const CustomerPaymentsTab = ({ customerId }: CustomerPaymentsTabProps) => {
 
   const allPayments = [...customerAdvancePayments, ...customerFinalPayments]
     .sort((a, b) => {
-      const dateA = a.paymentType === 'advance' ? (a as any).receivedDate || '2024-01-01' : (a as any).paymentDate || '2024-01-01';
-      const dateB = b.paymentType === 'advance' ? (b as any).receivedDate || '2024-01-01' : (b as any).paymentDate || '2024-01-01';
+      const dateA = a.paymentType === 'advance' ? 
+        (a as AdvancePayment & { paymentType: 'advance' }).receivedDate || '2024-01-01' : 
+        (a as FinalPayment & { paymentType: 'final' }).paymentDate || '2024-01-01';
+      const dateB = b.paymentType === 'advance' ? 
+        (b as AdvancePayment & { paymentType: 'advance' }).receivedDate || '2024-01-01' : 
+        (b as FinalPayment & { paymentType: 'final' }).paymentDate || '2024-01-01';
       return new Date(dateB).getTime() - new Date(dateA).getTime();
     });
 
@@ -113,10 +117,16 @@ const CustomerPaymentsTab = ({ customerId }: CustomerPaymentsTabProps) => {
                   ₹{formatCurrency(payment.amount)}
                 </div>
                 <div className="ds-card-meta">
-                  {payment.paymentMethod} | {formatDate(payment.paymentType === 'advance' ? (payment as any).receivedDate || '2024-01-01' : (payment as any).paymentDate || '2024-01-01')}
-                  {((payment as any).bankReference || (payment as any).transactionReference) && (
+                  {payment.paymentMethod} | {formatDate(payment.paymentType === 'advance' ? 
+                    (payment as AdvancePayment & { paymentType: 'advance' }).receivedDate || '2024-01-01' : 
+                    (payment as FinalPayment & { paymentType: 'final' }).paymentDate || '2024-01-01')}
+                  {(payment.paymentType === 'advance' ? 
+                    (payment as AdvancePayment & { paymentType: 'advance' }).bankReference : 
+                    (payment as FinalPayment & { paymentType: 'final' }).transactionReference) && (
                     <div className={styles.transactionId}>
-                      Ref: {(payment as any).bankReference || (payment as any).transactionReference}
+                      Ref: {payment.paymentType === 'advance' ? 
+                        (payment as AdvancePayment & { paymentType: 'advance' }).bankReference : 
+                        (payment as FinalPayment & { paymentType: 'final' }).transactionReference}
                     </div>
                   )}
                 </div>
@@ -124,14 +134,14 @@ const CustomerPaymentsTab = ({ customerId }: CustomerPaymentsTabProps) => {
               
               {/* Payment Information */}
               <div className={styles.paymentInfo}>
-                {(payment as any).quoteId && (
+                {payment.paymentType === 'advance' && (payment as AdvancePayment & { paymentType: 'advance' }).quoteId && (
                   <div className={styles.orderReference}>
-                    Quote: {(payment as any).quoteId}
+                    Quote: {(payment as AdvancePayment & { paymentType: 'advance' }).quoteId}
                   </div>
                 )}
-                {payment.paymentType === 'final' && (payment as any).notes && (
+                {payment.paymentType === 'final' && (payment as FinalPayment & { paymentType: 'final' }).notes && (
                   <div className={styles.paymentNotes}>
-                    Note: {(payment as any).notes}
+                    Note: {(payment as FinalPayment & { paymentType: 'final' }).notes}
                   </div>
                 )}
               </div>
