@@ -2,16 +2,12 @@
 
 /* Main Container */
 .infoTabContainer {
-  height: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .infoContent {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: var(--ds-space-md);
   display: flex;
   flex-direction: column;
@@ -58,8 +54,8 @@
 
 .infoValue {
   font-family: var(--font-family);
-  font-size: var(--font-base);
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: 500;
   color: var(--ds-text-primary);
   word-break: break-word;
   text-align: left;
@@ -83,7 +79,7 @@
 
 .contactName {
   font-family: var(--font-family);
-  font-size: var(--font-base);
+  font-size: var(--font-sm);
   font-weight: 600;
   color: var(--ds-text-primary);
   margin: 0 0 var(--ds-space-xs) 0;
@@ -186,8 +182,8 @@
 
 .preferenceValue {
   font-family: var(--font-family);
-  font-size: var(--font-base);
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: 500;
   color: var(--ds-text-primary);
   word-break: break-word;
   text-align: left;
@@ -231,8 +227,15 @@
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
+  .infoTabContainer {
+    /* Removed height constraints to allow natural content flow with Customer360View scroll */
+  }
+  
   .infoContent {
     padding: var(--ds-space-sm);
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0);
+    will-change: scroll-position;
   }
   
   .contactCard {

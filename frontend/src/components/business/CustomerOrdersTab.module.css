@@ -2,16 +2,13 @@
 
 /* Main Container */
 .ordersTabContainer {
-  height: 100%;
-  overflow: hidden;
+  /* Removed height: 100% and overflow: hidden to allow natural content flow with Customer360View scroll */
   display: flex;
   flex-direction: column;
 }
 
 .ordersList {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: var(--ds-space-md);
   display: flex;
   flex-direction: column;

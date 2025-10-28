@@ -18,6 +18,7 @@
 | **Navigation** | Universal Search Architecture | Global search bar in header for cross-module discovery | [Visual Design Spec](#universal-search-architecture) |
 | **Layout** | CSS Grid Architecture | Single PlatformShell container for all platform pages using CSS Grid | [Unified Architecture](#unified-platformshell-architecture) |
 | **Layout** | Fixed Layout Architecture | Fixed headers/navigation for factory environment stability | [Visual Design Spec](#fixed-layout-architecture) |
+| **Layout** | Multi-Level Scroll Architecture | Single scroll container per hierarchy; nested containers use height: 100% | [Visual Design Spec](#multi-level-scroll-architecture) |
 | **Layout** | No Auto-Hide Header (MVP) | Headers remain visible for production environment reliability | [Visual Design Spec](#no-auto-hide-header-mvp) |
 | **Modals** | Global Modal Design System | 500px max width, mobile-first responsive, consistent Portal pattern | [Visual Design Spec](#modal-design-system-standard) |
 | **Modals** | Parent-Child Modal System | Clean state management for modal hierarchies with context preservation | [Visual Design Spec](#parent-child-modal-system) |

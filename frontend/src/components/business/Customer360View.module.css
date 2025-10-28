@@ -1,12 +1,12 @@
 /* Customer360View.module.css - Full Page Customer 360° View */
 
-/* Main Container - Information Only (No CTA) */
+/* Main Container - Fixed Headers with Scrollable Content */
 .customer360Container {
-  display: grid;
-  grid-template-rows: var(--ds-touch-target-preferred) var(--ds-touch-target-preferred) 1fr; /* Header | Tabs | Content */
-  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill available parent space instead of claiming full viewport */
   background: var(--ds-bg-primary);
-  /* Remove overflow: hidden to allow natural mobile scroll */
+  /* Allow sticky positioning to work properly */
 }
 
 /* Header - Touch Target Preferred */
@@ -18,6 +18,9 @@
   border-bottom: 1px solid var(--ds-border-subtle);
   background: var(--ds-bg-primary);
   gap: var(--ds-space-sm);
+  position: sticky;
+  top: 0;
+  z-index: 101;
 }
 
 .backButton {
@@ -71,6 +74,9 @@
   display: flex;
   border-bottom: 1px solid var(--ds-border-subtle);
   background: var(--ds-bg-primary);
+  position: sticky;
+  top: var(--ds-touch-target-preferred);
+  z-index: 100;
 }
 
 .tabButton {
@@ -161,25 +167,21 @@
   color: var(--ds-text-inverse);
 }
 
-/* Tab Content Area - Mobile-First Scroll Optimization */
+/* Tab Content Area - Individual Tab Scroll */
 .tabContent {
   background: var(--ds-bg-primary);
-  min-height: 0; /* Allow grid item to shrink */
-  /* Mobile scroll optimization - let browser handle natural scroll */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* Ensure compatibility with ModalPortal scroll management */
-  touch-action: manipulation;
+  /* Mobile scroll optimizations */
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
-  .customer360Container {
-    /* Optimize for mobile viewport */
-    min-height: 100vh;
-  }
-  
   .customer360Header {
     padding: 0 var(--ds-space-sm);
   }
@@ -196,19 +198,10 @@
     text-align: center;
   }
   
-  .tabContent {
-    /* Enhanced mobile scroll behavior */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    /* Prevent scroll bounce conflicts with ModalPortal */
-    overscroll-behavior: contain;
-  }
-  
   .tabButton {
     font-size: var(--font-sm);
     font-weight: 500;
   }
-  
 }
 
 /* Touch Device Optimizations */

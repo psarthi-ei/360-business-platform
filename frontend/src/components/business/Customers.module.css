@@ -154,6 +154,11 @@
   -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
 }
 
+/* Disable Level 1 scroll when in 360° view mode - prevents competing scroll containers */
+.customersModule.view360Mode .customersContent {
+  overflow: hidden; /* Disable scroll - Customer360View handles all scrolling */
+}
+
 /* Universal scroll - no conditional classes needed, always enabled */
 
 .customersContent.scrollable::-webkit-scrollbar {

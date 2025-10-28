@@ -369,6 +369,159 @@ Margins: 16px mobile, 24px tablet, 32px desktop
 Gutters: 12px mobile, 16px tablet, 24px desktop
 ```
 
+#### **Multi-Level Scroll Architecture**
+
+**DESIGN DECISION: Single Scroll Container Pattern**
+
+When implementing components with multiple hierarchical levels (parent → child → sub-child), use the **Single Scroll Container Pattern** to prevent height conflicts and ensure content accessibility.
+
+**Architecture Patterns:**
+
+**Pattern A: Single Container Scroll** (Recommended for most modules)
+```
+Module Container (overflow-y: auto)
+├── Tab Navigation (fixed)
+└── Tab Content (natural flow)
+    └── Individual Components (natural flow)
+```
+*Used by: Sales, Production, Procurement modules*
+
+**Pattern B: Dedicated Tab Container Scroll** (For complex hierarchies)
+```
+Module Container (overflow: hidden in special modes)
+├── Fixed Headers
+└── Tab Content Container (overflow-y: auto, flex: 1)
+    └── Individual Tabs (natural flow, no height constraints)
+```
+*Used by: Customer360View*
+
+**Pattern C: Nested Individual Scroll** (Special cases only)
+```
+Container
+└── Multiple Cards
+    └── Individual Tab Content (overflow-y: local)
+```
+*Used by: ProductionOrderManagement*
+
+**Implementation Rules:**
+1. **Single Scroll Handler**: Only ONE container per hierarchy should handle scrolling
+2. **Height Management**: Use `height: 100%` for nested containers, not `height: 100vh`
+3. **Flex Growth**: Scroll containers use `flex: 1` + `min-height: 0` + `overflow-y: auto`
+4. **No Height Constraints**: Individual content components should flow naturally
+5. **Touch Optimization**: Include `-webkit-overflow-scrolling: touch` for mobile
+
+**CSS Implementation:**
+```css
+/* Scroll Container */
+.scrollContainer {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
+/* Content Components */
+.contentComponent {
+  /* NO height: 100% or overflow: hidden */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Competing Container Prevention */
+.parentContainer.specialMode .parentContent {
+  overflow: hidden; /* Disable parent scroll when child takes over */
+}
+```
+
+**Case Study: Customer Module Fix**
+
+**Background:**
+The Customer module has a unique 4-level hierarchy that differs from other business modules:
+
+```
+Level 1: Customers.tsx (Main Module Container)
+├── CSS: .customersModule (height: 100%, CSS Grid)
+├── Content: .customersContent (grid-row: 3, overflow-y: auto)
+└── State: Normal mode vs 360° view mode
+
+Level 2: CustomerListManagement.tsx (List View)
+├── Purpose: Shows customer list when NOT in 360° view
+└── Scroll: Inherits from parent container
+
+Level 3: Customer360View.tsx (360° Container)
+├── CSS: .customer360Container (height: 100vh → PROBLEM)
+├── Content: .tabContent (overflow-y: auto → CONFLICT)
+└── Navigation: Fixed headers + tab navigation
+
+Level 4: Individual Tabs (Content Components)
+├── CustomerInsightsTab.tsx
+├── CustomerInfoTab.tsx  
+├── CustomerAccountStatementTab.tsx
+├── CustomerOrdersTab.tsx
+└── CustomerSupportTab.tsx
+```
+
+**Problem Identified:**
+1. **Height Conflict**: Level 3 claimed `100vh` while sitting inside Level 1's grid
+2. **Competing Scrollers**: Both Level 1 and Level 3 had `overflow-y: auto`
+3. **Content Truncation**: Level 4 tabs had height constraints preventing full content access
+
+**Solution Applied:**
+```css
+/* Step 1: Disable Level 1 scroll in 360° mode */
+.customersModule.view360Mode .customersContent {
+  overflow: hidden; /* Prevent competing scroll containers */
+}
+
+/* Step 2: Fix Level 3 height constraint */
+.customer360Container {
+  height: 100%; /* Fill available parent space instead of claiming full viewport */
+}
+
+/* Step 3: Remove Level 4 height constraints */
+.ordersTabContainer, .supportTabContainer {
+  /* Removed: height: 100%; overflow: hidden; */
+  display: flex;
+  flex-direction: column;
+}
+
+.infoTabContainer {
+  /* Removed mobile: height: 100%; min-height: 0; */
+}
+```
+
+**Architecture Comparison:**
+
+*Before (Broken):*
+```
+Customers (overflow-y: auto) ← Scroll Handler 1
+└── Customer360View (height: 100vh, overflow-y: auto) ← Scroll Handler 2 (CONFLICT)
+    └── Individual Tabs (height: 100%, overflow: hidden) ← Content Blocked
+```
+
+*After (Fixed):*
+```
+Customers (overflow: hidden in 360° mode) ← Disabled in special mode
+└── Customer360View (height: 100%, overflow-y: auto) ← Single Scroll Handler
+    └── Individual Tabs (natural flow) ← Content Accessible
+```
+
+**Results:**
+- ✅ Single scroll container architecture implemented
+- ✅ All tab content fully accessible with scrolling
+- ✅ No height truncation issues
+- ✅ Proper mobile touch scrolling maintained
+- ✅ Clean state transitions between normal and 360° modes
+
+**Prevention Guidelines:**
+1. **Never mix `height: 100vh` with grid-constrained parents**
+2. **Only ONE container per hierarchy should handle scrolling**
+3. **Use `height: 100%` for nested containers, not `height: 100vh`**
+4. **Individual content components should never have height constraints**
+5. **Test all tabs for full content accessibility**
+
 ### Component Design System
 
 #### **Button Styles**
