@@ -1,0 +1,79 @@
+/* Support Ticket Management Screen Styles - Platform Scroll Compatible */
+.supportTicketScreen {
+  /* Universal scroll pattern - let parent handle scrolling */
+  padding: var(--ds-padding-screen);
+  text-align: left !important;
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* Page content wrapper - let content determine height for scrolling */
+.pageContent {
+  padding: 0;
+}
+
+.ticketsContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+/* ===== GLOBAL CARD SYSTEM REFERENCE ===== */
+/* Support ticket card styles now handled by global .ds-card system in index.css */
+/* Card container, hover and expanded states handled globally */
+/* Card content styles handled by global .ds-card-* classes */
+/* Status-based border colors handled by global .ds-card-status-* classes */
+
+/* ===== COMPONENT-SPECIFIC STATUS DISPLAY ===== */
+.statusLine {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+/* ===== COMPONENT-SPECIFIC ACTION BUTTONS ===== */
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+  margin-top: clamp(12px, 3vw, 16px);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-md);
+}
+
+/* ===== COMPONENT-SPECIFIC NOTES LIST ===== */
+.notesList {
+  margin: var(--ds-space-sm) 0;
+  padding-left: var(--ds-space-md);
+  color: var(--ds-text-secondary);
+}
+
+.notesList li {
+  margin-bottom: var(--ds-space-xs);
+  font-size: var(--font-sm);
+  line-height: 1.4;
+}
+
+/* Mobile Responsiveness - Container padding removal pattern */
+@media (max-width: 767px) {
+  .ticketsContainer {
+    padding-left: 0;     /* Remove padding on mobile */
+    padding-right: 0;    /* Remove padding on mobile */
+  }
+}

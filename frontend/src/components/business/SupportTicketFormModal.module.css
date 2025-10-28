@@ -1,0 +1,189 @@
+/* Support Ticket Form Modal Styles - ModalPortal Architecture Compliant */
+
+/* Modal content - Global sizing handled automatically by ModalPortal */
+.modalContent {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-elevated);
+  /* max-width automatically 500px via global design system */
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+}
+
+/* Modal Header */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-primary);
+  position: sticky;
+  top: 0;
+  background: var(--ds-bg-card);
+  z-index: 1;
+}
+
+.modalTitle {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.closeButton {
+  width: var(--ds-touch-target-md);
+  height: var(--ds-touch-target-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font-size: var(--font-xl);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-text-primary);
+}
+
+/* Modal Form */
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.formBody {
+  padding: var(--ds-space-lg);
+  flex: 1;
+}
+
+/* Form Groups */
+.formGroup {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.formLabel {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-xs);
+}
+
+/* Form Inputs */
+.formInput,
+.formSelect,
+.formTextarea {
+  width: 100%;
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-base);
+  font-family: var(--font-family);
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: var(--ds-touch-target-md);
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Form Row for side-by-side inputs */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-md);
+}
+
+/* Error States */
+.formInputError {
+  border-color: var(--ds-text-critical);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.errorMessage {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--ds-text-critical);
+  margin-top: var(--ds-space-xs);
+}
+
+/* Character Count */
+.characterCount {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  text-align: right;
+  margin-top: var(--ds-space-xs);
+}
+
+/* Modal Footer */
+.modalFooter {
+  padding: var(--ds-space-lg);
+  border-top: 1px solid var(--ds-border-primary);
+  display: flex;
+  gap: var(--ds-space-sm);
+  justify-content: flex-end;
+  background: var(--ds-bg-card);
+  position: sticky;
+  bottom: 0;
+}
+
+/* Modal Animation */
+@keyframes modalSlideIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 767px) {
+  .modalHeader,
+  .formBody,
+  .modalFooter {
+    padding: var(--ds-space-md);
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+
+  .modalFooter {
+    flex-direction: column-reverse;
+  }
+
+  .modalFooter button {
+    width: 100%;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .formInput,
+  .formSelect,
+  .formTextarea {
+    border-width: 2px;
+  }
+}

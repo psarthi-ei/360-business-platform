@@ -4,7 +4,8 @@ import styles from './Customers.module.css';
 import CustomerListManagement from './CustomerListManagement';
 import SupportTicketManagement from './SupportTicketManagement';
 import Customer360View from './Customer360View';
-import { BusinessProfile } from '../../data/customerMockData';
+import SupportTicketFormModal from './SupportTicketFormModal';
+import { BusinessProfile, SupportTicket } from '../../data/customerMockData';
 
 interface CustomersProps {
   mobile?: boolean;
@@ -46,6 +47,10 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
   // 360° view state management
   const [show360View, setShow360View] = useState(false);
   const [selected360Customer, setSelected360Customer] = useState<BusinessProfile | null>(null);
+  
+  // Support ticket modal state management
+  const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
+  const [editingTicket, setEditingTicket] = useState<SupportTicket | null>(null);
   
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
@@ -261,6 +266,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
           <SupportTicketManagement
             filterState={supportFilterState}
             onFilterChange={setSupportFilterState}
+            onOpenTicketModal={handleOpenTicketModal}
           />
         );
       default:
@@ -281,11 +287,31 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
   const handleCTAClick = () => {
     switch(activeSection) {
       case 'support':
-        alert('Create Support Ticket functionality coming soon!');
+        setIsTicketModalOpen(true);
+        setEditingTicket(null); // Create mode
         break;
       default:
         // Unknown section - no action needed
     }
+  };
+  
+  // Handle support ticket modal actions
+  const handleOpenTicketModal = (ticket?: SupportTicket) => {
+    setEditingTicket(ticket || null);
+    setIsTicketModalOpen(true);
+  };
+  
+  const handleCloseTicketModal = () => {
+    setIsTicketModalOpen(false);
+    setEditingTicket(null);
+  };
+  
+  const handleTicketSubmit = (ticketData: any) => {
+    // TODO: Implement actual ticket creation/update logic
+    // For now, show success message
+    const action = editingTicket ? 'updated' : 'created';
+    alert(`Support ticket ${action} successfully!`);
+    handleCloseTicketModal();
   };
 
   // 360° view handlers
@@ -320,7 +346,13 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
         </button>
         <button 
           className={`${styles.sectionButton} ${activeSection === 'support' ? styles.active : ''}`}
-          onClick={() => setActiveSection('support')}
+          onClick={() => {
+            setActiveSection('support');
+            if (show360View) {
+              setShow360View(false);
+              setSelected360Customer(null);
+            }
+          }}
         >
           Support
         </button>
@@ -345,6 +377,16 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
             {getContextualCTA(activeSection)}
           </button>
         </div>
+      )}
+      
+      {/* Support Ticket Form Modal */}
+      {activeSection === 'support' && (
+        <SupportTicketFormModal
+          isOpen={isTicketModalOpen}
+          onClose={handleCloseTicketModal}
+          onSubmit={handleTicketSubmit}
+          editingTicket={editingTicket}
+        />
       )}
     </div>
   );
