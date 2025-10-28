@@ -8,71 +8,54 @@
   padding: var(--ds-space-md);
 }
 
-/* Statement Header */
+/* Statement Header - Single row layout */
 .statementHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   padding: var(--ds-space-md);
   background: var(--ds-bg-secondary);
   border-radius: var(--ds-radius-lg);
   border: 1px solid var(--ds-border-subtle);
 }
 
-.headerInfo {
-  flex: 1;
-}
-
-.headerTitle {
-  font-family: var(--font-family);
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: var(--ds-text-primary);
-  margin: 0 0 var(--ds-space-xs) 0;
-}
-
-.customerName {
-  font-family: var(--font-family);
-  font-size: var(--font-base);
-  color: var(--ds-text-secondary);
-  margin: 0;
-}
-
-.headerActions {
+/* Header Row - Filter left, Outstanding right */
+.headerRow {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--ds-space-sm);
-}
-
-.filterContainer {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
+  gap: var(--ds-space-md);
+}
+
+/* Filter Dropdowns - Consistent with other tabs */
+.filterDropdowns {
+  display: flex;
   gap: var(--ds-space-sm);
+  align-items: center;
 }
 
-.transactionFilter {
-  height: var(--ds-touch-target-sm);
-  padding: 0 var(--ds-space-sm);
-  background: var(--ds-bg-primary);
-  border: 1px solid var(--ds-border-subtle);
+.filterDropdown {
+  height: var(--ds-space-xxl);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: white;
+  border: 1px solid var(--ds-border-secondary);
   border-radius: var(--ds-radius-sm);
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
   color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  line-height: 1.2;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 140px;
+  transition: all 0.2s;
+  min-width: 160px;
+  width: auto;
 }
 
-.transactionFilter:hover {
-  border-color: var(--ds-color-primary);
+.filterDropdown:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
 }
 
-.transactionFilter:focus {
+.filterDropdown:focus {
   outline: none;
-  border-color: var(--ds-color-primary);
-  box-shadow: 0 0 0 2px var(--ds-color-primary-alpha);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
 }
 
 .outstandingAmount {
@@ -80,6 +63,12 @@
   flex-direction: column;
   align-items: flex-end;
   gap: var(--ds-space-xs);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: linear-gradient(135deg, var(--ds-bg-primary) 0%, var(--ds-bg-secondary) 100%);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-default);
+  box-shadow: 0 2px 4px var(--ds-shadow-light);
+  min-width: 140px;
 }
 
 .outstandingLabel {
@@ -103,27 +92,6 @@
   color: var(--ds-color-success);
 }
 
-.shareButton {
-  height: var(--ds-touch-target-md);
-  padding: 0 var(--ds-space-md);
-  background: var(--ds-color-info);
-  color: var(--ds-text-inverse);
-  border: none;
-  border-radius: var(--ds-radius-sm);
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--ds-space-xs);
-}
-
-.shareButton:hover {
-  background: var(--ds-color-info-hover);
-  transform: translateY(-1px);
-}
 
 /* Transactions List */
 .transactionsList {
@@ -135,57 +103,11 @@
 /* Legacy transaction card styles - now using global DS card system */
 /* These styles are kept for any remaining custom elements */
 
-/* Desktop Table Layout */
-.desktopTableHeader {
-  display: none; /* Hidden on mobile */
-  grid-template-columns: 100px 120px 100px 100px 100px 80px;
+/* Transactions List */
+.transactionsList {
+  display: flex;
+  flex-direction: column;
   gap: var(--ds-space-sm);
-  padding: var(--ds-space-sm) var(--ds-space-md);
-  background: var(--ds-bg-secondary);
-  border: 1px solid var(--ds-border-subtle);
-  border-bottom: none;
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
-  font-weight: 600;
-  color: var(--ds-text-primary);
-}
-
-.tableHeaderCell {
-  text-align: left;
-}
-
-.desktopTableRow {
-  display: none; /* Hidden on mobile */
-  grid-template-columns: 100px 120px 100px 100px 100px 80px;
-  gap: var(--ds-space-sm);
-  padding: var(--ds-space-sm) var(--ds-space-md);
-  border: 1px solid var(--ds-border-subtle);
-  border-top: none;
-  background: var(--ds-bg-primary);
-  font-family: var(--font-family);
-  font-size: var(--font-sm);
-  color: var(--ds-text-primary);
-}
-
-.tableCell {
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.desktopViewButton {
-  background: transparent;
-  border: none;
-  color: var(--ds-color-primary);
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-size: var(--font-xs);
-  text-decoration: underline;
-}
-
-.desktopViewButton:hover {
-  color: var(--ds-color-primary-hover);
 }
 
 /* Mobile Transaction Layout */
@@ -231,24 +153,6 @@
 }
 
 /* Desktop Responsive */
-@media (min-width: 769px) {
-  .desktopTableHeader {
-    display: grid;
-  }
-  
-  .desktopTableRow {
-    display: grid;
-  }
-  
-  .mobileTransaction {
-    display: none;
-  }
-  
-  .transactionHeader,
-  .transactionDescription {
-    display: none;
-  }
-}
 
 /* Empty State */
 .emptyState {
@@ -314,6 +218,7 @@
   margin-top: var(--ds-space-xs);
 }
 
+
 /* Industry Standard Account Statement Features */
 .documentNumber {
   font-family: var(--font-family);
@@ -327,36 +232,17 @@
   letter-spacing: 0.5px;
 }
 
-.transactionStatus {
+.paymentMethod {
   font-family: var(--font-family);
   font-size: var(--font-xs);
   font-weight: 500;
+  color: var(--ds-color-success);
+  background: var(--ds-color-success-alpha);
   padding: var(--ds-space-xxs) var(--ds-space-xs);
   border-radius: var(--ds-radius-xs);
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
-.transactionStatus.status-paid {
-  background: var(--ds-color-success);
-  color: var(--ds-text-inverse);
-}
-
-.transactionStatus.status-pending {
-  background: var(--ds-color-warning);
-  color: var(--ds-text-primary);
-}
-
-.transactionStatus.status-overdue {
-  background: var(--ds-color-danger);
-  color: var(--ds-text-inverse);
-}
-
-.transactionStatus.status-received,
-.transactionStatus.status-verified,
-.transactionStatus.status-reconciled {
-  background: var(--ds-color-success);
-  color: var(--ds-text-inverse);
-}
 
 .transactionTimestamp {
   font-family: var(--font-family);
@@ -371,16 +257,25 @@
   color: var(--ds-text-primary);
   line-height: 1.4;
   margin-bottom: var(--ds-space-xs);
+  /* Mobile-optimized text handling */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .auditTrail {
   font-family: var(--font-family);
   font-size: var(--font-xs);
   color: var(--ds-text-tertiary);
-  font-style: italic;
+  font-style: normal;
+  font-weight: 500;
   margin-top: var(--ds-space-xxs);
   padding-left: var(--ds-space-sm);
   border-left: 2px solid var(--ds-border-subtle);
+  /* Mobile-optimized text handling - allow 2-line display */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 
 /* Mobile Responsive Design */
@@ -401,17 +296,24 @@
   }
   
   .statementHeader {
-    flex-direction: column;
-    gap: var(--ds-space-md);
-    align-items: flex-start;
+    padding: var(--ds-space-sm);
   }
   
-  .headerActions {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  .headerRow {
+    flex-direction: column;
+    gap: var(--ds-space-sm);
+    align-items: stretch;
+  }
+  
+  .outstandingAmount {
+    min-width: auto;
     width: 100%;
-    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--ds-space-sm) var(--ds-space-md);
+  }
+  
+  .filterDropdowns {
+    order: -1;
   }
   
   .filterContainer {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, getFinalInvoiceById, mockFinalInvoices } from '../../data/salesMockData';
+import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, getFinalInvoiceById, getProformaInvoiceById, mockFinalInvoices, getQuoteById } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import CustomerDetailsModal from './CustomerDetailsModal';
 import styles from './CustomerAccountStatementTab.module.css';
@@ -21,8 +21,29 @@ interface AccountTransaction {
   relatedOrderId?: string;
   relatedInvoiceId?: string;
   documentNumber?: string; // For invoice numbers, payment references
-  status?: string; // For transaction status
+  paymentMethod?: string; // For payment transactions (RTGS, NEFT, UPI, etc.)
+  bankName?: string; // For payment meta display
+  shortReference?: string; // For payment meta display
 }
+
+// Helper function to extract bank information from transaction reference
+const extractBankInfo = (transactionRef: string, paymentMethod: string) => {
+  if (!transactionRef) return { bankName: '', shortReference: '' };
+  
+  // Extract bank name from transaction reference patterns
+  let bankName = '';
+  if (transactionRef.includes('HDFC')) bankName = 'HDFC Bank';
+  else if (transactionRef.includes('SBI')) bankName = 'State Bank of India';
+  else if (transactionRef.includes('ICICI')) bankName = 'ICICI Bank';
+  else if (transactionRef.includes('BOB')) bankName = 'Bank of Baroda';
+  else if (transactionRef.includes('AXIS')) bankName = 'Axis Bank';
+  else bankName = 'Bank';
+  
+  // Extract short reference (last part after bank code and date)
+  const shortReference = transactionRef.slice(-6); // Last 6 characters
+  
+  return { bankName, shortReference };
+};
 
 const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTabProps) => {
   // Modal state
@@ -43,35 +64,51 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
     // Add Sales Invoice transactions (DEBIT entries)
     const customerInvoices = mockFinalInvoices.filter(invoice => invoice.businessProfileId === customerId);
     customerInvoices.forEach(invoice => {
+      // Extract meaningful business context from invoice items
+      const primaryItem = invoice.items[0];
+      const itemDescription = primaryItem ? 
+        `${primaryItem.description} - ${primaryItem.quantity} ${primaryItem.unit}` : 
+        'Product Invoice';
+      
       const invoiceTransaction: AccountTransaction = {
         id: `invoice-${invoice.id}`,
         date: invoice.invoiceDate,
         type: 'sales_invoice',
         reference: invoice.invoiceNumber,
-        description: `Sales Invoice - ${invoice.items[0]?.description || 'Product Invoice'}`,
+        description: itemDescription,
         debitAmount: invoice.totalAmount,
         runningBalance: 0, // Will be calculated after sorting
         relatedInvoiceId: invoice.id,
-        documentNumber: invoice.invoiceNumber,
-        status: invoice.status
+        documentNumber: invoice.invoiceNumber
       };
       transactions.push(invoiceTransaction);
     });
 
     // Add Advance Payment transactions (CREDIT entries)
     advancePayments.forEach(payment => {
-      // Only show received payments in account statement
-      if (payment.status === 'received' && payment.receivedDate) {
+      // Show all payments with proper allocation and received date
+      if (payment.receivedDate) {
+        // Get the proforma invoice for this payment
+        const proformaInvoice = getProformaInvoiceById(payment.proformaInvoiceId);
+        // Get the quote to access items description
+        const quote = proformaInvoice ? getQuoteById(proformaInvoice.quoteId) : null;
+        
+        // Extract bank information for meta display
+        const { bankName, shortReference } = extractBankInfo(payment.transactionReference || '', payment.paymentMethod);
+        
         const paymentTransaction: AccountTransaction = {
           id: payment.id,
           date: payment.receivedDate,
           type: 'advance_payment',
           reference: payment.transactionReference || payment.id,
-          description: `Advance Payment via ${payment.paymentMethod}${payment.transactionReference ? ` (Ref: ${payment.transactionReference})` : ''}`,
+          description: quote ? quote.items : 'Advance Payment',
           creditAmount: payment.receivedAmount || payment.amount,
           runningBalance: 0, // Will be calculated after sorting
-          documentNumber: payment.transactionReference,
-          status: payment.status
+          documentNumber: proformaInvoice ? proformaInvoice.id : payment.transactionReference,
+          relatedInvoiceId: payment.proformaInvoiceId,
+          paymentMethod: payment.paymentMethod,
+          bankName: bankName,
+          shortReference: shortReference
         };
         transactions.push(paymentTransaction);
       }
@@ -79,20 +116,28 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
 
     // Add Payment transactions (CREDIT entries)
     finalPayments.forEach(payment => {
-      // Only show verified/reconciled payments in account statement
-      if (payment.status === 'received' || payment.status === 'verified' || payment.status === 'reconciled') {
+      // Show all payments with proper invoice allocation
+      if (payment.finalInvoiceId) {
         const salesInvoice = getFinalInvoiceById(payment.finalInvoiceId);
+        
+        // Extract bank information for meta display
+        const { bankName, shortReference } = extractBankInfo(payment.transactionReference || '', payment.paymentMethod);
+        
         const paymentTransaction: AccountTransaction = {
           id: payment.id,
           date: payment.paymentDate,
           type: 'payment',
-          reference: payment.transactionReference,
-          description: `Payment${salesInvoice ? ` against ${salesInvoice.invoiceNumber}` : ''} via ${payment.paymentMethod}`,
+          reference: salesInvoice ? salesInvoice.invoiceNumber : payment.transactionReference,
+          description: salesInvoice && salesInvoice.items.length > 0 ? 
+            `${salesInvoice.items[0].description} - ${salesInvoice.items[0].quantity} ${salesInvoice.items[0].unit}` : 
+            'Final Payment',
           creditAmount: payment.amount,
           runningBalance: 0, // Will be calculated after sorting
           relatedInvoiceId: payment.finalInvoiceId,
-          documentNumber: payment.transactionReference,
-          status: payment.status
+          documentNumber: salesInvoice ? salesInvoice.invoiceNumber : payment.transactionReference,
+          paymentMethod: payment.paymentMethod,
+          bankName: bankName,
+          shortReference: shortReference
         };
         transactions.push(paymentTransaction);
       }
@@ -138,12 +183,12 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
     setSelectedTransaction(null);
   };
 
-  // Format currency
+  // Format currency - Full amounts with 2 decimal places and comma separation
   const formatCurrency = (amount: number) => {
-    if (amount >= 10000000) return `${(amount / 10000000).toFixed(1)}Cr`;
-    if (amount >= 100000) return `${(amount / 100000).toFixed(1)}L`;
-    if (amount >= 1000) return `${(amount / 1000).toFixed(1)}K`;
-    return amount.toString();
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
   };
 
   // Format date
@@ -181,21 +226,6 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
   };
 
 
-  // Handle share (WhatsApp only)
-  const handleShare = () => {
-    const statementSummary = `Account Statement - ${customer?.companyName}\n\nCurrent Outstanding: ₹${formatCurrency(Math.abs(transactions[0]?.runningBalance || 0))}\nTotal Transactions: ${transactions.length}\n\n*Generated with ElevateBusiness 360°*`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'Account Statement',
-        text: statementSummary
-      });
-    } else {
-      // Fallback: Copy to clipboard
-      navigator.clipboard.writeText(statementSummary);
-      alert('Statement summary copied to clipboard');
-    }
-  };
 
   if (transactions.length === 0) {
     return (
@@ -214,57 +244,41 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
   return (
     <div className={styles.accountStatementContainer}>
       
-      {/* Statement Header */}
+      {/* Statement Controls - Single Row Layout */}
       <div className={styles.statementHeader}>
-        <div className={styles.headerInfo}>
-          <h3 className={styles.headerTitle}>Account Statement</h3>
-          <p className={styles.customerName}>{customer?.companyName}</p>
-        </div>
-        <div className={styles.headerActions}>
-          <div className={styles.filterContainer}>
+        <div className={styles.headerRow}>
+          <div className={styles.filterDropdowns}>
             <select 
-              className={styles.transactionFilter}
+              className={styles.filterDropdown}
               value={transactionFilter}
               onChange={(e) => setTransactionFilter(e.target.value)}
             >
               <option value="all">All Transactions</option>
-              <option value="invoices">Sales Invoices</option>
-              <option value="payments">Payments</option>
-              <option value="advance_payment">Advance Payments</option>
+              <option value="invoices">📄 Invoices</option>
+              <option value="payments">💳 Payments</option>
+              <option value="advance_payment">💰 Advance</option>
             </select>
           </div>
+          
           <div className={styles.outstandingAmount}>
             <span className={styles.outstandingLabel}>Outstanding</span>
             <span className={`${styles.outstandingValue} ${(allTransactions[0]?.runningBalance || 0) > 0 ? styles.debit : styles.credit}`}>
               ₹{formatCurrency(Math.abs(allTransactions[0]?.runningBalance || 0))}
             </span>
           </div>
-          <button className={styles.shareButton} onClick={handleShare}>
-            💬 Share
-          </button>
         </div>
-      </div>
-
-      {/* Desktop Table Header */}
-      <div className={styles.desktopTableHeader}>
-        <span className={styles.tableHeaderCell}>Date</span>
-        <span className={styles.tableHeaderCell}>Type</span>
-        <span className={styles.tableHeaderCell}>Ref No</span>
-        <span className={styles.tableHeaderCell}>Debit</span>
-        <span className={styles.tableHeaderCell}>Credit</span>
-        <span className={styles.tableHeaderCell}>Action</span>
       </div>
 
       {/* Transactions List */}
       <div className={styles.transactionsList}>
         {transactions.map((transaction) => {
-          // Determine transaction status class based on type and balance
+          // Determine transaction status class based on type 
           const getTransactionStatusClass = () => {
             if (transaction.type === 'sales_invoice') {
-              return transaction.status === 'paid' ? 'ds-card-status-active' : 'ds-card-priority-medium';
+              return 'ds-card-priority-medium'; // Invoice = amount due
             }
             if (transaction.type === 'advance_payment' || transaction.type === 'payment') {
-              return 'ds-card-status-active';
+              return 'ds-card-status-active'; // Payment = money received
             }
             return 'ds-card-status-pending';
           };
@@ -288,9 +302,9 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
                       {transaction.documentNumber}
                     </span>
                   )}
-                  {transaction.status && (
-                    <span className={`${styles.transactionStatus} ${styles[`status-${transaction.status}`]}`}>
-                      {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                  {transaction.type === 'sales_invoice' && transaction.paymentMethod && (
+                    <span className={styles.paymentMethod}>
+                      {transaction.paymentMethod}
                     </span>
                   )}
                   <span className={styles.transactionTimestamp}>
@@ -298,25 +312,25 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
                   </span>
                 </div>
 
-                {/* Transaction Description & Audit Trail */}
+                {/* Transaction Description & Business Context */}
                 <div className="ds-card-meta" title={transaction.description}>
                   <div className={styles.transactionDescription}>
                     {transaction.description}
                   </div>
-                  {transaction.relatedInvoiceId && (
+                  {transaction.type === 'sales_invoice' && customer && (
                     <div className={styles.auditTrail}>
-                      Related: {transaction.relatedInvoiceId}
+                      Customer: {customer.companyName}
                     </div>
                   )}
-                  {transaction.type === 'sales_invoice' && (
+                  {(transaction.type === 'advance_payment' || transaction.type === 'payment') && transaction.bankName && (
                     <div className={styles.auditTrail}>
-                      Invoice Type: Sales Invoice
+                      {transaction.paymentMethod} via {transaction.bankName} • Ref: {transaction.shortReference}
                     </div>
                   )}
                 </div>
 
-                {/* Transaction Actions/Details */}
-                <div className="ds-card-actions" onClick={(e) => e.stopPropagation()}>
+                {/* Transaction Amount Information */}
+                <div className="ds-card-content" onClick={(e) => e.stopPropagation()}>
                   <div className={styles.transactionAmountInfo}>
                     {transaction.debitAmount && (
                       <span className={styles.debitAmount}>
@@ -333,6 +347,10 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
                       {transaction.runningBalance > 0 ? '(Due)' : '(Credit)'}
                     </span>
                   </div>
+                </div>
+
+                {/* Transaction Actions */}
+                <div className="ds-card-actions" onClick={(e) => e.stopPropagation()}>
                   <button 
                     className="ds-btn ds-btn-sm ds-btn-secondary"
                     onClick={() => handleViewDetails(transaction)}
