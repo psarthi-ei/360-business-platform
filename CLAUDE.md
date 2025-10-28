@@ -36,6 +36,83 @@ date  # ALWAYS run first - validates project timeline context
 
 ---
 
+## 🔄 UNIVERSAL MAJOR WORK PROTOCOL (MANDATORY)
+
+### **CRITICAL: TASK-TRIGGERED ARCHITECTURE REVIEW**
+
+**Problem Solved**: Session continuation bypasses mandatory reading, causing architectural decisions to be missed.
+
+**Solution**: ANY major work automatically triggers full documentation review, regardless of session boundaries.
+
+### **AUTO-TRIGGER CONDITIONS - READ ALL DOCS FIRST**
+
+**IF ANY OF THESE APPLY → STOP AND READ MANDATORY DOCS:**
+
+#### **Implementation Work:**
+- Creating new components or features
+- Modifying existing architecture patterns
+- Adding functionality to existing systems
+- Building new user interfaces or workflows
+- Integrating with existing component systems
+
+#### **System-Level Work:**
+- Layout or CSS Grid changes
+- Navigation or routing modifications
+- Design system updates or extensions
+- Performance optimizations
+- Mobile/responsive behavior fixes
+- Cross-module integrations
+
+#### **Architecture Work:**
+- Modal implementations (ANY modal work)
+- State management changes
+- Service layer modifications
+- Component structure updates
+- API integrations or data flow changes
+
+### **TRIGGER KEYWORDS - IMMEDIATE DOC REVIEW REQUIRED:**
+```
+"implement", "create", "build", "develop", "add"
+"fix", "update", "modify", "change", "refactor" 
+"component", "feature", "functionality", "system"
+"modal", "navigation", "layout", "grid", "design"
+"architecture", "integration", "service", "API"
+"mobile", "responsive", "optimization", "performance"
+```
+
+### **MANDATORY READING SEQUENCE (Major Work):**
+```bash
+# STEP 1: FOUNDATION DOCS (ALWAYS READ)
+1. /docs/CLAUDE.md (this file - session protocol)
+2. /docs/DOCUMENTATION_INDEX.md (navigation hub + Quick Decision Matrix)  
+3. /docs/IMPLEMENTATION_ROADMAP.md (current status)
+4. /docs/ARCHITECTURE_DECISIONS_INDEX.md (ALL architectural decisions)
+
+# STEP 2: TASK-SPECIFIC DOCS (Based on Documentation Index Quick Decision Matrix)
+Use /docs/DOCUMENTATION_INDEX.md Quick Decision Matrix to determine:
+- Component work → COMPONENT_DESIGN_PATTERNS.md
+- UI/Visual work → VISUAL_DESIGN_SPECIFICATION.md  
+- Business logic → BUSINESS_PROCESSES.md
+- Feature requirements → PRODUCT_REQUIREMENTS.md
+- Architecture patterns → UNIFIED_ARCHITECTURE.md
+```
+
+### **TASK-SPECIFIC DOCUMENTATION PROTOCOL:**
+> **NEVER guess which docs to read** - Always check the Quick Decision Matrix in DOCUMENTATION_INDEX.md to identify the exact documents needed for your specific task type.
+
+### **UNIVERSAL PRINCIPLE:**
+> **"If it's significant enough to spend development time on, it's significant enough to check all architectural context first."**
+
+### **ENFORCEMENT RULE:**
+- ✅ **BEFORE any significant work**: Check existing architectural decisions
+- ✅ **NEVER start implementing**: Without reviewing established patterns
+- ✅ **ALWAYS ask first**: "Is this already architecturally decided?"
+- ❌ **NEVER assume**: That new implementation is needed without context check
+
+**This protocol ensures architectural compliance regardless of session continuation, compaction, or boundaries.**
+
+---
+
 ## 🚨 CRITICAL MISTAKES TO AVOID
 
 ### **1. COMPILATION VERIFICATION (MANDATORY)**
@@ -101,7 +178,16 @@ if (params && 'leadId' in params) {
 2. `Edit` tool with exact string matching
 3. `BashOutput` verification after changes
 
-### **6. DOCUMENTATION FORMATTING STANDARDS (MANDATORY)**
+### **6. SKIPPING MAJOR WORK PROTOCOL (CRITICAL ERROR)**
+**❌ FATAL MISTAKE**: Starting implementation work without checking architectural context
+
+**✅ MANDATORY ENFORCEMENT**:
+- BEFORE any component/system work → Read Universal Major Work Protocol above
+- NEVER implement modals without checking Architecture Decisions Index
+- ALWAYS verify existing patterns before creating new solutions
+- If ANY trigger keywords apply → STOP and read all mandatory docs first
+
+### **7. DOCUMENTATION FORMATTING STANDARDS (MANDATORY)**
 **❌ FORBIDDEN**: Emojis in document headers (breaks TOC navigation)
 
 **✅ REQUIRED STANDARDS**:

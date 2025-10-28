@@ -1,22 +1,17 @@
 /* Customer360View.module.css - Full Page Customer 360° View */
 
-/* Main Container */
+/* Main Container - Information Only (No CTA) */
 .customer360Container {
   display: grid;
-  grid-template-rows: 48px 48px auto 1fr 56px; /* Header | Tabs | Status | Content | CTA */
-  height: 100%;
+  grid-template-rows: var(--ds-touch-target-preferred) var(--ds-touch-target-preferred) 1fr; /* Header | Tabs | Content */
+  min-height: 100%;
   background: var(--ds-bg-primary);
-  overflow: hidden;
+  /* Remove overflow: hidden to allow natural mobile scroll */
 }
 
-/* Space reclamation when CTA is hidden */
-.customer360Container.noCTA {
-  grid-template-rows: 48px 48px auto 1fr; /* Header | Tabs | Status | Content (CTA space reclaimed) */
-}
-
-/* Header - 48px */
+/* Header - Touch Target Preferred */
 .customer360Header {
-  height: 48px;
+  height: var(--ds-touch-target-preferred);
   display: flex;
   align-items: center;
   padding: 0 var(--ds-space-md);
@@ -70,9 +65,9 @@
   text-align: left;
 }
 
-/* Tab Navigation - 48px */
+/* Tab Navigation - Touch Target Preferred */
 .tabNavigation {
-  height: 48px;
+  height: var(--ds-touch-target-preferred);
   display: flex;
   border-bottom: 1px solid var(--ds-border-subtle);
   background: var(--ds-bg-primary);
@@ -80,7 +75,7 @@
 
 .tabButton {
   flex: 1;
-  height: 48px;
+  height: var(--ds-touch-target-preferred);
   background: transparent;
   border: none;
   font-family: var(--font-family);
@@ -112,13 +107,13 @@
   padding: var(--ds-space-sm) var(--ds-space-md);
   background: var(--ds-bg-secondary);
   border-bottom: 1px solid var(--ds-border-subtle);
-  min-height: 40px;
+  min-height: var(--ds-space-xxl);
 }
 
 .loyaltyBadge {
   font-family: var(--font-family);
-  font-size: var(--font-xs);
-  font-weight: 700;
+  font-size: var(--font-sm);
+  font-weight: 500;
   padding: var(--ds-space-xs) var(--ds-space-sm);
   background: var(--ds-color-gold);
   color: var(--ds-text-inverse);
@@ -130,15 +125,15 @@
 
 .paymentScore {
   font-family: var(--font-family);
-  font-size: var(--font-sm);
+  font-size: var(--font-base);
   color: var(--ds-text-primary);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .creditStatus {
   font-family: var(--font-family);
-  font-size: var(--font-xs);
-  font-weight: 600;
+  font-size: var(--font-sm);
+  font-weight: 500;
   padding: var(--ds-space-xs) var(--ds-space-sm);
   border-radius: var(--ds-radius-sm);
   text-transform: uppercase;
@@ -166,53 +161,25 @@
   color: var(--ds-text-inverse);
 }
 
-/* Tab Content Area */
+/* Tab Content Area - Mobile-First Scroll Optimization */
 .tabContent {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   background: var(--ds-bg-primary);
   min-height: 0; /* Allow grid item to shrink */
+  /* Mobile scroll optimization - let browser handle natural scroll */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Ensure compatibility with ModalPortal scroll management */
+  touch-action: manipulation;
 }
 
-/* Context-Aware CTA - 56px */
-.customer360CTA {
-  height: 56px;
-  display: flex;
-  align-items: center;
-  padding: var(--ds-space-sm) var(--ds-space-md);
-  border-top: 1px solid var(--ds-border-subtle);
-  background: var(--ds-bg-primary);
-}
-
-.customer360CTAButton {
-  width: 100%;
-  height: 40px;
-  background: var(--ds-btn-primary);
-  color: white;
-  border: none;
-  border-radius: var(--ds-radius-md);
-  font-size: var(--font-base);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px; /* Visual Design Spec touch target */
-}
-
-.customer360CTAButton:hover {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(-1px);
-}
-
-.customer360CTAButton:active {
-  background: var(--ds-btn-primary-hover);
-  transform: translateY(1px);
-}
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
+  .customer360Container {
+    /* Optimize for mobile viewport */
+    min-height: 100vh;
+  }
+  
   .customer360Header {
     padding: 0 var(--ds-space-sm);
   }
@@ -229,18 +196,19 @@
     text-align: center;
   }
   
+  .tabContent {
+    /* Enhanced mobile scroll behavior */
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    /* Prevent scroll bounce conflicts with ModalPortal */
+    overscroll-behavior: contain;
+  }
+  
   .tabButton {
-    font-size: var(--font-xs);
+    font-size: var(--font-sm);
+    font-weight: 500;
   }
   
-  .customer360CTA {
-    padding: var(--ds-space-xs) var(--ds-space-sm);
-  }
-  
-  .customer360CTAButton {
-    min-height: 44px;
-    font-size: var(--font-base);
-  }
 }
 
 /* Touch Device Optimizations */

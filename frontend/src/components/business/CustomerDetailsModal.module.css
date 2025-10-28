@@ -1,0 +1,106 @@
+/* CustomerDetailsModal.module.css - Reusable Modal Wrapper for Customer 360° Details */
+/* Updated to work with ModalPortal for consistent scroll behavior */
+
+/* Modal Container - Responsive (used within ModalPortal) */
+.modalContainer {
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Modal Header - Touch Target Preferred */
+.modalHeader {
+  height: var(--ds-touch-target-preferred);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-primary);
+  flex-shrink: 0;
+}
+
+.closeButton {
+  width: var(--ds-touch-target-md);
+  height: var(--ds-touch-target-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-hover);
+  color: var(--ds-color-primary-hover);
+}
+
+.modalTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modal Content - Scrollable */
+.modalContent {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-primary);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .modalContainer {
+    max-height: 90vh;
+    margin: 0;
+  }
+  
+  .modalHeader {
+    padding: 0 var(--ds-space-sm);
+  }
+  
+  .modalContent {
+    padding: var(--ds-space-sm);
+  }
+  
+  .modalTitle {
+    font-size: var(--font-base);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .closeButton {
+    min-width: var(--ds-touch-target);
+    min-height: var(--ds-touch-target);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .closeButton {
+    transition: none;
+  }
+}

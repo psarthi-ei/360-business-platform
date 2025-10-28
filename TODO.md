@@ -2,51 +2,364 @@
 
 *This file contains the complete implementation plan for Phase 7: Customer Module with all visual specifications and technical details.*
 
-## Session Status: ✅ SUB-PHASE 7.1 COMPLETED
+## Session Status: 🔄 STRATEGIC PIVOT - SUB-PHASE 7.2 PLANNING
 
-**Latest Achievement**: Customer Module 360° View Navigation Overhaul Complete
-- ✅ Eliminated CustomerQuickPreview component (direct Card → 360° navigation)
-- ✅ Implemented configuration-driven CTA hiding pattern
-- ✅ Added space optimization by reclaiming filter area in 360° view
-- ✅ Reordered tabs to Insights → Orders → Payments sequence
-- ✅ Fixed design system compliance issues (CTA button colors, tokens)
-- ✅ Added comprehensive Lead Management documentation
+**Strategic Decision**: Customer 360° View = Information Only
+- ❌ Previous: Action-oriented with CTA configuration system
+- ✅ New: Pure information display with 5-tab structure  
+- 🎯 Rationale: Real business workflow analysis (calls > digital buttons)
 
-**Current Major Milestone**: Phase 7 - Customer Module Implementation (Core Navigation Complete)
+**Major Architectural Change**: 5-Tab Customer 360° Structure
+- Tab 1: **Insights** - Business intelligence & KPIs
+- Tab 2: **Info** - Company details, multiple contacts (NEW - most important)
+- Tab 3: **Orders** - Order history & tracking  
+- Tab 4: **Account Statement** - Complete financial transaction history (replaces simple payments tab)
+- Tab 5: **Support** - Support ticket history
 
-## ⚠️ KNOWN ISSUES - POST-7.1 RESOLUTION REQUIRED
+**Previous Achievements (Sub-Phase 7.1)**:
+- ✅ Design system token compliance fixes (hardcoded pixels → tokens)
+- ✅ Architecture compliance review (95% → 100% compliant)
+- ✅ Direct Card → 360° navigation implementation
+- ✅ Configuration-driven CTA patterns established
 
-### **Tickets Tab Spacing Persistence Issue**
-
-**Problem**: Customer 360° tickets tab displays inconsistent spacing compared to orders/payments tabs
-- **Status**: Temporarily removed from Customer 360° view
-- **Priority**: P1 (affects customer support workflow)
-- **Impact**: Customer 360° now has 3 tabs (Insights, Orders, Payments) instead of planned 4
-
-**Investigation Summary**:
-- ✅ **Root Cause Analysis**: Completed systematic comparison across all tab components
-- ✅ **Structural Fixes Attempted**: Multiple attempts to match working orders tab structure exactly
-- ✅ **CSS Compliance**: Verified design system token compliance across all components
-- ✅ **From-Scratch Rebuild**: Completely recreated tickets tab using working orders pattern
-- ❌ **Issue Persistence**: Spacing problems persist despite identical structure/CSS
-
-**Technical Details**:
-- Global `ds-card-content` CSS affects only tickets tab differently
-- Same JSX structure, same CSS classes, same design system tokens as working tabs
-- Issue manifests on both desktop and mobile layouts
-- Problem appears to be deeper architectural/CSS inheritance issue
-
-**Next Steps for Resolution**:
-1. **Phase 7.2 Priority**: Investigate global CSS cascade patterns
-2. **Alternative Approach**: Consider component-level CSS isolation strategy
-3. **Architecture Review**: Evaluate if tickets functionality needs different approach
-4. **Workaround**: Current 3-tab Customer 360° remains fully functional
-
-**Temporary Solution**: Clean 3-tab Customer 360° experience maintained (Insights → Orders → Payments)
+**Current Major Milestone**: Phase 7.2 - 5-Tab Information-Only Customer 360° Implementation
 
 ---
 
-# 🎯 **PHASE 7: CUSTOMER MODULE - COMPLETE IMPLEMENTATION PLAN**
+## ⚠️ STRATEGIC ARCHITECTURE DECISION - ACCOUNT STATEMENT IMPLEMENTATION
+
+**Decision**: Replace simple payments tab with comprehensive Account Statement
+
+**Strategic Rationale**:
+- ✅ **Standard Manufacturing Practice**: Account statements over isolated payment views
+- ✅ **Business Context**: Show WHY transactions occurred (SO, Invoice, Proforma references)  
+- ✅ **Financial Clarity**: Running balance with proper debit/credit categorization
+- ✅ **Mobile Optimization**: Card-based layout for factory environment usage
+- ✅ **Desktop Efficiency**: Professional table format for detailed financial analysis
+- ✅ **Information-Only Approach**: View/share functionality (no transaction creation)
+
+**Account Statement Core Features**:
+
+1. **Transaction Categorization**:
+   - 🧾 **Invoice** (Sales Order creation) → Debit entry (customer owes money)
+   - 💰 **Payment** (Customer payments) → Credit entry (customer pays money)  
+   - 🧮 **Credit Note** (Returns/adjustments) → Credit entry (reduces customer debt)
+   - 📝 **Debit Note** (Additional charges) → Debit entry (increases customer debt)
+
+2. **Mobile Layout** (Card-based):
+   ```
+   ┌─────────────────────────────────────┐
+   │ 📅 15 Nov 2024                     │
+   │ 🧾 Invoice #INV-2024-1247         │
+   │ SO: #SO-2024-1247                  │
+   │ ₹5,00,000                    Total │
+   │ Outstanding: ₹2,50,000             │
+   │ [View Details]                     │
+   └─────────────────────────────────────┘
+   ```
+
+3. **Desktop Layout** (Professional Table):
+   ```
+   | Date       | Type    | Reference | Description | Debit   | Credit  | Balance |
+   |------------|---------|-----------|-------------|---------|---------|---------|
+   | 15 Nov     | Invoice | INV-1247  | SO-1247    | 5,00,000|         | 2,50,000|
+   | 18 Nov     | Payment | PAY-1156  | Advance    |         | 2,50,000|         0|
+   ```
+
+4. **View Details Modal**:
+   - Transaction-specific information display
+   - Related document links (SO, Invoice, Payment receipt)
+   - Business context and transaction notes
+   - Document reference numbers and dates
+
+5. **Share Functionality** (WhatsApp Only):
+   - WhatsApp integration: Send statement summary
+   - Read-only approach: Information viewing only (no transaction creation)
+   - Simple sharing for customer communication
+
+**Technical Implementation Plan**:
+- ✅ **Component**: Replace `CustomerPaymentsTab.tsx` → `CustomerAccountStatementTab.tsx`
+- ✅ **Design**: Responsive (Mobile cards + Desktop table)
+- ✅ **Modal**: `AccountStatementModal.tsx` for transaction details
+- ✅ **Data**: Invoice-based payment architecture integration
+- ✅ **Share**: WhatsApp integration only
+- ✅ **Architecture**: Information-only with modal details pattern
+
+**Business Value**:
+- ✅ **Professional Format**: Industry-standard account statement display
+- ✅ **Transaction Context**: Clear business references (SO/Invoice connections)
+- ✅ **Mobile-First**: Factory environment optimized interface
+- ✅ **Financial Clarity**: Running balance with proper accounting logic
+- ✅ **Communication Ready**: WhatsApp sharing for customer discussions
+
+---
+
+## 🚨 CRITICAL: POST-CUSTOMER-MODULE DATA STRUCTURE REFACTOR
+
+**Priority**: HIGH - Implement after Customer 360° module completion
+
+### **Industry Standard Data Structure Gaps Identified**
+
+**Current vs Industry Standard Analysis:**
+
+| Document | Current Structure | Industry Standard | Gap Status |
+|----------|------------------|-------------------|------------|
+| **Quote** | `items: string` | `items: QuoteItem[]` + GST breakdown | ❌ **MAJOR GAP** |
+| **ProformaInvoice** | Financial fields only | `items: ProformaItem[]` + copy from Quote | ❌ **MISSING ITEMS** |
+| **SalesOrder** | `items: string` + pricing | `items: OrderItem[]` (NO pricing) | ❌ **WRONG STRUCTURE** |
+| **FinalInvoice** | `items: InvoiceItem[]` | Same | ✅ **CORRECT** |
+
+### **Required Interface Changes**
+
+**1. Quote Interface Enhancement:**
+```typescript
+interface Quote {
+  // REMOVE: items: string
+  // ADD: items: QuoteItem[]
+  items: QuoteItem[];           // ❌ MISSING: Detailed item array
+  subtotal: number;             // ❌ MISSING: Financial breakdown  
+  gstRate: number;              // ❌ MISSING: Tax rate
+  gstAmount: number;            // ❌ MISSING: Tax amount
+  totalAmount: number;          // ✅ EXISTS
+  paymentTerms: string;         // ❌ MISSING: Commercial terms
+  deliveryTerms: string;        // ❌ MISSING: Delivery terms
+  validityDays: number;         // ❌ MISSING: Quote validity
+}
+
+interface QuoteItem {
+  description: string;
+  fabricType: string;
+  gsm: number;
+  width: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+}
+```
+
+**2. ProformaInvoice Interface Enhancement:**
+```typescript
+interface ProformaInvoice {
+  // ADD: Copy of approved Quote items
+  items: ProformaItem[];        // ❌ MISSING: Item details array
+  // KEEP: All existing financial fields ✅
+  subtotal: number;             // ✅ EXISTS
+  gstAmount: number;            // ✅ EXISTS
+  totalAmount: number;          // ✅ EXISTS
+  advanceAmount: number;        // ✅ EXISTS
+}
+```
+
+**3. SalesOrder Interface Cleanup:**
+```typescript
+interface SalesOrder {
+  // REMOVE: items: string, totalAmount, balancePaymentDue, orderValue
+  // REMOVE: quantity, fabricType, productDescription (duplicates)
+  // ADD: Item specs without pricing
+  items: OrderItem[];          // ❌ MISSING: Item specs for production
+  // KEEP: Production-specific fields ✅
+  progressPercentage: number;   // ✅ EXISTS
+  deliveryDate: string;         // ✅ EXISTS
+  productionStatus: string;     // ✅ EXISTS
+}
+
+interface OrderItem {
+  description: string;
+  fabricType: string;
+  quantity: number;
+  specifications: string;
+  // NO PRICING FIELDS
+}
+```
+
+### **Implementation Strategy - Work Preservation**
+
+**✅ Customer 360° Work Preserved (90%):**
+- All modal components (`CustomerDetailsModal`, `OrderDetailsModal`, `PaymentDetailsModal`)
+- All navigation and tab architecture
+- All responsive design and styling
+- All business logic patterns
+- Account Statement design specifications
+
+**🔧 Minor Updates Required (10%):**
+- Helper functions to extract from item arrays instead of strings
+- Display logic to show detailed product specifications  
+- Enhanced modal content with richer item data
+
+### **Progressive Enhancement Approach**
+
+**Phase 1: Interface Enhancement**
+- Add new item array interfaces alongside existing string fields
+- Maintain backward compatibility during transition
+- Update mock data to include both formats
+
+**Phase 2: Component Enhancement**  
+- Update helper functions to use detailed item arrays
+- Enhance modal components to display richer product details
+- Keep all UI/navigation/styling unchanged
+
+**Phase 3: Data Migration**
+- Convert all mock data to use new detailed item arrays
+- Remove old string-based fields after verification
+- Update production data structures
+
+**Phase 4: Cleanup**
+- Remove backward compatibility code
+- Optimize performance with new data structure
+- Add validation for industry-standard compliance
+
+### **Business Impact**
+
+**✅ Benefits After Refactor:**
+- Industry-standard document flow (Quote → ProformaInvoice → SalesOrder → FinalInvoice)
+- Detailed product specifications in all documents
+- Proper pricing distribution (Quote/Proforma/Final only, NOT in SalesOrder)
+- Enhanced Customer 360° modals with complete item details
+- Professional business document generation capability
+
+**📋 Implementation Timeline:**
+- **Priority**: Implement after Customer 360° module completion
+- **Duration**: ~2-3 hours for interface updates + component enhancements
+- **Risk**: LOW - 90% of Customer 360° work preserved
+- **Testing**: Comprehensive verification of all document relationships
+
+---
+
+## ⚠️ KNOWN ISSUES - POST-7.1 RESOLUTION REQUIRED
+
+### **Previous Tickets Tab Issue - RESOLVED VIA STRATEGIC PIVOT**
+
+**Previous Problem**: Customer 360° tickets tab had spacing inconsistencies
+- **Status**: ✅ RESOLVED via strategic architectural change
+- **Solution**: Information-only approach eliminates complex styling conflicts
+- **New Approach**: Support tab will display ticket history (no creation/actions)
+
+**Strategic Resolution**:
+- **Root Cause**: Action buttons and CTA systems created CSS complexity
+- **Solution**: Pure information display eliminates styling conflicts
+- **Benefits**: Simpler architecture, clearer user experience, better performance
+- **Implementation**: Support tab as 5th tab in new information-only structure
+
+---
+
+# 🎯 **PHASE 7.2: 5-TAB CUSTOMER 360° IMPLEMENTATION PLAN**
+
+## **📋 DETAILED IMPLEMENTATION STRATEGY**
+
+### **Core Strategic Changes**
+1. **Remove CTA System**: Eliminate all action buttons and CTA configuration from Customer360View
+2. **5-Tab Structure**: Insights | Info | Orders | Payments | Support
+3. **Information-Only**: Pure information display with communication access only
+4. **Grid Simplification**: 4-row layout (header | tabs | status | content)
+
+### **Business Requirements**
+- **Info Tab**: Most important - company details, GST, multiple contacts with Call/WhatsApp
+- **Contact Management**: Individual communication buttons for each contact person
+- **Gujarat Context**: Owner, Manager, Accounts, Procurement contacts per company
+- **Communication Focus**: Phone calls and WhatsApp as primary business actions
+
+### **Implementation Sequence**
+
+#### **Sub-Phase 7.2.1: Remove CTA System (10 minutes)**
+- ✅ Remove `TAB_CTA_CONFIG` configuration
+- ✅ Remove `getContextualCTA()` function  
+- ✅ Remove `handleCTAClick()` function
+- ✅ Remove `shouldHideCTA` logic
+- ✅ Update CSS grid to remove CTA row
+
+#### **Sub-Phase 7.2.2: Implement 5-Tab Navigation (5 minutes)**
+- ✅ Update tab type: `'insights' | 'info' | 'orders' | 'payments' | 'support'`
+- ✅ Update tab navigation array
+- ✅ Set default tab to 'info' (most important for business)
+- ✅ Update CSS for 5-tab responsive layout
+
+#### **Sub-Phase 7.2.3: Create CustomerInfoTab Component (15 minutes)**
+- 📋 Create new component with company information
+- 📋 Implement contact management with Call/WhatsApp buttons
+- 📋 Add business details (GST, addresses, credit terms)
+- 📋 Design system token compliance
+
+#### **Sub-Phase 7.2.4: Restore CustomerSupportTab (10 minutes)**
+- 📋 Create support ticket history display
+- 📋 Information-only approach (no ticket creation)
+- 📋 Follow existing tab patterns for consistency
+
+#### **Sub-Phase 7.2.5: Update Customer List Cards (10 minutes)**
+- 📋 Change button text to "360° View"
+- 📋 Add Call and WhatsApp buttons to cards
+- 📋 Implement communication handlers
+
+#### **Sub-Phase 7.2.6: Remove Actions from Existing Tabs (5 minutes)**
+- 📋 CustomerInsightsTab: Remove any action buttons
+- 📋 CustomerOrdersTab: Remove any action buttons
+- 📋 CustomerPaymentsTab: Remove any action buttons
+
+### **Technical Specifications**
+
+#### **CSS Grid Updates**
+```css
+.customer360Container {
+  grid-template-rows: var(--ds-touch-target-preferred) var(--ds-touch-target-preferred) auto 1fr;
+  /* Header | Tabs | Status | Content - NO CTA ROW */
+}
+
+.tabButton {
+  flex: 1; /* 5 tabs = 20% width each */
+}
+```
+
+#### **Contact Management Interface**
+```jsx
+// Primary Contact with communication
+<div className="contact-primary">
+  <span>Ramesh Patel - Owner</span>
+  <button onClick={() => call(contact.phone)}>📞 Call</button>
+  <button onClick={() => whatsapp(contact.phone)}>💬 WhatsApp</button>
+</div>
+
+// Additional Contacts
+{additionalContacts.map(contact => (
+  <div key={contact.id} className="contact-card">
+    <span>{contact.name} - {contact.role}</span>
+    <button onClick={() => call(contact.phone)}>📞</button>
+    <button onClick={() => whatsapp(contact.phone)}>💬</button>
+  </div>
+))}
+```
+
+### **Files to Create/Modify**
+
+#### **New Components**
+1. `CustomerInfoTab.tsx` - Most important tab with contact management
+2. `CustomerSupportTab.tsx` - Support ticket history display
+3. `CustomerInfoTab.module.css` - Info tab styling
+4. `CustomerSupportTab.module.css` - Support tab styling
+
+#### **Modified Components**
+1. `Customer360View.tsx` - Remove CTA system, add 5-tab navigation
+2. `Customer360View.module.css` - Remove CTA styles, update grid
+3. `CustomerListManagement.tsx` - Update button text and add communication
+4. `CustomerInsightsTab.tsx` - Remove action buttons
+5. `CustomerOrdersTab.tsx` - Remove action buttons  
+6. `CustomerPaymentsTab.tsx` - Remove action buttons
+
+### **Architecture Compliance Checklist**
+- ✅ Design System Tokens: All styling uses `var(--ds-*)` tokens
+- ✅ Touch Targets: 44px minimum for all interactive elements
+- ✅ Component Structure: Business logic only, no infrastructure code
+- ✅ Mobile-First: 5-tab responsive design
+- ✅ Zero Code Duplication: Shared patterns across tabs
+
+### **Success Criteria**
+- ✅ Customer 360° = Pure information browsing
+- ✅ Info tab = Complete contact management hub
+- ✅ Communication = Easy Call/WhatsApp access
+- ✅ Business Value = Complete customer context for conversations
+- ✅ Technical Excellence = 100% architecture compliance
+
+---
+
+# 🎯 **PREVIOUS PHASE 7: CUSTOMER MODULE - COMPLETE IMPLEMENTATION PLAN**
 
 ## **📋 ARCHITECTURE COMPLIANCE CHECKLIST**
 

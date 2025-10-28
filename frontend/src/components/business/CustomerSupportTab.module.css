@@ -1,0 +1,291 @@
+/* CustomerSupportTab.module.css - Customer Support Tab Styles */
+
+/* Main Container */
+.supportTabContainer {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.supportContent {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Section Titles */
+.sectionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+/* Support Description */
+.supportDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0 0 var(--ds-space-md) 0;
+  line-height: 1.5;
+}
+
+/* Contact Actions */
+.contactActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  flex-wrap: wrap;
+}
+
+/* Support Information Grid */
+.supportInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.supportItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.supportItem:last-child {
+  border-bottom: none;
+}
+
+.supportLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.supportValue {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  word-break: break-word;
+  text-align: left;
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: var(--font-xxl);
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Tickets Section */
+.ticketsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+.ticketsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Ticket Card Styles */
+.ticketTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.statusBadge {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.open {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.in_progress {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.statusBadge.resolved {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.closed {
+  background: var(--ds-color-neutral);
+  color: var(--ds-text-primary);
+}
+
+.ticketInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.ticketCategory {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ticketPriority {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ticketPriority.low {
+  background: var(--ds-color-neutral);
+  color: var(--ds-text-primary);
+}
+
+.ticketPriority.medium {
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+}
+
+.ticketPriority.high {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.ticketPriority.urgent {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+.ticketDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.ticketActions {
+  display: flex;
+  justify-content: center;
+  gap: var(--ds-space-sm);
+  padding-top: var(--ds-space-sm);
+  border-top: 1px solid var(--ds-border-subtle);
+  margin-top: var(--ds-space-sm);
+}
+
+.viewTicketButton {
+  height: var(--ds-touch-target-md);
+  padding: 0 var(--ds-space-md);
+  background: var(--ds-color-primary);
+  color: var(--ds-text-inverse);
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.viewTicketButton:hover {
+  background: var(--ds-color-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .supportContent {
+    padding: var(--ds-space-sm);
+  }
+  
+  .contactActions {
+    flex-direction: column;
+  }
+  
+  .contactActions button {
+    width: 100%;
+  }
+  
+  .emptyStateContent {
+    padding: var(--ds-space-md);
+  }
+  
+  .emptyIcon {
+    font-size: var(--font-xl);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .supportContent {
+    padding-bottom: var(--ds-space-lg);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none;
+  }
+}

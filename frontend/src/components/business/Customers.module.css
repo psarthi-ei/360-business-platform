@@ -2,7 +2,7 @@
 
 .customersModule {
   display: grid;
-  grid-template-rows: 48px 44px 1fr 56px;
+  grid-template-rows: var(--ds-touch-target-preferred) var(--ds-touch-target-md) 1fr var(--ds-touch-target-comfortable);
   height: 100%;
   background: var(--background-primary);
   position: relative;
@@ -11,22 +11,22 @@
 
 /* Configuration-driven CTA hiding - following Production pattern */
 .customersModule.noCTA {
-  grid-template-rows: 48px 44px 1fr; /* Remove 56px CTA row */
+  grid-template-rows: var(--ds-touch-target-preferred) var(--ds-touch-target-md) 1fr; /* Remove CTA row */
 }
 
 /* 360° view mode - reclaim filter space for maximum content area */
 .customersModule.view360Mode {
-  grid-template-rows: 48px 1fr; /* Section tabs + full content (no filters, no CTA) */
+  grid-template-rows: var(--ds-touch-target-preferred) 1fr; /* Section tabs + full content (no filters, no CTA) */
 }
 
 .customersModule.view360Mode.noCTA {
-  grid-template-rows: 48px 1fr; /* Same as above - already no CTA in 360° mode */
+  grid-template-rows: var(--ds-touch-target-preferred) 1fr; /* Same as above - already no CTA in 360° mode */
 }
 
-/* 48px Section Navigation - Visual Design Spec */
+/* Section Navigation - Touch Target Preferred */
 .customersSections {
   display: flex;
-  height: 48px;
+  height: var(--ds-touch-target-preferred);
   background: white;
   border-bottom: 1px solid var(--ds-border-primary);
   grid-row: 1;
@@ -34,7 +34,7 @@
 
 .sectionButton {
   flex: 1;
-  height: 48px;
+  height: var(--ds-touch-target-preferred);
   border: none;
   background: transparent;
   color: var(--ds-text-secondary);
@@ -66,12 +66,12 @@
   transform: translateY(-0.5px);
 }
 
-/* 44px Filters Row - Visual Design Spec */
+/* Filters Row - Touch Target Medium */
 .customersFilters {
   display: flex;
   align-items: center;
   gap: var(--ds-space-sm);
-  height: 44px;
+  height: var(--ds-touch-target-md);
   padding: 0 var(--ds-space-md);
   background: var(--ds-bg-subtle);
   border-bottom: 1px solid var(--ds-border-primary);
@@ -101,7 +101,7 @@
 }
 
 .filterDropdown {
-  height: 36px;
+  height: var(--ds-space-xxl);
   padding: var(--ds-space-xs) var(--ds-space-sm);
   background: white;
   border: 1px solid var(--ds-border-secondary);
@@ -139,7 +139,7 @@
   color: var(--ds-text-primary);
   font-size: var(--font-sm);
   font-weight: 600;
-  min-height: 32px;
+  min-height: var(--ds-space-xxl);
   white-space: nowrap;
 }
 
@@ -174,9 +174,9 @@
   background: var(--ds-text-secondary);
 }
 
-/* 56px Bottom CTA - Visual Design Spec */
+/* Bottom CTA - Touch Target Comfortable */
 .customersCTA {
-  height: 56px;
+  height: var(--ds-touch-target-comfortable);
   padding: var(--ds-space-sm) var(--ds-space-md);
   background: white;
   border-top: 1px solid var(--ds-border-primary);
@@ -189,7 +189,7 @@
 
 .customersCTAButton {
   width: 100%;
-  height: 40px;
+  height: var(--ds-space-xxl);
   background: var(--ds-btn-primary);
   color: white;
   border: none;
@@ -201,7 +201,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: var(--ds-touch-target-md);
 }
 
 .customersCTAButton:hover {
@@ -217,16 +217,16 @@
 /* Touch targets - 44px minimum per Visual Design Spec */
 @media (max-width: 768px) {
   .sectionButton {
-    min-height: 44px;
+    min-height: var(--ds-touch-target-md);
   }
   
   .filterDropdown {
-    min-height: 44px;
+    min-height: var(--ds-touch-target-md);
     font-size: var(--font-base);
   }
   
   .customersCTAButton {
-    min-height: 44px;
+    min-height: var(--ds-touch-target-md);
     font-size: var(--font-base);
   }
 }

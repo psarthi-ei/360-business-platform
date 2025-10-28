@@ -1,0 +1,254 @@
+/* OrderDetailsModal.module.css - Order Detail Modal Styles */
+
+/* Main Content Container */
+.orderDetailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-lg);
+}
+
+/* Order Header */
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.orderInfo {
+  flex: 1;
+}
+
+.orderTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+}
+
+.customerName {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.orderBadges {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  align-items: flex-end;
+}
+
+/* Badges */
+.statusBadge, .urgencyBadge, .paymentStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.info, .paymentStatus.info {
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.primary, .paymentStatus.primary {
+  background: var(--ds-color-primary);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.success, .paymentStatus.success {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.warning, .paymentStatus.warning {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.statusBadge.danger, .paymentStatus.danger {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+.statusBadge.neutral, .paymentStatus.neutral {
+  background: var(--ds-color-neutral);
+  color: var(--ds-text-primary);
+}
+
+.urgencyBadge.normal {
+  background: var(--ds-color-neutral);
+  color: var(--ds-text-primary);
+}
+
+.urgencyBadge.urgent {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.urgencyBadge.critical {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+/* Detail Sections */
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+.sectionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+  padding-bottom: var(--ds-space-xs);
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+/* Detail Grid */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-sm);
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  gap: var(--ds-space-md);
+}
+
+.detailLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+.detailValue {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Production Info */
+.productionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Progress Section */
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressValue {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-color-primary);
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--ds-bg-accent);
+  border-radius: var(--ds-radius-sm);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--ds-color-primary);
+  transition: width 0.3s ease;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* Notes Section */
+.notesContent {
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-md);
+  border-left: 4px solid var(--ds-color-info);
+}
+
+.notesText {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .orderHeader {
+    flex-direction: column;
+    gap: var(--ds-space-sm);
+    align-items: flex-start;
+  }
+  
+  .orderBadges {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: var(--ds-space-xs);
+  }
+  
+  .detailItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+  
+  .detailLabel {
+    min-width: auto;
+  }
+  
+  .detailValue {
+    text-align: left;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .orderDetailsContent {
+    padding-bottom: var(--ds-space-lg);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+}

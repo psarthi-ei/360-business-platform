@@ -1171,6 +1171,73 @@ This stock reservation system transforms material management from reactive probl
 - **Payment Follow-up**: Systematic collection process for outstanding amounts
 - **Incentives**: Early payment discounts, prompt payment recognition
 
+---
+
+## **FINANCIAL TRANSACTION FLOW & ACCOUNT STATEMENT LOGIC**
+
+### **Document Hierarchy & Financial Impact**
+
+#### **Financial Document Types**
+1. **Proforma Invoice (PI)** 
+   - **Purpose**: Internal payment request document
+   - **Financial Impact**: NO debit to customer account
+   - **Function**: Enables advance payment collection
+
+2. **Sales Invoice** 
+   - **Purpose**: Official tax invoice (created at delivery)
+   - **Financial Impact**: Creates DEBIT to customer account (full amount)
+   - **Function**: Official customer liability & GST compliance
+
+#### **Payment Transaction Types**
+1. **Advance Payment** 
+   - **Against**: Proforma Invoice
+   - **Financial Impact**: CREDIT entry (reduces future liability)
+   - **Timeline**: Early in process (before manufacturing)
+
+2. **Final Payment**
+   - **Against**: Sales Invoice 
+   - **Financial Impact**: CREDIT entry (clears remaining balance)
+   - **Timeline**: After delivery (balance amount only)
+
+### **Chronological Financial Flow**
+
+#### **Industry Standard Timeline**
+```
+Day 1:    Advance Payment (₹30,000) → Credit vs PI-001
+Day 30:   Sales Invoice (₹100,000) → Debit (full amount)
+Day 30:   Advance Adjustment → Net outstanding = ₹70,000
+Day 45:   Final Payment (₹70,000) → Credit vs INV-001
+```
+
+#### **Account Statement Display Logic**
+```
+DATE        TYPE                REF NO          DEBIT       CREDIT      BALANCE
+01-Oct-24   Advance Payment     vs PI-001                   30,000      -30,000
+30-Oct-24   Sales Invoice       INV-2024-001    1,00,000                70,000
+15-Nov-24   Final Payment       vs INV-001                  70,000      0
+```
+
+### **Key Business Rules**
+
+#### **Payment-Invoice Relationships**
+- **ALL payments must reference specific invoices**
+- **Advance payments** → Reference Proforma Invoice ID
+- **Final payments** → Reference Sales Invoice ID
+- **No orphan payments** allowed in the system
+
+#### **Account Statement Logic**
+- **Shows chronological financial transactions only**
+- **Advance creates temporary credit balance** (customer prepaid)
+- **Sales Invoice creates official debit** (full liability)
+- **Running balance reflects actual money owed**
+- **Can go negative** with advance payments (credit balance)
+
+#### **Transaction Audit Trail**
+- **Document references** for all entries
+- **Payment method tracking** (RTGS/UPI/Cheque/Cash)
+- **Transaction IDs** for bank reconciliation
+- **Chronological sequence** for business clarity
+
 **Customer Relationship Management:**
 - **Satisfaction Survey**: Formal or informal feedback collection
 - **Quality Review**: Discussion of any quality issues and resolution

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './CustomerListManagement.module.css';
 import { mockBusinessProfiles, type BusinessProfile } from '../../data/customerMockData';
 import { mockSalesOrders, type SalesOrder } from '../../data/salesMockData';
-import { mockAdvancePayments, mockFinalPayments, type AdvancePayment, type FinalPayment } from '../../data/salesMockData';
+import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, type AdvancePayment, type FinalPayment } from '../../data/salesMockData';
 
 interface CustomerListManagementProps {
   mobile?: boolean;
@@ -37,8 +37,8 @@ const CustomerListManagement = ({
     
     customers.forEach((customer: BusinessProfile) => {
       const customerOrders = mockSalesOrders.filter((order: SalesOrder) => order.businessProfileId === customer.id);
-      const customerAdvancePayments = mockAdvancePayments.filter((payment: AdvancePayment) => payment.businessProfileId === customer.id);
-      const customerFinalPayments = mockFinalPayments.filter((payment: FinalPayment) => payment.businessProfileId === customer.id);
+      const customerAdvancePayments = getAdvancePaymentsByCustomerId(customer.id);
+      const customerFinalPayments = getFinalPaymentsByCustomerId(customer.id);
       
       const totalOrderValue = customerOrders.reduce((sum: number, order: SalesOrder) => sum + order.totalAmount, 0);
       const totalAdvancePaid = customerAdvancePayments.reduce((sum: number, payment: AdvancePayment) => sum + payment.amount, 0);
@@ -171,7 +171,7 @@ const CustomerListManagement = ({
                   className="ds-btn ds-btn-primary"
                   onClick={() => handleViewCustomer(customer.id)}
                 >
-                  View 360° Details
+                  360° View
                 </button>
               </div>
               </div>

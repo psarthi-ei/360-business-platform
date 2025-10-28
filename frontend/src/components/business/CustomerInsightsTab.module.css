@@ -1,21 +1,79 @@
 /* CustomerInsightsTab.module.css - Customer Analytics & Insights Tab Styles */
 
-/* Main Container */
+/* Main Container - Full Scroll Mode */
 .insightsTabContainer {
-  height: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .insightsContent {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: var(--ds-space-md);
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-lg);
+}
+
+/* Customer Status Bar - Now Scrollable */
+.customerStatusBar {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-md);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-md);
+  margin-bottom: var(--ds-space-md);
+}
+
+.loyaltyBadge {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-color-gold);
+  color: var(--ds-text-inverse);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.paymentScore {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+}
+
+.creditStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.creditStatus.excellent {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.creditStatus.good {
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+}
+
+.creditStatus.watch {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.creditStatus.hold {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
 }
 
 /* Key Metrics Grid */
@@ -250,7 +308,7 @@
 }
 
 .emptyIcon {
-  font-size: 48px;
+  font-size: var(--font-xxl);
   display: block;
   margin-bottom: var(--ds-space-md);
 }
@@ -307,6 +365,18 @@
     gap: var(--ds-space-xs);
   }
   
+  .customerStatusBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+    padding: var(--ds-space-sm);
+  }
+  
+  .customerStatusBar > * {
+    align-self: stretch;
+    text-align: center;
+  }
+  
   .assessmentSection,
   .summarySection,
   .recommendationsSection {
@@ -318,7 +388,7 @@
   }
   
   .emptyIcon {
-    font-size: 36px;
+    font-size: var(--font-xl);
   }
 }
 

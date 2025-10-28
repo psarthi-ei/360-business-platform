@@ -1,0 +1,468 @@
+/* CustomerAccountStatementTab.module.css - Account Statement Tab Styles */
+
+/* Main Container */
+.accountStatementContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-lg);
+  padding: var(--ds-space-md);
+}
+
+/* Statement Header */
+.statementHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.headerTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+}
+
+.customerName {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--ds-space-sm);
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+}
+
+.transactionFilter {
+  height: var(--ds-touch-target-sm);
+  padding: 0 var(--ds-space-sm);
+  background: var(--ds-bg-primary);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.transactionFilter:hover {
+  border-color: var(--ds-color-primary);
+}
+
+.transactionFilter:focus {
+  outline: none;
+  border-color: var(--ds-color-primary);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-alpha);
+}
+
+.outstandingAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--ds-space-xs);
+}
+
+.outstandingLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.outstandingValue {
+  font-family: var(--font-family);
+  font-size: var(--font-xl);
+  font-weight: 700;
+}
+
+.outstandingValue.debit {
+  color: var(--ds-color-danger);
+}
+
+.outstandingValue.credit {
+  color: var(--ds-color-success);
+}
+
+.shareButton {
+  height: var(--ds-touch-target-md);
+  padding: 0 var(--ds-space-md);
+  background: var(--ds-color-info);
+  color: var(--ds-text-inverse);
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.shareButton:hover {
+  background: var(--ds-color-info-hover);
+  transform: translateY(-1px);
+}
+
+/* Transactions List */
+.transactionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm); /* Reduced gap since using ds-card-container */
+}
+
+/* Legacy transaction card styles - now using global DS card system */
+/* These styles are kept for any remaining custom elements */
+
+/* Desktop Table Layout */
+.desktopTableHeader {
+  display: none; /* Hidden on mobile */
+  grid-template-columns: 100px 120px 100px 100px 100px 80px;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border: 1px solid var(--ds-border-subtle);
+  border-bottom: none;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.tableHeaderCell {
+  text-align: left;
+}
+
+.desktopTableRow {
+  display: none; /* Hidden on mobile */
+  grid-template-columns: 100px 120px 100px 100px 100px 80px;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border: 1px solid var(--ds-border-subtle);
+  border-top: none;
+  background: var(--ds-bg-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+}
+
+.tableCell {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktopViewButton {
+  background: transparent;
+  border: none;
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  text-decoration: underline;
+}
+
+.desktopViewButton:hover {
+  color: var(--ds-color-primary-hover);
+}
+
+/* Mobile Transaction Layout */
+.mobileTransaction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm) 0;
+  border-top: 1px solid var(--ds-border-subtle);
+}
+
+.transactionAmountLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+}
+
+.transactionAmount {
+  font-weight: 500;
+}
+
+.runningBalance {
+  font-weight: 600;
+  color: var(--ds-text-accent);
+}
+
+.mobileViewButton {
+  background: transparent;
+  border: none;
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  text-align: center;
+  padding: var(--ds-space-xs);
+}
+
+.mobileViewButton:hover {
+  color: var(--ds-color-primary-hover);
+}
+
+/* Desktop Responsive */
+@media (min-width: 769px) {
+  .desktopTableHeader {
+    display: grid;
+  }
+  
+  .desktopTableRow {
+    display: grid;
+  }
+  
+  .mobileTransaction {
+    display: none;
+  }
+  
+  .transactionHeader,
+  .transactionDescription {
+    display: none;
+  }
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: var(--font-xxl);
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Transaction Amount Info - Global DS Card Actions Integration */
+.transactionAmountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+}
+
+.debitAmount {
+  color: var(--ds-color-danger);
+  font-weight: 600;
+}
+
+.creditAmount {
+  color: var(--ds-color-success);
+  font-weight: 600;
+}
+
+.runningBalance {
+  color: var(--ds-text-primary);
+  font-weight: 600;
+  border-top: 1px solid var(--ds-border-subtle);
+  padding-top: var(--ds-space-xs);
+  margin-top: var(--ds-space-xs);
+}
+
+/* Industry Standard Account Statement Features */
+.documentNumber {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--ds-color-primary);
+  background: var(--ds-bg-accent);
+  padding: var(--ds-space-xxs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transactionStatus {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  padding: var(--ds-space-xxs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-xs);
+  text-transform: capitalize;
+}
+
+.transactionStatus.status-paid {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.transactionStatus.status-pending {
+  background: var(--ds-color-warning);
+  color: var(--ds-text-primary);
+}
+
+.transactionStatus.status-overdue {
+  background: var(--ds-color-danger);
+  color: var(--ds-text-inverse);
+}
+
+.transactionStatus.status-received,
+.transactionStatus.status-verified,
+.transactionStatus.status-reconciled {
+  background: var(--ds-color-success);
+  color: var(--ds-text-inverse);
+}
+
+.transactionTimestamp {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-tertiary);
+  font-weight: 400;
+}
+
+.transactionDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.4;
+  margin-bottom: var(--ds-space-xs);
+}
+
+.auditTrail {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-tertiary);
+  font-style: italic;
+  margin-top: var(--ds-space-xxs);
+  padding-left: var(--ds-space-sm);
+  border-left: 2px solid var(--ds-border-subtle);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .accountStatementContainer {
+    padding: var(--ds-space-sm);
+    gap: var(--ds-space-md);
+  }
+  
+  .transactionAmountInfo {
+    gap: var(--ds-space-xxs);
+  }
+  
+  .auditTrail {
+    font-size: var(--font-xs);
+    padding-left: var(--ds-space-xs);
+    border-left-width: 1px;
+  }
+  
+  .statementHeader {
+    flex-direction: column;
+    gap: var(--ds-space-md);
+    align-items: flex-start;
+  }
+  
+  .headerActions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .filterContainer {
+    order: -1;
+    flex: 1;
+    min-width: 140px;
+  }
+  
+  .transactionFilter {
+    width: 100%;
+  }
+  
+  .outstandingAmount {
+    align-items: flex-start;
+  }
+  
+  .transactionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-sm);
+  }
+  
+  .transactionAmounts {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xs);
+    padding: var(--ds-space-xs);
+  }
+  
+  .transactionAmounts span {
+    text-align: left !important;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .accountStatementContainer {
+    padding-bottom: var(--ds-space-lg);
+  }
+  
+  .transactionCard:hover {
+    transform: none;
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .transactionCard, .shareButton, .viewDetailsButton {
+    transition: none;
+  }
+  
+  .transactionCard:hover, .shareButton:hover, .viewDetailsButton:hover {
+    transform: none;
+  }
+}

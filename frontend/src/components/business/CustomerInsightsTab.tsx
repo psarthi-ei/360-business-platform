@@ -1,18 +1,22 @@
 import React from 'react';
-import { mockSalesOrders, mockAdvancePayments, mockFinalPayments } from '../../data/salesMockData';
-import { mockBusinessProfiles } from '../../data/customerMockData';
+import { mockSalesOrders, getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId } from '../../data/salesMockData';
+import { mockBusinessProfiles, BusinessProfile } from '../../data/customerMockData';
 import styles from './CustomerInsightsTab.module.css';
 
 interface CustomerInsightsTabProps {
   customerId: string;
+  customer?: BusinessProfile;
+  loyaltyTier?: string;
+  paymentScore?: number;
+  creditStatus?: string;
 }
 
-const CustomerInsightsTab = ({ customerId }: CustomerInsightsTabProps) => {
+const CustomerInsightsTab = ({ customerId, customer: customerProp, loyaltyTier, paymentScore, creditStatus }: CustomerInsightsTabProps) => {
   // Get customer data
-  const customer = mockBusinessProfiles.find(bp => bp.id === customerId);
+  const customer = customerProp || mockBusinessProfiles.find(bp => bp.id === customerId);
   const customerOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
-  const customerAdvancePayments = mockAdvancePayments.filter(payment => payment.businessProfileId === customerId);
-  const customerFinalPayments = mockFinalPayments.filter(payment => payment.businessProfileId === customerId);
+  const customerAdvancePayments = getAdvancePaymentsByCustomerId(customerId);
+  const customerFinalPayments = getFinalPaymentsByCustomerId(customerId);
 
   // Calculate insights
   const calculateInsights = () => {
@@ -145,6 +149,19 @@ const CustomerInsightsTab = ({ customerId }: CustomerInsightsTabProps) => {
   return (
     <div className={styles.insightsTabContainer}>
       <div className={styles.insightsContent}>
+        
+        {/* Customer Status Bar - Now Scrollable */}
+        <div className={styles.customerStatusBar}>
+          <span className={styles.loyaltyBadge}>
+            🏆 {loyaltyTier || 'STANDARD'}
+          </span>
+          <span className={styles.paymentScore}>
+            Payment Score: {paymentScore || 85}/100
+          </span>
+          <span className={`${styles.creditStatus} ${styles[creditStatus || 'good']}`}>
+            {(creditStatus || 'good').toUpperCase()}
+          </span>
+        </div>
         
         {/* Key Metrics Cards */}
         <div className={styles.metricsGrid}>

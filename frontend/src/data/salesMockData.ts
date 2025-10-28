@@ -73,17 +73,21 @@ export interface Address {
 
 export interface AdvancePayment {
   id: string;
-  proformaInvoiceId: string;
-  quoteId: string;
-  leadId: string;
-  businessProfileId: string;
+  proformaInvoiceId: string; // Single relationship - access customer via invoice chain
   amount: number;
   dueDate: string;
   status: 'pending' | 'overdue' | 'received' | 'partial';
   receivedDate?: string;
   receivedAmount?: number;
-  bankReference?: string;
   paymentMethod: 'RTGS' | 'NEFT' | 'Cash' | 'Cheque' | 'UPI';
+  transactionReference?: string;
+  bankDetails?: {
+    bankName: string;
+    accountNumber: string;
+    ifscCode: string;
+  };
+  verificationStatus?: 'pending' | 'verified' | 'rejected';
+  verificationNotes?: string;
 }
 
 export interface ProformaInvoice {
@@ -124,6 +128,17 @@ export interface SalesOrder {
   paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue' | 'fully_paid';
   productionStatus: string;
   balancePaymentDue?: number; // Remaining balance after advance
+  
+  // Enhanced fields for Customer 360° view modal display
+  quantity?: string; // Product quantity for display (e.g., "500 pieces")
+  fabricType?: string; // Type of fabric (Cotton, Silk, etc.)
+  productDescription?: string; // Detailed product description
+  urgency?: 'normal' | 'urgent' | 'critical'; // Order urgency level
+  customerNotes?: string; // Special customer instructions
+  expectedDeliveryDate?: string; // Expected delivery date
+  actualDeliveryDate?: string; // Actual delivery date when completed
+  orderValue?: number; // For display formatting (same as totalAmount)
+  progressPercentage?: number; // Production progress (0-100)
 }
 
 // Customer data moved to customerMockData.ts - import from there for customer-related functionality
@@ -248,14 +263,23 @@ export interface FinalInvoice {
 // Final Payment Records - Module 10: Payment closure tracking
 export interface FinalPayment {
   id: string;
-  finalInvoiceId: string;
-  businessProfileId: string; // Updated to use unified businessProfileId
+  finalInvoiceId: string; // Single relationship - access customer via invoice chain
   amount: number;
   paymentDate: string;
   paymentMethod: 'RTGS' | 'NEFT' | 'Cash' | 'Cheque' | 'UPI';
   transactionReference: string;
   status: 'received' | 'verified' | 'reconciled';
   notes: string;
+  bankDetails?: {
+    bankName: string;
+    accountNumber: string;
+    ifscCode: string;
+  };
+  verificationStatus?: 'pending' | 'verified' | 'rejected';
+  verificationNotes?: string;
+  reconciliationDate?: string;
+  reconciliationNotes?: string;
+  relatedAdvancePaymentId?: string; // Link to original advance payment
 }
 
 // Customer Feedback and Loyalty interfaces moved to customerMockData.ts
@@ -733,7 +757,17 @@ export const mockSalesOrders: SalesOrder[] = [
     statusMessage: 'Advance payment received - Ready for production planning',
     paymentStatus: 'advance_received' as const,
     productionStatus: 'Materials reserved - Ready to start',
-    balancePaymentDue: 194250
+    balancePaymentDue: 194250,
+    
+    // Enhanced fields for Customer 360° view
+    quantity: '1,500 meters',
+    fabricType: 'Premium Cotton',
+    productDescription: 'High-quality cotton fabric for saree production, 44" width, 120 GSM',
+    urgency: 'normal' as const,
+    customerNotes: 'Quality to match previous order sample. Pack in waterproof covers.',
+    expectedDeliveryDate: 'November 15, 2025',
+    orderValue: 277500,
+    progressPercentage: 15
   },
   // SO-002: Order with mixed materials (some available, some shortage)
   {
@@ -1037,37 +1071,28 @@ export const mockAdvancePayments: AdvancePayment[] = [
   {
     id: 'AP-2025-001',
     proformaInvoiceId: 'PI-2025-001',
-    quoteId: 'QT-001',
-    leadId: 'lead-001',
-    businessProfileId: 'bp-gujarat-garments',
     amount: 971250,
     dueDate: 'April 2, 2025',
     status: 'received',
     receivedDate: 'March 19, 2025',
     receivedAmount: 971250,
-    bankReference: 'HDFC240319RT12345',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'HDFC240319RT12345'
   },
   {
     id: 'AP-2025-002',
     proformaInvoiceId: 'PI-2025-002',
-    quoteId: 'QT-004',
-    leadId: 'L-004',
-    businessProfileId: 'bp-baroda-fashion',
     amount: 259875,
     dueDate: 'April 10, 2025',
     status: 'received',
     receivedDate: 'March 28, 2025',
     receivedAmount: 259875,
-    bankReference: 'SBI240328NF67890',
-    paymentMethod: 'NEFT'
+    paymentMethod: 'NEFT',
+    transactionReference: 'SBI240328NF67890'
   },
   {
     id: 'AP-2025-003',
     proformaInvoiceId: 'PI-2025-003',
-    quoteId: 'QT-005',
-    leadId: 'lead-005',
-    businessProfileId: 'bp-gujarat-garments',
     amount: 3853500,
     dueDate: 'April 15, 2025',
     status: 'pending',
@@ -1076,104 +1101,83 @@ export const mockAdvancePayments: AdvancePayment[] = [
   {
     id: 'AP-2025-004',
     proformaInvoiceId: 'PI-2025-004',
-    quoteId: 'QT-006',
-    leadId: 'lead-001',
-    businessProfileId: 'bp-baroda-fashion',
     amount: 750000,
     dueDate: 'April 20, 2025',
     status: 'received',
     receivedDate: 'March 31, 2025',
     receivedAmount: 750000,
-    bankReference: 'ICICI240331RT13579',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'ICICI240331RT13579'
   },
   {
     id: 'AP-2025-005',
     proformaInvoiceId: 'PI-2025-005',
-    quoteId: 'QT-002',
-    leadId: 'lead-002',
-    businessProfileId: 'bp-gujarat-garments',
     amount: 630000,
     dueDate: 'October 12, 2025',
     status: 'received',
     receivedDate: 'October 10, 2025',
     receivedAmount: 630000,
-    bankReference: 'HDFC251010RT24681',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'HDFC251010RT24681'
   },
   
   // New Advance Payments - Converting Prospects to Customers
   {
     id: 'AP-2025-007',
     proformaInvoiceId: 'PI-2025-007',
-    quoteId: 'QT-020',
-    leadId: 'lead-002',
-    businessProfileId: 'bp-rajkot-mills',
     amount: 1800000,
     dueDate: 'November 15, 2025',
     status: 'received',
     receivedDate: 'October 25, 2025',
     receivedAmount: 1800000,
-    bankReference: 'SBI251025NF98765',
-    paymentMethod: 'NEFT'
+    paymentMethod: 'NEFT',
+    transactionReference: 'SBI251025NF98765'
   },
   {
     id: 'AP-2025-008',
     proformaInvoiceId: 'PI-2025-008',
-    quoteId: 'QT-025',
-    leadId: 'lead-003',
-    businessProfileId: 'bp-mumbai-exports',
     amount: 2250000,
     dueDate: 'November 20, 2025',
     status: 'received',
     receivedDate: 'October 28, 2025',
     receivedAmount: 2250000,
-    bankReference: 'HDFC251028SW13579',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'HDFC251028SW13579'
   },
   
   // Phase 3 New Customers - Advanced Payments
   {
     id: 'AP-2025-009',
     proformaInvoiceId: 'PI-2025-009',
-    quoteId: 'QT-030',
-    leadId: 'lead-004',
-    businessProfileId: 'bp-ahmedabad-fashion',
     amount: 1575000,
     dueDate: 'September 25, 2025',
     status: 'received',
     receivedDate: 'September 15, 2025',
     receivedAmount: 1575000,
-    bankReference: 'ICICI250915SW24680',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'ICICI250915SW24680'
   },
   {
     id: 'AP-2025-010',
     proformaInvoiceId: 'PI-2025-010',
-    quoteId: 'QT-031',
-    leadId: 'lead-005',
-    businessProfileId: 'bp-bhavnagar-marine',
     amount: 975000,
     dueDate: 'August 30, 2025',
     status: 'received',
     receivedDate: 'August 20, 2025',
     receivedAmount: 975000,
-    bankReference: 'CANARA250820RT13591',
-    paymentMethod: 'RTGS'
+    paymentMethod: 'RTGS',
+    transactionReference: 'CANARA250820RT13591'
   },
   {
     id: 'AP-2025-011',
     proformaInvoiceId: 'PI-2025-011',
-    quoteId: 'QT-032',
-    leadId: 'lead-001',
-    businessProfileId: 'bp-vadodara-crafts',
     amount: 375000,
     dueDate: 'July 20, 2025',
     status: 'received',
     receivedDate: 'July 10, 2025',
     receivedAmount: 375000,
-    bankReference: 'BOB250710NF97531',
-    paymentMethod: 'NEFT'
+    paymentMethod: 'NEFT',
+    transactionReference: 'BOB250710NF97531'
   }
 ];
 
@@ -1690,7 +1694,6 @@ export const mockFinalPayments: FinalPayment[] = [
   {
     id: 'FP-2025-001',
     finalInvoiceId: 'INV-2025-001',
-    businessProfileId: 'bp-baroda-fashion',
     amount: 825000,
     paymentDate: 'October 10, 2025',  // Matches paymentReceivedDate in invoice
     paymentMethod: 'RTGS',
@@ -1701,7 +1704,6 @@ export const mockFinalPayments: FinalPayment[] = [
   {
     id: 'FP-2025-002',
     finalInvoiceId: 'INV-2025-002',
-    businessProfileId: 'bp-gujarat-garments',
     amount: 605000,
     paymentDate: 'October 8, 2025',  // Matches paymentReceivedDate in invoice
     paymentMethod: 'RTGS',
@@ -1727,8 +1729,49 @@ export const getAdvancePaymentByProformaId = (proformaId: string): AdvancePaymen
   return mockAdvancePayments.find(ap => ap.proformaInvoiceId === proformaId);
 };
 
+// Helper functions for invoice-based payment architecture
+
+// Get advance payment with full details (payment + invoice + quote + lead + customer)
+export const getAdvancePaymentWithDetails = (paymentId: string) => {
+  const payment = mockAdvancePayments.find(ap => ap.id === paymentId);
+  if (!payment) return null;
+  
+  const invoice = mockProformaInvoices.find(pi => pi.id === payment.proformaInvoiceId);
+  if (!invoice) return { payment, invoice: null, quote: null, lead: null };
+  
+  const quote = mockQuotes.find(q => q.id === invoice.quoteId);
+  const lead = quote ? mockLeads.find(l => l.id === quote.leadId) : null;
+  
+  return { payment, invoice, quote, lead };
+};
+
+// Get final payment with full details (payment + invoice + order + quote + lead + customer)
+export const getFinalPaymentWithDetails = (paymentId: string) => {
+  const payment = mockFinalPayments.find(fp => fp.id === paymentId);
+  if (!payment) return null;
+  
+  const invoice = mockFinalInvoices.find(fi => fi.id === payment.finalInvoiceId);
+  if (!invoice) return { payment, invoice: null, order: null, quote: null, lead: null };
+  
+  const order = mockSalesOrders.find(so => so.id === invoice.salesOrderId);
+  const quote = order ? mockQuotes.find(q => q.id === order.quoteId) : null;
+  const lead = quote ? mockLeads.find(l => l.id === quote.leadId) : null;
+  
+  return { payment, invoice, order, quote, lead };
+};
+
+// Get all advance payments for a customer by traversing invoice relationships
 export const getAdvancePaymentsByCustomerId = (customerId: string): AdvancePayment[] => {
-  return mockAdvancePayments.filter(ap => ap.businessProfileId === customerId);
+  const customerInvoices = mockProformaInvoices.filter(pi => pi.businessProfileId === customerId);
+  const invoiceIds = customerInvoices.map(pi => pi.id);
+  return mockAdvancePayments.filter(ap => invoiceIds.includes(ap.proformaInvoiceId));
+};
+
+// Get all final payments for a customer by traversing invoice relationships
+export const getFinalPaymentsByCustomerId = (customerId: string): FinalPayment[] => {
+  const customerInvoices = mockFinalInvoices.filter(fi => fi.businessProfileId === customerId);
+  const invoiceIds = customerInvoices.map(fi => fi.id);
+  return mockFinalPayments.filter(fp => invoiceIds.includes(fp.finalInvoiceId));
 };
 
 export const getFinalInvoiceById = (id: string): FinalInvoice | undefined => {

@@ -1,0 +1,269 @@
+/* CustomerInfoTab.module.css - Customer Information Tab Styles */
+
+/* Main Container */
+.infoTabContainer {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoContent {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+/* Section Titles */
+.sectionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+/* Information Grid Layout */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-sm);
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.infoItem:last-child {
+  border-bottom: none;
+}
+
+.infoLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.infoValue {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  word-break: break-word;
+  text-align: left;
+}
+
+/* Contact Card - Future-ready for multiple contacts */
+.contactCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.contactInfo {
+  flex: 1;
+}
+
+.contactName {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+}
+
+.contactRole {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin: 0 0 var(--ds-space-sm) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.contactIcon {
+  font-size: var(--font-sm);
+  flex-shrink: 0;
+}
+
+.contactValue {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  word-break: break-all;
+}
+
+.contactActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xxs);
+  flex-shrink: 0;
+}
+
+/* Address Section */
+.addressSection {
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.addressTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+}
+
+.addressText {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+
+/* Preferences Grid */
+.preferencesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-sm);
+}
+
+.preferenceItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.preferenceItem:last-child {
+  border-bottom: none;
+}
+
+.preferenceLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.preferenceValue {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  word-break: break-word;
+  text-align: left;
+}
+
+/* Empty State */
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-xl);
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: var(--font-xxl);
+  display: block;
+  margin-bottom: var(--ds-space-md);
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-sm) 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .infoContent {
+    padding: var(--ds-space-sm);
+  }
+  
+  .contactCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .contactActions {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  
+  .emptyStateContent {
+    padding: var(--ds-space-md);
+  }
+  
+  .emptyIcon {
+    font-size: var(--font-xl);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .infoContent {
+    padding-bottom: var(--ds-space-lg);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none;
+  }
+}

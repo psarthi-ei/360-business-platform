@@ -113,6 +113,27 @@ export interface LoyaltyTransaction {
   relatedFeedbackId?: string;
 }
 
+// Support Tickets - Customer support and issue tracking
+export interface SupportTicket {
+  id: string;
+  businessProfileId: string;
+  title: string;
+  description: string;
+  category: 'quality_issue' | 'delivery_delay' | 'payment_query' | 'technical_support' | 'general_inquiry' | 'complaint';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  createdDate: string;
+  updatedDate: string;
+  resolvedDate?: string;
+  assignedTo?: string;
+  resolution?: string;
+  customerSatisfaction?: number; // 1-5 rating after resolution
+  relatedOrderId?: string;
+  relatedPaymentId?: string;
+  attachments?: string[];
+  internalNotes?: string[];
+}
+
 // ===== CUSTOMER DATA =====
 export const mockBusinessProfiles: BusinessProfile[] = [
   // Customer Companies (have made advance payments)
@@ -1237,6 +1258,102 @@ export const getTopPerformingCustomers = (limit: number = 5): BusinessProfile[] 
     })
     .slice(0, limit);
 };
+
+// ===== SUPPORT TICKET DATA =====
+export const mockSupportTickets: SupportTicket[] = [
+  {
+    id: 'ST-001',
+    businessProfileId: 'bp-gujarat-garments',
+    title: 'Quality issue with fabric batch GJ-2025-03',
+    description: 'Received fabric has inconsistent thread count in approximately 200 yards. Some sections are looser than specified standards.',
+    category: 'quality_issue',
+    priority: 'high',
+    status: 'in_progress',
+    createdDate: '2025-03-20',
+    updatedDate: '2025-03-22',
+    assignedTo: 'Quality Control Team',
+    relatedOrderId: 'SO-001',
+    internalNotes: [
+      'Quality team has examined the batch',
+      'Replacement fabric being prepared',
+      'Customer wants expedited delivery for replacement'
+    ]
+  },
+  {
+    id: 'ST-002',
+    businessProfileId: 'bp-gujarat-garments',
+    title: 'Delivery delay notification needed',
+    description: 'Order SO-002 delivery might be delayed by 3-4 days due to raw material shortage. Need to inform customer and get approval.',
+    category: 'delivery_delay',
+    priority: 'medium',
+    status: 'resolved',
+    createdDate: '2025-03-15',
+    updatedDate: '2025-03-16',
+    resolvedDate: '2025-03-16',
+    assignedTo: 'Customer Relations',
+    resolution: 'Customer contacted and agreed to revised timeline. Compensation offered in form of 2% discount on next order.',
+    customerSatisfaction: 4,
+    relatedOrderId: 'SO-002'
+  },
+  {
+    id: 'ST-003',
+    businessProfileId: 'bp-baroda-fashion',
+    title: 'Payment verification required',
+    description: 'Advance payment of ₹367,500 received but bank reference number not matching our records. Need verification.',
+    category: 'payment_query',
+    priority: 'urgent',
+    status: 'resolved',
+    createdDate: '2025-03-30',
+    updatedDate: '2025-03-31',
+    resolvedDate: '2025-03-31',
+    assignedTo: 'Accounts Team',
+    resolution: 'Bank reference verified. Payment was from different branch, hence the reference mismatch. Customer profile updated.',
+    customerSatisfaction: 5,
+    relatedPaymentId: 'AP-004'
+  },
+  {
+    id: 'ST-004',
+    businessProfileId: 'bp-ahmedabad-cotton',
+    title: 'Request for product samples',
+    description: 'Customer requesting fabric samples for new seasonal collection. Need to send sample catalog and arrange pickup.',
+    category: 'general_inquiry',
+    priority: 'low',
+    status: 'open',
+    createdDate: '2025-04-01',
+    updatedDate: '2025-04-01',
+    assignedTo: 'Sales Team'
+  },
+  {
+    id: 'ST-005',
+    businessProfileId: 'bp-gujarat-garments',
+    title: 'Order customization request',
+    description: 'Customer wants to modify fabric weight from 200 GSM to 220 GSM for order SO-003. Already in production.',
+    category: 'technical_support',
+    priority: 'medium',
+    status: 'in_progress',
+    createdDate: '2025-04-02',
+    updatedDate: '2025-04-02',
+    assignedTo: 'Production Team',
+    relatedOrderId: 'SO-003',
+    internalNotes: [
+      'Production team consulted',
+      'Change possible but will add 2 days to timeline',
+      'Additional cost: ₹15,000 for weight upgrade'
+    ]
+  },
+  {
+    id: 'ST-006',
+    businessProfileId: 'bp-baroda-fashion',
+    title: 'Bulk discount inquiry',
+    description: 'Customer planning large order for next quarter. Requesting volume pricing and terms for orders above ₹10L.',
+    category: 'general_inquiry',
+    priority: 'medium',
+    status: 'open',
+    createdDate: '2025-04-03',
+    updatedDate: '2025-04-03',
+    assignedTo: 'Sales Manager'
+  }
+];
 
 // Customer-Sales Relationship Functions
 // Simplified approach - return empty arrays for now to avoid circular dependencies

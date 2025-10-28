@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { mockSalesOrders, type SalesOrder } from '../../data/salesMockData';
+import { getBusinessProfileById } from '../../data/customerMockData';
+import OrderDetailsModal from './OrderDetailsModal';
 import styles from './CustomerOrdersTab.module.css';
 
 interface CustomerOrdersTabProps {
@@ -7,8 +9,23 @@ interface CustomerOrdersTabProps {
 }
 
 const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
+  // State for modal
+  const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Get customer orders
   const customerOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+
+  // Modal handlers
+  const handleViewDetails = (order: SalesOrder) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedOrder(null);
+  };
 
   // Format currency
   const formatCurrency = (amount: number) => {
@@ -28,63 +45,35 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
     });
   };
 
-  // Get order progress percentage
-  const getOrderProgress = (order: SalesOrder) => {
-    const statusProgress = {
-      'pending': 0,
-      'confirmed': 20,
-      'production_started': 40,
-      'quality_check': 70,
-      'production_completed': 90,
-      'delivered': 100,
-      'cancelled': 0
+  // Get status information matching Production order cards
+  const getOrderStatusInfo = (order: SalesOrder) => {
+    const statusInfo = {
+      'pending': { icon: '🟡', label: 'Order Pending', cardClass: 'ds-card-status-pending' },
+      'confirmed': { icon: '🟢', label: 'Order Confirmed', cardClass: 'ds-card-status-active' },
+      'production_started': { icon: '🔵', label: 'In Production', cardClass: 'ds-card-status-pending' },
+      'quality_check': { icon: '🟠', label: 'Quality Check', cardClass: 'ds-card-status-pending' },
+      'production_completed': { icon: '✅', label: 'Ready for Delivery', cardClass: 'ds-card-status-active' },
+      'delivered': { icon: '🎉', label: 'Delivered', cardClass: 'ds-card-status-completed' },
+      'cancelled': { icon: '❌', label: 'Cancelled', cardClass: 'ds-card-status-cancelled' }
     };
-    return statusProgress[order.status as keyof typeof statusProgress] || 0;
+    return statusInfo[order.status as keyof typeof statusInfo] || statusInfo['pending'];
   };
 
-  // Get order progress text
-  const getOrderProgressText = (order: SalesOrder) => {
-    const progressTexts = {
-      'pending': 'Order Pending',
-      'confirmed': 'Order Confirmed',
-      'production_started': 'In Production',
-      'quality_check': 'Quality Check',
-      'production_completed': 'Ready for Delivery',
-      'delivered': 'Delivered',
-      'cancelled': 'Cancelled'
-    };
-    return progressTexts[order.status as keyof typeof progressTexts] || order.status;
+  // Get payment status info  
+  const getPaymentStatus = (order: SalesOrder) => {
+    // Use existing payment status from order
+    const paymentStatus = order.paymentStatus;
+    
+    if (paymentStatus === 'fully_paid' || paymentStatus === 'completed') {
+      return { icon: '✅', label: 'Paid' };
+    } else if (paymentStatus === 'advance_received' || paymentStatus === 'partial') {
+      const outstanding = order.balancePaymentDue || 0;
+      return { icon: '🟡', label: `₹${formatCurrency(outstanding)} Due` };
+    } else {
+      return { icon: '🔴', label: 'Payment Pending' };
+    }
   };
 
-  // Get status badge class
-  const getStatusClass = (status: string) => {
-    const statusClasses = {
-      'pending': 'pending',
-      'confirmed': 'confirmed',
-      'production_started': 'production',
-      'quality_check': 'quality',
-      'production_completed': 'ready',
-      'delivered': 'delivered',
-      'cancelled': 'cancelled'
-    };
-    return statusClasses[status as keyof typeof statusClasses] || 'default';
-  };
-
-  // Action handlers
-  const viewOrderDetails = (orderId: string) => {
-    // View order details functionality
-    alert(`Order details for ${orderId} - coming soon!`);
-  };
-
-  const initiateCall = (contactPerson: string) => {
-    // Call contact person functionality
-    alert(`Calling ${contactPerson}...`);
-  };
-
-  const trackOrder = (orderId: string) => {
-    // Track order functionality
-    alert(`Order tracking for ${orderId} - coming soon!`);
-  };
 
   // Sort orders by date (newest first)
   const sortedOrders = customerOrders.sort((a, b) => 
@@ -108,65 +97,68 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
   return (
     <div className={styles.ordersTabContainer}>
       <div className={styles.ordersList}>
-        {sortedOrders.map((order) => (
-          <div key={order.id} className="ds-card-container">
-            <div className="ds-card ds-card-with-actions">
-              {/* Order Header */}
-              <div className="ds-card-header">
-                <span className={styles.orderNumber}>ORDER #{order.id}</span>
-                <span className={`ds-badge ${styles.statusBadge} ${styles[getStatusClass(order.status)]}`}>
-                  {order.status.replace('_', ' ').toUpperCase()}
-                </span>
-              </div>
-              
-              {/* Order Details */}
-              <div className="ds-card-content">
-                <p className={styles.productDescription}>
-                  {order.items} - Details available
-                </p>
-                <div className="ds-card-meta">
-                  Value: ₹{formatCurrency(order.totalAmount)} | Due: {formatDate(order.deliveryDate)}
+        {sortedOrders.map((order) => {
+          const businessProfile = getBusinessProfileById(order.businessProfileId);
+          const companyName = businessProfile?.companyName || 'Unknown Company';
+          const statusInfo = getOrderStatusInfo(order);
+          const paymentStatus = getPaymentStatus(order);
+          
+          return (
+            <div key={order.id} className="ds-card-container" data-order-id={order.id}>
+              {/* Global Card System - 140px Template - Matches Production Cards */}
+              <div className={`ds-card ${statusInfo.cardClass}`}>
+                {/* Order Header - Order ID + Company */}
+                <div 
+                  className="ds-card-header"
+                  title={`${order.id} - ${companyName} - ${order.items}`}
+                >
+                  <span>{order.id} — </span>
+                  <span className={styles.truncateText}>{companyName}</span>
                 </div>
-              </div>
-              
-              {/* Progress Indicator */}
-              <div className={styles.orderProgress}>
-                <div className={styles.progressBar}>
-                  <div 
-                    className={styles.progressFill}
-                    style={{ width: `${getOrderProgress(order)}%` }}
-                  />
+                
+                {/* Status Information - Order Status & Payment Status */}
+                <div className="ds-card-status">
+                  <div className={styles.statusLine}>
+                    {statusInfo.icon} {statusInfo.label}
+                  </div>
+                  <div className={styles.statusLine}>
+                    {paymentStatus.icon} {paymentStatus.label}
+                  </div>
                 </div>
-                <span className={styles.progressText}>
-                  {getOrderProgressText(order)}
-                </span>
-              </div>
-              
-              {/* Contextual Actions - 44px touch targets */}
-              <div className="ds-card-actions">
-                <button 
-                  className="ds-btn ds-btn-secondary"
-                  onClick={() => viewOrderDetails(order.id)}
+                
+                {/* Meta Information - Product Details & Value */}
+                <div 
+                  className="ds-card-meta"
+                  title={`${order.items} | Value: ₹${formatCurrency(order.totalAmount)} | Due: ${formatDate(order.deliveryDate)}`}
                 >
-                  👁️ View
-                </button>
-                <button 
-                  className="ds-btn ds-btn-secondary"
-                  onClick={() => initiateCall('Customer Representative')}
-                >
-                  📞 Discuss
-                </button>
-                <button 
-                  className="ds-btn ds-btn-primary"
-                  onClick={() => trackOrder(order.id)}
-                >
-                  📊 Track
-                </button>
+                  {order.items}<br />
+                  Value: ₹{formatCurrency(order.totalAmount)} • Due: {formatDate(order.deliveryDate)}
+                </div>
+
+                {/* Action Button - View Details */}
+                <div className="ds-card-actions">
+                  <button 
+                    className="ds-btn ds-btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewDetails(order);
+                    }}
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+      
+      {/* Order Details Modal */}
+      <OrderDetailsModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        order={selectedOrder}
+      />
     </div>
   );
 };

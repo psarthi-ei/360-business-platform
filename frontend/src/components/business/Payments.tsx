@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
-import { mockAdvancePayments, mockFinalPayments, getProformaInvoiceById, getFinalInvoiceById } from '../../data/salesMockData';
+import { mockAdvancePayments, mockFinalPayments, getAdvancePaymentWithDetails, getFinalPaymentWithDetails } from '../../data/salesMockData';
 import styles from './Payments.module.css';
 
 interface PaymentsProps {
@@ -53,16 +53,17 @@ function Payments({
   // Create combined payment records from both advance and final payments
   const createPaymentRecords = (): PaymentRecord[] => {
     const advanceRecords: PaymentRecord[] = mockAdvancePayments.map(payment => {
-      const customer = getBusinessProfileById(payment.businessProfileId);
-      const proformaInvoice = getProformaInvoiceById(payment.proformaInvoiceId);
+      const paymentDetails = getAdvancePaymentWithDetails(payment.id);
+      const customer = paymentDetails?.lead ? getBusinessProfileById(paymentDetails.lead.businessProfileId) : null;
+      const proformaInvoice = paymentDetails?.invoice;
       
       return {
         id: payment.id,
         type: 'advance' as const,
         invoiceId: payment.proformaInvoiceId,
-        businessProfileId: payment.businessProfileId,
-        quoteId: payment.quoteId,
-        customerName: customer?.companyName || `Company (${payment.businessProfileId})`,
+        businessProfileId: customer?.id || 'unknown',
+        quoteId: paymentDetails?.quote?.id || 'unknown',
+        customerName: customer?.companyName || 'Unknown Company',
         location: customer ? `${customer.registeredAddress.city}, ${customer.registeredAddress.state}` : 'Location not available',
         invoiceAmount: proformaInvoice?.totalAmount || 0,
         paymentAmount: payment.amount,
@@ -73,21 +74,22 @@ function Payments({
         receivedDate: payment.receivedDate,
         contactInfo: customer?.phone || 'No contact available',
         paymentMethod: payment.paymentMethod,
-        bankReference: payment.bankReference
+        bankReference: payment.transactionReference
       };
     });
 
     const finalRecords: PaymentRecord[] = mockFinalPayments.map(payment => {
-      const customer = getBusinessProfileById(payment.businessProfileId);
-      const finalInvoice = getFinalInvoiceById(payment.finalInvoiceId);
+      const paymentDetails = getFinalPaymentWithDetails(payment.id);
+      const customer = paymentDetails?.order ? getBusinessProfileById(paymentDetails.order.businessProfileId) : null;
+      const finalInvoice = paymentDetails?.invoice;
       
       return {
         id: payment.id,
         type: 'final' as const,
         invoiceId: payment.finalInvoiceId,
-        businessProfileId: payment.businessProfileId,
+        businessProfileId: customer?.id || 'unknown',
         salesOrderId: finalInvoice?.salesOrderId,
-        customerName: customer?.companyName || `Customer ${payment.businessProfileId}`,
+        customerName: customer?.companyName || 'Unknown Customer',
         location: customer ? `${customer.registeredAddress.city}, ${customer.registeredAddress.state}` : 'Location not available',
         invoiceAmount: finalInvoice?.totalAmount || 0,
         paymentAmount: payment.amount,

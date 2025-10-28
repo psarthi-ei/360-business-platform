@@ -4,7 +4,7 @@ import {
   mockProformaInvoices, 
   mockFinalInvoices, 
   getAdvancePaymentByProformaId,
-  mockAdvancePayments
+  mockFinalPayments
 } from '../../data/salesMockData';
 import styles from './Invoices.module.css';
 
@@ -332,7 +332,7 @@ function Invoices({
                         // Get payment data for this invoice
                         const paymentData = invoice.type === 'proforma' 
                           ? getAdvancePaymentByProformaId(invoice.id)
-                          : mockAdvancePayments.find(p => p.businessProfileId === invoice.businessProfileId);
+                          : mockFinalPayments.find(p => p.finalInvoiceId === invoice.id);
                         
                         if (!paymentData) return null;
                         
@@ -341,9 +341,9 @@ function Invoices({
                             <h4>💰 Payment Details</h4>
                             <div className={styles.detailsGrid}>
                               <p><strong>Payment Method:</strong> {paymentData.paymentMethod}</p>
-                              <p><strong>Payment Date:</strong> {paymentData.receivedDate || paymentData.dueDate}</p>
-                              <p><strong>Amount Paid:</strong> {formatCurrency(paymentData.receivedAmount || paymentData.amount)}</p>
-                              <p><strong>Bank Reference:</strong> {paymentData.bankReference}</p>
+                              <p><strong>Payment Date:</strong> {'paymentDate' in paymentData ? paymentData.paymentDate : (paymentData.receivedDate || paymentData.dueDate)}</p>
+                              <p><strong>Amount Paid:</strong> {formatCurrency('paymentDate' in paymentData ? paymentData.amount : (paymentData.receivedAmount || paymentData.amount))}</p>
+                              <p><strong>Transaction Reference:</strong> {paymentData.transactionReference}</p>
                               <p>
                                 <strong>Payment ID:</strong> 
                                 <span 

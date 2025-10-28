@@ -13,11 +13,28 @@
 
   /* Standardized Font Size System - Universal Responsive Typography */
   /* Responsive font sizes using clamp() - scales automatically across all devices */
-  --font-xs: clamp(12px, 2.5vw, 14px);    /* Small labels, secondary text */
-  --font-sm: clamp(14px, 3vw, 16px);      /* Body text, action buttons */
-  --font-base: clamp(16px, 3.5vw, 18px);  /* Standard UI elements, dropdowns */
-  --font-lg: clamp(18px, 4vw, 20px);      /* Important text, headings */
-  --font-xl: clamp(20px, 4.5vw, 24px);    /* Large headers, emphasis */
+  /* Based on Visual Design Specification Typography Hierarchy */
+  
+  /* Visual Design Spec Semantic Mapping: */
+  --font-xs: clamp(12px, 2.5vw, 14px);    /* Body S: 12px - Captions, meta info */
+  --font-sm: clamp(14px, 3vw, 16px);      /* Body M & Label: 14px - Secondary text, form labels, chips, tab names */
+  --font-base: clamp(16px, 3.5vw, 18px);  /* Body L & Button: 16px - Primary body text, button text */
+  --font-lg: clamp(18px, 4vw, 20px);      /* Display M: 18px - Card titles */
+  --font-xl: clamp(20px, 4.5vw, 24px);    /* Display L/XL: 20-24px - Section headers, page titles */
+
+  /* Typography Usage Rules (from Visual Design Specification):
+   * - Readable at arm's length (factory use requirement)
+   * - Maximum 2 text hierarchy levels per screen
+   * - No italic text (difficult on mobile)
+   * - ALL CAPS only for buttons and critical alerts
+   * 
+   * Semantic Usage Guide:
+   * --font-xs (Body S):     Meta information, captions, timestamps
+   * --font-sm (Body M/Label): Tab names, form labels, secondary text, badge text  
+   * --font-base (Body L/Button): Primary content, button text, main descriptions
+   * --font-lg (Display M):  Card/section titles, important headings
+   * --font-xl (Display L/XL): Page titles, major section headers
+   */
 
   /* Global Color Variables - Visual Design Specification Implementation */
   --color-primary: #1D4ED8;  /* Visual Design Spec primary blue */
