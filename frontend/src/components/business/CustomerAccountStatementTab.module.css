@@ -358,6 +358,202 @@
   }
 }
 
+/* Enhanced Transaction Details Modal */
+.transactionDetailsContent {
+  padding: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-lg);
+}
+
+.transactionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.transactionInfo {
+  flex: 1;
+}
+
+.transactionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0 0 var(--ds-space-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.transactionReference {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.transactionBadges {
+  display: flex;
+  gap: var(--ds-space-xs);
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.typeBadge {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  padding: var(--ds-space-xxs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.typeBadge.salesinvoice {
+  background: var(--ds-color-warning-alpha);
+  color: var(--ds-color-warning);
+}
+
+.typeBadge.advancepayment {
+  background: var(--ds-color-info-alpha);
+  color: var(--ds-color-info);
+}
+
+.typeBadge.payment {
+  background: var(--ds-color-success-alpha);
+  color: var(--ds-color-success);
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.sectionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+  padding-bottom: var(--ds-space-xs);
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-sm);
+}
+
+.detailItem {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--ds-space-sm);
+  align-items: flex-start;
+}
+
+.detailLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  word-break: break-word;
+}
+
+.detailValue.creditAmount {
+  color: var(--ds-color-success);
+  font-weight: 600;
+}
+
+.detailValue.debitAmount {
+  color: var(--ds-color-danger);
+  font-weight: 600;
+}
+
+.detailValue.balanceDue {
+  color: var(--ds-color-danger);
+  font-weight: 600;
+}
+
+.detailValue.balanceCredit {
+  color: var(--ds-color-success);
+  font-weight: 600;
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.invoiceItem {
+  background: var(--ds-bg-secondary);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-xs);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.itemDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-primary);
+  display: block;
+  margin-bottom: var(--ds-space-xxs);
+}
+
+.itemDetails {
+  font-family: var(--font-family);
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+}
+
+/* Mobile Responsive for Modal */
+@media (max-width: 768px) {
+  .transactionDetailsContent {
+    padding: var(--ds-space-sm);
+    gap: var(--ds-space-md);
+  }
+  
+  .transactionHeader {
+    flex-direction: column;
+    gap: var(--ds-space-sm);
+    align-items: stretch;
+  }
+  
+  .transactionBadges {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .detailItem {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xxs);
+  }
+  
+  .detailLabel {
+    font-size: var(--font-xs);
+  }
+  
+  .detailValue {
+    font-size: var(--font-sm);
+  }
+}
+
 /* Accessibility Enhancements */
 @media (prefers-reduced-motion: reduce) {
   .transactionCard, .shareButton, .viewDetailsButton {

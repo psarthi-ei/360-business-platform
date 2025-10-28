@@ -195,7 +195,7 @@
 /* Primary Button Variant - Visual Design Specification */
 .ds-btn-primary {
   background: var(--ds-btn-primary);  /* #1D4ED8 */
-  color: white;
+  color: var(--ds-text-inverse);
 }
 .ds-btn-primary:hover {
   background: var(--ds-btn-primary-hover);  /* #1E40AF */
@@ -210,14 +210,14 @@
 }
 .ds-btn-secondary:hover {
   background: var(--ds-btn-secondary-hover);  /* #1D4ED8 */
-  color: white;
+  color: var(--ds-text-inverse);
   transform: translateY(-1px);
 }
 
 /* Urgent/Hot Priority Actions - Visual Design Specification */
 .ds-btn-urgent {
   background: var(--ds-btn-urgent);  /* #F97316 */
-  color: white;
+  color: var(--ds-text-inverse);
 }
 .ds-btn-urgent:hover {
   background: var(--ds-btn-urgent-hover);  /* #EA580C */
@@ -239,19 +239,21 @@
 
 /* Action-Specific Variants (from Lead/Quote success) */
 .ds-btn-call { 
-  background: #2ed573; 
-  color: white;
+  background: var(--ds-btn-primary); 
+  color: var(--ds-text-inverse) !important;
 }
 .ds-btn-call:hover { 
-  background: #7bed9f; 
+  background: var(--ds-btn-primary-hover); 
+  color: var(--ds-text-inverse) !important;
 }
 
 .ds-btn-whatsapp { 
   background: #25d366; 
-  color: white;
+  color: var(--ds-text-inverse) !important;
 }
 .ds-btn-whatsapp:hover { 
   background: #128c7e; 
+  color: var(--ds-text-inverse) !important;
 }
 
 /* Filter Buttons (QuotationOrders pattern) */
@@ -262,7 +264,7 @@
 }
 .ds-btn-filter:hover {
   background: #4299e1;
-  color: white;
+  color: var(--ds-text-inverse);
 }
 
 /* More/Toggle Buttons */
@@ -274,7 +276,7 @@
 }
 .ds-btn-more:hover {
   background: #4299e1;
-  color: white;
+  color: var(--ds-text-inverse);
 }
 
 /* ========================================

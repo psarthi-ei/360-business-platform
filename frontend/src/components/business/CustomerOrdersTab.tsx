@@ -138,7 +138,7 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
                 {/* Action Button - View Details */}
                 <div className="ds-card-actions">
                   <button 
-                    className="ds-btn ds-btn-primary"
+                    className="ds-btn ds-btn-sm ds-btn-secondary"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleViewDetails(order);

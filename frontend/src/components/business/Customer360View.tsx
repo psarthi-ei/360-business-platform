@@ -37,6 +37,13 @@ const Customer360View = ({ customer, onClose }: Customer360ViewProps) => {
     <div className={styles.customer360Container}>
       {/* Customer Header - 48px */}
       <div className={styles.customer360Header}>
+        <button 
+          className={styles.backButton}
+          onClick={onClose}
+          title="Back to customer list"
+        >
+          ← Back
+        </button>
         <h1 className={styles.customerName}>{customer.companyName}</h1>
       </div>
 

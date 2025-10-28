@@ -365,53 +365,232 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
         })}
       </div>
 
-      {/* Transaction Details Modal */}
+      {/* Enhanced Transaction Details Modal */}
       <CustomerDetailsModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title={selectedTransaction ? `Transaction Details - ${selectedTransaction.reference}` : 'Transaction Details'}
+        title={selectedTransaction ? `${getTransactionTypeDisplay(selectedTransaction.type)} Details - ${selectedTransaction.reference}` : 'Transaction Details'}
       >
-        {selectedTransaction && (
-          <div style={{ padding: 'var(--ds-space-md)' }}>
-            <div style={{ marginBottom: 'var(--ds-space-md)' }}>
-              <h4 style={{ margin: '0 0 var(--ds-space-sm) 0', fontFamily: 'var(--font-family)', fontSize: 'var(--font-base)', fontWeight: '600', color: 'var(--ds-text-primary)' }}>
-                Transaction Information
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 'var(--ds-space-sm)', fontSize: 'var(--font-sm)' }}>
-                <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Type:</span>
-                <span style={{ color: 'var(--ds-text-primary)' }}>{getTransactionTypeDisplay(selectedTransaction.type)}</span>
-                
-                <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Reference:</span>
-                <span style={{ color: 'var(--ds-text-primary)' }}>{selectedTransaction.reference}</span>
-                
-                <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Date:</span>
-                <span style={{ color: 'var(--ds-text-primary)' }}>{formatDate(selectedTransaction.date)}</span>
-                
-                <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Description:</span>
-                <span style={{ color: 'var(--ds-text-primary)' }}>{selectedTransaction.description}</span>
-                
-                {selectedTransaction.creditAmount && (
-                  <>
-                    <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Amount:</span>
-                    <span style={{ color: 'var(--ds-color-success)', fontWeight: '600' }}>₹{formatCurrency(selectedTransaction.creditAmount)} (Credit)</span>
-                  </>
-                )}
-                
-                {selectedTransaction.debitAmount && (
-                  <>
-                    <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Amount:</span>
-                    <span style={{ color: 'var(--ds-color-danger)', fontWeight: '600' }}>₹{formatCurrency(selectedTransaction.debitAmount)} (Debit)</span>
-                  </>
-                )}
-                
-                <span style={{ fontWeight: '500', color: 'var(--ds-text-secondary)' }}>Balance:</span>
-                <span style={{ color: selectedTransaction.runningBalance > 0 ? 'var(--ds-color-danger)' : 'var(--ds-color-success)', fontWeight: '600' }}>
-                  ₹{formatCurrency(Math.abs(selectedTransaction.runningBalance))} {selectedTransaction.runningBalance > 0 ? '(Outstanding)' : '(Credit)'}
-                </span>
+        {selectedTransaction && (() => {
+          // Fetch related data based on transaction type
+          let relatedFinalInvoice = null;
+          let relatedProformaInvoice = null;
+          let relatedQuote = null;
+
+          if (selectedTransaction.type === 'sales_invoice' && selectedTransaction.relatedInvoiceId) {
+            relatedFinalInvoice = mockFinalInvoices.find(inv => inv.id === selectedTransaction.relatedInvoiceId);
+          } else if (selectedTransaction.type === 'advance_payment' && selectedTransaction.relatedInvoiceId) {
+            relatedProformaInvoice = getProformaInvoiceById(selectedTransaction.relatedInvoiceId);
+            if (relatedProformaInvoice) {
+              relatedQuote = getQuoteById(relatedProformaInvoice.quoteId);
+            }
+          } else if (selectedTransaction.type === 'payment' && selectedTransaction.relatedInvoiceId) {
+            relatedFinalInvoice = getFinalInvoiceById(selectedTransaction.relatedInvoiceId);
+          }
+
+          return (
+            <div className={styles.transactionDetailsContent}>
+              
+              {/* Transaction Header */}
+              <div className={styles.transactionHeader}>
+                <div className={styles.transactionInfo}>
+                  <h3 className={styles.transactionTitle}>
+                    {getTransactionIcon(selectedTransaction.type)} {getTransactionTypeDisplay(selectedTransaction.type)}
+                  </h3>
+                  <p className={styles.transactionReference}>{selectedTransaction.reference}</p>
+                </div>
+                <div className={styles.transactionBadges}>
+                  <span className={`${styles.typeBadge} ${styles[selectedTransaction.type.replace('_', '')]}`}>
+                    {selectedTransaction.type === 'sales_invoice' ? 'INVOICE' : 
+                     selectedTransaction.type === 'advance_payment' ? 'ADVANCE' : 'PAYMENT'}
+                  </span>
+                </div>
               </div>
+
+              {/* Financial Details */}
+              <div className={styles.detailSection}>
+                <h4 className={styles.sectionTitle}>Financial Information</h4>
+                <div className={styles.detailGrid}>
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Transaction Date</span>
+                    <span className={styles.detailValue}>{formatDate(selectedTransaction.date)}</span>
+                  </div>
+                  
+                  {selectedTransaction.creditAmount && (
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Credit Amount</span>
+                      <span className={`${styles.detailValue} ${styles.creditAmount}`}>
+                        ₹{formatCurrency(selectedTransaction.creditAmount)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {selectedTransaction.debitAmount && (
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Debit Amount</span>
+                      <span className={`${styles.detailValue} ${styles.debitAmount}`}>
+                        ₹{formatCurrency(selectedTransaction.debitAmount)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Account Balance</span>
+                    <span className={`${styles.detailValue} ${selectedTransaction.runningBalance > 0 ? styles.balanceDue : styles.balanceCredit}`}>
+                      ₹{formatCurrency(Math.abs(selectedTransaction.runningBalance))} 
+                      {selectedTransaction.runningBalance > 0 ? ' (Outstanding)' : ' (Credit)'}
+                    </span>
+                  </div>
+                  
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Document Number</span>
+                    <span className={styles.detailValue}>{selectedTransaction.documentNumber || selectedTransaction.reference}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment-Specific Details */}
+              {(selectedTransaction.type === 'advance_payment' || selectedTransaction.type === 'payment') && selectedTransaction.paymentMethod && (
+                <div className={styles.detailSection}>
+                  <h4 className={styles.sectionTitle}>Payment Details</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Payment Method</span>
+                      <span className={styles.detailValue}>{selectedTransaction.paymentMethod}</span>
+                    </div>
+                    
+                    {selectedTransaction.bankName && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Bank</span>
+                        <span className={styles.detailValue}>{selectedTransaction.bankName}</span>
+                      </div>
+                    )}
+                    
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Transaction Reference</span>
+                      <span className={styles.detailValue}>{selectedTransaction.reference}</span>
+                    </div>
+                    
+                    {selectedTransaction.shortReference && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Short Reference</span>
+                        <span className={styles.detailValue}>{selectedTransaction.shortReference}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Final Invoice Details */}
+              {relatedFinalInvoice && (
+                <div className={styles.detailSection}>
+                  <h4 className={styles.sectionTitle}>Invoice Details</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Invoice Number</span>
+                      <span className={styles.detailValue}>{relatedFinalInvoice.invoiceNumber}</span>
+                    </div>
+                    
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Invoice Date</span>
+                      <span className={styles.detailValue}>{formatDate(relatedFinalInvoice.invoiceDate)}</span>
+                    </div>
+                    
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Total Amount</span>
+                      <span className={styles.detailValue}>₹{formatCurrency(relatedFinalInvoice.totalAmount)}</span>
+                    </div>
+                    
+                    {relatedFinalInvoice.items && relatedFinalInvoice.items.length > 0 && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Items</span>
+                        <div className={styles.itemsList}>
+                          {relatedFinalInvoice.items.map((item, index) => (
+                            <div key={index} className={styles.invoiceItem}>
+                              <span className={styles.itemDescription}>{item.description}</span>
+                              <span className={styles.itemDetails}>
+                                {item.quantity} {item.unit} × ₹{formatCurrency(item.rate)} = ₹{formatCurrency(item.taxableAmount)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Proforma Invoice Details */}
+              {relatedProformaInvoice && (
+                <div className={styles.detailSection}>
+                  <h4 className={styles.sectionTitle}>Related Proforma Invoice</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Proforma Number</span>
+                      <span className={styles.detailValue}>{relatedProformaInvoice.id}</span>
+                    </div>
+                    
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Total Amount</span>
+                      <span className={styles.detailValue}>₹{formatCurrency(relatedProformaInvoice.totalAmount)}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Quote/Order Details for Advance Payments */}
+              {selectedTransaction.type === 'advance_payment' && relatedQuote && (
+                <div className={styles.detailSection}>
+                  <h4 className={styles.sectionTitle}>Order Details</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Quote Reference</span>
+                      <span className={styles.detailValue}>{relatedQuote.id}</span>
+                    </div>
+                    
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Products</span>
+                      <span className={styles.detailValue}>{relatedQuote.items}</span>
+                    </div>
+                    
+                    {relatedQuote.totalAmount && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Order Value</span>
+                        <span className={styles.detailValue}>₹{formatCurrency(relatedQuote.totalAmount)}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Business Context */}
+              <div className={styles.detailSection}>
+                <h4 className={styles.sectionTitle}>Business Context</h4>
+                <div className={styles.detailGrid}>
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Customer</span>
+                    <span className={styles.detailValue}>{customer?.companyName}</span>
+                  </div>
+                  
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Description</span>
+                    <span className={styles.detailValue}>{selectedTransaction.description}</span>
+                  </div>
+                  
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Impact</span>
+                    <span className={styles.detailValue}>
+                      {selectedTransaction.type === 'sales_invoice' ? 'Increased outstanding balance' :
+                       selectedTransaction.type === 'advance_payment' ? 'Advance payment received' :
+                       'Payment received against invoice'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
             </div>
-          </div>
-        )}
+          );
+        })()}
       </CustomerDetailsModal>
 
     </div>

@@ -103,18 +103,18 @@ const CustomerInfoTab = ({ customerId }: CustomerInfoTabProps) => {
                     </div>
                   </div>
                 </div>
-                <div className={styles.contactActions}>
+                <div className="ds-card-actions">
                   <button 
                     className="ds-btn ds-btn-call"
                     onClick={() => initiateCall(customer.phone)}
                   >
-                    📞 Call
+                    Call
                   </button>
                   <button 
                     className="ds-btn ds-btn-whatsapp"
                     onClick={() => initiateWhatsApp(customer.phone, customer.contactPerson)}
                   >
-                    💬 WhatsApp
+                    WhatsApp
                   </button>
                 </div>
               </div>

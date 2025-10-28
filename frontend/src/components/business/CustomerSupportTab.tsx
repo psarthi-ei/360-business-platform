@@ -49,7 +49,6 @@ const CustomerSupportTab = ({ customerId }: CustomerSupportTabProps) => {
 
         {/* Support Tickets */}
         <div className={styles.ticketsSection}>
-          <h3 className={styles.sectionTitle}>Support Tickets</h3>
           
           {customerTickets.length === 0 ? (
             <div className={styles.emptyState}>
@@ -96,7 +95,7 @@ const CustomerSupportTab = ({ customerId }: CustomerSupportTabProps) => {
                     {/* Action - View Details Button */}
                     <div className="ds-card-actions">
                       <button 
-                        className="ds-btn ds-btn-primary"
+                        className="ds-btn ds-btn-sm ds-btn-secondary"
                         onClick={() => handleViewTicket(ticket)}
                       >
                         View Details

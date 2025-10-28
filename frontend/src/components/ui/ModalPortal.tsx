@@ -52,8 +52,15 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
       // Use CSS class-based approach for better reliability
       document.body.classList.add('modal-open');
       
-      // Apply inline styles only if CSS class doesn't work
-      document.body.style.top = `-${scrollY}px`;
+      // For mobile Safari compatibility - avoid position fixed issues
+      if (window.innerWidth <= 768) {
+        // Mobile: Use overflow hidden only, avoid position fixed
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+      } else {
+        // Desktop: Use position fixed approach
+        document.body.style.top = `-${scrollY}px`;
+      }
 
       // Cleanup function to restore scroll
       return () => {
@@ -75,12 +82,20 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         if (!originalTop) document.body.style.removeProperty('top');
         if (!originalTouchAction) document.body.style.removeProperty('touch-action');
         
-        // Restore scroll position with error handling
-        try {
-          window.scrollTo(0, scrollY);
-        } catch {
-          // Fallback scroll restoration
-          document.documentElement.scrollTop = scrollY;
+        // Restore scroll position with mobile-specific handling
+        if (window.innerWidth <= 768) {
+          // Mobile: Simple scroll restoration
+          setTimeout(() => {
+            window.scrollTo(0, scrollY);
+          }, 0);
+        } else {
+          // Desktop: Immediate scroll restoration
+          try {
+            window.scrollTo(0, scrollY);
+          } catch {
+            // Fallback scroll restoration
+            document.documentElement.scrollTop = scrollY;
+          }
         }
         
         // Force a reflow to ensure styles are applied
