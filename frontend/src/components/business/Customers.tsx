@@ -7,6 +7,15 @@ import Customer360View from './Customer360View';
 import SupportTicketFormModal from './SupportTicketFormModal';
 import { BusinessProfile, SupportTicket } from '../../data/customerMockData';
 
+interface SupportTicketForm {
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  category: 'quality_issue' | 'delivery_delay' | 'payment_query' | 'technical_support' | 'general_inquiry' | 'complaint';
+  businessProfileId: string;
+  assignedTo: string;
+}
+
 interface CustomersProps {
   mobile?: boolean;
   onShowCustomerProfile?: (customerId: string) => void;
@@ -306,7 +315,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
     setEditingTicket(null);
   };
   
-  const handleTicketSubmit = (ticketData: any) => {
+  const handleTicketSubmit = (ticketData: SupportTicketForm) => {
     // TODO: Implement actual ticket creation/update logic
     // For now, show success message
     const action = editingTicket ? 'updated' : 'created';
