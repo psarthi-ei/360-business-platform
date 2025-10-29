@@ -204,3 +204,322 @@
     gap: var(--ds-space-sm);
   }
 }
+
+/* ===== PROFESSIONAL INVOICE DISPLAY (PHASE 2) ===== */
+
+/* Professional Toggle Section */
+.professionalToggle {
+  padding: var(--ds-space-md);
+  background: var(--ds-btn-primary);
+  color: white;
+  border-radius: var(--ds-radius-md);
+  margin-bottom: var(--ds-space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-space-sm);
+}
+
+.professionalToggle h3 {
+  margin: 0 0 var(--ds-space-xs) 0;
+  font-size: var(--font-lg);
+  font-weight: 600;
+}
+
+.professionalToggle p {
+  margin: 0;
+  font-size: var(--font-sm);
+  opacity: 0.9;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--ds-space-sm) var(--ds-space-lg);
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--ds-radius-xl);
+  transition: all 0.3s ease;
+}
+
+.toggleButton:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.toggleButton input {
+  margin-right: var(--ds-space-sm);
+  transform: scale(1.2);
+  accent-color: var(--ds-color-success);
+}
+
+.toggleSlider {
+  font-weight: 600;
+  font-size: var(--font-sm);
+}
+
+/* Professional Items Section Styles - Matching QuotationOrders */
+.professionalItemsSection {
+  margin: var(--ds-space-md) 0;
+}
+
+.itemsToggleHeader {
+  background: var(--ds-color-success);
+  color: white;
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.itemsToggleHeader:hover {
+  background: #059669;  /* Darker green than --ds-color-success */
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--ds-shadow-elevated);
+}
+
+.itemsToggleHeader:hover .itemsHeaderText h4,
+.itemsToggleHeader:hover .itemsHeaderText p,
+.itemsToggleHeader:hover .itemsHeaderIcon,
+.itemsToggleHeader:hover .itemsExpandIcon {
+  color: white !important;
+}
+
+.itemsHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-md);
+}
+
+.itemsHeaderIcon {
+  font-size: var(--font-lg);
+}
+
+.itemsHeaderText h4 {
+  margin: 0;
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.itemsHeaderText p {
+  margin: var(--ds-space-xs) 0 0 0;
+  font-size: var(--font-sm);
+  opacity: 0.9;
+}
+
+.itemsExpandIcon {
+  font-size: var(--font-lg);
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.itemsContent {
+  margin-top: var(--ds-space-xs);
+}
+
+/* Enhanced Items Display */
+.itemsEnhanced {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-md);
+  border: 2px solid var(--ds-color-success);
+  margin-top: 0;
+  box-shadow: var(--ds-shadow-elevated);
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm); /* Reduced spacing between items */
+}
+
+.itemRow {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-sm); /* Reduced padding */
+  border: 1px solid var(--ds-border-light);
+  transition: all 0.3s ease;
+}
+
+.itemRow:hover {
+  border-color: var(--ds-color-primary);
+  box-shadow: var(--ds-shadow-card);
+}
+
+.itemRowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--ds-space-sm); /* Reduced gap */
+  margin-bottom: var(--ds-space-xs); /* Reduced margin */
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemHeader {
+  margin-bottom: var(--ds-space-sm);
+}
+
+.itemDescription {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: block;
+  margin-bottom: var(--ds-space-xs);
+}
+
+.itemMeta {
+  display: flex;
+  gap: var(--ds-space-lg);
+  flex-wrap: wrap;
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+}
+
+.itemCodeBadge {
+  background: var(--ds-color-primary);
+  color: white;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-xs);
+  font-weight: 600;
+}
+
+.itemAmount {
+  text-align: right;
+  min-width: 120px;
+}
+
+.itemPrice {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-color-success);
+}
+
+.itemTaxable {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  margin-top: var(--ds-space-xs);
+}
+
+.totalsSection {
+  border-top: 2px solid var(--ds-border-light);
+  padding-top: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-xs) 0;
+}
+
+.totalLabel {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.totalValue {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.totalTax {
+  color: var(--ds-color-warning);
+}
+
+.totalAdvance {
+  color: var(--ds-color-info);
+}
+
+.totalFinal {
+  border-top: 2px solid var(--ds-color-success);
+  padding-top: var(--ds-space-sm);
+  margin-top: var(--ds-space-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalFinalLabel {
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--ds-text-primary);
+}
+
+.totalFinalValue {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--ds-color-success);
+}
+
+/* Mobile Responsive for Professional Display */
+@media (max-width: 768px) {
+  .professionalToggle {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .professionalToggle .toggleButton {
+    align-self: flex-end;
+    margin-top: var(--ds-space-sm);
+  }
+
+  .itemsEnhanced {
+    padding: var(--ds-space-md);
+    margin-top: var(--ds-space-sm);
+  }
+
+  /* Mobile responsive for collapsible header - Matching QuotationOrders */
+  .itemsToggleHeader {
+    padding: var(--ds-space-sm);
+  }
+  
+  .itemsHeaderContent {
+    gap: var(--ds-space-sm);
+  }
+  
+  .itemsHeaderText h4 {
+    font-size: var(--font-sm);
+  }
+  
+  .itemsHeaderText p {
+    font-size: var(--font-xs);
+  }
+
+  .itemRowHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-sm);
+  }
+
+  .itemInfo {
+    width: 100%;
+  }
+
+  .itemCodeBadge {
+    display: inline-block;
+    margin-top: var(--ds-space-xs);
+  }
+
+  .itemAmount {
+    text-align: left;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .itemMeta {
+    gap: var(--ds-space-sm);
+  }
+}

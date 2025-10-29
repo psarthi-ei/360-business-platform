@@ -704,8 +704,8 @@ body.modal-open {
   }
   
   .ds-card-header {
-    min-height: 20px;               /* Adjusted for mobile font scaling */
-    max-height: 40px;
+    min-height: 22px;               /* Adjusted for mobile font scaling */
+    max-height: 46px;               /* Ensure 2 full lines: 18px * 1.2 * 2 = 43.2px + buffer */
   }
   
   .ds-card-action-buttons {

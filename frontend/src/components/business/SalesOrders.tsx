@@ -1,6 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
-import { mockSalesOrders, mockQuotes, mockLeads } from '../../data/salesMockData';
+import { 
+  mockSalesOrders, 
+  mockQuotes, 
+  mockLeads,
+  getFeatureToggleState,
+  setFeatureToggle,
+  OrderItem
+} from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './SalesOrders.module.css';
@@ -30,6 +37,31 @@ function SalesOrders({
     toggleExpansion(orderId, 'data-order-id');
   }, [toggleExpansion]);
   
+  // Professional Order Display with Feature Toggle Support
+  const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
+  
+  // State for collapsible professional items sections
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  
+  // Handle toggle change
+  const handleToggleChange = (enabled: boolean) => {
+    setFeatureToggle('STRUCTURED_ITEMS_ENABLED', enabled);
+    setUseStructuredData(enabled);
+  };
+
+  // Handle items section expansion toggle
+  const toggleItemsExpansion = (orderId: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(orderId)) {
+        newSet.delete(orderId);
+      } else {
+        newSet.add(orderId);
+      }
+      return newSet;
+    });
+  };
+  
   
   // Helper function to calculate payment details for an order
   const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
@@ -58,10 +90,166 @@ function SalesOrders({
       paymentStatus
     };
   };
+  
+  // Helper function to check if order has structured items
+  const hasStructuredItems = (order: { itemsStructured?: OrderItem[] }): boolean => {
+    return !!(order.itemsStructured && order.itemsStructured.length > 0);
+  };
+  
+  // Get formatted items display for header (concise)
+  const getOrderItemsHeader = (order: { items: string; itemsStructured?: OrderItem[] }): string => {
+    if (useStructuredData && hasStructuredItems(order)) {
+      const items = order.itemsStructured as OrderItem[];
+      if (items.length === 1) {
+        const deliveryProgress = items[0].deliveredQuantity ? ` (${items[0].deliveredQuantity}/${items[0].quantity} delivered)` : ` (${items[0].quantity} ${items[0].unit})`;
+        return `${items[0].description}${deliveryProgress}`;
+      } else {
+        // Show first item details + more count for multiple items
+        const firstItem = items[0];
+        const remainingCount = items.length - 1;
+        const deliveryProgress = firstItem.deliveredQuantity ? ` (${firstItem.deliveredQuantity}/${firstItem.quantity} delivered)` : ` (${firstItem.quantity} ${firstItem.unit})`;
+        return `${firstItem.description}${deliveryProgress} + ${remainingCount} more items`;
+      }
+    }
+    // Fallback to existing string display
+    return order.items;
+  };
+  
+  // Get formatted items display for details (comprehensive with production tracking)
+  const renderOrderItemsDetails = (order: { items: string; itemsStructured?: OrderItem[]; progressPercentage?: number }) => {
+    if (useStructuredData && hasStructuredItems(order)) {
+      const items = order.itemsStructured as OrderItem[];
+      
+      return (
+        <div className={styles.itemsEnhanced}>
+          <div className={styles.itemsList}>
+            {items.map((item, index) => (
+              <div key={index} className={styles.itemRow}>
+                <div className={styles.itemRowHeader}>
+                  <div className={styles.itemInfo}>
+                    <div className={styles.itemHeader}>
+                      <span className={styles.itemCodeBadge}>
+                        {item.itemCode}
+                      </span>
+                      <span className={styles.itemDescription}>
+                        {item.description}
+                      </span>
+                    </div>
+                    <div className={styles.itemDetails}>
+                      <span>
+                        <strong>HSN:</strong> {item.hsnCode}
+                      </span>
+                      <span>
+                        <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
+                      </span>
+                    </div>
+                    
+                    {/* Production Tracking Details */}
+                    <div className={styles.productionTracking}>
+                      <div className={styles.deliveryProgress}>
+                        <span className={styles.deliveryLabel}>
+                          🚚 Delivery Progress:
+                        </span>
+                        <span className={styles.deliveryValue}>
+                          {item.deliveredQuantity || 0} / {item.quantity} {item.unit}
+                        </span>
+                        <div className={styles.progressBar}>
+                          <div 
+                            className={styles.progressFill}
+                            style={{ 
+                              width: `${((item.deliveredQuantity || 0) / item.quantity) * 100}%` 
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Production Summary */}
+          <div className={styles.productionSummary}>
+            <div className={styles.summaryRow}>
+              <span className={styles.summaryLabel}>🏭 Overall Progress:</span>
+              <span className={styles.summaryValue}>{order.progressPercentage || 0}%</span>
+            </div>
+            <div className={styles.overallProgressBar}>
+              <div 
+                className={styles.overallProgressFill}
+                style={{ width: `${order.progressPercentage || 0}%` }}
+              ></div>
+            </div>
+          </div>
+          
+          {/* Production Summary - Non-Financial */}
+          <div className={styles.productionSummaryFooter}>
+            <div className={styles.summaryRow}>
+              <span className={styles.summaryLabel}>📋 Total Items:</span>
+              <span className={styles.summaryValue}>{items.length} items</span>
+            </div>
+            <div className={styles.summaryRow}>
+              <span className={styles.summaryLabel}>📦 Total Quantity:</span>
+              <span className={styles.summaryValue}>
+                {items.reduce((sum, item) => sum + item.quantity, 0).toLocaleString()} units
+              </span>
+            </div>
+            <div className={styles.summaryRow}>
+              <span className={styles.summaryLabel}>✅ Delivered:</span>
+              <span className={styles.summaryValue}>
+                {items.reduce((sum, item) => sum + (item.deliveredQuantity || 0), 0).toLocaleString()} units
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Fallback to existing string display
+    return (
+      <div className={styles.basicItemsDisplay}>
+        <p><strong>Items:</strong> {order.items}</p>
+        {order.progressPercentage !== undefined && (
+          <div className={styles.basicProgress}>
+            <span>Production Progress: {order.progressPercentage}%</span>
+            <div className={styles.basicProgressBar}>
+              <div 
+                className={styles.basicProgressFill}
+                style={{ width: `${order.progressPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
+      
+        {/* Professional Production Tracking Toggle Section */}
+        <div className={styles.professionalToggle}>
+          <div>
+            <h3>Production Tracking & Item Details</h3>
+            <p>Enhanced view with delivery progress, item breakdown, and production status</p>
+          </div>
+          <div 
+            className={styles.toggleButton}
+            onClick={() => handleToggleChange(!useStructuredData)}
+          >
+            <input 
+              type="checkbox" 
+              checked={useStructuredData} 
+              onChange={() => handleToggleChange(!useStructuredData)}
+            />
+            <span className={styles.toggleSlider}>
+              {useStructuredData ? 'Professional View' : 'Standard View'}
+            </span>
+          </div>
+        </div>
+      
       <div className={styles.ordersContainer}>
         {mockSalesOrders.map(order => {
           // Filter logic
@@ -118,9 +306,9 @@ function SalesOrders({
                 {/* Enhanced Header - Company Name + Items Context */}
                 <div 
                   className="ds-card-header"
-                  title={`${companyName} - ${order.items} (Order ID: ${order.id})`}
+                  title={`${companyName} - ${getOrderItemsHeader(order)} (Order ID: ${order.id})`}
                 >
-                  {companyName} — {order.items}
+                  {companyName} — {getOrderItemsHeader(order)}
                 </div>
                 
                 {/* Optimized Status - Primary Order Status Only */}
@@ -154,6 +342,32 @@ function SalesOrders({
                     <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
                   </div>
 
+                  {/* Professional Production Tracking Items Section */}
+                  {useStructuredData && hasStructuredItems(order) && (
+                    <div className={styles.professionalItemsSection}>
+                      <div 
+                        className={styles.itemsToggleHeader}
+                        onClick={() => toggleItemsExpansion(order.id)}
+                      >
+                        <div className={styles.itemsHeaderContent}>
+                          <span className={styles.itemsHeaderIcon}>🏭</span>
+                          <div className={styles.itemsHeaderText}>
+                            <h4>Production Tracking & Item Details</h4>
+                            <p>{getOrderItemsHeader(order)}</p>
+                          </div>
+                        </div>
+                        <div className={styles.itemsExpandIcon}>
+                          {expandedItems.has(order.id) ? '▼' : '▶'}
+                        </div>
+                      </div>
+                      
+                      {expandedItems.has(order.id) && (
+                        <div className={styles.itemsContent}>
+                          {renderOrderItemsDetails(order)}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   
                   {/* Related Quote and Lead Information */}
                   <div className={styles.orderMapping}>

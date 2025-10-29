@@ -4,7 +4,17 @@ import {
   mockProformaInvoices, 
   mockFinalInvoices, 
   getAdvancePaymentByProformaId,
-  mockFinalPayments
+  mockFinalPayments,
+  getFeatureToggleState,
+  setFeatureToggle,
+  isProformaWithStructuredItems,
+  isFinalInvoiceWithStructuredItems,
+  ProformaItem,
+  InvoiceItem,
+  calculateProformaItemTotals,
+  calculateInvoiceItemTotals,
+  ProformaInvoice,
+  FinalInvoice
 } from '../../data/salesMockData';
 import styles from './Invoices.module.css';
 
@@ -35,6 +45,15 @@ interface InvoiceRecord {
   businessProfileId: string; // For customer status lookup
 }
 
+// Helper function to get original invoice data for structured items access
+const getOriginalInvoiceData = (invoiceRecord: InvoiceRecord): ProformaInvoice | FinalInvoice | null => {
+  if (invoiceRecord.type === 'proforma') {
+    return mockProformaInvoices.find(inv => inv.id === invoiceRecord.id) || null;
+  } else {
+    return mockFinalInvoices.find(inv => inv.id === invoiceRecord.id) || null;
+  }
+};
+
 function Invoices({
   onShowQuotationOrders,
   onShowPayments,
@@ -43,6 +62,12 @@ function Invoices({
   filterState,
   onFilterChange
 }: InvoicesProps) {
+  
+  // Professional Invoice Display with Feature Toggle Support
+  const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
+  
+  // State for collapsible professional items sections
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   
   // Progressive disclosure state for 140px template cards
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
@@ -76,6 +101,227 @@ function Invoices({
       }, 100);
     }
   }, [expandedDetails]);
+
+  // Handle toggle change
+  const handleToggleChange = (enabled: boolean) => {
+    setFeatureToggle('STRUCTURED_ITEMS_ENABLED', enabled);
+    setUseStructuredData(enabled);
+  };
+
+  // Handle items section expansion toggle
+  const toggleItemsExpansion = (invoiceId: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(invoiceId)) {
+        newSet.delete(invoiceId);
+      } else {
+        newSet.add(invoiceId);
+      }
+      return newSet;
+    });
+  };
+
+  // Get formatted items display for header (concise)
+  const getInvoiceItemsHeader = (invoice: InvoiceRecord): string => {
+    if (useStructuredData) {
+      const originalInvoice = getOriginalInvoiceData(invoice);
+      
+      // Handle Proforma Invoice
+      if (invoice.type === 'proforma' && originalInvoice && isProformaWithStructuredItems(originalInvoice)) {
+        const proformaInvoice = originalInvoice as ProformaInvoice;
+        const items = proformaInvoice.itemsStructured as ProformaItem[];
+        if (items.length === 1) {
+          return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
+        } else {
+          // Show first item details + more count for multiple items
+          const firstItem = items[0];
+          const remainingCount = items.length - 1;
+          return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+        }
+      }
+      
+      // Handle Final Invoice
+      if (invoice.type === 'final' && originalInvoice && isFinalInvoiceWithStructuredItems(originalInvoice)) {
+        const finalInvoice = originalInvoice as FinalInvoice;
+        const items = finalInvoice.items as InvoiceItem[];
+        if (items.length === 1) {
+          return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
+        } else {
+          // Show first item details + more count for multiple items
+          const firstItem = items[0];
+          const remainingCount = items.length - 1;
+          return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+        }
+      }
+    }
+    // Fallback to existing string display or basic info
+    return 'Invoice items';
+  };
+
+  // Get formatted items display for details (comprehensive)
+  const renderInvoiceItemsDetails = (invoice: InvoiceRecord) => {
+    if (useStructuredData && invoice.type === 'proforma') {
+      const originalInvoice = getOriginalInvoiceData(invoice);
+      if (originalInvoice && isProformaWithStructuredItems(originalInvoice)) {
+        const proformaInvoice = originalInvoice as ProformaInvoice;
+        const items = proformaInvoice.itemsStructured as ProformaItem[];
+        const totals = calculateProformaItemTotals(items);
+      
+      return (
+        <div className={styles.itemsEnhanced}>
+          <div className={styles.itemsList}>
+            {items.map((item, index) => (
+              <div key={index} className={styles.itemRow}>
+                <div className={styles.itemRowHeader}>
+                  <div className={styles.itemInfo}>
+                    <div className={styles.itemHeader}>
+                      <span className={styles.itemCodeBadge}>
+                        {item.itemCode}
+                      </span>
+                      <span className={styles.itemDescription}>
+                        {item.description}
+                      </span>
+                    </div>
+                    <div className={styles.itemDetails}>
+                      <span>
+                        <strong>HSN:</strong> {item.hsnCode}
+                      </span>
+                      <span>
+                        <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
+                      </span>
+                      <span>
+                        <strong>Rate:</strong> {formatCurrency(item.rate)}/{item.unit}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={styles.itemAmount}>
+                    <div className={styles.itemAmountValue}>
+                      {formatCurrency(item.taxableAmount)}
+                    </div>
+                    {item.discount > 0 && (
+                      <div className={styles.itemDiscount}>
+                        -{item.discount}% discount
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className={styles.itemsTotals}>
+            <div className={styles.totalRow}>
+              <span className={styles.totalLabel}>Subtotal (Before Tax):</span>
+              <span className={styles.totalValue}>{formatCurrency(totals.subtotal)}</span>
+            </div>
+            <div className={styles.totalRow}>
+              <span className={styles.totalLabel}>CGST (9%):</span>
+              <span className={`${styles.totalValue} ${styles.totalTax}`}>{formatCurrency(totals.cgstAmount)}</span>
+            </div>
+            <div className={styles.totalRow}>
+              <span className={styles.totalLabel}>SGST (9%):</span>
+              <span className={`${styles.totalValue} ${styles.totalTax}`}>{formatCurrency(totals.sgstAmount)}</span>
+            </div>
+            <div className={styles.totalFinal}>
+              <span className={styles.totalFinalLabel}>Grand Total:</span>
+              <span className={styles.totalFinalValue}>
+                {formatCurrency(totals.total)}
+              </span>
+            </div>
+            <div className={styles.totalRow}>
+              <span className={styles.totalLabel}>Advance Required (50%):</span>
+              <span className={`${styles.totalValue} ${styles.totalAdvance}`}>{formatCurrency(totals.total * 0.5)}</span>
+            </div>
+          </div>
+        </div>
+      );
+      }
+    }
+    
+    // Handle Final Invoice structured items
+    if (useStructuredData && invoice.type === 'final') {
+      const originalInvoice = getOriginalInvoiceData(invoice);
+      if (originalInvoice && isFinalInvoiceWithStructuredItems(originalInvoice)) {
+        const finalInvoice = originalInvoice as FinalInvoice;
+        const items = finalInvoice.items as InvoiceItem[];
+        const totals = calculateInvoiceItemTotals(items);
+      
+        return (
+          <div className={styles.itemsEnhanced}>
+            <div className={styles.itemsList}>
+              {items.map((item, index) => (
+                <div key={index} className={styles.itemRow}>
+                  <div className={styles.itemRowHeader}>
+                    <div className={styles.itemInfo}>
+                      <div className={styles.itemHeader}>
+                        <span className={styles.itemCodeBadge}>
+                          {item.itemCode}
+                        </span>
+                        <span className={styles.itemDescription}>
+                          {item.description}
+                        </span>
+                      </div>
+                      <div className={styles.itemDetails}>
+                        <span>
+                          <strong>HSN:</strong> {item.hsnCode}
+                        </span>
+                        <span>
+                          <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
+                        </span>
+                        <span>
+                          <strong>Rate:</strong> {formatCurrency(item.rate)}/{item.unit}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.itemAmount}>
+                      <div className={styles.itemAmountValue}>
+                        {formatCurrency(item.taxableAmount)}
+                      </div>
+                      {item.discount > 0 && (
+                        <div className={styles.itemDiscount}>
+                          -{item.discount}% discount
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className={styles.itemsTotals}>
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Subtotal:</span>
+                <span className={styles.totalValue}>{formatCurrency(totals.subtotal)}</span>
+              </div>
+              {totals.totalDiscount > 0 && (
+                <div className={styles.totalRow}>
+                  <span className={styles.totalLabel}>Total Discount:</span>
+                  <span className={`${styles.totalValue} ${styles.totalDiscount}`}>-{formatCurrency(totals.totalDiscount)}</span>
+                </div>
+              )}
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Taxable Amount:</span>
+                <span className={styles.totalValue}>{formatCurrency(totals.taxableAmount)}</span>
+              </div>
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>GST (5%):</span>
+                <span className={`${styles.totalValue} ${styles.totalTax}`}>{formatCurrency(totals.totalTax)}</span>
+              </div>
+              <div className={styles.totalFinal}>
+                <span className={styles.totalFinalLabel}>Final Amount:</span>
+                <span className={styles.totalFinalValue}>
+                  {formatCurrency(totals.total)}
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+    
+    // Fallback to existing string display
+    return <p><strong>Items:</strong> No items specified</p>;
+  };
 
   // Create combined invoice records from both proforma and final invoices
   const createInvoiceRecords = (): InvoiceRecord[] => {
@@ -236,6 +482,22 @@ function Invoices({
     <div className={styles.invoicesScreen}>
       <div className={styles.pageContent}>
 
+        {/* Professional Display Toggle (Phase 2) */}
+        <div className={styles.professionalToggle}>
+          <div>
+            <h3>💼 Professional Invoice Display</h3>
+            <p>Toggle between basic and professional structured item display with GST compliance</p>
+          </div>
+          <label className={styles.toggleButton}>
+            <input 
+              type="checkbox" 
+              checked={useStructuredData}
+              onChange={(e) => handleToggleChange(e.target.checked)}
+            />
+            <span className={styles.toggleSlider}></span>
+          </label>
+        </div>
+
         {/* Invoice Records - 140px Template */}
         <div className={styles.invoicesContainer}>
           {filteredInvoices.length === 0 ? (
@@ -301,7 +563,32 @@ function Invoices({
                         </div>
                       </div>
 
-                      {/* Related Record Information */}
+                      {/* Professional Items Display Section (Phase 2) - Moved before related records for better UX */}
+                      <div className={styles.professionalItemsSection}>
+                        <div 
+                          className={styles.itemsToggleHeader}
+                          onClick={() => toggleItemsExpansion(invoice.id)}
+                        >
+                          <div className={styles.itemsHeaderContent}>
+                            <span className={styles.itemsHeaderIcon}>📋</span>
+                            <div className={styles.itemsHeaderText}>
+                              <h4>Item Details</h4>
+                              <p>{getInvoiceItemsHeader(invoice)}</p>
+                            </div>
+                          </div>
+                          <div className={styles.itemsExpandIcon}>
+                            {expandedItems.has(invoice.id) ? '▼' : '▶'}
+                          </div>
+                        </div>
+                        
+                        {expandedItems.has(invoice.id) && (
+                          <div className={styles.itemsContent}>
+                            {renderInvoiceItemsDetails(invoice)}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Related Record Information - Moved after item details */}
                       {invoice.relatedId && (
                         <div className={styles.relationshipSection}>
                           <h4>Related Records</h4>
