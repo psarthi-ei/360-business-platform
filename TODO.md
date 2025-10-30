@@ -2,11 +2,30 @@
 
 *This file contains ACTIVE tasks only. Completed tasks are removed and documented in Implementation Roadmap.*
 
-## Current Session: ✅ ARCHITECTURE REFACTOR COMPLETE - PHASE 4 BUSINESS LOGIC CLEANUP ACHIEVED
+## Current Session: ✅ PURCHASE REQUESTS UX ENHANCEMENT COMPLETE - SUB-PHASE 7.10 ACHIEVED
 
-**Latest Achievement**: Architecture Refactor + Business Logic Cleanup (PHASE 4) + TypeScript Enhancement  
-**Status**: ✅ **PHASE 4 COMPLETED** (100%) - Clean data-driven architecture with proper separation of concerns  
+**Latest Achievement**: Purchase Requests UX Enhancement & Information Architecture Optimization (SUB-PHASE 7.10)  
+**Status**: ✅ **SUB-PHASE 7.10 COMPLETED** (100%) - Improved card design, eliminated data duplication, optimized business value display  
 **Next**: PHASE 3 Supply Chain Consolidation (MSME workflow improvement)
+
+### **✅ COMPLETED: SUB-PHASE 7.10 Purchase Requests UX Enhancement & Information Architecture Optimization**
+- ✅ **Standard DS Card Compliance**: Fixed expansion pattern to use standard "More/Less" instead of custom "View Details to Approve"
+- ✅ **Information Architecture Redesign**: Restructured expanded content from dense text to organized scannable sections
+- ✅ **Data Duplication Elimination**: Removed redundant customer name from KPI section (already in header)
+- ✅ **Improved Business Value Metadata**: Enhanced meta section with material count, investment focus, delivery urgency
+- ✅ **Customer-Centric Header**: Changed header from "Purchase Request ID" to "Customer Name — Order Value" for business context
+- ✅ **Mobile-Responsive Materials View**: Implemented desktop table + mobile card views for materials breakdown
+- ✅ **Optimized KPI Grid**: Updated business metrics to show Order Value, Material Investment, Investment %, Materials Count
+- ✅ **Professional Information Hierarchy**: Clear progression from business context (card) to detailed analysis (expanded)
+
+### **✅ COMPLETED: SUB-PHASE 7.9 Material Requirements Data Migration & LinkedPR Implementation**
+- ✅ **Data Structure Migration**: Migrated from old mockMaterialRequirements to mockConsolidatedMaterialRequirements
+- ✅ **Clean Separation of Concerns**: Removed all cost-related fields from Material Requirements (MR focuses on availability only)
+- ✅ **Interface Cleanup**: Cleaned MaterialItem and ConsolidatedMaterialRequirement interfaces of cost/approval data
+- ✅ **Workflow Separation**: Removed approval workflow fields from MR (approval belongs to Purchase Requests only)
+- ✅ **LinkedPR Implementation**: Fixed getPRStatus function to check linkedPR directly from consolidated data
+- ✅ **UI Enhancement**: Updated button logic to show "View Purchase Request" when linkedPR exists vs "Create Purchase Request"
+- ✅ **Component Updates**: Enhanced MaterialRequirements component with proper shortage-based filtering and DS card compliance
 
 ### **✅ COMPLETED: SUB-PHASE 7.8.1 Architecture Refactor + TypeScript Enhancement**
 - ✅ **Clean Architecture**: Removed all business logic calculations from UI components
