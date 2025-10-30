@@ -4,6 +4,7 @@ import {
   mockConsolidatedPurchaseRequests, 
   mockPurchaseOrders
 } from '../../data/procurementMockData';
+import { SalesOrder } from '../../data/salesMockData';
 import styles from './Procurement.module.css';
 import MaterialRequirements from './MaterialRequirements';
 import PurchaseRequests from './PurchaseRequests';
@@ -32,7 +33,7 @@ const calculateMaterialStatusCounts = () => {
     deliveryDate: string;
   }
   
-  const allOrders: OrderWithMaterialStatus[] = mockSalesOrders.map((order: any) => ({
+  const allOrders: OrderWithMaterialStatus[] = mockSalesOrders.map((order: SalesOrder) => ({
     orderId: order.id,
     materialStatus: checkOrderMaterialAvailability(order.id),
     deliveryDate: order.deliveryDate
