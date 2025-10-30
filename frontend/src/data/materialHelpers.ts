@@ -403,14 +403,12 @@ export const generateConsolidatedPRFromMR = (consolidatedMR: ConsolidatedMateria
       materialName: material.materialName,
       requiredQuantity: material.requiredQuantity,
       unit: material.unit,
-      estimatedUnitCost: 0, // To be filled by procurement team
-      estimatedTotalCost: 0, // To be filled by procurement team
-      forOrderItems: [], // To be linked by procurement team
+      estimatedUnitCost: 0, // Required by PurchaseRequestItem - to be filled by procurement
+      estimatedTotalCost: 0, // Required by PurchaseRequestItem - to be filled by procurement  
+      forOrderItems: [], // Required by PurchaseRequestItem - to be filled by procurement
       urgency: material.urgency,
-      preferredVendor: 'TBD', // To be determined by procurement team
-      qualitySpecs: 'Standard', // Default - to be specified by procurement team
       deliveryRequirement: `Deliver by ${consolidatedMR.requiredDate}`,
-      notes: material.notes || 'Material requirement from production planning'
+      notes: material.notes || ''
     })),
     totalEstimatedCost: 0, // To be calculated by procurement team
     businessJustification: `Customer ${consolidatedMR.customerName} delivery commitment requires material procurement by ${consolidatedMR.requiredDate}`,
