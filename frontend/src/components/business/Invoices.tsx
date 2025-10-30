@@ -5,10 +5,6 @@ import {
   mockFinalInvoices, 
   getAdvancePaymentByProformaId,
   mockFinalPayments,
-  getFeatureToggleState,
-  setFeatureToggle,
-  isProformaWithStructuredItems,
-  isFinalInvoiceWithStructuredItems,
   ProformaItem,
   InvoiceItem,
   calculateProformaItemTotals,
@@ -63,11 +59,7 @@ function Invoices({
   onFilterChange
 }: InvoicesProps) {
   
-  // Professional Invoice Display with Feature Toggle Support
-  const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
-  
-  // State for collapsible professional items sections
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  // Removed nested items expansion - items now shown directly in main expanded view
   
   // Progressive disclosure state for 140px template cards
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
@@ -77,12 +69,7 @@ function Invoices({
     if (expandedDetails.has(invoiceId)) {
       // Simple collapse - no sequencing needed
       setExpandedDetails(new Set());
-      // Also collapse items section when main card collapses
-      setExpandedItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(invoiceId);
-        return newSet;
-      });
+      // Items now shown directly - no separate collapse needed
     } else {
       // Sequential: First collapse any open card
       if (expandedDetails.size > 0) {
@@ -108,34 +95,18 @@ function Invoices({
     }
   }, [expandedDetails]);
 
-  // Handle toggle change
-  const handleToggleChange = (enabled: boolean) => {
-    setFeatureToggle('STRUCTURED_ITEMS_ENABLED', enabled);
-    setUseStructuredData(enabled);
-  };
 
-  // Handle items section expansion toggle
-  const toggleItemsExpansion = (invoiceId: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(invoiceId)) {
-        newSet.delete(invoiceId);
-      } else {
-        newSet.add(invoiceId);
-      }
-      return newSet;
-    });
-  };
+  // Removed nested items expansion function
 
-  // Get formatted items display for header (concise)
+  // Get formatted items display for header (concise) - Currently unused but kept for future enhancement
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getInvoiceItemsHeader = (invoice: InvoiceRecord): string => {
-    if (useStructuredData) {
-      const originalInvoice = getOriginalInvoiceData(invoice);
-      
-      // Handle Proforma Invoice
-      if (invoice.type === 'proforma' && originalInvoice && isProformaWithStructuredItems(originalInvoice)) {
-        const proformaInvoice = originalInvoice as ProformaInvoice;
-        const items = proformaInvoice.itemsStructured as ProformaItem[];
+    const originalInvoice = getOriginalInvoiceData(invoice);
+    
+    // Handle Proforma Invoice
+    if (invoice.type === 'proforma' && originalInvoice && (originalInvoice as ProformaInvoice).items) {
+      const proformaInvoice = originalInvoice as ProformaInvoice;
+      const items = proformaInvoice.items as ProformaItem[];
         if (items.length === 1) {
           return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
         } else {
@@ -147,7 +118,7 @@ function Invoices({
       }
       
       // Handle Final Invoice
-      if (invoice.type === 'final' && originalInvoice && isFinalInvoiceWithStructuredItems(originalInvoice)) {
+      if (invoice.type === 'final' && originalInvoice && (originalInvoice as FinalInvoice).items) {
         const finalInvoice = originalInvoice as FinalInvoice;
         const items = finalInvoice.items as InvoiceItem[];
         if (items.length === 1) {
@@ -159,18 +130,18 @@ function Invoices({
           return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
         }
       }
-    }
+    
     // Fallback to existing string display or basic info
     return 'Invoice items';
   };
 
   // Get formatted items display for details (comprehensive)
   const renderInvoiceItemsDetails = (invoice: InvoiceRecord) => {
-    if (useStructuredData && invoice.type === 'proforma') {
+    if (invoice.type === 'proforma') {
       const originalInvoice = getOriginalInvoiceData(invoice);
-      if (originalInvoice && isProformaWithStructuredItems(originalInvoice)) {
+      if (originalInvoice && (originalInvoice as ProformaInvoice).items) {
         const proformaInvoice = originalInvoice as ProformaInvoice;
-        const items = proformaInvoice.itemsStructured as ProformaItem[];
+        const items = proformaInvoice.items as ProformaItem[];
         const totals = calculateProformaItemTotals(items);
       
       return (
@@ -245,9 +216,9 @@ function Invoices({
     }
     
     // Handle Final Invoice structured items
-    if (useStructuredData && invoice.type === 'final') {
+    if (invoice.type === 'final') {
       const originalInvoice = getOriginalInvoiceData(invoice);
-      if (originalInvoice && isFinalInvoiceWithStructuredItems(originalInvoice)) {
+      if (originalInvoice && (originalInvoice as FinalInvoice).items) {
         const finalInvoice = originalInvoice as FinalInvoice;
         const items = finalInvoice.items as InvoiceItem[];
         const totals = calculateInvoiceItemTotals(items);
@@ -487,22 +458,6 @@ function Invoices({
   return (
     <div className={styles.invoicesScreen}>
       <div className={styles.pageContent}>
-
-        {/* Professional Display Toggle (Phase 2) */}
-        <div className={styles.professionalToggle}>
-          <span>Item Display:</span>
-          <label className={styles.toggleButton}>
-            <input 
-              type="checkbox" 
-              checked={useStructuredData}
-              onChange={(e) => handleToggleChange(e.target.checked)}
-            />
-            <span className={styles.toggleSlider}>
-              {useStructuredData ? 'Professional' : 'Basic'}
-            </span>
-          </label>
-        </div>
-
         {/* Invoice Records - 140px Template */}
         <div className={styles.invoicesContainer}>
           {filteredInvoices.length === 0 ? (
@@ -556,41 +511,27 @@ function Invoices({
                   {/* Expanded Details - Match LeadManagement Structure */}
                   {expandedDetails.has(invoice.id) && (
                     <div className={styles.expandedSection}>
-                      {/* Invoice Details Section */}
+                      {/* Enhanced Invoice Details - Focus on NEW information not in card */}
                       <div className={styles.invoiceDetailsSection}>
                         <h4>Invoice Details</h4>
                         <div className={styles.detailsGrid}>
-                          <p><strong>Company:</strong> {invoice.customerName} - {invoice.location}</p>
-                          <p><strong>Issue Date:</strong> {invoice.issueDate} | <strong>Due Date:</strong> {invoice.dueDate}</p>
-                          <p><strong>Type:</strong> {invoice.type === 'proforma' ? '📋 Proforma Invoice' : '📄 Final Invoice'}</p>
-                          <p><strong>Amount:</strong> {formatCurrency(invoice.totalAmount)} (incl. GST)</p>
-                          <p><strong>Status:</strong> {statusInfo.label}</p>
+                          {invoice.type === 'proforma' && (
+                            <p><strong>Payment Instructions:</strong> {(() => {
+                              const originalInvoice = getOriginalInvoiceData(invoice);
+                              return originalInvoice && 'paymentInstructions' in originalInvoice 
+                                ? originalInvoice.paymentInstructions 
+                                : 'Standard payment terms apply';
+                            })()}</p>
+                          )}
+                          <p><strong>Contact:</strong> {invoice.contactInfo}</p>
+                          <p><strong>Payment Terms:</strong> {invoice.paymentTerms}</p>
                         </div>
                       </div>
 
-                      {/* Professional Items Display Section (Phase 2) - Moved before related records for better UX */}
-                      <div className={styles.professionalItemsSection}>
-                        <div 
-                          className={styles.itemsToggleHeader}
-                          onClick={() => toggleItemsExpansion(invoice.id)}
-                        >
-                          <div className={styles.itemsHeaderContent}>
-                            <span className={styles.itemsHeaderIcon}>📋</span>
-                            <div className={styles.itemsHeaderText}>
-                              <h4>Item Details</h4>
-                              <p>{getInvoiceItemsHeader(invoice)}</p>
-                            </div>
-                          </div>
-                          <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
-                            {expandedItems.has(invoice.id) ? '▼' : '▶'}
-                          </div>
-                        </div>
-                        
-                        {expandedItems.has(invoice.id) && (
-                          <div className={styles.itemsContent}>
-                            {renderInvoiceItemsDetails(invoice)}
-                          </div>
-                        )}
+                      {/* Comprehensive Item Details - Always Visible */}
+                      <div className={styles.itemsSection}>
+                        <h4 className={styles.sectionTitle}>📋 Item Details</h4>
+                        {renderInvoiceItemsDetails(invoice)}
                       </div>
 
                       {/* Related Record Information - Moved after item details */}

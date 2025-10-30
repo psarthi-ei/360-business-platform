@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { mockSalesOrders, type SalesOrder } from '../../data/salesMockData';
+import { mockSalesOrders, type SalesOrder, OrderItem } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import OrderDetailsModal from './OrderDetailsModal';
 import styles from './CustomerOrdersTab.module.css';
@@ -7,6 +7,21 @@ import styles from './CustomerOrdersTab.module.css';
 interface CustomerOrdersTabProps {
   customerId: string;
 }
+
+// Helper function to format order items for display
+const getOrderItemsHeader = (order: { items: OrderItem[] }): string => {
+  if (!order.items || order.items.length === 0) {
+    return 'No items';
+  }
+  
+  if (order.items.length === 1) {
+    return `${order.items[0].description} (${order.items[0].quantity} ${order.items[0].unit})`;
+  } else {
+    const firstItem = order.items[0];
+    const remainingCount = order.items.length - 1;
+    return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+  }
+};
 
 const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
   // State for modal
@@ -110,7 +125,7 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
                 {/* Order Header - Order ID + Company */}
                 <div 
                   className="ds-card-header"
-                  title={`${order.id} - ${companyName} - ${order.items}`}
+                  title={`${order.id} - ${companyName} - ${getOrderItemsHeader(order)}`}
                 >
                   <span>{order.id} — </span>
                   <span className={styles.truncateText}>{companyName}</span>
@@ -129,9 +144,9 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
                 {/* Meta Information - Product Details & Value */}
                 <div 
                   className="ds-card-meta"
-                  title={`${order.items} | Value: ₹${formatCurrency(order.totalAmount)} | Due: ${formatDate(order.deliveryDate)}`}
+                  title={`${getOrderItemsHeader(order)} | Value: ₹${formatCurrency(order.totalAmount)} | Due: ${formatDate(order.deliveryDate)}`}
                 >
-                  {order.items}<br />
+                  {getOrderItemsHeader(order)}<br />
                   Value: ₹{formatCurrency(order.totalAmount)} • Due: {formatDate(order.deliveryDate)}
                 </div>
 

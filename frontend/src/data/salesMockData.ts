@@ -62,7 +62,6 @@ export interface Quote {
   businessProfileId?: string; // Links to company BusinessProfile
   quoteDate: string;
   validUntil: string;
-  items: string;                    // ✅ Keep existing (fallback)
   totalAmount: number;
   status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'expired' | 
           'proforma_sent' | 'advance_requested' | 'advance_overdue' | 
@@ -73,8 +72,8 @@ export interface Quote {
   advancePaymentRequired?: number;
   advancePaymentStatus?: 'not_requested' | 'awaiting' | 'overdue' | 'received';
   
-  // ✅ Add new structured fields (optional for zero breakage)
-  itemsStructured?: QuoteItem[];    // ✅ Add new (optional)
+  // Professional structured items array
+  items: QuoteItem[];
 }
 
 
@@ -129,9 +128,8 @@ export interface ProformaInvoice {
   status: 'pending' | 'sent' | 'payment_received' | 'expired';
   paymentInstructions: string;
   
-  // ✅ Add items support (missing in current interface)
-  items?: string;                      // For existing records
-  itemsStructured?: ProformaItem[];    // New structure
+  // Professional structured items array
+  items: ProformaItem[];
 }
 
 export interface BankDetails {
@@ -158,7 +156,7 @@ export interface SalesOrder {
   advancePaymentId: string; // Links to advance payment that created this order
   orderDate: string;
   deliveryDate: string;
-  items: string;                    // ✅ Keep existing (fallback)
+  items: OrderItem[];               // Professional structured items array
   totalAmount: number;
   status: 'order_confirmed' | 'production_planning' | 'pending_materials' | 'production_started' | 'quality_check' | 'production_completed' | 'ready_to_ship' | 'shipped' | 'in_transit' | 'delivered' | 'completed';
   statusMessage: string;
@@ -177,8 +175,6 @@ export interface SalesOrder {
   orderValue?: number; // For display formatting (same as totalAmount)
   progressPercentage?: number; // Production progress (0-100)
   
-  // ✅ Add new structured fields (optional for zero breakage)
-  itemsStructured?: OrderItem[];    // ✅ Add new (optional)
 }
 
 // Customer data moved to customerMockData.ts - import from there for customer-related functionality
@@ -588,14 +584,13 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-001',
     quoteDate: 'March 15, 2025',
     validUntil: 'March 30, 2025',
-    items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard',
     totalAmount: 1480000,
     status: 'under_review',
     statusMessage: 'Customer is reviewing quote - Expecting response by end of week',
     advancePaymentRequired: 740000, // 50% advance
     advancePaymentStatus: 'not_requested',
     // ✅ Enhanced with structured items for professional presentation
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-IND-001",
         description: "Industrial Cotton Fabric",
@@ -613,14 +608,13 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-002', // Lead status: 'quote_sent' - ALIGNED
     quoteDate: 'March 18, 2025',
     validUntil: 'April 5, 2025',
-    items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
     totalAmount: 1320000,
     status: 'under_review', // ALIGNED: quote_sent → under_review status
     statusMessage: 'Quote sent to customer - Awaiting response from production head',
     advancePaymentRequired: 660000, // 50% advance
     advancePaymentStatus: 'not_requested', // No payment request yet until quote approved
     // ✅ Enhanced with structured items - multiple items example
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEAS-001",
         description: "Cotton Seasonal Fabric - Light Weight",
@@ -650,7 +644,6 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-gujarat-garments',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
-    items: 'Export quality cotton fabric - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
     status: 'order_created',
     statusMessage: 'Order created successfully - Quote completed',
@@ -659,7 +652,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 487500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer creation
     // ✅ Enhanced with single premium item
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-EXP-001",
         description: "Export Quality Cotton Fabric - Premium Grade",
@@ -678,7 +671,6 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-baroda-fashion',
     quoteDate: 'March 28, 2025',
     validUntil: 'April 15, 2025',
-    items: 'Premium fashion fabric - 3,500 yards @ ₹210/yard',
     totalAmount: 735000,
     status: 'approved',
     statusMessage: 'Quote approved - Advance payment received, customer created',
@@ -687,7 +679,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer creation
     // ✅ Enhanced with multiple fashion items and discount
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-FASH-001",
         description: "Premium Silk Blend Fabric - Designer Collection",
@@ -726,7 +718,6 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-gujarat-garments',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
-    items: 'Mixed fabric for casual wear - 5,000 yards @ ₹195/yard',
     totalAmount: 975000,
     status: 'approved',
     statusMessage: 'Quote approved - Advance payment received, auto-converting to customer',
@@ -734,7 +725,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 487500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer conversion
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-CAS-001",
         description: "Mixed Cotton Fabric for Casual Wear",
@@ -752,7 +743,6 @@ export const mockQuotes: Quote[] = [
     leadId: 'gujarat-002',
     quoteDate: 'March 12, 2025',
     validUntil: 'March 30, 2025',
-    items: 'Budget fabric option - 6,000 yards @ ₹165/yard',
     totalAmount: 990000,
     status: 'rejected',
     statusMessage: 'Lead rejected budget option, went with main quote QT-002',
@@ -760,7 +750,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 495000, // 50% advance
     advancePaymentStatus: 'not_requested',
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-BUD-001",
         description: "Budget Cotton Fabric Option",
@@ -778,7 +768,6 @@ export const mockQuotes: Quote[] = [
     leadId: 'baroda-004',
     quoteDate: 'February 20, 2025',
     validUntil: 'March 5, 2025',
-    items: 'Seasonal fabric collection - 3,000 yards @ ₹220/yard',
     totalAmount: 660000,
     status: 'expired',
     statusMessage: 'Quote expired - Lead requested extension, new quote being prepared',
@@ -786,7 +775,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 330000, // 50% advance
     advancePaymentStatus: 'overdue',
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEA-002",
         description: "Seasonal Fashion Fabric Collection",
@@ -804,7 +793,6 @@ export const mockQuotes: Quote[] = [
     leadId: 'baroda-004',
     quoteDate: 'March 8, 2025',
     validUntil: 'March 25, 2025',
-    items: 'Updated seasonal collection - 3,500 yards @ ₹210/yard',
     totalAmount: 735000,
     status: 'approved',
     statusMessage: 'New quote approved - Advance payment received, converting to customer',
@@ -812,7 +800,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer conversion
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEA-001",
         description: "Seasonal Fashion Fabric Collection",
@@ -833,7 +821,6 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-rajesh-textiles',
     quoteDate: 'October 15, 2025',
     validUntil: 'November 5, 2025',
-    items: 'High-grade cotton fabric for export - 10,000 yards @ ₹200/yard',
     totalAmount: 2000000,
     status: 'proforma_sent', // Aligns with lead conversionStatus
     statusMessage: 'Proforma invoice sent - Advance payment requested (₹10,00,000)',
@@ -841,7 +828,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 1000000, // 50% advance for export quality
     advancePaymentStatus: 'awaiting', // Waiting for payment to convert lead to customer
     // ✅ Enhanced with comprehensive export order (4 items with discounts)
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-EXP-002",
         description: "Export Grade Cotton Fabric - A+ Quality",
@@ -892,14 +879,13 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-baroda-textiles',
     quoteDate: 'October 10, 2025',
     validUntil: 'October 30, 2025',
-    items: 'Cotton fabric for retail - 4,000 yards @ ₹175/yard',
     totalAmount: 700000,
     status: 'pending', // Active lead stage - quote prepared but not yet sent
     statusMessage: 'Quote prepared - Ready to send to prospect',
     advancePaymentRequired: 350000, // 50% advance
     advancePaymentStatus: 'not_requested', // No payment request yet in active lead stage
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-RET-001",
         description: "Cotton Fabric for Retail Applications",
@@ -924,14 +910,13 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-gujarat-garments',
     quoteDate: 'October 20, 2025',
     validUntil: 'November 10, 2025',
-    items: 'Seasonal collection fabric - 6,000 yards @ ₹225/yard (winter premium)',
     totalAmount: 1350000,
     status: 'under_review', // ALIGNED: quote_sent → under_review status
     statusMessage: 'Quote sent to valued customer - Awaiting approval for winter collection',
     advancePaymentRequired: 675000, // 50% advance
     advancePaymentStatus: 'not_requested', // Quote sent, awaiting customer response
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEA-002",
         description: "Seasonal Winter Collection Fabric",
@@ -952,7 +937,6 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-baroda-fashion',
     quoteDate: 'October 18, 2025',
     validUntil: 'November 8, 2025',
-    items: 'Premium fashion fabric expansion - 8,000 yards @ ₹275/yard (export grade)',
     totalAmount: 2200000,
     status: 'approved', // ALIGNED: verbally_approved → approved status
     statusMessage: 'Quote verbally approved by Creative Director - Preparing proforma invoice',
@@ -960,7 +944,7 @@ export const mockQuotes: Quote[] = [
     advancePaymentRequired: 1100000, // 50% advance for premium order
     advancePaymentStatus: 'not_requested', // Moving to proforma stage
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-EXP-001",
         description: "Premium Fashion Fabric - Export Grade",
@@ -981,14 +965,13 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-surat-wholesale',
     quoteDate: 'October 22, 2025',
     validUntil: 'November 12, 2025',
-    items: 'Bulk wholesale fabric order - 15,000 yards @ ₹180/yard (volume pricing)',
     totalAmount: 2700000,
     status: 'pending', // ALIGNED: active_lead → pending status
     statusMessage: 'Large volume quote prepared - Reviewing final pricing with management',
     advancePaymentRequired: 1350000, // 50% advance for bulk order
     advancePaymentStatus: 'not_requested', // Quote being finalized
     // ✅ Enhanced with structured items for professional display
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-WHD-001",
         description: "Bulk Wholesale Cotton Fabric",
@@ -1008,14 +991,13 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-005',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
-    items: 'Cotton fabric bulk order - 3,000 meters @ ₹175/meter',
     totalAmount: 525000,
     status: 'approved',
     statusMessage: 'Bulk quote approved - Advance payment received',
     advancePaymentRequired: 157500, // 30% advance
     advancePaymentStatus: 'received',
     // ✅ Enhanced with structured items for professional presentation
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-BULK-001",
         description: "Cotton Fabric Bulk Order - Premium Quality",
@@ -1059,7 +1041,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-001-001',
     orderDate: 'October 20, 2025',
     deliveryDate: 'November 15, 2025',
-    items: 'Industrial Cotton Fabric - 8,000 yards @ ₹185/yard', // ✅ Consistent with Quote QT-001
     totalAmount: 1480000, // ✅ Consistent: 8000 * 185 = 1,480,000
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Ready for production planning',
@@ -1067,7 +1048,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Materials reserved - Ready to start',
     balancePaymentDue: 1036000, // ✅ 70% of 1,480,000 (after 30% advance)
     // ✅ Enhanced with structured items for production tracking - Consistent with QT-001
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-IND-001",
         description: "Industrial Cotton Fabric",
@@ -1098,7 +1079,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-002-001',
     orderDate: 'October 20, 2025',
     deliveryDate: 'November 20, 2025',
-    items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard',
     totalAmount: 1320000,
     status: 'pending_materials' as const,
     statusMessage: 'Material shortage - Procurement in progress',
@@ -1106,7 +1086,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Waiting for material availability',
     balancePaymentDue: 924000, // ✅ 70% of 1,320,000 (after 30% advance)
     // ✅ Enhanced with structured items for production tracking - Consistent with QT-002
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEAS-001",
         description: "Cotton Seasonal Fabric - Light Weight",
@@ -1137,7 +1117,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-003-001',
     orderDate: 'October 19, 2025',
     deliveryDate: 'November 10, 2025',
-    items: 'Polyester blend fabric - 2,000 meters @ ₹165/meter',
     totalAmount: 330000,
     status: 'production_started' as const,
     statusMessage: 'Production in progress - 60% completed',
@@ -1145,7 +1124,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Work Order WO-2025-003A active',
     balancePaymentDue: 231000,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-POL-001",
         description: "Polyester Blend Fabric - Premium Grade",
@@ -1167,7 +1146,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-004-001',
     orderDate: 'October 18, 2025',
     deliveryDate: 'November 5, 2025',
-    items: 'Seasonal collection fabric - 1,800 meters @ ₹210/meter',
     totalAmount: 378000,
     status: 'completed' as const,
     statusMessage: 'Order completed and delivered successfully',
@@ -1175,7 +1153,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Completed and delivered',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEAS-001",
         description: "Seasonal Collection Fabric - Premium Cotton Blend",
@@ -1197,7 +1175,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-005-001',
     orderDate: 'October 21, 2025',
     deliveryDate: 'November 25, 2025',
-    items: 'Cotton fabric bulk order - 3,000 meters @ ₹175/meter',
     totalAmount: 525000,
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Ready for production',
@@ -1205,7 +1182,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Ready for material allocation',
     balancePaymentDue: 367500,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-BULK-001",
         description: "Cotton Fabric Bulk Order - Premium Quality",
@@ -1246,7 +1223,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'ADV-QT-006-001',
     orderDate: 'October 21, 2025',
     deliveryDate: 'November 30, 2025',
-    items: 'Cotton yarn fabric - 2,200 meters @ ₹190/meter',
     totalAmount: 418000,
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Checking material availability',
@@ -1254,7 +1230,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Pending material availability check',
     balancePaymentDue: 292600,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-YARN-001",
         description: "Cotton Yarn Fabric - High Quality Weave",
@@ -1276,7 +1252,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'AP-2025-009',
     orderDate: 'September 15, 2025',
     deliveryDate: 'October 30, 2025',
-    items: 'Premium Export Fashion Fabric - 2,000 meters @ ₹787.50/meter',
     totalAmount: 1575000,
     status: 'delivered' as const,
     statusMessage: 'Order completed and delivered - Invoice paid',
@@ -1284,7 +1259,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Delivered and completed',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-EXP-FASH-001",
         description: "Premium Export Fashion Fabric - Designer Grade",
@@ -1305,7 +1280,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'AP-2025-010',
     orderDate: 'August 20, 2025',
     deliveryDate: 'September 30, 2025',
-    items: 'Marine-grade Industrial Fabric - 1,200 meters @ ₹812.50/meter',
     totalAmount: 975000,
     status: 'delivered' as const,
     statusMessage: 'Order delivered and paid - Excellent marine quality',
@@ -1313,7 +1287,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Delivered and completed',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-MAR-001",
         description: "Marine-Grade Industrial Fabric - High Durability",
@@ -1334,7 +1308,6 @@ export const mockSalesOrders: SalesOrder[] = [
     advancePaymentId: 'AP-2025-011',
     orderDate: 'July 10, 2025',
     deliveryDate: 'August 15, 2025',
-    items: 'Traditional Handloom Fabric - 600 meters @ ₹625/meter',
     totalAmount: 375000,
     status: 'production_completed' as const,
     statusMessage: 'Production completed - Ready for delivery',
@@ -1342,7 +1315,7 @@ export const mockSalesOrders: SalesOrder[] = [
     productionStatus: 'Quality check completed - Ready for dispatch',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-HAND-001",
         description: "Traditional Handloom Fabric - Artisan Crafted",
@@ -1379,16 +1352,15 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     businessProfileId: 'bp-gujarat-garments',
     issueDate: 'October 10, 2025',
     dueDate: 'October 25, 2025',  // Future: 8 days from today (pending)
-    subtotal: 1850000,
-    gstAmount: 92500,
-    totalAmount: 1942500,
-    advanceAmount: 971250,
+    subtotal: 1480000,  // Fixed: should match item taxableAmount
+    gstAmount: 266400,  // Fixed: CGST (133200) + SGST (133200) = 266400
+    totalAmount: 1746400,  // Fixed: should match item totalWithTax
+    advanceAmount: 873200,  // Fixed: 50% of corrected totalAmount (1746400)
     bankDetails: companyBankDetails,
     status: 'pending',
-    paymentInstructions: 'Please pay 50% advance (₹9,71,250) within 15 days to confirm order',
+    paymentInstructions: 'Please pay 50% advance (₹8,73,200) within 15 days to confirm order',
     // ✅ Enhanced with structured items from corresponding quote QT-001
-    items: 'Industrial cotton fabric - 8,000 yards @ ₹185/yard', // Legacy field
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-IND-001",
         description: "Industrial Cotton Fabric",
@@ -1413,16 +1385,15 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     businessProfileId: 'bp-baroda-fashion',
     issueDate: 'October 12, 2025',
     dueDate: 'October 27, 2025',  // Future: 10 days from today (pending)
-    subtotal: 825000,
-    gstAmount: 41250,
-    totalAmount: 866250,
-    advanceAmount: 259875,
+    subtotal: 735000,  // Fixed: should match item taxableAmount
+    gstAmount: 36750,  // Fixed: CGST (18375) + SGST (18375) = 36750
+    totalAmount: 771750,  // Fixed: should match item totalWithTax
+    advanceAmount: 231525,  // Fixed: 30% of corrected totalAmount (771750)
     bankDetails: companyBankDetails,
     status: 'pending',
-    paymentInstructions: '30% advance payment (₹2,59,875) required for new customer',
+    paymentInstructions: '30% advance payment (₹2,31,525) required for new customer',
     // ✅ Enhanced with structured items for professional GST display
-    items: 'Seasonal fabric collection - 3,500 yards @ ₹210/yard', // Legacy field
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEA-001",
         description: "Seasonal Fashion Fabric Collection",
@@ -1455,8 +1426,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     status: 'pending',
     paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee',
     // ✅ Enhanced with structured items for professional GST display - Export order
-    items: 'Premium export fabric collection - 50,000 yards @ ₹183.5/yard', // Legacy field
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-EXP-001",
         description: "Premium Export Cotton Fabric",
@@ -1504,8 +1474,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     status: 'expired',
     paymentInstructions: '30% advance payment (₹2,04,750) required - payment overdue, order may be cancelled',
     // ✅ Enhanced with structured items for professional GST display
-    items: 'Seasonal fabric collection - 3,000 yards @ ₹220/yard', // Legacy field
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-SEA-002",
         description: "Seasonal Fashion Fabric Collection",
@@ -1538,8 +1507,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     status: 'payment_received',
     paymentInstructions: '50% advance payment (₹6,30,000) received on October 10, 2025 - order confirmed',
     // ✅ Enhanced with structured items for professional GST display
-    items: 'Mixed fabric for seasonal wear - 6,000 yards @ ₹220/yard', // Legacy field
-    itemsStructured: [
+    items: [
       {
         itemCode: "TEX-MIX-001",
         description: "Mixed Cotton Fabric for Seasonal Wear",
@@ -2402,47 +2370,6 @@ export const getAverageOrderValueFromSalesOrders = (): number => {
 
 // Material Requirements Planning
 
-/**
- * ENHANCED COMMERCIAL DOCUMENTS - FEATURE TOGGLE SYSTEM & HELPERS
- * Phase 1: Dual support infrastructure for safe migration
- */
-
-// Feature toggle configuration
-export interface FeatureToggles {
-  STRUCTURED_ITEMS_ENABLED: boolean;
-  CONSOLIDATED_MR_ENABLED: boolean;
-  PROFESSIONAL_INVOICING_ENABLED: boolean;
-}
-
-// Default configuration (professional display enabled by default)
-export const defaultFeatureToggles: FeatureToggles = {
-  STRUCTURED_ITEMS_ENABLED: true,
-  CONSOLIDATED_MR_ENABLED: false,
-  PROFESSIONAL_INVOICING_ENABLED: false
-};
-
-// Feature toggle state (in-memory for MVP, can be moved to localStorage/context later)
-let currentFeatureToggles: FeatureToggles = { ...defaultFeatureToggles };
-
-// Feature toggle management functions
-export function getFeatureToggleState(feature: keyof FeatureToggles): boolean {
-  return currentFeatureToggles[feature];
-}
-
-export function setFeatureToggle(feature: keyof FeatureToggles, enabled: boolean): void {
-  currentFeatureToggles[feature] = enabled;
-  // Feature toggle state updated
-}
-
-export function resetFeatureToggles(): void {
-  currentFeatureToggles = { ...defaultFeatureToggles };
-  // Feature toggles reset to defaults
-}
-
-// React hook for components
-export function useFeatureToggle(feature: keyof FeatureToggles): boolean {
-  return getFeatureToggleState(feature);
-}
 
 /**
  * BUSINESS LOGIC HELPER FUNCTIONS
@@ -2536,36 +2463,6 @@ export function calculateInvoiceItemTotals(items: InvoiceItem[]): {
   };
 }
 
-/**
- * TYPE GUARDS FOR RUNTIME CHECKING
- */
-
-export function hasStructuredItems<T extends { itemsStructured?: unknown[] }>(obj: T): obj is T & { itemsStructured: unknown[] } {
-  return obj.itemsStructured !== undefined && obj.itemsStructured.length > 0;
-}
-
-export function isQuoteWithStructuredItems(quote: unknown): quote is Quote & { itemsStructured: QuoteItem[] } {
-  return quote !== null && typeof quote === 'object' && 
-         'itemsStructured' in quote && Array.isArray((quote as Quote).itemsStructured) && 
-         (quote as Quote).itemsStructured!.length > 0;
-}
-
-export function isProformaWithStructuredItems(proforma: unknown): proforma is ProformaInvoice & { itemsStructured: ProformaItem[] } {
-  return proforma !== null && typeof proforma === 'object' && 
-         'itemsStructured' in proforma && Array.isArray((proforma as ProformaInvoice).itemsStructured) && 
-         (proforma as ProformaInvoice).itemsStructured!.length > 0;
-}
-
-export function isSalesOrderWithStructuredItems(order: unknown): order is SalesOrder & { itemsStructured: OrderItem[] } {
-  return order !== null && typeof order === 'object' && 
-         'itemsStructured' in order && Array.isArray((order as SalesOrder).itemsStructured) && 
-         (order as SalesOrder).itemsStructured!.length > 0;
-}
-export function isFinalInvoiceWithStructuredItems(invoice: unknown): invoice is FinalInvoice & { items: InvoiceItem[] } {
-  return invoice !== null && typeof invoice === 'object' && 
-         'items' in invoice && Array.isArray((invoice as FinalInvoice).items) && 
-         (invoice as FinalInvoice).items!.length > 0;
-}
 
 /**
  * SAMPLE STRUCTURED ITEMS DATA (for testing and development)

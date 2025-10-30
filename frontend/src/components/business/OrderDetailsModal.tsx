@@ -1,5 +1,5 @@
 import React from 'react';
-import { SalesOrder } from '../../data/salesMockData';
+import { SalesOrder, OrderItem } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import CustomerDetailsModal from './CustomerDetailsModal';
 import styles from './OrderDetailsModal.module.css';
@@ -9,6 +9,21 @@ interface OrderDetailsModalProps {
   onClose: () => void;
   order: SalesOrder | null;
 }
+
+// Helper function to format order items for display
+const getOrderItemsHeader = (order: { items: OrderItem[] }): string => {
+  if (!order.items || order.items.length === 0) {
+    return 'No items';
+  }
+  
+  if (order.items.length === 1) {
+    return `${order.items[0].description} (${order.items[0].quantity} ${order.items[0].unit})`;
+  } else {
+    const firstItem = order.items[0];
+    const remainingCount = order.items.length - 1;
+    return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+  }
+};
 
 const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) => {
   if (!order) return null;
@@ -107,7 +122,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
           <div className={styles.detailGrid}>
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Product</span>
-              <span className={styles.detailValue}>{order.items}</span>
+              <span className={styles.detailValue}>{getOrderItemsHeader(order)}</span>
             </div>
             {order.productDescription && (
               <div className={styles.detailItem}>

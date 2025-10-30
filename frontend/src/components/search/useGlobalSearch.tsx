@@ -90,12 +90,11 @@ export function useGlobalSearch(
         const customer = quote.businessProfileId ? navigationHandlers.getBusinessProfileById(quote.businessProfileId) : null;
         const customerName = customer?.companyName || 'Unknown Customer';
         if (customerName.toLowerCase().includes(lowerQuery) ||
-            quote.items.toLowerCase().includes(lowerQuery) ||
             quote.status.toLowerCase().includes(lowerQuery)) {
           results.push({
             type: 'quote',
             title: customerName,
-            subtitle: `${quote.items.split(' - ')[0]} - ${navigationHandlers.formatCurrency(quote.totalAmount)}`,
+            subtitle: `Quote ${quote.id} - ${navigationHandlers.formatCurrency(quote.totalAmount)}`,
             status: quote.status,
             action: () => navigationHandlers.onShowQuotationOrders(),
             category: 'ACTIVE BUSINESS'
@@ -110,13 +109,12 @@ export function useGlobalSearch(
         const customer = navigationHandlers.getBusinessProfileById(order.businessProfileId);
         const customerName = customer?.companyName || 'Unknown Customer';
         if (customerName.toLowerCase().includes(lowerQuery) ||
-            order.items.toLowerCase().includes(lowerQuery) ||
             order.status.toLowerCase().includes(lowerQuery) ||
             (order.paymentStatus && order.paymentStatus.toLowerCase().includes(lowerQuery))) {
           results.push({
             type: 'order',
             title: customerName,
-            subtitle: `${order.items.split(' - ')[0]} - ${navigationHandlers.formatCurrency(order.totalAmount)}`,
+            subtitle: `Order ${order.id} - ${navigationHandlers.formatCurrency(order.totalAmount)}`,
             status: order.status,
             action: () => navigationHandlers.onShowSalesOrders(),
             category: 'ACTIVE BUSINESS'

@@ -5,9 +5,6 @@ import {
   mockQuotes, 
   mockLeads, 
   mockSalesOrders,
-  getFeatureToggleState,
-  setFeatureToggle,
-  hasStructuredItems,
   QuoteItem,
   calculateItemTotals
 } from '../../data/salesMockData';
@@ -33,118 +30,86 @@ function QuotationOrders({
   const { t } = useTranslation();
   const location = useLocation();
   
-  // Enhanced Quote Display Functions with Feature Toggle Support
-  const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
-  
-  // State for collapsible professional items sections
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-  
-  // Handle toggle change
-  const handleToggleChange = (enabled: boolean) => {
-    setFeatureToggle('STRUCTURED_ITEMS_ENABLED', enabled);
-    setUseStructuredData(enabled);
-  };
-
-  // Handle items section expansion toggle
-  const toggleItemsExpansion = (quoteId: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(quoteId)) {
-        newSet.delete(quoteId);
-      } else {
-        newSet.add(quoteId);
-      }
-      return newSet;
-    });
-  };
+  // Removed nested items expansion - items now shown directly in main expanded view
   
   // Get formatted items display for header (concise)
-  const getQuoteItemsHeader = (quote: { items: string; itemsStructured?: QuoteItem[] }): string => {
-    if (useStructuredData && hasStructuredItems(quote)) {
-      const items = quote.itemsStructured as QuoteItem[];
-      if (items.length === 1) {
-        return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
-      } else {
-        // Show first item details + more count for multiple items
-        const firstItem = items[0];
-        const remainingCount = items.length - 1;
-        return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
-      }
+  const getQuoteItemsHeader = (quote: { items: QuoteItem[] }): string => {
+    const items = quote.items;
+    if (items.length === 1) {
+      return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
+    } else {
+      // Show first item details + more count for multiple items
+      const firstItem = items[0];
+      const remainingCount = items.length - 1;
+      return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
     }
-    // Fallback to existing string display
-    return quote.items;
   };
   
   // Get formatted items display for details (comprehensive)
-  const renderQuoteItemsDetails = (quote: { items: string; itemsStructured?: QuoteItem[] }) => {
-    if (useStructuredData && hasStructuredItems(quote)) {
-      const items = quote.itemsStructured as QuoteItem[];
-      const totals = calculateItemTotals(items);
-      
-      return (
-        <div className={styles.itemsEnhanced}>
-          <div className={styles.itemsList}>
-            {items.map((item, index) => (
-              <div key={index} className={styles.itemRow}>
-                <div className={styles.itemRowHeader}>
-                  <div className={styles.itemInfo}>
-                    <div className={styles.itemHeader}>
-                      <span className={styles.itemCodeBadge}>
-                        {item.itemCode}
-                      </span>
-                      <span className={styles.itemDescription}>
-                        {item.description}
-                      </span>
-                    </div>
-                    <div className={styles.itemDetails}>
-                      <span>
-                        <strong>HSN:</strong> {item.hsnCode}
-                      </span>
-                      <span>
-                        <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
-                      </span>
-                      <span>
-                        <strong>Rate:</strong> {formatCurrency(item.rate)}/{item.unit}
-                      </span>
-                    </div>
+  const renderQuoteItemsDetails = (quote: { items: QuoteItem[] }) => {
+    const items = quote.items;
+    const totals = calculateItemTotals(items);
+    
+    return (
+      <div className={styles.itemsEnhanced}>
+        <div className={styles.itemsList}>
+          {items.map((item, index) => (
+            <div key={index} className={styles.itemRow}>
+              <div className={styles.itemRowHeader}>
+                <div className={styles.itemInfo}>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.itemCodeBadge}>
+                      {item.itemCode}
+                    </span>
+                    <span className={styles.itemDescription}>
+                      {item.description}
+                    </span>
                   </div>
-                  <div className={styles.itemAmount}>
-                    <div className={styles.itemAmountValue}>
-                      {formatCurrency(item.taxableAmount)}
-                    </div>
-                    {item.discount > 0 && (
-                      <div className={styles.itemDiscount}>
-                        -{item.discount}% discount
-                      </div>
-                    )}
+                  <div className={styles.itemDetails}>
+                    <span>
+                      <strong>HSN:</strong> {item.hsnCode}
+                    </span>
+                    <span>
+                      <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
+                    </span>
+                    <span>
+                      <strong>Rate:</strong> {formatCurrency(item.rate)}/{item.unit}
+                    </span>
                   </div>
                 </div>
+                <div className={styles.itemAmount}>
+                  <div className={styles.itemAmountValue}>
+                    {formatCurrency(item.taxableAmount)}
+                  </div>
+                  {item.discount > 0 && (
+                    <div className={styles.itemDiscount}>
+                      -{item.discount}% discount
+                    </div>
+                  )}
+                </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+        
+        <div className={styles.itemsTotals}>
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>Subtotal (Before Tax):</span>
+            <span className={styles.totalValue}>{formatCurrency(totals.subtotal)}</span>
           </div>
-          
-          <div className={styles.itemsTotals}>
-            <div className={styles.totalRow}>
-              <span className={styles.totalLabel}>Subtotal (Before Tax):</span>
-              <span className={styles.totalValue}>{formatCurrency(totals.subtotal)}</span>
-            </div>
-            <div className={styles.totalRow}>
-              <span className={styles.totalLabel}>GST (18%):</span>
-              <span className={`${styles.totalValue} ${styles.totalTax}`}>{formatCurrency(totals.taxAmount)}</span>
-            </div>
-            <div className={styles.totalFinal}>
-              <span className={styles.totalFinalLabel}>Grand Total:</span>
-              <span className={styles.totalFinalValue}>
-                {formatCurrency(totals.total)}
-              </span>
-            </div>
+          <div className={styles.totalRow}>
+            <span className={styles.totalLabel}>GST (18%):</span>
+            <span className={`${styles.totalValue} ${styles.totalTax}`}>{formatCurrency(totals.taxAmount)}</span>
+          </div>
+          <div className={styles.totalFinal}>
+            <span className={styles.totalFinalLabel}>Grand Total:</span>
+            <span className={styles.totalFinalValue}>
+              {formatCurrency(totals.total)}
+            </span>
           </div>
         </div>
-      );
-    }
-    
-    // Fallback to existing string display
-    return <p><strong>Items:</strong> {quote.items}</p>;
+      </div>
+    );
   };
   
   // Helper function to get company name from quote
@@ -162,7 +127,17 @@ function QuotationOrders({
     return 'Unknown Company';
   };
 
-  // Helper function to get company location from quote
+  // Helper function to get advance percentage from Quote data
+  const getQuoteAdvancePercentage = (quote: any): number => {
+    // Calculate percentage from Quote's advancePaymentRequired field
+    if (quote.advancePaymentRequired && quote.totalAmount) {
+      return Math.round((quote.advancePaymentRequired / quote.totalAmount) * 100);
+    }
+    return 0; // No advance data available
+  };
+
+  // Helper function to get company location from quote - Currently unused but kept for future enhancement
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getQuoteCompanyLocation = (quote: { businessProfileId?: string; leadId: string }) => {
     if (quote.businessProfileId) {
       const bp = getBusinessProfileById(quote.businessProfileId);
@@ -192,16 +167,7 @@ function QuotationOrders({
   // Use the hook's toggle function with our custom data attribute
   const toggleDetails = useCallback((quoteId: string) => {
     toggleExpansion(quoteId, 'data-quote-id');
-    
-    // When main card collapses, also collapse items section
-    if (isExpanded(quoteId)) {
-      setExpandedItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(quoteId);
-        return newSet;
-      });
-    }
-  }, [toggleExpansion, isExpanded]);
+  }, [toggleExpansion]);
 
   // Workflow Method 1: Handle Quote Approval
   const handleQuoteApproval = useCallback((quoteId: string) => {
@@ -278,13 +244,14 @@ function QuotationOrders({
 
     // Generate proforma invoice ID
     const proformaId = 'PI-' + Date.now();
-    const advanceAmount = Math.round(quote.totalAmount * 0.5); // 50% advance
+    const advanceAmount = quote.advancePaymentRequired || 0;
+    const advancePercentage = getQuoteAdvancePercentage(quote);
     
     // Update quote with proforma details
     quote.proformaInvoiceId = proformaId;
     quote.advancePaymentRequired = advanceAmount;
     quote.advancePaymentStatus = 'awaiting';
-    quote.statusMessage = `Proforma invoice ${proformaId} generated. Advance payment of ${formatCurrency(advanceAmount)} awaiting.`;
+    quote.statusMessage = `Proforma invoice ${proformaId} generated. Advance payment of ${formatCurrency(advanceAmount)} (${advancePercentage}%) awaiting.`;
     
     setWorkflowMessages({...workflowMessages, [quoteId]: `Proforma invoice generated! Advance payment ${formatCurrency(advanceAmount)} requested.`});
   }, [workflowMessages]);
@@ -333,21 +300,6 @@ function QuotationOrders({
   
   return (
     <div className={styles.quotationOrdersScreen}>
-      {/* Professional Display Toggle (Phase 2) */}
-      <div className={styles.professionalToggle}>
-        <span>Item Display:</span>
-        <label className={styles.toggleButton}>
-          <input 
-            type="checkbox" 
-            checked={useStructuredData}
-            onChange={(e) => handleToggleChange(e.target.checked)}
-          />
-          <span>
-            {useStructuredData ? 'Professional' : 'Basic'}
-          </span>
-        </label>
-      </div>
-      
       <div className={styles.pageContent}>
 
       <div className={styles.quotesContainer}>
@@ -448,50 +400,19 @@ function QuotationOrders({
               {isExpanded(quote.id) && (
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
-                    {/* Basic Information Section */}
-                    <div className={styles.basicInfoSection}>
-                      <p><strong>Company:</strong> {getQuoteCompanyName(quote)} - {getQuoteCompanyLocation(quote)}</p>
-                      <p><strong>{t('quoteDate')}:</strong> {quote.quoteDate} | <strong>{t('validUntil')}:</strong> {quote.validUntil}</p>
-                      
-                      {/* Basic items display when not using structured view */}
-                      {!(useStructuredData && hasStructuredItems(quote)) && (
-                        <p><strong>Items:</strong> {quote.items}</p>
+                    {/* Enhanced Quote Details - Focus on NEW information not in card */}
+                    <div className={styles.quoteDetailsSection}>
+                      <p><strong>Status Details:</strong> {quote.statusMessage}</p>
+                      {quote.advancePaymentRequired && (
+                        <p><strong>Advance Required:</strong> {formatCurrency(quote.advancePaymentRequired)} ({Math.round((quote.advancePaymentRequired / quote.totalAmount) * 100)}%)</p>
                       )}
-                      
-                      {/* Total amount only shown if not using structured display to avoid duplication */}
-                      {!(useStructuredData && hasStructuredItems(quote)) && (
-                        <p><strong>{t('totalAmount')}:</strong> {formatCurrency(quote.totalAmount)}</p>
-                      )}
-                      
-                      <p><strong>Status:</strong> {quote.statusMessage}</p>
                     </div>
 
-                    {/* Professional Items Section - Moved before lead/order status for better UX */}
-                    {useStructuredData && hasStructuredItems(quote) && (
-                      <div className={styles.professionalItemsSection}>
-                        <div 
-                          className={styles.itemsToggleHeader}
-                          onClick={() => toggleItemsExpansion(quote.id)}
-                        >
-                          <div className={styles.itemsHeaderContent}>
-                            <span className={styles.itemsHeaderIcon}>📋</span>
-                            <div className={styles.itemsHeaderText}>
-                              <h4>Item Details</h4>
-                              <p>{getQuoteItemsHeader(quote)}</p>
-                            </div>
-                          </div>
-                          <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
-                            {expandedItems.has(quote.id) ? '▼' : '▶'}
-                          </div>
-                        </div>
-                        
-                        {expandedItems.has(quote.id) && (
-                          <div className={styles.itemsContent}>
-                            {renderQuoteItemsDetails(quote)}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    {/* Comprehensive Item Details - Always Visible */}
+                    <div className={styles.itemsSection}>
+                      <h4 className={styles.sectionTitle}>📋 Item Details</h4>
+                      {renderQuoteItemsDetails(quote)}
+                    </div>
 
                     {/* Related Lead and Order Information - Moved after item details */}
                     <div className={styles.quoteMapping}>

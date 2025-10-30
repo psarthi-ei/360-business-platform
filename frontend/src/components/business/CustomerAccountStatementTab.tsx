@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, getFinalInvoiceById, getProformaInvoiceById, mockFinalInvoices, getQuoteById } from '../../data/salesMockData';
+import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, getFinalInvoiceById, getProformaInvoiceById, mockFinalInvoices, getQuoteById, QuoteItem } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import CustomerDetailsModal from './CustomerDetailsModal';
 import styles from './CustomerAccountStatementTab.module.css';
@@ -43,6 +43,21 @@ const extractBankInfo = (transactionRef: string, paymentMethod: string) => {
   const shortReference = transactionRef.slice(-6); // Last 6 characters
   
   return { bankName, shortReference };
+};
+
+// Helper function to format quote items for display
+const getQuoteItemsHeader = (quote: { items: QuoteItem[] }): string => {
+  if (!quote.items || quote.items.length === 0) {
+    return 'No items';
+  }
+  
+  if (quote.items.length === 1) {
+    return `${quote.items[0].description} (${quote.items[0].quantity} ${quote.items[0].unit})`;
+  } else {
+    const firstItem = quote.items[0];
+    const remainingCount = quote.items.length - 1;
+    return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+  }
 };
 
 const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTabProps) => {
@@ -101,7 +116,7 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
           date: payment.receivedDate,
           type: 'advance_payment',
           reference: payment.transactionReference || payment.id,
-          description: quote ? quote.items : 'Advance Payment',
+          description: quote ? getQuoteItemsHeader(quote) : 'Advance Payment',
           creditAmount: payment.receivedAmount || payment.amount,
           runningBalance: 0, // Will be calculated after sorting
           documentNumber: proformaInvoice ? proformaInvoice.id : payment.transactionReference,
@@ -550,7 +565,7 @@ const CustomerAccountStatementTab = ({ customerId }: CustomerAccountStatementTab
                     
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Products</span>
-                      <span className={styles.detailValue}>{relatedQuote.items}</span>
+                      <span className={styles.detailValue}>{getQuoteItemsHeader(relatedQuote)}</span>
                     </div>
                     
                     {relatedQuote.totalAmount && (

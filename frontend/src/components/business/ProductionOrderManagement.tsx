@@ -1,10 +1,25 @@
 import React, { useMemo, useState } from 'react';
-import { mockSalesOrders, SalesOrder } from '../../data/salesMockData';
+import { mockSalesOrders, SalesOrder, OrderItem } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import ProgressBar from '../ui/ProgressBar';
 import { getWorkOrdersBySalesOrder } from '../../data/productionMockData';
 import styles from './ProductionOrderManagement.module.css';
+
+// Helper function to format order items for display
+const getOrderItemsHeader = (order: { items: OrderItem[] }): string => {
+  if (!order.items || order.items.length === 0) {
+    return 'No items';
+  }
+  
+  if (order.items.length === 1) {
+    return `${order.items[0].description} (${order.items[0].quantity} ${order.items[0].unit})`;
+  } else {
+    const firstItem = order.items[0];
+    const remainingCount = order.items.length - 1;
+    return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
+  }
+};
 
 interface ProductionOrderManagementProps {
   mobile?: boolean;
@@ -283,9 +298,9 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                     {/* Meta Information - Product Details & Due Date */}
                     <div 
                       className="ds-card-meta"
-                      title={`${order.items} | Qty: ${order.quantity} | Due: ${order.deliveryDate}`}
+                      title={`${getOrderItemsHeader(order)} | Qty: ${order.quantity} | Due: ${order.deliveryDate}`}
                     >
-                      {order.items} • {order.quantity}<br />
+                      {getOrderItemsHeader(order)} • {order.quantity}<br />
                       Due: {order.deliveryDate}
                     </div>
 
@@ -301,7 +316,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                       <div className="ds-details-content">
                         <h4>🏭 Production Order Details</h4>
                         <p><strong>Customer:</strong> {companyName} ({businessProfile?.registeredAddress.city || 'Unknown'})</p>
-                        <p><strong>Product Details:</strong> {order.items}</p>
+                        <p><strong>Product Details:</strong> {getOrderItemsHeader(order)}</p>
                         <p><strong>Order Value:</strong> {formatCurrency(order.totalAmount)} • Delivery: {order.deliveryDate}</p>
                         <p><strong>Material Status:</strong> {order.materialStatus.icon} {order.materialStatus.display}</p>
                         <p><strong>Production Status:</strong> {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}</p>

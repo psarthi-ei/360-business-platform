@@ -1,7 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
-import { mockAdvancePayments, mockFinalPayments, getAdvancePaymentWithDetails, getFinalPaymentWithDetails } from '../../data/salesMockData';
+import { mockAdvancePayments, mockFinalPayments, mockProformaInvoices, getAdvancePaymentWithDetails, getFinalPaymentWithDetails } from '../../data/salesMockData';
 import styles from './Payments.module.css';
+
+// Helper function to get advance percentage from ProformaInvoice data only
+const getAdvancePercentageFromData = (quoteId?: string, paymentAmount?: number, invoiceAmount?: number): string => {
+  // First try to get from ProformaInvoice
+  if (quoteId) {
+    const relatedProformaInvoice = mockProformaInvoices.find(pi => pi.quoteId === quoteId);
+    if (relatedProformaInvoice) {
+      const actualPercentage = Math.round((relatedProformaInvoice.advanceAmount / relatedProformaInvoice.totalAmount) * 100);
+      return `${actualPercentage}%`;
+    }
+  }
+  
+  // Fallback: calculate from payment data as-is (no business logic)
+  if (paymentAmount && invoiceAmount) {
+    const calculatedPercentage = Math.round((paymentAmount / invoiceAmount) * 100);
+    return `${calculatedPercentage}%`;
+  }
+  
+  return '0%'; // No data available
+};
 
 interface PaymentsProps {
   onShowSalesOrders?: () => void;
@@ -381,7 +401,7 @@ function Payments({
                         <strong>{formatCurrency(payment.invoiceAmount)}</strong>
                       </div>
                       <div className={styles.amountRow}>
-                        <span>{payment.type === 'advance' ? 'Advance Amount (50%)' : 'Final Payment Amount'}:</span>
+                        <span>{payment.type === 'advance' ? `Advance Amount (${getAdvancePercentageFromData(payment.quoteId, payment.paymentAmount, payment.invoiceAmount)})` : 'Final Payment Amount'}:</span>
                         <strong>{formatCurrency(payment.paymentAmount)}</strong>
                       </div>
                       <div className={styles.amountRow}>

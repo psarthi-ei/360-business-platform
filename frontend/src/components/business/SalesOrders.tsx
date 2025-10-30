@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
 import { 
   mockSalesOrders, 
   mockQuotes, 
   mockLeads,
-  getFeatureToggleState,
-  setFeatureToggle,
+  mockProformaInvoices,
   OrderItem
 } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
@@ -36,46 +35,26 @@ function SalesOrders({
   const toggleDetails = useCallback((orderId: string) => {
     toggleExpansion(orderId, 'data-order-id');
     
-    // When main card collapses, also collapse items section
-    if (isExpanded(orderId)) {
-      setExpandedItems(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(orderId);
-        return newSet;
-      });
-    }
-  }, [toggleExpansion, isExpanded]);
+    // Items now shown directly - no separate collapse needed
+  }, [toggleExpansion]);
   
-  // Professional Order Display with Feature Toggle Support
-  const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
+  // Removed nested items expansion - items now shown directly in main expanded view
   
-  // State for collapsible professional items sections
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   
-  // Handle toggle change
-  const handleToggleChange = (enabled: boolean) => {
-    setFeatureToggle('STRUCTURED_ITEMS_ENABLED', enabled);
-    setUseStructuredData(enabled);
-  };
-
-  // Handle items section expansion toggle
-  const toggleItemsExpansion = (orderId: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(orderId)) {
-        newSet.delete(orderId);
-      } else {
-        newSet.add(orderId);
+  // Helper function to get payment details for an order from ProformaInvoice data
+  const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string) => {
+    // Default values
+    let advanceAmount = 0;
+    let advancePercentage = 0;
+    
+    // Find related ProformaInvoice through quote
+    if (quoteId) {
+      const relatedProformaInvoice = mockProformaInvoices.find(pi => pi.quoteId === quoteId);
+      if (relatedProformaInvoice) {
+        advanceAmount = relatedProformaInvoice.advanceAmount;
+        advancePercentage = Math.round((advanceAmount / relatedProformaInvoice.totalAmount) * 100);
       }
-      return newSet;
-    });
-  };
-  
-  
-  // Helper function to calculate payment details for an order
-  const getOrderPaymentDetails = (orderId: string, totalAmount: number) => {
-    const advancePercentage = 50; // Standard 50% advance
-    const advanceAmount = Math.round(totalAmount * (advancePercentage / 100));
+    }
     
     // Simulate different payment states based on order ID (same logic as Payments)
     let advanceReceived = 0;
@@ -96,19 +75,20 @@ function SalesOrders({
       advanceAmount,
       advanceReceived,
       balanceAdvance: advanceAmount - advanceReceived,
-      paymentStatus
+      paymentStatus,
+      advancePercentage
     };
   };
   
   // Helper function to check if order has structured items
-  const hasStructuredItems = (order: { itemsStructured?: OrderItem[] }): boolean => {
-    return !!(order.itemsStructured && order.itemsStructured.length > 0);
+  const hasStructuredItems = (order: { items: OrderItem[] }): boolean => {
+    return !!(order.items && order.items.length > 0);
   };
   
   // Get formatted items display for header (concise)
-  const getOrderItemsHeader = (order: { items: string; itemsStructured?: OrderItem[] }): string => {
-    if (useStructuredData && hasStructuredItems(order)) {
-      const items = order.itemsStructured as OrderItem[];
+  const getOrderItemsHeader = (order: { items: OrderItem[] }): string => {
+    if (hasStructuredItems(order)) {
+      const items = order.items as OrderItem[];
       if (items.length === 1) {
         return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
       } else {
@@ -118,14 +98,14 @@ function SalesOrders({
         return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
       }
     }
-    // Fallback to existing string display
-    return order.items;
+    // Fallback display
+    return "No items";
   };
   
   // Get formatted items display for details (comprehensive with production tracking)
-  const renderOrderItemsDetails = (order: { items: string; itemsStructured?: OrderItem[]; progressPercentage?: number }) => {
-    if (useStructuredData && hasStructuredItems(order)) {
-      const items = order.itemsStructured as OrderItem[];
+  const renderOrderItemsDetails = (order: { items: OrderItem[]; progressPercentage?: number }) => {
+    if (hasStructuredItems(order)) {
+      const items = order.items as OrderItem[];
       
       return (
         <div className={styles.itemsEnhanced}>
@@ -172,10 +152,10 @@ function SalesOrders({
       );
     }
     
-    // Fallback to existing string display
+    // Fallback display
     return (
       <div className={styles.basicItemsDisplay}>
-        <p><strong>Items:</strong> {order.items}</p>
+        <p><strong>Items:</strong> No items available</p>
         {order.progressPercentage !== undefined && (
           <div className={styles.basicProgress}>
             <span>Production Progress: {order.progressPercentage}%</span>
@@ -195,23 +175,6 @@ function SalesOrders({
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
       
-        {/* Professional Item Details Toggle Section */}
-        <div className={styles.professionalToggle}>
-          <span>Item Display:</span>
-          <div 
-            className={styles.toggleButton}
-            onClick={() => handleToggleChange(!useStructuredData)}
-          >
-            <input 
-              type="checkbox" 
-              checked={useStructuredData} 
-              onChange={() => handleToggleChange(!useStructuredData)}
-            />
-            <span className={styles.toggleSlider}>
-              {useStructuredData ? 'Professional' : 'Basic'}
-            </span>
-          </div>
-        </div>
       
       <div className={styles.ordersContainer}>
         {mockSalesOrders.map(order => {
@@ -254,7 +217,7 @@ function SalesOrders({
 
           const relatedQuote = mockQuotes.find(quote => quote.id === order.quoteId);
           const relatedLead = relatedQuote ? mockLeads.find(lead => lead.id === relatedQuote.leadId) : null;
-          const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount);
+          const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount, order.quoteId);
 
           const businessProfile = getBusinessProfileById(order.businessProfileId);
           const companyName = businessProfile?.companyName || 'Unknown Company';
@@ -298,37 +261,22 @@ function SalesOrders({
               {isExpanded(order.id) && (
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
-                    <p><strong>{t('customerName')}:</strong> {companyName} - {businessProfile?.registeredAddress.city || 'Unknown'}</p>
-                    <p><strong>{t('orderDate')}:</strong> {order.orderDate} | <strong>Delivery:</strong> {order.deliveryDate}</p>
-                    <p><strong>Items:</strong> {order.items}</p>
-                    <p><strong>{t('totalAmount')}:</strong> {formatCurrency(order.totalAmount)} (incl. GST)</p>
-                    <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
+                    {/* Enhanced Order Details - Focus on NEW information not in card */}
+                    <p><strong>Status Details:</strong> {order.statusMessage}</p>
+                    <p><strong>Production Status:</strong> {order.productionStatus}</p>
+                    {order.balancePaymentDue && order.balancePaymentDue > 0 && (
+                      <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue)}</p>
+                    )}
+                    {order.progressPercentage && (
+                      <p><strong>Progress:</strong> {order.progressPercentage}% completed</p>
+                    )}
                   </div>
 
-                  {/* Professional Item Details Section */}
-                  {useStructuredData && hasStructuredItems(order) && (
-                    <div className={styles.professionalItemsSection}>
-                      <div 
-                        className={styles.itemsToggleHeader}
-                        onClick={() => toggleItemsExpansion(order.id)}
-                      >
-                        <div className={styles.itemsHeaderContent}>
-                          <span className={styles.itemsHeaderIcon}>📋</span>
-                          <div className={styles.itemsHeaderText}>
-                            <h4>Item Details</h4>
-                            <p>{getOrderItemsHeader(order)}</p>
-                          </div>
-                        </div>
-                        <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
-                          {expandedItems.has(order.id) ? '▼' : '▶'}
-                        </div>
-                      </div>
-                      
-                      {expandedItems.has(order.id) && (
-                        <div className={styles.itemsContent}>
-                          {renderOrderItemsDetails(order)}
-                        </div>
-                      )}
+                  {/* Comprehensive Item Details with Production Context - Always Visible */}
+                  {hasStructuredItems(order) && (
+                    <div className={styles.itemsSection}>
+                      <h4 className={styles.sectionTitle}>📋 Item Details</h4>
+                      {renderOrderItemsDetails(order)}
                     </div>
                   )}
                   
