@@ -6,6 +6,7 @@ import {
   mockLeads, 
   mockSalesOrders,
   QuoteItem,
+  Quote,
   calculateItemTotals
 } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
@@ -128,7 +129,7 @@ function QuotationOrders({
   };
 
   // Helper function to get advance percentage from Quote data
-  const getQuoteAdvancePercentage = (quote: any): number => {
+  const getQuoteAdvancePercentage = (quote: Quote): number => {
     // Calculate percentage from Quote's advancePaymentRequired field
     if (quote.advancePaymentRequired && quote.totalAmount) {
       return Math.round((quote.advancePaymentRequired / quote.totalAmount) * 100);
