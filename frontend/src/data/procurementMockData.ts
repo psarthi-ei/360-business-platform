@@ -64,141 +64,31 @@ export interface GoodsReceiptNote {
   notes?: string;
 }
 
-// ==================== PROCUREMENT MOCK DATA ====================
+// ==================== CONSOLIDATED INTERFACES (PHASE 3) ====================
 
-// Material Requirements grouped by Order - using proper sales order IDs
-export const mockMaterialRequirements: MaterialRequirement[] = [
-  // Order SO-002 — Mixed fabric for casual wear - Cotton Yarn requirement
-  {
-    id: 'MR-001',
-    orderId: 'SO-002', // References existing sales order
-    materialName: 'Cotton Yarn 30s Count',
-    requiredQuantity: 500,
-    unit: 'kg',
-    urgency: 'high',
-    requiredDate: '2025-10-25',
-    notes: 'Critical material for production schedule'
-  },
-  
-  // Order SO-004 — Updated seasonal collection - Polyester Thread requirement
-  {
-    id: 'MR-002',
-    orderId: 'SO-004', // References existing sales order
-    materialName: 'Polyester Thread',
-    requiredQuantity: 100,
-    unit: 'kg',
-    urgency: 'low',
-    requiredDate: '2025-10-30'
-  },
-  {
-    id: 'MR-002B',
-    orderId: 'SO-004', // References existing sales order
-    materialName: 'Cotton Fabric Base',
-    requiredQuantity: 200,
-    unit: 'meters',
-    urgency: 'low',
-    requiredDate: '2025-10-30'
-  },
-  
-  // Order SO-002 — Red Dye Chemical requirement
-  {
-    id: 'MR-003',
-    orderId: 'SO-002', // Same order, different material
-    materialName: 'Red Dye Chemical',
-    requiredQuantity: 50,
-    unit: 'kg',
-    urgency: 'high',
-    requiredDate: '2025-10-22',
-    notes: 'Dyeing process critical material'
-  },
-  
-  // Order SO-002 — Additional fabric requirement
-  {
-    id: 'MR-004',
-    orderId: 'SO-002', // Additional materials for large order
-    materialName: 'Cotton Fabric 150 GSM',
-    requiredQuantity: 1000,
-    unit: 'meters',
-    urgency: 'medium',
-    requiredDate: '2025-11-01'
-  },
-  
-  // Order SO-004 — Accessories requirement
-  {
-    id: 'MR-005',
-    orderId: 'SO-004', // Accessories for seasonal collection
-    materialName: 'Zipper - Metal 12 inch',
-    requiredQuantity: 200,
-    unit: 'pieces',
-    urgency: 'low',
-    requiredDate: '2025-11-05'
-  },
-  
-  // Order SO-001 — Cotton Yarn requirement
-  {
-    id: 'MR-006',
-    orderId: 'SO-001',
-    materialName: 'Cotton Yarn 40s Count',
-    requiredQuantity: 300,
-    unit: 'kg',
-    urgency: 'high',
-    requiredDate: '2025-10-24',
-    notes: 'Premium customer order priority'
-  },
-  
-  // Order SO-003 — Polyester requirements (in production)
-  {
-    id: 'MR-007',
-    orderId: 'SO-003',
-    materialName: 'Polyester Yarn 150D',
-    requiredQuantity: 400,
-    unit: 'kg',
-    urgency: 'medium',
-    requiredDate: '2025-10-28'
-  },
-  
-  // Order SO-005 — Cotton bulk order requirements
-  {
-    id: 'MR-008',
-    orderId: 'SO-005',
-    materialName: 'Cotton Yarn 40s Count',
-    requiredQuantity: 600,
-    unit: 'kg',
-    urgency: 'medium',
-    requiredDate: '2025-11-01',
-    notes: 'Bulk order - high volume requirement'
-  },
-  {
-    id: 'MR-009',
-    orderId: 'SO-005',
-    materialName: 'Blue Dye Chemical',
-    requiredQuantity: 45,
-    unit: 'kg',
-    urgency: 'medium',
-    requiredDate: '2025-11-01'
-  },
-  
-  // Order SO-006 — Cotton yarn fabric requirements (competing for same materials)
-  {
-    id: 'MR-010',
-    orderId: 'SO-006',
-    materialName: 'Cotton Yarn 40s Count',
-    requiredQuantity: 450,
-    unit: 'kg',
-    urgency: 'medium',
-    requiredDate: '2025-11-05',
-    notes: 'Competing for same Cotton Yarn 40s as SO-001 and SO-005'
-  },
-  {
-    id: 'MR-011',
-    orderId: 'SO-006',
-    materialName: 'Cotton Thread - White',
-    requiredQuantity: 80,
-    unit: 'kg',
-    urgency: 'low',
-    requiredDate: '2025-11-05'
-  }
-];
+export interface MaterialItem {
+  materialName: string;           // "Cotton Yarn 30s Count"
+  requiredQuantity: number;       // 500
+  unit: string;                  // "kg"
+  urgency: 'high' | 'medium' | 'low';
+  notes?: string;
+}
+
+export interface ConsolidatedMaterialRequirement {
+  id: string;                     // "MR-SO-002-CONSOLIDATED"
+  salesOrderId: string;           // "SO-002"
+  customerName: string;           // "Gujarat Garments"
+  orderValue: number;             // ₹400,000 (customer order total)
+  materials: MaterialItem[];      // Array of all materials for this order
+  urgency: 'high' | 'medium' | 'low';
+  requiredDate: string;           // Customer delivery date
+  businessJustification: string;  // "Customer delivery commitment Nov 15"
+  createdDate: string;
+  notes?: string;
+  linkedPR?: string;              // Linked PR number like "PR-001"
+}
+
+// ==================== PROCUREMENT MOCK DATA ====================
 
 // Purchase Requests matching Visual Design Spec format
 export const mockPurchaseRequests: PurchaseRequest[] = [
@@ -379,5 +269,179 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     inspectedBy: 'Quality Team',
     inspectionDate: '2025-10-15',
     notes: 'Over delivery - bonus 5kg received, excellent quality'
+  }
+];
+
+// ==================== CONSOLIDATED MATERIAL REQUIREMENTS (PHASE 3) ====================
+
+export const mockConsolidatedMaterialRequirements: ConsolidatedMaterialRequirement[] = [
+  // Gujarat Garments - Large Cotton Fabric Order
+  {
+    id: "MR-SO-001-CONSOLIDATED",
+    salesOrderId: "SO-001",
+    customerName: "Gujarat Garments",
+    orderValue: 1480000, // ₹14.8L order
+    materials: [
+      {
+        materialName: "Cotton Yarn 30s Count",
+        requiredQuantity: 500,
+        unit: "kg",
+        urgency: "high",
+        notes: "Critical for export quality requirements"
+      },
+      {
+        materialName: "Blue Reactive Dye",
+        requiredQuantity: 40,
+        unit: "kg",
+        urgency: "high",
+        notes: "Color fastness critical for export"
+      },
+      {
+        materialName: "Fixing Agent Chemicals",
+        requiredQuantity: 15,
+        unit: "kg",
+        urgency: "medium"
+      }
+    ],
+    urgency: "high",
+    requiredDate: "2025-11-10", // 5 days before delivery
+    businessJustification: "Export order for Gujarat Garments. Customer delivery November 15 requires material procurement by November 10 to meet production timeline.",
+    createdDate: "2025-10-20",
+    notes: "Export quality requirements - cannot compromise on material standards",
+    linkedPR: "PR-001"
+  },
+
+  // Baroda Fashion House - Premium Silk Order
+  {
+    id: "MR-SO-004-CONSOLIDATED",
+    salesOrderId: "SO-004",
+    customerName: "Baroda Fashion House",
+    orderValue: 1575000, // ₹15.75L order
+    materials: [
+      {
+        materialName: "Raw Silk Threads",
+        requiredQuantity: 200,
+        unit: "kg",
+        urgency: "high",
+        notes: "Premium quality for luxury fashion line"
+      },
+      {
+        materialName: "Gold Metallic Dye",
+        requiredQuantity: 10,
+        unit: "kg",
+        urgency: "high"
+      },
+      {
+        materialName: "Polyester Reinforcement Thread",
+        requiredQuantity: 50,
+        unit: "kg",
+        urgency: "medium"
+      }
+    ],
+    urgency: "high",
+    requiredDate: "2025-11-20",
+    businessJustification: "Premium silk order for Baroda Fashion House luxury collection. High-value materials required for fashion-grade quality standards.",
+    createdDate: "2025-10-22",
+    linkedPR: "PR-002",
+    notes: "Luxury fashion requirements - premium materials justify higher cost percentage"
+  },
+
+  // Gujarat Garments - Standard Cotton Order (Approved Example)
+  {
+    id: "MR-SO-002-CONSOLIDATED", 
+    salesOrderId: "SO-002",
+    customerName: "Gujarat Garments",
+    orderValue: 1155000, // ₹11.55L order
+    materials: [
+      {
+        materialName: "Cotton Yarn 40s Count",
+        requiredQuantity: 300,
+        unit: "kg",
+        urgency: "medium",
+        notes: "Regular domestic quality"
+      },
+      {
+        materialName: "Red Reactive Dye",
+        requiredQuantity: 25,
+        unit: "kg",
+        urgency: "medium"
+      },
+      {
+        materialName: "Common Salt for Dyeing",
+        requiredQuantity: 100,
+        unit: "kg",
+        urgency: "low"
+      }
+    ],
+    urgency: "medium",
+    requiredDate: "2025-11-05",
+    businessJustification: "Standard domestic order for Gujarat Garments. Materials ready for immediate procurement to maintain production schedule.",
+    createdDate: "2025-10-15",
+    linkedPR: "PR-003",
+    notes: "Standard domestic quality - cost-efficient materials"
+  },
+
+  // Baroda Fashion House - High Priority Rush Order
+  {
+    id: "MR-SO-003-CONSOLIDATED",
+    salesOrderId: "SO-003", 
+    customerName: "Baroda Fashion House",
+    orderValue: 892500, // ₹8.93L order
+    materials: [
+      {
+        materialName: "Heavy Canvas Fabric Base",
+        requiredQuantity: 400,
+        unit: "meters",
+        urgency: "high",
+        notes: "Industrial strength required"
+      },
+      {
+        materialName: "Waterproof Coating Wax",
+        requiredQuantity: 50,
+        unit: "kg",
+        urgency: "high"
+      },
+      {
+        materialName: "Heavy Duty Thread",
+        requiredQuantity: 30,
+        unit: "kg",
+        urgency: "high"
+      }
+    ],
+    urgency: "high",
+    requiredDate: "2025-10-30",
+    businessJustification: "URGENT: Rush order for Baroda Fashion House. Customer needs delivery by November 5 for their urgent project. Material needed immediately.",
+    createdDate: "2025-10-25",
+    linkedPR: "PR-004",
+    notes: "RUSH ORDER - Premium pricing acceptable for urgent delivery"
+  },
+
+  // New Customer - Surat Wholesale (Low Cost Example)
+  {
+    id: "MR-SO-005-CONSOLIDATED",
+    salesOrderId: "SO-005",
+    customerName: "Surat Wholesale Market", 
+    orderValue: 675000, // ₹6.75L order
+    materials: [
+      {
+        materialName: "Cotton Yarn 20s Count",
+        requiredQuantity: 400,
+        unit: "kg",
+        urgency: "low",
+        notes: "Cost-optimized for wholesale market"
+      },
+      {
+        materialName: "Mixed Basic Dyes",
+        requiredQuantity: 35,
+        unit: "kg",
+        urgency: "low"
+      }
+    ],
+    urgency: "low",
+    requiredDate: "2025-11-25",
+    businessJustification: "New wholesale customer order. Cost-efficient materials for competitive pricing. Standard delivery timeline acceptable.",
+    createdDate: "2025-10-28",
+    linkedPR: "PR-005",
+    notes: "Price-sensitive wholesale order - focus on cost optimization"
   }
 ];

@@ -1,7 +1,7 @@
 // Material Availability Helper Functions
 // Dynamic calculation functions for stock reservation and material allocation
 
-import { mockMaterialRequirements } from './procurementMockData';
+import { mockConsolidatedMaterialRequirements, mockPurchaseRequests } from './procurementMockData';
 import { getOnHandStock } from './inventoryMockData';
 import { getSoftReservedQuantity, getHardReservedQuantity, getActiveOrderReservations } from './stockReservationMockData';
 
@@ -85,12 +85,24 @@ export const checkMaterialAvailability = (materialName: string, requiredQuantity
  * Check material availability for an entire Sales Order
  */
 export const checkOrderMaterialAvailability = (orderId: string): OrderMaterialStatus => {
-  // Get all material requirements for this order
-  const requirements = mockMaterialRequirements.filter(mr => mr.orderId === orderId);
+  // Find consolidated material requirement for this order
+  const consolidatedMR = mockConsolidatedMaterialRequirements.find(mr => mr.salesOrderId === orderId);
   
-  // Check availability for each material
-  const materialChecks = requirements.map(req => 
-    checkMaterialAvailability(req.materialName, req.requiredQuantity, req.unit)
+  if (!consolidatedMR) {
+    // Return empty status if no material requirements found
+    return {
+      orderId,
+      overallStatus: 'available',
+      materialChecks: [],
+      shortageItems: [],
+      availableItems: [],
+      totalShortage: 0
+    };
+  }
+  
+  // Extract individual materials from consolidated structure
+  const materialChecks = consolidatedMR.materials.map(material => 
+    checkMaterialAvailability(material.materialName, material.requiredQuantity, material.unit)
   );
   
   // Categorize materials
@@ -126,16 +138,18 @@ export const checkOrderMaterialAvailability = (orderId: string): OrderMaterialSt
 export const findMaterialConflicts = (orderIds: string[]): MaterialConflict[] => {
   const materialDemands = new Map<string, { demand: number; orders: string[] }>();
   
-  // Collect all material demands
+  // Collect all material demands from consolidated MRs
   orderIds.forEach(orderId => {
-    const requirements = mockMaterialRequirements.filter(mr => mr.orderId === orderId);
-    requirements.forEach(req => {
-      const existing = materialDemands.get(req.materialName) || { demand: 0, orders: [] };
-      materialDemands.set(req.materialName, {
-        demand: existing.demand + req.requiredQuantity,
-        orders: [...existing.orders, orderId]
+    const consolidatedMR = mockConsolidatedMaterialRequirements.find(mr => mr.salesOrderId === orderId);
+    if (consolidatedMR) {
+      consolidatedMR.materials.forEach(material => {
+        const existing = materialDemands.get(material.materialName) || { demand: 0, orders: [] };
+        materialDemands.set(material.materialName, {
+          demand: existing.demand + material.requiredQuantity,
+          orders: [...existing.orders, orderId]
+        });
       });
-    });
+    }
   });
   
   // Find conflicts
@@ -242,23 +256,37 @@ export const getShortageDetails = (orderId: string) => {
  * Get priority order queue for a material (for supervisor decision making)
  */
 export const getMaterialOrderQueue = (materialName: string) => {
-  const orders = mockMaterialRequirements
-    .filter(mr => mr.materialName === materialName)
-    .map(mr => ({
-      orderId: mr.orderId,
-      required: mr.requiredQuantity,
-      urgency: mr.urgency,
-      requiredDate: mr.requiredDate,
-      hasReservation: getActiveOrderReservations(mr.orderId).length > 0
-    }))
-    .sort((a, b) => {
-      // Sort by urgency first, then by required date
-      const urgencyOrder = { high: 3, medium: 2, low: 1 };
-      const urgencyDiff = urgencyOrder[b.urgency] - urgencyOrder[a.urgency];
-      if (urgencyDiff !== 0) return urgencyDiff;
-      
-      return new Date(a.requiredDate).getTime() - new Date(b.requiredDate).getTime();
+  const orders: Array<{
+    orderId: string;
+    required: number;
+    urgency: 'high' | 'medium' | 'low';
+    requiredDate: string;
+    hasReservation: boolean;
+  }> = [];
+  
+  // Extract material requirements from consolidated MRs
+  mockConsolidatedMaterialRequirements.forEach(consolidatedMR => {
+    consolidatedMR.materials.forEach(material => {
+      if (material.materialName === materialName) {
+        orders.push({
+          orderId: consolidatedMR.salesOrderId,
+          required: material.requiredQuantity,
+          urgency: material.urgency,
+          requiredDate: consolidatedMR.requiredDate,
+          hasReservation: getActiveOrderReservations(consolidatedMR.salesOrderId).length > 0
+        });
+      }
     });
+  });
+  
+  // Sort by urgency first, then by required date
+  orders.sort((a, b) => {
+    const urgencyOrder = { high: 3, medium: 2, low: 1 };
+    const urgencyDiff = urgencyOrder[b.urgency] - urgencyOrder[a.urgency];
+    if (urgencyDiff !== 0) return urgencyDiff;
+    
+    return new Date(a.requiredDate).getTime() - new Date(b.requiredDate).getTime();
+  });
   
   const freeStock = calculateFreeStock(materialName);
   let remainingStock = freeStock;
@@ -284,7 +312,7 @@ export const getMaterialOrderQueue = (materialName: string) => {
  * Get material allocation summary for dashboard
  */
 export const getMaterialAllocationSummary = () => {
-  const allOrders = [...new Set(mockMaterialRequirements.map(mr => mr.orderId))];
+  const allOrders = mockConsolidatedMaterialRequirements.map(mr => mr.salesOrderId);
   const statusCounts = { available: 0, partial: 0, shortage: 0 };
   
   allOrders.forEach(orderId => {
@@ -297,4 +325,63 @@ export const getMaterialAllocationSummary = () => {
     ...statusCounts,
     lastUpdated: new Date().toISOString()
   };
+};
+
+// ==================== PURCHASE REQUEST LINKING FUNCTIONS ====================
+
+/**
+ * Find Purchase Request linked to a specific order's material requirements
+ */
+export const getLinkedPurchaseRequest = (orderId: string) => {
+  // Find consolidated material requirement for this order
+  const consolidatedMR = mockConsolidatedMaterialRequirements.find(mr => mr.salesOrderId === orderId);
+  
+  if (!consolidatedMR || !consolidatedMR.linkedPR) {
+    return null;
+  }
+  
+  // Find PR by the linkedPR ID
+  const linkedPR = mockPurchaseRequests.find(pr => pr.id === consolidatedMR.linkedPR);
+  
+  return linkedPR || null;
+};
+
+/**
+ * Check if an order has a linked Purchase Request
+ */
+export const hasLinkedPR = (orderId: string): boolean => {
+  return getLinkedPurchaseRequest(orderId) !== null;
+};
+
+/**
+ * Get PR status for an order (for display purposes)
+ */
+export const getPRStatus = (orderId: string) => {
+  // Find consolidated material requirement for this order
+  const consolidatedMR = mockConsolidatedMaterialRequirements.find(mr => mr.salesOrderId === orderId);
+  
+  if (!consolidatedMR || !consolidatedMR.linkedPR) {
+    return {
+      hasPR: false,
+      status: null,
+      prId: null,
+      canCreatePR: true
+    };
+  }
+  
+  return {
+    hasPR: true,
+    status: 'linked', // Simple status since we're not checking actual PR data
+    prId: consolidatedMR.linkedPR,
+    canCreatePR: false
+  };
+};
+
+/**
+ * Generate new PR ID for auto-creation
+ */
+export const generatePRId = (): string => {
+  const year = new Date().getFullYear();
+  const timestamp = Date.now().toString().slice(-6);
+  return `PR-${year}-${timestamp}`;
 };

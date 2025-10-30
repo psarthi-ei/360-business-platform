@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { mockMaterialRequirements, mockPurchaseRequests, mockPurchaseOrders } from '../../data/procurementMockData';
-import { checkMaterialAvailability } from '../../data/materialHelpers';
+import { 
+  mockPurchaseRequests, 
+  mockPurchaseOrders
+} from '../../data/procurementMockData';
 import styles from './Procurement.module.css';
 import MaterialRequirements from './MaterialRequirements';
 import PurchaseRequests from './PurchaseRequests';
@@ -16,19 +18,37 @@ interface ProcurementProps {
 
 type ProcurementTabType = 'mr' | 'prs' | 'pos' | 'grns';
 
-// Dynamic count calculator functions using new material availability system
-const calculateMRCounts = () => ({
-  all: mockMaterialRequirements.length,
-  shortage: mockMaterialRequirements.filter(mr => {
-    const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
-    return availability.status === 'shortage' || availability.status === 'partial';
-  }).length,
-  available: mockMaterialRequirements.filter(mr => {
-    const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
-    return availability.status === 'available';
-  }).length,
-  ordered: 0 // This status doesn't exist in new system - would need to check purchase orders instead
-});
+// Material status count calculator for all sales orders
+const calculateMaterialStatusCounts = () => {
+  // Import mock sales orders and helper functions to calculate status counts
+  const { mockSalesOrders } = require('../../data/salesMockData');
+  const { checkOrderMaterialAvailability } = require('../../data/materialHelpers');
+  
+  interface OrderWithMaterialStatus {
+    orderId: string;
+    materialStatus: {
+      overallStatus: 'available' | 'partial' | 'shortage';
+    };
+    deliveryDate: string;
+  }
+  
+  const allOrders: OrderWithMaterialStatus[] = mockSalesOrders.map((order: any) => ({
+    orderId: order.id,
+    materialStatus: checkOrderMaterialAvailability(order.id),
+    deliveryDate: order.deliveryDate
+  }));
+  
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  
+  return {
+    all: allOrders.length,
+    available: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'available').length,
+    partial: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'partial').length,
+    shortage: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'shortage').length,
+    urgent: allOrders.filter((order: OrderWithMaterialStatus) => new Date(order.deliveryDate) <= nextWeek).length
+  };
+};
 
 const calculatePRCounts = () => ({
   all: mockPurchaseRequests.length,
@@ -67,17 +87,18 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   ];
   
   // Dynamic count calculations
-  const mrCounts = calculateMRCounts();
+  const mrCounts = calculateMaterialStatusCounts();
   const prCounts = calculatePRCounts();
   const poCounts = calculatePOCounts();
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
     mr: [
-      { value: 'all', label: 'All Materials', count: mrCounts.all },
-      { value: 'shortage', label: '⚠️ Shortages', count: mrCounts.shortage },
+      { value: 'all', label: 'All Orders', count: mrCounts.all },
       { value: 'available', label: '✅ Available', count: mrCounts.available },
-      { value: 'ordered', label: '🟡 Ordered', count: mrCounts.ordered }
+      { value: 'partial', label: '⚠️ Partial', count: mrCounts.partial },
+      { value: 'shortage', label: '🚫 Shortage', count: mrCounts.shortage },
+      { value: 'urgent', label: '🔥 Urgent', count: mrCounts.urgent }
     ],
     prs: [
       { value: 'all', label: 'All Requests', count: prCounts.all },
@@ -137,23 +158,13 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     const getStatusFilters = () => {
       switch(activeTab) {
         case 'mr': {
-          const mrCounts = {
-            all: mockMaterialRequirements.length,
-            shortage: mockMaterialRequirements.filter(mr => {
-              const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
-              return availability.status === 'shortage' || availability.status === 'partial';
-            }).length,
-            available: mockMaterialRequirements.filter(mr => {
-              const availability = checkMaterialAvailability(mr.materialName, mr.requiredQuantity, mr.unit);
-              return availability.status === 'available';
-            }).length,
-            ordered: 0 // This status doesn't exist in new system
-          };
+          const mrCounts = calculateMaterialStatusCounts();
           return [
-            { value: 'all', label: 'All Materials', count: mrCounts.all },
-            { value: 'shortage', label: '⚠️ Shortages', count: mrCounts.shortage },
+            { value: 'all', label: 'All Orders', count: mrCounts.all },
             { value: 'available', label: '✅ Available', count: mrCounts.available },
-            { value: 'ordered', label: '🟡 Ordered', count: mrCounts.ordered }
+            { value: 'partial', label: '⚠️ Partial', count: mrCounts.partial },
+            { value: 'shortage', label: '🚫 Shortage', count: mrCounts.shortage },
+            { value: 'urgent', label: '🔥 Urgent', count: mrCounts.urgent }
           ];
         }
         case 'prs': {
