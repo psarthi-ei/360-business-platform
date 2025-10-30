@@ -26,6 +26,10 @@ export interface PurchaseOrder {
 export interface GoodsReceiptNote {
   id: string;
   poId: string; // Links to Purchase Order
+  consolidatedPrId: string; // Links to Consolidated Purchase Request
+  salesOrderId: string; // Customer sales order reference
+  customerName: string; // Customer business context
+  supplierName: string; // Supplier information
   receivedBy: string;
   materialName: string;
   orderedQuantity: number;
@@ -33,8 +37,10 @@ export interface GoodsReceiptNote {
   unit: string;
   qualityStatus: 'pending' | 'approved' | 'rejected';
   receiptDate: string;
+  qualityDeadline?: string; // When quality inspection must be completed
   inspectedBy?: string;
   inspectionDate?: string;
+  materialValue?: number; // Financial value of materials received
   notes?: string;
 }
 
@@ -215,6 +221,10 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
   {
     id: 'GRN-001',
     poId: 'PO-002',
+    consolidatedPrId: 'PR-SO-2024-002-CONSOLIDATED',
+    salesOrderId: 'SO-2024-002',
+    customerName: 'Mumbai Mills',
+    supplierName: 'Rajesh Textiles',
     receivedBy: 'Warehouse Team',
     materialName: 'Cotton Yarn 40s Count',
     orderedQuantity: 500,
@@ -222,13 +232,19 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'kg',
     qualityStatus: 'approved',
     receiptDate: '2025-10-18',
+    qualityDeadline: '2025-10-20',
     inspectedBy: 'Quality Team',
     inspectionDate: '2025-10-18',
+    materialValue: 300000,
     notes: 'Good quality, no defects found'
   },
   {
     id: 'GRN-002',
     poId: 'PO-003',
+    consolidatedPrId: 'PR-SO-2024-001-CONSOLIDATED',
+    salesOrderId: 'SO-2024-001',
+    customerName: 'Gujarat Garments',
+    supplierName: 'Mumbai Mills',
     receivedBy: 'Warehouse Team',
     materialName: 'Polyester Thread',
     orderedQuantity: 200,
@@ -236,11 +252,17 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'kg',
     qualityStatus: 'pending',
     receiptDate: '2025-10-19',
+    qualityDeadline: '2025-10-21',
+    materialValue: 150000,
     notes: 'Short delivery - 10kg less than ordered'
   },
   {
     id: 'GRN-003',
     poId: 'PO-001',
+    consolidatedPrId: 'PR-001',
+    salesOrderId: 'SO-001',
+    customerName: 'Gujarat Garments',
+    supplierName: 'Chemical Solutions Ltd',
     receivedBy: 'Warehouse Team',
     materialName: 'Blue Dye Chemical',
     orderedQuantity: 50,
@@ -248,13 +270,19 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'kg',
     qualityStatus: 'rejected',
     receiptDate: '2025-10-17',
+    qualityDeadline: '2025-10-19',
     inspectedBy: 'Quality Team',
     inspectionDate: '2025-10-17',
+    materialValue: 25000,
     notes: 'Color consistency issues - returned to supplier'
   },
   {
     id: 'GRN-004',
     poId: 'PO-004',
+    consolidatedPrId: 'PR-002',
+    salesOrderId: 'SO-004',
+    customerName: 'Baroda Fashion House',
+    supplierName: 'Premium Textiles Pvt Ltd',
     receivedBy: 'Warehouse Team',
     materialName: 'Cotton Fabric 120 GSM',
     orderedQuantity: 300,
@@ -262,13 +290,19 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'meters',
     qualityStatus: 'approved',
     receiptDate: '2025-10-16',
+    qualityDeadline: '2025-10-18',
     inspectedBy: 'Quality Team',
     inspectionDate: '2025-10-16',
+    materialValue: 180000,
     notes: 'Excellent quality, meets specifications'
   },
   {
     id: 'GRN-005',
     poId: 'PO-005',
+    consolidatedPrId: 'PR-003',
+    salesOrderId: 'SO-005',
+    customerName: 'Modern Apparel Co',
+    supplierName: 'Hardware Components Ltd',
     receivedBy: 'Warehouse Team',
     materialName: 'Metal Zippers 12 inch',
     orderedQuantity: 1000,
@@ -276,11 +310,17 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'pieces',
     qualityStatus: 'pending',
     receiptDate: '2025-10-20',
+    qualityDeadline: '2025-10-22',
+    materialValue: 47500,
     notes: 'Partial delivery - 50 pieces short, quality check in progress'
   },
   {
     id: 'GRN-006',
     poId: 'PO-006',
+    consolidatedPrId: 'PR-004',
+    salesOrderId: 'SO-006',
+    customerName: 'Supreme Textiles',
+    supplierName: 'Dyestuff India Ltd',
     receivedBy: 'Warehouse Team',
     materialName: 'Reactive Dyes - Red',
     orderedQuantity: 25,
@@ -288,8 +328,10 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     unit: 'kg',
     qualityStatus: 'approved',
     receiptDate: '2025-10-15',
+    qualityDeadline: '2025-10-17',
     inspectedBy: 'Quality Team',
     inspectionDate: '2025-10-15',
+    materialValue: 37500,
     notes: 'Over delivery - bonus 5kg received, excellent quality'
   }
 ];
