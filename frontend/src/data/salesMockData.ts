@@ -142,16 +142,13 @@ export interface BankDetails {
   branch: string;
 }
 
-// Sales Order items - extends QuoteItem with production tracking
+// Sales Order items - extends QuoteItem (production tracking moved to WorkOrders)
 export interface OrderItem extends QuoteItem {
-  // ✅ DELIVERED QUANTITY (physical completion) - Item level for flexibility
-  deliveredQuantity?: number;    // Physical completion tracking (0 for MVP, supports partial delivery future)
-  
   // ❌ NO STATUS fields at item level - status is always SO-level
   // productionStatus?: string;     // ❌ Remove - use SalesOrder.status/productionStatus
   // materialStatus?: string;       // ❌ Remove - use SalesOrder.materialStatus
   
-  // ✅ Items track physical completion, not process status
+  // ✅ Production tracking handled by WorkOrder system for proper domain separation
 }
 
 export interface SalesOrder {
@@ -1079,8 +1076,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "yards",
         rate: 185,
         discount: 0,
-        taxableAmount: 1480000,
-        deliveredQuantity: 0 // Ready for production - not yet started
+        taxableAmount: 1480000
       }
     ],
     
@@ -1119,8 +1115,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "yards",
         rate: 210,
         discount: 0,
-        taxableAmount: 630000,
-        deliveredQuantity: 0 // Material shortage - no delivery yet
+        taxableAmount: 630000
       },
       {
         itemCode: "TEX-SEAS-002",
@@ -1130,8 +1125,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "yards",
         rate: 230,
         discount: 0,
-        taxableAmount: 690000,
-        deliveredQuantity: 0 // Material shortage - no delivery yet
+        taxableAmount: 690000
       }
     ]
   },
@@ -1160,8 +1154,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 165,
         discount: 0,
-        taxableAmount: 330000,
-        deliveredQuantity: 1200 // 60% completed as per status
+        taxableAmount: 330000
       }
     ],
     progressPercentage: 60 // Production in progress - 60% completed
@@ -1191,8 +1184,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 210,
         discount: 0,
-        taxableAmount: 378000,
-        deliveredQuantity: 1800 // Fully completed and delivered
+        taxableAmount: 378000
       }
     ],
     progressPercentage: 100 // Fully completed
@@ -1222,8 +1214,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 175,
         discount: 0,
-        taxableAmount: 350000,
-        deliveredQuantity: 0 // Ready for production - not yet delivered
+        taxableAmount: 350000
       },
       {
         itemCode: "TEX-BULK-002", 
@@ -1233,8 +1224,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 180,
         discount: 5, // Bulk discount
-        taxableAmount: 171000,
-        deliveredQuantity: 0 // Ready for production - not yet delivered
+        taxableAmount: 171000
       },
       {
         itemCode: "SVC-QC-001",
@@ -1244,8 +1234,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 1.33,
         discount: 0,
-        taxableAmount: 4000,
-        deliveredQuantity: 0 // Service to be provided with production
+        taxableAmount: 4000
       }
     ]
   },
@@ -1274,8 +1263,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 190,
         discount: 0,
-        taxableAmount: 418000,
-        deliveredQuantity: 0 // Pending material availability check
+        taxableAmount: 418000
       }
     ]
   },
@@ -1305,8 +1293,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 787.50,
         discount: 0,
-        taxableAmount: 1575000,
-        deliveredQuantity: 2000 // Fully delivered
+        taxableAmount: 1575000
       }
     ],
     progressPercentage: 100 // Fully completed
@@ -1335,8 +1322,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 812.50,
         discount: 0,
-        taxableAmount: 975000,
-        deliveredQuantity: 1200 // Fully delivered
+        taxableAmount: 975000
       }
     ],
     progressPercentage: 100 // Fully completed
@@ -1365,8 +1351,7 @@ export const mockSalesOrders: SalesOrder[] = [
         unit: "meters",
         rate: 625,
         discount: 0,
-        taxableAmount: 375000,
-        deliveredQuantity: 600 // Production completed - ready for delivery
+        taxableAmount: 375000
       }
     ],
     progressPercentage: 95 // Production completed - ready for delivery
@@ -2429,9 +2414,9 @@ export interface FeatureToggles {
   PROFESSIONAL_INVOICING_ENABLED: boolean;
 }
 
-// Default configuration (all disabled initially for safe rollout)
+// Default configuration (professional display enabled by default)
 export const defaultFeatureToggles: FeatureToggles = {
-  STRUCTURED_ITEMS_ENABLED: false,
+  STRUCTURED_ITEMS_ENABLED: true,
   CONSOLIDATED_MR_ENABLED: false,
   PROFESSIONAL_INVOICING_ENABLED: false
 };
@@ -2478,8 +2463,7 @@ export function convertQuoteToProformaItems(quoteItems: QuoteItem[]): ProformaIt
 // Convert Quote items to SalesOrder items
 export function convertQuoteToOrderItems(quoteItems: QuoteItem[]): OrderItem[] {
   return quoteItems.map(item => ({
-    ...item,
-    deliveredQuantity: 0  // MVP: No partial delivery, but structure supports future
+    ...item
   }));
 }
 
@@ -2489,7 +2473,6 @@ export function convertProformaToInvoiceItems(proformaItems: ProformaItem[], adv
     const advanceAmount = Math.round(item.totalWithTax * advancePercentage);
     return {
       ...item,
-      deliveredQuantity: item.quantity, // MVP: Full delivery assumed
       advanceAmount,
       balanceAmount: item.totalWithTax - advanceAmount
     };

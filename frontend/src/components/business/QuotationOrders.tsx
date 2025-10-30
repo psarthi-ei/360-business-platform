@@ -192,7 +192,16 @@ function QuotationOrders({
   // Use the hook's toggle function with our custom data attribute
   const toggleDetails = useCallback((quoteId: string) => {
     toggleExpansion(quoteId, 'data-quote-id');
-  }, [toggleExpansion]);
+    
+    // When main card collapses, also collapse items section
+    if (isExpanded(quoteId)) {
+      setExpandedItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(quoteId);
+        return newSet;
+      });
+    }
+  }, [toggleExpansion, isExpanded]);
 
   // Workflow Method 1: Handle Quote Approval
   const handleQuoteApproval = useCallback((quoteId: string) => {
@@ -326,10 +335,7 @@ function QuotationOrders({
     <div className={styles.quotationOrdersScreen}>
       {/* Professional Display Toggle (Phase 2) */}
       <div className={styles.professionalToggle}>
-        <div>
-          <h3>💼 Professional Quote Display</h3>
-          <p>Toggle between basic and professional structured item display</p>
-        </div>
+        <span>Item Display:</span>
         <label className={styles.toggleButton}>
           <input 
             type="checkbox" 
@@ -337,7 +343,7 @@ function QuotationOrders({
             onChange={(e) => handleToggleChange(e.target.checked)}
           />
           <span>
-            {useStructuredData ? '✨ Enhanced' : '📝 Basic'}
+            {useStructuredData ? 'Professional' : 'Basic'}
           </span>
         </label>
       </div>
@@ -474,7 +480,7 @@ function QuotationOrders({
                               <p>{getQuoteItemsHeader(quote)}</p>
                             </div>
                           </div>
-                          <div className={styles.itemsExpandIcon}>
+                          <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
                             {expandedItems.has(quote.id) ? '▼' : '▶'}
                           </div>
                         </div>

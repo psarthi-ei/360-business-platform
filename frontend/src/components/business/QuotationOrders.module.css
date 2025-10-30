@@ -394,30 +394,23 @@
   }
 }
 
-/* Professional Quote Items Display - Design System Compliant */
+/* Professional Quote Items Display - Compact Toggle */
 .professionalToggle {
-  padding: var(--ds-space-md);
-  background: var(--ds-btn-primary);
-  color: white;
-  border-radius: var(--ds-radius-md);
-  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  border-radius: var(--ds-radius-sm);
+  margin-bottom: var(--ds-space-sm);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--ds-space-sm);
+  font-size: var(--font-sm);
 }
 
 @media (max-width: 768px) {
   .professionalToggle {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-  }
-  
-  .professionalToggle .toggleButton {
-    align-self: flex-end;
-    margin-top: var(--ds-space-sm);
+    justify-content: space-between;
   }
 
   /* Mobile responsiveness for professional items display */
@@ -546,7 +539,7 @@
   align-items: center;
   margin-bottom: var(--ds-space-md);
   padding-bottom: var(--ds-space-sm);
-  border-bottom: 2px solid var(--ds-color-success);
+  border-bottom: 2px solid var(--ds-border-primary);
 }
 
 .itemsHeader span {
@@ -564,15 +557,17 @@
 .itemsList {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-space-sm); /* Reduced from md to sm */
+  gap: var(--ds-space-md); /* Clean spacing for item separation */
+  padding: 0; /* Remove padding to avoid nested box effect */
 }
 
 .itemRow {
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-sm); /* Reduced from md to sm */
+  padding: var(--ds-space-md);
   box-shadow: var(--ds-shadow-sm);
-  border: 1px solid var(--ds-border-subtle);
+  border: 1px solid var(--ds-border-subtle); /* More subtle border */
+  margin-bottom: var(--ds-space-sm);
 }
 
 .itemRowHeader {
@@ -587,17 +582,20 @@
 }
 
 .itemHeader {
-  margin-bottom: var(--ds-space-xs); /* Reduced from sm to xs */
+  margin-bottom: var(--ds-space-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
 }
 
 .itemCodeBadge {
-  background: var(--ds-color-success);
+  background: var(--ds-color-primary);
   color: white;
   padding: 2px var(--ds-space-sm);
   border-radius: var(--ds-radius-xl);
   font-size: var(--font-xs);
   font-weight: 600;
-  margin-right: var(--ds-space-sm);
+  align-self: flex-start; /* Badge only takes needed width */
 }
 
 .itemDescription {
@@ -605,7 +603,7 @@
   font-size: var(--font-sm);
   color: var(--ds-text-primary);
   display: block;
-  margin-bottom: var(--ds-space-xs);
+  width: 100%; /* Full width for description */
 }
 
 .itemDetails {
@@ -620,7 +618,7 @@
 
 .itemAmount {
   text-align: right;
-  background: var(--ds-bg-expanded);
+  background: var(--ds-bg-subtle); /* Much lighter background */
   padding: var(--ds-space-sm) var(--ds-space-md);
   border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-border-subtle);
@@ -643,7 +641,7 @@
   border-radius: var(--ds-radius-md);
   padding: var(--ds-space-lg);
   margin-top: var(--ds-space-lg);
-  border: 2px solid var(--ds-color-success);
+  border: 2px solid var(--ds-border-primary);
   box-shadow: var(--ds-shadow-elevated);
 }
 
@@ -665,7 +663,7 @@
 }
 
 .totalTax {
-  color: var(--ds-color-success);
+  color: var(--ds-text-primary); /* Neutral color for tax amounts */
 }
 
 .totalFinal {
@@ -685,8 +683,8 @@
 .totalFinalValue {
   font-size: var(--font-xl);
   font-weight: 600;
-  color: var(--ds-color-success);
-  background: var(--ds-bg-status-active-subtle);
+  color: var(--ds-text-primary); /* Neutral color for final totals */
+  background: var(--ds-bg-subtle);
   padding: var(--ds-space-xs) var(--ds-space-md);
   border-radius: var(--ds-radius-md);
 }
@@ -704,14 +702,15 @@
 
 .professionalItemsSection .itemsEnhanced {
   margin-top: 0;
-  border: 2px solid var(--ds-color-success);
-  box-shadow: var(--ds-shadow-elevated);
+  border: 1px solid var(--ds-border-light);
+  box-shadow: var(--ds-shadow-card);
 }
 
 /* Collapsible Items Header */
 .itemsToggleHeader {
-  background: var(--ds-color-success);
-  color: white;
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  border: 2px solid var(--ds-border-primary);
   padding: var(--ds-space-md);
   border-radius: var(--ds-radius-lg);
   display: flex;
@@ -723,17 +722,17 @@
 }
 
 .itemsToggleHeader:hover {
-  background: #059669;  /* Darker green than --ds-color-success */
-  color: white;
+  background: var(--ds-bg-card);
+  border-color: var(--ds-color-primary);
   transform: translateY(-1px);
-  box-shadow: var(--ds-shadow-elevated);
+  box-shadow: var(--ds-shadow-card);
 }
 
 .itemsToggleHeader:hover .itemsHeaderText h4,
 .itemsToggleHeader:hover .itemsHeaderText p,
 .itemsToggleHeader:hover .itemsHeaderIcon,
 .itemsToggleHeader:hover .itemsExpandIcon {
-  color: white !important;
+  color: var(--ds-text-primary) !important;
 }
 
 .itemsHeaderContent {
@@ -758,10 +757,16 @@
   opacity: 0.9;
 }
 
-.itemsExpandIcon {
+/* Use design system expansion indicator with size override for better touch targets */
+.itemsExpandIcon.ds-card-expand-indicator {
   font-size: var(--font-lg);
-  font-weight: bold;
-  transition: transform 0.3s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-sm);
+  cursor: pointer;
 }
 
 .itemsContent {

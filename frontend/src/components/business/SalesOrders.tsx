@@ -35,7 +35,16 @@ function SalesOrders({
   // Use the hook's toggle function with our custom data attribute
   const toggleDetails = useCallback((orderId: string) => {
     toggleExpansion(orderId, 'data-order-id');
-  }, [toggleExpansion]);
+    
+    // When main card collapses, also collapse items section
+    if (isExpanded(orderId)) {
+      setExpandedItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(orderId);
+        return newSet;
+      });
+    }
+  }, [toggleExpansion, isExpanded]);
   
   // Professional Order Display with Feature Toggle Support
   const [useStructuredData, setUseStructuredData] = useState(getFeatureToggleState('STRUCTURED_ITEMS_ENABLED'));
@@ -101,14 +110,12 @@ function SalesOrders({
     if (useStructuredData && hasStructuredItems(order)) {
       const items = order.itemsStructured as OrderItem[];
       if (items.length === 1) {
-        const deliveryProgress = items[0].deliveredQuantity ? ` (${items[0].deliveredQuantity}/${items[0].quantity} delivered)` : ` (${items[0].quantity} ${items[0].unit})`;
-        return `${items[0].description}${deliveryProgress}`;
+        return `${items[0].description} (${items[0].quantity} ${items[0].unit})`;
       } else {
         // Show first item details + more count for multiple items
         const firstItem = items[0];
         const remainingCount = items.length - 1;
-        const deliveryProgress = firstItem.deliveredQuantity ? ` (${firstItem.deliveredQuantity}/${firstItem.quantity} delivered)` : ` (${firstItem.quantity} ${firstItem.unit})`;
-        return `${firstItem.description}${deliveryProgress} + ${remainingCount} more items`;
+        return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
       }
     }
     // Fallback to existing string display
@@ -142,65 +149,24 @@ function SalesOrders({
                       <span>
                         <strong>Qty:</strong> {item.quantity.toLocaleString()} {item.unit}
                       </span>
+                      <span>
+                        <strong>Rate:</strong> {formatCurrency(item.rate)}/{item.unit}
+                      </span>
                     </div>
-                    
-                    {/* Production Tracking Details */}
-                    <div className={styles.productionTracking}>
-                      <div className={styles.deliveryProgress}>
-                        <span className={styles.deliveryLabel}>
-                          🚚 Delivery Progress:
-                        </span>
-                        <span className={styles.deliveryValue}>
-                          {item.deliveredQuantity || 0} / {item.quantity} {item.unit}
-                        </span>
-                        <div className={styles.progressBar}>
-                          <div 
-                            className={styles.progressFill}
-                            style={{ 
-                              width: `${((item.deliveredQuantity || 0) / item.quantity) * 100}%` 
-                            }}
-                          ></div>
-                        </div>
+                  </div>
+                  <div className={styles.itemAmount}>
+                    <div className={styles.itemAmountValue}>
+                      {formatCurrency(item.taxableAmount)}
+                    </div>
+                    {item.discount > 0 && (
+                      <div className={styles.itemDiscount}>
+                        -{item.discount}% discount
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-          
-          {/* Production Summary */}
-          <div className={styles.productionSummary}>
-            <div className={styles.summaryRow}>
-              <span className={styles.summaryLabel}>🏭 Overall Progress:</span>
-              <span className={styles.summaryValue}>{order.progressPercentage || 0}%</span>
-            </div>
-            <div className={styles.overallProgressBar}>
-              <div 
-                className={styles.overallProgressFill}
-                style={{ width: `${order.progressPercentage || 0}%` }}
-              ></div>
-            </div>
-          </div>
-          
-          {/* Production Summary - Non-Financial */}
-          <div className={styles.productionSummaryFooter}>
-            <div className={styles.summaryRow}>
-              <span className={styles.summaryLabel}>📋 Total Items:</span>
-              <span className={styles.summaryValue}>{items.length} items</span>
-            </div>
-            <div className={styles.summaryRow}>
-              <span className={styles.summaryLabel}>📦 Total Quantity:</span>
-              <span className={styles.summaryValue}>
-                {items.reduce((sum, item) => sum + item.quantity, 0).toLocaleString()} units
-              </span>
-            </div>
-            <div className={styles.summaryRow}>
-              <span className={styles.summaryLabel}>✅ Delivered:</span>
-              <span className={styles.summaryValue}>
-                {items.reduce((sum, item) => sum + (item.deliveredQuantity || 0), 0).toLocaleString()} units
-              </span>
-            </div>
           </div>
         </div>
       );
@@ -229,12 +195,9 @@ function SalesOrders({
     <div className={styles.salesOrdersScreen}>
       <div className={styles.pageContent}>
       
-        {/* Professional Production Tracking Toggle Section */}
+        {/* Professional Item Details Toggle Section */}
         <div className={styles.professionalToggle}>
-          <div>
-            <h3>Production Tracking & Item Details</h3>
-            <p>Enhanced view with delivery progress, item breakdown, and production status</p>
-          </div>
+          <span>Item Display:</span>
           <div 
             className={styles.toggleButton}
             onClick={() => handleToggleChange(!useStructuredData)}
@@ -245,7 +208,7 @@ function SalesOrders({
               onChange={() => handleToggleChange(!useStructuredData)}
             />
             <span className={styles.toggleSlider}>
-              {useStructuredData ? 'Professional View' : 'Standard View'}
+              {useStructuredData ? 'Professional' : 'Basic'}
             </span>
           </div>
         </div>
@@ -342,7 +305,7 @@ function SalesOrders({
                     <p><strong>{t('orderStatus')}:</strong> {order.statusMessage}</p>
                   </div>
 
-                  {/* Professional Production Tracking Items Section */}
+                  {/* Professional Item Details Section */}
                   {useStructuredData && hasStructuredItems(order) && (
                     <div className={styles.professionalItemsSection}>
                       <div 
@@ -350,13 +313,13 @@ function SalesOrders({
                         onClick={() => toggleItemsExpansion(order.id)}
                       >
                         <div className={styles.itemsHeaderContent}>
-                          <span className={styles.itemsHeaderIcon}>🏭</span>
+                          <span className={styles.itemsHeaderIcon}>📋</span>
                           <div className={styles.itemsHeaderText}>
-                            <h4>Production Tracking & Item Details</h4>
+                            <h4>Item Details</h4>
                             <p>{getOrderItemsHeader(order)}</p>
                           </div>
                         </div>
-                        <div className={styles.itemsExpandIcon}>
+                        <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
                           {expandedItems.has(order.id) ? '▼' : '▶'}
                         </div>
                       </div>

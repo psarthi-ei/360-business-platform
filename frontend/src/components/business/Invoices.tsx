@@ -77,6 +77,12 @@ function Invoices({
     if (expandedDetails.has(invoiceId)) {
       // Simple collapse - no sequencing needed
       setExpandedDetails(new Set());
+      // Also collapse items section when main card collapses
+      setExpandedItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(invoiceId);
+        return newSet;
+      });
     } else {
       // Sequential: First collapse any open card
       if (expandedDetails.size > 0) {
@@ -484,17 +490,16 @@ function Invoices({
 
         {/* Professional Display Toggle (Phase 2) */}
         <div className={styles.professionalToggle}>
-          <div>
-            <h3>💼 Professional Invoice Display</h3>
-            <p>Toggle between basic and professional structured item display with GST compliance</p>
-          </div>
+          <span>Item Display:</span>
           <label className={styles.toggleButton}>
             <input 
               type="checkbox" 
               checked={useStructuredData}
               onChange={(e) => handleToggleChange(e.target.checked)}
             />
-            <span className={styles.toggleSlider}></span>
+            <span className={styles.toggleSlider}>
+              {useStructuredData ? 'Professional' : 'Basic'}
+            </span>
           </label>
         </div>
 
@@ -576,7 +581,7 @@ function Invoices({
                               <p>{getInvoiceItemsHeader(invoice)}</p>
                             </div>
                           </div>
-                          <div className={styles.itemsExpandIcon}>
+                          <div className={`${styles.itemsExpandIcon} ds-card-expand-indicator`}>
                             {expandedItems.has(invoice.id) ? '▼' : '▶'}
                           </div>
                         </div>

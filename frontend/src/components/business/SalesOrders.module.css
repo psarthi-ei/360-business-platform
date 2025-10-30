@@ -250,18 +250,18 @@
 
 /* ===== PROFESSIONAL PRODUCTION TRACKING DISPLAY ===== */
 
-/* Professional Toggle Section - Matching Invoices/QuotationOrders Style */
+/* Professional Toggle Section - Compact Style */
 .professionalToggle {
-  padding: var(--ds-space-md);
-  background: var(--ds-btn-primary);
-  color: white;
-  border-radius: var(--ds-radius-md);
-  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  border-radius: var(--ds-radius-sm);
+  margin-bottom: var(--ds-space-sm);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--ds-space-sm);
+  font-size: var(--font-sm);
 }
 
 .professionalToggle h3 {
@@ -307,8 +307,9 @@
 }
 
 .itemsToggleHeader {
-  background: var(--ds-color-success);
-  color: white;
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  border: 2px solid var(--ds-border-primary);
   padding: var(--ds-space-md);
   border-radius: var(--ds-radius-lg);
   display: flex;
@@ -320,17 +321,17 @@
 }
 
 .itemsToggleHeader:hover {
-  background: #059669;  /* Darker green than --ds-color-success */
-  color: white;
+  background: var(--ds-bg-card);
+  border-color: var(--ds-color-primary);
   transform: translateY(-1px);
-  box-shadow: var(--ds-shadow-elevated);
+  box-shadow: var(--ds-shadow-card);
 }
 
 .itemsToggleHeader:hover .itemsHeaderText h4,
 .itemsToggleHeader:hover .itemsHeaderText p,
 .itemsToggleHeader:hover .itemsHeaderIcon,
 .itemsToggleHeader:hover .itemsExpandIcon {
-  color: white !important;
+  color: var(--ds-text-primary) !important;
 }
 
 .itemsHeaderContent {
@@ -355,10 +356,16 @@
   opacity: 0.9;
 }
 
-.itemsExpandIcon {
+/* Use design system expansion indicator with size override for better touch targets */
+.itemsExpandIcon.ds-card-expand-indicator {
   font-size: var(--font-lg);
-  font-weight: bold;
-  transition: transform 0.3s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-sm);
+  cursor: pointer;
 }
 
 .itemsContent {
@@ -370,23 +377,25 @@
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-lg);
   padding: var(--ds-space-md);
-  border: 2px solid var(--ds-color-success);
+  border: 1px solid var(--ds-border-light);
   margin-top: 0;
-  box-shadow: var(--ds-shadow-elevated);
+  box-shadow: var(--ds-shadow-card);
 }
 
 .itemsList {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-space-sm); /* Reduced spacing between items */
+  gap: var(--ds-space-md); /* Clean spacing for item separation */
+  padding: 0; /* Remove padding to avoid nested box effect */
 }
 
 .itemRow {
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-sm); /* Reduced padding */
-  border: 1px solid var(--ds-border-light);
+  padding: var(--ds-space-md);
+  border: 1px solid var(--ds-border-subtle); /* More subtle border */
   transition: all 0.3s ease;
+  margin-bottom: var(--ds-space-sm);
 }
 
 .itemRow:hover {
@@ -408,14 +417,17 @@
 
 .itemHeader {
   margin-bottom: var(--ds-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
 }
 
 .itemDescription {
-  font-size: var(--font-base);
+  font-size: var(--font-sm);
   font-weight: 600;
   color: var(--ds-text-primary);
   display: block;
-  margin-bottom: var(--ds-space-xs);
+  width: 100%; /* Full width for description */
 }
 
 .itemDetails {
@@ -434,17 +446,34 @@
   border-radius: var(--ds-radius-md);
   font-size: var(--font-xs);
   font-weight: 600;
+  align-self: flex-start; /* Badge only takes needed width */
 }
 
 .itemAmount {
   text-align: right;
   min-width: 120px;
+  background: var(--ds-bg-subtle); /* Much lighter background */
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.itemAmountValue {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.itemDiscount {
+  font-size: var(--font-xs);
+  color: var(--ds-color-danger);
+  margin-top: var(--ds-space-xs);
 }
 
 .itemPrice {
   font-size: var(--font-lg);
   font-weight: 600;
-  color: var(--ds-color-success);
+  color: var(--ds-text-primary); /* Neutral color for amounts */
 }
 
 /* Production Tracking Specific Styles */
@@ -455,19 +484,19 @@
   margin-top: var(--ds-space-sm);
 }
 
-.deliveryProgress {
+.productionProgress {
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-xs);
 }
 
-.deliveryLabel {
+.productionLabel {
   font-size: var(--font-sm);
   font-weight: 600;
   color: var(--ds-text-primary);
 }
 
-.deliveryValue {
+.productionValue {
   font-size: var(--font-sm);
   color: var(--ds-text-secondary);
 }
@@ -508,9 +537,26 @@
 }
 
 .summaryValue {
-  font-size: var(--font-lg);
-  font-weight: 700;
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+/* Progressive color classes for different summary types */
+.summaryValueNeutral {
+  color: var(--ds-text-primary);
+}
+
+.summaryValueSuccess {
   color: var(--ds-color-success);
+}
+
+.summaryValueProgress {
+  color: var(--ds-color-info);
+}
+
+.summaryValueWarning {
+  color: var(--ds-color-warning);
 }
 
 .overallProgressBar {
@@ -566,14 +612,7 @@
 /* Mobile Responsive for Professional Display */
 @media (max-width: 768px) {
   .professionalToggle {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-  }
-  
-  .professionalToggle .toggleButton {
-    align-self: flex-end;
-    margin-top: var(--ds-space-sm);
+    justify-content: space-between;
   }
 
   .itemsEnhanced {
@@ -614,16 +653,16 @@
   }
 
   .itemAmount {
-    text-align: left;
     min-width: auto;
     width: 100%;
+    /* Keep right alignment on mobile too - consistent with Quote */
   }
 
   .itemDetails {
     gap: var(--ds-space-sm);
   }
 
-  .deliveryProgress {
+  .productionProgress {
     gap: var(--ds-space-xs);
   }
 
