@@ -1,7 +1,7 @@
 // Material Availability Helper Functions
 // Dynamic calculation functions for stock reservation and material allocation
 
-import { mockConsolidatedMaterialRequirements, mockConsolidatedPurchaseRequests } from './procurementMockData';
+import { mockConsolidatedMaterialRequirements, mockConsolidatedPurchaseRequests, ConsolidatedMaterialRequirement, MaterialItem, ConsolidatedPurchaseRequest } from './procurementMockData';
 import { getOnHandStock } from './inventoryMockData';
 import { getSoftReservedQuantity, getHardReservedQuantity, getActiveOrderReservations } from './stockReservationMockData';
 
@@ -391,7 +391,7 @@ export const generatePRId = (): string => {
 /**
  * Generate consolidated PR from consolidated MR
  */
-export const generateConsolidatedPRFromMR = (consolidatedMR: any): any => {
+export const generateConsolidatedPRFromMR = (consolidatedMR: ConsolidatedMaterialRequirement): ConsolidatedPurchaseRequest => {
   
   return {
     id: `PR-${consolidatedMR.salesOrderId}-CONSOLIDATED`,
@@ -399,21 +399,20 @@ export const generateConsolidatedPRFromMR = (consolidatedMR: any): any => {
     salesOrderId: consolidatedMR.salesOrderId,
     customerName: consolidatedMR.customerName,
     orderValue: consolidatedMR.orderValue,
-    materials: consolidatedMR.materials.map((material: any) => ({
+    materials: consolidatedMR.materials.map((material: MaterialItem) => ({
       materialName: material.materialName,
       requiredQuantity: material.requiredQuantity,
       unit: material.unit,
-      estimatedUnitCost: material.estimatedUnitCost || 0,
-      estimatedTotalCost: material.estimatedTotalCost || 0,
-      forOrderItems: material.forOrderItems || [],
+      estimatedUnitCost: 0, // To be filled by procurement team
+      estimatedTotalCost: 0, // To be filled by procurement team
+      forOrderItems: [], // To be linked by procurement team
       urgency: material.urgency,
-      preferredVendor: material.supplierPreference,
-      qualitySpecs: material.qualitySpecs,
+      preferredVendor: 'TBD', // To be determined by procurement team
+      qualitySpecs: 'Standard', // Default - to be specified by procurement team
       deliveryRequirement: `Deliver by ${consolidatedMR.requiredDate}`,
-      notes: material.notes
+      notes: material.notes || 'Material requirement from production planning'
     })),
-    totalEstimatedCost: consolidatedMR.materials.reduce((sum: number, material: any) => 
-      sum + (material.estimatedTotalCost || 0), 0),
+    totalEstimatedCost: 0, // To be calculated by procurement team
     businessJustification: `Customer ${consolidatedMR.customerName} delivery commitment requires material procurement by ${consolidatedMR.requiredDate}`,
     urgency: consolidatedMR.urgency,
     requiredDate: consolidatedMR.requiredDate,
@@ -437,16 +436,10 @@ export const calculatePRImpactLevel = (totalCost: number, orderValue: number): '
 /**
  * Get vendor breakdown summary from materials
  */
-export const getVendorBreakdown = (materials: any[]): string => {
-  const vendorCosts = materials.reduce((acc: any, material: any) => {
-    const vendor = material.preferredVendor || 'Local Supplier';
-    acc[vendor] = (acc[vendor] || 0) + material.estimatedTotalCost;
-    return acc;
-  }, {});
-  
-  return Object.entries(vendorCosts)
-    .map(([vendor, cost]) => `${vendor} (₹${(cost as number).toLocaleString()})`)
-    .join(', ');
+export const getVendorBreakdown = (materials: MaterialItem[]): string => {
+  // Since MaterialItem doesn't have cost info, return a placeholder breakdown
+  const materialCount = materials.length;
+  return `${materialCount} materials - Vendor quotes pending`;
 };
 
 /**
@@ -477,21 +470,20 @@ export const getImpactLevelDisplay = (totalCost: number, orderValue: number): st
  * Calculate consolidated PR counts for filter system
  */
 export const calculateConsolidatedPRCounts = () => {
-  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
   
   const nextWeek = new Date();
   nextWeek.setDate(nextWeek.getDate() + 7);
   
   return {
     all: mockConsolidatedPurchaseRequests.length,
-    pending_approval: mockConsolidatedPurchaseRequests.filter((pr: any) => pr.status === 'pending').length,
-    high_impact: mockConsolidatedPurchaseRequests.filter((pr: any) => 
+    pending_approval: mockConsolidatedPurchaseRequests.filter((pr: ConsolidatedPurchaseRequest) => pr.status === 'pending').length,
+    high_impact: mockConsolidatedPurchaseRequests.filter((pr: ConsolidatedPurchaseRequest) => 
       calculatePRImpactLevel(pr.totalEstimatedCost, pr.orderValue) === 'high'
     ).length,
-    urgent_delivery: mockConsolidatedPurchaseRequests.filter((pr: any) => 
+    urgent_delivery: mockConsolidatedPurchaseRequests.filter((pr: ConsolidatedPurchaseRequest) => 
       new Date(pr.requiredDate) <= nextWeek
     ).length,
-    approved: mockConsolidatedPurchaseRequests.filter((pr: any) => pr.status === 'approved').length
+    approved: mockConsolidatedPurchaseRequests.filter((pr: ConsolidatedPurchaseRequest) => pr.status === 'approved').length
   };
 };
 
@@ -499,9 +491,7 @@ export const calculateConsolidatedPRCounts = () => {
  * Approve consolidated purchase request
  */
 export const approveConsolidatedPR = (prId: string, approvedBy: string, reasoning?: string) => {
-  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
-  
-  const pr = mockConsolidatedPurchaseRequests.find((pr: any) => pr.id === prId);
+  const pr = mockConsolidatedPurchaseRequests.find((pr: ConsolidatedPurchaseRequest) => pr.id === prId);
   if (!pr) return null;
   
   pr.status = 'approved';
@@ -516,9 +506,7 @@ export const approveConsolidatedPR = (prId: string, approvedBy: string, reasonin
  * Reject consolidated purchase request
  */
 export const rejectConsolidatedPR = (prId: string, rejectedBy: string, reasoning: string) => {
-  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
-  
-  const pr = mockConsolidatedPurchaseRequests.find((pr: any) => pr.id === prId);
+  const pr = mockConsolidatedPurchaseRequests.find((pr: ConsolidatedPurchaseRequest) => pr.id === prId);
   if (!pr) return null;
   
   pr.status = 'rejected';
