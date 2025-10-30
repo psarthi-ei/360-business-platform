@@ -85,6 +85,10 @@ const PurchaseRequests = ({
       alert(`📋 Generating Purchase Orders for ${pr.customerName} - will create vendor-specific POs`);
     }
   };
+
+  const handleViewRelatedPOs = (prId: string) => {
+    alert(`🔍 Navigating to Purchase Orders for Consolidated PR: ${prId}`);
+  };
   
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -312,12 +316,20 @@ const PurchaseRequests = ({
                           </>
                         )}
                         {pr.status === 'approved' && (
-                          <button 
-                            className="ds-btn ds-btn-primary"
-                            onClick={() => handlePOGeneration(pr.id)}
-                          >
-                            📋 Generate Purchase Orders
-                          </button>
+                          <>
+                            <button 
+                              className="ds-btn ds-btn-primary"
+                              onClick={() => handlePOGeneration(pr.id)}
+                            >
+                              📋 Generate Purchase Orders
+                            </button>
+                            <button 
+                              className="ds-btn ds-btn-secondary"
+                              onClick={() => handleViewRelatedPOs(pr.id)}
+                            >
+                              👁️ View Related POs
+                            </button>
+                          </>
                         )}
                       </div>
                     </div>

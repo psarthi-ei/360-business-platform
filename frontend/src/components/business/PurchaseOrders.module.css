@@ -52,6 +52,79 @@
 
 /* Status-based border colors now handled by global .ds-card-status-* system in index.css */
 
+/* ===== EXPANDED CONTENT ORGANIZATION ===== */
+
+/* Section 1: Business Metrics Grid */
+.businessMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.metricCard {
+  background: var(--ds-bg-secondary);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricLabel {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.metricValue {
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+/* Section 2: Context Cards */
+.contextSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.contextCard {
+  background: var(--ds-bg-secondary);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-sm);
+}
+
+.contextHeader {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  margin-bottom: 6px;
+}
+
+.contextContent {
+  font-size: var(--font-xs);
+  color: var(--ds-text-primary);
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.contextContent div {
+  margin-bottom: 4px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.contextContent div:last-child {
+  margin-bottom: 0;
+}
+
 /* Design System Contextual Actions */
 .cardActions {
   display: flex;
@@ -80,5 +153,22 @@
     margin-right: 0;
     padding-left: 0;     /* Remove padding on mobile */
     padding-right: 0;    /* Remove padding on mobile */
+  }
+  
+  /* Business Metrics - 2 columns on mobile */
+  .businessMetrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Context Section - Single column on mobile */
+  .contextSection {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Ensure content doesn't overflow */
+  .contextContent {
+    overflow-x: hidden;
+    word-wrap: break-word;
+    max-width: 100%;
   }
 }

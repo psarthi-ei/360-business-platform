@@ -1,7 +1,7 @@
 // Material Availability Helper Functions
 // Dynamic calculation functions for stock reservation and material allocation
 
-import { mockConsolidatedMaterialRequirements, mockPurchaseRequests } from './procurementMockData';
+import { mockConsolidatedMaterialRequirements, mockConsolidatedPurchaseRequests } from './procurementMockData';
 import { getOnHandStock } from './inventoryMockData';
 import { getSoftReservedQuantity, getHardReservedQuantity, getActiveOrderReservations } from './stockReservationMockData';
 
@@ -341,7 +341,7 @@ export const getLinkedPurchaseRequest = (orderId: string) => {
   }
   
   // Find PR by the linkedPR ID
-  const linkedPR = mockPurchaseRequests.find(pr => pr.id === consolidatedMR.linkedPR);
+  const linkedPR = mockConsolidatedPurchaseRequests.find(pr => pr.id === consolidatedMR.linkedPR);
   
   return linkedPR || null;
 };
@@ -384,4 +384,147 @@ export const generatePRId = (): string => {
   const year = new Date().getFullYear();
   const timestamp = Date.now().toString().slice(-6);
   return `PR-${year}-${timestamp}`;
+};
+
+// ==================== CONSOLIDATED PURCHASE REQUEST HELPERS (PHASE 3) ====================
+
+/**
+ * Generate consolidated PR from consolidated MR
+ */
+export const generateConsolidatedPRFromMR = (consolidatedMR: any): any => {
+  
+  return {
+    id: `PR-${consolidatedMR.salesOrderId}-CONSOLIDATED`,
+    consolidatedMrId: consolidatedMR.id,
+    salesOrderId: consolidatedMR.salesOrderId,
+    customerName: consolidatedMR.customerName,
+    orderValue: consolidatedMR.orderValue,
+    materials: consolidatedMR.materials.map((material: any) => ({
+      materialName: material.materialName,
+      requiredQuantity: material.requiredQuantity,
+      unit: material.unit,
+      estimatedUnitCost: material.estimatedUnitCost || 0,
+      estimatedTotalCost: material.estimatedTotalCost || 0,
+      forOrderItems: material.forOrderItems || [],
+      urgency: material.urgency,
+      preferredVendor: material.supplierPreference,
+      qualitySpecs: material.qualitySpecs,
+      deliveryRequirement: `Deliver by ${consolidatedMR.requiredDate}`,
+      notes: material.notes
+    })),
+    totalEstimatedCost: consolidatedMR.materials.reduce((sum: number, material: any) => 
+      sum + (material.estimatedTotalCost || 0), 0),
+    businessJustification: `Customer ${consolidatedMR.customerName} delivery commitment requires material procurement by ${consolidatedMR.requiredDate}`,
+    urgency: consolidatedMR.urgency,
+    requiredDate: consolidatedMR.requiredDate,
+    status: 'pending',
+    requestedBy: 'Production Planning',
+    requestDate: new Date().toISOString().split('T')[0]
+  };
+};
+
+/**
+ * Calculate business impact level based on cost and order value
+ */
+export const calculatePRImpactLevel = (totalCost: number, orderValue: number): 'low' | 'medium' | 'high' => {
+  const percentage = (totalCost / orderValue) * 100;
+  
+  if (percentage > 60 || totalCost > 400000) return 'high';
+  if (percentage > 30 || totalCost > 200000) return 'medium';
+  return 'low';
+};
+
+/**
+ * Get vendor breakdown summary from materials
+ */
+export const getVendorBreakdown = (materials: any[]): string => {
+  const vendorCosts = materials.reduce((acc: any, material: any) => {
+    const vendor = material.preferredVendor || 'Local Supplier';
+    acc[vendor] = (acc[vendor] || 0) + material.estimatedTotalCost;
+    return acc;
+  }, {});
+  
+  return Object.entries(vendorCosts)
+    .map(([vendor, cost]) => `${vendor} (₹${(cost as number).toLocaleString()})`)
+    .join(', ');
+};
+
+/**
+ * Calculate investment percentage of total cost vs order value
+ */
+export const getInvestmentPercentage = (totalCost: number, orderValue: number): number => {
+  return Math.round((totalCost / orderValue) * 100);
+};
+
+/**
+ * Get impact level display with proper styling
+ */
+export const getImpactLevelDisplay = (totalCost: number, orderValue: number): string => {
+  const level = calculatePRImpactLevel(totalCost, orderValue);
+  const percentage = getInvestmentPercentage(totalCost, orderValue);
+  
+  switch (level) {
+    case 'high':
+      return `🔥 High Impact (${percentage}%)`;
+    case 'medium':
+      return `⚡ Medium Impact (${percentage}%)`;
+    default:
+      return `📊 Standard (${percentage}%)`;
+  }
+};
+
+/**
+ * Calculate consolidated PR counts for filter system
+ */
+export const calculateConsolidatedPRCounts = () => {
+  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
+  
+  const nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  
+  return {
+    all: mockConsolidatedPurchaseRequests.length,
+    pending_approval: mockConsolidatedPurchaseRequests.filter((pr: any) => pr.status === 'pending').length,
+    high_impact: mockConsolidatedPurchaseRequests.filter((pr: any) => 
+      calculatePRImpactLevel(pr.totalEstimatedCost, pr.orderValue) === 'high'
+    ).length,
+    urgent_delivery: mockConsolidatedPurchaseRequests.filter((pr: any) => 
+      new Date(pr.requiredDate) <= nextWeek
+    ).length,
+    approved: mockConsolidatedPurchaseRequests.filter((pr: any) => pr.status === 'approved').length
+  };
+};
+
+/**
+ * Approve consolidated purchase request
+ */
+export const approveConsolidatedPR = (prId: string, approvedBy: string, reasoning?: string) => {
+  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
+  
+  const pr = mockConsolidatedPurchaseRequests.find((pr: any) => pr.id === prId);
+  if (!pr) return null;
+  
+  pr.status = 'approved';
+  pr.reviewedBy = approvedBy;
+  pr.reviewDate = new Date().toISOString().split('T')[0];
+  pr.approvalReasoning = reasoning || `Materials approved for ${pr.customerName} order delivery timeline`;
+  
+  return pr;
+};
+
+/**
+ * Reject consolidated purchase request
+ */
+export const rejectConsolidatedPR = (prId: string, rejectedBy: string, reasoning: string) => {
+  const { mockConsolidatedPurchaseRequests } = require('./procurementMockData');
+  
+  const pr = mockConsolidatedPurchaseRequests.find((pr: any) => pr.id === prId);
+  if (!pr) return null;
+  
+  pr.status = 'rejected';
+  pr.reviewedBy = rejectedBy;
+  pr.reviewDate = new Date().toISOString().split('T')[0];
+  pr.approvalReasoning = reasoning;
+  
+  return pr;
 };

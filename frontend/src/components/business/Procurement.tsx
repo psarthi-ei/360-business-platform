@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { ActionParams } from '../../services/nlp/types';
 import { 
-  mockPurchaseRequests, 
+  mockConsolidatedPurchaseRequests, 
   mockPurchaseOrders
 } from '../../data/procurementMockData';
 import styles from './Procurement.module.css';
@@ -51,18 +51,20 @@ const calculateMaterialStatusCounts = () => {
 };
 
 const calculatePRCounts = () => ({
-  all: mockPurchaseRequests.length,
-  pending: mockPurchaseRequests.filter(pr => pr.status === 'pending').length,
-  approved: mockPurchaseRequests.filter(pr => pr.status === 'approved').length,
-  rejected: mockPurchaseRequests.filter(pr => pr.status === 'rejected').length
+  all: mockConsolidatedPurchaseRequests.length,
+  pending: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'pending').length,
+  approved: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'approved').length,
+  rejected: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'rejected').length
 });
 
-const calculatePOCounts = () => ({
-  all: mockPurchaseOrders.length,
-  open: mockPurchaseOrders.filter(po => po.status === 'open').length,
-  delivered: mockPurchaseOrders.filter(po => po.status === 'delivered').length,
-  cancelled: mockPurchaseOrders.filter(po => po.status === 'cancelled').length
-});
+const calculatePOCounts = () => {
+  return {
+    all: mockPurchaseOrders.length,
+    open: mockPurchaseOrders.filter(po => po.status === 'open').length,
+    delivered: mockPurchaseOrders.filter(po => po.status === 'delivered').length,
+    cancelled: mockPurchaseOrders.filter(po => po.status === 'cancelled').length
+  };
+};
 
 const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: ProcurementProps) => {
   // State Management
@@ -169,10 +171,10 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         }
         case 'prs': {
           const prCounts = {
-            all: mockPurchaseRequests.length,
-            pending: mockPurchaseRequests.filter(pr => pr.status === 'pending').length,
-            approved: mockPurchaseRequests.filter(pr => pr.status === 'approved').length,
-            rejected: mockPurchaseRequests.filter(pr => pr.status === 'rejected').length
+            all: mockConsolidatedPurchaseRequests.length,
+            pending: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'pending').length,
+            approved: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'approved').length,
+            rejected: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'rejected').length
           };
           return [
             { value: 'all', label: 'All Requests', count: prCounts.all },
@@ -182,12 +184,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
           ];
         }
         case 'pos': {
-          const poCounts = {
-            all: mockPurchaseOrders.length,
-            open: mockPurchaseOrders.filter(po => po.status === 'open').length,
-            delivered: mockPurchaseOrders.filter(po => po.status === 'delivered').length,
-            cancelled: mockPurchaseOrders.filter(po => po.status === 'cancelled').length
-          };
+          const poCounts = calculatePOCounts();
           return [
             { value: 'all', label: 'All Orders', count: poCounts.all },
             { value: 'open', label: '⏳ Open', count: poCounts.open },
