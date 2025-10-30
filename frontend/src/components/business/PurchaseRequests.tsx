@@ -150,7 +150,7 @@ const PurchaseRequests = ({
                   
                   {/* Status - Business Impact Level */}
                   <div className="ds-card-status">
-                    {statusInfo.icon} {statusInfo.label} • {impactLevel} • {pr.materials.length} materials
+                    {statusInfo.icon} {statusInfo.label} • {impactLevel}
                   </div>
                   
                   {/* Meta - Business Value & Urgency */}
@@ -158,8 +158,8 @@ const PurchaseRequests = ({
                     className="ds-card-meta"
                     title={`${pr.materials.length} materials • ${formatCurrency(pr.totalEstimatedCost)} investment • Due: ${formatDate(pr.requiredDate)}`}
                   >
-                    {pr.materials.length} materials • {formatCurrency(pr.totalEstimatedCost)} investment<br />
-                    Due: {formatDate(pr.requiredDate)} • {getInvestmentPercentage(pr.totalEstimatedCost, pr.orderValue)}% of order • Order {pr.salesOrderId}
+                    {pr.materials.length} materials • {formatCurrency(pr.totalEstimatedCost)}<br />
+                    Due: {formatDate(pr.requiredDate)} • {getInvestmentPercentage(pr.totalEstimatedCost, pr.orderValue)}% of order
                   </div>
 
                   {/* Expand Indicator */}

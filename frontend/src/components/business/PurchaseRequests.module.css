@@ -117,8 +117,10 @@
 .materialsTable {
   border: 1px solid var(--ds-border-primary);
   border-radius: var(--ds-radius-sm);
-  overflow: hidden;
+  overflow: auto;
   display: block; /* Show on desktop */
+  max-width: 100%;
+  width: 100%;
 }
 
 .tableHeader {
@@ -138,7 +140,15 @@
   padding: var(--ds-space-sm);
   border-bottom: 1px solid var(--ds-border-primary);
   font-size: var(--font-xs);
-  align-items: center;
+  align-items: start;
+}
+
+.tableHeader > div,
+.tableRow > div {
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .tableRow:last-child {
@@ -259,10 +269,15 @@
   font-size: var(--font-xs);
   color: var(--ds-text-primary);
   line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .contextContent div {
   margin-bottom: 4px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .contextContent div:last-child {
@@ -283,6 +298,7 @@
 @media (max-width: 768px) {
   .purchaseRequestsScreen {
     /* Let Design System handle padding consistently */
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
   
   .prContainer {
@@ -290,6 +306,8 @@
     margin-right: 0;
     padding-left: 0;     /* Remove padding on mobile */
     padding-right: 0;    /* Remove padding on mobile */
+    max-width: 100vw;    /* Ensure no overflow */
+    overflow-x: hidden;  /* Prevent card overflow */
   }
 
   .businessMetrics {
@@ -309,5 +327,10 @@
   .contextSection {
     grid-template-columns: 1fr;
     gap: var(--ds-space-xs);
+  }
+
+  .contextCard {
+    min-width: 0; /* Allow flex shrinking */
+    overflow-wrap: break-word;
   }
 }
