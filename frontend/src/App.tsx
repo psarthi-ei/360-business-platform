@@ -9,7 +9,6 @@ import LeadManagement from './components/business/LeadManagement';
 import QuotationOrders from './components/business/QuotationOrders';
 import SalesOrders from './components/business/SalesOrders';
 import Sales from './components/business/Sales';
-import Payments from './components/business/Payments';
 import Invoices from './components/business/Invoices';
 import ExternalProfileForm, { BusinessProfileFormData } from './components/auth/ExternalProfileForm';
 import Production from './components/business/Production';
@@ -60,7 +59,6 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/platform/leads') return 'leads';
   if (pathname === '/platform/quotes') return 'quotes';
   if (pathname === '/platform/orders') return 'orders';
-  if (pathname === '/platform/payments') return 'payments';
   if (pathname === '/platform/invoices') return 'invoices';
   if (pathname.startsWith('/platform/customers/')) return 'customerprofile';
   if (pathname === '/platform/customers') return 'customers';
@@ -84,7 +82,6 @@ function AppContent() {
   const [leadFilter, setLeadFilter] = useState('all');
   const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
-  const [paymentFilter, setPaymentFilter] = useState('all');
   const [invoiceFilter, setInvoiceFilter] = useState('all');
   const [profileLinkId] = useState('');
   const [profileQuoteId] = useState('');
@@ -312,19 +309,6 @@ function AppContent() {
     );
   }
 
-  function renderPayments() {
-    return (
-      <div className="platformPageContent">
-        <Payments
-          onShowSalesOrders={showSalesOrders}
-          onShowInvoices={showInvoices}
-          onShowCustomerProfile={showCustomerProfileWithState}
-          filterState={paymentFilter}
-          onFilterChange={setPaymentFilter}
-        />
-      </div>
-    );
-  }
 
   function renderInvoices() {
     return (
@@ -531,7 +515,6 @@ function AppContent() {
     renderSales,
     renderQuotationOrders,
     renderSalesOrders,
-    renderPayments,
     renderInvoices,
     renderProduction,
     renderProcurement,

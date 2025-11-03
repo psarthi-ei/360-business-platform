@@ -1,11 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { mockLeads, mockQuotes } from '../../data/salesMockData';
+import { mockLeads, mockQuotes, mockReceivables, mockPayables } from '../../data/salesMockData';
 import styles from './Sales.module.css';
 import LeadManagement from './LeadManagement';
 import QuotationOrders from './QuotationOrders';
 import SalesOrders from './SalesOrders';
 import Invoices from './Invoices';
+import ReceivablesManagement from './ReceivablesManagement';
+import PayablesManagement from './PayablesManagement';
 
 interface SalesProps {
   mobile?: boolean;
@@ -13,7 +15,7 @@ interface SalesProps {
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
-type TabType = 'leads' | 'quotes' | 'orders' | 'invoices';
+type TabType = 'leads' | 'quotes' | 'orders' | 'invoices' | 'receivables' | 'payables';
 
 // Dynamic count calculator functions
 const calculateLeadCounts = () => ({
@@ -30,6 +32,24 @@ const calculateQuoteCounts = () => ({
   expired: mockQuotes.filter(q => q.status === 'expired').length
 });
 
+const calculateReceivableCounts = () => ({
+  all: mockReceivables.length,
+  current: mockReceivables.filter(r => r.agingCategory === 'current').length,
+  aging30: mockReceivables.filter(r => r.agingCategory === '31-60').length,
+  aging60: mockReceivables.filter(r => r.agingCategory === '61-90').length,
+  overdue: mockReceivables.filter(r => r.agingCategory === '90+').length,
+  critical: mockReceivables.filter(r => r.customerRisk === 'critical').length
+});
+
+const calculatePayableCounts = () => ({
+  all: mockPayables.length,
+  dueToday: mockPayables.filter(p => p.daysToDue === 0).length,
+  dueThisWeek: mockPayables.filter(p => p.daysToDue >= 0 && p.daysToDue <= 7).length,
+  upcoming: mockPayables.filter(p => p.daysToDue > 7).length,
+  overdue: mockPayables.filter(p => p.daysToDue < 0).length,
+  critical: mockPayables.filter(p => p.criticalSupplier).length
+});
+
 const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps) => {
   // State Management
   const [activeTab, setActiveTab] = useState<TabType>('leads');
@@ -37,13 +57,27 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   const [quoteFilterState, setQuoteFilterState] = useState('all');
   const [orderFilterState, setOrderFilterState] = useState('all');
   const [invoiceFilterState, setInvoiceFilterState] = useState('all');
+  const [receivablesFilterState, setReceivablesFilterState] = useState('all');
+  const [payablesFilterState, setPayablesFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
   
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
   
+  
   // Modal trigger states for CTA button functionality
   const [triggerLeadModal, setTriggerLeadModal] = useState(false);
+  
+  // Refs for tab scrolling behavior
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<{ [key in TabType]: HTMLButtonElement | null }>({
+    leads: null,
+    quotes: null,
+    orders: null,
+    invoices: null,
+    receivables: null,
+    payables: null
+  });
   
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
@@ -56,6 +90,40 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   // Dynamic count calculations
   const leadCounts = calculateLeadCounts();
   const quoteCounts = calculateQuoteCounts();
+  const receivableCounts = calculateReceivableCounts();
+  const payableCounts = calculatePayableCounts();
+  
+
+  // Function to scroll active tab into center view on mobile
+  const scrollToActiveTab = useCallback((tabType: TabType) => {
+    if (window.innerWidth <= 768 && tabsRef.current && tabRefs.current[tabType]) {
+      const tabsContainer = tabsRef.current;
+      const activeTabElement = tabRefs.current[tabType];
+      
+      if (activeTabElement) {
+        const containerWidth = tabsContainer.offsetWidth;
+        const tabOffsetLeft = activeTabElement.offsetLeft;
+        const tabWidth = activeTabElement.offsetWidth;
+        
+        // Calculate scroll position to center the active tab
+        const scrollPosition = tabOffsetLeft - (containerWidth / 2) + (tabWidth / 2);
+        
+        tabsContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, []);
+
+  // Enhanced tab change handler with scroll behavior
+  const handleTabChange = useCallback((tabType: TabType) => {
+    setActiveTab(tabType);
+    // Scroll to center the newly active tab on mobile
+    setTimeout(() => {
+      scrollToActiveTab(tabType);
+    }, 100);
+  }, [scrollToActiveTab]);
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
@@ -82,6 +150,22 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       { value: 'paid', label: '💰 Paid', count: 8 },
       { value: 'pending', label: '🟡 Pending', count: 5 },
       { value: 'overdue', label: '🔴 Overdue', count: 2 }
+    ],
+    receivables: [
+      { value: 'all', label: 'All Receivables', count: receivableCounts.all },
+      { value: 'current', label: '💚 Current (0-30)', count: receivableCounts.current },
+      { value: 'aging_30', label: '🟡 31-60 Days', count: receivableCounts.aging30 },
+      { value: 'aging_60', label: '🟠 61-90 Days', count: receivableCounts.aging60 },
+      { value: 'overdue', label: '🔴 90+ Days', count: receivableCounts.overdue },
+      { value: 'critical', label: '⚠️ Critical Risk', count: receivableCounts.critical }
+    ],
+    payables: [
+      { value: 'all', label: 'All Payables', count: payableCounts.all },
+      { value: 'due_today', label: '🟡 Due Today', count: payableCounts.dueToday },
+      { value: 'due_week', label: '📅 Due This Week', count: payableCounts.dueThisWeek },
+      { value: 'upcoming', label: '💚 Upcoming', count: payableCounts.upcoming },
+      { value: 'overdue', label: '🔴 Overdue', count: payableCounts.overdue },
+      { value: 'critical', label: '⚠️ Critical Suppliers', count: payableCounts.critical }
     ]
   };
 
@@ -92,6 +176,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'quotes': return quoteFilterState;
       case 'orders': return orderFilterState;
       case 'invoices': return invoiceFilterState;
+      case 'receivables': return receivablesFilterState;
+      case 'payables': return payablesFilterState;
       default: return 'all';
     }
   };
@@ -103,6 +189,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'quotes': setQuoteFilterState(filter); break;
       case 'orders': setOrderFilterState(filter); break;
       case 'invoices': setInvoiceFilterState(filter); break;
+      case 'receivables': setReceivablesFilterState(filter); break;
+      case 'payables': setPayablesFilterState(filter); break;
     }
   };
 
@@ -115,6 +203,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
         case 'quotes': return quoteFilterState;
         case 'orders': return orderFilterState;
         case 'invoices': return invoiceFilterState;
+        case 'receivables': return receivablesFilterState;
+        case 'payables': return payablesFilterState;
         default: return 'all';
       }
     })();
@@ -164,6 +254,42 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             { value: 'pending', label: '🟡 Pending', count: 5 },
             { value: 'overdue', label: '🔴 Overdue', count: 2 }
           ];
+        case 'receivables': {
+          const receivableCounts = {
+            all: mockReceivables.length,
+            current: mockReceivables.filter(r => r.agingCategory === 'current').length,
+            aging30: mockReceivables.filter(r => r.agingCategory === '31-60').length,
+            aging60: mockReceivables.filter(r => r.agingCategory === '61-90').length,
+            overdue: mockReceivables.filter(r => r.agingCategory === '90+').length,
+            critical: mockReceivables.filter(r => r.customerRisk === 'critical').length
+          };
+          return [
+            { value: 'all', label: 'All Receivables', count: receivableCounts.all },
+            { value: 'current', label: '💚 Current (0-30)', count: receivableCounts.current },
+            { value: 'aging_30', label: '🟡 31-60 Days', count: receivableCounts.aging30 },
+            { value: 'aging_60', label: '🟠 61-90 Days', count: receivableCounts.aging60 },
+            { value: 'overdue', label: '🔴 90+ Days', count: receivableCounts.overdue },
+            { value: 'critical', label: '⚠️ Critical Risk', count: receivableCounts.critical }
+          ];
+        }
+        case 'payables': {
+          const payableCounts = {
+            all: mockPayables.length,
+            dueToday: mockPayables.filter(p => p.daysToDue === 0).length,
+            dueThisWeek: mockPayables.filter(p => p.daysToDue >= 0 && p.daysToDue <= 7).length,
+            upcoming: mockPayables.filter(p => p.daysToDue > 7).length,
+            overdue: mockPayables.filter(p => p.daysToDue < 0).length,
+            critical: mockPayables.filter(p => p.criticalSupplier).length
+          };
+          return [
+            { value: 'all', label: 'All Payables', count: payableCounts.all },
+            { value: 'due_today', label: '🟡 Due Today', count: payableCounts.dueToday },
+            { value: 'due_week', label: '📅 Due This Week', count: payableCounts.dueThisWeek },
+            { value: 'upcoming', label: '💚 Upcoming', count: payableCounts.upcoming },
+            { value: 'overdue', label: '🔴 Overdue', count: payableCounts.overdue },
+            { value: 'critical', label: '⚠️ Critical Suppliers', count: payableCounts.critical }
+          ];
+        }
         default:
           return [];
       }
@@ -186,7 +312,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, leadFilterState, quoteFilterState, orderFilterState, invoiceFilterState, timelineFilter]);
+  }, [activeTab, leadFilterState, quoteFilterState, orderFilterState, invoiceFilterState, receivablesFilterState, payablesFilterState, timelineFilter]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -224,9 +350,10 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     return () => window.removeEventListener('resize', handleResize);
   }, [calculateScrollBehavior]);
 
+
   // Render business filters for current tab
   const renderTabFilters = () => {
-    const currentStatusFilters = statusFilterConfigs[activeTab];
+    const currentStatusFilters = statusFilterConfigs[activeTab as keyof typeof statusFilterConfigs];
     const currentStatusFilter = getCurrentFilterState();
     const filteredCount = getFilteredCount();
 
@@ -239,7 +366,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             value={currentStatusFilter}
             onChange={(e) => handleFilterChange(e.target.value)}
           >
-            {currentStatusFilters.map(filter => (
+            {currentStatusFilters.map((filter: { value: string; label: string; count: number }) => (
               <option key={filter.value} value={filter.value}>
                 {filter.label}
               </option>
@@ -315,6 +442,21 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             onFilterChange={setInvoiceFilterState}
           />
         );
+      case 'receivables':
+        return (
+          <ReceivablesManagement
+            filterState={receivablesFilterState}
+            onFilterChange={setReceivablesFilterState}
+            onShowCustomerProfile={onShowCustomerProfile}
+          />
+        );
+      case 'payables':
+        return (
+          <PayablesManagement
+            filterState={payablesFilterState}
+            onFilterChange={setPayablesFilterState}
+          />
+        );
       default:
         return null;
     }
@@ -327,6 +469,8 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'quotes': return '+ Add Quote';
       case 'orders': return '+ New Order';
       case 'invoices': return '+ New Invoice';
+      case 'receivables': return '+ Record Payment';
+      case 'payables': return '+ New Bill';
       default: return '+ Add';
     }
   };
@@ -338,19 +482,22 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
         setTriggerLeadModal(true);
         break;
       case 'quotes':
-        // For now, show alert since no dedicated add modal exists
         alert('Add Quote functionality coming soon!');
         break;
       case 'orders':
-        // For now, show alert since no dedicated add modal exists
         alert('Add Order functionality coming soon!');
         break;
       case 'invoices':
-        // For now, show alert since no dedicated add modal exists
         alert('Add Invoice functionality coming soon!');
         break;
+      case 'receivables':
+        alert('Record Payment functionality coming soon!');
+        break;
+      case 'payables':
+        alert('Add Bill functionality coming soon!');
+        break;
       default:
-        // Unknown tab - no action needed
+        break;
     }
   };
 
@@ -362,30 +509,48 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   return (
     <div className={styles.salesModule}>
       {/* 48px Tab Navigation - Visual Design Spec */}
-      <div className={styles.salesTabs}>
+      <div className={styles.salesTabs} ref={tabsRef}>
         <button 
+          ref={(el) => { tabRefs.current.leads = el; }}
           className={`${styles.tabButton} ${activeTab === 'leads' ? styles.active : ''}`}
-          onClick={() => setActiveTab('leads')}
+          onClick={() => handleTabChange('leads')}
         >
           Leads
         </button>
         <button 
+          ref={(el) => { tabRefs.current.quotes = el; }}
           className={`${styles.tabButton} ${activeTab === 'quotes' ? styles.active : ''}`}
-          onClick={() => setActiveTab('quotes')}
+          onClick={() => handleTabChange('quotes')}
         >
           Quotes
         </button>
         <button 
+          ref={(el) => { tabRefs.current.orders = el; }}
+          className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
+          onClick={() => handleTabChange('orders')}
+        >
+          Orders
+        </button>
+        <button 
+          ref={(el) => { tabRefs.current.invoices = el; }}
           className={`${styles.tabButton} ${activeTab === 'invoices' ? styles.active : ''}`}
-          onClick={() => setActiveTab('invoices')}
+          onClick={() => handleTabChange('invoices')}
         >
           Invoices
         </button>
         <button 
-          className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
-          onClick={() => setActiveTab('orders')}
+          ref={(el) => { tabRefs.current.receivables = el; }}
+          className={`${styles.tabButton} ${activeTab === 'receivables' ? styles.active : ''}`}
+          onClick={() => handleTabChange('receivables')}
         >
-          Orders
+          Receivables
+        </button>
+        <button 
+          ref={(el) => { tabRefs.current.payables = el; }}
+          className={`${styles.tabButton} ${activeTab === 'payables' ? styles.active : ''}`}
+          onClick={() => handleTabChange('payables')}
+        >
+          Payables
         </button>
       </div>
       

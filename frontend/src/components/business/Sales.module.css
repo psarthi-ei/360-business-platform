@@ -15,6 +15,16 @@
   background: white;
   border-bottom: 1px solid var(--ds-border-primary);
   grid-row: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+.salesTabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tabButton {
@@ -34,6 +44,9 @@
   position: relative;
   border-bottom: 3px solid transparent;
   letter-spacing: 0.02em;
+  padding: 0 var(--ds-space-md);
+  min-width: 100px;
+  white-space: nowrap;
 }
 
 .tabButton.active {
@@ -192,8 +205,55 @@
   transform: translateY(1px);
 }
 
+/* Basic tabs container */
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  /* Enhanced horizontal scrollable tabs */
+  .salesTabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+  }
+
+  
+  
+  .salesTabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for clean appearance */
+  }
+  
+  .tabButton {
+    flex: none; /* Don't expand tabs to fill space on mobile for horizontal scrolling */
+    min-width: 100px; /* Increased for better readability */
+    max-width: 140px; /* Allow longer tab names to show */
+    white-space: nowrap; /* Prevent text wrapping */
+    font-size: var(--font-sm);
+    padding: 0 var(--ds-space-md); /* More horizontal padding for better touch targets */
+    scroll-snap-align: start; /* Snap to start when scrolling */
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  /* Enhanced active tab visibility on mobile */
+  .tabButton.active {
+    min-width: 120px; /* Ensure active tab gets more space */
+    font-weight: 700; /* Stronger weight for active state */
+    color: var(--color-primary);
+    background: var(--ds-bg-priority-low-subtle);
+    border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+    margin: 0 2px; /* Slight spacing for active tab emphasis */
+    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.2);
+  }
+  
+  /* Scroll behavior improvements */
+  .salesTabs {
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+  
   .salesFilters {
     padding: 0 var(--ds-space-sm);
   }
@@ -205,10 +265,6 @@
   
   .salesCTA {
     padding: var(--ds-space-sm) var(--ds-space-sm);
-  }
-  
-  .tabButton {
-    font-size: var(--font-sm);
   }
 }
 
@@ -231,3 +287,4 @@
 .salesContent :global([class*="voiceCommands"]) {
   display: none;
 }
+

@@ -312,6 +312,222 @@ export interface FinalPayment {
 
 // Customer Feedback and Loyalty interfaces moved to customerMockData.ts
 
+// ==================== JOB ORDER SYSTEM INTERFACES ====================
+
+// Service Requirements - Parallel to FabricRequirements for job work specifications
+export interface ServiceRequirements {
+  serviceType: 'dyeing' | 'finishing' | 'printing' | 'bleaching' | 'mercerizing';
+  materialType: string;        // "Cotton Grey Fabric", "Polyester Blend"
+  quantity: number;           // Quantity of material to process
+  unit: 'meters' | 'yards' | 'kg' | 'pieces';
+  processSpecifications: {
+    colors?: string[];         // For dyeing/printing services
+    finishType?: string;       // For finishing processes
+    qualityGrade: 'A-Grade' | 'B-Grade' | 'Export-Grade';
+    chemicalRequirements?: string[];
+    temperatureRange?: string;
+    processingTime?: string;   // "24 hours", "3 days"
+  };
+  deliveryTimeline: string;    // "5 days from material receipt"
+  specialInstructions?: string;
+}
+
+// Client Material Inward - Complete client material receipt and tracking system
+export interface ClientMaterialInward {
+  id: string;
+  jobOrderId: string;
+  materialType: string;
+  description: string;           // "Cotton Grey Fabric - 180 GSM"
+  receivedQuantity: number;
+  unit: string;
+  receivedDate: string;
+  receivedBy: string;            // Employee name
+  
+  // Quality assessment
+  qualityCheck: {
+    inspector: string;
+    inspectionDate: string;
+    gradeAssigned: 'A-Grade' | 'B-Grade' | 'C-Grade' | 'Rejected';
+    defectsNoted?: string[];
+    defectPercentage?: number;
+    photosPath?: string[];       // Quality check photos
+    approvalStatus: 'approved' | 'conditional' | 'rejected';
+  };
+  
+  // Storage and tracking
+  storageLocation: string;       // "Warehouse B - Section 3"
+  batchNumber?: string;
+  currentBalance: number;        // Tracks consumption during processing
+  
+  // Processing status
+  status: 'received' | 'in_process' | 'processing_complete' | 'ready_return';
+  
+  // Material balance tracking
+  consumedQuantity?: number;     // Used in processing
+  wasteQuantity?: number;        // Process waste
+  returnableQuantity?: number;   // Remaining for return
+  finalProductQuantity?: number; // Completed processed material
+}
+
+// Client Material Balance - Material consumption tracking during production
+export interface ClientMaterialBalance {
+  materialId: string;
+  jobOrderId: string;
+  customerId: string;
+  
+  // Balance tracking
+  initialQuantity: number;
+  allocatedToProduction: number;
+  consumedInProcess: number;
+  wasteGenerated: number;
+  returnableBalance: number;
+  finalProductDelivered: number;
+  
+  // Audit trail
+  lastUpdated: string;
+  updatedBy: string;
+  notes?: string;
+  
+  // Return management
+  returnScheduled?: boolean;
+  returnDate?: string;
+  returnQuantity?: number;
+}
+
+// Job Order - Extends SalesOrder with service-focused fields and client material tracking
+export interface JobOrder extends SalesOrder {
+  // Differentiator fields
+  orderType: 'job_order';                    // Key differentiator
+  materialOwnership: 'client';               // Always client for job orders
+  
+  // Service-specific fields
+  serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+  creditTerms: 15 | 30 | 45;                // Credit days instead of advance %
+  
+  // Client material tracking
+  clientMaterials: ClientMaterialInward[];
+  clientMaterialsReceived: boolean;
+  
+  // Credit management (leverages existing BusinessProfile)
+  creditApprovalStatus: 'approved' | 'pending' | 'requires_review';
+  creditApprovalBy?: string;
+  creditHoldReason?: string;
+  
+  // Service delivery tracking
+  serviceStartDate?: string;
+  estimatedCompletionDate?: string;
+  actualCompletionDate?: string;
+  
+  // Service requirements (parallel to fabricRequirements)
+  serviceRequirements?: ServiceRequirements;
+}
+
+// Enhanced SalesOrder for type differentiation
+export interface EnhancedSalesOrder extends SalesOrder {
+  orderType: 'sales_order';                 // Differentiator field
+  materialOwnership: 'company';             // Always company for sales
+}
+
+// ==================== FINANCIAL MANAGEMENT INTERFACES ====================
+
+// Receivables with Aging Analysis - Credit cycle management
+export interface ReceivableRecord {
+  id: string;
+  invoiceId: string;
+  customerId: string;
+  customerName: string;
+  companyName: string;
+  
+  // Invoice details
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
+  originalAmount: number;
+  receivedAmount: number;
+  balanceAmount: number;
+  
+  // Aging analysis
+  daysPastDue: number;           // Calculated field
+  agingCategory: 'current' | '31-60' | '61-90' | '90+';
+  
+  // Order context
+  orderType: 'sales_order' | 'job_order';
+  orderId: string;
+  orderDescription: string;      // Brief description of what was sold/processed
+  
+  // Credit management
+  creditLimit: number;
+  totalOutstanding: number;      // Total across all invoices for this customer
+  creditUtilization: number;     // Percentage of credit limit used
+  
+  // Risk assessment
+  customerRisk: 'low' | 'medium' | 'high' | 'critical';
+  paymentHistory: 'excellent' | 'good' | 'fair' | 'poor';
+  lastPaymentDate?: string;
+  averagePaymentDays: number;    // Historical average
+  
+  // Collection workflow
+  remindersSent: number;
+  lastReminderDate?: string;
+  nextActionDate?: string;
+  nextActionType?: 'reminder' | 'call' | 'visit' | 'legal';
+  assignedCollector?: string;
+  
+  // Status tracking
+  paymentStatus: 'pending' | 'partial' | 'overdue' | 'collection' | 'written_off';
+  paymentPlan?: {
+    planActive: boolean;
+    installmentAmount: number;
+    nextInstallmentDate: string;
+    remainingInstallments: number;
+  };
+}
+
+// Payables Management - Vendor payment scheduling and tracking
+export interface PayableRecord {
+  id: string;
+  vendorId: string;
+  vendorName: string;
+  vendorType: 'chemical_supplier' | 'utility_provider' | 'service_provider' | 'equipment_vendor';
+  
+  // Bill details
+  billNumber: string;
+  billDate: string;
+  dueDate: string;
+  totalAmount: number;
+  paidAmount: number;
+  balanceAmount: number;
+  
+  // Timing analysis
+  daysToDue: number;             // Positive = upcoming, negative = overdue
+  status: 'upcoming' | 'due_today' | 'due_soon' | 'overdue';
+  
+  // Categorization
+  category: 'raw_materials' | 'chemicals' | 'utilities' | 'services' | 'equipment';
+  subCategory?: string;          // "Reactive Dyes", "Electricity", "Machine Maintenance"
+  
+  // Payment planning
+  paymentMethod: 'RTGS' | 'NEFT' | 'Cheque' | 'Cash' | 'UPI';
+  scheduledPaymentDate?: string;
+  approvalRequired: boolean;
+  approvedBy?: string;
+  
+  // Vendor relationship
+  vendorRating: 'excellent' | 'good' | 'fair' | 'poor';
+  criticalSupplier: boolean;     // Essential for operations
+  paymentTerms: string;          // "30 days", "Immediate", "45 days"
+  
+  // Order context
+  relatedPurchaseOrder?: string;
+  relatedGRN?: string;
+  materialDelivered: boolean;
+  
+  // Cash flow impact
+  priority: 'high' | 'medium' | 'low';
+  earlyPaymentDiscount?: number; // Percentage discount for early payment
+  latePaymentPenalty?: number;   // Penalty for late payment
+}
+
 // Mock Data
 // mockBusinessProfiles moved to customerMockData.ts - import from there for customer data
 
@@ -2493,4 +2709,490 @@ export const sampleQuoteItems: QuoteItem[] = [
 
 export const sampleProformaItems: ProformaItem[] = convertQuoteToProformaItems(sampleQuoteItems);
 export const sampleOrderItems: OrderItem[] = convertQuoteToOrderItems(sampleQuoteItems);
+
+// ==================== JOB ORDER MOCK DATA ====================
+
+// Mock Client Materials for Job Orders
+export const mockClientMaterials: ClientMaterialInward[] = [
+  {
+    id: 'CM-001',
+    jobOrderId: 'JO-2024-001',
+    materialType: 'Cotton Grey Fabric',
+    description: 'Cotton Grey Fabric - 180 GSM, Plain Weave',
+    receivedQuantity: 2100,
+    unit: 'meters',
+    receivedDate: '2024-10-14',
+    receivedBy: 'Ramesh Kumar',
+    qualityCheck: {
+      inspector: 'Priya Sharma',
+      inspectionDate: '2024-10-14',
+      gradeAssigned: 'A-Grade',
+      defectsNoted: ['Minor selvage variation in 3 pieces'],
+      defectPercentage: 0.5,
+      photosPath: ['/images/qc/CM-001-1.jpg', '/images/qc/CM-001-2.jpg'],
+      approvalStatus: 'approved'
+    },
+    storageLocation: 'Warehouse C - Section 2',
+    batchNumber: 'BATCH-CM-001',
+    currentBalance: 2050,
+    status: 'in_process',
+    consumedQuantity: 50,
+    wasteQuantity: 0,
+    returnableQuantity: 2050,
+    finalProductQuantity: 0
+  },
+  {
+    id: 'CM-002',
+    jobOrderId: 'JO-2024-002',
+    materialType: 'Cotton Dyed Fabric',
+    description: 'Cotton Dyed Fabric - Navy Blue, 200 GSM',
+    receivedQuantity: 1550,
+    unit: 'meters',
+    receivedDate: '2024-10-17',
+    receivedBy: 'Suresh Patel',
+    qualityCheck: {
+      inspector: 'Anjali Mehta',
+      inspectionDate: '2024-10-17',
+      gradeAssigned: 'A-Grade',
+      defectsNoted: ['Minor color variation in 2 pieces'],
+      defectPercentage: 1.0,
+      photosPath: ['/images/qc/CM-002-1.jpg'],
+      approvalStatus: 'conditional'
+    },
+    storageLocation: 'Warehouse A - Section 4',
+    batchNumber: 'BATCH-CM-002',
+    currentBalance: 1550,
+    status: 'received',
+    consumedQuantity: 0,
+    wasteQuantity: 0,
+    returnableQuantity: 1550,
+    finalProductQuantity: 0
+  },
+  {
+    id: 'CM-003',
+    jobOrderId: 'JO-2024-003',
+    materialType: 'Polyester Fabric',
+    description: 'Polyester Grey Fabric - 150 GSM, Twill Weave',
+    receivedQuantity: 3200,
+    unit: 'meters',
+    receivedDate: '2024-10-20',
+    receivedBy: 'Deepak Singh',
+    qualityCheck: {
+      inspector: 'Kavita Joshi',
+      inspectionDate: '2024-10-20',
+      gradeAssigned: 'B-Grade',
+      defectsNoted: ['Some yarn irregularities', 'Slightly uneven width'],
+      defectPercentage: 2.5,
+      photosPath: ['/images/qc/CM-003-1.jpg', '/images/qc/CM-003-2.jpg', '/images/qc/CM-003-3.jpg'],
+      approvalStatus: 'approved'
+    },
+    storageLocation: 'Warehouse B - Section 1',
+    batchNumber: 'BATCH-CM-003',
+    currentBalance: 3200,
+    status: 'received',
+    consumedQuantity: 0,
+    wasteQuantity: 0,
+    returnableQuantity: 3200,
+    finalProductQuantity: 0
+  }
+];
+
+// Mock Job Orders - Service-based processing orders
+export const mockJobOrders: JobOrder[] = [
+  {
+    id: 'JO-2024-001',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'dyeing',
+    creditTerms: 30,
+    quoteId: 'QT-JO-001',
+    businessProfileId: 'bp-surat-dye-works',
+    advancePaymentId: '', // Job orders typically don't use advance payments
+    orderDate: '2024-10-15',
+    deliveryDate: '2024-10-22',
+    totalAmount: 48000,
+    status: 'production_started',
+    statusMessage: 'Dyeing process in progress - 60% completed',
+    paymentStatus: 'pending',
+    productionStatus: 'dyeing_in_progress',
+    urgency: 'normal',
+    progressPercentage: 60,
+    
+    // Service-specific fields
+    clientMaterials: [mockClientMaterials[0]],
+    clientMaterialsReceived: true,
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Rajesh Agarwal',
+    serviceStartDate: '2024-10-16',
+    estimatedCompletionDate: '2024-10-21',
+    
+    serviceRequirements: {
+      serviceType: 'dyeing',
+      materialType: 'Cotton Grey Fabric',
+      quantity: 2000,
+      unit: 'meters',
+      processSpecifications: {
+        colors: ['Navy Blue'],
+        qualityGrade: 'A-Grade',
+        chemicalRequirements: ['Reactive Dyes', 'Salt', 'Soda Ash'],
+        temperatureRange: '60-80°C',
+        processingTime: '6 hours'
+      },
+      deliveryTimeline: '5 days from material receipt',
+      specialInstructions: 'Ensure color fastness as per export standards'
+    },
+    
+    items: [{
+      itemCode: 'SVC-DYE-001',
+      description: 'Reactive Dyeing Service - Navy Blue',
+      hsnCode: '9988', // Service HSN code
+      quantity: 2000,
+      unit: 'meters',
+      rate: 24, // ₹24 per meter processing charge
+      discount: 0,
+      taxableAmount: 48000
+    }]
+  },
+  
+  {
+    id: 'JO-2024-002',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'finishing',
+    creditTerms: 15,
+    quoteId: 'QT-JO-002',
+    businessProfileId: 'bp-ahmedabad-finishers',
+    advancePaymentId: '',
+    orderDate: '2024-10-18',
+    deliveryDate: '2024-10-25',
+    totalAmount: 36000,
+    status: 'order_confirmed',
+    statusMessage: 'Material received, processing scheduled',
+    paymentStatus: 'pending',
+    productionStatus: 'planning',
+    urgency: 'normal',
+    progressPercentage: 10,
+    
+    clientMaterials: [mockClientMaterials[1]],
+    clientMaterialsReceived: true,
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Kiran Shah',
+    estimatedCompletionDate: '2024-10-24',
+    
+    serviceRequirements: {
+      serviceType: 'finishing',
+      materialType: 'Cotton Dyed Fabric',
+      quantity: 1500,
+      unit: 'meters',
+      processSpecifications: {
+        finishType: 'Softening & Anti-wrinkle',
+        qualityGrade: 'A-Grade',
+        chemicalRequirements: ['Softening Agent', 'Anti-wrinkle Finish'],
+        processingTime: '4 hours'
+      },
+      deliveryTimeline: '3 days from processing start'
+    },
+    
+    items: [{
+      itemCode: 'SVC-FIN-001',
+      description: 'Softening & Anti-wrinkle Finishing',
+      hsnCode: '9988',
+      quantity: 1500,
+      unit: 'meters',
+      rate: 24,
+      discount: 0,
+      taxableAmount: 36000
+    }]
+  },
+  
+  {
+    id: 'JO-2024-003',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'printing',
+    creditTerms: 45,
+    quoteId: 'QT-JO-003',
+    businessProfileId: 'bp-mumbai-prints',
+    advancePaymentId: '',
+    orderDate: '2024-10-21',
+    deliveryDate: '2024-10-30',
+    totalAmount: 96000,
+    status: 'pending_materials',
+    statusMessage: 'Waiting for client material quality approval',
+    paymentStatus: 'pending',
+    productionStatus: 'material_pending',
+    urgency: 'urgent',
+    progressPercentage: 5,
+    
+    clientMaterials: [mockClientMaterials[2]],
+    clientMaterialsReceived: true,
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Deepak Joshi',
+    estimatedCompletionDate: '2024-10-28',
+    
+    serviceRequirements: {
+      serviceType: 'printing',
+      materialType: 'Polyester Fabric',
+      quantity: 3000,
+      unit: 'meters',
+      processSpecifications: {
+        colors: ['Red', 'Blue', 'Green', 'Yellow'],
+        qualityGrade: 'B-Grade',
+        chemicalRequirements: ['Digital Inks', 'Pre-treatment Solution'],
+        processingTime: '8 hours'
+      },
+      deliveryTimeline: '7 days from material approval',
+      specialInstructions: 'Multi-color digital print with high resolution'
+    },
+    
+    items: [{
+      itemCode: 'SVC-PRT-001',
+      description: 'Digital Printing Service - Multi-color Design',
+      hsnCode: '9988',
+      quantity: 3000,
+      unit: 'meters',
+      rate: 32,
+      discount: 0,
+      taxableAmount: 96000
+    }]
+  }
+];
+
+// ==================== FINANCIAL MANAGEMENT MOCK DATA ====================
+
+// Mock Receivables with Aging Analysis
+export const mockReceivables: ReceivableRecord[] = [
+  {
+    id: 'REC-001',
+    invoiceId: 'INV-2024-089',
+    customerId: 'bp-surat-dye-works',
+    customerName: 'Rajesh Agarwal',
+    companyName: 'Surat Dye Works Pvt. Ltd.',
+    invoiceNumber: 'INV-2024-089',
+    invoiceDate: '2024-09-15',
+    dueDate: '2024-10-15',
+    originalAmount: 48000,
+    receivedAmount: 0,
+    balanceAmount: 48000,
+    daysPastDue: 17,
+    agingCategory: '31-60',
+    orderType: 'job_order',
+    orderId: 'JO-2024-001',
+    orderDescription: 'Reactive Dyeing Service - Navy Blue',
+    creditLimit: 200000,
+    totalOutstanding: 75000,
+    creditUtilization: 37.5,
+    customerRisk: 'medium',
+    paymentHistory: 'good',
+    lastPaymentDate: '2024-08-20',
+    averagePaymentDays: 35,
+    remindersSent: 2,
+    lastReminderDate: '2024-10-20',
+    nextActionDate: '2024-11-05',
+    nextActionType: 'call',
+    assignedCollector: 'Priya Sharma',
+    paymentStatus: 'overdue'
+  },
+  
+  {
+    id: 'REC-002',
+    invoiceId: 'INV-2024-091',
+    customerId: 'bp-ahmedabad-traders',
+    customerName: 'Kiran Shah',
+    companyName: 'Ahmedabad Textile Traders',
+    invoiceNumber: 'INV-2024-091',
+    invoiceDate: '2024-10-01',
+    dueDate: '2024-10-31',
+    originalAmount: 125000,
+    receivedAmount: 50000,
+    balanceAmount: 75000,
+    daysPastDue: 1,
+    agingCategory: 'current',
+    orderType: 'sales_order',
+    orderId: 'SO-2024-045',
+    orderDescription: 'Premium Cotton Fabric - Export Quality',
+    creditLimit: 500000,
+    totalOutstanding: 225000,
+    creditUtilization: 45.0,
+    customerRisk: 'low',
+    paymentHistory: 'excellent',
+    lastPaymentDate: '2024-10-15',
+    averagePaymentDays: 28,
+    remindersSent: 1,
+    lastReminderDate: '2024-11-01',
+    nextActionDate: '2024-11-08',
+    nextActionType: 'reminder',
+    paymentStatus: 'partial'
+  },
+  
+  {
+    id: 'REC-003',
+    invoiceId: 'INV-2024-067',
+    customerId: 'bp-mumbai-exports',
+    customerName: 'Deepak Joshi',
+    companyName: 'Mumbai Export House',
+    invoiceNumber: 'INV-2024-067',
+    invoiceDate: '2024-07-20',
+    dueDate: '2024-08-19',
+    originalAmount: 180000,
+    receivedAmount: 0,
+    balanceAmount: 180000,
+    daysPastDue: 74,
+    agingCategory: '61-90',
+    orderType: 'job_order',
+    orderId: 'JO-2024-008',
+    orderDescription: 'Digital Printing Service - Multi-color Design',
+    creditLimit: 300000,
+    totalOutstanding: 280000,
+    creditUtilization: 93.3,
+    customerRisk: 'high',
+    paymentHistory: 'poor',
+    averagePaymentDays: 65,
+    remindersSent: 5,
+    lastReminderDate: '2024-10-25',
+    nextActionDate: '2024-11-10',
+    nextActionType: 'legal',
+    assignedCollector: 'Suresh Kumar',
+    paymentStatus: 'collection'
+  },
+  
+  {
+    id: 'REC-004',
+    invoiceId: 'INV-2024-095',
+    customerId: 'bp-coimbatore-mills',
+    customerName: 'Lakshmi Narayan',
+    companyName: 'Coimbatore Cotton Mills',
+    invoiceNumber: 'INV-2024-095',
+    invoiceDate: '2024-10-20',
+    dueDate: '2024-11-19',
+    originalAmount: 85000,
+    receivedAmount: 0,
+    balanceAmount: 85000,
+    daysPastDue: -18,
+    agingCategory: 'current',
+    orderType: 'job_order',
+    orderId: 'JO-2024-012',
+    orderDescription: 'Bleaching & Finishing Services',
+    creditLimit: 150000,
+    totalOutstanding: 85000,
+    creditUtilization: 56.7,
+    customerRisk: 'low',
+    paymentHistory: 'good',
+    averagePaymentDays: 25,
+    remindersSent: 0,
+    nextActionDate: '2024-11-15',
+    nextActionType: 'reminder',
+    paymentStatus: 'pending'
+  }
+];
+
+// Mock Payables - Vendor payment management
+export const mockPayables: PayableRecord[] = [
+  {
+    id: 'PAY-001',
+    vendorId: 'VEN-001',
+    vendorName: 'Colourtex Chemicals Ltd.',
+    vendorType: 'chemical_supplier',
+    billNumber: 'CCL-2024-234',
+    billDate: '2024-10-15',
+    dueDate: '2024-11-14',
+    totalAmount: 85000,
+    paidAmount: 0,
+    balanceAmount: 85000,
+    daysToDue: 13,
+    status: 'upcoming',
+    category: 'chemicals',
+    subCategory: 'Reactive Dyes',
+    paymentMethod: 'RTGS',
+    approvalRequired: true,
+    vendorRating: 'excellent',
+    criticalSupplier: true,
+    paymentTerms: '30 days',
+    relatedPurchaseOrder: 'PO-2024-089',
+    relatedGRN: 'GRN-2024-112',
+    materialDelivered: true,
+    priority: 'high',
+    earlyPaymentDiscount: 2.0,
+    latePaymentPenalty: 1.5
+  },
+  
+  {
+    id: 'PAY-002',
+    vendorId: 'VEN-002',
+    vendorName: 'Gujarat State Electricity Board',
+    vendorType: 'utility_provider',
+    billNumber: 'GSEB-OCT-2024',
+    billDate: '2024-10-01',
+    dueDate: '2024-11-01',
+    totalAmount: 45000,
+    paidAmount: 0,
+    balanceAmount: 45000,
+    daysToDue: 0,
+    status: 'due_today',
+    category: 'utilities',
+    subCategory: 'Electricity',
+    paymentMethod: 'NEFT',
+    approvalRequired: false,
+    vendorRating: 'good',
+    criticalSupplier: true,
+    paymentTerms: 'Monthly',
+    materialDelivered: true,
+    priority: 'high',
+    latePaymentPenalty: 2.0
+  },
+  
+  {
+    id: 'PAY-003',
+    vendorId: 'VEN-003',
+    vendorName: 'Precision Machinery Services',
+    vendorType: 'service_provider',
+    billNumber: 'PMS-2024-067',
+    billDate: '2024-09-20',
+    dueDate: '2024-10-20',
+    totalAmount: 25000,
+    paidAmount: 0,
+    balanceAmount: 25000,
+    daysToDue: -12,
+    status: 'overdue',
+    category: 'services',
+    subCategory: 'Machine Maintenance',
+    paymentMethod: 'Cheque',
+    approvalRequired: true,
+    approvedBy: 'Finance Manager',
+    vendorRating: 'good',
+    criticalSupplier: false,
+    paymentTerms: '30 days',
+    materialDelivered: true,
+    priority: 'medium',
+    latePaymentPenalty: 1.0
+  },
+  
+  {
+    id: 'PAY-004',
+    vendorId: 'VEN-004',
+    vendorName: 'Industrial Chemicals Corp.',
+    vendorType: 'chemical_supplier',
+    billNumber: 'ICC-2024-156',
+    billDate: '2024-10-25',
+    dueDate: '2024-11-25',
+    totalAmount: 65000,
+    paidAmount: 0,
+    balanceAmount: 65000,
+    daysToDue: 24,
+    status: 'upcoming',
+    category: 'chemicals',
+    subCategory: 'Finishing Chemicals',
+    paymentMethod: 'RTGS',
+    scheduledPaymentDate: '2024-11-20',
+    approvalRequired: true,
+    vendorRating: 'excellent',
+    criticalSupplier: true,
+    paymentTerms: '30 days',
+    relatedPurchaseOrder: 'PO-2024-094',
+    relatedGRN: 'GRN-2024-118',
+    materialDelivered: true,
+    priority: 'high',
+    earlyPaymentDiscount: 1.5
+  }
+];
 

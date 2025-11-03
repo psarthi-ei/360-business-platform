@@ -9,7 +9,6 @@ export interface RenderFunctions {
   renderSales: () => React.ReactElement;
   renderQuotationOrders: () => React.ReactElement;
   renderSalesOrders: () => React.ReactElement;
-  renderPayments: () => React.ReactElement;
   renderInvoices: () => React.ReactElement;
   renderProduction: () => React.ReactElement;
   renderProcurement: () => React.ReactElement;
@@ -35,7 +34,6 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
     <Route key="leads" path="leads" element={renderFunctions.renderLeadManagement()} />,
     <Route key="quotes" path="quotes" element={renderFunctions.renderQuotationOrders()} />,
     <Route key="orders" path="orders" element={renderFunctions.renderSalesOrders()} />,
-    <Route key="payments" path="payments" element={renderFunctions.renderPayments()} />,
     <Route key="invoices" path="invoices" element={renderFunctions.renderInvoices()} />,
     <Route key="customers" path="customers" element={renderFunctions.renderCustomers()} />,
     

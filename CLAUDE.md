@@ -10,14 +10,13 @@ date  # ALWAYS run first - validates project timeline context
 **Current Timeline:**
 - **Project Start**: August 27, 2025
 - **Implementation Strategy**: Core Views → Cross-Module → CRUD sequence
-- **Phase Details**: Check Implementation Roadmap for current status
+- **Phase Details**: Check TODO.md for current priorities
 
 ### **STEP 2: READ MANDATORY SESSION CONTEXT**
 ```bash
 # MANDATORY SESSION CONTEXT (read in order):
 /docs/DOCUMENTATION_INDEX.md          # FIRST: Master navigation hub - all documents and Quick Decision Matrix  
-/docs/IMPLEMENTATION_ROADMAP.md       # SECOND: Primary implementation roadmap with streamlined phases
-/docs/ARCHITECTURE_DECISIONS_INDEX.md # THIRD: Master Architecture Decisions Index - ALL architectural decisions (MANDATORY)
+/docs/ARCHITECTURE_DECISIONS_INDEX.md # SECOND: Master Architecture Decisions Index - ALL architectural decisions (MANDATORY)
 
 # Supporting references:
 /docs/VISUAL_DESIGN_SPECIFICATION.md  # Complete visual designs and wireframes
@@ -85,8 +84,7 @@ date  # ALWAYS run first - validates project timeline context
 # STEP 1: FOUNDATION DOCS (ALWAYS READ)
 1. /docs/CLAUDE.md (this file - session protocol)
 2. /docs/DOCUMENTATION_INDEX.md (navigation hub + Quick Decision Matrix)  
-3. /docs/IMPLEMENTATION_ROADMAP.md (current status)
-4. /docs/ARCHITECTURE_DECISIONS_INDEX.md (ALL architectural decisions)
+3. /docs/ARCHITECTURE_DECISIONS_INDEX.md (ALL architectural decisions)
 
 # STEP 2: TASK-SPECIFIC DOCS (Based on Documentation Index Quick Decision Matrix)
 Use /docs/DOCUMENTATION_INDEX.md Quick Decision Matrix to determine:
@@ -159,16 +157,16 @@ if (params && 'leadId' in params) {
 4. Run `grep` audit to verify zero hardcoded values
 5. Test build compilation to confirm no errors
 
-### **4. IMPLEMENTATION ROADMAP COMPLIANCE (MANDATORY)**
+### **4. ARCHITECTURAL PATTERN COMPLIANCE (MANDATORY)**
 **❌ Common Mistake**: Creating new files instead of updating existing systems
 
 **✅ Required Standards**:
-- ALL updates MUST follow existing architectural patterns per Implementation Roadmap
-- ALL designs MUST reference Visual Design Spec via Implementation Roadmap
+- ALL updates MUST follow existing architectural patterns per Architecture Decisions Index
+- ALL designs MUST reference Visual Design Spec
 - ALL colors MUST use design system tokens (NO hardcoded #1D4ED8, #F97316)
 - ALL fonts MUST use design system tokens (NO hardcoded Inter)
 - ALL touch targets MUST use design system tokens (NO hardcoded 44px)
-- Follow Implementation Roadmap in `/docs/IMPLEMENTATION_ROADMAP.md`
+- Follow architectural patterns in `/docs/ARCHITECTURE_DECISIONS_INDEX.md`
 
 ### **5. FILE EDITING PROTOCOL**
 **❌ Common Mistake**: Using Edit tool without reading file first
@@ -211,15 +209,15 @@ if (params && 'leadId' in params) {
 
 ## 🎯 IMPLEMENTATION PRINCIPLES
 
-### **Implementation Roadmap Reference**
-- **Current Status**: Check `/docs/IMPLEMENTATION_ROADMAP.md` for live phase status
+### **Current Status Reference**
 - **Todo Tracking**: Check `/TODO.md` for current priorities and session context
+- **Architecture Decisions**: Check `/docs/ARCHITECTURE_DECISIONS_INDEX.md` for all patterns
 
 ### **Core Implementation Standards**
 1. UPDATE existing systems (NOT create new files)
 2. EXTEND existing Design System classes following Visual Design Spec
 3. PRESERVE all existing architectural patterns while applying Visual Design styling
-4. FOLLOW Implementation Roadmap phase structure (Core Views → Cross-Module → CRUD)
+4. FOLLOW established patterns: Core Views → Cross-Module → CRUD
 
 ---
 
@@ -276,5 +274,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ---
 
-**📍 For detailed implementation steps, refer to the Implementation Roadmap.**  
 **🎯 This guide focuses on session protocol and mistake prevention only.**

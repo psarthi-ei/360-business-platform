@@ -20,10 +20,10 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
         navigate('/platform/leads');
       }
     },
-    showQuotationOrders: () => navigate('/platform/quotes'),
+    showQuotationOrders: () => navigate('/platform/sales?tab=quotes'),
     showSales: () => navigate('/platform/sales'),
     showSalesOrders: () => navigate('/platform/orders'),
-    showPayments: () => navigate('/platform/payments'),
+    showPayments: () => navigate('/platform/sales?tab=receivables'),
     showInvoices: () => navigate('/platform/invoices'),
     showCustomerList: () => navigate('/platform/customers'),
     showCustomerProfile: (customerId: string) => navigate(`/platform/customers/${customerId}`),

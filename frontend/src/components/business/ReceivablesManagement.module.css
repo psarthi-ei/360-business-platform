@@ -1,0 +1,213 @@
+/* ReceivablesManagement.module.css - Dedicated CSS Module for Receivables Component */
+
+/* Main container for receivables management */
+.receivablesManagement {
+  padding: var(--ds-space-md);
+  background: var(--background-primary);
+}
+
+/* ==================== ENHANCED SUMMARY STYLING - Professional Look ==================== */
+
+/* Enhanced Receivables summary section - uses DS summary classes */
+.receivablesSummary {
+  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-md);
+}
+
+.agingSummaryHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.agingSummaryHeader h3 {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  border-bottom: 1px solid var(--ds-border-secondary);
+  padding-bottom: var(--ds-space-xs);
+}
+
+.agingSummaryHeader p {
+  margin: 0;
+  color: var(--ds-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  font-weight: 500;
+}
+
+/* Receivables cards container */
+.receivablesCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.noReceivables {
+  padding: var(--ds-space-xl);
+  text-align: center;
+  color: var(--ds-text-secondary);
+  background: white;
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+}
+
+/* Expanded sections styling */
+.receivablesPaymentSection,
+.receivablesCustomerSection {
+  margin-bottom: var(--ds-space-md);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-secondary);
+  border-radius: var(--ds-radius-sm);
+}
+
+.receivablesPaymentSection h4,
+.receivablesCustomerSection h4 {
+  margin: 0 0 var(--ds-space-sm) 0;
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.receivablesPaymentSection p,
+.receivablesCustomerSection p {
+  margin: var(--ds-space-xs) 0;
+  color: var(--ds-text-secondary);
+  font-size: var(--font-sm);
+  line-height: 1.4;
+}
+
+/* Action buttons container */
+.receivablesActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-xs);
+  margin-top: var(--ds-space-md);
+}
+
+/* Expanded section styling using DS system variables */
+.expandedSection {
+  background: var(--ds-bg-expanded);
+  border: 1px solid var(--ds-border-primary);
+  border-top: 2px solid var(--color-primary);
+  border-radius: 0 0 var(--ds-radius-md) var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  margin-top: -1px;
+  animation: expandDown 0.25s ease-out;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    padding-top: var(--ds-space-md);
+    padding-bottom: var(--ds-space-md);
+    transform: translateY(0);
+  }
+}
+
+/* ==================== PROFESSIONAL SECTION STYLING ==================== */
+
+/* Detail Sections - Matching Invoice component pattern */
+.receivablesDetailsSection h4,
+.receivablesCustomerSection h4 {
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  border-bottom: 2px solid var(--ds-border-primary);
+  padding-bottom: var(--ds-space-xs);
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-sm);
+  text-align: left;
+}
+
+.detailsGrid p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  text-align: left;
+}
+
+/* Enhanced Action Buttons - Matching Invoice component */
+.expandedActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-lg);
+  padding-top: var(--ds-space-md);
+  border-top: 2px solid var(--ds-border-primary);
+  flex-wrap: wrap;
+}
+
+.expandedActions .ds-btn {
+  min-height: 44px !important;
+  padding: var(--ds-space-sm) var(--ds-space-md) !important;
+  font-size: var(--font-sm) !important;
+  font-weight: 600 !important;
+  border-radius: var(--ds-radius-md) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--ds-space-xs) !important;
+}
+
+/* ==================== AGING INDICATOR STYLES ==================== */
+/* Aging classes removed - now using global ds-card-priority-* and ds-card-status-* classes 
+   from the global design system for consistent white backgrounds and colored borders */
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 768px) {
+  .receivablesManagement {
+    padding: var(--ds-space-sm);
+  }
+  
+  .receivablesSummary {
+    padding: var(--ds-space-sm);
+  }
+  
+  .agingSummaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+  
+  .receivablesActions {
+    flex-direction: column;
+  }
+  
+  .expandedSection {
+    padding: var(--ds-space-sm);
+  }
+  
+  .detailsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xs);
+  }
+  
+  .expandedActions {
+    gap: var(--ds-space-xs);
+  }
+  
+  .expandedActions .ds-btn {
+    min-height: 48px !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}

@@ -17,7 +17,6 @@ export function getCurrentProcessStage(pathname: string): string {
   if (pathname.includes('/leads')) return 'leads';
   if (pathname.includes('/quotes')) return 'quotes';
   if (pathname.includes('/orders')) return 'orders';
-  if (pathname.includes('/payments')) return 'payments';
   if (pathname.includes('/customers')) return 'customers';
   if (pathname.includes('/inventory')) return 'inventory';
   if (pathname.includes('/fulfillment')) return 'fulfillment';

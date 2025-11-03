@@ -36,7 +36,7 @@ export class VoiceCommandRouter {
         break;
       case 'NAVIGATE_TO_QUOTES':
       case 'SHOW_QUOTES':
-        this.navigate('/quotes');
+        this.navigate('/sales?tab=quotes');
         break;
       case 'NAVIGATE_TO_ORDERS':
       case 'SHOW_ORDERS':
@@ -44,7 +44,7 @@ export class VoiceCommandRouter {
         break;
       case 'NAVIGATE_TO_PAYMENTS':
       case 'SHOW_PAYMENTS':
-        this.navigate('/payments');
+        this.navigate('/sales?tab=receivables');
         break;
       case 'NAVIGATE_TO_INVOICES':
       case 'SHOW_INVOICES':
@@ -85,13 +85,13 @@ export class VoiceCommandRouter {
 
       // Quote Management Actions
       case 'CREATE_QUOTE':
-        this.navigate('/quotes?action=create-quote');
+        this.navigate('/sales?tab=quotes&action=create-quote');
         break;
       case 'APPROVE_QUOTE':
         if (params && 'quoteId' in params) {
-          this.navigate(`/quotes?action=approve-quote&quoteId=${params.quoteId}`);
+          this.navigate(`/sales?tab=quotes&action=approve-quote&quoteId=${params.quoteId}`);
         } else {
-          this.navigate('/quotes');
+          this.navigate('/sales?tab=quotes');
         }
         break;
 
@@ -109,13 +109,13 @@ export class VoiceCommandRouter {
 
       // Payment Management Actions
       case 'RECORD_PAYMENT':
-        this.navigate('/payments?action=record-payment');
+        this.navigate('/sales?tab=receivables&action=record-payment');
         break;
       case 'SEND_PAYMENT_REMINDER':
         if (params && 'customerId' in params) {
-          this.navigate(`/payments?action=send-reminder&customerId=${params.customerId}`);
+          this.navigate(`/sales?tab=receivables&action=send-reminder&customerId=${params.customerId}`);
         } else {
-          this.navigate('/payments');
+          this.navigate('/sales?tab=receivables');
         }
         break;
 

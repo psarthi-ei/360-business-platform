@@ -4,12 +4,17 @@ import {
   mockConsolidatedPurchaseRequests, 
   mockPurchaseOrders
 } from '../../data/procurementMockData';
+import {
+  getInventorySummary,
+  getExpiringChemicals
+} from '../../data/inventoryMockData';
 import { SalesOrder } from '../../data/salesMockData';
 import styles from './Procurement.module.css';
 import MaterialRequirements from './MaterialRequirements';
 import PurchaseRequests from './PurchaseRequests';
 import PurchaseOrders from './PurchaseOrders';
 import GoodsReceiptNotes from './GoodsReceiptNotes';
+import InventoryManagement from './InventoryManagement';
 
 interface ProcurementProps {
   mobile?: boolean;
@@ -17,7 +22,7 @@ interface ProcurementProps {
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
-type ProcurementTabType = 'mr' | 'prs' | 'pos' | 'grns';
+type ProcurementTabType = 'mr' | 'prs' | 'pos' | 'grns' | 'inventory';
 
 // Material status count calculator for all sales orders
 const calculateMaterialStatusCounts = () => {
@@ -74,6 +79,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   const [prFilterState, setPrFilterState] = useState('all');
   const [poFilterState, setPoFilterState] = useState('all');
   const [grnFilterState, setGrnFilterState] = useState('all');
+  const [inventoryFilterState, setInventoryFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
   
   // Universal scroll behavior - always enabled for business modules (CSS handles it)
@@ -93,6 +99,16 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   const mrCounts = calculateMaterialStatusCounts();
   const prCounts = calculatePRCounts();
   const poCounts = calculatePOCounts();
+  
+  // Calculate inventory counts
+  const inventorySummary = getInventorySummary();
+  const inventoryCounts = {
+    all: inventorySummary.totalItems,
+    company: inventorySummary.companyItemsCount,
+    client: inventorySummary.clientItemsCount,
+    lowstock: inventorySummary.lowStockItems,
+    expiring: getExpiringChemicals().length
+  };
   
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
@@ -120,6 +136,13 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       { value: 'pending', label: '⏳ Pending QC', count: 6 },
       { value: 'approved', label: '✅ Approved', count: 10 },
       { value: 'rejected', label: '❌ Rejected', count: 2 }
+    ],
+    inventory: [
+      { value: 'all', label: 'All Materials', count: inventoryCounts.all },
+      { value: 'company', label: '🏢 Company Materials', count: inventoryCounts.company },
+      { value: 'client', label: '👤 Client Materials', count: inventoryCounts.client },
+      { value: 'lowstock', label: '⚠️ Low Stock', count: inventoryCounts.lowstock },
+      { value: 'expiring', label: '⏰ Expiring Soon', count: inventoryCounts.expiring }
     ]
   };
 
@@ -130,6 +153,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       case 'prs': return prFilterState;
       case 'pos': return poFilterState;
       case 'grns': return grnFilterState;
+      case 'inventory': return inventoryFilterState;
       default: return 'all';
     }
   };
@@ -141,6 +165,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       case 'prs': setPrFilterState(filter); break;
       case 'pos': setPoFilterState(filter); break;
       case 'grns': setGrnFilterState(filter); break;
+      case 'inventory': setInventoryFilterState(filter); break;
     }
   };
 
@@ -153,6 +178,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         case 'prs': return prFilterState;
         case 'pos': return poFilterState;
         case 'grns': return grnFilterState;
+        case 'inventory': return inventoryFilterState;
         default: return 'all';
       }
     })();
@@ -200,6 +226,16 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
             { value: 'approved', label: '✅ Approved', count: 10 },
             { value: 'rejected', label: '❌ Rejected', count: 2 }
           ];
+        case 'inventory': {
+          const invSummary = getInventorySummary();
+          return [
+            { value: 'all', label: 'All Materials', count: invSummary.totalItems },
+            { value: 'company', label: '🏢 Company Materials', count: invSummary.companyItemsCount },
+            { value: 'client', label: '👤 Client Materials', count: invSummary.clientItemsCount },
+            { value: 'lowstock', label: '⚠️ Low Stock', count: invSummary.lowStockItems },
+            { value: 'expiring', label: '⏰ Expiring Soon', count: getExpiringChemicals().length }
+          ];
+        }
         default:
           return [];
       }
@@ -222,7 +258,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, mrFilterState, prFilterState, poFilterState, grnFilterState, timelineFilter]);
+  }, [activeTab, mrFilterState, prFilterState, poFilterState, grnFilterState, inventoryFilterState, timelineFilter]);
 
   // Universal scroll - no complex calculations needed, browser handles overflow automatically
 
@@ -305,6 +341,13 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
             onFilterChange={setGrnFilterState}
           />
         );
+      case 'inventory':
+        return (
+          <InventoryManagement
+            filterState={inventoryFilterState}
+            onFilterChange={setInventoryFilterState}
+          />
+        );
       default:
         return null;
     }
@@ -317,6 +360,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       case 'prs': return '+ New Request';
       case 'pos': return '+ New PO';
       case 'grns': return '+ Record Receipt';
+      case 'inventory': return '+ Update Stock';
       default: return '+ Add';
     }
   };
@@ -335,6 +379,9 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         break;
       case 'grns':
         alert('Record Goods Receipt functionality coming soon!');
+        break;
+      case 'inventory':
+        alert('Update Stock functionality coming soon!');
         break;
       default:
         // Unknown tab - no action needed
@@ -373,6 +420,12 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
           onClick={() => setActiveTab('grns')}
         >
           GRNs
+        </button>
+        <button 
+          className={`${styles.tabButton} ${activeTab === 'inventory' ? styles.active : ''}`}
+          onClick={() => setActiveTab('inventory')}
+        >
+          Inventory
         </button>
       </div>
       
