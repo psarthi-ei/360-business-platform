@@ -130,6 +130,7 @@ export interface Lead {
   budget: string;
   timeline: string;
   priority: 'hot' | 'warm' | 'cold';
+  leadType: 'sales' | 'job_work'; // Added: Lead type differentiation for UI logic
   
   // UC-L04: Structured Fabric Requirements
   fabricRequirements?: FabricRequirements;
@@ -611,6 +612,7 @@ export const mockLeads: Lead[] = [
     budget: '₹12-15 lakhs',
     timeline: '45 days',
     priority: 'hot',
+    leadType: 'sales',
     fabricRequirements: {
       fabricType: 'Cotton',
       gsm: 180,
@@ -640,6 +642,7 @@ export const mockLeads: Lead[] = [
     budget: '₹10-14 lakhs',
     timeline: '60 days',
     priority: 'warm',
+    leadType: 'sales',
     fabricRequirements: {
       fabricType: 'Cotton Blend',
       gsm: 150,
@@ -670,6 +673,7 @@ export const mockLeads: Lead[] = [
     budget: '₹8-10 lakhs',
     timeline: '30 days',
     priority: 'hot',
+    leadType: 'sales',
     lastContact: 'Converted to order on March 15, 2025',
     notes: 'Successfully converted to order. First order completed successfully.',
     conversionStatus: 'converted_to_order',
@@ -688,6 +692,7 @@ export const mockLeads: Lead[] = [
     budget: '₹6-8 lakhs',
     timeline: '20 days',
     priority: 'warm',
+    leadType: 'sales',
     lastContact: 'Converted to order on April 02, 2025',
     notes: 'Excellent payment behavior - completed first order successfully.',
     conversionStatus: 'converted_to_order',
@@ -705,6 +710,7 @@ export const mockLeads: Lead[] = [
     timeline: '90 days',
     lastContact: 'Last week - "Need more time to decide"',
     priority: 'cold',
+    leadType: 'sales',
     notes: 'New prospect - slow decision process. Follow up in 2 weeks.',
     conversionStatus: 'active_lead'
   },
@@ -719,6 +725,7 @@ export const mockLeads: Lead[] = [
     timeline: '30 days',
     lastContact: 'Today 2:30 PM - "Will pay advance by tomorrow"',
     priority: 'hot',
+    leadType: 'sales',
     notes: 'Quote approved. Proforma invoice sent. Advance payment expected tomorrow.',
     conversionStatus: 'proforma_sent'
   },
@@ -736,6 +743,7 @@ export const mockLeads: Lead[] = [
     timeline: '25 days',
     lastContact: 'Converted to customer on March 31, 2025',
     priority: 'hot',
+    leadType: 'sales',
     notes: 'Successfully converted to customer. First order completed successfully.',
     conversionStatus: 'converted_to_order',
     convertedToOrderDate: 'March 31, 2025'
@@ -759,6 +767,7 @@ export const mockLeads: Lead[] = [
     budget: '₹12-15 lakhs',
     timeline: '35 days',
     priority: 'hot',
+    leadType: 'sales',
     fabricRequirements: {
       fabricType: 'Cotton Blend',
       gsm: 160,
@@ -790,6 +799,7 @@ export const mockLeads: Lead[] = [
     budget: '₹18-22 lakhs',
     timeline: '40 days',
     priority: 'warm',
+    leadType: 'sales',
     fabricRequirements: {
       fabricType: 'Silk Blend',
       gsm: 140,
@@ -821,6 +831,7 @@ export const mockLeads: Lead[] = [
     budget: '₹25-30 lakhs',
     timeline: '50 days',
     priority: 'hot',
+    leadType: 'sales',
     fabricRequirements: {
       fabricType: 'Mixed Cotton',
       gsm: 130,
@@ -853,6 +864,7 @@ export const mockLeads: Lead[] = [
     budget: '₹45,000-55,000',
     timeline: '7 days',
     priority: 'hot',
+    leadType: 'job_work',
     
     // Service requirements instead of fabric requirements
     serviceRequirements: {
@@ -888,6 +900,7 @@ export const mockLeads: Lead[] = [
     budget: '₹30,000-40,000',
     timeline: '5 days',
     priority: 'warm',
+    leadType: 'job_work',
     
     serviceRequirements: {
       serviceType: 'finishing',
@@ -922,6 +935,7 @@ export const mockLeads: Lead[] = [
     budget: '₹75,000-85,000',
     timeline: '10 days',
     priority: 'hot',
+    leadType: 'job_work',
     
     serviceRequirements: {
       serviceType: 'printing',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lead, FabricRequirements } from '../../data/salesMockData';
+import { Lead, FabricRequirements, ServiceRequirements } from '../../data/salesMockData';
 import ModalPortal from '../ui/ModalPortal';
 import styles from './AddLeadModal.module.css';
 
@@ -25,6 +25,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     designation: '',
     department: '',
     businessProfileId: '',
+    // ✅ NEW: Lead type selection
+    leadType: 'sales' as 'sales' | 'job_work',
     // Fabric Requirements
     fabricRequirements: {
       fabricType: '',
@@ -37,12 +39,31 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
       qualityGrade: undefined,
       specialProcessing: '',
       deliveryTimeline: ''
-    } as FabricRequirements
+    } as FabricRequirements,
+    // ✅ NEW: Service Requirements for job work leads
+    serviceRequirements: {
+      serviceType: 'dyeing',
+      materialType: '',
+      quantity: 0,
+      unit: 'meters',
+      deliveryTimeline: '',
+      customerSpecifications: {
+        colors: [],
+        finishType: [],
+        printType: [],
+        designComplexity: '',
+        printQuality: '',
+        specialRequirements: [],
+        testingRequired: [],
+        chemicalRequirements: []
+      }
+    } as ServiceRequirements
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showFabricRequirements, setShowFabricRequirements] = useState(false);
+  const [showServiceRequirements, setShowServiceRequirements] = useState(false);
 
   // Pre-populate form when editing
   useEffect(() => {
@@ -60,6 +81,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         designation: editingLead.designation || '',
         department: editingLead.department || '',
         businessProfileId: editingLead.businessProfileId || '',
+        // ✅ NEW: Lead type (inferred from existing data or default to sales)
+        leadType: 'sales' as 'sales' | 'job_work', // Can be enhanced to detect from existing data
         fabricRequirements: editingLead.fabricRequirements || {
           fabricType: '',
           gsm: undefined,
@@ -71,7 +94,25 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
           qualityGrade: undefined,
           specialProcessing: '',
           deliveryTimeline: ''
-        } as FabricRequirements
+        } as FabricRequirements,
+        // ✅ NEW: Service requirements (empty for editing existing leads)
+        serviceRequirements: {
+          serviceType: 'dyeing',
+          materialType: '',
+          quantity: 0,
+          unit: 'meters',
+          deliveryTimeline: '',
+          customerSpecifications: {
+            colors: [],
+            finishType: [],
+            printType: [],
+            designComplexity: '',
+            printQuality: '',
+            specialRequirements: [],
+            testingRequired: [],
+            chemicalRequirements: []
+          }
+        } as ServiceRequirements
       });
       
       // Auto-expand fabric requirements if editing and there are existing requirements
@@ -96,6 +137,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         designation: '',
         department: '',
         businessProfileId: '',
+        leadType: 'sales',
         fabricRequirements: {
           fabricType: '',
           gsm: undefined,
@@ -107,11 +149,35 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
           qualityGrade: undefined,
           specialProcessing: '',
           deliveryTimeline: ''
-        } as FabricRequirements
+        } as FabricRequirements,
+        serviceRequirements: {
+          serviceType: 'dyeing',
+          materialType: '',
+          quantity: 0,
+          unit: 'meters',
+          deliveryTimeline: '',
+          customerSpecifications: {
+            colors: [],
+            finishType: [],
+            printType: [],
+            designComplexity: '',
+            printQuality: '',
+            specialRequirements: [],
+            testingRequired: [],
+            chemicalRequirements: []
+          }
+        } as ServiceRequirements
       });
       setShowFabricRequirements(false);
     }
   }, [editingLead]);
+
+  // Keep requirements sections collapsed by default - user can expand if needed
+  useEffect(() => {
+    // Always keep both sections collapsed by default
+    setShowServiceRequirements(false);
+    setShowFabricRequirements(false);
+  }, [formData.leadType]);
 
   // Company options are now handled in the dropdown
 
@@ -144,6 +210,13 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
   const qualityGrades = [
     'A-Grade', 'B-Grade', 'Export-Grade', 'Industrial'
   ];
+
+  const handleLeadTypeChange = (leadType: 'sales' | 'job_work') => {
+    handleInputChange('leadType', leadType);
+    // Keep sections collapsed by default - user can expand manually if needed
+    setShowServiceRequirements(false);
+    setShowFabricRequirements(false);
+  };
 
   const handleInputChange = (field: string, value: string | number) => {
     // Handle fabric requirements fields
@@ -231,6 +304,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
       designation: '',
       department: '',
       businessProfileId: '',
+      leadType: 'sales',
       fabricRequirements: {
         fabricType: '',
         gsm: undefined,
@@ -242,7 +316,24 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         qualityGrade: undefined,
         specialProcessing: '',
         deliveryTimeline: ''
-      } as FabricRequirements
+      } as FabricRequirements,
+      serviceRequirements: {
+        serviceType: 'dyeing',
+        materialType: '',
+        quantity: 0,
+        unit: 'meters',
+        deliveryTimeline: '',
+        customerSpecifications: {
+          colors: [],
+          finishType: [],
+          printType: [],
+          designComplexity: '',
+          printQuality: '',
+          specialRequirements: [],
+          testingRequired: [],
+          chemicalRequirements: []
+        }
+      } as ServiceRequirements
     });
     
     setIsSubmitting(false);
@@ -263,6 +354,36 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         </div>
 
         <form onSubmit={handleSubmit} className={styles.modalForm}>
+          {/* Lead Type Selection - First Thing in Modal */}
+          <div className={styles.formGroup}>
+            <label className={styles.leadTypeLabel}>Lead Type *</label>
+            <div className={styles.radioGroup}>
+              <label className={styles.radioOption}>
+                <input
+                  type="radio"
+                  name="leadType"
+                  value="sales"
+                  checked={formData.leadType === 'sales'}
+                  onChange={() => handleLeadTypeChange('sales')}
+                />
+                <span>Sales Order</span>
+              </label>
+              <label className={styles.radioOption}>
+                <input
+                  type="radio"
+                  name="leadType"
+                  value="job_work"
+                  checked={formData.leadType === 'job_work'}
+                  onChange={() => handleLeadTypeChange('job_work')}
+                />
+                <span>Job Work</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Spacing div for better visual separation */}
+          <div style={{ marginBottom: 'var(--ds-space-lg)' }}></div>
+
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="contactPerson">Contact Person *</label>
@@ -407,8 +528,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
             {errors.inquiry && <span className={styles.errorText}>{errors.inquiry}</span>}
           </div>
 
-          {/* Fabric Requirements Section - UC-L04 */}
-          <div className={styles.fabricRequirementsSection}>
+          {/* Fabric Requirements Section - Only for Sales Orders */}
+          {formData.leadType === 'sales' && (
+            <div className={styles.fabricRequirementsSection}>
             <div className={styles.sectionHeader} onClick={() => setShowFabricRequirements(!showFabricRequirements)}>
               <h3>🧵 Fabric Requirements (Optional)</h3>
               <span className={styles.toggleIcon}>{showFabricRequirements ? '▼' : '▶'}</span>
@@ -549,6 +671,114 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
               </div>
             )}
           </div>
+          )}
+
+          {/* Service Requirements Section - Only for Job Work */}
+          {formData.leadType === 'job_work' && (
+            <div className={styles.fabricRequirementsSection}>
+              <div className={styles.sectionHeader} onClick={() => setShowServiceRequirements(!showServiceRequirements)}>
+                <h3>🔧 Service Requirements (Job Work)</h3>
+                <span className={styles.toggleIcon}>{showServiceRequirements ? '▼' : '▶'}</span>
+              </div>
+              
+              {showServiceRequirements && (
+                <div className={styles.fabricFields}>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="serviceType">Service Type</label>
+                      <select
+                        id="serviceType"
+                        value={formData.serviceRequirements.serviceType}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          serviceRequirements: {
+                            ...prev.serviceRequirements,
+                            serviceType: e.target.value as 'dyeing' | 'finishing' | 'printing' | 'weaving'
+                          }
+                        }))}
+                      >
+                        <option value="dyeing">🎨 Dyeing Services</option>
+                        <option value="finishing">✨ Finishing Services</option>
+                        <option value="printing">🖨️ Printing Services</option>
+                        <option value="weaving">🧶 Weaving Services</option>
+                      </select>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label htmlFor="materialType">Material Type</label>
+                      <input
+                        id="materialType"
+                        type="text"
+                        value={formData.serviceRequirements.materialType}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          serviceRequirements: {
+                            ...prev.serviceRequirements,
+                            materialType: e.target.value
+                          }
+                        }))}
+                        placeholder="e.g., Cotton Grey Fabric, Silk Yarn"
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="serviceQuantity">Quantity</label>
+                      <input
+                        id="serviceQuantity"
+                        type="number"
+                        value={formData.serviceRequirements.quantity || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          serviceRequirements: {
+                            ...prev.serviceRequirements,
+                            quantity: e.target.value ? parseInt(e.target.value) : 0
+                          }
+                        }))}
+                        placeholder="1000"
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label htmlFor="serviceUnit">Unit</label>
+                      <select
+                        id="serviceUnit"
+                        value={formData.serviceRequirements.unit}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          serviceRequirements: {
+                            ...prev.serviceRequirements,
+                            unit: e.target.value as 'meters' | 'yards'
+                          }
+                        }))}
+                      >
+                        <option value="meters">Meters</option>
+                        <option value="yards">Yards</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="serviceDeliveryTimeline">Service Delivery Timeline</label>
+                    <input
+                      id="serviceDeliveryTimeline"
+                      type="text"
+                      value={formData.serviceRequirements.deliveryTimeline}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        serviceRequirements: {
+                          ...prev.serviceRequirements,
+                          deliveryTimeline: e.target.value
+                        }
+                      }))}
+                      placeholder="e.g., Within 15 days of material receipt"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className={styles.formGroup}>
             <label htmlFor="notes">Additional Notes</label>

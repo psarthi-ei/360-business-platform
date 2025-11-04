@@ -2,14 +2,24 @@ import React, { useCallback } from 'react';
 import { formatCurrency, getBusinessProfileById } from '../../data/customerMockData';
 import { 
   mockSalesOrders, 
+  mockJobOrders,
   mockQuotes, 
   mockLeads,
   mockProformaInvoices,
-  OrderItem
+  OrderItem,
+  SalesOrder,
+  JobOrder
 } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './SalesOrders.module.css';
+
+// Unified order type for processing both sales orders and job orders
+type UnifiedOrder = (SalesOrder | JobOrder) & {
+  orderType: 'sales_order' | 'job_order';
+  materialOwnership: 'company' | 'client';
+  paymentType: 'advance' | 'credit';
+};
 
 interface SalesOrdersProps {
   onShowLeadManagement?: () => void;
@@ -17,6 +27,7 @@ interface SalesOrdersProps {
   onShowPayments?: () => void;
   filterState: string;
   onFilterChange: (filter: string) => void;
+  includeJobOrders?: boolean; // New prop to control job order inclusion
 }
 
 function SalesOrders({
@@ -24,7 +35,8 @@ function SalesOrders({
   onShowQuotationOrders,
   onShowPayments,
   filterState,
-  onFilterChange
+  onFilterChange,
+  includeJobOrders = true // Default to include both types
 }: SalesOrdersProps) {
   const { t } = useTranslation();
   
@@ -40,6 +52,42 @@ function SalesOrders({
   
   // Removed nested items expansion - items now shown directly in main expanded view
   
+  // ✅ NEW: Unified order processing
+  const getAllOrders = useCallback((): UnifiedOrder[] => {
+    // Convert sales orders to unified format
+    const salesOrders: UnifiedOrder[] = mockSalesOrders.map(order => ({
+      ...order,
+      orderType: 'sales_order' as const,
+      materialOwnership: 'company' as const,
+      paymentType: 'advance' as const
+    }));
+    
+    // Convert job orders to unified format  
+    const jobOrders: UnifiedOrder[] = includeJobOrders ? mockJobOrders.map(order => ({
+      ...order,
+      orderType: 'job_order' as const,
+      materialOwnership: 'client' as const,
+      paymentType: 'credit' as const
+    })) : [];
+    
+    // Merge and sort by date
+    return [...salesOrders, ...jobOrders].sort((a, b) => 
+      new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+    );
+  }, [includeJobOrders]);
+  
+  // ✅ NEW: Enhanced filtering for dual order types
+  const getFilteredOrders = useCallback((): UnifiedOrder[] => {
+    const allOrders = getAllOrders();
+    
+    return allOrders.filter(order => {
+      // Apply existing filter logic
+      if (filterState === 'all') return true;
+      if (filterState === 'pending' && order.status === 'order_confirmed') return true;
+      if (filterState === 'production' && order.status === 'production_started') return true;
+      return false;
+    });
+  }, [getAllOrders, filterState]);
   
   // Helper function to get payment details for an order from ProformaInvoice data
   const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string) => {
@@ -177,15 +225,7 @@ function SalesOrders({
       
       
       <div className={styles.ordersContainer}>
-        {mockSalesOrders.map(order => {
-          // Filter logic
-          const shouldShow = (
-            filterState === 'all' ||
-            (filterState === 'pending' && order.status === 'order_confirmed') ||
-            (filterState === 'production' && order.status === 'production_started')
-          );
-
-          if (!shouldShow) return null;
+        {getFilteredOrders().map(order => {
 
           const statusIcons = {
             // Core customer-facing states
@@ -257,12 +297,12 @@ function SalesOrders({
                 className={`ds-card ${order.status === 'completed' || order.status === 'delivered' ? 'ds-card-status-active' : order.status === 'order_confirmed' || order.status === 'production_started' || order.status === 'shipped' ? 'ds-card-status-pending' : 'ds-card-priority-medium'} ${isExpanded(order.id) ? 'ds-card-expanded' : ''}`}
                 onClick={() => toggleDetails(order.id)}
               >
-                {/* Enhanced Header - Company Name + Items Context */}
+                {/* Enhanced Header - Company Name + Items Context + Order Type */}
                 <div 
                   className="ds-card-header"
-                  title={`${companyName} - ${getOrderItemsHeader(order)} (Order ID: ${order.id})`}
+                  title={`${companyName} - ${getOrderItemsHeader(order)} (${order.orderType === 'job_order' ? 'Job Work' : 'Sales Order'} ID: ${order.id})`}
                 >
-                  {companyName} — {getOrderItemsHeader(order)}
+                  {order.orderType === 'job_order' ? '🔧' : '📦'} {companyName} — {getOrderItemsHeader(order)}
                 </div>
                 
                 {/* Optimized Status - Primary Order Status Only */}
@@ -290,6 +330,7 @@ function SalesOrders({
                 <div className="ds-expanded-details">
                   <div className="ds-details-content">
                     {/* Enhanced Order Details - Focus on NEW information not in card */}
+                    <p><strong>Order Type:</strong> {order.orderType === 'job_order' ? '🔧 Job Work Order' : '📦 Sales Order'} • <strong>Materials:</strong> {order.materialOwnership === 'client' ? '👤 Client Owned' : '🏭 Company Owned'} • <strong>Payment:</strong> {order.paymentType === 'credit' ? '💳 Credit Terms' : '💰 Advance Payment'}</p>
                     <p><strong>Status Details:</strong> {order.statusMessage}</p>
                     <p><strong>Production Status:</strong> {order.statusMessage}</p>
                     {order.balancePaymentDue && order.balancePaymentDue > 0 && (
@@ -297,6 +338,9 @@ function SalesOrders({
                     )}
                     {order.progressPercentage && (
                       <p><strong>Progress:</strong> {order.progressPercentage}% completed</p>
+                    )}
+                    {order.orderType === 'job_order' && 'serviceType' in order && (
+                      <p><strong>Service Type:</strong> {order.serviceType} • <strong>Credit Terms:</strong> {order.creditTerms} days</p>
                     )}
                   </div>
 
