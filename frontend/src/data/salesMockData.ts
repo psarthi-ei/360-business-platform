@@ -44,6 +44,75 @@ export interface FabricRequirements {
   deliveryTimeline?: string; // When fabric is needed
 }
 
+export interface ServiceRequirements {
+  serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+  materialType: string;        // "Cotton Grey Fabric" - what customer brings
+  quantity: number;           // Quantity customer wants processed
+  unit: 'meters' | 'yards' | 'kg' | 'pieces';
+  
+  // ONLY customer specifications (not production details)
+  customerSpecifications: {
+    colors?: string[];         // Customer wants "Red, Blue, Green"
+    finishType?: string[];     // Customer wants ["Matte finish", "Anti-wrinkle"]
+    printType?: string[];      // For printing services
+    designComplexity?: string; // For printing services
+    printQuality?: string;     // For printing services
+    specialRequirements?: string[]; // Customer-specific requirements
+    testingRequired?: string[]; // Required tests
+    chemicalRequirements?: string[]; // For dyeing services
+    processRequirements?: string[]; // Process-specific requirements
+    qualityGrade?: string;     // Quality requirements
+  };
+  
+  deliveryTimeline: string;    // Promise to customer "7 days"
+  specialInstructions?: string; // Customer notes only
+}
+
+// Phase 2 Day 12: Quote Conversion Workflow Interfaces
+// Different workflow paths for sales vs service quotes
+
+// Sales Quote Conversion (Advance Payment Model)
+export interface SalesQuoteConversion {
+  step1: 'quote_created';
+  step2: 'proforma_invoice_generated'; // For advance payment collection
+  step3: 'advance_payment_received';   // Triggers order creation
+  step4: 'sales_order_created';
+  paymentType: 'advance';
+  riskMitigation: 'advance_payment_covers_material_cost';
+}
+
+// Service Quote Conversion (Credit Payment Model)  
+export interface ServiceQuoteConversion {
+  step1: 'service_quote_created';
+  step2: 'quote_acceptance';           // Direct acceptance, no payment
+  step3: 'job_order_created';          // No proforma step
+  step4: 'material_receipt_awaited';
+  paymentType: 'credit';
+  riskMitigation: 'client_owns_materials_lower_risk';
+}
+
+// Quote Conversion Workflow States
+export type QuoteConversionStep = 
+  | 'quote_created'
+  | 'proforma_invoice_generated'
+  | 'advance_payment_received'
+  | 'sales_order_created'
+  | 'service_quote_created'
+  | 'quote_acceptance'
+  | 'job_order_created'
+  | 'material_receipt_awaited';
+
+// Workflow Controller for handling different quote types
+export interface QuoteWorkflowController {
+  quoteId: string;
+  quoteType: 'product_sale' | 'service_processing';
+  currentStep: QuoteConversionStep;
+  workflowType: 'sales_conversion' | 'service_conversion';
+  nextStep: QuoteConversionStep | null;
+  canProgress: boolean;
+  progressCondition?: string; // What needs to happen to progress
+}
+
 export interface Lead {
   id: string;
   businessProfileId: string; // Required - Links to BusinessProfile (single source of truth)
@@ -64,6 +133,9 @@ export interface Lead {
   
   // UC-L04: Structured Fabric Requirements
   fabricRequirements?: FabricRequirements;
+  
+  // Service Requirements (for service-based leads)
+  serviceRequirements?: ServiceRequirements;
   
   // Relationship Tracking
   lastContact: string;
@@ -310,6 +382,22 @@ export interface FinalInvoice {
   paymentReceivedDate?: string;
   notes: string;
   
+  // Phase 2 Day 13: Service Invoice Enhancement
+  // Service-specific fields for job order invoices
+  invoiceType?: 'product_invoice' | 'service_invoice';
+  serviceDescription?: string;
+  serviceType?: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+  creditTerms?: number;
+  materialOwnership?: 'company' | 'client';
+  
+  // Service completion tracking
+  serviceCompletionDate?: string;
+  materialReturnStatus?: 'processing' | 'ready_for_collection' | 'returned';
+  qualityCertificateAttached?: boolean;
+  
+  // Enhanced payment details
+  paymentType?: 'advance' | 'credit';
+  
   // Legacy fields for backward compatibility
   gstRate: number;
   gstAmount: number;
@@ -345,21 +433,6 @@ export interface FinalPayment {
 
 // Service Requirements - Parallel to FabricRequirements for job work specifications
 // Clean Customer-Focused Service Requirements (NO production details)
-export interface ServiceRequirements {
-  serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
-  materialType: string;        // "Cotton Grey Fabric" - what customer brings
-  quantity: number;           // Quantity customer wants processed
-  unit: 'meters' | 'yards' | 'kg' | 'pieces';
-  
-  // ONLY customer specifications (not production details)
-  customerSpecifications: {
-    colors?: string[];         // Customer wants "Red, Blue, Green"
-    finishType?: string;       // Customer wants "Matte finish"
-  };
-  
-  deliveryTimeline: string;    // Promise to customer "7 days"
-  specialInstructions?: string; // Customer notes only
-}
 
 // ❌ REMOVED: ClientMaterialInward interface - duplicated inventory functionality
 // ✅ REPLACEMENT: Use inventory system as single source of truth for all materials
@@ -466,7 +539,7 @@ export interface ReceivableRecord {
   assignedCollector?: string;
   
   // Status tracking
-  paymentStatus: 'pending' | 'partial' | 'overdue' | 'collection' | 'written_off';
+  paymentStatus: 'pending' | 'paid' | 'partial' | 'overdue' | 'collection' | 'written_off';
   paymentPlan?: {
     planActive: boolean;
     installmentAmount: number;
@@ -763,6 +836,111 @@ export const mockLeads: Lead[] = [
     lastContact: 'This morning - "Biggest order this year, need best pricing"',
     notes: 'Large wholesale customer. Volume discount expected. Fast payment on delivery.',
     conversionStatus: 'active_lead'
+  },
+
+  // ==================== SERVICE LEADS FOR JOB ORDERS ====================
+  // Service Lead 1 - Dyeing Service
+  {
+    id: 'lead-jo-001',
+    businessProfileId: 'bp-surat-processors',
+    contactPerson: 'Ramesh Kumar',
+    designation: 'Production Manager',
+    department: 'Processing',
+    contact: '+91 98765 43210 | ramesh@suratprocessors.com',
+    phone: '+91 98765 43210',
+    email: 'ramesh@suratprocessors.com',
+    inquiry: 'Dyeing service for 2000m cotton fabric - Navy blue reactive dyes',
+    budget: '₹45,000-55,000',
+    timeline: '7 days',
+    priority: 'hot',
+    
+    // Service requirements instead of fabric requirements
+    serviceRequirements: {
+      serviceType: 'dyeing',
+      materialType: 'Cotton Grey Fabric',
+      quantity: 2000,
+      unit: 'meters',
+      customerSpecifications: {
+        colors: ['Navy Blue'],
+        qualityGrade: 'A-Grade',
+        chemicalRequirements: ['Reactive Dyes', 'Salt', 'Soda Ash'],
+        processRequirements: ['Pre-treatment', 'Hot dyeing process', 'Cold wash']
+      },
+      deliveryTimeline: '7 days'
+    },
+    
+    lastContact: 'Yesterday - "Urgent order for export client, need best quality"',
+    notes: 'Regular service customer. Brings own fabric. Reliable payment record.',
+    conversionStatus: 'quote_sent'
+  },
+
+  // Service Lead 2 - Finishing Service
+  {
+    id: 'lead-jo-002',
+    businessProfileId: 'bp-ahmedabad-finishers',
+    contactPerson: 'Kiran Shah',
+    designation: 'Quality Head',
+    department: 'Finishing',
+    contact: '+91 97654 32108 | kiran@ahmedabadfinish.com',
+    phone: '+91 97654 32108',
+    email: 'kiran@ahmedabadfinish.com',
+    inquiry: 'Softening and anti-wrinkle finishing for 1500m cotton fabric',
+    budget: '₹30,000-40,000',
+    timeline: '5 days',
+    priority: 'warm',
+    
+    serviceRequirements: {
+      serviceType: 'finishing',
+      materialType: 'Cotton Dyed Fabric',
+      quantity: 1500,
+      unit: 'meters',
+      customerSpecifications: {
+        finishType: ['Softening', 'Anti-wrinkle'],
+        qualityGrade: 'Premium',
+        specialRequirements: ['Enzyme treatment', 'Silicone softening', 'Anti-bacterial'],
+        testingRequired: ['Hand feel test', 'Wrinkle recovery']
+      },
+      deliveryTimeline: '5 days'
+    },
+    
+    lastContact: '2 days ago - "Regular finishing work, need consistent quality"',
+    notes: 'Established finishing client. Quality-focused. Net 15 payment terms.',
+    conversionStatus: 'verbally_approved'
+  },
+
+  // Service Lead 3 - Printing Service
+  {
+    id: 'lead-jo-003',
+    businessProfileId: 'bp-mumbai-printers',
+    contactPerson: 'Deepak Joshi',
+    designation: 'Design Manager',
+    department: 'Digital Printing',
+    contact: '+91 96543 21087 | deepak@mumbaiprints.com',
+    phone: '+91 96543 21087',
+    email: 'deepak@mumbaiprints.com',
+    inquiry: 'Digital printing service for 3200m polyester fabric - Multi-color design',
+    budget: '₹75,000-85,000',
+    timeline: '10 days',
+    priority: 'hot',
+    
+    serviceRequirements: {
+      serviceType: 'printing',
+      materialType: 'Polyester Fabric',
+      quantity: 3200,
+      unit: 'meters',
+      customerSpecifications: {
+        printType: ['Digital printing'],
+        colors: ['Multi-color design', '8 colors', 'CMYK process'],
+        designComplexity: 'High',
+        printQuality: 'Photo quality',
+        specialRequirements: ['Color fastness testing', 'Design registration', 'Quality check']
+      },
+      deliveryTimeline: '10 days'
+    },
+    
+    lastContact: 'This morning - "Fashion season order, need premium printing quality"',
+    notes: 'Fashion industry client. High-value orders. Requires premium quality and fast delivery.',
+    conversionStatus: 'awaiting_payment'
   }
 ];
 
@@ -2077,6 +2255,17 @@ export const mockFinalInvoices: FinalInvoice[] = [
     paymentReceivedDate: 'November 15, 2024',
     notes: 'Service completed successfully. High-quality dyeing as per specifications.',
     
+    // Phase 2 Day 13: Service Invoice Enhancement - Applied to existing service invoice
+    invoiceType: 'service_invoice',
+    serviceDescription: 'Reactive Dyeing Service - Navy Blue Premium Grade',
+    serviceType: 'dyeing',
+    creditTerms: 30,
+    materialOwnership: 'client',
+    serviceCompletionDate: 'November 12, 2024',
+    materialReturnStatus: 'returned',
+    qualityCertificateAttached: true,
+    paymentType: 'credit',
+    
     // Legacy fields for backward compatibility
     gstRate: 18,
     gstAmount: 8640,
@@ -2989,6 +3178,90 @@ export const sampleQuoteItems: QuoteItem[] = [
 export const sampleProformaItems: ProformaItem[] = convertQuoteToProformaItems(sampleQuoteItems);
 export const sampleOrderItems: OrderItem[] = convertQuoteToOrderItems(sampleQuoteItems);
 
+// Phase 2 Day 12: Quote Conversion Workflow Controllers
+// Sample data showing different workflow states for various quotes
+
+export const mockQuoteWorkflowControllers: QuoteWorkflowController[] = [
+  // Service Quote - Direct to Job Order Workflow
+  {
+    quoteId: 'QT-JO-001', // Service quote for dyeing
+    quoteType: 'service_processing',
+    currentStep: 'service_quote_created',
+    workflowType: 'service_conversion',
+    nextStep: 'quote_acceptance',
+    canProgress: true,
+    progressCondition: 'Customer acceptance required'
+  },
+  {
+    quoteId: 'QT-JO-002', // Service quote for finishing (accepted)
+    quoteType: 'service_processing',
+    currentStep: 'quote_acceptance',
+    workflowType: 'service_conversion',
+    nextStep: 'job_order_created',
+    canProgress: true,
+    progressCondition: 'Generate job order automatically'
+  },
+  {
+    quoteId: 'QT-JO-003', // Service quote for printing (completed workflow)
+    quoteType: 'service_processing',
+    currentStep: 'job_order_created',
+    workflowType: 'service_conversion',
+    nextStep: 'material_receipt_awaited',
+    canProgress: false,
+    progressCondition: 'Job order JO-003 created, waiting for client materials'
+  },
+  
+  // Product Sales Quote - Advance Payment Workflow  
+  {
+    quoteId: 'QT-2024-001', // Product quote for cotton fabric
+    quoteType: 'product_sale',
+    currentStep: 'quote_created',
+    workflowType: 'sales_conversion',
+    nextStep: 'proforma_invoice_generated',
+    canProgress: true,
+    progressCondition: 'Generate proforma invoice for advance payment'
+  },
+  {
+    quoteId: 'QT-2024-002', // Product quote with proforma generated
+    quoteType: 'product_sale',
+    currentStep: 'proforma_invoice_generated',
+    workflowType: 'sales_conversion',
+    nextStep: 'advance_payment_received',
+    canProgress: false,
+    progressCondition: 'Awaiting 30% advance payment of ₹4,44,000'
+  },
+  {
+    quoteId: 'QT-2024-003', // Product quote with payment received
+    quoteType: 'product_sale',
+    currentStep: 'advance_payment_received',
+    workflowType: 'sales_conversion',
+    nextStep: 'sales_order_created',
+    canProgress: true,
+    progressCondition: 'Create sales order for production'
+  }
+];
+
+// Helper functions for quote workflow management
+export function getNextWorkflowStep(controller: QuoteWorkflowController): QuoteConversionStep | null {
+  if (!controller.canProgress) return null;
+  return controller.nextStep;
+}
+
+export function canProgressWorkflow(quoteId: string): boolean {
+  const controller = mockQuoteWorkflowControllers.find(c => c.quoteId === quoteId);
+  return controller?.canProgress ?? false;
+}
+
+export function getWorkflowType(quoteId: string): 'sales_conversion' | 'service_conversion' | null {
+  const controller = mockQuoteWorkflowControllers.find(c => c.quoteId === quoteId);
+  return controller?.workflowType ?? null;
+}
+
+// Business logic: Service quotes skip proforma step
+export function requiresProformaInvoice(quoteType: 'product_sale' | 'service_processing'): boolean {
+  return quoteType === 'product_sale'; // Only product sales need proforma for advance payment
+}
+
 // ==================== JOB ORDER MOCK DATA ====================
 
 // ❌ REMOVED: mockClientMaterials array - all client material tracking now through inventory system
@@ -3077,7 +3350,7 @@ export const mockJobOrders: JobOrder[] = [
       quantity: 1500,
       unit: 'meters',
       customerSpecifications: {
-        finishType: 'Softening & Anti-wrinkle'
+        finishType: ['Softening & Anti-wrinkle']
       },
       deliveryTimeline: '3 days from processing start'
     },
@@ -3268,6 +3541,79 @@ export const mockReceivables: ReceivableRecord[] = [
     remindersSent: 0,
     nextActionDate: '2024-11-15',
     nextActionType: 'reminder',
+    paymentStatus: 'pending'
+  },
+  
+  // Phase 2 Day 14: Job Order Receivables for Financial Chain
+  // Linked to enhanced service invoices with new service-specific fields
+  {
+    id: 'REC-JO-001',
+    invoiceId: 'INV-JO-2024-001', // Links to enhanced service invoice
+    customerId: 'bp-surat-dye-works',
+    customerName: 'Ramesh Kumar',
+    companyName: 'Surat Dye Works',
+    
+    invoiceNumber: 'INV-JO-2024-001',
+    invoiceDate: '2024-10-22',
+    dueDate: '2024-11-21',
+    originalAmount: 56640,
+    receivedAmount: 56640, // Paid as per enhanced invoice
+    balanceAmount: 0,
+    
+    // Credit-based aging (different from advance-based sales)
+    daysPastDue: -17, // Still current (17 days to due date)
+    agingCategory: 'current',
+    
+    // Job order specific fields
+    orderType: 'job_order',
+    orderId: 'JO-2024-001',
+    orderDescription: 'Reactive Dyeing Service - Navy Blue Premium Grade',
+    
+    creditLimit: 200000,
+    totalOutstanding: 0, // Paid
+    creditUtilization: 0.0,
+    customerRisk: 'low',
+    paymentHistory: 'excellent',
+    lastPaymentDate: '2024-11-15',
+    averagePaymentDays: 24,
+    remindersSent: 0,
+    nextActionDate: undefined,
+    nextActionType: undefined,
+    paymentStatus: 'paid'
+  },
+  
+  // Additional service quote receivables  
+  {
+    id: 'REC-JO-002',
+    invoiceId: 'INV-JO-2024-002',
+    customerId: 'bp-textile-finishers',
+    customerName: 'Arvind Patel',
+    companyName: 'Advanced Textile Finishers',
+    
+    invoiceNumber: 'INV-JO-2024-002',
+    invoiceDate: '2024-10-25',
+    dueDate: '2024-11-09',
+    originalAmount: 84000,
+    receivedAmount: 0,
+    balanceAmount: 84000,
+    
+    daysPastDue: -5, // Due in 5 days
+    agingCategory: 'current',
+    
+    orderType: 'job_order',
+    orderId: 'JO-2024-002',
+    orderDescription: 'Finishing Services - Softening & Anti-wrinkle',
+    
+    creditLimit: 150000,
+    totalOutstanding: 84000,
+    creditUtilization: 56.0,
+    customerRisk: 'medium',
+    paymentHistory: 'good',
+    averagePaymentDays: 28,
+    remindersSent: 1,
+    lastReminderDate: '2024-11-01',
+    nextActionDate: '2024-11-08',
+    nextActionType: 'call',
     paymentStatus: 'pending'
   }
 ];

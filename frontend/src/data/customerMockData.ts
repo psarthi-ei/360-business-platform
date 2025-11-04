@@ -909,6 +909,136 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     },
     priority: 'hot',
     fabricPreferences: ['Export quality cotton', 'High-grade fabrics', 'Cotton manufacturing']
+  },
+  
+  // Service Lead BusinessProfiles - Added to fix customer name display issue
+  {
+    id: 'bp-surat-processors',
+    companyName: 'Surat Processing Works',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Surat',
+      state: 'Gujarat',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Ramesh Kumar',
+    phone: '+91 98765 43210',
+    email: 'ramesh@suratprocessors.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Textile processing services',
+    specialization: 'Dyeing and finishing services for cotton fabrics',
+    employeeCount: '50-100 employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 200000,
+    paymentScore: 75,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    preferences: {
+      paymentMethod: 'Net Banking',
+      deliveryPreference: 'Factory pickup',
+      qualityRequirements: 'Premium quality dyeing services',
+      communication: 'Email and phone',
+      specialNotes: 'Service prospect - dyeing and processing specialist'
+    },
+    
+    priority: 'warm',
+    fabricPreferences: ['Cotton processing', 'Reactive dyeing', 'Premium finishing']
+  },
+  
+  {
+    id: 'bp-ahmedabad-finishers',
+    companyName: 'Ahmedabad Finishing Mills',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Ahmedabad',
+      state: 'Gujarat',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Kiran Shah',
+    phone: '+91 97654 32108',
+    email: 'kiran@ahmedabadfinish.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Fabric finishing services',
+    specialization: 'Softening, anti-wrinkle, and quality finishing services',
+    employeeCount: '30-50 employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 150000,
+    paymentScore: 80,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    preferences: {
+      paymentMethod: 'Cheque',
+      deliveryPreference: 'Our facility pickup',
+      qualityRequirements: 'Premium finishing quality standards',
+      communication: 'Phone and WhatsApp',
+      specialNotes: 'Service prospect - fabric finishing specialist'
+    },
+    
+    priority: 'warm',
+    fabricPreferences: ['Cotton finishing', 'Quality enhancement', 'Softening treatments']
+  },
+  
+  {
+    id: 'bp-mumbai-printers',
+    companyName: 'Mumbai Digital Printers',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Deepak Joshi',
+    phone: '+91 96543 21087',
+    email: 'deepak@mumbaiprints.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Digital textile printing',
+    specialization: 'Multi-color digital printing on polyester and cotton',
+    employeeCount: '20-30 employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 250000,
+    paymentScore: 85,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    preferences: {
+      paymentMethod: 'RTGS',
+      deliveryPreference: 'Express courier',
+      qualityRequirements: 'High-resolution digital printing quality',
+      communication: 'Email and video calls',
+      specialNotes: 'Service prospect - premium digital printing specialist'
+    },
+    
+    priority: 'hot',
+    fabricPreferences: ['Digital printing', 'Polyester fabrics', 'Multi-color designs']
   }
 ];
 
