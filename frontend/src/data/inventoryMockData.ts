@@ -612,3 +612,79 @@ export const getInventoryValueByOwnership = () => {
     totalValue: companyValue + clientValue
   };
 };
+
+// ==================== JOB ORDER MATERIAL HELPER FUNCTIONS ====================
+// ✅ Moved from salesMockData.ts to eliminate dependency
+
+/**
+ * Get all client materials for a specific job order
+ * Alias for getMaterialsForJobOrder for backward compatibility
+ */
+export const getClientMaterialsForJobOrder = (jobOrderId: string): InventoryItem[] => {
+  return getMaterialsForJobOrder(jobOrderId);
+};
+
+/**
+ * Get all client materials for a specific customer
+ * Alias for getClientMaterials for backward compatibility
+ */
+export const getClientMaterialsForCustomer = (clientId: string): InventoryItem[] => {
+  return getClientMaterials(clientId);
+};
+
+/**
+ * Check if job order has received all expected materials
+ * Note: Works with available InventoryItem properties
+ */
+export const validateClientMaterialsReceived = (jobOrder: { id: string; expectedClientMaterialNames: string[] }): boolean => {
+  const receivedMaterials = getMaterialsForJobOrder(jobOrder.id);
+  return jobOrder.expectedClientMaterialNames.every(expectedMaterial =>
+    receivedMaterials.some(item => 
+      item.materialName.includes(expectedMaterial)
+    )
+  );
+};
+
+/**
+ * Get material status summary for job order
+ * Uses available inventory properties: stockStatus, daysSinceLastMovement
+ */
+export const getJobOrderMaterialStatus = (jobOrderId: string) => {
+  const materials = getMaterialsForJobOrder(jobOrderId);
+  
+  return {
+    totalMaterials: materials.length,
+    // Map inventory stockStatus to processing status
+    received: materials.filter(m => m.stockStatus === 'healthy' && m.daysSinceLastMovement && m.daysSinceLastMovement < 7).length,
+    inProcess: materials.filter(m => m.stockStatus === 'healthy' && m.daysSinceLastMovement && m.daysSinceLastMovement >= 7).length,
+    completed: materials.filter(m => m.notes?.includes('processed') || m.notes?.includes('completed')).length
+  };
+};
+
+/**
+ * Get material consumption summary for job order
+ * Simplified version using available inventory properties
+ */
+export const getJobOrderMaterialConsumption = (jobOrderId: string) => {
+  const materials = getMaterialsForJobOrder(jobOrderId);
+  
+  const consumption = materials.reduce((acc, material) => {
+    return {
+      totalReceived: acc.totalReceived + material.onHandStock,
+      totalConsumed: acc.totalConsumed + 0, // Would need additional tracking
+      totalWaste: acc.totalWaste + 0, // Would need additional tracking
+      totalReturnable: acc.totalReturnable + material.onHandStock // Assuming all returnable
+    };
+  }, {
+    totalReceived: 0,
+    totalConsumed: 0,
+    totalWaste: 0,
+    totalReturnable: 0
+  });
+  
+  return {
+    ...consumption,
+    wastePercentage: 0, // Would need waste tracking
+    consumptionPercentage: 0 // Would need consumption tracking
+  };
+};

@@ -188,31 +188,59 @@ function SalesOrders({
           if (!shouldShow) return null;
 
           const statusIcons = {
+            // Core customer-facing states
             order_confirmed: '✅',
+            payment_pending: '💳',
+            materials_pending: '📦',
+            in_process: '🔄',
+            quality_check: '🔍',
+            ready_to_ship: '🚚',
+            shipped: '🛫',
+            delivered: '📍',
+            completed: '🎉',
+            on_hold: '⏸️',
+            cancelled: '❌',
+            
+            // Legacy SalesOrder status values (compatibility)
             production_planning: '📋',
             pending_materials: '📦',
             production_started: '🏭',
-            quality_check: '🔍',
             production_completed: '✅',
-            ready_to_ship: '🚚',
-            shipped: '🛫',
             in_transit: '🚛',
-            delivered: '📍',
-            completed: '🎉'
+            
+            // Legacy JobOrder status values (compatibility)
+            awaiting_client_materials: '📥',
+            materials_acknowledged: '✅',
+            service_completed: '🎯',
+            ready_for_invoice: '💰'
           };
 
           const statusLabels = {
+            // Core customer-facing states
             order_confirmed: 'Order Confirmed',
+            payment_pending: 'Payment Pending',
+            materials_pending: 'Materials Pending',
+            in_process: 'In Process',
+            quality_check: 'Quality Check',
+            ready_to_ship: 'Ready to Ship',
+            shipped: 'Shipped',
+            delivered: 'Delivered',
+            completed: t('completed') || 'Completed',
+            on_hold: 'On Hold',
+            cancelled: 'Cancelled',
+            
+            // Legacy SalesOrder status values (compatibility)
             production_planning: 'Planning Production',
             pending_materials: 'Awaiting Materials',
             production_started: t('inProduction') || 'In Production',
-            quality_check: 'Quality Check',
             production_completed: 'Production Done',
-            ready_to_ship: 'Ready to Ship',
-            shipped: 'Shipped',
             in_transit: 'In Transit',
-            delivered: 'Delivered',
-            completed: t('completed') || 'Completed'
+            
+            // Legacy JobOrder status values (compatibility)
+            awaiting_client_materials: 'Awaiting Client Materials',
+            materials_acknowledged: 'Materials Received',
+            service_completed: 'Service Completed',
+            ready_for_invoice: 'Ready for Invoice'
           };
 
           const relatedQuote = mockQuotes.find(quote => quote.id === order.quoteId);
@@ -263,7 +291,7 @@ function SalesOrders({
                   <div className="ds-details-content">
                     {/* Enhanced Order Details - Focus on NEW information not in card */}
                     <p><strong>Status Details:</strong> {order.statusMessage}</p>
-                    <p><strong>Production Status:</strong> {order.productionStatus}</p>
+                    <p><strong>Production Status:</strong> {order.statusMessage}</p>
                     {order.balancePaymentDue && order.balancePaymentDue > 0 && (
                       <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue)}</p>
                     )}
@@ -320,7 +348,7 @@ function SalesOrders({
                           )}
                         </span>
                       </p>
-                      <p><strong>🏭 Production:</strong> {order.productionStatus}</p>
+                      <p><strong>🏭 Production:</strong> {order.statusMessage}</p>
                     </div>
                   </div>
                   

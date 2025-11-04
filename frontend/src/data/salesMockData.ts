@@ -1,6 +1,36 @@
 // Sales Mock Data for 360° Business Platform
 // This file contains sales-related sample data: leads, quotes, orders, invoices, payments, and fabric specifications
 
+// No inventory imports - Sales module handles only customer relationships and service orders
+
+// Universal Order Status - Comprehensive status including all current values for compatibility
+export type OrderStatus = 
+  // Core customer-facing states
+  | 'order_confirmed'        // Order created and confirmed
+  | 'payment_pending'        // Awaiting payment (advance/full)
+  | 'materials_pending'      // Awaiting materials (client materials for JO, procurement for SO)
+  | 'in_process'            // Being manufactured/processed
+  | 'quality_check'         // Final quality verification
+  | 'ready_to_ship'         // Completed, ready for delivery
+  | 'shipped'               // Dispatched to customer
+  | 'delivered'             // Customer received
+  | 'completed'             // Order fully completed and invoiced
+  | 'on_hold'               // Temporarily paused
+  | 'cancelled'             // Order cancelled
+  
+  // Legacy SalesOrder status values (kept for compatibility)
+  | 'production_planning'    // Production being planned
+  | 'pending_materials'      // Same as materials_pending (alias)
+  | 'production_started'     // Same as in_process (alias)
+  | 'production_completed'   // Production finished
+  | 'in_transit'            // Same as shipped (alias)
+  
+  // Legacy JobOrder status values (kept for compatibility)
+  | 'awaiting_client_materials'  // Awaiting client materials for job work
+  | 'materials_acknowledged'     // Client materials received and acknowledged
+  | 'service_completed'          // Service work completed
+  | 'ready_for_invoice';         // Ready to generate final invoice
+
 export interface FabricRequirements {
   fabricType: string; // Cotton, Silk, Polyester, etc.
   gsm?: number; // Grams per Square Meter
@@ -158,10 +188,9 @@ export interface SalesOrder {
   deliveryDate: string;
   items: OrderItem[];               // Professional structured items array
   totalAmount: number;
-  status: 'order_confirmed' | 'production_planning' | 'pending_materials' | 'production_started' | 'quality_check' | 'production_completed' | 'ready_to_ship' | 'shipped' | 'in_transit' | 'delivered' | 'completed';
+  status: OrderStatus;              // Unified customer-facing status (clean architecture)
   statusMessage: string;
   paymentStatus: 'pending' | 'advance_received' | 'partial' | 'completed' | 'overdue' | 'fully_paid';
-  productionStatus: string;
   balancePaymentDue?: number; // Remaining balance after advance
   
   // Enhanced fields for Customer 360° view modal display
@@ -173,7 +202,7 @@ export interface SalesOrder {
   expectedDeliveryDate?: string; // Expected delivery date
   actualDeliveryDate?: string; // Actual delivery date when completed
   orderValue?: number; // For display formatting (same as totalAmount)
-  progressPercentage?: number; // Production progress (0-100)
+  progressPercentage?: number; // Production progress (0-100) - kept for component compatibility
   
 }
 
@@ -315,59 +344,25 @@ export interface FinalPayment {
 // ==================== JOB ORDER SYSTEM INTERFACES ====================
 
 // Service Requirements - Parallel to FabricRequirements for job work specifications
+// Clean Customer-Focused Service Requirements (NO production details)
 export interface ServiceRequirements {
-  serviceType: 'dyeing' | 'finishing' | 'printing' | 'bleaching' | 'mercerizing';
-  materialType: string;        // "Cotton Grey Fabric", "Polyester Blend"
-  quantity: number;           // Quantity of material to process
+  serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+  materialType: string;        // "Cotton Grey Fabric" - what customer brings
+  quantity: number;           // Quantity customer wants processed
   unit: 'meters' | 'yards' | 'kg' | 'pieces';
-  processSpecifications: {
-    colors?: string[];         // For dyeing/printing services
-    finishType?: string;       // For finishing processes
-    qualityGrade: 'A-Grade' | 'B-Grade' | 'Export-Grade';
-    chemicalRequirements?: string[];
-    temperatureRange?: string;
-    processingTime?: string;   // "24 hours", "3 days"
+  
+  // ONLY customer specifications (not production details)
+  customerSpecifications: {
+    colors?: string[];         // Customer wants "Red, Blue, Green"
+    finishType?: string;       // Customer wants "Matte finish"
   };
-  deliveryTimeline: string;    // "5 days from material receipt"
-  specialInstructions?: string;
+  
+  deliveryTimeline: string;    // Promise to customer "7 days"
+  specialInstructions?: string; // Customer notes only
 }
 
-// Client Material Inward - Complete client material receipt and tracking system
-export interface ClientMaterialInward {
-  id: string;
-  jobOrderId: string;
-  materialType: string;
-  description: string;           // "Cotton Grey Fabric - 180 GSM"
-  receivedQuantity: number;
-  unit: string;
-  receivedDate: string;
-  receivedBy: string;            // Employee name
-  
-  // Quality assessment
-  qualityCheck: {
-    inspector: string;
-    inspectionDate: string;
-    gradeAssigned: 'A-Grade' | 'B-Grade' | 'C-Grade' | 'Rejected';
-    defectsNoted?: string[];
-    defectPercentage?: number;
-    photosPath?: string[];       // Quality check photos
-    approvalStatus: 'approved' | 'conditional' | 'rejected';
-  };
-  
-  // Storage and tracking
-  storageLocation: string;       // "Warehouse B - Section 3"
-  batchNumber?: string;
-  currentBalance: number;        // Tracks consumption during processing
-  
-  // Processing status
-  status: 'received' | 'in_process' | 'processing_complete' | 'ready_return';
-  
-  // Material balance tracking
-  consumedQuantity?: number;     // Used in processing
-  wasteQuantity?: number;        // Process waste
-  returnableQuantity?: number;   // Remaining for return
-  finalProductQuantity?: number; // Completed processed material
-}
+// ❌ REMOVED: ClientMaterialInward interface - duplicated inventory functionality
+// ✅ REPLACEMENT: Use inventory system as single source of truth for all materials
 
 // Client Material Balance - Material consumption tracking during production
 export interface ClientMaterialBalance {
@@ -395,31 +390,28 @@ export interface ClientMaterialBalance {
 }
 
 // Job Order - Extends SalesOrder with service-focused fields and client material tracking
+// JobOrder: Clean Sales-Only Interface (no production/inventory concerns)
 export interface JobOrder extends SalesOrder {
-  // Differentiator fields
-  orderType: 'job_order';                    // Key differentiator
-  materialOwnership: 'client';               // Always client for job orders
+  // Sales differentiator fields
+  orderType: 'job_order';                    // Key differentiator from regular sales
+  materialOwnership: 'client';               // Business model indicator
   
-  // Service-specific fields
+  // Sales & service fields only
   serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
-  creditTerms: 15 | 30 | 45;                // Credit days instead of advance %
+  creditTerms: 15 | 30 | 45;                // Credit days for payment terms
   
-  // Client material tracking
-  clientMaterials: ClientMaterialInward[];
-  clientMaterialsReceived: boolean;
+  // Sales expectation tracking (NOT inventory management)
+  expectedClientMaterialNames: string[];     // What we expect for quoting/costing
   
-  // Credit management (leverages existing BusinessProfile)
+  // Uses inherited status field (OrderStatus) - no separate salesServiceStatus needed
+  
+  // Sales service requirements (for quotation and billing)
+  serviceRequirements?: ServiceRequirements;
+  
+  // Sales credit management
   creditApprovalStatus: 'approved' | 'pending' | 'requires_review';
   creditApprovalBy?: string;
   creditHoldReason?: string;
-  
-  // Service delivery tracking
-  serviceStartDate?: string;
-  estimatedCompletionDate?: string;
-  actualCompletionDate?: string;
-  
-  // Service requirements (parallel to fabricRequirements)
-  serviceRequirements?: ServiceRequirements;
 }
 
 // Enhanced SalesOrder for type differentiation
@@ -1245,6 +1237,81 @@ export const mockQuotes: Quote[] = [
         taxableAmount: 4000
       }
     ]
+  },
+
+  // ==================== SERVICE QUOTES FOR JOB ORDERS ====================
+  // ✅ CRITICAL: These quotes are referenced by job orders but were missing
+
+  // Service Quote 1 - Dyeing Service
+  {
+    id: 'QT-JO-001',
+    leadId: 'lead-jo-001',
+    businessProfileId: 'bp-surat-processors',
+    quoteDate: '2024-10-15',
+    validUntil: '2024-10-30',
+    totalAmount: 48000,
+    status: 'approved',
+    statusMessage: 'Service quote approved - Ready for material receipt',
+    
+    
+    items: [{
+      itemCode: 'SVC-DYE-001',
+      description: 'Reactive Dyeing Service - Navy Blue (Premium Quality)',
+      hsnCode: '9988', // Service HSN code (not product HSN)
+      quantity: 2000,
+      unit: 'meters',
+      rate: 24, // ₹24 per meter processing charge
+      discount: 0,
+      taxableAmount: 48000
+    }]
+  },
+
+  // Service Quote 2 - Finishing Service  
+  {
+    id: 'QT-JO-002',
+    leadId: 'lead-jo-002',
+    businessProfileId: 'bp-ahmedabad-finishers',
+    quoteDate: '2024-10-18',
+    validUntil: '2024-11-05',
+    totalAmount: 36000,
+    status: 'approved',
+    statusMessage: 'Finishing service quote approved',
+    
+    
+    items: [{
+      itemCode: 'SVC-FIN-001',
+      description: 'Softening & Anti-wrinkle Finishing Service',
+      hsnCode: '9988',
+      quantity: 1500,
+      unit: 'meters', 
+      rate: 24,
+      discount: 0,
+      taxableAmount: 36000
+    }]
+  },
+
+  // Service Quote 3 - Printing Service
+  {
+    id: 'QT-JO-003',
+    leadId: 'lead-jo-003',
+    businessProfileId: 'bp-mumbai-printers',
+    quoteDate: '2024-10-20',
+    validUntil: '2024-11-10', 
+    totalAmount: 80000,
+    status: 'approved',
+    statusMessage: 'Printing service quote approved',
+    
+    
+    items: [{
+      itemCode: 'SVC-PRT-001',
+      description: 'Digital Printing Service - Multi-color Design',
+      hsnCode: '9988',
+      quantity: 3200,
+      unit: 'meters',
+      rate: 25,
+      discount: 0,
+      taxableAmount: 80000
+    }]
   }
 ];
 
@@ -1261,7 +1328,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Ready for production planning',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Materials reserved - Ready to start',
     balancePaymentDue: 1036000, // ✅ 70% of 1,480,000 (after 30% advance)
     // ✅ Enhanced with structured items for production tracking - Consistent with QT-001
     items: [
@@ -1299,7 +1365,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'pending_materials' as const,
     statusMessage: 'Material shortage - Procurement in progress',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Waiting for material availability',
     balancePaymentDue: 924000, // ✅ 70% of 1,320,000 (after 30% advance)
     // ✅ Enhanced with structured items for production tracking - Consistent with QT-002
     items: [
@@ -1337,7 +1402,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'production_started' as const,
     statusMessage: 'Production in progress - 60% completed',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Work Order WO-2025-003A active',
     balancePaymentDue: 231000,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1366,7 +1430,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'completed' as const,
     statusMessage: 'Order completed and delivered successfully',
     paymentStatus: 'completed' as const,
-    productionStatus: 'Completed and delivered',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1395,7 +1458,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Ready for production',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Ready for material allocation',
     balancePaymentDue: 367500,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1443,7 +1505,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'order_confirmed' as const,
     statusMessage: 'Advance payment received - Checking material availability',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Pending material availability check',
     balancePaymentDue: 292600,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1472,7 +1533,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'delivered' as const,
     statusMessage: 'Order completed and delivered - Invoice paid',
     paymentStatus: 'fully_paid' as const,
-    productionStatus: 'Delivered and completed',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1500,7 +1560,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'delivered' as const,
     statusMessage: 'Order delivered and paid - Excellent marine quality',
     paymentStatus: 'fully_paid' as const,
-    productionStatus: 'Delivered and completed',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1528,7 +1587,6 @@ export const mockSalesOrders: SalesOrder[] = [
     status: 'production_completed' as const,
     statusMessage: 'Production completed - Ready for delivery',
     paymentStatus: 'advance_received' as const,
-    productionStatus: 'Quality check completed - Ready for dispatch',
     balancePaymentDue: 0,
     // ✅ Enhanced with structured items for production tracking
     items: [
@@ -1952,6 +2010,227 @@ export const mockAdvancePayments: AdvancePayment[] = [
 
 // Final GST Invoices Data - Post-delivery billing
 export const mockFinalInvoices: FinalInvoice[] = [
+  // Service Invoices for Job Orders (2024)
+  {
+    id: 'INV-JO-2024-001',
+    invoiceNumber: 'INV-JO-2024-001',
+    salesOrderId: 'JO-2024-001', // Job order reference (not regular sales order)
+    businessProfileId: 'bp-surat-dye-works',
+    invoiceDate: 'October 22, 2024',
+    dueDate: 'November 21, 2024', // 30-day credit terms
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Surat Dye Works',
+      billingAddress: 'Industrial Area, Surat - 394107, Gujarat',
+      gstNumber: '24XYZAB9876C1D2',
+      panNumber: 'XYZAB9876C',
+      stateCode: '24',
+      phone: '+91 98765 43202'
+    },
+    
+    items: [
+      {
+        itemCode: 'SVC-DYE-001',
+        description: 'Reactive Dyeing Service - Navy Blue (Premium)',
+        hsnCode: '9988', // Service HSN code
+        quantity: 1200,
+        unit: 'Kg',
+        rate: 40.00,
+        discount: 0,
+        taxableAmount: 48000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false, // Gujarat to Gujarat (intrastate)
+      cgstRate: 9,
+      sgstRate: 9,
+      igstRate: 0,
+      cgstAmount: 4320,
+      sgstAmount: 4320,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 0, // Job orders typically don't require advance
+      balanceDue: 56640,
+      paymentTerms: 'Net 30 days'
+    },
+    
+    subtotal: 48000,
+    totalDiscount: 0,
+    taxableAmount: 48000,
+    totalTax: 8640,
+    totalAmount: 56640,
+    
+    status: 'paid',
+    paymentReceivedDate: 'November 15, 2024',
+    notes: 'Service completed successfully. High-quality dyeing as per specifications.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 18,
+    gstAmount: 8640,
+    advanceAdjusted: 0,
+    balanceAmount: 0
+  },
+  
+  {
+    id: 'INV-JO-2024-002',
+    invoiceNumber: 'INV-JO-2024-002',
+    salesOrderId: 'JO-2024-002', // Job order reference
+    businessProfileId: 'bp-textile-finishers',
+    invoiceDate: 'October 25, 2024',
+    dueDate: 'November 9, 2024', // 15-day credit terms
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Advanced Textile Finishers',
+      billingAddress: 'Factory Road, Surat - 394210, Gujarat',
+      gstNumber: '24PQRST1234E5F6',
+      panNumber: 'PQRST1234E',
+      stateCode: '24',
+      phone: '+91 98765 43203'
+    },
+    
+    items: [
+      {
+        itemCode: 'SVC-FIN-001',
+        description: 'Chemical Finishing Service - Softening & Anti-wrinkle',
+        hsnCode: '9988', // Service HSN code
+        quantity: 800,
+        unit: 'Kg',
+        rate: 62.50,
+        discount: 0,
+        taxableAmount: 50000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false, // Gujarat to Gujarat (intrastate)
+      cgstRate: 9,
+      sgstRate: 9,
+      igstRate: 0,
+      cgstAmount: 4500,
+      sgstAmount: 4500,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 0, // Job orders typically don't require advance
+      balanceDue: 59000,
+      paymentTerms: 'Net 15 days'
+    },
+    
+    subtotal: 50000,
+    totalDiscount: 0,
+    taxableAmount: 50000,
+    totalTax: 9000,
+    totalAmount: 59000,
+    
+    status: 'pending',
+    paymentReceivedDate: undefined,
+    notes: 'Premium finishing service completed. Payment due within 15 days.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 18,
+    gstAmount: 9000,
+    advanceAdjusted: 0,
+    balanceAmount: 59000
+  },
+  
+  {
+    id: 'INV-JO-2024-003',
+    invoiceNumber: 'INV-JO-2024-003',
+    salesOrderId: 'JO-2024-003', // Job order reference
+    businessProfileId: 'bp-print-masters',
+    invoiceDate: 'October 28, 2024',
+    dueDate: 'December 12, 2024', // 45-day credit terms
+    
+    company: {
+      name: 'Surat Textile Mills Pvt Ltd',
+      address: 'Plot No. 45, Industrial Estate, Surat - 394210, Gujarat',
+      gstNumber: '24ABCDE1234F1Z5',
+      panNumber: 'ABCDE1234F',
+      stateCode: '24',
+      phone: '+91 98765 43210',
+      email: 'accounts@surattextiles.com'
+    },
+    
+    customer: {
+      name: 'Gujarat Print Masters',
+      billingAddress: 'Printing Complex, Surat - 394230, Gujarat',
+      gstNumber: '24MNOPQ6789R7S8',
+      panNumber: 'MNOPQ6789R',
+      stateCode: '24',
+      phone: '+91 98765 43204'
+    },
+    
+    items: [
+      {
+        itemCode: 'SVC-PRT-001',
+        description: 'Digital Printing Service - Custom Pattern Design',
+        hsnCode: '9988', // Service HSN code
+        quantity: 600,
+        unit: 'Meter',
+        rate: 75.00,
+        discount: 0,
+        taxableAmount: 45000
+      }
+    ],
+    
+    taxDetails: {
+      isInterstate: false, // Gujarat to Gujarat (intrastate)
+      cgstRate: 9,
+      sgstRate: 9,
+      igstRate: 0,
+      cgstAmount: 4050,
+      sgstAmount: 4050,
+      igstAmount: 0
+    },
+    
+    paymentDetails: {
+      advanceReceived: 0, // Job orders typically don't require advance
+      balanceDue: 53100,
+      paymentTerms: 'Net 45 days'
+    },
+    
+    subtotal: 45000,
+    totalDiscount: 0,
+    taxableAmount: 45000,
+    totalTax: 8100,
+    totalAmount: 53100,
+    
+    status: 'overdue',
+    paymentReceivedDate: undefined,
+    notes: 'Custom printing completed. Extended credit terms but payment overdue.',
+    
+    // Legacy fields for backward compatibility
+    gstRate: 18,
+    gstAmount: 8100,
+    advanceAdjusted: 0,
+    balanceAmount: 53100
+  },
+  
+  // Regular Sales Invoices (2025)
   {
     id: 'INV-2025-001',
     invoiceNumber: 'INV-2025-001',
@@ -2712,90 +2991,11 @@ export const sampleOrderItems: OrderItem[] = convertQuoteToOrderItems(sampleQuot
 
 // ==================== JOB ORDER MOCK DATA ====================
 
-// Mock Client Materials for Job Orders
-export const mockClientMaterials: ClientMaterialInward[] = [
-  {
-    id: 'CM-001',
-    jobOrderId: 'JO-2024-001',
-    materialType: 'Cotton Grey Fabric',
-    description: 'Cotton Grey Fabric - 180 GSM, Plain Weave',
-    receivedQuantity: 2100,
-    unit: 'meters',
-    receivedDate: '2024-10-14',
-    receivedBy: 'Ramesh Kumar',
-    qualityCheck: {
-      inspector: 'Priya Sharma',
-      inspectionDate: '2024-10-14',
-      gradeAssigned: 'A-Grade',
-      defectsNoted: ['Minor selvage variation in 3 pieces'],
-      defectPercentage: 0.5,
-      photosPath: ['/images/qc/CM-001-1.jpg', '/images/qc/CM-001-2.jpg'],
-      approvalStatus: 'approved'
-    },
-    storageLocation: 'Warehouse C - Section 2',
-    batchNumber: 'BATCH-CM-001',
-    currentBalance: 2050,
-    status: 'in_process',
-    consumedQuantity: 50,
-    wasteQuantity: 0,
-    returnableQuantity: 2050,
-    finalProductQuantity: 0
-  },
-  {
-    id: 'CM-002',
-    jobOrderId: 'JO-2024-002',
-    materialType: 'Cotton Dyed Fabric',
-    description: 'Cotton Dyed Fabric - Navy Blue, 200 GSM',
-    receivedQuantity: 1550,
-    unit: 'meters',
-    receivedDate: '2024-10-17',
-    receivedBy: 'Suresh Patel',
-    qualityCheck: {
-      inspector: 'Anjali Mehta',
-      inspectionDate: '2024-10-17',
-      gradeAssigned: 'A-Grade',
-      defectsNoted: ['Minor color variation in 2 pieces'],
-      defectPercentage: 1.0,
-      photosPath: ['/images/qc/CM-002-1.jpg'],
-      approvalStatus: 'conditional'
-    },
-    storageLocation: 'Warehouse A - Section 4',
-    batchNumber: 'BATCH-CM-002',
-    currentBalance: 1550,
-    status: 'received',
-    consumedQuantity: 0,
-    wasteQuantity: 0,
-    returnableQuantity: 1550,
-    finalProductQuantity: 0
-  },
-  {
-    id: 'CM-003',
-    jobOrderId: 'JO-2024-003',
-    materialType: 'Polyester Fabric',
-    description: 'Polyester Grey Fabric - 150 GSM, Twill Weave',
-    receivedQuantity: 3200,
-    unit: 'meters',
-    receivedDate: '2024-10-20',
-    receivedBy: 'Deepak Singh',
-    qualityCheck: {
-      inspector: 'Kavita Joshi',
-      inspectionDate: '2024-10-20',
-      gradeAssigned: 'B-Grade',
-      defectsNoted: ['Some yarn irregularities', 'Slightly uneven width'],
-      defectPercentage: 2.5,
-      photosPath: ['/images/qc/CM-003-1.jpg', '/images/qc/CM-003-2.jpg', '/images/qc/CM-003-3.jpg'],
-      approvalStatus: 'approved'
-    },
-    storageLocation: 'Warehouse B - Section 1',
-    batchNumber: 'BATCH-CM-003',
-    currentBalance: 3200,
-    status: 'received',
-    consumedQuantity: 0,
-    wasteQuantity: 0,
-    returnableQuantity: 3200,
-    finalProductQuantity: 0
-  }
-];
+// ❌ REMOVED: mockClientMaterials array - all client material tracking now through inventory system
+// ✅ REPLACEMENT: Use mockInventory with materialOwnership: 'client' and jobOrderId references
+
+// ✅ CLIENT MATERIAL HELPER FUNCTIONS MOVED TO INVENTORY MODULE
+// All helper functions now imported from inventoryMockData.ts to eliminate dependency
 
 // Mock Job Orders - Service-based processing orders
 export const mockJobOrders: JobOrder[] = [
@@ -2814,29 +3014,24 @@ export const mockJobOrders: JobOrder[] = [
     status: 'production_started',
     statusMessage: 'Dyeing process in progress - 60% completed',
     paymentStatus: 'pending',
-    productionStatus: 'dyeing_in_progress',
     urgency: 'normal',
     progressPercentage: 60,
     
-    // Service-specific fields
-    clientMaterials: [mockClientMaterials[0]],
-    clientMaterialsReceived: true,
+    // ✅ NEW: Reference expected materials by name (no duplication)
+    expectedClientMaterialNames: [
+      'Cotton Fabric - Grey 150 GSM',
+      'Cotton Fabric - Plain Weave 120 GSM'
+    ],
     creditApprovalStatus: 'approved',
     creditApprovalBy: 'Rajesh Agarwal',
-    serviceStartDate: '2024-10-16',
-    estimatedCompletionDate: '2024-10-21',
     
     serviceRequirements: {
       serviceType: 'dyeing',
       materialType: 'Cotton Grey Fabric',
       quantity: 2000,
       unit: 'meters',
-      processSpecifications: {
-        colors: ['Navy Blue'],
-        qualityGrade: 'A-Grade',
-        chemicalRequirements: ['Reactive Dyes', 'Salt', 'Soda Ash'],
-        temperatureRange: '60-80°C',
-        processingTime: '6 hours'
+      customerSpecifications: {
+        colors: ['Navy Blue']
       },
       deliveryTimeline: '5 days from material receipt',
       specialInstructions: 'Ensure color fastness as per export standards'
@@ -2869,26 +3064,20 @@ export const mockJobOrders: JobOrder[] = [
     status: 'order_confirmed',
     statusMessage: 'Material received, processing scheduled',
     paymentStatus: 'pending',
-    productionStatus: 'planning',
     urgency: 'normal',
     progressPercentage: 10,
     
-    clientMaterials: [mockClientMaterials[1]],
-    clientMaterialsReceived: true,
+    expectedClientMaterialNames: ['Cotton Blend Fabric 180 GSM'],
     creditApprovalStatus: 'approved',
     creditApprovalBy: 'Kiran Shah',
-    estimatedCompletionDate: '2024-10-24',
     
     serviceRequirements: {
       serviceType: 'finishing',
       materialType: 'Cotton Dyed Fabric',
       quantity: 1500,
       unit: 'meters',
-      processSpecifications: {
-        finishType: 'Softening & Anti-wrinkle',
-        qualityGrade: 'A-Grade',
-        chemicalRequirements: ['Softening Agent', 'Anti-wrinkle Finish'],
-        processingTime: '4 hours'
+      customerSpecifications: {
+        finishType: 'Softening & Anti-wrinkle'
       },
       deliveryTimeline: '3 days from processing start'
     },
@@ -2920,26 +3109,23 @@ export const mockJobOrders: JobOrder[] = [
     status: 'pending_materials',
     statusMessage: 'Waiting for client material quality approval',
     paymentStatus: 'pending',
-    productionStatus: 'material_pending',
     urgency: 'urgent',
     progressPercentage: 5,
     
-    clientMaterials: [mockClientMaterials[2]],
-    clientMaterialsReceived: true,
+    expectedClientMaterialNames: [
+      'Polyester Fabric - 150 GSM',
+      'Twill Weave Base Material'
+    ],
     creditApprovalStatus: 'approved',
     creditApprovalBy: 'Deepak Joshi',
-    estimatedCompletionDate: '2024-10-28',
     
     serviceRequirements: {
       serviceType: 'printing',
       materialType: 'Polyester Fabric',
       quantity: 3000,
       unit: 'meters',
-      processSpecifications: {
-        colors: ['Red', 'Blue', 'Green', 'Yellow'],
-        qualityGrade: 'B-Grade',
-        chemicalRequirements: ['Digital Inks', 'Pre-treatment Solution'],
-        processingTime: '8 hours'
+      customerSpecifications: {
+        colors: ['Red', 'Blue', 'Green', 'Yellow']
       },
       deliveryTimeline: '7 days from material approval',
       specialInstructions: 'Multi-color digital print with high resolution'

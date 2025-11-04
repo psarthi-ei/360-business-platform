@@ -201,7 +201,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
           <div className={styles.productionInfo}>
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Status</span>
-              <span className={styles.detailValue}>{order.productionStatus}</span>
+              <span className={styles.detailValue}>{order.statusMessage}</span>
             </div>
             {order.progressPercentage !== undefined && (
               <div className={styles.progressSection}>
