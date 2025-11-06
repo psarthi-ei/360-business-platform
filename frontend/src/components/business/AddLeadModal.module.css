@@ -341,6 +341,70 @@
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
+/* Requested Items Section Styles */
+/* Architecture Compliance: Design System V2 - Mobile-First Global Variables */
+
+.itemsSectionLabel {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-sm);
+  display: block;
+}
+
+.itemsSection {
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-bg-card);
+  overflow: hidden;
+}
+
+.emptyItemsState {
+  padding: var(--ds-space-lg);
+  text-align: center;
+  background: var(--ds-bg-secondary);
+}
+
+.emptyItemsState p {
+  margin: 0;
+  color: var(--ds-text-secondary);
+  font-size: var(--font-sm);
+  line-height: 1.4;
+}
+
+.itemsList {
+  padding: var(--ds-space-md);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.addItemButton {
+  /* Design System V2 - Secondary Button with Icon */
+  width: 100%;
+  background: var(--ds-bg-secondary);
+  border: 1px solid var(--ds-border-interactive);
+  color: var(--ds-text-primary);
+  padding: var(--ds-padding-button);
+  border-radius: 0 0 var(--ds-radius-md) var(--ds-radius-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-xs);
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.addItemButton:hover {
+  background: var(--ds-bg-hover);
+  border-color: var(--ds-color-primary);
+}
+
 /* Mobile responsive for fabric section */
 @media (max-width: 768px) {
   .sectionHeader {
@@ -353,5 +417,9 @@
   
   .fabricFields {
     padding: 16px;
+  }
+  
+  .itemsList {
+    max-height: 200px;
   }
 }

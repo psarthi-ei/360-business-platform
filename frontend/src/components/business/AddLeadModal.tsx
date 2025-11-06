@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Lead, FabricRequirements, ServiceRequirements } from '../../data/salesMockData';
+import { Lead, LeadRequestedItem, DeliveryRequirements } from '../../data/salesMockData';
 import ModalPortal from '../ui/ModalPortal';
+import CatalogItemSelector from './CatalogItemSelector';
+import RequestedItemCard from './RequestedItemCard';
 import styles from './AddLeadModal.module.css';
 
 interface AddLeadModalProps {
@@ -25,45 +27,22 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     designation: '',
     department: '',
     businessProfileId: '',
-    // ✅ NEW: Lead type selection
+    // Catalog-driven lead management
     leadType: 'sales' as 'sales' | 'job_work',
-    // Fabric Requirements
-    fabricRequirements: {
-      fabricType: '',
-      gsm: undefined,
-      width: '',
-      weaveType: '',
-      quantity: undefined,
-      unit: 'meters',
-      colors: '',
-      qualityGrade: undefined,
-      specialProcessing: '',
-      deliveryTimeline: ''
-    } as FabricRequirements,
-    // ✅ NEW: Service Requirements for job work leads
-    serviceRequirements: {
-      serviceType: 'dyeing',
-      materialType: '',
-      quantity: 0,
-      unit: 'meters',
-      deliveryTimeline: '',
-      customerSpecifications: {
-        colors: [],
-        finishType: [],
-        printType: [],
-        designComplexity: '',
-        printQuality: '',
-        specialRequirements: [],
-        testingRequired: [],
-        chemicalRequirements: []
-      }
-    } as ServiceRequirements
+    requestedItems: [] as LeadRequestedItem[],
+    priorityLevel: 'must_have' as 'must_have' | 'preferred' | 'nice_to_have',
+    deliveryRequirements: {
+      preferredDate: '',
+      isDateFlexible: true,
+      deliveryLocation: '',
+      qualityInspectionRequired: false,
+      specialHandling: []
+    } as DeliveryRequirements
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showFabricRequirements, setShowFabricRequirements] = useState(false);
-  const [showServiceRequirements, setShowServiceRequirements] = useState(false);
+  const [showItemSelector, setShowItemSelector] = useState(false);
 
   // Pre-populate form when editing
   useEffect(() => {
@@ -81,47 +60,17 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         designation: editingLead.designation || '',
         department: editingLead.department || '',
         businessProfileId: editingLead.businessProfileId || '',
-        // ✅ NEW: Lead type (inferred from existing data or default to sales)
-        leadType: 'sales' as 'sales' | 'job_work', // Can be enhanced to detect from existing data
-        fabricRequirements: editingLead.fabricRequirements || {
-          fabricType: '',
-          gsm: undefined,
-          width: '',
-          weaveType: '',
-          quantity: undefined,
-          unit: 'meters',
-          colors: '',
-          qualityGrade: undefined,
-          specialProcessing: '',
-          deliveryTimeline: ''
-        } as FabricRequirements,
-        // ✅ NEW: Service requirements (empty for editing existing leads)
-        serviceRequirements: {
-          serviceType: 'dyeing',
-          materialType: '',
-          quantity: 0,
-          unit: 'meters',
-          deliveryTimeline: '',
-          customerSpecifications: {
-            colors: [],
-            finishType: [],
-            printType: [],
-            designComplexity: '',
-            printQuality: '',
-            specialRequirements: [],
-            testingRequired: [],
-            chemicalRequirements: []
-          }
-        } as ServiceRequirements
+        leadType: editingLead.leadType || 'sales',
+        requestedItems: editingLead.requestedItems || [],
+        priorityLevel: editingLead.priorityLevel || 'must_have',
+        deliveryRequirements: editingLead.deliveryRequirements || {
+          preferredDate: '',
+          isDateFlexible: true,
+          deliveryLocation: '',
+          qualityInspectionRequired: false,
+          specialHandling: []
+        }
       });
-      
-      // Auto-expand fabric requirements if editing and there are existing requirements
-      const hasExistingRequirements = editingLead.fabricRequirements && (
-        editingLead.fabricRequirements.fabricType ||
-        editingLead.fabricRequirements.gsm ||
-        editingLead.fabricRequirements.quantity
-      );
-      setShowFabricRequirements(!!hasExistingRequirements);
     } else {
       // Reset form for new lead
       setFormData({
@@ -138,46 +87,19 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         department: '',
         businessProfileId: '',
         leadType: 'sales',
-        fabricRequirements: {
-          fabricType: '',
-          gsm: undefined,
-          width: '',
-          weaveType: '',
-          quantity: undefined,
-          unit: 'meters',
-          colors: '',
-          qualityGrade: undefined,
-          specialProcessing: '',
-          deliveryTimeline: ''
-        } as FabricRequirements,
-        serviceRequirements: {
-          serviceType: 'dyeing',
-          materialType: '',
-          quantity: 0,
-          unit: 'meters',
-          deliveryTimeline: '',
-          customerSpecifications: {
-            colors: [],
-            finishType: [],
-            printType: [],
-            designComplexity: '',
-            printQuality: '',
-            specialRequirements: [],
-            testingRequired: [],
-            chemicalRequirements: []
-          }
-        } as ServiceRequirements
+        requestedItems: [],
+        priorityLevel: 'must_have',
+        deliveryRequirements: {
+          preferredDate: '',
+          isDateFlexible: true,
+          deliveryLocation: '',
+          qualityInspectionRequired: false,
+          specialHandling: []
+        }
       });
-      setShowFabricRequirements(false);
     }
   }, [editingLead]);
 
-  // Keep requirements sections collapsed by default - user can expand if needed
-  useEffect(() => {
-    // Always keep both sections collapsed by default
-    setShowServiceRequirements(false);
-    setShowFabricRequirements(false);
-  }, [formData.leadType]);
 
   // Company options are now handled in the dropdown
 
@@ -193,55 +115,44 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     'Planned (2-3 months)', 'Future (3-6 months)', 'Long-term (6+ months)'
   ];
 
-  // Fabric specification options
-  const fabricTypes = [
-    'Cotton', 'Silk', 'Polyester', 'Cotton Blend', 'Silk Blend', 'Viscose', 
-    'Linen', 'Georgette', 'Chiffon', 'Canvas', 'Denim', 'Other'
-  ];
-
-  const widthOptions = [
-    '36 inches', '44 inches', '58 inches', '60 inches', '72 inches'
-  ];
-
-  const weaveTypes = [
-    'Plain', 'Twill', 'Satin', 'Jacquard', 'Dobby', 'Herringbone', 'Other'
-  ];
-
-  const qualityGrades = [
-    'A-Grade', 'B-Grade', 'Export-Grade', 'Industrial'
-  ];
 
   const handleLeadTypeChange = (leadType: 'sales' | 'job_work') => {
     handleInputChange('leadType', leadType);
-    // Keep sections collapsed by default - user can expand manually if needed
-    setShowServiceRequirements(false);
-    setShowFabricRequirements(false);
   };
 
   const handleInputChange = (field: string, value: string | number) => {
-    // Handle fabric requirements fields
-    if (field.startsWith('fabric.')) {
-      const fabricField = field.replace('fabric.', '');
-      setFormData(prev => ({
-        ...prev,
-        fabricRequirements: {
-          ...prev.fabricRequirements,
-          [fabricField]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [field]: value,
-        // Auto-populate contact field with phone for compatibility
-        contact: field === 'phone' ? String(value) : prev.contact
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [field]: value,
+      // Auto-populate contact field with phone for compatibility
+      contact: field === 'phone' ? String(value) : prev.contact
+    }));
 
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
+  };
+
+  // Handle adding items from catalog
+  const handleAddItem = (newItem: LeadRequestedItem) => {
+    setFormData(prev => ({
+      ...prev,
+      requestedItems: [...prev.requestedItems, newItem]
+    }));
+  };
+
+  // Handle removing items
+  const handleRemoveItem = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      requestedItems: prev.requestedItems.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Get already selected item IDs to avoid duplicates
+  const getSelectedItemIds = () => {
+    return formData.requestedItems.map(item => item.masterItemId);
   };
 
   const validateForm = () => {
@@ -305,35 +216,15 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
       department: '',
       businessProfileId: '',
       leadType: 'sales',
-      fabricRequirements: {
-        fabricType: '',
-        gsm: undefined,
-        width: '',
-        weaveType: '',
-        quantity: undefined,
-        unit: 'meters',
-        colors: '',
-        qualityGrade: undefined,
-        specialProcessing: '',
-        deliveryTimeline: ''
-      } as FabricRequirements,
-      serviceRequirements: {
-        serviceType: 'dyeing',
-        materialType: '',
-        quantity: 0,
-        unit: 'meters',
-        deliveryTimeline: '',
-        customerSpecifications: {
-          colors: [],
-          finishType: [],
-          printType: [],
-          designComplexity: '',
-          printQuality: '',
-          specialRequirements: [],
-          testingRequired: [],
-          chemicalRequirements: []
-        }
-      } as ServiceRequirements
+      requestedItems: [],
+      priorityLevel: 'must_have',
+      deliveryRequirements: {
+        preferredDate: '',
+        isDateFlexible: true,
+        deliveryLocation: '',
+        qualityInspectionRequired: false,
+        specialHandling: []
+      }
     });
     
     setIsSubmitting(false);
@@ -528,257 +419,39 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
             {errors.inquiry && <span className={styles.errorText}>{errors.inquiry}</span>}
           </div>
 
-          {/* Fabric Requirements Section - Only for Sales Orders */}
-          {formData.leadType === 'sales' && (
-            <div className={styles.fabricRequirementsSection}>
-            <div className={styles.sectionHeader} onClick={() => setShowFabricRequirements(!showFabricRequirements)}>
-              <h3>🧵 Fabric Requirements (Optional)</h3>
-              <span className={styles.toggleIcon}>{showFabricRequirements ? '▼' : '▶'}</span>
-            </div>
-            
-            {showFabricRequirements && (
-              <div className={styles.fabricFields}>
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="fabricType">Fabric Type</label>
-                    <select
-                      id="fabricType"
-                      value={formData.fabricRequirements.fabricType}
-                      onChange={(e) => handleInputChange('fabric.fabricType', e.target.value)}
-                    >
-                      <option value="">Select Fabric Type</option>
-                      {fabricTypes.map(type => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="gsm">GSM (Weight)</label>
-                    <input
-                      id="gsm"
-                      type="number"
-                      value={formData.fabricRequirements.gsm || ''}
-                      onChange={(e) => handleInputChange('fabric.gsm', e.target.value ? parseInt(e.target.value) : '')}
-                      placeholder="e.g., 150"
+          {/* Requested Items Section */}
+          <div className={styles.formGroup}>
+            <label className={styles.itemsSectionLabel}>
+              Requested Items {formData.requestedItems.length > 0 && `(${formData.requestedItems.length})`}
+            </label>
+            <div className={styles.itemsSection}>
+              {formData.requestedItems.length === 0 ? (
+                <div className={styles.emptyItemsState}>
+                  <p>No items added yet. Add items from our catalog to help generate accurate quotes.</p>
+                </div>
+              ) : (
+                <div className={styles.itemsList}>
+                  {formData.requestedItems.map((item, index) => (
+                    <RequestedItemCard
+                      key={index}
+                      item={item}
+                      businessModel={formData.leadType}
+                      onRemove={() => handleRemoveItem(index)}
+                      showActions={true}
+                      index={index}
                     />
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="width">Fabric Width</label>
-                    <select
-                      id="width"
-                      value={formData.fabricRequirements.width}
-                      onChange={(e) => handleInputChange('fabric.width', e.target.value)}
-                    >
-                      <option value="">Select Width</option>
-                      {widthOptions.map(width => (
-                        <option key={width} value={width}>{width}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="weaveType">Weave Type</label>
-                    <select
-                      id="weaveType"
-                      value={formData.fabricRequirements.weaveType}
-                      onChange={(e) => handleInputChange('fabric.weaveType', e.target.value)}
-                    >
-                      <option value="">Select Weave</option>
-                      {weaveTypes.map(weave => (
-                        <option key={weave} value={weave}>{weave}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="quantity">Quantity</label>
-                    <input
-                      id="quantity"
-                      type="number"
-                      value={formData.fabricRequirements.quantity || ''}
-                      onChange={(e) => handleInputChange('fabric.quantity', e.target.value ? parseInt(e.target.value) : '')}
-                      placeholder="e.g., 5000"
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="unit">Unit</label>
-                    <select
-                      id="unit"
-                      value={formData.fabricRequirements.unit}
-                      onChange={(e) => handleInputChange('fabric.unit', e.target.value)}
-                    >
-                      <option value="meters">Meters</option>
-                      <option value="yards">Yards</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="colors">Colors</label>
-                    <input
-                      id="colors"
-                      type="text"
-                      value={formData.fabricRequirements.colors}
-                      onChange={(e) => handleInputChange('fabric.colors', e.target.value)}
-                      placeholder="e.g., Navy blue, White, Red"
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="qualityGrade">Quality Grade</label>
-                    <select
-                      id="qualityGrade"
-                      value={formData.fabricRequirements.qualityGrade || ''}
-                      onChange={(e) => handleInputChange('fabric.qualityGrade', e.target.value)}
-                    >
-                      <option value="">Select Quality</option>
-                      {qualityGrades.map(grade => (
-                        <option key={grade} value={grade}>{grade}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="specialProcessing">Special Processing</label>
-                  <input
-                    id="specialProcessing"
-                    type="text"
-                    value={formData.fabricRequirements.specialProcessing}
-                    onChange={(e) => handleInputChange('fabric.specialProcessing', e.target.value)}
-                    placeholder="e.g., Pre-shrunk, mercerized, dye-ready"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="deliveryTimeline">Fabric Delivery Timeline</label>
-                  <input
-                    id="deliveryTimeline"
-                    type="text"
-                    value={formData.fabricRequirements.deliveryTimeline}
-                    onChange={(e) => handleInputChange('fabric.deliveryTimeline', e.target.value)}
-                    placeholder="e.g., Within 30 days"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-          )}
-
-          {/* Service Requirements Section - Only for Job Work */}
-          {formData.leadType === 'job_work' && (
-            <div className={styles.fabricRequirementsSection}>
-              <div className={styles.sectionHeader} onClick={() => setShowServiceRequirements(!showServiceRequirements)}>
-                <h3>🔧 Service Requirements (Job Work)</h3>
-                <span className={styles.toggleIcon}>{showServiceRequirements ? '▼' : '▶'}</span>
-              </div>
-              
-              {showServiceRequirements && (
-                <div className={styles.fabricFields}>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="serviceType">Service Type</label>
-                      <select
-                        id="serviceType"
-                        value={formData.serviceRequirements.serviceType}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          serviceRequirements: {
-                            ...prev.serviceRequirements,
-                            serviceType: e.target.value as 'dyeing' | 'finishing' | 'printing' | 'weaving'
-                          }
-                        }))}
-                      >
-                        <option value="dyeing">🎨 Dyeing Services</option>
-                        <option value="finishing">✨ Finishing Services</option>
-                        <option value="printing">🖨️ Printing Services</option>
-                        <option value="weaving">🧶 Weaving Services</option>
-                      </select>
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="materialType">Material Type</label>
-                      <input
-                        id="materialType"
-                        type="text"
-                        value={formData.serviceRequirements.materialType}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          serviceRequirements: {
-                            ...prev.serviceRequirements,
-                            materialType: e.target.value
-                          }
-                        }))}
-                        placeholder="e.g., Cotton Grey Fabric, Silk Yarn"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="serviceQuantity">Quantity</label>
-                      <input
-                        id="serviceQuantity"
-                        type="number"
-                        value={formData.serviceRequirements.quantity || ''}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          serviceRequirements: {
-                            ...prev.serviceRequirements,
-                            quantity: e.target.value ? parseInt(e.target.value) : 0
-                          }
-                        }))}
-                        placeholder="1000"
-                      />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="serviceUnit">Unit</label>
-                      <select
-                        id="serviceUnit"
-                        value={formData.serviceRequirements.unit}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          serviceRequirements: {
-                            ...prev.serviceRequirements,
-                            unit: e.target.value as 'meters' | 'yards'
-                          }
-                        }))}
-                      >
-                        <option value="meters">Meters</option>
-                        <option value="yards">Yards</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="serviceDeliveryTimeline">Service Delivery Timeline</label>
-                    <input
-                      id="serviceDeliveryTimeline"
-                      type="text"
-                      value={formData.serviceRequirements.deliveryTimeline}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        serviceRequirements: {
-                          ...prev.serviceRequirements,
-                          deliveryTimeline: e.target.value
-                        }
-                      }))}
-                      placeholder="e.g., Within 15 days of material receipt"
-                    />
-                  </div>
+                  ))}
                 </div>
               )}
+              <button
+                type="button"
+                onClick={() => setShowItemSelector(true)}
+                className={styles.addItemButton}
+              >
+                📦 Add Item from Catalog
+              </button>
             </div>
-          )}
+          </div>
 
           <div className={styles.formGroup}>
             <label htmlFor="notes">Additional Notes</label>
@@ -812,6 +485,15 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
             </button>
           </div>
         </form>
+
+        {/* Catalog Item Selector Modal */}
+        <CatalogItemSelector
+          isOpen={showItemSelector}
+          onClose={() => setShowItemSelector(false)}
+          businessModel={formData.leadType}
+          onItemSelected={handleAddItem}
+          excludeItemIds={getSelectedItemIds()}
+        />
       </div>
     </ModalPortal>
   );

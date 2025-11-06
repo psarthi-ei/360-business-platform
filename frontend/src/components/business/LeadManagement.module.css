@@ -1273,33 +1273,104 @@
 /* New Section Styles */
 .leadDetailsSection,
 .companySection,
+.contactSection,
 .projectSection,
+.fabricSection,
 .conversionSection {
-  margin-bottom: 20px;
+  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
 }
 
 .leadDetailsSection h4,
 .companySection h4,
+.contactSection h4,
 .projectSection h4,
+.fabricSection h4,
 .conversionSection h4 {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  border-bottom: 2px solid #E5E7EB;
-  padding-bottom: 8px;
+  margin: 0 0 var(--ds-space-md) 0;
+  font-size: var(--font-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-text-primary);
+  border-bottom: 2px solid var(--ds-border-subtle);
+  padding-bottom: var(--ds-space-xs);
 }
 
 .detailsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: var(--ds-space-md);
 }
 
 .detailsGrid p {
   margin: 0;
-  font-size: 14px;
-  color: #374151;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  font-weight: var(--ds-font-weight-normal);
+}
+
+.detailsGrid p strong {
+  color: var(--ds-text-secondary);
+  font-weight: var(--ds-font-weight-medium);
+  margin-right: var(--ds-space-xs);
+}
+
+/* Enhanced Section Header Styles */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+  flex-wrap: wrap;
+  gap: var(--ds-space-sm);
+}
+
+.itemCount {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-subtle);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+/* Total Section Styling */
+.totalSection {
+  margin-top: var(--ds-space-lg);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-sm) 0;
+}
+
+.totalLabel {
+  font-size: var(--font-base);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-primary);
+}
+
+.totalAmount {
+  font-size: var(--font-lg);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-color-primary);
+}
+
+.calculationNote {
+  margin: var(--ds-space-sm) 0 0 0;
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-style: italic;
+  line-height: 1.4;
 }
 
 /* Mobile responsive */
