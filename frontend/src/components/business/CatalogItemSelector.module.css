@@ -55,9 +55,10 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
   padding: var(--ds-space-lg);
   gap: var(--ds-space-md);
+  scroll-behavior: smooth;
 }
 
 /* Search Section */
@@ -114,12 +115,14 @@
 
 /* Items List */
 .itemsList {
-  flex: 1;
+  flex: 0 0 auto;
   overflow-y: auto;
   border: 1px solid var(--ds-border-subtle);
   border-radius: var(--ds-radius-md);
   background: var(--ds-bg-primary);
-  max-height: 300px;
+  min-height: 300px;
+  max-height: 400px;
+  scroll-behavior: smooth;
 }
 
 .emptyState {
@@ -457,6 +460,17 @@
     max-height: 95vh;
   }
   
+  .modalBody {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .itemsList {
+    min-height: 250px;
+    max-height: 350px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   .searchRow {
     flex-direction: column;
   }
@@ -476,5 +490,25 @@
   .cancelButton,
   .addButton {
     width: 100%;
+  }
+}
+
+/* Desktop Responsive - Ensure proper height and visibility */
+@media (min-width: 1024px) {
+  .modalContent {
+    max-width: 1000px;
+    max-height: 85vh;
+  }
+  
+  .itemsList {
+    min-height: 350px;
+    max-height: 450px;
+  }
+  
+  /* Ensure details section is properly visible */
+  .detailsSection {
+    margin-top: var(--ds-space-lg);
+    padding-top: var(--ds-space-lg);
+    border-top: 2px solid var(--ds-border-primary);
   }
 }

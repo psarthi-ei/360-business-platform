@@ -109,6 +109,29 @@ function CatalogItemSelector({
     // Set quantity to item's minimum quantity to ensure pricing works
     const minQuantity = item.businessRules.minimumQuantity || 1;
     setQuantity(Math.max(quantity, minQuantity));
+    
+    // Scroll to details section to ensure visibility
+    setTimeout(() => {
+      const detailsSection = document.querySelector('.catalog-item-details-section') as HTMLElement;
+      const modalBody = document.querySelector(`.${styles.modalBody}`) as HTMLElement;
+      
+      if (detailsSection && modalBody) {
+        // Calculate scroll position within modal body
+        const detailsSectionTop = detailsSection.offsetTop;
+        const modalBodyScrollTop = modalBody.scrollTop;
+        const modalBodyHeight = modalBody.clientHeight;
+        const detailsSectionHeight = detailsSection.offsetHeight;
+        
+        // Check if details section is not fully visible
+        if (detailsSectionTop < modalBodyScrollTop || 
+            detailsSectionTop + detailsSectionHeight > modalBodyScrollTop + modalBodyHeight) {
+          modalBody.scrollTo({
+            top: detailsSectionTop - 20, // Small offset for better UX
+            behavior: 'smooth'
+          });
+        }
+      }
+    }, 150);
   };
 
   const handleAddItem = () => {
@@ -223,7 +246,7 @@ function CatalogItemSelector({
 
           {/* Item Details Section */}
           {selectedItem && (
-            <div className={styles.detailsSection}>
+            <div className={`${styles.detailsSection} catalog-item-details-section`}>
               <h3>Item Details</h3>
               <div className={styles.selectedItemInfo}>
                 <h4>{selectedItem.name}</h4>

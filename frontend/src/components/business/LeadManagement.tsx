@@ -124,7 +124,6 @@ function LeadManagement({
     }).format(amount);
   };
 
-
   // Handle adding new lead
   const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
     const newLead: Lead = {
