@@ -323,6 +323,8 @@ function QuotationOrders({
 
           const statusIcons = {
             pending: '⏳',
+            draft: '📝',
+            sent: '📤',
             under_review: '👁️',
             approved: '✅',
             rejected: '🚫',
@@ -331,11 +333,14 @@ function QuotationOrders({
             advance_requested: '💰',
             advance_overdue: '⚠️',
             advance_received: '✅',
-            order_created: '🏭'
+            order_created: '🏭',
+            superseded: '🔄'
           };
 
           const statusLabels = {
             pending: t('pending') || 'Pending',
+            draft: 'Draft',
+            sent: 'Sent',
             under_review: 'Under Review',
             approved: t('approved') || 'Approved',
             rejected: 'Rejected',
@@ -344,7 +349,8 @@ function QuotationOrders({
             advance_requested: 'Advance Requested',
             advance_overdue: 'Payment Overdue',
             advance_received: 'Advance Received',
-            order_created: 'Order Created'
+            order_created: 'Order Created',
+            superseded: 'Superseded'
           };
           
           const relatedOrder = mockSalesOrders.find(order => order.quoteId === quote.id);

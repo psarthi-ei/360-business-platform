@@ -194,15 +194,19 @@ export interface Lead {
   // Delivery requirements
   deliveryRequirements: DeliveryRequirements;
   
-  // Generated quote reference
-  generatedQuoteId?: string;
+  // PHASE 1.3: Enhanced Quote Tracking System
+  activeQuoteId?: string;              // Current active quote for this lead
+  quoteHistory?: string[];             // Array of all quote IDs (including revisions)
+  lastQuoteAction?: 'generated' | 'sent' | 'approved' | 'revised'; // Last quote action taken
+  lastQuoteActionDate?: string;        // When last quote action occurred
+  quoteCount?: number;                 // Total number of quotes generated (including revisions)
   
   // Relationship Tracking
   lastContact: string;
   notes: string;
   
-  // Enhanced Conversion Status - Sales Process Stages
-  conversionStatus: 'active_lead' | 'quote_sent' | 'verbally_approved' | 'proforma_sent' | 'awaiting_payment' | 'converted_to_order';
+  // Enhanced Conversion Status - Complete Sales Process Stages
+  conversionStatus: 'active_lead' | 'quote_sent' | 'quote_rejected' | 'quote_expired' | 'negotiation' | 'verbally_approved' | 'proforma_sent' | 'payment_failed' | 'awaiting_payment' | 'converted_to_order';
   convertedToOrderDate?: string;
 }
 
@@ -234,9 +238,7 @@ export interface Quote {
   quoteDate: string;
   validUntil: string;
   totalAmount: number;
-  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'expired' | 
-          'proforma_sent' | 'advance_requested' | 'advance_overdue' | 
-          'advance_received' | 'order_created';
+  status: 'draft' | 'sent' | 'approved' | 'rejected' | 'expired' | 'superseded' | 'pending' | 'under_review' | 'proforma_sent' | 'advance_requested' | 'advance_overdue' | 'advance_received' | 'order_created';
   statusMessage: string;
   approvalDate?: string;
   proformaInvoiceId?: string;
@@ -259,6 +261,67 @@ export interface Quote {
   
   // Professional structured items array
   items: QuoteItem[];
+  
+  // PHASE 1.1: Quote Revision Tracking System (required fields)
+  parentQuoteId?: string;           // Reference to original quote if this is a revision
+  revisionNumber: number;           // Sequential revision number (1 = original, 2+ = revisions)
+  isActive: boolean;                // Only the latest revision should be active
+  lastRevisionDate?: string;        // When this quote was last revised
+  revisionReason?: string;          // Why this revision was created
+}
+
+// PHASE 1.1: Quote Revision System Supporting Interfaces
+export interface QuoteRevision {
+  id: string;
+  parentQuoteId: string;
+  revisionNumber: number;
+  changes: QuoteChanges;
+  createdDate: string;
+  createdBy: string;
+  reason?: string;
+}
+
+export interface QuoteChanges {
+  itemsAdded?: QuoteItem[];
+  itemsRemoved?: string[];           // Item codes that were removed
+  itemsModified?: {
+    itemCode: string;
+    oldValues: Partial<QuoteItem>;
+    newValues: Partial<QuoteItem>;
+  }[];
+  pricingAdjustments?: {
+    oldTotalAmount: number;
+    newTotalAmount: number;
+    adjustmentReason: string;
+  };
+  termsChanges?: {
+    oldTerms: string;
+    newTerms: string;
+  };
+}
+
+export interface QuoteHistory {
+  quoteId: string;
+  revisions: QuoteRevision[];
+  latestRevisionNumber: number;
+  totalRevisions: number;
+}
+
+export interface QuoteAction {
+  action: 'generate' | 'view' | 'revise' | 'send' | 'approve' | 'generate_proforma';
+  label: string;
+  icon: string;
+  buttonClass: string;
+  condition?: (quote: Quote, lead?: Lead) => boolean;
+}
+
+export interface QuoteState {
+  leadId: string;
+  hasQuote: boolean;
+  activeQuoteId?: string;
+  latestQuoteStatus?: Quote['status'];
+  revisionCount: number;
+  availableActions: QuoteAction[];
 }
 
 
@@ -310,7 +373,7 @@ export interface ProformaInvoice {
   totalAmount: number;
   advanceAmount: number;
   bankDetails: BankDetails;
-  status: 'pending' | 'sent' | 'payment_received' | 'expired';
+  status: 'pending' | 'sent' | 'payment_received' | 'expired' | 'draft';
   paymentInstructions: string;
   
   // Professional structured items array
@@ -461,7 +524,7 @@ export interface FinalInvoice {
   totalAmount: number;
   
   // Status and Notes
-  status: 'pending' | 'paid' | 'overdue';
+  status: 'pending' | 'paid' | 'overdue' | 'draft';
   paymentReceivedDate?: string;
   notes: string;
   
@@ -879,9 +942,9 @@ export const mockLeads: Lead[] = [
       specialHandling: ['Pre-treatment required'],
       qualityInspectionRequired: true
     },
-    lastContact: 'Yesterday - "Urgent order for export client, need best quality"',
-    notes: 'Regular service customer. Brings own fabric. Reliable payment record.',
-    conversionStatus: 'quote_sent'
+    lastContact: 'Yesterday - "Quote price too high, need to discuss alternatives"',
+    notes: 'Regular service customer. Brings own fabric. Quote rejected due to pricing.',
+    conversionStatus: 'quote_rejected'
   },
 
   // 5. Warm Job Work Lead - Finishing Service
@@ -981,54 +1044,49 @@ export const mockLeads: Lead[] = [
       specialHandling: ['Sequential processing required', 'Quality testing at each stage'],
       qualityInspectionRequired: true
     },
-    lastContact: 'This morning - "Urgent export order, need complete processing pipeline done perfectly"',
-    notes: 'Large export client project. Client provides raw cotton fabric, we handle complete dyeing and finishing. Premium quality requirements.',
-    conversionStatus: 'quote_sent'
+    lastContact: 'This morning - "Reviewing quote, need some modifications to pricing and delivery terms"',
+    notes: 'Large export client project. In active negotiation on terms and pricing. Premium quality requirements.',
+    conversionStatus: 'negotiation'
   }
 ];
 
 export const mockQuotes: Quote[] = [
   // ========================================
-  // LEAD-QUOTE DATA RELATIONSHIP DOCUMENTATION
+  // SIMPLIFIED QUOTES - MATCHED TO OUR 6 LEADS
   // ========================================
   
-  // BUSINESS WORKFLOW: Lead Conversion Status → Quote Status Alignment
-  // 1. 'active_lead' → Quote status: 'pending' (quote prepared but not sent)
-  // 2. 'quote_sent' → Quote status: 'under_review' (quote sent, awaiting response)  
-  // 3. 'verbally_approved' → Quote status: 'approved' (customer agreed verbally)
-  // 4. 'proforma_sent' → Quote status: 'proforma_sent' (proforma invoice sent)
-  // 5. 'awaiting_payment' → Quote status: 'advance_requested' (payment pending)
-  // 6. 'converted_to_order' → Quote status: 'order_created' (payment received, customer created)
+  // CLEAN QUOTE STRUCTURE - MATCHED TO 6 LEADS:
+  // lead-001: NO quote (demonstrates "Generate Quote" state)
+  // lead-002: Quote generated (pending state)
+  // lead-003: Quote sent (under review)
+  // lead-004: Quote with revision (proforma sent)
+  // lead-005: Quote sent (job work)
+  // lead-006: Quote approved (job work)
   
-  // DATA INTEGRITY RULES:
-  // - Every lead with 'quote_sent'+ status MUST have at least one quote
-  // - Every lead with 'proforma_sent'+ status MUST have quote with proforma details
-  // - Every lead with 'converted_to_order' status MUST have received advance payment
-  // - Quote leadId MUST reference valid lead in mockLeads array
-  // - Quote businessProfileId MUST reference valid profile for converted customers
-  
-  // Quotes for active leads (no BusinessProfile yet)
+  // LEAD 002: Surat Fashion House - Quote Generated (pending state)
   {
-    id: 'QT-001',
-    leadId: 'lead-001',
-    quoteDate: 'March 15, 2025',
-    validUntil: 'March 30, 2025',
-    totalAmount: 1480000,
-    status: 'under_review',
-    statusMessage: 'Customer is reviewing quote - Expecting response by end of week',
-    advancePaymentRequired: 740000, // 50% advance
+    id: 'QT-002',
+    leadId: 'lead-002',
+    businessProfileId: 'bp-surat-fashion-house',
+    quoteDate: 'November 5, 2025',
+    validUntil: 'November 20, 2025',
+    totalAmount: 1320000,
+    status: 'draft',
+    statusMessage: 'Quote generated - Ready to send to customer',
+    advancePaymentRequired: 660000,
     advancePaymentStatus: 'not_requested',
-    // ✅ Enhanced with structured items for professional presentation
+    revisionNumber: 1,
+    isActive: true,
     items: [
       {
-        itemCode: "TEX-IND-001",
-        description: "Industrial Cotton Fabric",
+        itemCode: "TEX-FASH-001",
+        description: "Premium Fashion Cotton Fabric",
         hsnCode: "5208",
-        quantity: 8000,
+        quantity: 6000,
         unit: "yards",
-        rate: 185,
+        rate: 220,
         discount: 0,
-        taxableAmount: 1480000
+        taxableAmount: 1320000
       }
     ]
   },
@@ -1038,10 +1096,12 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'March 18, 2025',
     validUntil: 'April 5, 2025',
     totalAmount: 1320000,
-    status: 'under_review', // ALIGNED: quote_sent → under_review status
+    status: 'sent', // ALIGNED: quote_sent → under_review status
     statusMessage: 'Quote sent to customer - Awaiting response from production head',
     advancePaymentRequired: 660000, // 50% advance
     advancePaymentStatus: 'not_requested', // No payment request yet until quote approved
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items - multiple items example
     items: [
       {
@@ -1066,6 +1126,40 @@ export const mockQuotes: Quote[] = [
       }
     ]
   },
+  
+  // EXAMPLE: Quote Revision for QT-001 (demonstrating revision system)
+  {
+    id: 'QT-001-R2',
+    leadId: 'lead-001',
+    parentQuoteId: 'QT-001',
+    quoteDate: 'March 20, 2025',
+    validUntil: 'April 5, 2025',
+    totalAmount: 1380000, // Reduced price after negotiation
+    status: 'sent',
+    statusMessage: 'Revised quote with 10% discount applied - Customer requested price reduction',
+    advancePaymentRequired: 690000,
+    advancePaymentStatus: 'not_requested',
+    items: [
+      {
+        itemCode: "TEX-IND-001",
+        description: "Industrial Cotton Fabric",
+        hsnCode: "5208",
+        quantity: 8000,
+        unit: "yards",
+        rate: 185,
+        discount: 10, // Added 10% discount in revision
+        taxableAmount: 1380000
+      }
+    ],
+    
+    // PHASE 1.1: Revision tracking fields
+    revisionNumber: 2,
+    isActive: true,
+    lastRevisionDate: 'March 20, 2025',
+    revisionReason: 'Customer requested 10% discount for bulk order',
+  },
+  
+  
   // Quotes for converted customers (linked to BusinessProfile)
   {
     id: 'QT-GJ-002',
@@ -1074,12 +1168,14 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
     totalAmount: 975000,
-    status: 'order_created',
+    status: 'approved',
     statusMessage: 'Order created successfully - Quote completed',
     approvalDate: 'March 12, 2025',
     proformaInvoiceId: 'PI-GJ-002',
     advancePaymentRequired: 487500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer creation
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with single premium item
     items: [
       {
@@ -1107,6 +1203,8 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: 'PI-BR-004',
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer creation
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with multiple fashion items and discount
     items: [
       {
@@ -1153,6 +1251,8 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: 'PI-002',
     advancePaymentRequired: 487500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer conversion
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1178,6 +1278,8 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: undefined,
     advancePaymentRequired: 495000, // 50% advance
     advancePaymentStatus: 'not_requested',
+    revisionNumber: 1,
+    isActive: false,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1203,6 +1305,8 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: 'PI-003',
     advancePaymentRequired: 330000, // 50% advance
     advancePaymentStatus: 'overdue',
+    revisionNumber: 1,
+    isActive: false,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1228,6 +1332,8 @@ export const mockQuotes: Quote[] = [
     proformaInvoiceId: 'PI-004',
     advancePaymentRequired: 367500, // 50% advance
     advancePaymentStatus: 'received', // This triggered customer conversion
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1251,11 +1357,13 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'October 15, 2025',
     validUntil: 'November 5, 2025',
     totalAmount: 2000000,
-    status: 'proforma_sent', // Aligns with lead conversionStatus
+    status: 'approved', // Aligns with lead conversionStatus
     statusMessage: 'Proforma invoice sent - Advance payment requested (₹10,00,000)',
     proformaInvoiceId: 'PI-L004-001',
     advancePaymentRequired: 1000000, // 50% advance for export quality
     advancePaymentStatus: 'awaiting', // Waiting for payment to convert lead to customer
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with comprehensive export order (4 items with discounts)
     items: [
       {
@@ -1309,10 +1417,12 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'October 10, 2025',
     validUntil: 'October 30, 2025',
     totalAmount: 700000,
-    status: 'pending', // Active lead stage - quote prepared but not yet sent
+    status: 'draft', // Active lead stage - quote prepared but not yet sent
     statusMessage: 'Quote prepared - Ready to send to prospect',
     advancePaymentRequired: 350000, // 50% advance
     advancePaymentStatus: 'not_requested', // No payment request yet in active lead stage
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1340,10 +1450,13 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'October 20, 2025',
     validUntil: 'November 10, 2025',
     totalAmount: 1350000,
-    status: 'under_review', // ALIGNED: quote_sent → under_review status
+    status: 'sent', // ALIGNED: quote_sent → under_review status
     statusMessage: 'Quote sent to valued customer - Awaiting approval for winter collection',
     advancePaymentRequired: 675000, // 50% advance
     advancePaymentStatus: 'not_requested', // Quote sent, awaiting customer response
+    // PHASE 1.1: Revision tracking fields
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items for professional display
     items: [
       {
@@ -1384,7 +1497,10 @@ export const mockQuotes: Quote[] = [
         discount: 0,
         taxableAmount: 2200000
       }
-    ]
+    ],
+    // PHASE 1.1: Quote Revision Tracking System (required fields)
+    revisionNumber: 1,
+    isActive: true,
   },
   
   // Quote for existing customer Surat Wholesale (lead-cust-003: active_lead status)
@@ -1395,7 +1511,7 @@ export const mockQuotes: Quote[] = [
     quoteDate: 'October 22, 2025',
     validUntil: 'November 12, 2025',
     totalAmount: 2700000,
-    status: 'pending', // ALIGNED: active_lead → pending status
+    status: 'draft', // ALIGNED: active_lead → pending status
     statusMessage: 'Large volume quote prepared - Reviewing final pricing with management',
     advancePaymentRequired: 1350000, // 50% advance for bulk order
     advancePaymentStatus: 'not_requested', // Quote being finalized
@@ -1411,7 +1527,9 @@ export const mockQuotes: Quote[] = [
         discount: 0,
         taxableAmount: 2700000
       }
-    ]
+    ],
+    revisionNumber: 1,
+    isActive: true,
   },
   
   // QT-005: Bulk order quote (later converted to SO-005)
@@ -1425,6 +1543,8 @@ export const mockQuotes: Quote[] = [
     statusMessage: 'Bulk quote approved - Advance payment received',
     advancePaymentRequired: 157500, // 30% advance
     advancePaymentStatus: 'received',
+    revisionNumber: 1,
+    isActive: true,
     // ✅ Enhanced with structured items for professional presentation
     items: [
       {
@@ -1473,8 +1593,8 @@ export const mockQuotes: Quote[] = [
     totalAmount: 48000,
     status: 'approved',
     statusMessage: 'Service quote approved - Ready for material receipt',
-    
-    
+    revisionNumber: 1,
+    isActive: true,
     items: [{
       itemCode: 'SVC-DYE-001',
       description: 'Reactive Dyeing Service - Navy Blue (Premium Quality)',
@@ -1497,8 +1617,8 @@ export const mockQuotes: Quote[] = [
     totalAmount: 36000,
     status: 'approved',
     statusMessage: 'Finishing service quote approved',
-    
-    
+    revisionNumber: 1,
+    isActive: true,
     items: [{
       itemCode: 'SVC-FIN-001',
       description: 'Softening & Anti-wrinkle Finishing Service',
@@ -1521,8 +1641,8 @@ export const mockQuotes: Quote[] = [
     totalAmount: 80000,
     status: 'approved',
     statusMessage: 'Printing service quote approved',
-    
-    
+    revisionNumber: 1,
+    isActive: true,
     items: [{
       itemCode: 'SVC-PRT-001',
       description: 'Digital Printing Service - Multi-color Design',
@@ -1852,7 +1972,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     totalAmount: 1746400,  // Fixed: should match item totalWithTax
     advanceAmount: 873200,  // Fixed: 50% of corrected totalAmount (1746400)
     bankDetails: companyBankDetails,
-    status: 'pending',
+    status: 'draft',
     paymentInstructions: 'Please pay 50% advance (₹8,73,200) within 15 days to confirm order',
     // ✅ Enhanced with structured items from corresponding quote QT-001
     items: [
@@ -1885,7 +2005,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     totalAmount: 771750,  // Fixed: should match item totalWithTax
     advanceAmount: 231525,  // Fixed: 30% of corrected totalAmount (771750)
     bankDetails: companyBankDetails,
-    status: 'pending',
+    status: 'draft',
     paymentInstructions: '30% advance payment (₹2,31,525) required for new customer',
     // ✅ Enhanced with structured items for professional GST display
     items: [
@@ -1918,7 +2038,7 @@ export const mockProformaInvoices: ProformaInvoice[] = [
     totalAmount: 9633750,
     advanceAmount: 3853500,
     bankDetails: companyBankDetails,
-    status: 'pending',
+    status: 'draft',
     paymentInstructions: '40% advance payment (₹38,53,500) required for export orders with LC/Bank guarantee',
     // ✅ Enhanced with structured items for professional GST display - Export order
     items: [
@@ -2378,7 +2498,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 9000,
     totalAmount: 59000,
     
-    status: 'pending',
+    status: 'draft',
     paymentReceivedDate: undefined,
     notes: 'Premium finishing service completed. Payment due within 15 days.',
     
@@ -2741,7 +2861,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 41250,
     totalAmount: 866250,
     
-    status: 'pending',
+    status: 'draft',
     paymentReceivedDate: '',
     notes: 'New customer - first invoice. Payment terms: 15 days.',
     
@@ -2813,7 +2933,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 50000,
     totalAmount: 1050000,
     
-    status: 'pending',
+    status: 'draft',
     paymentReceivedDate: '',
     notes: 'Wholesale order - fast delivery required.',
     
@@ -2885,7 +3005,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 45000,
     totalAmount: 945000,
     
-    status: 'pending',
+    status: 'draft',
     paymentReceivedDate: '',
     notes: 'Cotton processing order - quality inspection required.',
     
@@ -2957,7 +3077,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 50000,
     totalAmount: 1050000,
     
-    status: 'pending',
+    status: 'draft',
     paymentReceivedDate: '',
     notes: 'Export order - documentation and compliance required.',
     
@@ -3112,9 +3232,11 @@ export const generateQuoteFromLead = (leadId: string): Quote | null => {
     quoteDate: new Date().toISOString().split('T')[0],
     validUntil: getValidityDate(validityDays),
     totalAmount: subtotal + taxes,
-    status: 'pending',
+    status: 'draft',
     statusMessage: 'Quote generated from catalog',
     items: quoteItems,
+    revisionNumber: 1,
+    isActive: true,
     
     // Enhanced business model fields
     businessModel,
@@ -3165,7 +3287,9 @@ export const generateAndApplyQuote = (leadId: string): { quote: Quote | null, up
   }
 
   const updatedLead = { ...mockLeads[leadIndex] };
-  updatedLead.generatedQuoteId = quote.id;
+  // Update lead quote tracking (new approach replaces generatedQuoteId)
+  updatedLead.activeQuoteId = quote.id;
+  updatedLead.quoteHistory = [quote.id];
   updatedLead.conversionStatus = 'quote_sent';
   
   // Update the mock data (in real app, this would be API call)
@@ -3903,4 +4027,20 @@ export const mockPayables: PayableRecord[] = [
     earlyPaymentDiscount: 1.5
   }
 ];
+
+// PHASE 1.1: Quote Migration Utility - Add revision tracking fields to existing quotes
+function migrateQuotesToRevisionSystem() {
+  mockQuotes.forEach(quote => {
+    if (!quote.hasOwnProperty('revisionNumber')) {
+      quote.revisionNumber = 1;
+    }
+    if (!quote.hasOwnProperty('isActive')) {
+      quote.isActive = true;
+    }
+    // leadQuoteState removed - using lead conversionStatus as single source of truth
+  });
+}
+
+// Auto-migrate quotes on module load
+migrateQuotesToRevisionSystem();
 

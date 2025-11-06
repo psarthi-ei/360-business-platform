@@ -30,7 +30,7 @@ interface InvoiceRecord {
   customerName: string;
   location: string;
   totalAmount: number;
-  status: 'pending' | 'sent' | 'payment_received' | 'expired' | 'paid' | 'overdue';
+  status: 'pending' | 'sent' | 'payment_received' | 'expired' | 'paid' | 'overdue' | 'draft';
   issueDate: string;
   dueDate: string;
   relatedId?: string; // quoteId for proforma, salesOrderId for final

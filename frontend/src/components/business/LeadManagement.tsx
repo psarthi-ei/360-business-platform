@@ -6,6 +6,7 @@ import { mockLeads, Lead } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { calculateItemPrice } from '../../data/catalogMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
+import QuoteService from '../../services/QuoteService';
 import styles from './LeadManagement.module.css';
 
 interface LeadManagementProps {
@@ -122,6 +123,93 @@ function LeadManagement({
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
+  };
+
+  // PHASE 2.1: Dynamic Quote Actions based on Quote State
+  const renderDynamicQuoteActions = (lead: Lead) => {
+    const quoteState = QuoteService.getQuoteStateForLead(lead.id);
+    const availableActions = quoteState.availableActions;
+
+    if (availableActions.length === 0) {
+      return null; // No quote actions available
+    }
+
+    return availableActions.map((action) => (
+      <button
+        key={action.action}
+        className={action.buttonClass}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleQuoteAction(action.action, lead);
+        }}
+      >
+        {action.label}
+      </button>
+    ));
+  };
+
+  // Quote Action Handler
+  const handleQuoteAction = (actionType: string, lead: Lead) => {
+    switch (actionType) {
+      case 'generate':
+        handleGenerateQuote(lead);
+        break;
+      case 'view':
+        handleViewQuote(lead);
+        break;
+      case 'revise':
+        handleReviseQuote(lead);
+        break;
+      case 'send':
+        handleSendQuote(lead);
+        break;
+      case 'approve':
+        handleApproveQuote(lead);
+        break;
+      case 'generate_proforma':
+        handleGenerateProforma(lead);
+        break;
+      default:
+        // Unknown quote action - no handler available
+    }
+  };
+
+  // Quote Action Implementations (Phase 2.2)
+  const handleGenerateQuote = (lead: Lead) => {
+    // Generate quote logic to be implemented
+    // TODO: Implement quote generation
+    alert('Generate Quote - Implementation coming soon!');
+  };
+
+  const handleViewQuote = (lead: Lead) => {
+    // View quote logic to be implemented
+    if (onShowQuoteFromLead) {
+      onShowQuoteFromLead(lead.id);
+    }
+  };
+
+  const handleReviseQuote = (lead: Lead) => {
+    // Revise quote logic to be implemented
+    // TODO: Implement quote revision
+    alert('Revise Quote - Implementation coming soon!');
+  };
+
+  const handleSendQuote = (lead: Lead) => {
+    // Send quote logic to be implemented
+    // TODO: Implement quote sending
+    alert('Send Quote - Implementation coming soon!');
+  };
+
+  const handleApproveQuote = (lead: Lead) => {
+    // Approve quote logic to be implemented
+    // TODO: Implement quote approval
+    alert('Approve Quote - Implementation coming soon!');
+  };
+
+  const handleGenerateProforma = (lead: Lead) => {
+    // Generate proforma logic to be implemented
+    // TODO: Implement proforma generation
+    alert('Generate Proforma - Implementation coming soon!');
   };
 
   // Handle adding new lead
@@ -280,8 +368,12 @@ function LeadManagement({
                     const conversionLabels = {
                       active_lead: 'Active Lead',
                       quote_sent: 'Quote Sent',
+                      quote_rejected: 'Quote Rejected',
+                      quote_expired: 'Quote Expired',
+                      negotiation: 'In Negotiation',
                       verbally_approved: 'Approved',
                       proforma_sent: 'Proforma Sent',
+                      payment_failed: 'Payment Failed',
                       awaiting_payment: 'Payment Pending',
                       converted_to_order: 'Converted to Order'
                     };
@@ -417,15 +509,7 @@ function LeadManagement({
                     <button className="ds-btn ds-btn-secondary">
                       WhatsApp
                     </button>
-                    <button 
-                      className="ds-btn ds-btn-primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onShowQuoteFromLead?.(lead.id);
-                      }}
-                    >
-                      Quote
-                    </button>
+                    {renderDynamicQuoteActions(lead)}
                     <button 
                       className="ds-btn ds-btn-secondary"
                       onClick={(e) => {
