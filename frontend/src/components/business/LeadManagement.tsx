@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
+import RequestedItemCard from './RequestedItemCard';
 import { mockLeads, Lead } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
+import { calculateItemPrice } from '../../data/catalogMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import styles from './LeadManagement.module.css';
 
@@ -83,8 +85,45 @@ function LeadManagement({
     const businessProfile = getBusinessProfileById(lead.businessProfileId);
     if (!businessProfile) return '❓ Unknown';
     
-    return businessProfile.customerStatus === 'prospect' ? '🆕 New' : '🔄 Existing';
+    return businessProfile.customerStatus === 'prospect' ? '🆕 New Customer' : '🔄 Existing Customer';
   };
+
+  // Calculate total value for requested items
+  const calculateTotalValue = (lead: Lead) => {
+    if (!lead.requestedItems || lead.requestedItems.length === 0) {
+      return { totalValue: 0, itemCount: 0, calculatedItemCount: 0 };
+    }
+
+    let totalValue = 0;
+    let successfulCalculations = 0;
+
+    lead.requestedItems.forEach(item => {
+      try {
+        const calculation = calculateItemPrice(item.masterItemId, item.requestedQuantity, lead.leadType);
+        totalValue += calculation.finalPrice;
+        successfulCalculations++;
+      } catch {
+        // Skip items that can't be calculated
+      }
+    });
+
+    return { 
+      totalValue, 
+      itemCount: lead.requestedItems.length,
+      calculatedItemCount: successfulCalculations 
+    };
+  };
+
+  // Format currency
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
 
   // Handle adding new lead
   const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
@@ -230,9 +269,15 @@ function LeadManagement({
                   {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'} — {lead.inquiry}
                 </div>
                 
-                {/* Enhanced Status - Customer Type + Priority + Conversion Stage */}
+                {/* Simplified Status - Business Model + Priority + Conversion Stage */}
                 <div className="ds-card-status">
-                  {getCustomerTypeIndicator(lead)} • {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
+                  {(() => {
+                    const businessModelLabels = {
+                      sales: '🛒 Sales Order',
+                      job_work: '⚙️ Job Work'
+                    };
+                    return businessModelLabels[lead.leadType] || 'Unknown';
+                  })()} • {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
                     const conversionLabels = {
                       active_lead: 'Active Lead',
                       quote_sent: 'Quote Sent',
@@ -266,19 +311,17 @@ function LeadManagement({
               </div>
 
               {/* Expanded Details */}
-              {expandedDetails.has(lead.id) && (
+              {expandedDetails.has(lead.id) && (() => {
+                const totalCalculation = calculateTotalValue(lead);
+                return (
                 <div className={styles.expandedSection}>
                   {/* Lead Details Section */}
                   <div className={styles.leadDetailsSection}>
                     <h4>Lead Details</h4>
                     <div className={styles.detailsGrid}>
                       <p><strong>Lead ID:</strong> {lead.id}</p>
-                      <p><strong>Priority:</strong> {priorityIcons[lead.priority]} {priorityLabels[lead.priority]}</p>
-                      <p><strong>Status:</strong> {lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
-                      <p><strong>Location:</strong> {(() => {
-                        const bp = getBusinessProfileById(lead.businessProfileId);
-                        return bp ? `${bp.registeredAddress.city}, ${bp.registeredAddress.state}` : 'Unknown Location';
-                      })()}</p>
+                      <p><strong>Customer Type:</strong> {getCustomerTypeIndicator(lead)}</p>
+                      <p><strong>Created Date:</strong> {lead.lastContact}</p>
                     </div>
                   </div>
 
@@ -301,8 +344,7 @@ function LeadManagement({
                   <div className={styles.contactSection}>
                     <h4>Contact Information</h4>
                     <div className={styles.detailsGrid}>
-                      <p><strong>Contact:</strong> {lead.contact}</p>
-                      {lead.phone && <p><strong>Phone:</strong> {lead.phone}</p>}
+                      <p><strong>Primary Contact:</strong> {lead.phone || lead.contact}</p>
                       {lead.email && <p><strong>Email:</strong> {lead.email}</p>}
                       <p><strong>Last Contact:</strong> {lead.lastContact}</p>
                     </div>
@@ -319,49 +361,41 @@ function LeadManagement({
                     </div>
                   </div>
 
-                  {/* Fabric Requirements */}
+                  {/* Requested Items */}
                   <div className={styles.fabricSection}>
-                    <h4>Fabric Requirements</h4>
-                    {lead.fabricRequirements && (
-                      lead.fabricRequirements.fabricType || 
-                      lead.fabricRequirements.gsm || 
-                      lead.fabricRequirements.quantity
-                    ) ? (
+                    <div className={styles.sectionHeader}>
+                      <h4>Requested Items</h4>
+                      {totalCalculation.itemCount > 0 && (
+                        <span className={styles.itemCount}>{totalCalculation.itemCount} items</span>
+                      )}
+                    </div>
+                    {lead.requestedItems && lead.requestedItems.length > 0 ? (
                       <div className={styles.fabricContent}>
-                        <div className={styles.fabricGrid}>
-                          {lead.fabricRequirements.fabricType && (
-                            <span className={styles.fabricTag}>{lead.fabricRequirements.fabricType}</span>
-                          )}
-                          {lead.fabricRequirements.gsm && (
-                            <span className={styles.fabricTag}>{lead.fabricRequirements.gsm} GSM</span>
-                          )}
-                          {lead.fabricRequirements.quantity && (
-                            <span className={styles.fabricTag}>
-                              {lead.fabricRequirements.quantity} {lead.fabricRequirements.unit || 'units'}
-                            </span>
-                          )}
-                          {lead.fabricRequirements.qualityGrade && (
-                            <span className={styles.fabricTag}>{lead.fabricRequirements.qualityGrade}</span>
-                          )}
-                        </div>
-                        {lead.fabricRequirements.width && (
-                          <p><strong>Width:</strong> {lead.fabricRequirements.width}</p>
-                        )}
-                        {lead.fabricRequirements.weaveType && (
-                          <p><strong>Weave Type:</strong> {lead.fabricRequirements.weaveType}</p>
-                        )}
-                        {lead.fabricRequirements.colors && (
-                          <p><strong>Colors:</strong> {lead.fabricRequirements.colors}</p>
-                        )}
-                        {lead.fabricRequirements.specialProcessing && (
-                          <p><strong>Special Processing:</strong> {lead.fabricRequirements.specialProcessing}</p>
-                        )}
-                        {lead.fabricRequirements.deliveryTimeline && (
-                          <p><strong>Delivery Timeline:</strong> {lead.fabricRequirements.deliveryTimeline}</p>
+                        {lead.requestedItems.map((item, index) => (
+                          <RequestedItemCard
+                            key={index}
+                            item={item}
+                            businessModel={lead.leadType}
+                            showActions={false}
+                            index={index}
+                          />
+                        ))}
+                        {totalCalculation.totalValue > 0 && (
+                          <div className={styles.totalSection}>
+                            <div className={styles.totalRow}>
+                              <span className={styles.totalLabel}>Estimated Total Value:</span>
+                              <span className={styles.totalAmount}>{formatCurrency(totalCalculation.totalValue)}</span>
+                            </div>
+                            {totalCalculation.calculatedItemCount !== totalCalculation.itemCount && (
+                              <p className={styles.calculationNote}>
+                                * Total based on {totalCalculation.calculatedItemCount} of {totalCalculation.itemCount} items with available pricing
+                              </p>
+                            )}
+                          </div>
                         )}
                       </div>
                     ) : (
-                      <p className={styles.noData}>No fabric requirements specified yet.</p>
+                      <p className={styles.noData}>No items requested yet.</p>
                     )}
                   </div>
 
@@ -404,7 +438,8 @@ function LeadManagement({
                     </button>
                   </div>
                 </div>
-              )}
+                );
+              })()}
             </div>
           );
         })}

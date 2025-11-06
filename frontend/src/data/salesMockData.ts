@@ -1,6 +1,8 @@
 // Sales Mock Data for 360° Business Platform
 // This file contains sales-related sample data: leads, quotes, orders, invoices, payments, and fabric specifications
 
+// Master Item Catalog integration for Phase 2 (functions imported dynamically in quote generation)
+
 // No inventory imports - Sales module handles only customer relationships and service orders
 
 // Universal Order Status - Comprehensive status including all current values for compatibility
@@ -68,6 +70,52 @@ export interface ServiceRequirements {
   specialInstructions?: string; // Customer notes only
 }
 
+// ===== PHASE 2: ENHANCED LEAD MANAGEMENT INTERFACES =====
+
+// Catalog-driven item selection for leads
+export interface LeadRequestedItem {
+  masterItemId: string;               // Reference to Master Item Catalog
+  requestedQuantity: number;          // Quantity needed
+  customSpecifications?: Record<string, string>; // Custom modifications
+  budgetExpectation?: number;         // Expected price per unit
+  priority: 'must_have' | 'preferred' | 'nice_to_have'; // Item priority
+  notes?: string;                     // Additional notes
+}
+
+// Customer material information for Job Work leads
+export interface CustomerMaterialInfo {
+  materialType: string;               // Type of material customer provides
+  quantity: number;                   // Quantity customer will provide
+  qualityGrade: string;               // Quality assessment
+  deliveryDate: string;               // When customer will deliver
+  specifications: Record<string, string>; // Material specifications
+}
+
+// Budget range management
+export interface BudgetRange {
+  minimum: number;                    // Minimum budget
+  maximum: number;                    // Maximum budget
+  currency: 'INR';                    // Currency
+  isFlexible: boolean;                // Can budget be exceeded
+}
+
+// Custom specifications for special requirements
+export interface CustomSpecification {
+  specType: string;                   // Type of specification
+  description: string;                // Detailed description
+  isMandatory: boolean;               // Is this required
+  estimatedCostImpact?: number;       // Estimated additional cost
+}
+
+// Delivery requirements and constraints
+export interface DeliveryRequirements {
+  preferredDate: string;              // When customer wants delivery
+  isDateFlexible: boolean;            // Can date be adjusted
+  deliveryLocation: string;           // Where to deliver
+  specialHandling?: string[];         // Special delivery requirements
+  qualityInspectionRequired?: boolean; // Need quality check before delivery
+}
+
 // Phase 2 Day 12: Quote Conversion Workflow Interfaces
 // Different workflow paths for sales vs service quotes
 
@@ -130,13 +178,24 @@ export interface Lead {
   budget: string;
   timeline: string;
   priority: 'hot' | 'warm' | 'cold';
-  leadType: 'sales' | 'job_work'; // Added: Lead type differentiation for UI logic
+  leadType: 'sales' | 'job_work'; // Lead type differentiation for dual business model
   
-  // UC-L04: Structured Fabric Requirements
-  fabricRequirements?: FabricRequirements;
+  // Catalog-driven item selection (replaces manual requirements)
+  requestedItems: LeadRequestedItem[];
   
-  // Service Requirements (for service-based leads)
-  serviceRequirements?: ServiceRequirements;
+  // Business context and budget management
+  budgetExpectations?: BudgetRange;
+  priorityLevel: 'must_have' | 'preferred' | 'nice_to_have';
+  customSpecifications?: CustomSpecification[];
+  
+  // Customer materials (Job Work specific)
+  customerMaterials?: CustomerMaterialInfo[];
+  
+  // Delivery requirements
+  deliveryRequirements: DeliveryRequirements;
+  
+  // Generated quote reference
+  generatedQuoteId?: string;
   
   // Relationship Tracking
   lastContact: string;
@@ -147,7 +206,7 @@ export interface Lead {
   convertedToOrderDate?: string;
 }
 
-// Base item interface - foundation for all commercial documents
+// Enhanced item interface with catalog integration
 export interface QuoteItem {
   itemCode: string;        // "TEX-PREM-001"
   description: string;     // "Premium Cotton Fabric"
@@ -157,6 +216,15 @@ export interface QuoteItem {
   rate: number;           // 185 (per unit price)
   discount: number;       // 0 (percentage discount) - made required for compatibility
   taxableAmount: number;  // 277500 (quantity * rate - discount)
+  
+  // PHASE 2: Catalog integration fields
+  catalogItemId?: string;           // Reference to Master Item Catalog
+  businessModelPricing?: 'sales_premium' | 'job_work_competitive';
+  appliedVolumeDiscount?: {
+    thresholdQuantity: number;
+    discountPercentage: number;
+    discountAmount: number;
+  };
 }
 
 export interface Quote {
@@ -174,6 +242,20 @@ export interface Quote {
   proformaInvoiceId?: string;
   advancePaymentRequired?: number;
   advancePaymentStatus?: 'not_requested' | 'awaiting' | 'overdue' | 'received';
+  
+  // PHASE 2: Business model integration
+  businessModel?: 'sales' | 'job_work';
+  businessModelTerms?: {
+    paymentTerms: string;
+    deliveryDays?: number;
+    processingDays?: number;
+    specialConditions?: string[];
+  };
+  pricingDifferentiation?: {
+    strategy: string;
+    differentiationPercentage: number;
+    riskFactors: string[];
+  };
   
   // Professional structured items array
   items: QuoteItem[];
@@ -597,303 +679,219 @@ export interface PayableRecord {
 // Mock Data
 // mockBusinessProfiles moved to customerMockData.ts - import from there for customer data
 
+// Simplified MVP Data: Exactly 5 leads
 export const mockLeads: Lead[] = [
-  // ACTIVE LEADS - Currently in lead management process (no BusinessProfile yet)
+  // 1. Hot Sales Lead - Premium Cotton Fabric (Single Item)
   {
     id: 'lead-001',
-    businessProfileId: 'bp-mumbai-cotton-mills', // New prospect BusinessProfile
+    businessProfileId: 'bp-mumbai-cotton-mills',
     contactPerson: 'Pradeep Kumar',
     designation: 'Purchase Manager',
     department: 'Procurement',
-    contact: '+91 98765 11111 | pradeep@mumbaicomills.com',
+    contact: '+91 98765 11111',
     phone: '+91 98765 11111',
     email: 'pradeep@mumbaicomills.com',
-    inquiry: 'Industrial cotton fabric - 8,000 yards',
+    inquiry: 'Complete garment manufacturing supplies - cotton fabric, buttons, and dyes',
     budget: '₹12-15 lakhs',
-    timeline: '45 days',
-    priority: 'hot',
-    leadType: 'sales',
-    fabricRequirements: {
-      fabricType: 'Cotton',
-      gsm: 180,
-      width: '44 inches',
-      weaveType: 'Plain',
-      quantity: 8000,
-      unit: 'yards',
-      colors: 'Natural white, dye-ready',
-      qualityGrade: 'Industrial',
-      specialProcessing: 'Pre-shrunk, ready for industrial use',
-      deliveryTimeline: '45 days'
-    },
-    lastContact: 'Today 10:30 AM - "Very interested, send samples"',
-    notes: 'New potential customer. Quick decision maker. Needs samples by Friday.',
-    conversionStatus: 'active_lead'
-  },
-  {
-    id: 'lead-002',
-    businessProfileId: 'bp-surat-fashion-house', // New prospect BusinessProfile
-    contactPerson: 'Meera Patel',
-    designation: 'Production Head',
-    department: 'Production',
-    contact: '+91 99887 22222 | meera@suratfashion.com',
-    phone: '+91 99887 22222',
-    email: 'meera@suratfashion.com',
-    inquiry: 'Mixed fabric for seasonal wear - 6,000 yards',
-    budget: '₹10-14 lakhs',
-    timeline: '60 days',
-    priority: 'warm',
-    leadType: 'sales',
-    fabricRequirements: {
-      fabricType: 'Cotton Blend',
-      gsm: 150,
-      width: '44 inches',
-      weaveType: 'Twill',
-      quantity: 6000,
-      unit: 'yards',
-      colors: 'Navy blue, forest green, burgundy',
-      qualityGrade: 'A-Grade',
-      specialProcessing: 'Soft finish, color-fast dyeing',
-      deliveryTimeline: '60 days'
-    },
-    lastContact: 'Yesterday - "Comparing suppliers, will decide soon"',
-    notes: 'Price-sensitive buyer. Interested in long-term partnership.',
-    conversionStatus: 'quote_sent'
-  },
-  // CONVERTED LEADS - Linked to existing customers
-  {
-    id: 'gujarat-002',
-    businessProfileId: 'bp-gujarat-garments',
-    contactPerson: 'Kiran Patel',
-    designation: 'Owner',
-    department: 'Management',
-    contact: '+91 99884 55667 | kiran@gujaratgarments.com',
-    phone: '+91 99884 55667',
-    email: 'kiran@gujaratgarments.com',
-    inquiry: 'Export quality cotton fabric - 5,000 yards',
-    budget: '₹8-10 lakhs',
     timeline: '30 days',
     priority: 'hot',
     leadType: 'sales',
-    lastContact: 'Converted to order on March 15, 2025',
-    notes: 'Successfully converted to order. First order completed successfully.',
-    conversionStatus: 'converted_to_order',
-    convertedToOrderDate: 'March 15, 2025'
-  },
-  {
-    id: 'baroda-004',
-    businessProfileId: 'bp-baroda-fashion',
-    contactPerson: 'Rajesh Mehta',
-    designation: 'Creative Director',
-    department: 'Design',
-    contact: '+91 98765 43210 | rajesh@barodafashion.com',
-    phone: '+91 98765 43210',
-    email: 'rajesh@barodafashion.com',
-    inquiry: 'Premium fashion fabric - 3,500 yards',
-    budget: '₹6-8 lakhs',
-    timeline: '20 days',
-    priority: 'warm',
-    leadType: 'sales',
-    lastContact: 'Converted to order on April 02, 2025',
-    notes: 'Excellent payment behavior - completed first order successfully.',
-    conversionStatus: 'converted_to_order',
-    convertedToOrderDate: 'April 02, 2025'
-  },
-  {
-    id: 'lead-003',
-    businessProfileId: 'bp-baroda-textiles', // New prospect BusinessProfile
-    contactPerson: 'Ashok Shah',
-    contact: '+91 97654 33333 | ashok@barodatextiles.com',
-    phone: '+91 97654 33333',
-    email: 'ashok@barodatextiles.com',
-    inquiry: 'Cotton fabric for retail - 4,000 yards',
-    budget: '₹6-9 lakhs',
-    timeline: '90 days',
-    lastContact: 'Last week - "Need more time to decide"',
-    priority: 'cold',
-    leadType: 'sales',
-    notes: 'New prospect - slow decision process. Follow up in 2 weeks.',
-    conversionStatus: 'active_lead'
-  },
-  // LEADS WITH PENDING PAYMENTS - These will convert to customers once payment received
-  {
-    id: 'lead-004',
-    businessProfileId: 'bp-rajesh-textiles', // New prospect BusinessProfile
-    contactPerson: 'Rajesh Shah', 
-    contact: '+91 98765 43210 | rajesh@rateshtextiles.com',
-    inquiry: 'High-grade cotton fabric for export - 10,000 yards',
-    budget: '₹18-22 lakhs',
-    timeline: '30 days',
-    lastContact: 'Today 2:30 PM - "Will pay advance by tomorrow"',
-    priority: 'hot',
-    leadType: 'sales',
-    notes: 'Quote approved. Proforma invoice sent. Advance payment expected tomorrow.',
-    conversionStatus: 'proforma_sent'
-  },
-  
-  // CONVERTED LEADS - Kept for historical tracking but filtered from active display
-  {
-    id: 'lead-005',
-    businessProfileId: 'bp-gujarat-garments',
-    contactPerson: 'Kiran Desai',
-    contact: '+91 98765 55555 | kiran@gujaratfabrics.com',
-    phone: '+91 98765 55555',
-    email: 'kiran@gujaratfabrics.com',
-    inquiry: 'Premium cotton blend - 8,000 yards',
-    budget: '₹15-18 lakhs',
-    timeline: '25 days',
-    lastContact: 'Converted to customer on March 31, 2025',
-    priority: 'hot',
-    leadType: 'sales',
-    notes: 'Successfully converted to customer. First order completed successfully.',
-    conversionStatus: 'converted_to_order',
-    convertedToOrderDate: 'March 31, 2025'
-  },
-  
-  // ========================================
-  // LEADS FOR EXISTING CUSTOMERS - ONGOING BUSINESS RELATIONSHIPS
-  // ========================================
-  
-  // Repeat Business Lead for Gujarat Garments (existing customer)
-  {
-    id: 'lead-cust-001',
-    businessProfileId: 'bp-gujarat-garments', // EXISTING CUSTOMER
-    contactPerson: 'Kiran Patel',
-    designation: 'Owner',
-    department: 'Management',
-    contact: '+91 99884 55667 | kiran@gujaratgarments.com',
-    phone: '+91 99884 55667',
-    email: 'kiran@gujaratgarments.com',
-    inquiry: 'Seasonal collection fabric - 6,000 yards for winter collection',
-    budget: '₹12-15 lakhs',
-    timeline: '35 days',
-    priority: 'hot',
-    leadType: 'sales',
-    fabricRequirements: {
-      fabricType: 'Cotton Blend',
-      gsm: 160,
-      width: '44 inches',
-      weaveType: 'Twill',
-      quantity: 6000,
-      unit: 'yards',
-      colors: 'Autumn colors - rust, burgundy, forest green',
-      qualityGrade: 'A-Grade',
-      specialProcessing: 'Water-resistant finish for winter wear',
-      deliveryTimeline: '35 days'
+    requestedItems: [
+      {
+        masterItemId: 'cotton-001',
+        requestedQuantity: 2500,
+        priority: 'must_have',
+        budgetExpectation: 420,
+        customSpecifications: {
+          'Quality Requirements': 'Premium quality for high-end garments',
+          'Finishing': 'Pre-shrunk and mercerized',
+          'Inspection': 'Full quality inspection required'
+        },
+        notes: 'Premium cotton fabric for export quality garments'
+      },
+      {
+        masterItemId: 'button-001',
+        requestedQuantity: 5000,
+        priority: 'must_have',
+        budgetExpectation: 3.5,
+        customSpecifications: {
+          'Color Requirements': 'White and navy blue only',
+          'Quality Standard': 'Export grade buttons',
+          'Application': 'Premium shirt manufacturing'
+        },
+        notes: 'Standard 14mm buttons for premium shirt collection'
+      },
+      {
+        masterItemId: 'dye-001',
+        requestedQuantity: 25,
+        priority: 'preferred',
+        budgetExpectation: 180,
+        customSpecifications: {
+          'Color Matching': 'Pantone reference required',
+          'Fastness Grade': 'Minimum Grade 4',
+          'Application': 'Cotton fabric reactive dyeing'
+        },
+        notes: 'Red dye for accent fabric pieces in collection'
+      }
+    ],
+    priorityLevel: 'must_have',
+    deliveryRequirements: {
+      preferredDate: '2025-06-15',
+      isDateFlexible: false,
+      deliveryLocation: 'Mumbai Cotton Mills Factory',
+      specialHandling: ['Pre-shrinking', 'Quality certification'],
+      qualityInspectionRequired: true
     },
-    lastContact: 'Today 11:00 AM - "Need winter collection ready by December"',
-    notes: 'Existing customer - excellent payment history. Looking for repeat order with new specifications.',
-    conversionStatus: 'quote_sent'
-  },
-  
-  // Repeat Business Lead for Baroda Fashion House (existing customer)
-  {
-    id: 'lead-cust-002',
-    businessProfileId: 'bp-baroda-fashion', // EXISTING CUSTOMER
-    contactPerson: 'Rajesh Mehta',
-    designation: 'Creative Director',
-    department: 'Design',
-    contact: '+91 98765 43210 | rajesh@barodafashion.com',
-    phone: '+91 98765 43210',
-    email: 'rajesh@barodafashion.com',
-    inquiry: 'Premium fashion fabric expansion - 8,000 yards',
-    budget: '₹18-22 lakhs',
-    timeline: '40 days',
-    priority: 'warm',
-    leadType: 'sales',
-    fabricRequirements: {
-      fabricType: 'Silk Blend',
-      gsm: 140,
-      width: '58 inches',
-      weaveType: 'Satin',
-      quantity: 8000,
-      unit: 'yards',
-      colors: 'Pastel spring collection - mint, lavender, peach',
-      qualityGrade: 'Export-Grade',
-      specialProcessing: 'Anti-wrinkle treatment, luxury finish',
-      deliveryTimeline: '40 days'
-    },
-    lastContact: 'Yesterday - "Expanding our premium line, need your quality"',
-    notes: 'Trusted repeat customer. Previous orders always on-time payment. Premium pricing acceptable.',
-    conversionStatus: 'verbally_approved'
-  },
-  
-  // New Business Lead for Surat Wholesale Market (existing customer)
-  {
-    id: 'lead-cust-003',
-    businessProfileId: 'bp-surat-wholesale', // EXISTING CUSTOMER
-    contactPerson: 'Mehul Shah',
-    designation: 'Purchase Manager',
-    department: 'Procurement',
-    contact: '+91 98765 43203 | mehul@suratwholesale.com',
-    phone: '+91 98765 43203',
-    email: 'mehul@suratwholesale.com',
-    inquiry: 'Bulk wholesale fabric order - 15,000 yards',
-    budget: '₹25-30 lakhs',
-    timeline: '50 days',
-    priority: 'hot',
-    leadType: 'sales',
-    fabricRequirements: {
-      fabricType: 'Mixed Cotton',
-      gsm: 130,
-      width: '44 inches',
-      weaveType: 'Plain',
-      quantity: 15000,
-      unit: 'yards',
-      colors: 'Mixed assortment - 10 different colors',
-      qualityGrade: 'B-Grade',
-      specialProcessing: 'Bulk packaging, wholesale ready',
-      deliveryTimeline: '50 days'
-    },
-    lastContact: 'This morning - "Biggest order this year, need best pricing"',
-    notes: 'Large wholesale customer. Volume discount expected. Fast payment on delivery.',
+    lastContact: 'Today 10:30 AM - "Very interested, send samples by Thursday"',
+    notes: 'New potential customer. Quick decision maker. Premium quality requirements.',
     conversionStatus: 'active_lead'
   },
 
-  // ==================== SERVICE LEADS FOR JOB ORDERS ====================
-  // Service Lead 1 - Dyeing Service
+  // 2. Warm Lead - Inquiry Only (No Items Yet)
   {
-    id: 'lead-jo-001',
+    id: 'lead-002',
+    businessProfileId: 'bp-surat-fashion-house',
+    contactPerson: 'Meera Patel',
+    designation: 'Production Head',
+    department: 'Production',
+    contact: '+91 99887 22222',
+    phone: '+91 99887 22222',
+    email: 'meera@suratfashion.com',
+    inquiry: 'Exploring fabric options for upcoming seasonal collection. Need cost estimates for cotton and silk blends in various quantities.',
+    budget: 'To be discussed',
+    timeline: '3-4 months',
+    priority: 'warm',
+    leadType: 'sales',
+    requestedItems: [], // No specific items yet - inquiry stage
+    priorityLevel: 'preferred',
+    deliveryRequirements: {
+      preferredDate: '2025-08-15',
+      isDateFlexible: true,
+      deliveryLocation: 'Surat Fashion House Warehouse',
+      specialHandling: [],
+      qualityInspectionRequired: true
+    },
+    lastContact: 'Yesterday - "Still exploring options, will need samples once we finalize designs"',
+    notes: 'Early stage inquiry. Potential for large orders. Follow up with catalog and pricing information.',
+    conversionStatus: 'active_lead'
+  },
+
+  // 3. Cold Lead - Multiple Items (Cotton + Silk)
+  {
+    id: 'lead-003',
+    businessProfileId: 'bp-baroda-textiles',
+    contactPerson: 'Ashok Shah',
+    designation: 'Business Owner',
+    department: 'Management',
+    contact: '+91 97654 33333',
+    phone: '+91 97654 33333',
+    email: 'ashok@barodatextiles.com',
+    inquiry: 'Mixed fabric order with finishing services for retail collection - complete textile solution',
+    budget: '₹10-15 lakhs',
+    timeline: '90 days',
+    priority: 'cold',
+    leadType: 'sales',
+    requestedItems: [
+      {
+        masterItemId: 'cotton-002',
+        requestedQuantity: 1500,
+        priority: 'must_have',
+        budgetExpectation: 320,
+        customSpecifications: {
+          'Color Requirements': 'Natural white and light blue',
+          'Application': 'Casual wear retail garments'
+        },
+        notes: 'Standard cotton for retail collection'
+      },
+      {
+        masterItemId: 'silk-001',
+        requestedQuantity: 500,
+        priority: 'preferred',
+        budgetExpectation: 850,
+        customSpecifications: {
+          'Quality Grade': 'Premium',
+          'Application': 'High-end retail garments'
+        },
+        notes: 'Natural silk for premium product line'
+      },
+      {
+        masterItemId: 'finishing-001',
+        requestedQuantity: 1000,
+        priority: 'preferred',
+        budgetExpectation: 25,
+        customSpecifications: {
+          'Finish Type': 'Softening and anti-wrinkle for cotton portion',
+          'Quality Standard': 'Retail-ready finish',
+          'Application': 'Cotton fabric finishing only'
+        },
+        notes: 'Professional finishing service for cotton fabrics to ensure retail quality'
+      }
+    ],
+    priorityLevel: 'preferred',
+    deliveryRequirements: {
+      preferredDate: '2025-08-30',
+      isDateFlexible: true,
+      deliveryLocation: 'Baroda Textiles Warehouse',
+      specialHandling: ['Separate packaging for cotton and silk'],
+      qualityInspectionRequired: true
+    },
+    lastContact: 'Last week - "Need more time to finalize quantities and specifications"',
+    notes: 'New prospect - methodical decision process. Interested in both cotton and silk options.',
+    conversionStatus: 'active_lead'
+  },
+
+  // 4. Hot Job Work Lead - Dyeing Service
+  {
+    id: 'lead-004',
     businessProfileId: 'bp-surat-processors',
     contactPerson: 'Ramesh Kumar',
     designation: 'Production Manager',
     department: 'Processing',
-    contact: '+91 98765 43210 | ramesh@suratprocessors.com',
+    contact: '+91 98765 43210',
     phone: '+91 98765 43210',
     email: 'ramesh@suratprocessors.com',
-    inquiry: 'Dyeing service for 2000m cotton fabric - Navy blue reactive dyes',
+    inquiry: 'Dyeing service for 2,000 meters cotton fabric - Navy blue reactive dyes',
     budget: '₹45,000-55,000',
     timeline: '7 days',
     priority: 'hot',
     leadType: 'job_work',
-    
-    // Service requirements instead of fabric requirements
-    serviceRequirements: {
-      serviceType: 'dyeing',
-      materialType: 'Cotton Grey Fabric',
-      quantity: 2000,
-      unit: 'meters',
-      customerSpecifications: {
-        colors: ['Navy Blue'],
-        qualityGrade: 'A-Grade',
-        chemicalRequirements: ['Reactive Dyes', 'Salt', 'Soda Ash'],
-        processRequirements: ['Pre-treatment', 'Hot dyeing process', 'Cold wash']
-      },
-      deliveryTimeline: '7 days'
+    requestedItems: [
+      {
+        masterItemId: 'dyeing-001',
+        requestedQuantity: 2000,
+        priority: 'must_have',
+        budgetExpectation: 25,
+        customSpecifications: {
+          'Service Type': 'Dyeing',
+          'Material Type': 'Cotton Grey Fabric',
+          'Colors': 'Navy Blue',
+          'Quality Grade': 'A-Grade',
+          'Chemical Requirements': 'Reactive Dyes, Salt, Soda Ash'
+        },
+        notes: 'Urgent dyeing service for export client'
+      }
+    ],
+    priorityLevel: 'must_have',
+    deliveryRequirements: {
+      preferredDate: '2025-05-22',
+      isDateFlexible: false,
+      deliveryLocation: 'Surat Processors Facility',
+      specialHandling: ['Pre-treatment required'],
+      qualityInspectionRequired: true
     },
-    
     lastContact: 'Yesterday - "Urgent order for export client, need best quality"',
     notes: 'Regular service customer. Brings own fabric. Reliable payment record.',
     conversionStatus: 'quote_sent'
   },
 
-  // Service Lead 2 - Finishing Service
+  // 5. Warm Job Work Lead - Finishing Service
   {
-    id: 'lead-jo-002',
+    id: 'lead-005',
     businessProfileId: 'bp-ahmedabad-finishers',
     contactPerson: 'Kiran Shah',
     designation: 'Quality Head',
     department: 'Finishing',
-    contact: '+91 97654 32108 | kiran@ahmedabadfinish.com',
+    contact: '+91 97654 32108',
     phone: '+91 97654 32108',
     email: 'kiran@ahmedabadfinish.com',
     inquiry: 'Softening and anti-wrinkle finishing for 1500m cotton fabric',
@@ -901,60 +899,91 @@ export const mockLeads: Lead[] = [
     timeline: '5 days',
     priority: 'warm',
     leadType: 'job_work',
-    
-    serviceRequirements: {
-      serviceType: 'finishing',
-      materialType: 'Cotton Dyed Fabric',
-      quantity: 1500,
-      unit: 'meters',
-      customerSpecifications: {
-        finishType: ['Softening', 'Anti-wrinkle'],
-        qualityGrade: 'Premium',
-        specialRequirements: ['Enzyme treatment', 'Silicone softening', 'Anti-bacterial'],
-        testingRequired: ['Hand feel test', 'Wrinkle recovery']
-      },
-      deliveryTimeline: '5 days'
+    requestedItems: [
+      {
+        masterItemId: 'finishing-001',
+        requestedQuantity: 1500,
+        priority: 'preferred',
+        budgetExpectation: 30,
+        customSpecifications: {
+          'Service Type': 'Finishing',
+          'Material Type': 'Cotton Dyed Fabric',
+          'Finish Type': 'Softening, Anti-wrinkle',
+          'Quality Grade': 'Premium',
+          'Special Requirements': 'Enzyme treatment, Silicone softening'
+        },
+        notes: 'Regular finishing service requirement'
+      }
+    ],
+    priorityLevel: 'preferred',
+    deliveryRequirements: {
+      preferredDate: '2025-05-25',
+      isDateFlexible: true,
+      deliveryLocation: 'Ahmedabad Finishers Plant',
+      specialHandling: ['Hand feel testing required'],
+      qualityInspectionRequired: true
     },
-    
     lastContact: '2 days ago - "Regular finishing work, need consistent quality"',
-    notes: 'Established finishing client. Quality-focused. Net 15 payment terms.',
+    notes: 'Established customer. Requires specific chemical processes. Good payment history.',
     conversionStatus: 'verbally_approved'
   },
 
-  // Service Lead 3 - Printing Service
+  // 6. Hot Job Work Lead - Multi-Service Pipeline (Dyeing + Finishing)
   {
-    id: 'lead-jo-003',
-    businessProfileId: 'bp-mumbai-printers',
-    contactPerson: 'Deepak Joshi',
-    designation: 'Design Manager',
-    department: 'Digital Printing',
-    contact: '+91 96543 21087 | deepak@mumbaiprints.com',
-    phone: '+91 96543 21087',
-    email: 'deepak@mumbaiprints.com',
-    inquiry: 'Digital printing service for 3200m polyester fabric - Multi-color design',
-    budget: '₹75,000-85,000',
+    id: 'lead-006',
+    businessProfileId: 'bp-rajkot-processors',
+    contactPerson: 'Ravi Patel',
+    designation: 'Operations Head',
+    department: 'Processing',
+    contact: '+91 95123 67890',
+    phone: '+91 95123 67890',
+    email: 'ravi@rajkotprocessors.com',
+    inquiry: 'Complete processing pipeline - dyeing and finishing for 3,000 meters cotton fabric',
+    budget: '₹85,000-1,10,000',
     timeline: '10 days',
     priority: 'hot',
     leadType: 'job_work',
-    
-    serviceRequirements: {
-      serviceType: 'printing',
-      materialType: 'Polyester Fabric',
-      quantity: 3200,
-      unit: 'meters',
-      customerSpecifications: {
-        printType: ['Digital printing'],
-        colors: ['Multi-color design', '8 colors', 'CMYK process'],
-        designComplexity: 'High',
-        printQuality: 'Photo quality',
-        specialRequirements: ['Color fastness testing', 'Design registration', 'Quality check']
+    requestedItems: [
+      {
+        masterItemId: 'dyeing-001',
+        requestedQuantity: 3000,
+        priority: 'must_have',
+        budgetExpectation: 25,
+        customSpecifications: {
+          'Service Type': 'Reactive Dyeing',
+          'Material Type': 'Cotton Grey Fabric',
+          'Colors': 'Dark Navy Blue',
+          'Quality Grade': 'Export Quality',
+          'Chemical Requirements': 'Reactive Dyes, Salt, Soda Ash, Anti-migrant'
+        },
+        notes: 'Stage 1: Reactive dyeing with superior color fastness for export client'
       },
-      deliveryTimeline: '10 days'
+      {
+        masterItemId: 'finishing-001',
+        requestedQuantity: 3000,
+        priority: 'must_have',
+        budgetExpectation: 18,
+        customSpecifications: {
+          'Service Type': 'Premium Finishing',
+          'Material Type': 'Dyed Cotton Fabric',
+          'Finish Type': 'Softening, Anti-wrinkle, Water-repellent',
+          'Quality Grade': 'Export Premium',
+          'Special Requirements': 'OEKO-TEX certified chemicals only'
+        },
+        notes: 'Stage 2: Complete finishing after dyeing - full processing pipeline'
+      }
+    ],
+    priorityLevel: 'must_have',
+    deliveryRequirements: {
+      preferredDate: '2025-05-28',
+      isDateFlexible: false,
+      deliveryLocation: 'Rajkot Processors Facility',
+      specialHandling: ['Sequential processing required', 'Quality testing at each stage'],
+      qualityInspectionRequired: true
     },
-    
-    lastContact: 'This morning - "Fashion season order, need premium printing quality"',
-    notes: 'Fashion industry client. High-value orders. Requires premium quality and fast delivery.',
-    conversionStatus: 'awaiting_payment'
+    lastContact: 'This morning - "Urgent export order, need complete processing pipeline done perfectly"',
+    notes: 'Large export client project. Client provides raw cotton fabric, we handle complete dyeing and finishing. Premium quality requirements.',
+    conversionStatus: 'quote_sent'
   }
 ];
 
@@ -3016,6 +3045,139 @@ export const getAdvancePaymentsByCustomerId = (customerId: string): AdvancePayme
   const customerInvoices = mockProformaInvoices.filter(pi => pi.businessProfileId === customerId);
   const invoiceIds = customerInvoices.map(pi => pi.id);
   return mockAdvancePayments.filter(ap => invoiceIds.includes(ap.proformaInvoiceId));
+};
+
+// ===== PHASE 2: CATALOG-DRIVEN QUOTE GENERATION =====
+
+// Generate quote from enhanced lead using existing Quote interface
+export const generateQuoteFromLead = (leadId: string): Quote | null => {
+  const lead = getLeadById(leadId);
+  if (!lead || !lead.requestedItems || lead.requestedItems.length === 0) {
+    return null;
+  }
+
+  const businessModel = lead.leadType;
+  const quoteItems: QuoteItem[] = [];
+  let subtotal = 0;
+
+  // Import catalog functions dynamically
+  const { calculateItemPrice, getItemById } = require('./catalogMockData');
+
+  for (const requestedItem of lead.requestedItems) {
+    const catalogItem = getItemById(requestedItem.masterItemId);
+    if (!catalogItem) continue;
+
+    // Skip materials for job work (customer provides materials)
+    if (businessModel === 'job_work' && catalogItem.classification === 'material') {
+      continue;
+    }
+
+    const priceCalculation = calculateItemPrice(
+      requestedItem.masterItemId,
+      requestedItem.requestedQuantity,
+      businessModel
+    );
+
+    const quoteItem: QuoteItem = {
+      itemCode: catalogItem.code,
+      description: catalogItem.name,
+      hsnCode: '5208', // Textile HSN code
+      quantity: requestedItem.requestedQuantity,
+      unit: catalogItem.pricing.salesOrderPricing[0]?.unit || 'piece',
+      rate: priceCalculation.finalPrice,
+      discount: priceCalculation.discountDetails?.discountPercentage || 0,
+      taxableAmount: priceCalculation.finalPrice * requestedItem.requestedQuantity,
+      
+      // Enhanced catalog fields
+      catalogItemId: requestedItem.masterItemId,
+      businessModelPricing: businessModel === 'sales' ? 'sales_premium' : 'job_work_competitive',
+      appliedVolumeDiscount: priceCalculation.discountDetails ? {
+        thresholdQuantity: priceCalculation.discountDetails.thresholdQuantity,
+        discountPercentage: priceCalculation.discountDetails.discountPercentage,
+        discountAmount: (priceCalculation.basePrice - priceCalculation.finalPrice) * requestedItem.requestedQuantity
+      } : undefined
+    };
+
+    quoteItems.push(quoteItem);
+    subtotal += quoteItem.taxableAmount;
+  }
+
+  const taxes = Math.round(subtotal * 0.18); // 18% GST
+  const terms = getBusinessModelTerms(businessModel);
+  const validityDays = businessModel === 'sales' ? 15 : 30;
+
+  return {
+    id: `QT-${Date.now()}-${leadId.split('-')[1]}`,
+    leadId,
+    quoteDate: new Date().toISOString().split('T')[0],
+    validUntil: getValidityDate(validityDays),
+    totalAmount: subtotal + taxes,
+    status: 'pending',
+    statusMessage: 'Quote generated from catalog',
+    items: quoteItems,
+    
+    // Enhanced business model fields
+    businessModel,
+    businessModelTerms: terms,
+    pricingDifferentiation: {
+      strategy: businessModel === 'sales' ? 'Material + Service + Premium' : 'Service + Competitive Processing',
+      differentiationPercentage: businessModel === 'sales' ? 25 : -20,
+      riskFactors: businessModel === 'sales' 
+        ? ['Material procurement risk', 'Inventory holding cost', 'Quality guarantee']
+        : ['Customer material dependency', 'Lower margin model']
+    }
+  };
+};
+
+// Business model specific terms
+const getBusinessModelTerms = (businessModel: 'sales' | 'job_work') => {
+  return businessModel === 'sales' 
+    ? { 
+        paymentTerms: '30% advance, 70% on delivery', 
+        deliveryDays: 14,
+        specialConditions: ['Quality inspection allowed', 'Material procurement risk with manufacturer']
+      }
+    : { 
+        paymentTerms: '100% on completion', 
+        processingDays: 7,
+        specialConditions: ['Customer provides materials', 'Material quality verification at receipt']
+      };
+};
+
+// Get quote validity date
+const getValidityDate = (validityDays: number): string => {
+  const date = new Date();
+  date.setDate(date.getDate() + validityDays);
+  return date.toISOString().split('T')[0];
+};
+
+// Generate quote and update lead status
+export const generateAndApplyQuote = (leadId: string): { quote: Quote | null, updatedLead: Lead | null } => {
+  const quote = generateQuoteFromLead(leadId);
+  if (!quote) {
+    return { quote: null, updatedLead: null };
+  }
+
+  // Update lead with generated quote reference
+  const leadIndex = mockLeads.findIndex(lead => lead.id === leadId);
+  if (leadIndex === -1) {
+    return { quote, updatedLead: null };
+  }
+
+  const updatedLead = { ...mockLeads[leadIndex] };
+  updatedLead.generatedQuoteId = quote.id;
+  updatedLead.conversionStatus = 'quote_sent';
+  
+  // Update the mock data (in real app, this would be API call)
+  mockLeads[leadIndex] = updatedLead;
+
+  return { quote, updatedLead };
+};
+
+// Get applicable catalog items for business model
+export const getApplicableItemsForBusinessModel = (businessModel: 'sales' | 'job_work') => {
+  const { getApplicableItems } = require('./catalogMockData');
+  return getApplicableItems(businessModel);
 };
 
 // Get all final payments for a customer by traversing invoice relationships

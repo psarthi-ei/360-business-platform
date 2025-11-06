@@ -914,7 +914,7 @@ export const mockBusinessProfiles: BusinessProfile[] = [
   // Service Lead BusinessProfiles - Added to fix customer name display issue
   {
     id: 'bp-surat-processors',
-    companyName: 'Surat Processing Works',
+    companyName: 'Surat Cotton Industries',
     gstNumber: 'TBD',
     registeredAddress: {
       street: 'TBD',
@@ -925,12 +925,12 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     },
     contactPerson: 'Ramesh Kumar',
     phone: '+91 98765 43210',
-    email: 'ramesh@suratprocessors.com',
+    email: 'ramesh@suratcotton.com',
     
     customerStatus: 'prospect',
     
-    businessType: 'Textile processing services',
-    specialization: 'Dyeing and finishing services for cotton fabrics',
+    businessType: 'Cotton fabric manufacturing',
+    specialization: 'Grey cotton fabric production and textile manufacturing',
     employeeCount: '50-100 employees',
     
     totalOrders: 0,
@@ -946,18 +946,18 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     preferences: {
       paymentMethod: 'Net Banking',
       deliveryPreference: 'Factory pickup',
-      qualityRequirements: 'Premium quality dyeing services',
+      qualityRequirements: 'Premium dyeing and finishing for export quality',
       communication: 'Email and phone',
-      specialNotes: 'Service prospect - dyeing and processing specialist'
+      specialNotes: 'Cotton manufacturer - produces grey fabric, requires professional dyeing and finishing services'
     },
     
-    priority: 'warm',
-    fabricPreferences: ['Cotton processing', 'Reactive dyeing', 'Premium finishing']
+    priority: 'hot',
+    fabricPreferences: ['Grey cotton dyeing', 'Export quality finishing', 'Reactive dyeing services']
   },
   
   {
     id: 'bp-ahmedabad-finishers',
-    companyName: 'Ahmedabad Finishing Mills',
+    companyName: 'Ahmedabad Textile Manufacturing',
     gstNumber: 'TBD',
     registeredAddress: {
       street: 'TBD',
@@ -968,12 +968,12 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     },
     contactPerson: 'Kiran Shah',
     phone: '+91 97654 32108',
-    email: 'kiran@ahmedabadfinish.com',
+    email: 'kiran@ahmedabadtextiles.com',
     
     customerStatus: 'prospect',
     
-    businessType: 'Fabric finishing services',
-    specialization: 'Softening, anti-wrinkle, and quality finishing services',
+    businessType: 'Textile manufacturing',
+    specialization: 'Woven fabric manufacturing and textile production',
     employeeCount: '30-50 employees',
     
     totalOrders: 0,
@@ -989,13 +989,56 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     preferences: {
       paymentMethod: 'Cheque',
       deliveryPreference: 'Our facility pickup',
-      qualityRequirements: 'Premium finishing quality standards',
+      qualityRequirements: 'Premium finishing for retail-ready textiles',
       communication: 'Phone and WhatsApp',
-      specialNotes: 'Service prospect - fabric finishing specialist'
+      specialNotes: 'Textile manufacturer - produces woven fabrics, requires professional finishing services'
     },
     
     priority: 'warm',
-    fabricPreferences: ['Cotton finishing', 'Quality enhancement', 'Softening treatments']
+    fabricPreferences: ['Woven fabric finishing', 'Anti-wrinkle treatments', 'Retail-ready finishing']
+  },
+
+  {
+    id: 'bp-rajkot-processors',
+    companyName: 'Rajkot Cotton Mills',
+    gstNumber: 'TBD',
+    registeredAddress: {
+      street: 'TBD',
+      city: 'Rajkot',
+      state: 'Gujarat',
+      pincode: 'TBD',
+      country: 'India'
+    },
+    contactPerson: 'Ravi Patel',
+    phone: '+91 95123 67890',
+    email: 'ravi@rajkotcotton.com',
+    
+    customerStatus: 'prospect',
+    
+    businessType: 'Cotton textile manufacturing',
+    specialization: 'Premium cotton fabric production and textile manufacturing',
+    employeeCount: '75-100 employees',
+    
+    totalOrders: 0,
+    activeOrders: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    
+    creditLimit: 300000,
+    paymentScore: 0,
+    creditStatus: 'new',
+    paymentBehavior: 'new',
+    
+    preferences: {
+      paymentMethod: 'RTGS',
+      deliveryPreference: 'Factory pickup and delivery',
+      qualityRequirements: 'Export grade dyeing and finishing for premium cotton',
+      communication: 'Email and phone',
+      specialNotes: 'Cotton manufacturer - produces premium grey cotton, requires complete processing pipeline (dyeing + finishing)'
+    },
+    
+    priority: 'hot',
+    fabricPreferences: ['Premium cotton processing', 'Export quality dyeing', 'Complete finishing pipeline']
   },
   
   {

@@ -115,6 +115,13 @@
   --ds-radius-lg: clamp(8px, 1.5vw, 12px);
   --ds-radius-xl: clamp(12px, 2vw, 16px);
 
+  /* Font Weight System - Professional B2B Typography */
+  --ds-font-weight-light: 300;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-medium: 500;    /* Labels, secondary emphasis */
+  --ds-font-weight-semibold: 600;  /* Headers, primary emphasis */
+  --ds-font-weight-bold: 700;
+
   /* UNIVERSAL BUSINESS COLOR SYSTEM - Visual Design Specification */
   
   /* Business Priority System - Universal across all processes (leads, quotes, orders, customers) */
