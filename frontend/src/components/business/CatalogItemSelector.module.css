@@ -3,7 +3,7 @@
 
 .modalContent {
   width: 90vw;
-  max-width: 900px;
+  max-width: 500px; /* ARCHITECTURE COMPLIANCE: Modal Design System Standard - 500px max width */
   max-height: 90vh;
   background: var(--ds-bg-card);
   border-radius: var(--ds-radius-lg);
@@ -457,12 +457,27 @@
 @media (max-width: 768px) {
   .modalContent {
     width: 95vw;
-    max-height: 95vh;
+    max-height: calc(100vh - 20px); /* Increase available height */
+    height: auto;
+    overflow: visible;
   }
   
   .modalBody {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 120px); /* Ensure scrollable area */
+    padding-bottom: 100px; /* Extra space at bottom */
+  }
+  
+  /* Ensure specifications section is visible on mobile */
+  .specificationsSection {
+    display: block !important;
+    margin-top: var(--ds-space-md);
+    padding: var(--ds-space-md);
+    background: var(--ds-bg-secondary);
+    border: 1px solid var(--ds-border-subtle);
+    border-radius: var(--ds-radius-md);
+    position: relative;
   }
   
   .itemsList {
@@ -510,5 +525,340 @@
     margin-top: var(--ds-space-lg);
     padding-top: var(--ds-space-lg);
     border-top: 2px solid var(--ds-border-primary);
+  }
+}
+
+/* Custom Specifications Styling */
+.specificationsSection {
+  margin-top: var(--ds-space-lg);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.specificationsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+}
+
+.specificationsHeader label {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.addSpecButton {
+  /* Design System V2 - Secondary Button */
+  background: var(--ds-btn-secondary);
+  border: 1px solid var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-border);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.addSpecButton:hover:not(:disabled) {
+  background: var(--ds-btn-secondary-hover);
+  color: var(--ds-text-inverse);
+}
+
+.addSpecButton:disabled {
+  background: var(--ds-text-muted);
+  border-color: var(--ds-text-muted);
+  color: var(--ds-text-inverse);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Specifications List */
+.specificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-md);
+}
+
+.specificationItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-input);
+  transition: all 0.2s ease;
+}
+
+.specificationItem:hover {
+  border-color: var(--ds-border-interactive);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.specKey {
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  min-width: 120px;
+  font-size: var(--font-sm);
+}
+
+.specValue {
+  color: var(--ds-text-primary);
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+}
+
+.removeSpecButton {
+  background: var(--ds-bg-danger-subtle);
+  color: var(--ds-text-danger);
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.removeSpecButton:hover {
+  background: var(--ds-bg-danger);
+  color: var(--ds-text-inverse);
+  transform: scale(1.1);
+}
+
+/* Add Specification Form */
+.addSpecificationForm {
+  background: var(--ds-bg-card);
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-interactive);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+.specTypeSelect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.specTypeSelect label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.specSelectInput {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-card);
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-family: var(--font-family);
+  min-height: var(--ds-touch-target-sm);
+}
+
+.specSelectInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-accent-subtle);
+}
+
+.specValueInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.specValueInput label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.specInput {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-card);
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-family: var(--font-family);
+  min-height: var(--ds-touch-target-sm);
+}
+
+.specInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-accent-subtle);
+}
+
+.customSpecInputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.numberInputGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.unitLabel {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.specFormActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  justify-content: flex-end;
+  margin-top: var(--ds-space-sm);
+}
+
+.cancelSpecButton {
+  /* Design System V2 - Secondary Button */
+  background: var(--ds-btn-secondary);
+  border: 1px solid var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-border);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.cancelSpecButton:hover {
+  background: var(--ds-btn-secondary-hover);
+  color: var(--ds-text-inverse);
+}
+
+.saveSpecButton {
+  /* Design System V2 - Primary Button */
+  background: var(--ds-btn-primary);
+  border: 1px solid var(--ds-btn-primary);
+  color: var(--ds-text-inverse);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.saveSpecButton:hover:not(:disabled) {
+  background: var(--ds-btn-primary-hover);
+  border-color: var(--ds-btn-primary-hover);
+}
+
+.saveSpecButton:disabled {
+  background: var(--ds-text-muted);
+  border-color: var(--ds-text-muted);
+  color: var(--ds-text-inverse);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Empty State */
+.emptySpecifications {
+  text-align: center;
+  color: var(--ds-text-tertiary);
+  font-style: italic;
+  padding: var(--ds-space-lg);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-sm);
+  border: 1px dashed var(--ds-border-subtle);
+  font-size: var(--font-sm);
+}
+
+/* Mobile Responsiveness for Specifications */
+@media (max-width: 480px) {
+  .specificationsHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-sm);
+  }
+  
+  .addSpecButton {
+    width: 100%;
+  }
+  
+  .specificationItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-xs);
+  }
+  
+  .specKey {
+    min-width: auto;
+    font-weight: 600;
+  }
+  
+  .removeSpecButton {
+    align-self: flex-end;
+    margin-top: var(--ds-space-xs);
+  }
+  
+  .specFormActions {
+    flex-direction: column;
+  }
+  
+  .cancelSpecButton,
+  .saveSpecButton {
+    width: 100%;
+  }
+  
+  .customSpecInputs {
+    gap: var(--ds-space-sm);
+  }
+  
+  .numberInputGroup {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-xs);
   }
 }

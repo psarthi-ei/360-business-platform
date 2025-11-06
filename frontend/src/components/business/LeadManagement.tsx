@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
+import GenerateQuoteModal from './GenerateQuoteModal';
 import RequestedItemCard from './RequestedItemCard';
 import { mockLeads, Lead } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
@@ -45,6 +46,10 @@ function LeadManagement({
   
   // Mobile UX V2: Progressive disclosure state
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
+  
+  // Quote generation modal state
+  const [showGenerateQuoteModal, setShowGenerateQuoteModal] = useState(false);
+  const [selectedLeadForQuote, setSelectedLeadForQuote] = useState<Lead | null>(null);
 
   // Auto-open modal based on URL parameter
   useEffect(() => {
@@ -176,9 +181,8 @@ function LeadManagement({
 
   // Quote Action Implementations (Phase 2.2)
   const handleGenerateQuote = (lead: Lead) => {
-    // Generate quote logic to be implemented
-    // TODO: Implement quote generation
-    alert('Generate Quote - Implementation coming soon!');
+    setSelectedLeadForQuote(lead);
+    setShowGenerateQuoteModal(true);
   };
 
   const handleViewQuote = (lead: Lead) => {
@@ -232,6 +236,28 @@ function LeadManagement({
     setTimeout(() => {
       setSuccessMessage('');
     }, 3000);
+  };
+
+  // Quote modal handlers
+  const handleCloseGenerateQuoteModal = () => {
+    setShowGenerateQuoteModal(false);
+    setSelectedLeadForQuote(null);
+  };
+
+  const handleQuoteGenerated = (quoteId: string) => {
+    // Show success message
+    setSuccessMessage(`Quote ${quoteId} generated successfully!`);
+    
+    // Close modal
+    handleCloseGenerateQuoteModal();
+    
+    // Optionally refresh the leads to show updated status
+    // For now, we'll keep it simple and just show the success message
+    
+    // Clear success message after 5 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 5000);
   };
 
   // Handle updating existing lead
@@ -535,6 +561,14 @@ function LeadManagement({
         onClose={handleModalClose}
         onAddLead={editingLead ? handleUpdateLead : handleAddLead}
         editingLead={editingLead}
+      />
+
+      {/* Generate Quote Modal */}
+      <GenerateQuoteModal
+        isOpen={showGenerateQuoteModal}
+        onClose={handleCloseGenerateQuoteModal}
+        lead={selectedLeadForQuote}
+        onQuoteGenerated={handleQuoteGenerated}
       />
     </div>
   );

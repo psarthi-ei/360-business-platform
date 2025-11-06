@@ -1,0 +1,818 @@
+/* QuoteItemEditor.module.css - Design System Compliant */
+
+.itemEditor {
+  border: 1px solid var(--ds-border-primary);
+  border-left: 4px solid var(--ds-border-accent);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  margin-bottom: var(--ds-space-xl);
+  box-shadow: var(--ds-shadow-card);
+  transition: all 0.2s ease;
+}
+
+.itemEditor:hover {
+  border-color: var(--ds-border-interactive);
+  box-shadow: var(--ds-shadow-elevated);
+}
+
+.itemEditor.even {
+  background: var(--ds-bg-card);
+  border-left-color: var(--ds-bg-priority-low-subtle);
+}
+
+.itemEditor.odd {
+  background: var(--ds-bg-expanded);
+  border-left-color: var(--ds-bg-priority-medium-subtle);
+}
+
+/* Collapsed state styling for tighter spacing */
+.itemEditor.collapsed {
+  margin-bottom: var(--ds-space-md);
+}
+
+/* Item Header */
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+  padding: var(--ds-space-md) var(--ds-space-lg);
+  background: var(--ds-bg-interactive);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+/* Collapsible Header Controls */
+.headerClickable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.2s ease;
+  border-radius: var(--ds-radius-xs);
+  padding: var(--ds-space-xs);
+  margin: calc(-1 * var(--ds-space-xs));
+}
+
+.headerClickable:hover {
+  background: var(--ds-bg-hover);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+}
+
+.totalPreview {
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-mono);
+}
+
+.collapseIcon {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.itemCode {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-accent);
+  background: var(--ds-bg-accent-subtle);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  width: fit-content;
+}
+
+.itemName {
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-text-primary);
+}
+
+.jobWorkNote {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-text-warning);
+  background: var(--ds-bg-warning-subtle);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  width: fit-content;
+}
+
+.removeButton {
+  background: var(--ds-bg-danger-subtle);
+  color: var(--ds-text-danger);
+  border: none;
+  border-radius: var(--ds-radius-full);
+  width: var(--ds-touch-target-sm);
+  height: var(--ds-touch-target-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--ds-text-lg);
+  transition: all 0.2s ease;
+  margin-left: var(--ds-space-lg);
+}
+
+.removeButton:hover {
+  background: var(--ds-bg-danger);
+  color: var(--ds-text-on-primary);
+}
+
+/* Main Editor Row */
+.editorRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: var(--ds-space-md);
+  margin-bottom: var(--ds-space-md);
+}
+
+@media (max-width: 768px) {
+  .editorRow {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+}
+
+.editorField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.editorField label {
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-secondary);
+}
+
+.fieldNote {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-text-tertiary);
+  font-style: italic;
+}
+
+/* Quantity Editor */
+.quantityEditor {
+  display: flex;
+  align-items: center;
+  background: var(--ds-bg-primary);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  overflow: hidden;
+}
+
+.quantityBtn {
+  background: var(--ds-bg-secondary);
+  border: none;
+  width: var(--ds-touch-target-sm);
+  height: var(--ds-touch-target-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quantityBtn:hover:not(:disabled) {
+  background: var(--ds-bg-interactive-hover);
+}
+
+.quantityBtn:disabled {
+  background: var(--ds-bg-disabled);
+  color: var(--ds-text-disabled);
+  cursor: not-allowed;
+}
+
+.quantityInput {
+  border: none;
+  background: transparent;
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  text-align: center;
+  font-size: var(--ds-text-base);
+  color: var(--ds-text-primary);
+  flex: 1;
+  min-width: 80px;
+}
+
+.quantityInput:focus {
+  outline: none;
+  background: var(--ds-bg-input-focus);
+}
+
+/* Price Editor */
+.priceEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.catalogPrice {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-text-secondary);
+  font-family: var(--ds-font-mono);
+}
+
+.customPriceToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-size: var(--ds-text-sm);
+  cursor: pointer;
+}
+
+.customPriceInput {
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+}
+
+.customPriceInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  background: var(--ds-bg-input-focus);
+}
+
+/* Discount Editor */
+.discountEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.discountSlider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-secondary);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.discountSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-primary);
+  cursor: pointer;
+  border: 2px solid var(--ds-bg-primary);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.discountSlider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-primary);
+  cursor: pointer;
+  border: 2px solid var(--ds-bg-primary);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.discountInput {
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+  width: 80px;
+}
+
+.discountInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  background: var(--ds-bg-input-focus);
+}
+
+.discountAmount {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-text-success);
+  font-weight: var(--ds-weight-medium);
+}
+
+/* Total Amount */
+.totalAmount {
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-mono);
+}
+
+.unitBreakdown {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-text-secondary);
+  font-family: var(--ds-font-mono);
+}
+
+/* Expandable Section */
+.expandableSection {
+  border-top: 1px solid var(--ds-border-subtle);
+  padding-top: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+}
+
+/* Notes Editor */
+.notesEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.notesEditor label {
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-secondary);
+}
+
+.notesTextarea {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  font-size: var(--ds-text-base);
+  resize: vertical;
+  min-height: 60px;
+  font-family: var(--ds-font-sans);
+}
+
+.notesTextarea:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  background: var(--ds-bg-input-focus);
+}
+
+.notesTextarea::placeholder {
+  color: var(--ds-text-placeholder);
+  font-style: italic;
+}
+
+/* Custom Specifications */
+.specificationsEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.specificationsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.specificationsHeader label {
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-secondary);
+}
+
+.specificationRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.specKey {
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-secondary);
+  min-width: 120px;
+}
+
+.specValue {
+  color: var(--ds-text-primary);
+  flex: 1;
+  font-family: var(--ds-font-mono);
+}
+
+.removeSpecBtn {
+  background: var(--ds-bg-danger-subtle);
+  color: var(--ds-text-danger);
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--ds-text-sm);
+  transition: all 0.2s ease;
+}
+
+.removeSpecBtn:hover {
+  background: var(--ds-bg-danger);
+  color: var(--ds-text-on-primary);
+}
+
+.noSpecifications {
+  text-align: center;
+  color: var(--ds-text-tertiary);
+  font-style: italic;
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  border: 1px dashed var(--ds-border-subtle);
+}
+
+/* Item Summary */
+.itemSummary {
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-xs) 0;
+  font-size: var(--ds-text-sm);
+}
+
+.summaryRow:not(:last-child) {
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.summaryRow span:first-child {
+  color: var(--ds-text-secondary);
+  font-weight: var(--ds-weight-medium);
+}
+
+.summaryRow span:last-child {
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-mono);
+  text-transform: capitalize;
+}
+
+/* Error State */
+.errorCard {
+  background: var(--ds-bg-danger-subtle);
+  border: 1px solid var(--ds-border-danger);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  text-align: center;
+  margin-bottom: var(--ds-space-sm);
+}
+
+.errorCard p {
+  color: var(--ds-text-danger);
+  margin-bottom: var(--ds-space-sm);
+  font-weight: var(--ds-weight-medium);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .itemEditor {
+    padding: var(--ds-space-sm);
+  }
+  
+  .editorRow {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+  
+  .itemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-sm);
+  }
+  
+  .removeButton {
+    align-self: flex-end;
+  }
+  
+  .specificationsHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-sm);
+  }
+  
+  .specificationRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-xs);
+  }
+  
+  .specKey {
+    min-width: auto;
+    font-size: var(--ds-text-sm);
+  }
+}
+
+/* Enhanced Specification System - Design System V2 Compliant */
+.addSpecButton {
+  /* Design System V2 - Secondary Button */
+  background: var(--ds-btn-secondary);
+  border: 1px solid var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-border);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.addSpecButton:hover:not(:disabled) {
+  background: var(--ds-btn-secondary-hover);
+  color: var(--ds-text-inverse);
+}
+
+.addSpecButton:disabled {
+  background: var(--ds-text-muted);
+  border-color: var(--ds-text-muted);
+  color: var(--ds-text-inverse);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Specifications List */
+.specificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-md);
+}
+
+.specificationItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border-input);
+  transition: all 0.2s ease;
+}
+
+.specificationItem:hover {
+  border-color: var(--ds-border-interactive);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.removeSpecButton {
+  background: var(--ds-bg-danger-subtle);
+  color: var(--ds-text-danger);
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.removeSpecButton:hover {
+  background: var(--ds-bg-danger);
+  color: var(--ds-text-inverse);
+  transform: scale(1.1);
+}
+
+/* Add Specification Form */
+.addSpecificationForm {
+  background: var(--ds-bg-card);
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-interactive);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.specTypeSelect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.specTypeSelect label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.specSelectInput {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-card);
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-family: var(--font-family);
+  min-height: var(--ds-touch-target-sm);
+}
+
+.specSelectInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-accent-subtle);
+}
+
+.specValueInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.specValueInput label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.specInput {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-bg-card);
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-family: var(--font-family);
+  min-height: var(--ds-touch-target-sm);
+}
+
+.specInput:focus {
+  outline: none;
+  border-color: var(--ds-border-focus);
+  box-shadow: 0 0 0 2px var(--ds-bg-accent-subtle);
+}
+
+.customSpecInputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+}
+
+.numberInputGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.unitLabel {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.specFormActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  justify-content: flex-end;
+  margin-top: var(--ds-space-sm);
+}
+
+.cancelSpecButton {
+  /* Design System V2 - Secondary Button */
+  background: var(--ds-btn-secondary);
+  border: 1px solid var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-border);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.cancelSpecButton:hover {
+  background: var(--ds-btn-secondary-hover);
+  color: var(--ds-text-inverse);
+}
+
+.saveSpecButton {
+  /* Design System V2 - Primary Button */
+  background: var(--ds-btn-primary);
+  border: 1px solid var(--ds-btn-primary);
+  color: var(--ds-text-inverse);
+  padding: var(--ds-padding-button);
+  border-radius: 8px;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: var(--ds-touch-target-min);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: var(--ds-touch-action);
+  -webkit-tap-highlight-color: var(--ds-tap-highlight);
+}
+
+.saveSpecButton:hover:not(:disabled) {
+  background: var(--ds-btn-primary-hover);
+  border-color: var(--ds-btn-primary-hover);
+}
+
+.saveSpecButton:disabled {
+  background: var(--ds-text-muted);
+  border-color: var(--ds-text-muted);
+  color: var(--ds-text-inverse);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Empty State */
+.emptySpecifications {
+  text-align: center;
+  color: var(--ds-text-tertiary);
+  font-style: italic;
+  padding: var(--ds-space-lg);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-sm);
+  border: 1px dashed var(--ds-border-subtle);
+  font-size: var(--font-sm);
+}
+
+/* Mobile Responsiveness for Enhanced Specifications */
+@media (max-width: 480px) {
+  .addSpecButton {
+    width: 100%;
+  }
+  
+  .specificationItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-xs);
+  }
+  
+  .removeSpecButton {
+    align-self: flex-end;
+    margin-top: var(--ds-space-xs);
+  }
+  
+  .specFormActions {
+    flex-direction: column;
+  }
+  
+  .cancelSpecButton,
+  .saveSpecButton {
+    width: 100%;
+  }
+  
+  .customSpecInputs {
+    gap: var(--ds-space-sm);
+  }
+  
+  .numberInputGroup {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-xs);
+  }
+}

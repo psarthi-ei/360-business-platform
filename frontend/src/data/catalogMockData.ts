@@ -956,3 +956,119 @@ export const getRecommendedItems = (
 
   return candidates;
 };
+
+// ===== CUSTOM SPECIFICATIONS SYSTEM =====
+
+/**
+ * Specification Type Definition for Dynamic Specification Entry
+ * Supports structured specification types with smart input methods
+ */
+export interface SpecificationType {
+  id: string;
+  label: string;
+  inputType: 'dropdown' | 'number' | 'text';
+  options?: string[];
+  unit?: string;
+  placeholder?: string;
+  validation?: {
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+}
+
+/**
+ * Predefined Specification Types for Textile Industry
+ * Provides structured options for common textile specifications
+ */
+export const SPECIFICATION_TYPES: SpecificationType[] = [
+  {
+    id: 'color',
+    label: 'Color',
+    inputType: 'text',
+    placeholder: 'e.g., Red, Blue, Pantone 186C'
+  },
+  {
+    id: 'finish',
+    label: 'Finish',
+    inputType: 'dropdown',
+    options: ['Matte', 'Glossy', 'Anti-wrinkle', 'Water-resistant', 'Brushed', 'Calendered', 'Mercerized', 'Other']
+  },
+  {
+    id: 'gsm',
+    label: 'GSM (Weight)',
+    inputType: 'number',
+    unit: 'g/m²',
+    placeholder: 'e.g., 120, 150, 180',
+    validation: {
+      min: 50,
+      max: 1000
+    }
+  },
+  {
+    id: 'width',
+    label: 'Width',
+    inputType: 'dropdown',
+    options: ['36"', '44"', '58"', '60"', '72"', '108"', 'Custom']
+  },
+  {
+    id: 'quality_grade',
+    label: 'Quality Grade',
+    inputType: 'dropdown',
+    options: ['A-Grade', 'B-Grade', 'Export Grade', 'Industrial', 'Premium', 'Commercial']
+  },
+  {
+    id: 'thread_count',
+    label: 'Thread Count',
+    inputType: 'number',
+    unit: 'TPI',
+    placeholder: 'e.g., 200, 300, 400',
+    validation: {
+      min: 50,
+      max: 1000
+    }
+  },
+  {
+    id: 'weave_type',
+    label: 'Weave Type',
+    inputType: 'dropdown',
+    options: ['Plain', 'Twill', 'Satin', 'Oxford', 'Jacquard', 'Dobby', 'Other']
+  },
+  {
+    id: 'shrinkage',
+    label: 'Shrinkage %',
+    inputType: 'number',
+    unit: '%',
+    placeholder: 'e.g., 2, 3, 5',
+    validation: {
+      min: 0,
+      max: 20
+    }
+  },
+  {
+    id: 'opacity',
+    label: 'Opacity',
+    inputType: 'dropdown',
+    options: ['Opaque', 'Semi-transparent', 'Transparent', 'Sheer']
+  },
+  {
+    id: 'custom',
+    label: 'Custom Specification',
+    inputType: 'text',
+    placeholder: 'Enter custom specification name and value'
+  }
+];
+
+/**
+ * Get Specification Type by ID
+ */
+export const getSpecificationType = (id: string): SpecificationType | undefined => {
+  return SPECIFICATION_TYPES.find(type => type.id === id);
+};
+
+/**
+ * Get All Specification Types
+ */
+export const getAllSpecificationTypes = (): SpecificationType[] => {
+  return [...SPECIFICATION_TYPES];
+};

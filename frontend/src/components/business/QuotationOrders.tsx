@@ -377,7 +377,7 @@ function QuotationOrders({
                 
                 {/* Enhanced Status - Quote Status + Payment Progress */}
                 <div className="ds-card-status">
-                  {statusIcons[quote.status]} {statusLabels[quote.status]} • {(() => {
+                  {statusIcons[quote.status as keyof typeof statusIcons]} {statusLabels[quote.status as keyof typeof statusLabels]} • {(() => {
                     const paymentLabels = {
                       not_requested: 'Payment Not Requested',
                       awaiting: '⏳ Payment Awaiting',

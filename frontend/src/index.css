@@ -681,6 +681,16 @@ body.modal-open {
   /* Let content determine natural sizing up to max-width */
 }
 
+/* ARCHITECTURE COMPLIANCE: Mobile Modal Positioning */
+/* Based on AddLeadModal's proven successful pattern */
+@media (max-width: 768px) {
+  .modal-portal-container {
+    align-items: flex-start !important; /* Override ModalPortal center alignment */
+    padding-top: 20px !important; /* Proper spacing from screen top */
+    padding-bottom: 20px !important; /* AddLeadModal's proven 40px total spacing (20+20) */
+  }
+}
+
 /* Universal status border colors - consistent across all business modules */
 .ds-card-priority-high { border-left-color: var(--ds-priority-high); }      /* Orange for urgent/hot */
 .ds-card-priority-medium { border-left-color: var(--ds-priority-medium); }  /* Amber for warm/pending */

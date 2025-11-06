@@ -1070,59 +1070,33 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-surat-fashion-house',
     quoteDate: 'November 5, 2025',
     validUntil: 'November 20, 2025',
-    totalAmount: 1320000,
+    totalAmount: 1348000,
     status: 'draft',
     statusMessage: 'Quote generated - Ready to send to customer',
-    advancePaymentRequired: 660000,
+    advancePaymentRequired: 674000,
     advancePaymentStatus: 'not_requested',
     revisionNumber: 1,
     isActive: true,
     items: [
       {
-        itemCode: "TEX-FASH-001",
-        description: "Premium Fashion Cotton Fabric",
+        itemCode: "CTN-080-COL",
+        description: "Standard Cotton Fabric - Colored",
         hsnCode: "5208",
-        quantity: 6000,
-        unit: "yards",
-        rate: 220,
+        quantity: 4000,
+        unit: "meters",
+        rate: 280,
         discount: 0,
-        taxableAmount: 1320000
-      }
-    ]
-  },
-  {
-    id: 'QT-002',
-    leadId: 'lead-002', // Lead status: 'quote_sent' - ALIGNED
-    quoteDate: 'March 18, 2025',
-    validUntil: 'April 5, 2025',
-    totalAmount: 1320000,
-    status: 'sent', // ALIGNED: quote_sent → under_review status
-    statusMessage: 'Quote sent to customer - Awaiting response from production head',
-    advancePaymentRequired: 660000, // 50% advance
-    advancePaymentStatus: 'not_requested', // No payment request yet until quote approved
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with structured items - multiple items example
-    items: [
-      {
-        itemCode: "TEX-SEAS-001",
-        description: "Cotton Seasonal Fabric - Light Weight",
-        hsnCode: "5208",
-        quantity: 3000,
-        unit: "yards", 
-        rate: 210,
-        discount: 0,
-        taxableAmount: 630000
+        taxableAmount: 1120000
       },
       {
-        itemCode: "TEX-SEAS-002", 
-        description: "Polyester Blend Fabric - Seasonal Collection",
-        hsnCode: "5407",
-        quantity: 3000,
-        unit: "yards",
-        rate: 230,
-        discount: 0,
-        taxableAmount: 690000
+        itemCode: "SLK-150-NTR", 
+        description: "Natural Silk Fabric - Raw",
+        hsnCode: "5007",
+        quantity: 200,
+        unit: "meters",
+        rate: 1200,
+        discount: 5,
+        taxableAmount: 228000
       }
     ]
   },
@@ -1134,21 +1108,41 @@ export const mockQuotes: Quote[] = [
     parentQuoteId: 'QT-001',
     quoteDate: 'March 20, 2025',
     validUntil: 'April 5, 2025',
-    totalAmount: 1380000, // Reduced price after negotiation
+    totalAmount: 968000, // Reduced price after negotiation
     status: 'sent',
     statusMessage: 'Revised quote with 10% discount applied - Customer requested price reduction',
-    advancePaymentRequired: 690000,
+    advancePaymentRequired: 484000,
     advancePaymentStatus: 'not_requested',
     items: [
       {
-        itemCode: "TEX-IND-001",
-        description: "Industrial Cotton Fabric",
+        itemCode: "CTN-100-WHT",
+        description: "Premium Cotton Fabric - White",
         hsnCode: "5208",
-        quantity: 8000,
-        unit: "yards",
-        rate: 185,
+        quantity: 2500,
+        unit: "meters",
+        rate: 420,
         discount: 10, // Added 10% discount in revision
-        taxableAmount: 1380000
+        taxableAmount: 945000
+      },
+      {
+        itemCode: "BTN-PLT-14MM",
+        description: "Plastic Buttons - 14mm",
+        hsnCode: "3926",
+        quantity: 5000,
+        unit: "pieces",
+        rate: 2.5,
+        discount: 0,
+        taxableAmount: 12500
+      },
+      {
+        itemCode: "DYE-RCT-RED",
+        description: "Reactive Dye - Red",
+        hsnCode: "3204",
+        quantity: 25,
+        unit: "kg",
+        rate: 420,
+        discount: 0,
+        taxableAmount: 10500
       }
     ],
     
@@ -1159,252 +1153,32 @@ export const mockQuotes: Quote[] = [
     revisionReason: 'Customer requested 10% discount for bulk order',
   },
   
-  
-  // Quotes for converted customers (linked to BusinessProfile)
-  {
-    id: 'QT-GJ-002',
-    leadId: 'gujarat-002',
-    businessProfileId: 'bp-gujarat-garments',
-    quoteDate: 'March 10, 2025',
-    validUntil: 'March 25, 2025',
-    totalAmount: 975000,
-    status: 'approved',
-    statusMessage: 'Order created successfully - Quote completed',
-    approvalDate: 'March 12, 2025',
-    proformaInvoiceId: 'PI-GJ-002',
-    advancePaymentRequired: 487500, // 50% advance
-    advancePaymentStatus: 'received', // This triggered customer creation
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with single premium item
-    items: [
-      {
-        itemCode: "TEX-EXP-001",
-        description: "Export Quality Cotton Fabric - Premium Grade",
-        hsnCode: "5208",
-        quantity: 5000,
-        unit: "yards",
-        rate: 195,
-        discount: 0,
-        taxableAmount: 975000
-      }
-    ]
-  },
-  {
-    id: 'QT-BR-004',
-    leadId: 'baroda-004',
-    businessProfileId: 'bp-baroda-fashion',
-    quoteDate: 'March 28, 2025',
-    validUntil: 'April 15, 2025',
-    totalAmount: 735000,
-    status: 'approved',
-    statusMessage: 'Quote approved - Advance payment received, customer created',
-    approvalDate: 'March 30, 2025',
-    proformaInvoiceId: 'PI-BR-004',
-    advancePaymentRequired: 367500, // 50% advance
-    advancePaymentStatus: 'received', // This triggered customer creation
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with multiple fashion items and discount
-    items: [
-      {
-        itemCode: "TEX-FASH-001",
-        description: "Premium Silk Blend Fabric - Designer Collection",
-        hsnCode: "5007",
-        quantity: 2000,
-        unit: "yards",
-        rate: 250,
-        discount: 5, // 5% bulk discount
-        taxableAmount: 475000
-      },
-      {
-        itemCode: "TEX-FASH-002", 
-        description: "Cotton-Linen Fashion Fabric - Summer Collection",
-        hsnCode: "5208",
-        quantity: 1500,
-        unit: "yards",
-        rate: 180,
-        discount: 0,
-        taxableAmount: 270000
-      },
-      {
-        itemCode: "SVC-DYE-001",
-        description: "Custom Color Matching Service",
-        hsnCode: "9983",
-        quantity: 3500,
-        unit: "yards",
-        rate: 15,
-        discount: 0,
-        taxableAmount: 52500
-      }
-    ]
-  },
-  {
-    id: 'QT-GUJ-001',
-    leadId: 'gujarat-002',
-    businessProfileId: 'bp-gujarat-garments',
-    quoteDate: 'March 10, 2025',
-    validUntil: 'March 25, 2025',
-    totalAmount: 975000,
-    status: 'approved',
-    statusMessage: 'Quote approved - Advance payment received, auto-converting to customer',
-    proformaInvoiceId: 'PI-002',
-    advancePaymentRequired: 487500, // 50% advance
-    advancePaymentStatus: 'received', // This triggered customer conversion
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-CAS-001",
-        description: "Mixed Cotton Fabric for Casual Wear",
-        hsnCode: "5208",
-        quantity: 5000,
-        unit: "yards",
-        rate: 195,
-        discount: 0,
-        taxableAmount: 975000
-      }
-    ]
-  },
-  {
-    id: 'QT-002B',
-    leadId: 'gujarat-002',
-    quoteDate: 'March 12, 2025',
-    validUntil: 'March 30, 2025',
-    totalAmount: 990000,
-    status: 'rejected',
-    statusMessage: 'Lead rejected budget option, went with main quote QT-002',
-    proformaInvoiceId: undefined,
-    advancePaymentRequired: 495000, // 50% advance
-    advancePaymentStatus: 'not_requested',
-    revisionNumber: 1,
-    isActive: false,
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-BUD-001",
-        description: "Budget Cotton Fabric Option",
-        hsnCode: "5208",
-        quantity: 6000,
-        unit: "yards",
-        rate: 165,
-        discount: 0,
-        taxableAmount: 990000
-      }
-    ]
-  },
-  {
-    id: 'QT-003',
-    leadId: 'baroda-004',
-    quoteDate: 'February 20, 2025',
-    validUntil: 'March 5, 2025',
-    totalAmount: 660000,
-    status: 'expired',
-    statusMessage: 'Quote expired - Lead requested extension, new quote being prepared',
-    proformaInvoiceId: 'PI-003',
-    advancePaymentRequired: 330000, // 50% advance
-    advancePaymentStatus: 'overdue',
-    revisionNumber: 1,
-    isActive: false,
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-SEA-002",
-        description: "Seasonal Fashion Fabric Collection",
-        hsnCode: "5209",
-        quantity: 3000,
-        unit: "yards",
-        rate: 220,
-        discount: 10000, // Small discount applied
-        taxableAmount: 650000
-      }
-    ]
-  },
-  {
-    id: 'QT-004',
-    leadId: 'baroda-004',
-    quoteDate: 'March 8, 2025',
-    validUntil: 'March 25, 2025',
-    totalAmount: 735000,
-    status: 'approved',
-    statusMessage: 'New quote approved - Advance payment received, converting to customer',
-    proformaInvoiceId: 'PI-004',
-    advancePaymentRequired: 367500, // 50% advance
-    advancePaymentStatus: 'received', // This triggered customer conversion
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-SEA-001",
-        description: "Seasonal Fashion Fabric Collection",
-        hsnCode: "5209",
-        quantity: 3500,
-        unit: "yards",
-        rate: 210,
-        discount: 0,
-        taxableAmount: 735000
-      }
-    ]
-  },
-  
   // CRITICAL FIX: Missing quote for lead-004 (proforma_sent status)
   {
     id: 'QT-L004-001',
     leadId: 'lead-004', // Links to lead with conversionStatus: 'proforma_sent'
-    businessProfileId: 'bp-rajesh-textiles',
+    businessProfileId: 'bp-surat-processors',
     quoteDate: 'October 15, 2025',
     validUntil: 'November 5, 2025',
-    totalAmount: 2000000,
-    status: 'approved', // Aligns with lead conversionStatus
-    statusMessage: 'Proforma invoice sent - Advance payment requested (₹10,00,000)',
-    proformaInvoiceId: 'PI-L004-001',
-    advancePaymentRequired: 1000000, // 50% advance for export quality
+    totalAmount: 102080,
+    status: 'rejected', // Aligns with lead conversionStatus: 'quote_rejected'
+    statusMessage: 'Quote rejected by customer - Price too high for dyeing service',
+    proformaInvoiceId: '', // No proforma since quote was rejected
+    advancePaymentRequired: 51040, // 50% advance for job work service
     advancePaymentStatus: 'awaiting', // Waiting for payment to convert lead to customer
     revisionNumber: 1,
     isActive: true,
-    // ✅ Enhanced with comprehensive export order (4 items with discounts)
+    // ✅ Job Work Service - Dyeing service for customer's fabric
     items: [
       {
-        itemCode: "TEX-EXP-002",
-        description: "Export Grade Cotton Fabric - A+ Quality",
-        hsnCode: "5208",
-        quantity: 6000,
-        unit: "yards",
-        rate: 220,
-        discount: 10, // 10% bulk discount
-        taxableAmount: 1188000
-      },
-      {
-        itemCode: "TEX-EXP-003",
-        description: "Premium Cotton Muslin - Export Quality",
-        hsnCode: "5208",
+        itemCode: "DYE-REACTIVE-STD",
+        description: "Reactive Dyeing Service - Standard Colors (Navy Blue)",
+        hsnCode: "9983",
         quantity: 2000,
-        unit: "yards",
-        rate: 180,
-        discount: 5, // 5% discount
-        taxableAmount: 342000
-      },
-      {
-        itemCode: "SVC-EXP-001",
-        description: "Export Quality Certification & Testing",
-        hsnCode: "9983",
-        quantity: 8000,
-        unit: "yards",
-        rate: 12,
-        discount: 0,
-        taxableAmount: 96000
-      },
-      {
-        itemCode: "SVC-PKG-001", 
-        description: "Export Packaging & Documentation",
-        hsnCode: "9983",
-        quantity: 1,
-        unit: "order",
-        rate: 85000,
-        discount: 15, // 15% special discount
-        taxableAmount: 72250
+        unit: "meters",
+        rate: 58, // Job work pricing for 2000 meters (volume tier)
+        discount: 12, // Volume discount for job work
+        taxableAmount: 102080
       }
     ]
   },
@@ -1416,120 +1190,36 @@ export const mockQuotes: Quote[] = [
     businessProfileId: 'bp-baroda-textiles',
     quoteDate: 'October 10, 2025',
     validUntil: 'October 30, 2025',
-    totalAmount: 700000,
+    totalAmount: 996000,
     status: 'draft', // Active lead stage - quote prepared but not yet sent
     statusMessage: 'Quote prepared - Ready to send to prospect',
-    advancePaymentRequired: 350000, // 50% advance
+    advancePaymentRequired: 498000, // 50% advance
     advancePaymentStatus: 'not_requested', // No payment request yet in active lead stage
     revisionNumber: 1,
     isActive: true,
-    // ✅ Enhanced with structured items for professional display
+    // ✅ Aligned with lead-003 requested items (cotton-002 + silk-001)
     items: [
       {
-        itemCode: "TEX-RET-001",
-        description: "Cotton Fabric for Retail Applications",
+        itemCode: "CTN-080-COL",
+        description: "Standard Cotton Fabric - Colored",
         hsnCode: "5208",
-        quantity: 4000,
-        unit: "yards",
-        rate: 175,
+        quantity: 1500,
+        unit: "meters",
+        rate: 280,
         discount: 0,
-        taxableAmount: 700000
+        taxableAmount: 420000
+      },
+      {
+        itemCode: "SLK-150-NTR",
+        description: "Natural Silk Fabric - Raw",
+        hsnCode: "5007",
+        quantity: 500,
+        unit: "meters",
+        rate: 1200,
+        discount: 4, // Volume discount for 500+ meters
+        taxableAmount: 576000
       }
     ]
-  },
-  
-  // ========================================
-  // QUOTES FOR EXISTING CUSTOMER LEADS - REPEAT BUSINESS
-  // ========================================
-  
-  // Quote for existing customer Gujarat Garments (lead-cust-001: quote_sent status)
-  {
-    id: 'QT-CUST-001',
-    leadId: 'lead-cust-001', // EXISTING CUSTOMER repeat business
-    businessProfileId: 'bp-gujarat-garments',
-    quoteDate: 'October 20, 2025',
-    validUntil: 'November 10, 2025',
-    totalAmount: 1350000,
-    status: 'sent', // ALIGNED: quote_sent → under_review status
-    statusMessage: 'Quote sent to valued customer - Awaiting approval for winter collection',
-    advancePaymentRequired: 675000, // 50% advance
-    advancePaymentStatus: 'not_requested', // Quote sent, awaiting customer response
-    // PHASE 1.1: Revision tracking fields
-    revisionNumber: 1,
-    isActive: true,
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-SEA-002",
-        description: "Seasonal Winter Collection Fabric",
-        hsnCode: "5209",
-        quantity: 6000,
-        unit: "yards",
-        rate: 225,
-        discount: 0,
-        taxableAmount: 1350000
-      }
-    ]
-  },
-  
-  // Quote for existing customer Baroda Fashion (lead-cust-002: verbally_approved status)
-  {
-    id: 'QT-CUST-002',
-    leadId: 'lead-cust-002', // EXISTING CUSTOMER repeat business
-    businessProfileId: 'bp-baroda-fashion',
-    quoteDate: 'October 18, 2025',
-    validUntil: 'November 8, 2025',
-    totalAmount: 2200000,
-    status: 'approved', // ALIGNED: verbally_approved → approved status
-    statusMessage: 'Quote verbally approved by Creative Director - Preparing proforma invoice',
-    proformaInvoiceId: 'PI-CUST-002',
-    advancePaymentRequired: 1100000, // 50% advance for premium order
-    advancePaymentStatus: 'not_requested', // Moving to proforma stage
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-EXP-001",
-        description: "Premium Fashion Fabric - Export Grade",
-        hsnCode: "5208",
-        quantity: 8000,
-        unit: "yards",
-        rate: 275,
-        discount: 0,
-        taxableAmount: 2200000
-      }
-    ],
-    // PHASE 1.1: Quote Revision Tracking System (required fields)
-    revisionNumber: 1,
-    isActive: true,
-  },
-  
-  // Quote for existing customer Surat Wholesale (lead-cust-003: active_lead status)
-  {
-    id: 'QT-CUST-003',
-    leadId: 'lead-cust-003', // EXISTING CUSTOMER new inquiry
-    businessProfileId: 'bp-surat-wholesale',
-    quoteDate: 'October 22, 2025',
-    validUntil: 'November 12, 2025',
-    totalAmount: 2700000,
-    status: 'draft', // ALIGNED: active_lead → pending status
-    statusMessage: 'Large volume quote prepared - Reviewing final pricing with management',
-    advancePaymentRequired: 1350000, // 50% advance for bulk order
-    advancePaymentStatus: 'not_requested', // Quote being finalized
-    // ✅ Enhanced with structured items for professional display
-    items: [
-      {
-        itemCode: "TEX-WHD-001",
-        description: "Bulk Wholesale Cotton Fabric",
-        hsnCode: "5208",
-        quantity: 15000,
-        unit: "yards",
-        rate: 180,
-        discount: 0,
-        taxableAmount: 2700000
-      }
-    ],
-    revisionNumber: 1,
-    isActive: true,
   },
   
   // QT-005: Bulk order quote (later converted to SO-005)
@@ -1538,121 +1228,26 @@ export const mockQuotes: Quote[] = [
     leadId: 'lead-005',
     quoteDate: 'March 10, 2025',
     validUntil: 'March 25, 2025',
-    totalAmount: 525000,
+    totalAmount: 38640,
     status: 'approved',
-    statusMessage: 'Bulk quote approved - Advance payment received',
-    advancePaymentRequired: 157500, // 30% advance
+    statusMessage: 'Finishing service approved - Advance payment received',
+    advancePaymentRequired: 11592, // 30% advance
     advancePaymentStatus: 'received',
     revisionNumber: 1,
     isActive: true,
-    // ✅ Enhanced with structured items for professional presentation
+    // ✅ Job Work Service - Finishing service for customer's fabric (lead-005 request)
     items: [
       {
-        itemCode: "TEX-BULK-001",
-        description: "Cotton Fabric Bulk Order - Premium Quality",
-        hsnCode: "5208",
-        quantity: 2000,
-        unit: "meters",
-        rate: 175,
-        discount: 0,
-        taxableAmount: 350000
-      },
-      {
-        itemCode: "TEX-BULK-002", 
-        description: "Cotton Canvas Fabric - Industrial Grade",
-        hsnCode: "5208",
-        quantity: 1000,
-        unit: "meters",
-        rate: 180,
-        discount: 5, // Bulk discount
-        taxableAmount: 171000
-      },
-      {
-        itemCode: "SVC-QC-001",
-        description: "Quality Control & Testing Service",
+        itemCode: "FIN-CAL-STD",
+        description: "Calendering Service - Standard (Softening & Anti-wrinkle)",
         hsnCode: "9983",
-        quantity: 3000,
+        quantity: 1500,
         unit: "meters",
-        rate: 1.33,
-        discount: 0,
-        taxableAmount: 4000
+        rate: 28, // Job work pricing
+        discount: 8, // Volume discount for 1500 meters
+        taxableAmount: 38640
       }
     ]
-  },
-
-  // ==================== SERVICE QUOTES FOR JOB ORDERS ====================
-  // ✅ CRITICAL: These quotes are referenced by job orders but were missing
-
-  // Service Quote 1 - Dyeing Service
-  {
-    id: 'QT-JO-001',
-    leadId: 'lead-jo-001',
-    businessProfileId: 'bp-surat-processors',
-    quoteDate: '2024-10-15',
-    validUntil: '2024-10-30',
-    totalAmount: 48000,
-    status: 'approved',
-    statusMessage: 'Service quote approved - Ready for material receipt',
-    revisionNumber: 1,
-    isActive: true,
-    items: [{
-      itemCode: 'SVC-DYE-001',
-      description: 'Reactive Dyeing Service - Navy Blue (Premium Quality)',
-      hsnCode: '9988', // Service HSN code (not product HSN)
-      quantity: 2000,
-      unit: 'meters',
-      rate: 24, // ₹24 per meter processing charge
-      discount: 0,
-      taxableAmount: 48000
-    }]
-  },
-
-  // Service Quote 2 - Finishing Service  
-  {
-    id: 'QT-JO-002',
-    leadId: 'lead-jo-002',
-    businessProfileId: 'bp-ahmedabad-finishers',
-    quoteDate: '2024-10-18',
-    validUntil: '2024-11-05',
-    totalAmount: 36000,
-    status: 'approved',
-    statusMessage: 'Finishing service quote approved',
-    revisionNumber: 1,
-    isActive: true,
-    items: [{
-      itemCode: 'SVC-FIN-001',
-      description: 'Softening & Anti-wrinkle Finishing Service',
-      hsnCode: '9988',
-      quantity: 1500,
-      unit: 'meters', 
-      rate: 24,
-      discount: 0,
-      taxableAmount: 36000
-    }]
-  },
-
-  // Service Quote 3 - Printing Service
-  {
-    id: 'QT-JO-003',
-    leadId: 'lead-jo-003',
-    businessProfileId: 'bp-mumbai-printers',
-    quoteDate: '2024-10-20',
-    validUntil: '2024-11-10', 
-    totalAmount: 80000,
-    status: 'approved',
-    statusMessage: 'Printing service quote approved',
-    revisionNumber: 1,
-    isActive: true,
-    items: [{
-      itemCode: 'SVC-PRT-001',
-      description: 'Digital Printing Service - Multi-color Design',
-      hsnCode: '9988',
-      quantity: 3200,
-      unit: 'meters',
-      rate: 25,
-      discount: 0,
-      taxableAmount: 80000
-    }]
   }
 ];
 

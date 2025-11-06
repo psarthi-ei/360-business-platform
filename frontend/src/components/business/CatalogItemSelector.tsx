@@ -3,7 +3,8 @@ import {
   MasterItem, 
   getApplicableItems, 
   searchCatalogItems,
-  calculateItemPrice 
+  calculateItemPrice,
+  getSpecificationType
 } from '../../data/catalogMockData';
 import { LeadRequestedItem } from '../../data/salesMockData';
 import ModalPortal from '../ui/ModalPortal';
@@ -32,6 +33,13 @@ function CatalogItemSelector({
   // Item details form - simplified
   const [quantity, setQuantity] = useState<number>(1);
   const [notes, setNotes] = useState('');
+  
+  // Custom specifications state
+  const [customSpecifications, setCustomSpecifications] = useState<Record<string, string>>({});
+  const [isAddingSpec, setIsAddingSpec] = useState(false);
+  const [newSpecType, setNewSpecType] = useState<string>('');
+  const [newSpecValue, setNewSpecValue] = useState<string>('');
+  const [customSpecKey, setCustomSpecKey] = useState<string>(''); // For custom specification type
 
   // Get available items based on business model
   useEffect(() => {
@@ -64,6 +72,12 @@ function CatalogItemSelector({
       setSelectedItem(null);
       setQuantity(1);
       setNotes('');
+      // Reset custom specifications state
+      setCustomSpecifications({});
+      setIsAddingSpec(false);
+      setNewSpecType('');
+      setNewSpecValue('');
+      setCustomSpecKey('');
     }
   }, [isOpen]);
 
@@ -95,7 +109,7 @@ function CatalogItemSelector({
       return {
         totalPrice: calculation.finalPrice,
         unitPrice: selectedTier?.baseRate || 0,
-        unit: selectedTier?.unit?.replace('per_', '') || 'units'
+        unit: selectedTier?.unit?.replace('per_', 'per ') || 'units'
       };
     } catch {
       return { totalPrice: 0, unitPrice: 0, unit: 'units' };
@@ -112,23 +126,25 @@ function CatalogItemSelector({
     
     // Scroll to details section to ensure visibility
     setTimeout(() => {
-      const detailsSection = document.querySelector('.catalog-item-details-section') as HTMLElement;
-      const modalBody = document.querySelector(`.${styles.modalBody}`) as HTMLElement;
+      const detailsSection = document.querySelector('.catalog-item-details-section');
+      const modalBody = document.querySelector(`.${styles.modalBody}`);
       
       if (detailsSection && modalBody) {
-        // Calculate scroll position within modal body
-        const detailsSectionTop = detailsSection.offsetTop;
-        const modalBodyScrollTop = modalBody.scrollTop;
-        const modalBodyHeight = modalBody.clientHeight;
-        const detailsSectionHeight = detailsSection.offsetHeight;
+        // Calculate scroll position within modal body - ensure elements are HTMLElements
+        if (detailsSection instanceof HTMLElement && modalBody instanceof HTMLElement) {
+          const detailsSectionTop = detailsSection.offsetTop;
+          const modalBodyScrollTop = modalBody.scrollTop;
+          const modalBodyHeight = modalBody.clientHeight;
+          const detailsSectionHeight = detailsSection.offsetHeight;
         
-        // Check if details section is not fully visible
-        if (detailsSectionTop < modalBodyScrollTop || 
-            detailsSectionTop + detailsSectionHeight > modalBodyScrollTop + modalBodyHeight) {
-          modalBody.scrollTo({
-            top: detailsSectionTop - 20, // Small offset for better UX
-            behavior: 'smooth'
-          });
+          // Check if details section is not fully visible
+          if (detailsSectionTop < modalBodyScrollTop || 
+              detailsSectionTop + detailsSectionHeight > modalBodyScrollTop + modalBodyHeight) {
+            modalBody.scrollTo({
+              top: detailsSectionTop - 20, // Small offset for better UX
+              behavior: 'smooth'
+            });
+          }
         }
       }
     }, 150);
@@ -142,11 +158,137 @@ function CatalogItemSelector({
       requestedQuantity: quantity,
       budgetExpectation: estimatedPrice,
       priority: 'must_have', // Default priority - simplified
-      notes: notes.trim() || undefined
+      notes: notes.trim() || undefined,
+      customSpecifications: Object.keys(customSpecifications).length > 0 
+        ? customSpecifications 
+        : undefined
     };
     
     onItemSelected(requestedItem);
     onClose();
+  };
+
+  // Custom specifications functions
+  const handleAddSpecification = () => {
+    if (!newSpecType) return;
+    
+    const specificationType = getSpecificationType(newSpecType);
+    if (!specificationType) return;
+    
+    let specificationKey: string;
+    let specificationValue: string;
+    
+    if (newSpecType === 'custom') {
+      // For custom type, use the custom key as the specification name
+      if (!customSpecKey.trim() || !newSpecValue.trim()) return;
+      specificationKey = customSpecKey.trim();
+      specificationValue = newSpecValue.trim();
+    } else {
+      // For predefined types, use the label as key
+      if (!newSpecValue.trim()) return;
+      specificationKey = specificationType.label;
+      specificationValue = newSpecValue.trim();
+    }
+    
+    // Add specification to the list
+    setCustomSpecifications(prev => ({
+      ...prev,
+      [specificationKey]: specificationValue
+    }));
+    
+    // Reset form
+    setIsAddingSpec(false);
+    setNewSpecType('');
+    setNewSpecValue('');
+    setCustomSpecKey('');
+  };
+  
+  const handleCancelAddSpecification = () => {
+    setIsAddingSpec(false);
+    setNewSpecType('');
+    setNewSpecValue('');
+    setCustomSpecKey('');
+  };
+  
+  const handleRemoveSpecification = (key: string) => {
+    setCustomSpecifications(prev => {
+      const { [key]: removed, ...remaining } = prev;
+      return remaining;
+    });
+  };
+  
+  const renderSpecificationValueInput = () => {
+    if (!newSpecType) return null;
+    
+    const specificationType = getSpecificationType(newSpecType);
+    if (!specificationType) return null;
+    
+    if (newSpecType === 'custom') {
+      return (
+        <div className={styles.customSpecInputs}>
+          <input
+            type="text"
+            value={customSpecKey}
+            onChange={(e) => setCustomSpecKey(e.target.value)}
+            placeholder="Specification name (e.g., Pattern, Texture)"
+            className={styles.specInput}
+          />
+          <input
+            type="text"
+            value={newSpecValue}
+            onChange={(e) => setNewSpecValue(e.target.value)}
+            placeholder="Specification value"
+            className={styles.specInput}
+          />
+        </div>
+      );
+    }
+    
+    switch (specificationType.inputType) {
+      case 'dropdown':
+        return (
+          <select
+            value={newSpecValue}
+            onChange={(e) => setNewSpecValue(e.target.value)}
+            className={styles.specInput}
+          >
+            <option value="">Select {specificationType.label.toLowerCase()}</option>
+            {specificationType.options?.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        );
+      
+      case 'number':
+        return (
+          <div className={styles.numberInputGroup}>
+            <input
+              type="number"
+              value={newSpecValue}
+              onChange={(e) => setNewSpecValue(e.target.value)}
+              placeholder={specificationType.placeholder}
+              className={styles.specInput}
+              min={specificationType.validation?.min}
+              max={specificationType.validation?.max}
+            />
+            {specificationType.unit && (
+              <span className={styles.unitLabel}>{specificationType.unit}</span>
+            )}
+          </div>
+        );
+      
+      case 'text':
+      default:
+        return (
+          <input
+            type="text"
+            value={newSpecValue}
+            onChange={(e) => setNewSpecValue(e.target.value)}
+            placeholder={specificationType.placeholder}
+            className={styles.specInput}
+          />
+        );
+    }
   };
 
   const categories = [
@@ -265,8 +407,8 @@ function CatalogItemSelector({
                     className={styles.quantityInput}
                   />
                   <span className={styles.unit}>
-                    {selectedItem.pricing.salesOrderPricing[0]?.unit?.replace('per_', '') || 
-                     selectedItem.pricing.jobWorkPricing[0]?.unit?.replace('per_', '') || 'units'}
+                    {selectedItem.pricing.salesOrderPricing[0]?.unit?.replace('per_', 'per ') || 
+                     selectedItem.pricing.jobWorkPricing[0]?.unit?.replace('per_', 'per ') || 'units'}
                   </span>
                 </div>
                 <div className={styles.formGroup}>
@@ -309,6 +451,110 @@ function CatalogItemSelector({
                   rows={2}
                   className={styles.notesInput}
                 />
+              </div>
+
+              {/* Custom Specifications Section */}
+              <div className={styles.specificationsSection}>
+                <div className={styles.specificationsHeader}>
+                  <label>Custom Specifications</label>
+                </div>
+
+                {/* Existing Specifications List */}
+                {Object.keys(customSpecifications).length > 0 && (
+                  <div className={styles.specificationsList}>
+                    {Object.entries(customSpecifications).map(([key, value]) => (
+                      <div key={key} className={styles.specificationItem}>
+                        <span className={styles.specKey}>{key}:</span>
+                        <span className={styles.specValue}>{value}</span>
+                        <button
+                          type="button"
+                          className={styles.removeSpecButton}
+                          onClick={() => handleRemoveSpecification(key)}
+                          title="Remove specification"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add Specification Form */}
+                {isAddingSpec && (
+                  <div className={styles.addSpecificationForm}>
+                    <div className={styles.specTypeSelect}>
+                      <label htmlFor="specType">Specification Type</label>
+                      <select
+                        id="specType"
+                        value={newSpecType}
+                        onChange={(e) => setNewSpecType(e.target.value)}
+                        className={styles.specSelectInput}
+                      >
+                        <option value="">Select specification type...</option>
+                        {Object.keys({
+                          color: 'Color',
+                          gsm: 'GSM (grams per square meter)',
+                          width: 'Width',
+                          quality_grade: 'Quality Grade',
+                          finish: 'Finish',
+                          weave_pattern: 'Weave Pattern',
+                          thread_count: 'Thread Count',
+                          custom: 'Custom Specification'
+                        }).map(type => {
+                          const specificationType = getSpecificationType(type);
+                          return specificationType ? (
+                            <option key={type} value={type}>
+                              {specificationType.label}
+                            </option>
+                          ) : null;
+                        })}
+                      </select>
+                    </div>
+
+                    {/* Dynamic Value Input */}
+                    {newSpecType && (
+                      <div className={styles.specValueInput}>
+                        <label htmlFor="specValue">Value</label>
+                        {renderSpecificationValueInput()}
+                      </div>
+                    )}
+
+                    <div className={styles.specFormActions}>
+                      <button
+                        type="button"
+                        className={styles.cancelSpecButton}
+                        onClick={handleCancelAddSpecification}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.saveSpecButton}
+                        onClick={handleAddSpecification}
+                        disabled={!newSpecType || !newSpecValue || (newSpecType === 'custom' && !customSpecKey)}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Empty State */}
+                {Object.keys(customSpecifications).length === 0 && !isAddingSpec && (
+                  <div className={styles.emptySpecifications}>
+                    No custom specifications added
+                  </div>
+                )}
+
+                {/* Add Specification Button at Bottom */}
+                <button
+                  type="button"
+                  className={styles.addSpecButton}
+                  onClick={() => setIsAddingSpec(true)}
+                  disabled={isAddingSpec}
+                >
+                  + Add Specification
+                </button>
               </div>
             </div>
           )}

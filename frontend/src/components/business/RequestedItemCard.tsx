@@ -70,9 +70,10 @@ function RequestedItemCard({
     }).format(amount);
   };
 
-  // Get unit display
-  const unit = catalogItem.pricing.salesOrderPricing[0]?.unit?.replace('per_', '') || 
-               catalogItem.pricing.jobWorkPricing[0]?.unit?.replace('per_', '') || 'units';
+  // Get unit display - proper formatting for "per_meter" -> "per meter"
+  const rawUnit = catalogItem.pricing.salesOrderPricing[0]?.unit || 
+                  catalogItem.pricing.jobWorkPricing[0]?.unit || 'units';
+  const unit = rawUnit.replace('per_', 'per ');
 
   return (
     <div className={`${styles.itemCard} ${index % 2 === 1 ? styles.alternateCard : ''}`}>
