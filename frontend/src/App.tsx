@@ -25,6 +25,7 @@ import ContactPage from './website/components/ContactPage';
 import Footer from './website/components/Footer';
 import { TranslationProvider } from './contexts/TranslationContext';
 import { UserProvider } from './contexts/UserContext';
+import { TerminologyProvider } from './contexts/TerminologyContext';
 import { HelmetProvider } from 'react-helmet-async';
 // Theme-related imports removed for MVP simplicity
 import { scrollToTop } from './utils/scrollUtils';
@@ -533,7 +534,8 @@ function AppContent() {
   return (
     <HelmetProvider>
       <TranslationProvider defaultLanguage={currentLanguage}>
-        <UserProvider>
+        <TerminologyProvider initialRegion="surat-processing">
+          <UserProvider>
           <div className="App">
           <div className="App-content">
         
@@ -599,7 +601,8 @@ function AppContent() {
         
           </div>
         </div>
-        </UserProvider>
+          </UserProvider>
+        </TerminologyProvider>
       </TranslationProvider>
       <Analytics />
     </HelmetProvider>

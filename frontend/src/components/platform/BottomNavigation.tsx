@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './BottomNavigation.module.css';
 
 interface BottomNavigationProps {
@@ -11,8 +12,10 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { customers, leads, quotes, workOrders } = useTerminologyTerms();
 
   // 5-Tab Navigation - Visual Design Specification (Platform Routes)
+  // Core paths maintained for backend compatibility, labels use regional terminology
   const tabs = [
     { 
       path: '/platform/home', 
@@ -24,7 +27,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
       path: '/platform/sales', 
       icon: '💼', 
       label: 'Sales',
-      description: 'Leads → Quotes → Orders'
+      description: `${leads} → ${quotes} → Orders`
     },
     { 
       path: '/platform/procurement', 
@@ -36,13 +39,13 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
       path: '/platform/production', 
       icon: '🏭', 
       label: 'Production',
-      description: 'Manufacturing & Work Orders'
+      description: `Manufacturing & ${workOrders}`
     },
     { 
       path: '/platform/customers', 
       icon: '👥', 
-      label: 'Customers',
-      description: 'CRM & Customer Management'
+      label: customers,  // Display regional terminology (e.g., "Parties")
+      description: `CRM & ${customers} Management`
     }
   ];
 

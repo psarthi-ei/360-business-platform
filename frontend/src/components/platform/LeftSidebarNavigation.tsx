@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './LeftSidebarNavigation.module.css';
 
 interface LeftSidebarNavigationProps {
@@ -11,8 +12,10 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { customers, leads, quotes, workOrders } = useTerminologyTerms();
 
   // Navigation items matching BottomNavigation for consistency
+  // Core paths maintained for backend compatibility, labels use regional terminology
   const navigationItems = [
     { 
       path: '/platform/home', 
@@ -24,7 +27,7 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
       path: '/platform/sales', 
       icon: '💼', 
       label: 'Sales',
-      description: 'Leads → Quotes → Orders'
+      description: `${leads} → ${quotes} → Orders`
     },
     { 
       path: '/platform/procurement', 
@@ -36,13 +39,13 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
       path: '/platform/production', 
       icon: '🏭', 
       label: 'Production',
-      description: 'Manufacturing & Work Orders'
+      description: `Manufacturing & ${workOrders}`
     },
     { 
       path: '/platform/customers', 
       icon: '👥', 
-      label: 'Customers',
-      description: 'CRM & Customer Management'
+      label: customers,  // Display regional terminology (e.g., "Parties")
+      description: `CRM & ${customers} Management`
     }
   ];
 
