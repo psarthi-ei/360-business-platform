@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Lead, LeadRequestedItem, QuoteItem } from '../../data/salesMockData';
+import { Lead, LeadRequestedItem, QuoteItem, Quote } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import ModalPortal from '../ui/ModalPortal';
 import CatalogItemSelector from './CatalogItemSelector';
@@ -13,6 +13,8 @@ interface QuoteEditableItem extends LeadRequestedItem {
   customPrice?: number;
   discountPercentage?: number;
   calculatedTotal?: number;
+  discountAmount?: number;
+  quantity?: number;
 }
 
 interface GenerateQuoteModalProps {
@@ -84,8 +86,9 @@ function GenerateQuoteModal({
     let totalDiscount = 0;
 
     quoteItems.forEach(item => {
-      const itemTotal = (item as any).calculatedTotal || 0;
-      const discountAmount = (item as any).discountAmount || 0;
+      const editableItem = item as QuoteEditableItem;
+      const itemTotal = editableItem.calculatedTotal || 0;
+      const discountAmount = editableItem.discountAmount || 0;
       
       subtotal += itemTotal + discountAmount; // Add back discount to get pre-discount subtotal
       totalDiscount += discountAmount;
@@ -148,11 +151,11 @@ function GenerateQuoteModal({
     try {
       // Convert quote items to proper QuoteItem format
       const convertedItems: QuoteItem[] = quoteItems.map((item, index) => {
-        const itemData = item as any;
-        const quantity = itemData.quantity || item.requestedQuantity;
-        const rate = itemData.customPrice || itemData.budgetExpectation || 0;
-        const discountPercent = itemData.discountPercentage || 0;
-        const taxableAmount = itemData.calculatedTotal || (quantity * rate);
+        const editableItem = item as QuoteEditableItem;
+        const quantity = editableItem.quantity || item.requestedQuantity;
+        const rate = editableItem.customPrice || editableItem.budgetExpectation || 0;
+        const discountPercent = editableItem.discountPercentage || 0;
+        const taxableAmount = editableItem.calculatedTotal || (quantity * rate);
 
         return {
           itemCode: `QUOTE-${index + 1}`, // Generate quote-specific item code
@@ -189,12 +192,12 @@ function GenerateQuoteModal({
         items: convertedItems,
         revisionNumber: 1,
         isActive: true,
-        leadQuoteState: 'generated' as any
+        leadQuoteState: 'generated'
       };
 
       // Add quote to mockQuotes (simulating save)
       const mockQuotes = await import('../../data/salesMockData');
-      mockQuotes.mockQuotes.push(newQuote as any);
+      (mockQuotes.mockQuotes as Quote[]).push(newQuote as Quote);
 
       // Update lead status and tracking
       LeadStatusService.updateLeadStatus(lead.id, 'active_lead', 'Quote generated successfully');
