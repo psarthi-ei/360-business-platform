@@ -34,6 +34,7 @@
 | **Mobile** | 44px Touch Target Standard | Factory-optimized touch targets for industrial environment | [Visual Design Spec](#mobile-design-architecture) |
 | **Voice/Search** | Single Instance Pattern | One FloatingVoiceAssistant, one GlobalSearch serves entire platform | [Unified Architecture](#voice-search-integration-rules) |
 | **Routing** | Professional Routing Pattern | URL-based actions, service architecture, proper navigation | [Unified Architecture](#service-architecture-pattern) |
+| **Terminology** | URL/UI Separation Principle | URLs maintain ERP standards; UI displays regional terminology | [Architecture Decisions](#url-ui-separation-principle) |
 | **Grid** | Grid Layout Architecture | Responsive single container system replaces multi-shell approach | [Unified Architecture](#grid-layout-architecture) |
 | **Module** | Machine Tab MVP Exclusion | Machine management deferred to post-MVP for complexity reasons | [Visual Design Spec](#machine-tab-mvp-exclusion) |
 
@@ -223,6 +224,56 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 
 ---
 
+#### **7. URL/UI Separation Principle (MANDATORY)**
+**ERP Standard URLs with Regional UI Terminology**
+
+**CORE PRINCIPLE:** URLs maintain industry-standard ERP terminology while UI displays regional processing unit terminology.
+
+```
+🌐 URL/UI SEPARATION ARCHITECTURE
+
+URLs (ERP Standards):
+├── /platform/leads (not /inquiries)
+├── /platform/orders (not /job-orders)  
+├── /platform/invoices (not /job-bills)
+└── /platform/procurement (inventory context, not stock)
+
+UI Display (Regional Terminology):
+├── Tab Labels: "Inquiries" | "Job Orders" | "Job Bills" | "Stock"
+├── CTA Buttons: "+ Add Inquiry" | "+ New Job Order" | "+ New Job Bill"
+└── Headers: Regional terminology via TerminologyContext
+```
+
+**✅ MUST DO:**
+- Keep ALL URLs in ERP standard format
+- Apply regional terminology ONLY in UI display
+- Use TerminologyContext for all UI text
+- Maintain URL consistency across all navigation functions
+
+**❌ NEVER DO:**
+- Change URLs to match regional terminology  
+- Use hardcoded regional terms in routing logic
+- Create region-specific routes
+- Mix terminology systems in same component
+
+**IMPLEMENTATION PATTERN:**
+```typescript
+// ✅ CORRECT: ERP standard URL with regional UI
+navigate('/platform/leads'); // URL stays standard
+<button>{lead}</button> // UI shows "Inquiry" via TerminologyContext
+
+// ❌ FORBIDDEN: Regional terminology in URLs
+navigate('/platform/inquiries'); // NEVER use regional terms in URLs
+```
+
+**BENEFITS:**
+- **System Integration:** APIs and external systems use standard URLs
+- **Regional Adaptation:** UI terminology matches local business language  
+- **Maintainability:** Clean separation of routing and display concerns
+- **Scalability:** Easy addition of new regions without breaking URLs
+
+---
+
 ## Part 3: Implementation Standards
 
 ### **🎯 IMPLEMENTATION CHECKLIST**
@@ -233,6 +284,8 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 - [ ] Follows Visual Design Spec (48px tabs, 44px filters, 56px CTA)
 - [ ] Uses design system tokens (--ds-btn-primary, etc.)
 - [ ] Follows COMPONENT_DESIGN_PATTERNS.md for card templates and CSS variables
+- [ ] Uses ERP standard URLs (no regional terminology in routes)
+- [ ] Applies regional terminology only via TerminologyContext in UI
 - [ ] Adds data types to platformConfig GLOBAL_SCOPE
 - [ ] Extends GlobalSearch scope for new data
 - [ ] Adds voice commands to VoiceCommandRouter
@@ -257,6 +310,12 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 ❌ Breaking Visual Design Spec measurements  
 ❌ Using TypeScript `any` types  
 
+#### **URL/Terminology Violations:**
+❌ Using regional terminology in URLs (/inquiries, /job-orders)  
+❌ Hardcoding regional terms in navigation functions  
+❌ Creating region-specific routes  
+❌ Mixing terminology systems in same component  
+
 #### **Component Anti-Patterns:**
 ❌ Business components with infrastructure code  
 ❌ Multiple instances of voice/search systems  
@@ -273,6 +332,12 @@ const searchResults = searchAcrossDataTypes(query, GLOBAL_SCOPE);
 - platformConfig controls all behavior centrally
 - Business components contain pure business logic
 - Voice/search works globally from single instances
+
+**URL/Terminology Compliance:**
+- All URLs use ERP standard terminology (/leads, /orders, /invoices)
+- UI terminology comes exclusively from TerminologyContext
+- Navigation functions maintain URL consistency
+- Clean separation between routing and display terminology
 
 **Visual Design Compliance:**
 - 48px tab navigation, 44px filters, 56px CTA maintained

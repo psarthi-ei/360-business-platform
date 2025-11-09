@@ -141,6 +141,63 @@ Production becomes:
 
 ---
 
+## 🔗 6.1️⃣ URL/UI Architecture (Technical Implementation)
+
+### Core Principle: ERP URLs + Regional UI
+
+**CRITICAL ARCHITECTURAL DECISION:** URLs maintain industry-standard ERP terminology while UI displays regional Surat processing terminology.
+
+#### Why This Matters
+
+| Aspect | URL (ERP Standard) | UI Display (Regional) | Benefit |
+|---|---|---|---|
+| **System Integration** | `/platform/leads` | "Inquiries" tab | APIs and external systems use standard paths |
+| **Regional UX** | `/platform/orders` | "Job Orders" tab | Users see familiar Surat terminology |
+| **Maintainability** | `/platform/invoices` | "Job Bills" tab | Clean separation of routing and display |
+| **Scalability** | `/platform/procurement` | "Stock" tab | Easy addition of new regions without breaking URLs |
+
+#### Implementation Pattern
+
+```
+🌐 URL/UI SEPARATION ARCHITECTURE
+
+URLs (ERP Standards):
+├── /platform/leads (not /inquiries)
+├── /platform/orders (not /job-orders)  
+├── /platform/invoices (not /job-bills)
+└── /platform/procurement (inventory context, not stock)
+
+UI Display (Surat Terminology):
+├── Tab Labels: "Inquiries" | "Job Orders" | "Job Bills" | "Stock"
+├── CTA Buttons: "+ Add Inquiry" | "+ New Job Order" | "+ New Job Bill"
+└── All text via TerminologyContext (regional configuration)
+```
+
+#### Technical Guidelines
+
+**✅ MUST DO:**
+- Keep ALL navigation URLs in ERP standard format
+- Apply regional terminology ONLY in UI display via TerminologyContext
+- Use consistent URL patterns across all navigation functions
+- Maintain clean separation between routing logic and display terminology
+
+**❌ NEVER DO:**
+- Change URLs to match regional terminology (/inquiries, /job-orders)
+- Hardcode regional terms in navigation or routing logic
+- Create region-specific routes or URL paths
+- Mix terminology systems within components
+
+#### Benefits for MVP
+
+1. **System Integration Ready:** External systems (APIs, integrations) use standard ERP paths
+2. **Regional Adaptation:** UI perfectly matches Surat processing terminology and workflow
+3. **Future-Proof:** Easy addition of Mumbai/Chennai regions without URL conflicts  
+4. **Developer Experience:** Clear separation of concerns between routing and display logic
+
+This architecture ensures the **best of both worlds** - technical compatibility with ERP systems while delivering the regional user experience Surat processors need.
+
+---
+
 ## 💡 7️⃣ A Few Subtle Design Improvements
 
 1. **Inquiry tab → Add "Rate Revision"**
@@ -826,3 +883,137 @@ Lot Processing → QC → Ready → Dispatch → Job Bill
 ---
 
 Would you like me to now design the **Inward → Job Card → Lot creation flow** (with all these fields — party, challan, total meters, color split) so you can give it to your dev team as the official step-by-step logic for implementation?
+
+Should we use inventory as a stock and order as a job order instead of orders because now we have decided to just focus on Surat as a processing unit and if they call it a job order, we'll also call it a job order. Okay, what's your view?
+
+
+💯 Partha — **yes, absolutely.**
+You’re thinking *exactly* like a founder who’s trying to build adoption, not just software.
+
+Let’s unpack this carefully so you feel *100% confident* about the naming and flow — because you’re right: in a domain like Surat processing, **terminology = usability.**
+
+---
+
+## 🧭 1️⃣ The golden rule for your MVP
+
+> **Always use the words they use on the factory floor.**
+> If a word makes them pause or think “yeh kya hai?” — you’ve already lost trust.
+
+So yes —
+✅ “Inventory” → **Stock**
+✅ “Orders” → **Job Orders**
+
+are both **perfect renames** for your target audience.
+
+---
+
+## 📦 2️⃣ Why “Stock” is better than “Inventory”
+
+### Reality:
+
+Processors never say *inventory*.
+They say:
+
+* “Grey stock kitna hai?”
+* “Party ka stock alag rakho.”
+* “Chemical stock check kar lo.”
+
+Even educated owners and supervisors will use *stock* in all contexts.
+
+| Term          | Who uses it           | Meaning                                   | Keep? |
+| ------------- | --------------------- | ----------------------------------------- | ----- |
+| **Inventory** | ERP/accounting people | System term                               | ❌ No  |
+| **Stock**     | Every processor       | Materials in hand (grey, dyed, chemicals) | ✅ Yes |
+
+✅ Use “Stock” everywhere — simple, universal, clear.
+You can internally still call the table `inventory`, but UI = “Stock”.
+
+---
+
+## 🧾 3️⃣ Why “Job Order” is the perfect replacement for “Order”
+
+Let’s look at what *orders* mean to different businesses:
+
+| Business type | Word used        | Meaning                     |
+| ------------- | ---------------- | --------------------------- |
+| Traders       | Sales Order      | They sell finished fabric   |
+| Manufacturers | Production Order | They make fabric themselves |
+| Processors    | **Job Order**    | They process others’ fabric |
+
+So in your focus cluster (Surat = **processors**),
+
+> “Job Order” is **the industry term** — and you should mirror it.
+
+Every processor will immediately get it:
+
+> “Job Order bana diya kya?”
+> means “The party’s fabric is entered in the system and ready to track.”
+
+---
+
+## ⚙️ 4️⃣ How this affects your tab structure
+
+| Old                 | New            | Why                          |
+| ------------------- | -------------- | ---------------------------- |
+| Inquiry             | Inquiry        | Keep (they understand this)  |
+| Orders              | **Job Orders** | More specific, more familiar |
+| Invoices            | Job Bills      | Matches job-work model       |
+| Inventory           | **Stock**      | Plain and native             |
+| Purchase Order (PU) | Purchase Order | Keep as is                   |
+| GRN / Inward        | **Inward**     | Keep as is                   |
+
+---
+
+## 🧩 5️⃣ Final tab structure (post-rename, 100% Surat-friendly)
+
+| Module             | Tabs                                     | Notes                  |
+| ------------------ | ---------------------------------------- | ---------------------- |
+| 💼 **Sales**       | Inquiry → Job Orders → Job Bills         | Entirely job-work flow |
+| 🏭 **Production**  | Job Cards → Lots → QC → Ready            | Internal operations    |
+| 📦 **Procurement** | Inward → Stock → Purchase Orders         | Material management    |
+| 👥 **Parties**     | Party List                               | Traders / Agents       |
+| 🏠 **Home**        | Dashboard (pending jobs, lots, dispatch) | Optional               |
+
+---
+
+## 🧠 6️⃣ Why this naming matters so much
+
+Here’s what happens when your software uses “foreign” terms like “Inventory”, “Sales Order”, or “Work Order”:
+
+| Old word      | What user thinks                                     |
+| ------------- | ---------------------------------------------------- |
+| “Sales Order” | “Hum to sale nahi karte, hum processing karte hain.” |
+| “Inventory”   | “Kya hai yeh? Stock bolte na?”                       |
+| “Work Order”  | “Machine ka kaam hai kya?”                           |
+
+But if you mirror their terms:
+
+| Your word   | What user feels                                             |
+| ----------- | ----------------------------------------------------------- |
+| “Job Order” | “Haan, yehi to hum karte hain.”                             |
+| “Stock”     | “Grey stock aur party stock yahan dikh raha hai, mast hai.” |
+| “Job Bill”  | “Bill bhi yahan se nikal gaya, easy hai.”                   |
+
+The difference in *trust and comfort* is huge.
+
+---
+
+## ✅ 7️⃣ My recommendation (definitive)
+
+| Concept    | Final term (for UI) | Reason                |
+| ---------- | ------------------- | --------------------- |
+| Order      | **Job Order**       | Native processor term |
+| Work Order | **Lot**             | Floor-level term      |
+| Inventory  | **Stock**           | Simpler, common       |
+| Invoice    | **Job Bill**        | Real-world phrasing   |
+| GRN        | **Inward**          | Correct local usage   |
+| Customer   | **Party**           | Common industry word  |
+
+✅ Go with **Job Order** and **Stock** — absolutely the right decision for your MVP.
+It will make your product feel like it’s *built by someone from their own industry*, not an outsider.
+
+---
+
+If you want, I can now produce a **final terminology map (UI labels + internal system names + local equivalents)** — a clean one-pager you can give to your design and dev team so everyone uses consistent words across UI, DB, and reports.
+
+Would you like me to prepare that next?

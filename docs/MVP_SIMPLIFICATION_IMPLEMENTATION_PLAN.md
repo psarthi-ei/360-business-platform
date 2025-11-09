@@ -79,6 +79,46 @@ GET /api/leads
 // Third-party integrations work seamlessly
 ```
 
+## URL/UI Separation Architecture (MANDATORY)
+
+### Core Principle
+
+**CRITICAL ARCHITECTURAL DECISION:** URLs maintain industry-standard ERP terminology while UI displays regional Surat processing terminology.
+
+### URL/UI Mapping Standards
+
+| ERP Standard URL | Regional UI Display | Implementation |
+|---|---|---|
+| `/platform/leads` | "Inquiries" | Via TerminologyContext |
+| `/platform/customers` | "Parties" | Via TerminologyContext |
+| `/platform/orders` | "Job Orders" | Via TerminologyContext |
+| `/platform/invoices` | "Job Bills" | Via TerminologyContext |
+| `/platform/work-orders` | "Lots" | Via TerminologyContext |
+| `/platform/procurement` | "Stock" | Via TerminologyContext |
+
+### Implementation Rules (MANDATORY)
+
+**✅ MUST DO:**
+- Keep ALL navigation URLs in ERP standard format
+- Apply regional terminology ONLY in UI display via TerminologyContext
+- Use consistent URL patterns across all navigation functions
+- Maintain clean separation between routing logic and display terminology
+
+**❌ NEVER DO:**
+- Change URLs to match regional terminology (/inquiries, /job-orders, /parties)
+- Hardcode regional terms in navigation or routing logic
+- Create region-specific routes or URL paths
+- Mix terminology systems within components
+
+### Benefits
+
+1. **System Integration Ready:** External systems (APIs, integrations) use standard ERP paths
+2. **Regional Adaptation:** UI perfectly matches Surat processing terminology and workflow
+3. **Future-Proof:** Easy addition of Mumbai/Chennai regions without URL conflicts
+4. **Developer Experience:** Clear separation of concerns between routing and display logic
+
+---
+
 ## UI Terminology Layer (Configurable)
 
 ### Regional Terminology Configuration
@@ -215,16 +255,15 @@ Inquiry → Rate → Job Order → Inward → Job Card → Lot → QC → Ready 
 
 **Changes:**
 ```typescript
-// Before
+// ❌ INCORRECT: Changing URL paths to match regional terminology
 const tabs = [
-  { path: '/platform/sales', label: 'Sales' },
-  { path: '/platform/customers', label: 'Customers' }
+  { path: '/platform/parties', label: 'Parties' }  // WRONG: URL uses regional term
 ];
 
-// After  
+// ✅ CORRECT: ERP standard URLs with regional UI labels via TerminologyContext
 const tabs = [
   { path: '/platform/sales', label: 'Sales' },
-  { path: '/platform/parties', label: 'Parties' }  // Display terminology
+  { path: '/platform/customers', label: terminology.customers }  // "Parties" from context
 ];
 ```
 
@@ -241,22 +280,31 @@ const tabs = [
 **Update Routes:**
 ```typescript
 // Rename/update in routeBusinessLogic.tsx  
-<Route path="inquiry" element={renderLeadManagement()} />      // Rename from leads
-<Route path="inward" element={renderGoodsReceiptNotes()} />    // Rename from grn
-<Route path="parties" element={renderCustomers()} />          // Rename from customers
+<Route path="leads" element={renderLeadManagement()} />        // ERP standard path, UI shows "Inquiries"
+<Route path="procurement" element={renderProcurement()} />      // ERP standard path, UI shows "Stock"  
+<Route path="customers" element={renderCustomers()} />         // ERP standard path, UI shows "Parties"
 ```
 
-### 1.3 URL Structure Changes
+### 1.3 URL/UI Separation Implementation
 
-**Before:**
-- `/platform/leads`
-- `/platform/quotes`  
-- `/platform/customers`
+**CRITICAL:** URLs maintain ERP standards while UI displays regional terminology
 
-**After:**
-- `/platform/inquiry`
-- `/platform/orders` (quotes merged into inquiry)
-- `/platform/parties`
+**URL Structure (UNCHANGED - ERP Standards):**
+- `/platform/leads` (UI displays: "Inquiries")
+- `/platform/orders` (UI displays: "Job Orders") 
+- `/platform/customers` (UI displays: "Parties")
+- `/platform/invoices` (UI displays: "Job Bills")
+- `/platform/procurement` (UI displays: "Stock")
+
+**Implementation Pattern:**
+```typescript
+// ✅ CORRECT: ERP standard URL with regional UI
+navigate('/platform/leads'); // URL stays standard
+<button>{lead}</button> // UI shows "Inquiry" via TerminologyContext
+
+// ❌ FORBIDDEN: Regional terminology in URLs  
+navigate('/platform/inquiries'); // NEVER use regional terms in URLs
+```
 
 ## Week 2: Component Restructuring
 
@@ -506,7 +554,7 @@ const BottomNavigation = () => {
   
   const tabs = [
     { path: '/platform/sales', label: 'Sales' },
-    { path: '/platform/parties', label: terminology.customer + 's' }  // "Parties"
+    { path: '/platform/customers', label: terminology.customers }  // ERP URL, "Parties" display
   ];
 };
 ```
@@ -544,12 +592,12 @@ const BottomNavigation = () => {
 
 **Update Voice Recognition:**
 ```typescript
-// Update voice commands for local terminology
+// ✅ CORRECT: Voice commands use regional terminology but navigate to ERP standard URLs
 const VoiceCommands = {
-  'add party': () => navigate('/platform/parties/add'),
-  'create job bill': () => navigate('/platform/invoices/create'),
-  'check lot status': () => navigate('/platform/lots'),
-  // Local terminology commands
+  'add party': () => navigate('/platform/customers/add'),      // ERP URL for "Parties" 
+  'create job bill': () => navigate('/platform/invoices/create'), // Already correct
+  'check lot status': () => navigate('/platform/work-orders'),   // ERP URL for "Lots"
+  // Voice commands accept regional terms but route to standard URLs
 };
 ```
 
