@@ -40,6 +40,30 @@ export interface WorkOrder {
   createdDate: string;
 }
 
+// Job Work Production - Customer Fabric Tracking for Surat Processing
+export interface JobCard {
+  id: string;
+  salesOrderId: string; // Links to Job Order (customer order)
+  customerId: string;   // Customer who provided fabric
+  customerName: string; // For display purposes
+  fabricDetails: {
+    type: string;       // Cotton, Silk, Polyester, etc.
+    quantity: number;   // Total fabric quantity
+    unit: 'meters' | 'yards' | 'kg';
+    challanReference: string; // Customer's delivery challan
+    qualityGrade?: string;    // A-Grade, B-Grade, etc.
+    colors?: string[];        // If pre-dyed fabric
+    specialInstructions?: string; // Customer requirements
+  };
+  workOrderIds: string[];     // Multiple lots created from this job card
+  status: 'awaiting_material' | 'material_received' | 'in_progress' | 'completed';
+  grnId?: string;            // Links to goods receipt note for fabric inward
+  createdDate: string;
+  receivedDate?: string;     // When customer fabric was received
+  completedDate?: string;    // When all lots are completed
+  notes?: string;
+}
+
 export interface MaterialRequirement {
   material: string;
   required: string;
@@ -163,6 +187,69 @@ export const mockMachines: Machine[] = [
     status: 'available',
     capacity: '150m/h',
     assignedWorker: 'Vikram'
+  }
+];
+
+// Mock JobCard Data - Customer Fabric Processing Tracking
+export const mockJobCards: JobCard[] = [
+  {
+    id: 'JC-001',
+    salesOrderId: 'SO-002', // Links to existing Gujarat Garments job order
+    customerId: 'bp-gujarat-garments',
+    customerName: 'Gujarat Garments',
+    fabricDetails: {
+      type: 'Cotton Mixed',
+      quantity: 500,
+      unit: 'meters',
+      challanReference: 'GG-CH-1024',
+      qualityGrade: 'A-Grade',
+      colors: ['Natural White'],
+      specialInstructions: 'Handle with care - premium quality'
+    },
+    workOrderIds: ['WO#451', 'WO#452'], // Multiple lots from this job card
+    status: 'in_progress',
+    grnId: 'GRN-001', // Links to fabric inward entry
+    createdDate: '2024-10-15',
+    receivedDate: '2024-10-16',
+    notes: 'Customer fabric received in good condition'
+  },
+  {
+    id: 'JC-002', 
+    salesOrderId: 'SO-003',
+    customerId: 'bp-chennai-exports',
+    customerName: 'Chennai Exports',
+    fabricDetails: {
+      type: 'Silk',
+      quantity: 300,
+      unit: 'meters', 
+      challanReference: 'CE-CH-2041',
+      qualityGrade: 'Export-Grade',
+      specialInstructions: 'Temperature controlled processing required'
+    },
+    workOrderIds: ['WO#453'],
+    status: 'awaiting_material',
+    createdDate: '2024-10-18',
+    notes: 'Waiting for customer fabric delivery'
+  },
+  {
+    id: 'JC-003',
+    salesOrderId: 'SO-001', 
+    customerId: 'bp-mumbai-fashion',
+    customerName: 'Mumbai Fashion',
+    fabricDetails: {
+      type: 'Polyester Blend',
+      quantity: 750,
+      unit: 'meters',
+      challanReference: 'MF-CH-3012',
+      qualityGrade: 'B-Grade',
+      colors: ['Navy Blue', 'Charcoal']
+    },
+    workOrderIds: ['WO#454', 'WO#455'],
+    status: 'material_received',
+    grnId: 'GRN-002',
+    createdDate: '2024-10-12',
+    receivedDate: '2024-10-14',
+    notes: 'Pre-dyed fabric - ready for finishing process'
   }
 ];
 
@@ -766,4 +853,27 @@ export const calculateProductionMetrics = () => {
     activeWorkers: mockProductionWorkers.filter(w => w.status === 'active').length,
     totalWorkers: mockProductionWorkers.length
   };
+};
+
+// JobCard Helper Functions for Customer Fabric Tracking
+export const getJobCardById = (id: string): JobCard | undefined => {
+  return mockJobCards.find(jobCard => jobCard.id === id);
+};
+
+export const getJobCardBySalesOrder = (salesOrderId: string): JobCard | undefined => {
+  return mockJobCards.find(jobCard => jobCard.salesOrderId === salesOrderId);
+};
+
+export const getJobCardsByCustomer = (customerId: string): JobCard[] => {
+  return mockJobCards.filter(jobCard => jobCard.customerId === customerId);
+};
+
+export const getWorkOrdersByJobCard = (jobCardId: string): WorkOrder[] => {
+  const jobCard = getJobCardById(jobCardId);
+  if (!jobCard) return [];
+  return mockWorkOrders.filter(wo => jobCard.workOrderIds.includes(wo.id));
+};
+
+export const getJobCardByWorkOrder = (workOrderId: string): JobCard | undefined => {
+  return mockJobCards.find(jobCard => jobCard.workOrderIds.includes(workOrderId));
 };

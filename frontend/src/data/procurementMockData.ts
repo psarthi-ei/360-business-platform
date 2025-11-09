@@ -42,6 +42,12 @@ export interface GoodsReceiptNote {
   inspectionDate?: string;
   materialValue?: number; // Financial value of materials received
   notes?: string;
+  
+  // MVP Enhancement: Customer Fabric Tracking for Job Work
+  materialType?: 'raw_materials' | 'customer_fabric'; // Differentiates business type
+  challanPhoto?: string; // Photo documentation for customer fabric
+  customerId?: string; // Customer ID for customer fabric tracking
+  jobCardId?: string; // Links to JobCard for customer fabric
 }
 
 // ==================== CONSOLIDATED INTERFACES (PHASE 3) ====================
@@ -333,6 +339,58 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     inspectionDate: '2025-10-15',
     materialValue: 37500,
     notes: 'Over delivery - bonus 5kg received, excellent quality'
+  },
+  
+  // Customer Fabric Inward Entries for Job Work (MVP Enhancement)
+  {
+    id: 'GRN-CF-001',
+    poId: 'CF-PO-001', // Customer fabric "PO" - virtual entry for tracking
+    consolidatedPrId: 'CF-001',
+    salesOrderId: 'SO-002',
+    customerName: 'Gujarat Garments',
+    supplierName: 'Gujarat Garments', // Customer is the supplier for fabric
+    receivedBy: 'Inward Team',
+    materialName: 'Cotton Mixed Fabric - Customer Provided',
+    orderedQuantity: 500,
+    receivedQuantity: 500,
+    unit: 'meters',
+    qualityStatus: 'approved',
+    receiptDate: '2024-10-16',
+    qualityDeadline: '2024-10-17',
+    inspectedBy: 'Quality Team',
+    inspectionDate: '2024-10-16',
+    notes: 'Customer fabric received in excellent condition - ready for processing',
+    
+    // MVP Enhancement fields
+    materialType: 'customer_fabric',
+    challanPhoto: '/uploads/challan_GG_1024.jpg',
+    customerId: 'bp-gujarat-garments',
+    jobCardId: 'JC-001'
+  },
+  {
+    id: 'GRN-CF-002',
+    poId: 'CF-PO-002',
+    consolidatedPrId: 'CF-002', 
+    salesOrderId: 'SO-001',
+    customerName: 'Mumbai Fashion',
+    supplierName: 'Mumbai Fashion',
+    receivedBy: 'Inward Team',
+    materialName: 'Polyester Blend Fabric - Pre-dyed',
+    orderedQuantity: 750,
+    receivedQuantity: 750,
+    unit: 'meters',
+    qualityStatus: 'approved',
+    receiptDate: '2024-10-14',
+    qualityDeadline: '2024-10-15',
+    inspectedBy: 'Quality Team', 
+    inspectionDate: '2024-10-14',
+    notes: 'Pre-dyed fabric in Navy Blue and Charcoal - excellent color fastness',
+    
+    // MVP Enhancement fields
+    materialType: 'customer_fabric',
+    challanPhoto: '/uploads/challan_MF_3012.jpg',
+    customerId: 'bp-mumbai-fashion',
+    jobCardId: 'JC-003'
   }
 ];
 
