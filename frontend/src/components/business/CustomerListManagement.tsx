@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import { useTerminologyTerms } from '../../contexts/TerminologyContext'; // TODO: implement terminology display
 import styles from './CustomerListManagement.module.css';
 import { mockBusinessProfiles, type BusinessProfile } from '../../data/customerMockData';
 import { mockSalesOrders, type SalesOrder } from '../../data/salesMockData';
@@ -27,6 +28,9 @@ const CustomerListManagement = ({
   onFilterChange,
   onShow360View 
 }: CustomerListManagementProps) => {
+  // Use terminology hook for Surat processing terminology
+  // const { customer, customers: customersTerminology } = useTerminologyTerms(); // "Party", "Parties" - TODO: implement display terminology
+  
   const [customers] = useState(mockBusinessProfiles.filter((bp: BusinessProfile) => bp.customerStatus === 'customer'));
   const [customerMetrics, setCustomerMetrics] = useState<Record<string, CustomerMetrics>>({});
   

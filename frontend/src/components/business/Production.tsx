@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ActionParams } from '../../services/nlp/types';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './Production.module.css';
 import ProductionOrderManagement from './ProductionOrderManagement';
 import WorkOrderPlanning from './WorkOrderPlanning';
@@ -52,6 +53,9 @@ const calculateReadyCounts = () => ({
 });
 
 const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: ProductionProps) => {
+  // Use terminology hook for Surat processing terminology
+  const { productionOrders, workOrders, workOrder } = useTerminologyTerms();
+  
   // State Management
   const [activeTab, setActiveTab] = useState<ProductionTabType>('orders');
   const [ordersFilterState, setOrdersFilterState] = useState('all');
@@ -93,13 +97,13 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   // Status filter configurations for each tab (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
     orders: [
-      { value: 'all', label: 'All Orders', count: ordersCounts.all },
+      { value: 'all', label: `All ${productionOrders}`, count: ordersCounts.all },
       { value: 'not_started', label: '🟡 Not Started', count: ordersCounts.not_started },
       { value: 'in_production', label: '🔵 In Production', count: ordersCounts.in_production },
       { value: 'material_pending', label: '🔴 Material Pending', count: ordersCounts.material_pending }
     ],
     wo: [
-      { value: 'all', label: 'All Work Orders', count: woCounts.all },
+      { value: 'all', label: `All ${workOrders}`, count: woCounts.all },
       { value: 'pending', label: '🔴 Not Started', count: woCounts.pending },
       { value: 'running', label: '🟡 Running', count: woCounts.running },
       { value: 'completed', label: '✅ Completed', count: woCounts.completed },
@@ -159,7 +163,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         case 'orders': {
           const ordersCounts = { all: 8, not_started: 3, in_production: 4, material_pending: 1 };
           return [
-            { value: 'all', label: 'All Orders', count: ordersCounts.all },
+            { value: 'all', label: `All ${productionOrders}`, count: ordersCounts.all },
             { value: 'not_started', label: '🟡 Not Started', count: ordersCounts.not_started },
             { value: 'in_production', label: '🔵 In Production', count: ordersCounts.in_production },
             { value: 'material_pending', label: '🔴 Material Pending', count: ordersCounts.material_pending }
@@ -168,7 +172,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         case 'wo': {
           const woCounts = { all: 15, pending: 5, running: 7, completed: 3, unassigned: 0 };
           return [
-            { value: 'all', label: 'All Work Orders', count: woCounts.all },
+            { value: 'all', label: `All ${workOrders}`, count: woCounts.all },
             { value: 'pending', label: '🔴 Not Started', count: woCounts.pending },
             { value: 'running', label: '🟡 Running', count: woCounts.running },
             { value: 'completed', label: '✅ Completed', count: woCounts.completed },
@@ -221,7 +225,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
     }
     
     return Math.round(baseCount * machineModifier * timelineModifier);
-  }, [activeTab, ordersFilterState, woFilterState, qcFilterState, readyFilterState, machineFilter, timelineFilter]);
+  }, [activeTab, ordersFilterState, woFilterState, qcFilterState, readyFilterState, machineFilter, timelineFilter, productionOrders, workOrders]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -363,7 +367,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
   const getContextualCTA = (tab: ProductionTabType): string => {
     switch(tab) {
       case 'orders': return '+ Start Production';
-      case 'wo': return '+ Create Work Order';
+      case 'wo': return `+ Create ${workOrder}`;
       case 'qc': return '+ Quality Check';
       case 'ready': return '+ Pack & Dispatch';
       default: return '+ Add';
@@ -377,7 +381,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         setTriggerOrdersModal(true);
         break;
       case 'wo':
-        alert('Create Work Order functionality coming soon!');
+        alert(`Create ${workOrder} functionality coming soon!`);
         break;
       case 'qc':
         alert('Quality Check functionality coming soon!');
@@ -406,13 +410,13 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
           className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
           onClick={() => setActiveTab('orders')}
         >
-          Orders
+          {productionOrders}
         </button>
         <button 
           className={`${styles.tabButton} ${activeTab === 'wo' ? styles.active : ''}`}
           onClick={() => setActiveTab('wo')}
         >
-          WO
+          {workOrders}
         </button>
         <button 
           className={`${styles.tabButton} ${activeTab === 'qc' ? styles.active : ''}`}

@@ -308,95 +308,184 @@ navigate('/platform/inquiries'); // NEVER use regional terms in URLs
 
 ## Week 2: Component Restructuring
 
+**URL/UI Separation Compliance**: All component restructuring follows the architectural principle that URLs, file names, and system internals maintain ERP standard terminology while only UI display text uses regional Surat processing terminology via TerminologyContext. No file renaming operations are required - all files maintain their ERP standard names for system integration compatibility.
+
 ### 2.1 Sales Module Components
 
-**File Operations:**
+**IMPORTANT**: No file renaming required - maintain ERP standard filenames while updating UI terminology via TerminologyContext.
 
-1. **LeadManagement.tsx → InquiryManagement.tsx**
-```bash
-# Rename file
-mv LeadManagement.tsx InquiryManagement.tsx
-
-# Update imports across codebase
-# Update component name and all references
+1. **Keep LeadManagement.tsx (ERP Standard)**
+```typescript
+// ✅ KEEP: LeadManagement.tsx filename and component name
+// ✅ UPDATE: Only UI display text via TerminologyContext
+const LeadManagement = () => {
+  const { lead, leads } = useTerminologyTerms(); // "Inquiry", "Inquiries"
+  
+  return (
+    <div>
+      <h2>{leads}</h2> {/* Displays "Inquiries" */}
+      <button>+ Add {lead}</button> {/* Displays "+ Add Inquiry" */}
+    </div>
+  );
+};
 ```
 
-2. **Merge Quote Functionality into Inquiry**
+2. **Merge Quote Functionality into LeadManagement**
 ```typescript
 // Remove QuotationOrders.tsx as separate component
-// Move quote generation into InquiryManagement.tsx
-const InquiryManagement = () => {
+// Move quote generation into LeadManagement.tsx (business logic only)
+const LeadManagement = () => {
   const [showRateModal, setShowRateModal] = useState(false);
+  const { generateQuote } = useTerminologyTerms(); // "Send Rate"
+  
   // Embed rate/quote functionality directly
+  const handleGenerateQuote = () => setShowRateModal(true);
+  
+  return (
+    <div>
+      <button onClick={handleGenerateQuote}>{generateQuote}</button>
+    </div>
+  );
 };
 ```
 
 3. **Remove Receivables/Payables Components**
 ```bash
-# Remove files
+# Remove files (these don't follow MVP simplification)
 rm ReceivablesManagement.tsx
 rm PayablesManagement.tsx
 
-# Enhance Invoices.tsx with payment status
+# Enhance Invoices.tsx with payment status integration
 ```
 
 ### 2.2 Procurement Module Components
 
-**Remove Components:**
+**Remove Components (MVP Simplification):**
 ```bash
-rm MaterialRequirements.tsx
-rm PurchaseRequests.tsx
+# Remove complex procurement components not needed for Surat processing
+rm MaterialRequirements.tsx     # Not used in job work model
+rm PurchaseRequests.tsx         # No internal approval process needed
 ```
 
-**Rename Components:**
-```bash
-mv GoodsReceiptNotes.tsx InwardManagement.tsx
-```
-
-**Update Component Logic:**
+**Keep GoodsReceiptNotes.tsx (ERP Standard)**
 ```typescript
-// InwardManagement.tsx - Add customer fabric tracking
+// ✅ KEEP: GoodsReceiptNotes.tsx filename and component name
+// ✅ UPDATE: Only UI display text via TerminologyContext
+const GoodsReceiptNotes = () => {
+  const { goodsReceiptNote, inventory } = useTerminologyTerms(); // "Inward", "Stock"
+  
+  return (
+    <div>
+      <h2>{goodsReceiptNote}</h2> {/* Displays "Inward" */}
+      <button>+ Record {goodsReceiptNote}</button> {/* Displays "+ Record Inward" */}
+    </div>
+  );
+};
+```
+
+**Update Component Logic (Business Simplification):**
+```typescript
+// GoodsReceiptNotes.tsx - Add customer fabric tracking for job work
 interface InwardEntry {
   id: string;
-  type: 'customer_fabric' | 'raw_materials';  // Support both
-  partyId?: string;  // For customer fabric
+  type: 'customer_fabric' | 'raw_materials';  // Support both types
+  customerId?: string;  // For customer fabric (ERP standard field name)
   challanPhoto?: string;  // For customer fabric proof
-  // ... other fields
+  receivedBy: string;
+  verifiedBy: string;
+  items: InwardItem[];
 }
+
+// Support Surat processing workflow
+const handleCustomerFabricReceipt = () => {
+  // Track party fabric inward with photo verification
+};
 ```
 
 ### 2.3 Production Module Components
 
-**Component Restructuring:**
-```bash
-mv WorkOrderPlanning.tsx LotManagement.tsx
-mv ProductionOrderManagement.tsx JobCardManagement.tsx
+**Keep ERP Standard Filenames (No Renaming):**
+```typescript
+// ✅ KEEP: WorkOrderPlanning.tsx, ProductionOrderManagement.tsx filenames
+// ✅ UPDATE: Only UI display text via TerminologyContext
 ```
 
-**Update Production Logic:**
+**Update WorkOrderPlanning.tsx (Lot Management):**
 ```typescript
-// Remove sales order support
-const ProductionDashboard = () => {
-  // Show only job work orders
+const WorkOrderPlanning = () => {
+  const { workOrder, workOrders } = useTerminologyTerms(); // "Lot", "Lots"
+  
+  return (
+    <div>
+      <h2>{workOrders}</h2> {/* Displays "Lots" */}
+      <button>+ Create {workOrder}</button> {/* Displays "+ Create Lot" */}
+    </div>
+  );
+};
+```
+
+**Update Production Logic (Job Work Focus):**
+```typescript
+// ProductionOrderManagement.tsx - Focus on job work only (MVP simplification)
+const ProductionOrderManagement = () => {
+  const { order, orders } = useTerminologyTerms(); // "Job Order", "Job Orders"
+  
+  // Show only job work orders (remove sales order complexity)
   const jobWorkOrders = orders.filter(order => order.type === 'job_work');
-  // Remove sales order filtering
+  
+  return (
+    <div>
+      <h2>{orders}</h2> {/* Displays "Job Orders" */}
+      {/* Remove sales order filtering - job work only */}
+    </div>
+  );
 };
 ```
 
 ### 2.4 Customer Module Components  
 
-**Rename Components:**
-```bash
-mv Customers.tsx Parties.tsx
-mv CustomerDetailsModal.tsx PartyDetailsModal.tsx
-mv CustomerListManagement.tsx PartyListManagement.tsx
+**Keep ERP Standard Filenames (No Renaming):**
+```typescript
+// ✅ KEEP: Customers.tsx, CustomerDetailsModal.tsx, CustomerListManagement.tsx
+// ✅ UPDATE: Only UI display text via TerminologyContext
 ```
 
-**Update All References:**
+**Update Customers.tsx:**
 ```typescript
-// Update all imports and component names
-import Parties from './Parties';
-import PartyDetailsModal from './PartyDetailsModal';
+const Customers = () => {
+  const { customer, customers } = useTerminologyTerms(); // "Party", "Parties"
+  
+  return (
+    <div>
+      <h2>{customers}</h2> {/* Displays "Parties" */}
+      <button>+ Add {customer}</button> {/* Displays "+ Add Party" */}
+    </div>
+  );
+};
+```
+
+**Update CustomerDetailsModal.tsx:**
+```typescript
+const CustomerDetailsModal = () => {
+  const { customer } = useTerminologyTerms(); // "Party"
+  
+  return (
+    <div>
+      <h3>{customer} Details</h3> {/* Displays "Party Details" */}
+      {/* All business logic stays the same, only UI text changes */}
+    </div>
+  );
+};
+```
+
+**Keep All ERP Standard References:**
+```typescript
+// ✅ KEEP: All imports and component names use ERP standards
+import Customers from './Customers';                    // ERP standard filename
+import CustomerDetailsModal from './CustomerDetailsModal'; // ERP standard filename
+import CustomerListManagement from './CustomerListManagement'; // ERP standard filename
+
+// Only UI terminology changes through TerminologyContext
 ```
 
 ## Week 3: Data Models & Business Logic

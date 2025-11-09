@@ -1,13 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { mockLeads, mockQuotes, mockReceivables, mockPayables } from '../../data/salesMockData';
+import { mockLeads } from '../../data/salesMockData';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './Sales.module.css';
 import LeadManagement from './LeadManagement';
-import QuotationOrders from './QuotationOrders';
 import SalesOrders from './SalesOrders';
 import Invoices from './Invoices';
-import ReceivablesManagement from './ReceivablesManagement';
-import PayablesManagement from './PayablesManagement';
 
 interface SalesProps {
   mobile?: boolean;
@@ -15,9 +13,9 @@ interface SalesProps {
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
-type TabType = 'leads' | 'quotes' | 'orders' | 'invoices' | 'receivables' | 'payables';
+type TabType = 'leads' | 'orders' | 'invoices';
 
-// Dynamic count calculator functions
+// Dynamic count calculator functions - MVP simplified
 const calculateLeadCounts = () => ({
   all: mockLeads.length,
   hot: mockLeads.filter(l => l.priority === 'hot').length,
@@ -25,59 +23,23 @@ const calculateLeadCounts = () => ({
   cold: mockLeads.filter(l => l.priority === 'cold').length
 });
 
-const calculateQuoteCounts = () => ({
-  all: mockQuotes.length,
-  pending: mockQuotes.filter(q => q.status === 'pending').length,
-  approved: mockQuotes.filter(q => q.status === 'approved').length,
-  expired: mockQuotes.filter(q => q.status === 'expired').length
-});
-
-const calculateReceivableCounts = () => ({
-  all: mockReceivables.length,
-  current: mockReceivables.filter(r => r.agingCategory === 'current').length,
-  aging30: mockReceivables.filter(r => r.agingCategory === '31-60').length,
-  aging60: mockReceivables.filter(r => r.agingCategory === '61-90').length,
-  overdue: mockReceivables.filter(r => r.agingCategory === '90+').length,
-  critical: mockReceivables.filter(r => r.customerRisk === 'critical').length
-});
-
-const calculatePayableCounts = () => ({
-  all: mockPayables.length,
-  dueToday: mockPayables.filter(p => p.daysToDue === 0).length,
-  dueThisWeek: mockPayables.filter(p => p.daysToDue >= 0 && p.daysToDue <= 7).length,
-  upcoming: mockPayables.filter(p => p.daysToDue > 7).length,
-  overdue: mockPayables.filter(p => p.daysToDue < 0).length,
-  critical: mockPayables.filter(p => p.criticalSupplier).length
-});
-
 const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps) => {
-  // State Management
+  // State Management - MVP simplified
   const [activeTab, setActiveTab] = useState<TabType>('leads');
   const [leadFilterState, setLeadFilterState] = useState('all');
-  const [quoteFilterState, setQuoteFilterState] = useState('all');
   const [orderFilterState, setOrderFilterState] = useState('all');
   const [invoiceFilterState, setInvoiceFilterState] = useState('all');
-  const [receivablesFilterState, setReceivablesFilterState] = useState('all');
-  const [payablesFilterState, setPayablesFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
+  
+  // Get terminology for UI labels
+  const { lead, leads, invoice, invoices, order, orders } = useTerminologyTerms();
   
   // Intelligent scroll behavior state
   const [shouldShowScrollbar, setShouldShowScrollbar] = useState(false);
   
-  
   // Modal trigger states for CTA button functionality
   const [triggerLeadModal, setTriggerLeadModal] = useState(false);
   
-  // Refs for tab scrolling behavior
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const tabRefs = useRef<{ [key in TabType]: HTMLButtonElement | null }>({
-    leads: null,
-    quotes: null,
-    orders: null,
-    invoices: null,
-    receivables: null,
-    payables: null
-  });
   
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
@@ -87,57 +49,22 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     { value: 'thismonth', label: '📅 This Month' }
   ];
   
-  // Dynamic count calculations
+  // Dynamic count calculations - MVP simplified
   const leadCounts = calculateLeadCounts();
-  const quoteCounts = calculateQuoteCounts();
-  const receivableCounts = calculateReceivableCounts();
-  const payableCounts = calculatePayableCounts();
-  
 
-  // Function to scroll active tab into center view on mobile
-  const scrollToActiveTab = useCallback((tabType: TabType) => {
-    if (window.innerWidth <= 768 && tabsRef.current && tabRefs.current[tabType]) {
-      const tabsContainer = tabsRef.current;
-      const activeTabElement = tabRefs.current[tabType];
-      
-      if (activeTabElement) {
-        const containerWidth = tabsContainer.offsetWidth;
-        const tabOffsetLeft = activeTabElement.offsetLeft;
-        const tabWidth = activeTabElement.offsetWidth;
-        
-        // Calculate scroll position to center the active tab
-        const scrollPosition = tabOffsetLeft - (containerWidth / 2) + (tabWidth / 2);
-        
-        tabsContainer.scrollTo({
-          left: scrollPosition,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }, []);
 
-  // Enhanced tab change handler with scroll behavior
+  // Simple tab change handler - MVP simplified
   const handleTabChange = useCallback((tabType: TabType) => {
     setActiveTab(tabType);
-    // Scroll to center the newly active tab on mobile
-    setTimeout(() => {
-      scrollToActiveTab(tabType);
-    }, 100);
-  }, [scrollToActiveTab]);
+  }, []);
   
-  // Status filter configurations for each tab (Filter 1) - Dynamic counts
+  // Status filter configurations for each tab (Filter 1) - MVP simplified
   const statusFilterConfigs = {
     leads: [
       { value: 'all', label: 'All Leads', count: leadCounts.all },
       { value: 'hot', label: '🔥 Hot Leads', count: leadCounts.hot },
       { value: 'warm', label: '🔶 Warm Leads', count: leadCounts.warm },
       { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
-    ],
-    quotes: [
-      { value: 'all', label: 'All Quotes', count: quoteCounts.all },
-      { value: 'pending', label: '⏳ Pending', count: quoteCounts.pending },
-      { value: 'approved', label: '✅ Approved', count: quoteCounts.approved },
-      { value: 'expired', label: '❌ Expired', count: quoteCounts.expired }
     ],
     orders: [
       { value: 'all', label: 'All Orders', count: 5 },
@@ -150,66 +77,41 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       { value: 'paid', label: '💰 Paid', count: 8 },
       { value: 'pending', label: '🟡 Pending', count: 5 },
       { value: 'overdue', label: '🔴 Overdue', count: 2 }
-    ],
-    receivables: [
-      { value: 'all', label: 'All Receivables', count: receivableCounts.all },
-      { value: 'current', label: '💚 Current (0-30)', count: receivableCounts.current },
-      { value: 'aging_30', label: '🟡 31-60 Days', count: receivableCounts.aging30 },
-      { value: 'aging_60', label: '🟠 61-90 Days', count: receivableCounts.aging60 },
-      { value: 'overdue', label: '🔴 90+ Days', count: receivableCounts.overdue },
-      { value: 'critical', label: '⚠️ Critical Risk', count: receivableCounts.critical }
-    ],
-    payables: [
-      { value: 'all', label: 'All Payables', count: payableCounts.all },
-      { value: 'due_today', label: '🟡 Due Today', count: payableCounts.dueToday },
-      { value: 'due_week', label: '📅 Due This Week', count: payableCounts.dueThisWeek },
-      { value: 'upcoming', label: '💚 Upcoming', count: payableCounts.upcoming },
-      { value: 'overdue', label: '🔴 Overdue', count: payableCounts.overdue },
-      { value: 'critical', label: '⚠️ Critical Suppliers', count: payableCounts.critical }
     ]
   };
 
-  // Get current filter state based on active tab
+  // Get current filter state based on active tab - MVP simplified
   const getCurrentFilterState = () => {
     switch(activeTab) {
       case 'leads': return leadFilterState;
-      case 'quotes': return quoteFilterState;
       case 'orders': return orderFilterState;
       case 'invoices': return invoiceFilterState;
-      case 'receivables': return receivablesFilterState;
-      case 'payables': return payablesFilterState;
       default: return 'all';
     }
   };
 
-  // Set filter state based on active tab
+  // Set filter state based on active tab - MVP simplified
   const handleFilterChange = (filter: string) => {
     switch(activeTab) {
       case 'leads': setLeadFilterState(filter); break;
-      case 'quotes': setQuoteFilterState(filter); break;
       case 'orders': setOrderFilterState(filter); break;
       case 'invoices': setInvoiceFilterState(filter); break;
-      case 'receivables': setReceivablesFilterState(filter); break;
-      case 'payables': setPayablesFilterState(filter); break;
     }
   };
 
   // Calculate dynamic count based on current filters
   const getFilteredCount = useCallback(() => {
-    // Inline getCurrentFilterState logic to avoid external dependency
+    // Inline getCurrentFilterState logic to avoid external dependency - MVP simplified
     const currentStatusFilter = (() => {
       switch(activeTab) {
         case 'leads': return leadFilterState;
-        case 'quotes': return quoteFilterState;
         case 'orders': return orderFilterState;
         case 'invoices': return invoiceFilterState;
-        case 'receivables': return receivablesFilterState;
-        case 'payables': return payablesFilterState;
         default: return 'all';
       }
     })();
     
-    // Inline statusFilterConfigs access with count calculations to avoid external dependency
+    // Inline statusFilterConfigs access with count calculations - MVP simplified
     const getStatusFilters = () => {
       switch(activeTab) {
         case 'leads': {
@@ -226,20 +128,6 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
           ];
         }
-        case 'quotes': {
-          const quoteCounts = {
-            all: mockQuotes.length,
-            pending: mockQuotes.filter(q => q.status === 'pending').length,
-            approved: mockQuotes.filter(q => q.status === 'approved').length,
-            expired: mockQuotes.filter(q => q.status === 'expired').length
-          };
-          return [
-            { value: 'all', label: 'All Quotes', count: quoteCounts.all },
-            { value: 'pending', label: '⏳ Pending', count: quoteCounts.pending },
-            { value: 'approved', label: '✅ Approved', count: quoteCounts.approved },
-            { value: 'expired', label: '❌ Expired', count: quoteCounts.expired }
-          ];
-        }
         case 'orders':
           return [
             { value: 'all', label: 'All Orders', count: 5 },
@@ -254,42 +142,6 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             { value: 'pending', label: '🟡 Pending', count: 5 },
             { value: 'overdue', label: '🔴 Overdue', count: 2 }
           ];
-        case 'receivables': {
-          const receivableCounts = {
-            all: mockReceivables.length,
-            current: mockReceivables.filter(r => r.agingCategory === 'current').length,
-            aging30: mockReceivables.filter(r => r.agingCategory === '31-60').length,
-            aging60: mockReceivables.filter(r => r.agingCategory === '61-90').length,
-            overdue: mockReceivables.filter(r => r.agingCategory === '90+').length,
-            critical: mockReceivables.filter(r => r.customerRisk === 'critical').length
-          };
-          return [
-            { value: 'all', label: 'All Receivables', count: receivableCounts.all },
-            { value: 'current', label: '💚 Current (0-30)', count: receivableCounts.current },
-            { value: 'aging_30', label: '🟡 31-60 Days', count: receivableCounts.aging30 },
-            { value: 'aging_60', label: '🟠 61-90 Days', count: receivableCounts.aging60 },
-            { value: 'overdue', label: '🔴 90+ Days', count: receivableCounts.overdue },
-            { value: 'critical', label: '⚠️ Critical Risk', count: receivableCounts.critical }
-          ];
-        }
-        case 'payables': {
-          const payableCounts = {
-            all: mockPayables.length,
-            dueToday: mockPayables.filter(p => p.daysToDue === 0).length,
-            dueThisWeek: mockPayables.filter(p => p.daysToDue >= 0 && p.daysToDue <= 7).length,
-            upcoming: mockPayables.filter(p => p.daysToDue > 7).length,
-            overdue: mockPayables.filter(p => p.daysToDue < 0).length,
-            critical: mockPayables.filter(p => p.criticalSupplier).length
-          };
-          return [
-            { value: 'all', label: 'All Payables', count: payableCounts.all },
-            { value: 'due_today', label: '🟡 Due Today', count: payableCounts.dueToday },
-            { value: 'due_week', label: '📅 Due This Week', count: payableCounts.dueThisWeek },
-            { value: 'upcoming', label: '💚 Upcoming', count: payableCounts.upcoming },
-            { value: 'overdue', label: '🔴 Overdue', count: payableCounts.overdue },
-            { value: 'critical', label: '⚠️ Critical Suppliers', count: payableCounts.critical }
-          ];
-        }
         default:
           return [];
       }
@@ -312,7 +164,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, leadFilterState, quoteFilterState, orderFilterState, invoiceFilterState, receivablesFilterState, payablesFilterState, timelineFilter]);
+  }, [activeTab, leadFilterState, orderFilterState, invoiceFilterState, timelineFilter]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
@@ -349,7 +201,6 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     
     return () => window.removeEventListener('resize', handleResize);
   }, [calculateScrollBehavior]);
-
 
   // Render business filters for current tab
   const renderTabFilters = () => {
@@ -395,7 +246,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     );
   };
 
-  // Clean render function using configuration - TypeScript-safe approach
+  // Clean render function using configuration - MVP simplified
   const renderTabContent = () => {
     switch(activeTab) {
       case 'leads':
@@ -403,8 +254,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
           <LeadManagement
             mobile={mobile}
             onShowCustomerProfile={onShowCustomerProfile}
-            onShowQuoteFromLead={() => setActiveTab('quotes')}
-            onShowQuotationOrders={() => setActiveTab('quotes')}
+            onShowQuoteFromLead={() => {}} // Quote functionality integrated into LeadManagement
             onShowSalesOrders={() => setActiveTab('orders')}
             filterState={leadFilterState}
             onFilterChange={setLeadFilterState}
@@ -412,21 +262,11 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             onAddModalHandled={handleLeadModalHandled}
           />
         );
-      case 'quotes':
-        return (
-          <QuotationOrders
-            onShowSalesOrders={() => setActiveTab('orders')}
-            onShowCustomerProfile={onShowCustomerProfile || (() => {})}
-            onShowLeadManagement={() => setActiveTab('leads')}
-            filterState={quoteFilterState}
-            onFilterChange={setQuoteFilterState}
-          />
-        );
       case 'orders':
         return (
           <SalesOrders
             onShowLeadManagement={() => setActiveTab('leads')}
-            onShowQuotationOrders={() => setActiveTab('quotes')}
+            onShowQuotationOrders={() => setActiveTab('leads')} // Quotes handled in leads tab
             onShowPayments={() => setActiveTab('invoices')}
             filterState={orderFilterState}
             onFilterChange={setOrderFilterState}
@@ -435,26 +275,11 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
       case 'invoices':
         return (
           <Invoices
-            onShowQuotationOrders={() => setActiveTab('quotes')}
+            onShowQuotationOrders={() => setActiveTab('leads')} // Quotes handled in leads tab
             onShowSalesOrders={() => setActiveTab('orders')}
             onShowCustomerProfile={onShowCustomerProfile}
             filterState={invoiceFilterState}
             onFilterChange={setInvoiceFilterState}
-          />
-        );
-      case 'receivables':
-        return (
-          <ReceivablesManagement
-            filterState={receivablesFilterState}
-            onFilterChange={setReceivablesFilterState}
-            onShowCustomerProfile={onShowCustomerProfile}
-          />
-        );
-      case 'payables':
-        return (
-          <PayablesManagement
-            filterState={payablesFilterState}
-            onFilterChange={setPayablesFilterState}
           />
         );
       default:
@@ -462,39 +287,27 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     }
   };
 
-  // Get contextual CTA text for current tab
+  // Get contextual CTA text for current tab with terminology
   const getContextualCTA = (tab: TabType): string => {
     switch(tab) {
-      case 'leads': return '+ Add Lead';
-      case 'quotes': return '+ Add Quote';
-      case 'orders': return '+ New Order';
-      case 'invoices': return '+ New Invoice';
-      case 'receivables': return '+ Record Payment';
-      case 'payables': return '+ New Bill';
+      case 'leads': return `+ Add ${lead}`; // "+ Add Inquiry"
+      case 'orders': return `+ New ${order}`; // "+ New Job Order" 
+      case 'invoices': return `+ New ${invoice}`; // "+ New Job Bill"
       default: return '+ Add';
     }
   };
 
-  // Handle CTA click based on active tab
+  // Handle CTA click based on active tab - MVP simplified
   const handleCTAClick = () => {
     switch(activeTab) {
       case 'leads':
         setTriggerLeadModal(true);
         break;
-      case 'quotes':
-        alert('Add Quote functionality coming soon!');
-        break;
       case 'orders':
-        alert('Add Order functionality coming soon!');
+        alert(`Add ${order} functionality coming soon!`);
         break;
       case 'invoices':
-        alert('Add Invoice functionality coming soon!');
-        break;
-      case 'receivables':
-        alert('Record Payment functionality coming soon!');
-        break;
-      case 'payables':
-        alert('Add Bill functionality coming soon!');
+        alert(`Add ${invoice} functionality coming soon!`); // "Add Job Bill functionality"
         break;
       default:
         break;
@@ -508,49 +321,25 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
 
   return (
     <div className={styles.salesModule}>
-      {/* 48px Tab Navigation - Visual Design Spec */}
-      <div className={styles.salesTabs} ref={tabsRef}>
+      {/* 48px Tab Navigation - Visual Design Spec - MVP Simplified */}
+      <div className={styles.salesTabs}>
         <button 
-          ref={(el) => { tabRefs.current.leads = el; }}
           className={`${styles.tabButton} ${activeTab === 'leads' ? styles.active : ''}`}
           onClick={() => handleTabChange('leads')}
         >
-          Leads
+          {leads}
         </button>
         <button 
-          ref={(el) => { tabRefs.current.quotes = el; }}
-          className={`${styles.tabButton} ${activeTab === 'quotes' ? styles.active : ''}`}
-          onClick={() => handleTabChange('quotes')}
-        >
-          Quotes
-        </button>
-        <button 
-          ref={(el) => { tabRefs.current.orders = el; }}
           className={`${styles.tabButton} ${activeTab === 'orders' ? styles.active : ''}`}
           onClick={() => handleTabChange('orders')}
         >
-          Orders
+          {orders}
         </button>
         <button 
-          ref={(el) => { tabRefs.current.invoices = el; }}
           className={`${styles.tabButton} ${activeTab === 'invoices' ? styles.active : ''}`}
           onClick={() => handleTabChange('invoices')}
         >
-          Invoices
-        </button>
-        <button 
-          ref={(el) => { tabRefs.current.receivables = el; }}
-          className={`${styles.tabButton} ${activeTab === 'receivables' ? styles.active : ''}`}
-          onClick={() => handleTabChange('receivables')}
-        >
-          Receivables
-        </button>
-        <button 
-          ref={(el) => { tabRefs.current.payables = el; }}
-          className={`${styles.tabButton} ${activeTab === 'payables' ? styles.active : ''}`}
-          onClick={() => handleTabChange('payables')}
-        >
-          Payables
+          {invoices}
         </button>
       </div>
       

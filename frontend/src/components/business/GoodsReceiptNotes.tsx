@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { mockGoodsReceiptNotes, GoodsReceiptNote } from '../../data/procurementMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './GoodsReceiptNotes.module.css';
 
 interface GoodsReceiptNotesProps {
@@ -12,6 +13,9 @@ const GoodsReceiptNotes = ({
   filterState, 
   onFilterChange 
 }: GoodsReceiptNotesProps) => {
+  
+  // Use terminology hook for Surat processing terminology
+  const { goodsReceiptNote } = useTerminologyTerms();
   
   // Use card expansion hook for consistent single-card expansion behavior
   const { toggleExpansion, isExpanded } = useCardExpansion();
@@ -29,8 +33,14 @@ const GoodsReceiptNotes = ({
   
   // Mock action handlers
   const handleGRNAction = (action: string, grnId: string) => {
-    alert(`${action} action for GRN ${grnId} - Mock functionality`);
+    alert(`${action} action for ${goodsReceiptNote} ${grnId} - Mock functionality`);
   };
+
+  // Customer fabric tracking for Surat job work model - TODO: implement
+  // const handleCustomerFabricReceipt = (customerId: string, challanPhoto?: string) => {
+  //   // Track party fabric inward with photo verification
+  //   alert(`Recording customer fabric receipt from Party ID: ${customerId}${challanPhoto ? ' with photo verification' : ''}`);
+  // };
 
   const handleViewPO = (poId: string) => {
     alert(`🔍 Navigating to Purchase Order: ${poId}`);

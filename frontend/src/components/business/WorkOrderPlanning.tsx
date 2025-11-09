@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { mockWorkOrders, WorkOrder, mockMachines, mockProductionWorkers } from '../../data/productionMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+// import { useTerminologyTerms } from '../../contexts/TerminologyContext'; // TODO: implement terminology display
 import styles from './WorkOrderPlanning.module.css';
 
 interface WorkOrderPlanningProps {
@@ -22,6 +23,9 @@ const WorkOrderPlanning = ({
   onAddModalHandled,
   machineFilter = 'all'
 }: WorkOrderPlanningProps) => {
+  // Use terminology hook for Surat processing terminology
+  // const { workOrder, workOrders } = useTerminologyTerms(); // TODO: implement display terminology // "Lot", "Lots"
+  
   const { toggleExpansion, isExpanded } = useCardExpansion();
   
   // Filter logic for work orders

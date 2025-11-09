@@ -5,7 +5,6 @@ import { TranslationProvider } from '../contexts/TranslationContext';
 
 const mockProps = {
   onShowLeadManagement: jest.fn(),
-  onShowQuotationOrders: jest.fn(),
   onShowSales: jest.fn(),
   onShowSalesOrders: jest.fn(),
   onShowPayments: jest.fn(),
@@ -50,12 +49,10 @@ describe('Dashboard Component', () => {
       expect(screen.getByText('Production Efficiency')).toBeInTheDocument();
     });
 
-    test('should render action buttons', () => {
+    test('should render alert action button', () => {
       renderDashboard();
-      expect(screen.getByText('+Lead')).toBeInTheDocument();
-      expect(screen.getByText('+Quote')).toBeInTheDocument();
-      expect(screen.getByText('Payment')).toBeInTheDocument();
-      expect(screen.getByText('Production')).toBeInTheDocument();
+      // MVP simplification: Quick action buttons removed, only alert action remains
+      expect(screen.getByText('Resolve →')).toBeInTheDocument();
     });
 
     test('should render alert card', () => {

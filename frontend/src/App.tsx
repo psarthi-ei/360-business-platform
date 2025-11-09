@@ -6,7 +6,6 @@ import LanguageSwitcher from './components/ui/LanguageSwitcher';
 import HomePage from './website/components/HomePage';
 import Dashboard from './components/dashboard/Dashboard';
 import LeadManagement from './components/business/LeadManagement';
-import QuotationOrders from './components/business/QuotationOrders';
 import SalesOrders from './components/business/SalesOrders';
 import Sales from './components/business/Sales';
 import Invoices from './components/business/Invoices';
@@ -81,7 +80,6 @@ function AppContent() {
   const [userMode, setUserMode] = useState<UserMode>('guest');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [leadFilter, setLeadFilter] = useState('all');
-  const [quoteFilter, setQuoteFilter] = useState('all');
   const [orderFilter, setOrderFilter] = useState('all');
   const [invoiceFilter, setInvoiceFilter] = useState('all');
   const [profileLinkId] = useState('');
@@ -110,7 +108,6 @@ function AppContent() {
     showHomePage,
     showDashboard,
     showLeadManagement,
-    showQuotationOrders,
     showSales,
     showSalesOrders,
     showPayments,
@@ -232,7 +229,6 @@ function AppContent() {
       <div className="platformPageContent">
         <Dashboard
           onShowLeadManagement={showLeadManagement}
-          onShowQuotationOrders={showQuotationOrders}
           onShowSales={showSales}
           onShowSalesOrders={showSalesOrders}
           onShowPayments={showPayments}
@@ -263,7 +259,6 @@ function AppContent() {
           mobile={isMobile}
           onShowCustomerProfile={showCustomerProfileWithState}
           onShowQuoteFromLead={showQuoteFromLead}
-          onShowQuotationOrders={showQuotationOrders}
           onShowSalesOrders={showSalesOrders}
           filterState={leadFilter}
           onFilterChange={setLeadFilter}
@@ -282,26 +277,12 @@ function AppContent() {
     );
   }
 
-  function renderQuotationOrders() {
-    return (
-      <div className="platformPageContent">
-        <QuotationOrders
-          onShowSalesOrders={showSalesOrders}
-          onShowCustomerProfile={showCustomerProfileWithState}
-          onShowLeadManagement={showLeadManagement}
-          filterState={quoteFilter}
-          onFilterChange={setQuoteFilter}
-        />
-      </div>
-    );
-  }
 
   function renderSalesOrders() {
     return (
       <div className="platformPageContent">
         <SalesOrders
           onShowLeadManagement={showLeadManagement}
-          onShowQuotationOrders={showQuotationOrders}
           onShowPayments={showPayments}
           filterState={orderFilter}
           onFilterChange={setOrderFilter}
@@ -314,7 +295,6 @@ function AppContent() {
   function renderInvoices() {
     return (
       <Invoices
-        onShowQuotationOrders={showQuotationOrders}
         onShowPayments={showPayments}
         onShowCustomerProfile={showCustomerProfileWithState}
         filterState={invoiceFilter}
@@ -514,7 +494,6 @@ function AppContent() {
     renderDashboard,
     renderLeadManagement,
     renderSales,
-    renderQuotationOrders,
     renderSalesOrders,
     renderInvoices,
     renderProduction,

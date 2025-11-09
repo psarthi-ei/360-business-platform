@@ -20,7 +20,6 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
         navigate('/platform/leads');
       }
     },
-    showQuotationOrders: () => navigate('/platform/sales?tab=quotes'),
     showSales: () => navigate('/platform/sales'),
     showSalesOrders: () => navigate('/platform/orders'),
     showPayments: () => navigate('/platform/sales?tab=receivables'),

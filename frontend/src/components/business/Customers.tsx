@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ActionParams } from '../../services/nlp/types';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './Customers.module.css';
 import CustomerListManagement from './CustomerListManagement';
 import SupportTicketManagement from './SupportTicketManagement';
@@ -47,6 +48,9 @@ const calculateSupportCounts = () => ({
 });
 
 const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: CustomersProps) => {
+  // Use terminology hook for Surat processing terminology
+  const { customers } = useTerminologyTerms(); // "Parties"
+  
   // State Management
   const [activeSection, setActiveSection] = useState<CustomerSectionType>('customers');
   const [customerFilterState, setCustomerFilterState] = useState('all');
@@ -351,7 +355,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
             }
           }}
         >
-          Customers
+          {customers}
         </button>
         <button 
           className={`${styles.sectionButton} ${activeSection === 'support' ? styles.active : ''}`}

@@ -1,17 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { ActionParams } from '../../services/nlp/types';
-import { 
-  mockConsolidatedPurchaseRequests, 
-  mockPurchaseOrders
-} from '../../data/procurementMockData';
+import { mockPurchaseOrders } from '../../data/procurementMockData';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import {
   getInventorySummary,
   getExpiringChemicals
 } from '../../data/inventoryMockData';
-import { SalesOrder } from '../../data/salesMockData';
 import styles from './Procurement.module.css';
-import MaterialRequirements from './MaterialRequirements';
-import PurchaseRequests from './PurchaseRequests';
 import PurchaseOrders from './PurchaseOrders';
 import GoodsReceiptNotes from './GoodsReceiptNotes';
 import InventoryManagement from './InventoryManagement';
@@ -22,46 +17,10 @@ interface ProcurementProps {
   onUniversalAction?: (actionType: string, params?: ActionParams) => void;
 }
 
-type ProcurementTabType = 'mr' | 'prs' | 'pos' | 'grns' | 'inventory';
+type ProcurementTabType = 'inventory' | 'pos' | 'grns';
 
-// Material status count calculator for all sales orders
-const calculateMaterialStatusCounts = () => {
-  // Import mock sales orders and helper functions to calculate status counts
-  const { mockSalesOrders } = require('../../data/salesMockData');
-  const { checkOrderMaterialAvailability } = require('../../data/materialHelpers');
-  
-  interface OrderWithMaterialStatus {
-    orderId: string;
-    materialStatus: {
-      overallStatus: 'available' | 'partial' | 'shortage';
-    };
-    deliveryDate: string;
-  }
-  
-  const allOrders: OrderWithMaterialStatus[] = mockSalesOrders.map((order: SalesOrder) => ({
-    orderId: order.id,
-    materialStatus: checkOrderMaterialAvailability(order.id),
-    deliveryDate: order.deliveryDate
-  }));
-  
-  const nextWeek = new Date();
-  nextWeek.setDate(nextWeek.getDate() + 7);
-  
-  return {
-    all: allOrders.length,
-    available: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'available').length,
-    partial: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'partial').length,
-    shortage: allOrders.filter((order: OrderWithMaterialStatus) => order.materialStatus.overallStatus === 'shortage').length,
-    urgent: allOrders.filter((order: OrderWithMaterialStatus) => new Date(order.deliveryDate) <= nextWeek).length
-  };
-};
-
-const calculatePRCounts = () => ({
-  all: mockConsolidatedPurchaseRequests.length,
-  pending: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'pending').length,
-  approved: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'approved').length,
-  rejected: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'rejected').length
-});
+// Removed complex count calculations for MR and PR tabs
+// as per MVP simplification plan
 
 const calculatePOCounts = () => {
   return {
@@ -73,19 +32,17 @@ const calculatePOCounts = () => {
 };
 
 const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: ProcurementProps) => {
-  // State Management
-  const [activeTab, setActiveTab] = useState<ProcurementTabType>('mr');
-  const [mrFilterState, setMrFilterState] = useState('all');
-  const [prFilterState, setPrFilterState] = useState('all');
+  // State Management - MVP simplified
+  const [activeTab, setActiveTab] = useState<ProcurementTabType>('inventory');
   const [poFilterState, setPoFilterState] = useState('all');
   const [grnFilterState, setGrnFilterState] = useState('all');
   const [inventoryFilterState, setInventoryFilterState] = useState('all');
   const [timelineFilter, setTimelineFilter] = useState('all');
   
-  // Universal scroll behavior - always enabled for business modules (CSS handles it)
+  // Get terminology for UI labels
+  const { goodsReceiptNote, inventory } = useTerminologyTerms();
   
-  // Modal trigger states for CTA button functionality
-  const [triggerMRModal, setTriggerMRModal] = useState(false);
+  // Universal scroll behavior - always enabled for business modules (CSS handles it)
   
   // Timeline filter configuration (Filter 2)
   const timelineFilterConfig = [
@@ -95,10 +52,9 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     { value: 'thismonth', label: '📅 This Month' }
   ];
   
-  // Dynamic count calculations
-  const mrCounts = calculateMaterialStatusCounts();
-  const prCounts = calculatePRCounts();
+  // Dynamic count calculations - MVP simplified
   const poCounts = calculatePOCounts();
+  // Removed MR and PR counts per MVP simplification
   
   // Calculate inventory counts
   const inventorySummary = getInventorySummary();
@@ -110,20 +66,14 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     expiring: getExpiringChemicals().length
   };
   
-  // Status filter configurations for each tab (Filter 1) - Dynamic counts
+  // Status filter configurations for each tab (Filter 1) - MVP simplified
   const statusFilterConfigs = {
-    mr: [
-      { value: 'all', label: 'All Orders', count: mrCounts.all },
-      { value: 'available', label: '✅ Available', count: mrCounts.available },
-      { value: 'partial', label: '⚠️ Partial', count: mrCounts.partial },
-      { value: 'shortage', label: '🚫 Shortage', count: mrCounts.shortage },
-      { value: 'urgent', label: '🔥 Urgent', count: mrCounts.urgent }
-    ],
-    prs: [
-      { value: 'all', label: 'All Requests', count: prCounts.all },
-      { value: 'pending', label: '⏳ Pending', count: prCounts.pending },
-      { value: 'approved', label: '✅ Approved', count: prCounts.approved },
-      { value: 'rejected', label: '❌ Rejected', count: prCounts.rejected }
+    inventory: [
+      { value: 'all', label: 'All Materials', count: inventoryCounts.all },
+      { value: 'company', label: '🏢 Company Materials', count: inventoryCounts.company },
+      { value: 'client', label: '👤 Client Materials', count: inventoryCounts.client },
+      { value: 'lowstock', label: '⚠️ Low Stock', count: inventoryCounts.lowstock },
+      { value: 'expiring', label: '⏰ Expiring Soon', count: inventoryCounts.expiring }
     ],
     pos: [
       { value: 'all', label: 'All Orders', count: poCounts.all },
@@ -136,78 +86,51 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
       { value: 'pending', label: '⏳ Pending QC', count: 6 },
       { value: 'approved', label: '✅ Approved', count: 10 },
       { value: 'rejected', label: '❌ Rejected', count: 2 }
-    ],
-    inventory: [
-      { value: 'all', label: 'All Materials', count: inventoryCounts.all },
-      { value: 'company', label: '🏢 Company Materials', count: inventoryCounts.company },
-      { value: 'client', label: '👤 Client Materials', count: inventoryCounts.client },
-      { value: 'lowstock', label: '⚠️ Low Stock', count: inventoryCounts.lowstock },
-      { value: 'expiring', label: '⏰ Expiring Soon', count: inventoryCounts.expiring }
     ]
   };
 
-  // Get current filter state based on active tab
+  // Get current filter state based on active tab - MVP simplified
   const getCurrentFilterState = () => {
     switch(activeTab) {
-      case 'mr': return mrFilterState;
-      case 'prs': return prFilterState;
+      case 'inventory': return inventoryFilterState;
       case 'pos': return poFilterState;
       case 'grns': return grnFilterState;
-      case 'inventory': return inventoryFilterState;
       default: return 'all';
     }
   };
 
-  // Set filter state based on active tab
+  // Set filter state based on active tab - MVP simplified
   const handleFilterChange = (filter: string) => {
     switch(activeTab) {
-      case 'mr': setMrFilterState(filter); break;
-      case 'prs': setPrFilterState(filter); break;
+      case 'inventory': setInventoryFilterState(filter); break;
       case 'pos': setPoFilterState(filter); break;
       case 'grns': setGrnFilterState(filter); break;
-      case 'inventory': setInventoryFilterState(filter); break;
     }
   };
 
   // Calculate dynamic count based on current filters
   const getFilteredCount = useCallback(() => {
-    // Inline getCurrentFilterState logic to avoid external dependency
+    // Inline getCurrentFilterState logic to avoid external dependency - MVP simplified
     const currentStatusFilter = (() => {
       switch(activeTab) {
-        case 'mr': return mrFilterState;
-        case 'prs': return prFilterState;
+        case 'inventory': return inventoryFilterState;
         case 'pos': return poFilterState;
         case 'grns': return grnFilterState;
-        case 'inventory': return inventoryFilterState;
         default: return 'all';
       }
     })();
     
-    // Inline statusFilterConfigs access with count calculations to avoid external dependency
+    // Inline statusFilterConfigs access with count calculations - MVP simplified
     const getStatusFilters = () => {
       switch(activeTab) {
-        case 'mr': {
-          const mrCounts = calculateMaterialStatusCounts();
+        case 'inventory': {
+          const invSummary = getInventorySummary();
           return [
-            { value: 'all', label: 'All Orders', count: mrCounts.all },
-            { value: 'available', label: '✅ Available', count: mrCounts.available },
-            { value: 'partial', label: '⚠️ Partial', count: mrCounts.partial },
-            { value: 'shortage', label: '🚫 Shortage', count: mrCounts.shortage },
-            { value: 'urgent', label: '🔥 Urgent', count: mrCounts.urgent }
-          ];
-        }
-        case 'prs': {
-          const prCounts = {
-            all: mockConsolidatedPurchaseRequests.length,
-            pending: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'pending').length,
-            approved: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'approved').length,
-            rejected: mockConsolidatedPurchaseRequests.filter(pr => pr.status === 'rejected').length
-          };
-          return [
-            { value: 'all', label: 'All Requests', count: prCounts.all },
-            { value: 'pending', label: '⏳ Pending', count: prCounts.pending },
-            { value: 'approved', label: '✅ Approved', count: prCounts.approved },
-            { value: 'rejected', label: '❌ Rejected', count: prCounts.rejected }
+            { value: 'all', label: 'All Materials', count: invSummary.totalItems },
+            { value: 'company', label: '🏢 Company Materials', count: invSummary.companyItemsCount },
+            { value: 'client', label: '👤 Client Materials', count: invSummary.clientItemsCount },
+            { value: 'lowstock', label: '⚠️ Low Stock', count: invSummary.lowStockItems },
+            { value: 'expiring', label: '⏰ Expiring Soon', count: getExpiringChemicals().length }
           ];
         }
         case 'pos': {
@@ -226,16 +149,6 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
             { value: 'approved', label: '✅ Approved', count: 10 },
             { value: 'rejected', label: '❌ Rejected', count: 2 }
           ];
-        case 'inventory': {
-          const invSummary = getInventorySummary();
-          return [
-            { value: 'all', label: 'All Materials', count: invSummary.totalItems },
-            { value: 'company', label: '🏢 Company Materials', count: invSummary.companyItemsCount },
-            { value: 'client', label: '👤 Client Materials', count: invSummary.clientItemsCount },
-            { value: 'lowstock', label: '⚠️ Low Stock', count: invSummary.lowStockItems },
-            { value: 'expiring', label: '⏰ Expiring Soon', count: getExpiringChemicals().length }
-          ];
-        }
         default:
           return [];
       }
@@ -258,7 +171,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, mrFilterState, prFilterState, poFilterState, grnFilterState, inventoryFilterState, timelineFilter]);
+  }, [activeTab, inventoryFilterState, poFilterState, grnFilterState, timelineFilter]);
 
   // Universal scroll - no complex calculations needed, browser handles overflow automatically
 
@@ -306,25 +219,14 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     );
   };
 
-  // Clean render function using configuration - TypeScript-safe approach
+  // Clean render function using configuration - MVP simplified
   const renderTabContent = () => {
     switch(activeTab) {
-      case 'mr':
+      case 'inventory':
         return (
-          <MaterialRequirements
-            mobile={mobile}
-            onShowCustomerProfile={onShowCustomerProfile}
-            filterState={mrFilterState}
-            onFilterChange={setMrFilterState}
-            openAddModal={triggerMRModal}
-            onAddModalHandled={handleMRModalHandled}
-          />
-        );
-      case 'prs':
-        return (
-          <PurchaseRequests
-            filterState={prFilterState}
-            onFilterChange={setPrFilterState}
+          <InventoryManagement
+            filterState={inventoryFilterState}
+            onFilterChange={setInventoryFilterState}
           />
         );
       case 'pos':
@@ -341,91 +243,59 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
             onFilterChange={setGrnFilterState}
           />
         );
-      case 'inventory':
-        return (
-          <InventoryManagement
-            filterState={inventoryFilterState}
-            onFilterChange={setInventoryFilterState}
-          />
-        );
       default:
         return null;
     }
   };
 
-  // Get contextual CTA text for current tab
+  // Get contextual CTA text for current tab with terminology
   const getContextualCTA = (tab: ProcurementTabType): string => {
     switch(tab) {
-      case 'mr': return '+ Check Materials';
-      case 'prs': return '+ New Request';
-      case 'pos': return '+ New PO';
-      case 'grns': return '+ Record Receipt';
       case 'inventory': return '+ Update Stock';
+      case 'pos': return '+ New PO';
+      case 'grns': return `+ Record ${goodsReceiptNote}`; // "+ Record Inward"
       default: return '+ Add';
     }
   };
 
-  // Handle CTA click based on active tab
+  // Handle CTA click based on active tab - MVP simplified
   const handleCTAClick = () => {
     switch(activeTab) {
-      case 'mr':
-        setTriggerMRModal(true);
-        break;
-      case 'prs':
-        alert('Add Purchase Request functionality coming soon!');
+      case 'inventory':
+        alert('Update Stock functionality coming soon!');
         break;
       case 'pos':
         alert('Add Purchase Order functionality coming soon!');
         break;
       case 'grns':
-        alert('Record Goods Receipt functionality coming soon!');
-        break;
-      case 'inventory':
-        alert('Update Stock functionality coming soon!');
+        alert(`Record ${goodsReceiptNote} functionality coming soon!`); // "Record Inward functionality"
         break;
       default:
         // Unknown tab - no action needed
     }
   };
 
-  // Handle when MaterialRequirements modal is handled
-  const handleMRModalHandled = () => {
-    setTriggerMRModal(false);
-  };
-
   return (
     <div className={styles.procurementModule}>
-      {/* 48px Tab Navigation - Visual Design Spec */}
+      {/* 48px Tab Navigation - Visual Design Spec - MVP Simplified */}
       <div className={styles.procurementTabs}>
         <button 
-          className={`${styles.tabButton} ${activeTab === 'mr' ? styles.active : ''}`}
-          onClick={() => setActiveTab('mr')}
+          className={`${styles.tabButton} ${activeTab === 'inventory' ? styles.active : ''}`}
+          onClick={() => setActiveTab('inventory')}
         >
-          MR
-        </button>
-        <button 
-          className={`${styles.tabButton} ${activeTab === 'prs' ? styles.active : ''}`}
-          onClick={() => setActiveTab('prs')}
-        >
-          PRs
+          {inventory}
         </button>
         <button 
           className={`${styles.tabButton} ${activeTab === 'pos' ? styles.active : ''}`}
           onClick={() => setActiveTab('pos')}
         >
-          POs
+          Purchase Orders
         </button>
         <button 
           className={`${styles.tabButton} ${activeTab === 'grns' ? styles.active : ''}`}
           onClick={() => setActiveTab('grns')}
         >
-          GRNs
-        </button>
-        <button 
-          className={`${styles.tabButton} ${activeTab === 'inventory' ? styles.active : ''}`}
-          onClick={() => setActiveTab('inventory')}
-        >
-          Inventory
+          {goodsReceiptNote}
         </button>
       </div>
       

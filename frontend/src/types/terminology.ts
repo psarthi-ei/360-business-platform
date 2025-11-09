@@ -13,13 +13,18 @@ export interface TerminologyConfig {
   quotes: string;
   invoice: string;
   invoices: string;
+  order: string;
+  orders: string;
   
   // Production process
   workOrder: string;
   workOrders: string;
+  productionOrder: string;
+  productionOrders: string;
   
   // Procurement process
   goodsReceiptNote: string;
+  inventory: string;
   
   // Actions
   generateQuote: string;
@@ -41,13 +46,18 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     quotes: 'Rates',
     invoice: 'Job Bill',
     invoices: 'Job Bills',
+    order: 'Job Order',
+    orders: 'Job Orders',
     
     // Production process - Shop floor terms
     workOrder: 'Lot',
     workOrders: 'Lots',
+    productionOrder: 'Job Card',
+    productionOrders: 'Job Cards',
     
     // Procurement process - Industry terms
     goodsReceiptNote: 'Inward',
+    inventory: 'Stock',
     
     // Actions - Local terminology
     generateQuote: 'Send Rate',
@@ -67,13 +77,18 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     quotes: 'Quotes',
     invoice: 'Invoice',
     invoices: 'Invoices',
+    order: 'Order',
+    orders: 'Orders',
     
     // Production process - Standard terms
     workOrder: 'Work Order',
     workOrders: 'Work Orders',
+    productionOrder: 'Job Card',
+    productionOrders: 'Job Cards',
     
     // Procurement process - Standard terms
     goodsReceiptNote: 'GRN',
+    inventory: 'Inventory',
     
     // Actions - Formal terminology
     generateQuote: 'Generate Quote',
@@ -93,13 +108,18 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     quotes: 'Quotations',
     invoice: 'Invoice', 
     invoices: 'Invoices',
+    order: 'Order',
+    orders: 'Orders',
     
     // Production process - Manufacturing terms
     workOrder: 'Work Order',
     workOrders: 'Work Orders',
+    productionOrder: 'Job Card',
+    productionOrders: 'Job Cards',
     
     // Procurement process - Manufacturing terms
     goodsReceiptNote: 'Goods Receipt',
+    inventory: 'Inventory',
     
     // Actions - Manufacturing terminology
     generateQuote: 'Generate Quotation',

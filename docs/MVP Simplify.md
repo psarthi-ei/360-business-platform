@@ -1017,3 +1017,146 @@ It will make your product feel like it’s *built by someone from their own indu
 If you want, I can now produce a **final terminology map (UI labels + internal system names + local equivalents)** — a clean one-pager you can give to your design and dev team so everyone uses consistent words across UI, DB, and reports.
 
 Would you like me to prepare that next?
+
+
+Excellent — this is a very sharp, foundational question, Partha 👏
+
+You’re absolutely right that **GRN (Goods Receipt Note)** is a standard term across *manufacturing industries in general* — but textile, as a domain, has its own culture and vocabulary. Let’s unpack this carefully and settle it cleanly.
+
+---
+
+## 🧭 1️⃣ What GRN actually is (generically)
+
+**GRN = Goods Receipt Note**
+It’s a formal document used in **manufacturing, warehousing, and trading** to record that goods have been received — confirming:
+
+* Quantity
+* Quality
+* Supplier name
+* PO number
+* Receipt date
+
+It’s a *universal concept*, not specific to any industry —
+you’ll find GRN in automotive, machinery, FMCG, packaging, engineering, pharma, etc.
+
+✅ So yes — your understanding is correct.
+**GRN is a generic manufacturing industry concept.**
+
+---
+
+## 🧶 2️⃣ How it’s treated in the **textile industry**
+
+Here’s where things get interesting 👇
+
+In textile — because the supply chain involves **multiple material types** (grey fabric, yarn, dyes, chemicals, trims, etc.) and **different business models** (job work, own production, trading) — the **document has different names in daily use**, though it serves the *same purpose as GRN*.
+
+So yes — they *have* a GRN equivalent, but they don’t *call it GRN*.
+
+---
+
+### 🧵 a) For **Processing Units** (Surat, Jetpur, Erode, etc.)
+
+They receive **grey fabric from customers (traders)** for job work.
+
+**Equivalent of GRN = “Grey Inward” or “Challan Entry”**
+
+Why:
+
+* The grey fabric comes with the **party’s challan** (delivery note).
+* The processor’s office does a **Challan Entry** in their register or system.
+* That’s their “goods receipt.”
+
+So:
+
+> GRN (in ERP terms) = *Challan Entry* or *Grey Inward* in textile processing.
+
+---
+
+### 🧶 b) For **Weaving / Knitting Units**
+
+They receive **yarn** (either purchased or job work).
+
+**Equivalent of GRN = Yarn Inward / Yarn Receipt**
+
+They note:
+
+* Yarn count, lot number, cones, weight.
+* Supplier / party challan number.
+
+---
+
+### 🧶 c) For **Dyeing / Printing Units (own production)**
+
+They receive **grey fabric internally** or from external vendors.
+
+**Equivalent of GRN = Fabric Inward / Grey Receipt**
+
+Some big units might still use the word “GRN” (especially ERP-enabled composite mills like Arvind, Raymond, Welspun),
+but 95% of mid and small processors call it *Inward* or *Challan Entry.*
+
+---
+
+### 🧶 d) For **Spinning Units**
+
+They receive **raw cotton / fibre** from suppliers.
+
+**Equivalent of GRN = Material Inward / Cotton Receipt**
+
+They use more structured documentation and occasionally use the term GRN in internal ERP, but still, spoken language = “Inward.”
+
+---
+
+## 🧱 3️⃣ Industry-wise summary table
+
+| Textile Segment      | Material received         | Spoken term                      | GRN equivalent (formal) |
+| -------------------- | ------------------------- | -------------------------------- | ----------------------- |
+| Processing Unit      | Grey fabric (from trader) | Challan Entry / Grey Inward      | GRN equivalent          |
+| Dyeing House         | Party fabric / own grey   | Fabric Inward                    | GRN equivalent          |
+| Weaving / Knitting   | Yarn                      | Yarn Inward / Yarn Receipt       | GRN equivalent          |
+| Spinning Mill        | Raw cotton / fibre        | Material Inward                  | GRN equivalent          |
+| Garment Factory      | Fabric, trims             | Fabric Inward / Accessory Inward | GRN equivalent          |
+| Large Composite Mill | All materials             | Inward / GRN (formal)            | GRN proper              |
+
+✅ So across textile:
+
+> The *concept* of GRN absolutely exists.
+> The *term* changes — “Inward” or “Challan Entry” is the real industry term in 90% of units.
+
+---
+
+## ⚙️ 4️⃣ Why they prefer “Inward” over “GRN”
+
+| Reason                      | Explanation                                                                                  |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| **Language simplicity**     | Staff on the floor aren’t trained on accounting terms.                                       |
+| **Multiple material types** | Grey, yarn, dyes — all fall under “Inward” conceptually.                                     |
+| **Job work model**          | The material doesn’t belong to them — “Inward” feels more neutral than “Goods Receipt Note.” |
+| **Paper registers**         | For decades, the book was titled *“Inward Register”*, not GRN register.                      |
+
+---
+
+## 🧮 5️⃣ TL;DR — Final clarity
+
+| Question                                                      | Answer                                                                     |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Is GRN a manufacturing industry standard?                     | ✅ Yes, across all industries.                                              |
+| Does textile have the concept of GRN?                         | ✅ Yes, same function — confirm goods received.                             |
+| What do textile people call it?                               | “Inward”, “Challan Entry”, “Grey Inward”, “Material Inward”, “Yarn Inward” |
+| What’s the exact industry equivalent term for GRN in textile? | **“Inward (Challan Entry)”**                                               |
+
+---
+
+✅ **Final takeaway:**
+
+> In textile, the *GRN equivalent* is called **“Inward”**,
+> usually specified as:
+>
+> * **Grey Inward** (for job-work fabric), or
+> * **Material Inward** (for purchased materials).
+
+So yes — the function = same as GRN,
+but the terminology = localized (“Inward” or “Challan Entry”).
+
+---
+
+Would you like me to show a quick **side-by-side comparison** — how a standard manufacturing GRN maps field-by-field to a *textile processing “Inward” document* (so your dev team can reuse standard GRN logic but display local textile terms)?

@@ -5,7 +5,6 @@ import styles from './dashboard.module.css';
 interface DashboardProps {
   // Clean interface - only essential 5-tab navigation handlers
   onShowLeadManagement: (autoAction?: string, actionParams?: Record<string, unknown>) => void;
-  onShowQuotationOrders: () => void;
   onShowSales: () => void;
   onShowSalesOrders: () => void;
   onShowPayments: () => void;
@@ -25,7 +24,6 @@ interface DashboardProps {
 
 function Dashboard({ 
   onShowLeadManagement,
-  onShowQuotationOrders,
   onShowSales,
   onShowSalesOrders,
   onShowPayments,
@@ -80,21 +78,6 @@ function Dashboard({
         </div>
       </div>
 
-      {/* Primary Actions - 4 buttons aligned with business workflow */}
-      <div className={`${styles.primaryActions} ds-btn-container`}>
-        <button className="ds-btn ds-btn-primary" onClick={() => onShowLeadManagement('create')}>
-          +Lead
-        </button>
-        <button className="ds-btn ds-btn-primary" onClick={() => onShowQuotationOrders()}>
-          +Quote
-        </button>
-        <button className="ds-btn ds-btn-primary" onClick={() => onShowPayments()}>
-          Payment
-        </button>
-        <button className="ds-btn ds-btn-primary" onClick={() => onShowAnalytics?.()}>
-          Production
-        </button>
-      </div>
 
       {/* Alert Card - 2-Column Layout: Content | Action */}
       <div className={styles.alertCard}>

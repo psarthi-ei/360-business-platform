@@ -563,7 +563,7 @@ function LeadManagement({
         editingLead={editingLead}
       />
 
-      {/* Generate Quote Modal */}
+      {/* Generate Rate Modal (Surat terminology) */}
       <GenerateQuoteModal
         isOpen={showGenerateQuoteModal}
         onClose={handleCloseGenerateQuoteModal}

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { mockSalesOrders, SalesOrder, OrderItem } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+// import { useTerminologyTerms } from '../../contexts/TerminologyContext'; // TODO: implement terminology display
 import ProgressBar from '../ui/ProgressBar';
 import { getWorkOrdersBySalesOrder } from '../../data/productionMockData';
 import styles from './ProductionOrderManagement.module.css';
@@ -146,6 +147,9 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   openAddModal,
   onAddModalHandled
 }) => {
+  // Use terminology hook for Surat processing terminology
+  // const { productionOrder, productionOrders: productionOrderTerminology } = useTerminologyTerms(); // TODO: implement display terminology // "Job Card", "Job Cards"
+  
   const { toggleExpansion, isExpanded } = useCardExpansion();
   
   // State for tab-based information display

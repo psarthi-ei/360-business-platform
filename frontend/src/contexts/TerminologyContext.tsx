@@ -76,13 +76,18 @@ export const useTerminologyTerms = () => {
     quotes: terminology.quotes,
     invoice: terminology.invoice,
     invoices: terminology.invoices,
+    order: terminology.order,
+    orders: terminology.orders,
     
     // Production process
     workOrder: terminology.workOrder,
     workOrders: terminology.workOrders,
+    productionOrder: terminology.productionOrder,
+    productionOrders: terminology.productionOrders,
     
     // Procurement process
     goodsReceiptNote: terminology.goodsReceiptNote,
+    inventory: terminology.inventory,
     
     // Actions
     generateQuote: terminology.generateQuote,
