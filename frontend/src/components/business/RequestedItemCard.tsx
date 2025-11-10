@@ -1,6 +1,7 @@
 import React from 'react';
 import { LeadRequestedItem } from '../../data/salesMockData';
 import { getItemById, calculateItemPrice } from '../../data/catalogMockData';
+import { formatUnit } from '../../utils/unitFormatting';
 import styles from './RequestedItemCard.module.css';
 
 interface RequestedItemCardProps {
@@ -70,10 +71,11 @@ function RequestedItemCard({
     }).format(amount);
   };
 
-  // Get unit display - proper formatting for "per_meter" -> "per meter"
+  // Get unit display using centralized utility
   const rawUnit = catalogItem.pricing.salesOrderPricing[0]?.unit || 
                   catalogItem.pricing.jobWorkPricing[0]?.unit || 'units';
-  const unit = rawUnit.replace('per_', 'per ');
+  const quantityUnit = formatUnit.getDisplayUnit(rawUnit, 'quantity');  // "per_meter" -> "meter"
+  const rateUnit = formatUnit.getDisplayUnit(rawUnit, 'rate');           // "per_meter" -> "per meter"
 
   return (
     <div className={`${styles.itemCard} ${index % 2 === 1 ? styles.alternateCard : ''}`}>
@@ -96,13 +98,13 @@ function RequestedItemCard({
       <div className={styles.itemSummary}>
         <div className={styles.quantityDisplay}>
           <span className={styles.quantity}>{item.requestedQuantity.toLocaleString()}</span>
-          <span className={styles.unit}>{unit}</span>
+          <span className={styles.unit}>{quantityUnit}</span>
         </div>
         
         {!priceError && estimatedPrice > 0 && (
           <div className={styles.priceDisplay}>
             <div className={styles.unitPriceInfo}>
-              <span className={styles.unitPrice}>{formatCurrency(unitPrice)}/{unit}</span>
+              <span className={styles.unitPrice}>{formatCurrency(unitPrice)} {rateUnit}</span>
               <span className={styles.multiplySymbol}>×</span>
               <span className={styles.quantityInfo}>{item.requestedQuantity.toLocaleString()}</span>
             </div>

@@ -7,6 +7,7 @@ import { mockLeads, Lead } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { calculateItemPrice } from '../../data/catalogMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import QuoteService from '../../services/QuoteService';
 import styles from './LeadManagement.module.css';
 
@@ -34,6 +35,7 @@ function LeadManagement({
   onAddModalHandled,
 }: LeadManagementProps) {
   const { t } = useTranslation();
+  const terms = useTerminologyTerms();
   const location = useLocation();
   
   // State for modal and leads - Filter out converted leads for active display
@@ -91,7 +93,7 @@ function LeadManagement({
     const businessProfile = getBusinessProfileById(lead.businessProfileId);
     if (!businessProfile) return '❓ Unknown';
     
-    return businessProfile.customerStatus === 'prospect' ? '🆕 New Customer' : '🔄 Existing Customer';
+    return businessProfile.customerStatus === 'prospect' ? `🆕 New ${terms.customer}` : `🔄 Existing ${terms.customer}`;
   };
 
   // Calculate total value for requested items
@@ -377,9 +379,9 @@ function LeadManagement({
                 {/* Enhanced Header - Company Name + Inquiry Context */}
                 <div 
                   className="ds-card-header"
-                  title={`${getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'} - ${lead.inquiry} (Lead ID: ${lead.id})`}
+                  title={`${getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown ' + terms.customer} - ${lead.inquiry} (${terms.lead} ID: ${lead.id})`}
                 >
-                  {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'} — {lead.inquiry}
+                  {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown ' + terms.customer} — {lead.inquiry}
                 </div>
                 
                 {/* Simplified Status - Business Model + Priority + Conversion Stage */}
@@ -430,110 +432,127 @@ function LeadManagement({
               {/* Expanded Details */}
               {expandedDetails.has(lead.id) && (() => {
                 const totalCalculation = calculateTotalValue(lead);
+                const businessProfile = getBusinessProfileById(lead.businessProfileId);
                 return (
                 <div className={styles.expandedSection}>
-                  {/* Lead Details Section */}
-                  <div className={styles.leadDetailsSection}>
-                    <h4>Lead Details</h4>
-                    <div className={styles.detailsGrid}>
-                      <p><strong>Lead ID:</strong> {lead.id}</p>
-                      <p><strong>Customer Type:</strong> {getCustomerTypeIndicator(lead)}</p>
-                      <p><strong>Created Date:</strong> {lead.lastContact}</p>
-                    </div>
-                  </div>
-
-                  {/* Company Information */}
-                  <div className={styles.companySection}>
-                    <h4>Company Information</h4>
-                    <div className={styles.detailsGrid}>
-                      <p><strong>Company:</strong> {getBusinessProfileById(lead.businessProfileId)?.companyName || 'Unknown Company'}</p>
-                      <p><strong>Business Type:</strong> {(() => {
-                        const bp = getBusinessProfileById(lead.businessProfileId);
-                        return bp ? `${bp.businessType} - ${bp.specialization}` : 'Unknown Business';
-                      })()}</p>
-                      {lead.contactPerson && <p><strong>Contact Person:</strong> {lead.contactPerson}</p>}
-                      {lead.designation && <p><strong>Designation:</strong> {lead.designation}</p>}
-                      {lead.department && <p><strong>Department:</strong> {lead.department}</p>}
-                    </div>
-                  </div>
-
-                  {/* Contact Details */}
-                  <div className={styles.contactSection}>
-                    <h4>Contact Information</h4>
-                    <div className={styles.detailsGrid}>
-                      <p><strong>Primary Contact:</strong> {lead.phone || lead.contact}</p>
-                      {lead.email && <p><strong>Email:</strong> {lead.email}</p>}
-                      <p><strong>Last Contact:</strong> {lead.lastContact}</p>
-                    </div>
-                  </div>
-
-                  {/* Project Information */}
-                  <div className={styles.projectSection}>
-                    <h4>Project Information</h4>
-                    <div className={styles.detailsGrid}>
-                      <p><strong>Inquiry:</strong> {lead.inquiry}</p>
-                      <p><strong>Budget:</strong> {lead.budget}</p>
-                      <p><strong>Timeline:</strong> {lead.timeline}</p>
-                      {lead.notes && <p><strong>Notes:</strong> {lead.notes}</p>}
-                    </div>
-                  </div>
-
-                  {/* Requested Items */}
-                  <div className={styles.fabricSection}>
+                  
+                  {/* SECTION 1: Company & Contact Information (Merged) */}
+                  <div className={styles.companyContactSection}>
                     <div className={styles.sectionHeader}>
-                      <h4>Requested Items</h4>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>🏢</span>
+                        {terms.customer} & Contact Information
+                      </h4>
+                    </div>
+                    <div className={styles.companyContactGrid}>
+                      <div className={styles.companyDetails}>
+                        <p><strong>{terms.customer}:</strong> {businessProfile?.companyName || 'Unknown ' + terms.customer}</p>
+                        <p><strong>{terms.customer} Type:</strong> {businessProfile ? `${businessProfile.businessType} - ${businessProfile.specialization}` : `Unknown ${terms.customer}`}</p>
+                        <p><strong>{terms.customer} Category:</strong> {getCustomerTypeIndicator(lead)}</p>
+                        <p><strong>Location:</strong> {businessProfile ? `${businessProfile.registeredAddress.city}, ${businessProfile.registeredAddress.state}` : 'Unknown Location'}</p>
+                      </div>
+                      <div className={styles.contactDetails}>
+                        {lead.contactPerson && <p><strong>Contact Person:</strong> {lead.contactPerson}</p>}
+                        {lead.designation && <p><strong>Designation:</strong> {lead.designation}</p>}
+                        <p><strong>Phone:</strong> {lead.phone || lead.contact}</p>
+                        {lead.email && <p><strong>Email:</strong> {lead.email}</p>}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 2: Project Details (Enhanced for Job Work) */}
+                  <div className={styles.projectDetailsSection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>⚙️</span>
+                        Job Work Project Details
+                      </h4>
+                    </div>
+                    <div className={styles.projectDetailsGrid}>
+                      <div className={styles.projectOverview}>
+                        <p><strong>Processing Inquiry:</strong> {lead.inquiry}</p>
+                        <p><strong>Budget Range:</strong> {lead.budget}</p>
+                        <p><strong>Processing Timeline:</strong> {lead.timeline}</p>
+                        <p><strong>Priority Level:</strong> {lead.priority === 'hot' ? '🔥 Urgent Processing' : lead.priority === 'warm' ? '🔶 Planning Stage' : '🔵 Initial Inquiry'}</p>
+                      </div>
+                      {lead.notes && (
+                        <div className={styles.projectNotes}>
+                          <p><strong>Special Requirements:</strong> {lead.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* SECTION 3: Requested Services (Job Work Focused) */}
+                  <div className={styles.servicesSection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>🛠️</span>
+                        Requested Processing Services
+                      </h4>
                       {totalCalculation.itemCount > 0 && (
-                        <span className={styles.itemCount}>{totalCalculation.itemCount} items</span>
+                        <span className={styles.serviceCount}>{totalCalculation.itemCount} services</span>
                       )}
                     </div>
                     {lead.requestedItems && lead.requestedItems.length > 0 ? (
-                      <div className={styles.fabricContent}>
-                        {lead.requestedItems.map((item, index) => (
-                          <RequestedItemCard
-                            key={index}
-                            item={item}
-                            businessModel={lead.leadType}
-                            showActions={false}
-                            index={index}
-                          />
-                        ))}
+                      <div className={styles.servicesContent}>
+                        <div className={styles.servicesList}>
+                          {lead.requestedItems.map((item, index) => (
+                            <RequestedItemCard
+                              key={index}
+                              item={item}
+                              businessModel={lead.leadType}
+                              showActions={false}
+                              index={index}
+                            />
+                          ))}
+                        </div>
                         {totalCalculation.totalValue > 0 && (
-                          <div className={styles.totalSection}>
-                            <div className={styles.totalRow}>
-                              <span className={styles.totalLabel}>Estimated Total Value:</span>
-                              <span className={styles.totalAmount}>{formatCurrency(totalCalculation.totalValue)}</span>
+                          <div className={styles.jobValueSection}>
+                            <div className={styles.valueHeader}>
+                              <span className={styles.valueLabel}>Estimated Job Value:</span>
+                              <span className={styles.valueAmount}>{formatCurrency(totalCalculation.totalValue)}</span>
                             </div>
                             {totalCalculation.calculatedItemCount !== totalCalculation.itemCount && (
                               <p className={styles.calculationNote}>
-                                * Total based on {totalCalculation.calculatedItemCount} of {totalCalculation.itemCount} items with available pricing
+                                * Based on {totalCalculation.calculatedItemCount} of {totalCalculation.itemCount} services with available pricing
                               </p>
                             )}
                           </div>
                         )}
                       </div>
                     ) : (
-                      <p className={styles.noData}>No items requested yet.</p>
+                      <div className={styles.noServicesState}>
+                        <p>No processing services specified yet.</p>
+                      </div>
                     )}
                   </div>
 
-                  {/* Conversion Tracking */}
-                  <div className={styles.conversionSection}>
-                    <h4>Conversion Tracking</h4>
-                    <div className={styles.detailsGrid}>
-                      <p><strong>Conversion Status:</strong> {lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                  {/* SECTION 4: Lead Status (Simplified) */}
+                  <div className={styles.leadStatusSection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>📊</span>
+                        {terms.lead} Status & Tracking
+                      </h4>
+                    </div>
+                    <div className={styles.statusGrid}>
+                      <p><strong>{terms.lead} ID:</strong> {lead.id}</p>
+                      <p><strong>Status:</strong> <span className={styles.conversionStatus}>{lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></p>
+                      <p><strong>Created:</strong> {lead.lastContact}</p>
                       {lead.convertedToOrderDate && (
-                        <p><strong>Converted Date:</strong> {lead.convertedToOrderDate}</p>
+                        <p><strong>Converted:</strong> {lead.convertedToOrderDate}</p>
                       )}
                     </div>
                   </div>
 
-                  {/* Action Buttons - Proper 44px Touch Targets */}
+                  {/* Action Buttons - Keep at bottom for consistency */}
                   <div className={styles.expandedActions}>
                     <button className="ds-btn ds-btn-secondary">
-                      Call
+                      📞 Call
                     </button>
                     <button className="ds-btn ds-btn-secondary">
-                      WhatsApp
+                      📱 WhatsApp
                     </button>
                     {renderDynamicQuoteActions(lead)}
                     <button 
@@ -543,7 +562,7 @@ function LeadManagement({
                         handleEditLead(lead);
                       }}
                     >
-                      Edit
+                      ✏️ Edit
                     </button>
                   </div>
                 </div>

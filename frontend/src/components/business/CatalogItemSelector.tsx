@@ -7,6 +7,7 @@ import {
   getSpecificationType
 } from '../../data/catalogMockData';
 import { LeadRequestedItem } from '../../data/salesMockData';
+import { formatUnit } from '../../utils/unitFormatting';
 import ModalPortal from '../ui/ModalPortal';
 import styles from './CatalogItemSelector.module.css';
 
@@ -109,7 +110,7 @@ function CatalogItemSelector({
       return {
         totalPrice: calculation.finalPrice,
         unitPrice: selectedTier?.baseRate || 0,
-        unit: selectedTier?.unit?.replace('per_', 'per ') || 'units'
+        unit: formatUnit.getDisplayUnit(selectedTier?.unit || 'units', 'rate')
       };
     } catch {
       return { totalPrice: 0, unitPrice: 0, unit: 'units' };
@@ -372,12 +373,12 @@ function CatalogItemSelector({
                     <span className={styles.quality}>{item.specifications.qualityGrade}</span>
                     {businessModel === 'sales' && item.pricing.salesOrderPricing.length > 0 && (
                       <span className={styles.price}>
-                        From {formatCurrency(item.pricing.salesOrderPricing[0].baseRate)} / {item.pricing.salesOrderPricing[0].unit}
+                        From {formatCurrency(item.pricing.salesOrderPricing[0].baseRate)} / {formatUnit.getDisplayUnit(item.pricing.salesOrderPricing[0].unit, 'quantity')}
                       </span>
                     )}
                     {businessModel === 'job_work' && item.pricing.jobWorkPricing.length > 0 && (
                       <span className={styles.price}>
-                        From {formatCurrency(item.pricing.jobWorkPricing[0].baseRate)} / {item.pricing.jobWorkPricing[0].unit}
+                        From {formatCurrency(item.pricing.jobWorkPricing[0].baseRate)} / {formatUnit.getDisplayUnit(item.pricing.jobWorkPricing[0].unit, 'quantity')}
                       </span>
                     )}
                   </div>
@@ -407,8 +408,11 @@ function CatalogItemSelector({
                     className={styles.quantityInput}
                   />
                   <span className={styles.unit}>
-                    {selectedItem.pricing.salesOrderPricing[0]?.unit?.replace('per_', 'per ') || 
-                     selectedItem.pricing.jobWorkPricing[0]?.unit?.replace('per_', 'per ') || 'units'}
+                    {formatUnit.getDisplayUnit(
+                      selectedItem.pricing.salesOrderPricing[0]?.unit || 
+                      selectedItem.pricing.jobWorkPricing[0]?.unit || 'units',
+                      'quantity'
+                    )}
                   </span>
                 </div>
                 <div className={styles.formGroup}>
@@ -419,13 +423,13 @@ function CatalogItemSelector({
                         <div className={styles.unitPriceDisplay}>
                           <span className={styles.unitPriceLabel}>Unit Price:</span>
                           <span className={styles.unitPriceValue}>
-                            {formatCurrency(priceInfo.unitPrice)}/{priceInfo.unit}
+                            {formatCurrency(priceInfo.unitPrice)} {priceInfo.unit}
                           </span>
                         </div>
                       )}
                       {estimatedPrice > 0 && (
                         <div className={styles.totalPriceDisplay}>
-                          <span className={styles.totalPriceLabel}>Total ({quantity} {priceInfo.unit}s):</span>
+                          <span className={styles.totalPriceLabel}>Total ({quantity} {formatUnit.getDisplayUnit(selectedItem.pricing.salesOrderPricing[0]?.unit || selectedItem.pricing.jobWorkPricing[0]?.unit || 'units', 'quantity')}):</span>
                           <span className={styles.totalPriceValue}>{formatCurrency(estimatedPrice)}</span>
                         </div>
                       )}
@@ -433,7 +437,7 @@ function CatalogItemSelector({
                   ) : (
                     <div className={selectedItem ? styles.priceDisplayWarning : styles.priceDisplay}>
                       {selectedItem 
-                        ? `Minimum quantity: ${selectedItem.businessRules.minimumQuantity} ${priceInfo.unit}s`
+                        ? `Minimum quantity: ${selectedItem.businessRules.minimumQuantity} ${formatUnit.getDisplayUnit(selectedItem.pricing.salesOrderPricing[0]?.unit || selectedItem.pricing.jobWorkPricing[0]?.unit || 'units', 'quantity')}`
                         : 'Select an item to see price'
                       }
                     </div>

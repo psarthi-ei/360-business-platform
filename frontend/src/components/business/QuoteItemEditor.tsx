@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LeadRequestedItem } from '../../data/salesMockData';
 import { getItemById, calculateItemPrice, getSpecificationType } from '../../data/catalogMockData';
+import { formatUnit } from '../../utils/unitFormatting';
 import styles from './QuoteItemEditor.module.css';
 
 // Extended interface for quote editing with additional fields
@@ -589,7 +590,7 @@ function QuoteItemEditor({
         </div>
         <div className={styles.summaryRow}>
           <span>Unit:</span>
-          <span>{catalogItem.pricing.salesOrderPricing[0]?.unit || 'per_unit'}</span>
+          <span>{formatUnit.getDisplayUnit(catalogItem.pricing.salesOrderPricing[0]?.unit || 'per_unit', 'rate')}</span>
         </div>
         <div className={styles.summaryRow}>
           <span>Quality:</span>
