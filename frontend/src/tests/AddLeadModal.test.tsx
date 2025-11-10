@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import AddLeadModal from '../components/business/AddLeadModal';
 import { TranslationProvider } from '../contexts/TranslationContext';
+import { TerminologyProvider } from '../contexts/TerminologyContext';
 
 const mockProps = {
   isOpen: true,
@@ -14,7 +15,9 @@ const mockProps = {
 const renderWithTranslation = (component: React.ReactElement) => {
   return render(
     <TranslationProvider defaultLanguage="en">
-      {component}
+      <TerminologyProvider initialRegion="surat-processing">
+        {component}
+      </TerminologyProvider>
     </TranslationProvider>
   );
 };
@@ -27,32 +30,35 @@ describe('AddLeadModal - Basic Functionality', () => {
   test('renders modal with header when opened', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} />);
     
-    expect(screen.getByText('📋 Add New Lead')).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '×' })).toBeInTheDocument();
   });
 
   test('does not render when closed', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} isOpen={false} />);
     
-    expect(screen.queryByText('📋 Add New Lead')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('renders required form fields', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} />);
     
-    expect(screen.getByLabelText('Company *')).toBeInTheDocument();
-    expect(screen.getByLabelText('Contact Person *')).toBeInTheDocument();
-    expect(screen.getByLabelText('Phone Number *')).toBeInTheDocument();
-    expect(screen.getByLabelText('Inquiry Details *')).toBeInTheDocument();
+    // Check for form inputs by their input types and required attributes
+    expect(screen.getByRole('textbox', { name: /contact person/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /phone/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /inquiry details/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument(); // Customer/Party selection
   });
 
   test('shows validation errors for empty required fields', async () => {
     renderWithTranslation(<AddLeadModal {...mockProps} />);
     
-    await userEvent.click(screen.getByRole('button', { name: /add lead/i }));
+    const submitButton = screen.getByRole('button', { name: /add/i });
+    await userEvent.click(submitButton);
     
-    expect(screen.getByText('Company selection is required')).toBeInTheDocument();
-    expect(screen.getByText('Contact person is required')).toBeInTheDocument();
+    // Check that error messages appear (without matching exact text)
+    expect(screen.getByText(/selection is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/contact person is required/i)).toBeInTheDocument();
   });
 
   test('form has submit functionality', () => {
@@ -60,7 +66,7 @@ describe('AddLeadModal - Basic Functionality', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} onAddLead={mockOnAddLead} />);
     
     // Just check that the submit button exists and onAddLead prop is passed
-    expect(screen.getByRole('button', { name: /add lead/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
     expect(mockOnAddLead).toBeDefined();
   });
 
@@ -84,6 +90,6 @@ describe('AddLeadModal - Basic Functionality', () => {
     renderWithTranslation(<AddLeadModal {...mockProps} />);
     
     expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /add lead/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
   });
 });

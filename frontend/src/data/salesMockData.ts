@@ -1523,6 +1523,14 @@ export const getFinalInvoiceById = (id: string): FinalInvoice | undefined => {
   return mockFinalInvoices.find(inv => inv.id === id);
 };
 
+export const getJobOrderById = (id: string): JobOrder | undefined => {
+  return mockJobOrders.find(order => order.id === id);
+};
+
+export const getJobOrdersByCustomerId = (customerId: string): JobOrder[] => {
+  return mockJobOrders.filter(order => order.businessProfileId === customerId);
+};
+
 export const getFinalInvoicesBySalesOrderId = (salesOrderId: string): FinalInvoice[] => {
   return mockFinalInvoices.filter(inv => inv.salesOrderId === salesOrderId);
 };

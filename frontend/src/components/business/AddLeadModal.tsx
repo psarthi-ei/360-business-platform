@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lead, LeadRequestedItem, DeliveryRequirements } from '../../data/salesMockData';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import ModalPortal from '../ui/ModalPortal';
 import CatalogItemSelector from './CatalogItemSelector';
 import RequestedItemCard from './RequestedItemCard';
@@ -13,6 +14,8 @@ interface AddLeadModalProps {
 }
 
 function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalProps) {
+  // Get terminology for Job Work context
+  const terms = useTerminologyTerms();
 
   const [formData, setFormData] = useState({
     contactPerson: '',
@@ -25,10 +28,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     notes: '',
     contact: '', // Combined phone/email field
     designation: '',
-    department: '',
     businessProfileId: '',
-    // Catalog-driven lead management
-    leadType: 'sales' as 'sales' | 'job_work',
+    // Job Work focus - always defaults to job_work
+    leadType: 'job_work' as 'sales' | 'job_work',
     requestedItems: [] as LeadRequestedItem[],
     priorityLevel: 'must_have' as 'must_have' | 'preferred' | 'nice_to_have',
     deliveryRequirements: {
@@ -58,9 +60,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         notes: editingLead.notes || '',
         contact: editingLead.contact || '',
         designation: editingLead.designation || '',
-        department: editingLead.department || '',
         businessProfileId: editingLead.businessProfileId || '',
-        leadType: editingLead.leadType || 'sales',
+        leadType: editingLead.leadType || 'job_work',
         requestedItems: editingLead.requestedItems || [],
         priorityLevel: editingLead.priorityLevel || 'must_have',
         deliveryRequirements: editingLead.deliveryRequirements || {
@@ -84,9 +85,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         notes: '',
         contact: '',
         designation: '',
-        department: '',
         businessProfileId: '',
-        leadType: 'sales',
+        leadType: 'job_work',
         requestedItems: [],
         priorityLevel: 'must_have',
         deliveryRequirements: {
@@ -103,22 +103,20 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
 
   // Company options are now handled in the dropdown
 
-  // Budget ranges for textile orders
+  // Budget ranges for textile processing services
   const budgetRanges = [
-    'Under ₹1 Lakh', '₹1-5 Lakh', '₹5-10 Lakh', '₹10-25 Lakh', 
-    '₹25-50 Lakh', '₹50 Lakh - 1 Crore', 'Above ₹1 Crore', 'To be discussed'
+    'Under ₹25,000', '₹25,000-50,000', '₹50,000-1 Lakh', '₹1-2 Lakh', 
+    '₹2-5 Lakh', '₹5-10 Lakh', 'Above ₹10 Lakh', 'To be discussed'
   ];
 
-  // Timeline options
+  // Processing timeline options
   const timelineOptions = [
-    'Immediate (Within 1 week)', 'Urgent (2-4 weeks)', 'Standard (1-2 months)', 
-    'Planned (2-3 months)', 'Future (3-6 months)', 'Long-term (6+ months)'
+    'Immediate (1-2 days)', 'Urgent (3-5 days)', 'Standard (1 week)', 
+    'Planned (2 weeks)', 'Future (3-4 weeks)', 'Long-term (1+ months)'
   ];
 
 
-  const handleLeadTypeChange = (leadType: 'sales' | 'job_work') => {
-    handleInputChange('leadType', leadType);
-  };
+  // Lead type is always job_work - no switching needed
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
@@ -159,7 +157,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     const newErrors: {[key: string]: string} = {};
 
     if (!formData.businessProfileId.trim()) {
-      newErrors.businessProfileId = 'Company selection is required';
+      newErrors.businessProfileId = `${terms.customer} selection is required`;
     }
 
     if (!formData.contactPerson.trim()) {
@@ -193,10 +191,22 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     await new Promise(resolve => setTimeout(resolve, 800));
 
     // Prepare lead data
-    const leadData = {
-      ...formData,
+    const leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'> = {
+      contactPerson: formData.contactPerson,
+      phone: formData.phone,
+      email: formData.email,
+      inquiry: formData.inquiry,
+      budget: formData.budget,
+      timeline: formData.timeline,
+      priority: formData.priority,
+      notes: formData.notes,
+      designation: formData.designation,
+      requestedItems: formData.requestedItems,
+      priorityLevel: formData.priorityLevel,
+      deliveryRequirements: formData.deliveryRequirements,
       contact: formData.phone, // Use phone as primary contact
       businessProfileId: formData.businessProfileId || 'bp-new-prospect', // Default for new prospects
+      leadType: 'job_work' // Always job work
     };
 
     onAddLead(leadData);
@@ -213,9 +223,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
       notes: '',
       contact: '',
       designation: '',
-      department: '',
       businessProfileId: '',
-      leadType: 'sales',
+      leadType: 'job_work',
       requestedItems: [],
       priorityLevel: 'must_have',
       deliveryRequirements: {
@@ -240,40 +249,11 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     <ModalPortal isOpen={isOpen} onBackdropClick={handleClose}>
       <div className={styles.modalContent} data-testid="modal-overlay" onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>{editingLead ? '✏️ Edit Lead' : '📋 Add New Lead'}</h2>
+          <h2>{editingLead ? `✏️ Edit Job Work ${terms.lead}` : `📋 Add Job Work ${terms.lead}`}</h2>
           <button className={styles.closeButton} onClick={handleClose}>×</button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.modalForm}>
-          {/* Lead Type Selection - First Thing in Modal */}
-          <div className={styles.formGroup}>
-            <label className={styles.leadTypeLabel}>Lead Type *</label>
-            <div className={styles.radioGroup}>
-              <label className={styles.radioOption}>
-                <input
-                  type="radio"
-                  name="leadType"
-                  value="sales"
-                  checked={formData.leadType === 'sales'}
-                  onChange={() => handleLeadTypeChange('sales')}
-                />
-                <span>Sales Order</span>
-              </label>
-              <label className={styles.radioOption}>
-                <input
-                  type="radio"
-                  name="leadType"
-                  value="job_work"
-                  checked={formData.leadType === 'job_work'}
-                  onChange={() => handleLeadTypeChange('job_work')}
-                />
-                <span>Job Work</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Spacing div for better visual separation */}
-          <div style={{ marginBottom: 'var(--ds-space-lg)' }}></div>
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
@@ -291,15 +271,15 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="businessProfileId">Company *</label>
+              <label htmlFor="businessProfileId">{terms.customer} *</label>
               <select
                 id="businessProfileId"
                 value={formData.businessProfileId}
                 onChange={(e) => handleInputChange('businessProfileId', e.target.value)}
                 className={errors.businessProfileId ? styles.errorInput : ''}
               >
-                <option value="">Select Existing Company or Create New</option>
-                <option value="bp-new-prospect">Create New Company Profile</option>
+                <option value="">Select Existing {terms.customer} or Create New</option>
+                <option value="bp-new-prospect">Create New {terms.customer} Profile</option>
                 <option value="bp-mumbai-cotton-mills">Mumbai Cotton Mills</option>
                 <option value="bp-surat-fashion-house">Surat Fashion House</option>
                 <option value="bp-baroda-textiles">Baroda Textiles Co</option>
@@ -332,32 +312,34 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="contact@company.com"
+                placeholder="contact@party.com"
               />
             </div>
           </div>
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="designation">Designation</label>
+              <label htmlFor="designation">Designation/Role</label>
               <input
                 id="designation"
                 type="text"
                 value={formData.designation}
                 onChange={(e) => handleInputChange('designation', e.target.value)}
-                placeholder="e.g., Purchase Manager, Production Head"
+                placeholder="e.g., Owner, Production Manager, Mill Supervisor"
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="department">Department</label>
-              <input
-                id="department"
-                type="text"
-                value={formData.department}
-                onChange={(e) => handleInputChange('department', e.target.value)}
-                placeholder="e.g., Procurement, Production"
-              />
+              <label htmlFor="priority">Priority Level</label>
+              <select
+                id="priority"
+                value={formData.priority}
+                onChange={(e) => handleInputChange('priority', e.target.value as 'hot' | 'warm' | 'cold')}
+              >
+                <option value="hot">🔥 Hot - Urgent Processing</option>
+                <option value="warm">🔶 Warm - Planning Stage</option>
+                <option value="cold">🔵 Cold - Initial Inquiry</option>
+              </select>
             </div>
           </div>
 
@@ -391,28 +373,13 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
             </div>
           </div>
 
-          <div className={styles.formRow}>
-            <div className={styles.formGroup}>
-              <label htmlFor="priority">Priority Level</label>
-              <select
-                id="priority"
-                value={formData.priority}
-                onChange={(e) => handleInputChange('priority', e.target.value as 'hot' | 'warm' | 'cold')}
-              >
-                <option value="hot">🔥 Hot - Urgent Order</option>
-                <option value="warm">🔶 Warm - Planning Stage</option>
-                <option value="cold">🔵 Cold - Initial Inquiry</option>
-              </select>
-            </div>
-          </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="inquiry">Inquiry Details *</label>
             <textarea
               id="inquiry"
               value={formData.inquiry}
               onChange={(e) => handleInputChange('inquiry', e.target.value)}
-              placeholder="e.g., Need 500 meters cotton fabric, 150 GSM, plain weave for garment manufacturing..."
+              placeholder="e.g., Need dyeing for 500 meters cotton grey fabric, Navy Blue color, reactive dyes required..."
               rows={3}
               className={errors.inquiry ? styles.errorInput : ''}
             />
@@ -422,12 +389,12 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
           {/* Requested Items Section */}
           <div className={styles.formGroup}>
             <label className={styles.itemsSectionLabel}>
-              Requested Items {formData.requestedItems.length > 0 && `(${formData.requestedItems.length})`}
+              Requested Services {formData.requestedItems.length > 0 && `(${formData.requestedItems.length})`}
             </label>
             <div className={styles.itemsSection}>
               {formData.requestedItems.length === 0 ? (
                 <div className={styles.emptyItemsState}>
-                  <p>No items added yet. Add items from our catalog to help generate accurate quotes.</p>
+                  <p>No services added yet. Add processing services from our catalog to help generate accurate quotes.</p>
                 </div>
               ) : (
                 <div className={styles.itemsList}>
@@ -448,7 +415,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
                 onClick={() => setShowItemSelector(true)}
                 className={styles.addItemButton}
               >
-                📦 Add Item from Catalog
+                🛠️ Add Service from Catalog
               </button>
             </div>
           </div>
@@ -459,7 +426,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
               id="notes"
               value={formData.notes}
               onChange={(e) => handleInputChange('notes', e.target.value)}
-              placeholder="Any additional information or special requirements..."
+              placeholder="Any special processing requirements, quality specifications, or delivery notes..."
               rows={2}
             />
           </div>
@@ -479,8 +446,8 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
               disabled={isSubmitting}
             >
               {isSubmitting ? 
-                (editingLead ? 'Updating Lead...' : 'Adding Lead...') : 
-                (editingLead ? 'Update Lead' : 'Add Lead')
+                (editingLead ? `Updating ${terms.lead}...` : `Adding ${terms.lead}...`) : 
+                (editingLead ? `Update ${terms.lead}` : `Add ${terms.lead}`)
               }
             </button>
           </div>
