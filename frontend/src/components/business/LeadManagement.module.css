@@ -1665,6 +1665,17 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
+/* Initial Notes - Simple Style */
+.initialNotesSimple {
+  margin: var(--ds-space-sm) 0;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  border-left: 3px solid var(--ds-color-primary);
+}
+
 /* Conversation History Styles */
 .conversationHistory {
   margin-top: var(--ds-space-lg);

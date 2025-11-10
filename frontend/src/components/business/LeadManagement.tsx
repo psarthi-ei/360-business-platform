@@ -596,17 +596,9 @@ function LeadManagement({
 
                     {/* Initial Notes */}
                     {lead.notes && (
-                      <div className={styles.initialNotes}>
-                        <div className={styles.sectionHeader}>
-                          <h4 className={styles.sectionTitle}>
-                            <span className={styles.sectionIcon}>📝</span>
-                            Initial Notes
-                          </h4>
-                        </div>
-                        <div className={styles.notesContent}>
-                          <p>{lead.notes}</p>
-                        </div>
-                      </div>
+                      <p className={styles.initialNotesSimple}>
+                        <strong>Notes:</strong> {lead.notes}
+                      </p>
                     )}
 
                     {/* Additional Notes */}
