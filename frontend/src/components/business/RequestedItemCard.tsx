@@ -121,6 +121,22 @@ function RequestedItemCard({
           <span className={styles.notesText}>{item.notes}</span>
         </div>
       )}
+
+      {item.customSpecifications && Object.keys(item.customSpecifications).length > 0 && (
+        <div className={styles.specificationsDisplay}>
+          <div className={styles.specificationsHeader}>
+            <span className={styles.specificationsLabel}>Specifications:</span>
+          </div>
+          <div className={styles.specificationsList}>
+            {Object.entries(item.customSpecifications).map(([key, value]) => (
+              <div key={key} className={styles.specificationItem}>
+                <span className={styles.specKey}>{key}:</span>
+                <span className={styles.specValue}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
