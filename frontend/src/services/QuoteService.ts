@@ -118,7 +118,7 @@ export class QuoteService {
   /**
    * Get quote state for lead (determines available actions)
    */
-  static getQuoteStateForLead(leadId: string): QuoteState {
+  static getQuoteStateForLead(leadId: string, terminology?: { quote: string; generateQuote: string }): QuoteState {
     const activeQuote = this.getActiveQuoteForLead(leadId);
     const allQuotes = this.getQuotesForLead(leadId);
     const lead = this.getLeadById(leadId);
@@ -133,7 +133,7 @@ export class QuoteService {
     };
 
     // Determine available actions based on state
-    state.availableActions = this.getAvailableActions(state, activeQuote, lead);
+    state.availableActions = this.getAvailableActions(state, activeQuote, lead, terminology);
 
     return state;
   }
@@ -144,7 +144,8 @@ export class QuoteService {
   static getAvailableActions(
     state: QuoteState, 
     activeQuote?: Quote | null, 
-    lead?: Lead | null
+    lead?: Lead | null,
+    terminology?: { quote: string; generateQuote: string }
   ): QuoteAction[] {
     const actions: QuoteAction[] = [];
 
@@ -152,7 +153,7 @@ export class QuoteService {
     if (!state.hasQuote && lead?.requestedItems && lead.requestedItems.length > 0) {
       actions.push({
         action: 'generate',
-        label: '🎯 Generate Quote',
+        label: terminology ? `🎯 ${terminology.generateQuote}` : '🎯 Generate Quote',
         icon: '🎯',
         buttonClass: 'ds-btn ds-btn-primary'
       });
@@ -163,14 +164,14 @@ export class QuoteService {
       // Always available actions
       actions.push({
         action: 'view',
-        label: '📄 View Quote',
+        label: terminology ? `📄 View ${terminology.quote}` : '📄 View Quote',
         icon: '📄',
         buttonClass: 'ds-btn ds-btn-secondary'
       });
 
       actions.push({
         action: 'revise',
-        label: '✏️ Revise Quote',
+        label: terminology ? `✏️ Revise ${terminology.quote}` : '✏️ Revise Quote',
         icon: '✏️',
         buttonClass: 'ds-btn ds-btn-secondary'
       });
@@ -179,7 +180,7 @@ export class QuoteService {
       if (activeQuote.status === 'pending' || activeQuote.status === 'under_review') {
         actions.push({
           action: 'send',
-          label: '📧 Send Quote',
+          label: terminology ? `📧 Send ${terminology.quote}` : '📧 Send Quote',
           icon: '📧',
           buttonClass: 'ds-btn ds-btn-primary'
         });

@@ -134,7 +134,7 @@ function LeadManagement({
 
   // PHASE 2.1: Dynamic Quote Actions based on Quote State
   const renderDynamicQuoteActions = (lead: Lead) => {
-    const quoteState = QuoteService.getQuoteStateForLead(lead.id);
+    const quoteState = QuoteService.getQuoteStateForLead(lead.id, { quote: terms.quote, generateQuote: terms.generateQuote });
     const availableActions = quoteState.availableActions;
 
     if (availableActions.length === 0) {
@@ -394,18 +394,18 @@ function LeadManagement({
                     return businessModelLabels[lead.leadType] || 'Unknown';
                   })()} • {priorityIcons[lead.priority]} {priorityLabels[lead.priority]} • {(() => {
                     const conversionLabels = {
-                      active_lead: 'Active Lead',
-                      quote_sent: 'Quote Sent',
-                      quote_rejected: 'Quote Rejected',
-                      quote_expired: 'Quote Expired',
+                      active_lead: `Active ${terms.lead}`,
+                      quote_sent: `${terms.quote} Sent`,
+                      quote_rejected: `${terms.quote} Rejected`,
+                      quote_expired: `${terms.quote} Expired`,
                       negotiation: 'In Negotiation',
                       verbally_approved: 'Approved',
                       proforma_sent: 'Proforma Sent',
                       payment_failed: 'Payment Failed',
                       awaiting_payment: 'Payment Pending',
-                      converted_to_order: 'Converted to Order'
+                      converted_to_order: `Converted to ${terms.order}`
                     };
-                    return conversionLabels[lead.conversionStatus] || 'Active Lead';
+                    return conversionLabels[lead.conversionStatus] || `Active ${terms.lead}`;
                   })()}
                 </div>
                 
