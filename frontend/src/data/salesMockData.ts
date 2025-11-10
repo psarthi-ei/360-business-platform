@@ -161,6 +161,14 @@ export interface QuoteWorkflowController {
   progressCondition?: string; // What needs to happen to progress
 }
 
+// Lead conversation note with timestamp tracking
+export interface LeadNote {
+  id: string;
+  content: string;
+  timestamp: string; // ISO string for precise datetime
+  createdBy?: string; // Future enhancement for multi-user support
+}
+
 export interface Lead {
   id: string;
   businessProfileId: string; // Required - Links to BusinessProfile (single source of truth)
@@ -202,8 +210,8 @@ export interface Lead {
   quoteCount?: number;                 // Total number of quotes generated (including revisions)
   
   // Relationship Tracking
-  lastContact: string;
-  notes: string;
+  notes?: string; // Initial requirements/specifications captured during lead creation
+  notesHistory?: LeadNote[]; // Complete conversation history with timestamps
   
   // Enhanced Conversion Status - Complete Sales Process Stages
   conversionStatus: 'active_lead' | 'quote_sent' | 'quote_rejected' | 'quote_expired' | 'negotiation' | 'verbally_approved' | 'proforma_sent' | 'payment_failed' | 'awaiting_payment' | 'converted_to_order';
@@ -784,8 +792,33 @@ export const mockLeads: Lead[] = [
       specialHandling: ['Pre-treatment required'],
       qualityInspectionRequired: true
     },
-    lastContact: 'Yesterday - "Quote price too high, need to discuss alternatives"',
-    notes: 'Regular service customer. Brings own fabric. Quote rejected due to pricing.',
+    notes: 'Export client needs superior color fastness. Navy blue must match Pantone 19-3832. Client bringing own 100% cotton grey fabric.',
+    notesHistory: [
+      {
+        id: 'note-1731307200000',
+        content: 'Quote price too high, need to discuss alternatives',
+        timestamp: '2024-11-11T10:00:00.000Z',
+        createdBy: 'sales_team'
+      },
+      {
+        id: 'note-1731220800000',
+        content: 'Regular service customer. Brings own fabric. Quote rejected due to pricing.',
+        timestamp: '2024-11-10T10:00:00.000Z',
+        createdBy: 'sales_team'
+      },
+      {
+        id: 'note-1731134400000',
+        content: 'Customer called to discuss dyeing requirements. Needs navy blue color matching for export order.',
+        timestamp: '2024-11-09T10:00:00.000Z',
+        createdBy: 'sales_team'
+      },
+      {
+        id: 'note-1731048000000',
+        content: 'Initial inquiry received. Customer visited factory for quality check.',
+        timestamp: '2024-11-08T10:00:00.000Z',
+        createdBy: 'sales_team'
+      }
+    ],
     conversionStatus: 'quote_rejected'
   },
 
@@ -828,8 +861,15 @@ export const mockLeads: Lead[] = [
       specialHandling: ['Hand feel testing required'],
       qualityInspectionRequired: true
     },
-    lastContact: '2 days ago - "Regular finishing work, need consistent quality"',
-    notes: 'Established customer. Requires specific chemical processes. Good payment history.',
+    notes: 'Regular customer. Needs consistent soft hand feel for garment manufacturing. Premium quality required for branded clothes.',
+    notesHistory: [
+      {
+        id: 'note-1731134400001',
+        content: 'Regular finishing work, need consistent quality',
+        timestamp: '2024-11-09T10:00:00.000Z',
+        createdBy: 'sales_team'
+      }
+    ],
     conversionStatus: 'verbally_approved'
   },
 
@@ -886,8 +926,15 @@ export const mockLeads: Lead[] = [
       specialHandling: ['Sequential processing required', 'Quality testing at each stage'],
       qualityInspectionRequired: true
     },
-    lastContact: 'This morning - "Reviewing quote, need some modifications to pricing and delivery terms"',
-    notes: 'Large export client project. In active negotiation on terms and pricing. Premium quality requirements.',
+    notes: 'Large export order - complete processing pipeline required. Must use OEKO-TEX certified chemicals only. Quality critical.',
+    notesHistory: [
+      {
+        id: 'note-1731393600000',
+        content: 'Reviewing quote, need some modifications to pricing and delivery terms',
+        timestamp: '2024-11-12T10:00:00.000Z',
+        createdBy: 'sales_team'
+      }
+    ],
     conversionStatus: 'negotiation'
   }
 ];

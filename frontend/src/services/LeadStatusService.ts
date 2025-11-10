@@ -1,7 +1,7 @@
 // Lead Status Management Service
 // Handles lead conversion status transitions and validation
 
-import { Lead, Quote, mockLeads, mockQuotes } from '../data/salesMockData';
+import { Lead, Quote, LeadNote, mockLeads, mockQuotes } from '../data/salesMockData';
 
 export type LeadConversionStatus = 
   | 'active_lead'        // Initial inquiry stage
@@ -144,19 +144,17 @@ export class LeadStatusService {
 
     // Update lead status
     lead.conversionStatus = targetStatus;
-    
-    // Update timestamp
-    lead.lastContact = new Date().toLocaleString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
 
-    // Add note about status change
+    // Add note about status change to conversation history
     if (reason) {
-      lead.notes = `${lead.notes}\nStatus updated to ${targetStatus}: ${reason}`;
+      const statusNote: LeadNote = {
+        id: `status-${Date.now()}`,
+        content: `Status updated to ${targetStatus}: ${reason}`,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Add to beginning of notesHistory for newest first display
+      lead.notesHistory = [statusNote, ...(lead.notesHistory || [])];
     }
 
     // Handle special cases

@@ -1,0 +1,148 @@
+/* AddNotesModal.module.css - Simple notes modal using design system */
+
+.modalContent {
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: var(--ds-shadow-xl);
+  max-width: 400px !important;
+  width: 90vw;
+  max-height: 50vh !important;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-lg) var(--ds-space-xl) var(--ds-space-md);
+  border-bottom: 1px solid var(--ds-border-subtle);
+  position: sticky;
+  top: 0;
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+  z-index: 10;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.headerInfo h2 {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-size: var(--ds-text-xl);
+  font-weight: var(--ds-weight-semibold);
+}
+
+.leadInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.companyName {
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-primary);
+}
+
+.contactPerson {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-text-secondary);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: var(--ds-text-2xl);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: var(--ds-touch-target-sm);
+  height: var(--ds-touch-target-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-md);
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-secondary);
+  color: var(--ds-text-primary);
+}
+
+.modalForm {
+  padding: var(--ds-space-lg) var(--ds-space-xl);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.formField label {
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-primary);
+}
+
+.notesTextarea {
+  width: 100%;
+  padding: var(--ds-space-md);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--ds-text-base);
+  font-family: var(--font-family);
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-primary);
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+}
+
+.notesTextarea:focus {
+  outline: none;
+  border-color: var(--ds-color-primary);
+  box-shadow: 0 0 0 3px var(--ds-color-primary-alpha);
+}
+
+.notesTextarea::placeholder {
+  color: var(--ds-text-tertiary);
+}
+
+.fieldNote {
+  font-size: var(--ds-text-sm);
+  color: var(--ds-text-secondary);
+  font-style: italic;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-space-md);
+  padding-top: var(--ds-space-md);
+  border-top: 1px solid var(--ds-border-subtle);
+  margin-top: var(--ds-space-lg);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .modalContent {
+    max-width: 95vw !important;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+    gap: var(--ds-space-sm);
+  }
+  
+  .modalActions button {
+    width: 100%;
+  }
+}

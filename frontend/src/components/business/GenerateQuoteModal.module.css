@@ -215,6 +215,11 @@
   color: var(--ds-color-primary) !important;
 }
 
+.creditTerms {
+  color: var(--ds-color-success) !important;
+  font-weight: var(--ds-weight-medium);
+}
+
 .totalRow {
   padding-top: var(--ds-space-sm);
   border-top: 2px solid var(--ds-text-primary);

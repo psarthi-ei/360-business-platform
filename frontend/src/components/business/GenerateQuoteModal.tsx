@@ -243,14 +243,16 @@ function GenerateQuoteModal({
 
   const calculateAdvancePayment = () => {
     // Business model specific advance payment calculation
-    const percentage = lead.leadType === 'sales' ? 0.30 : 0.50; // 30% for sales, 50% for job work
+    const percentage = lead.leadType === 'sales' ? 0.30 : 0.00; // 30% for sales, 0% for job work (credit terms)
     return Math.round(quoteSummary.totalAmount * percentage);
   };
 
   const getBusinessModelTerms = () => {
+    const customerCreditDays = businessProfile?.loyalty?.paymentTerms || 30; // Default to 30 days if not found
+    
     if (lead.leadType === 'job_work') {
       return {
-        paymentTerms: '50% advance, 50% on completion',
+        paymentTerms: `${customerCreditDays} days credit terms`,
         processingDays: 7,
         specialConditions: [
           'Customer to provide materials',
@@ -403,10 +405,17 @@ function GenerateQuoteModal({
                     <span>Total Amount:</span>
                     <span>{formatCurrency(quoteSummary.totalAmount)}</span>
                   </div>
-                  <div className={styles.summaryRow}>
-                    <span>Advance Required ({lead.leadType === 'sales' ? '30%' : '50%'}):</span>
-                    <span className={styles.advanceAmount}>{formatCurrency(calculateAdvancePayment())}</span>
-                  </div>
+                  {lead.leadType === 'sales' ? (
+                    <div className={styles.summaryRow}>
+                      <span>Advance Required (30%):</span>
+                      <span className={styles.advanceAmount}>{formatCurrency(calculateAdvancePayment())}</span>
+                    </div>
+                  ) : (
+                    <div className={styles.summaryRow}>
+                      <span>Payment Terms:</span>
+                      <span className={styles.creditTerms}>{businessProfile?.loyalty?.paymentTerms || 30} days credit terms</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

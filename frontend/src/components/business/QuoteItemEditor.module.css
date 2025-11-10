@@ -325,6 +325,54 @@
   font-family: var(--ds-font-mono);
 }
 
+/* Pricing Breakdown */
+.pricingBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  margin-bottom: var(--ds-space-sm);
+}
+
+.pricingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--ds-text-xs);
+}
+
+.pricingLabel {
+  color: var(--ds-text-secondary);
+  font-weight: var(--ds-weight-medium);
+}
+
+.pricingValue {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-mono);
+}
+
+/* Calculation Breakdown */
+.calculationBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.savingsBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--ds-space-xs);
+  border-top: 1px solid var(--ds-border-subtle);
+}
+
+.savingsItem {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-text-success);
+  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-mono);
+}
+
 /* Expandable Section */
 .expandableSection {
   border-top: 1px solid var(--ds-border-subtle);

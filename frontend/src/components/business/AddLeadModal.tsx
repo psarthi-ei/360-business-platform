@@ -9,7 +9,7 @@ import styles from './AddLeadModal.module.css';
 interface AddLeadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddLead: (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => void;
+  onAddLead: (leadData: Omit<Lead, 'id' | 'conversionStatus' | 'convertedToOrderDate'>) => void;
   editingLead?: Lead | null;
 }
 
@@ -25,9 +25,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     budget: '',
     timeline: '',
     priority: 'warm' as 'hot' | 'warm' | 'cold',
-    notes: '',
     contact: '', // Combined phone/email field
     designation: '',
+    notes: '', // Initial requirements/specifications
     businessProfileId: '',
     // Job Work focus - always defaults to job_work
     leadType: 'job_work' as 'sales' | 'job_work',
@@ -57,9 +57,9 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
         budget: editingLead.budget || '',
         timeline: editingLead.timeline || '',
         priority: editingLead.priority || 'warm',
-        notes: editingLead.notes || '',
         contact: editingLead.contact || '',
         designation: editingLead.designation || '',
+        notes: editingLead.notes || '',
         businessProfileId: editingLead.businessProfileId || '',
         leadType: editingLead.leadType || 'job_work',
         requestedItems: editingLead.requestedItems || [],
@@ -191,7 +191,7 @@ function AddLeadModal({ isOpen, onClose, onAddLead, editingLead }: AddLeadModalP
     await new Promise(resolve => setTimeout(resolve, 800));
 
     // Prepare lead data
-    const leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'> = {
+    const leadData: Omit<Lead, 'id' | 'conversionStatus' | 'convertedToOrderDate'> = {
       contactPerson: formData.contactPerson,
       phone: formData.phone,
       email: formData.email,

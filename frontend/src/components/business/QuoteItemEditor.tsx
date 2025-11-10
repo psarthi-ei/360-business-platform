@@ -61,11 +61,17 @@ function QuoteItemEditor({
     finalPrice: number;
     totalAmount: number;
     discountAmount: number;
+    volumeDiscount: number;
+    volumeDiscountAmount: number;
+    effectiveRate: number;
   }>({
     basePrice: 0,
     finalPrice: 0,
     totalAmount: 0,
-    discountAmount: 0
+    discountAmount: 0,
+    volumeDiscount: 0,
+    volumeDiscountAmount: 0,
+    effectiveRate: 0
   });
 
   // Calculate pricing when editData changes
@@ -73,12 +79,16 @@ function QuoteItemEditor({
     if (!catalogItem) return;
 
     let basePrice = 0;
-    let finalPrice = 0;
+    let effectiveRate = 0;
+    let volumeDiscount = 0;
+    let volumeDiscountAmount = 0;
     
     if (editData.customPrice) {
       // Use custom price override
       basePrice = editData.customPrice;
-      finalPrice = editData.customPrice;
+      effectiveRate = editData.customPrice;
+      volumeDiscount = 0;
+      volumeDiscountAmount = 0;
     } else {
       // Use catalog pricing
       const priceCalculation = calculateItemPrice(
@@ -86,20 +96,26 @@ function QuoteItemEditor({
         editData.quantity, 
         businessModel
       );
-      basePrice = priceCalculation.basePrice / editData.quantity; // Per unit price
-      finalPrice = priceCalculation.finalPrice / editData.quantity; // Per unit after volume discounts
+      
+      basePrice = priceCalculation.basePrice / editData.quantity; // Per unit base price
+      effectiveRate = priceCalculation.finalPrice / editData.quantity; // Per unit after volume discounts
+      volumeDiscount = priceCalculation.volumeDiscount; // Volume discount percentage
+      volumeDiscountAmount = basePrice - effectiveRate; // Per unit volume discount amount
     }
 
-    // Apply additional discount
-    const discountAmount = (finalPrice * editData.discountPercentage) / 100;
-    const discountedPrice = finalPrice - discountAmount;
-    const totalAmount = discountedPrice * editData.quantity;
+    // Apply additional manual discount
+    const manualDiscountAmount = (effectiveRate * editData.discountPercentage) / 100;
+    const finalPrice = effectiveRate - manualDiscountAmount;
+    const totalAmount = finalPrice * editData.quantity;
 
     setPricing({
       basePrice,
-      finalPrice: discountedPrice,
+      finalPrice,
       totalAmount,
-      discountAmount: discountAmount * editData.quantity
+      discountAmount: manualDiscountAmount * editData.quantity,
+      volumeDiscount,
+      volumeDiscountAmount: volumeDiscountAmount * editData.quantity,
+      effectiveRate
     });
   }, [catalogItem, editData, businessModel]);
 
@@ -316,6 +332,13 @@ function QuoteItemEditor({
     }).format(amount);
   };
 
+  const getUnitForItem = (itemId: string): string => {
+    if (itemId.includes('fabric') || itemId.includes('cotton') || itemId.includes('silk')) return 'meter';
+    if (itemId.includes('button')) return 'piece';
+    if (itemId.includes('dye') || itemId.includes('dyeing') || itemId.includes('service')) return 'meter';
+    return 'unit';
+  };
+
   return (
     <div className={`${styles.itemEditor} ${index % 2 === 0 ? styles.even : styles.odd} ${!isExpanded ? styles.collapsed : ''}`}>
       {/* Item Header */}
@@ -391,9 +414,28 @@ function QuoteItemEditor({
         <div className={styles.editorField}>
           <label>Unit Price</label>
           <div className={styles.priceEditor}>
-            <div className={styles.catalogPrice}>
-              Catalog: {formatCurrency(pricing.basePrice)}
-            </div>
+            {!editData.customPrice ? (
+              <div className={styles.pricingBreakdown}>
+                <div className={styles.pricingRow}>
+                  <span className={styles.pricingLabel}>Base Catalog Rate:</span>
+                  <span className={styles.pricingValue}>{formatCurrency(pricing.basePrice)} per {getUnitForItem(item.masterItemId)}</span>
+                </div>
+                {pricing.volumeDiscount > 0 && (
+                  <div className={styles.pricingRow}>
+                    <span className={styles.pricingLabel}>Volume Discount ({pricing.volumeDiscount}%):</span>
+                    <span className={styles.pricingValue}>-{formatCurrency(pricing.basePrice - pricing.effectiveRate)} per {getUnitForItem(item.masterItemId)}</span>
+                  </div>
+                )}
+                <div className={styles.pricingRow}>
+                  <span className={styles.pricingLabel}>Effective Rate:</span>
+                  <span className={styles.pricingValue}>{formatCurrency(pricing.effectiveRate)} per {getUnitForItem(item.masterItemId)}</span>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.catalogPrice}>
+                Custom Price: {formatCurrency(pricing.basePrice)}
+              </div>
+            )}
             <label className={styles.customPriceToggle}>
               <input
                 type="checkbox"
@@ -457,8 +499,24 @@ function QuoteItemEditor({
           <div className={styles.totalAmount}>
             {formatCurrency(pricing.totalAmount)}
           </div>
-          <div className={styles.unitBreakdown}>
-            {formatCurrency(pricing.finalPrice)} × {editData.quantity}
+          <div className={styles.calculationBreakdown}>
+            <div className={styles.unitBreakdown}>
+              {formatCurrency(pricing.finalPrice)} × {editData.quantity} {getUnitForItem(item.masterItemId)}s
+            </div>
+            {(pricing.volumeDiscount > 0 || editData.discountPercentage > 0) && (
+              <div className={styles.savingsBreakdown}>
+                {pricing.volumeDiscount > 0 && (
+                  <div className={styles.savingsItem}>
+                    Volume Savings: {formatCurrency(pricing.volumeDiscountAmount)}
+                  </div>
+                )}
+                {editData.discountPercentage > 0 && (
+                  <div className={styles.savingsItem}>
+                    Manual Discount: {formatCurrency(pricing.discountAmount)}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

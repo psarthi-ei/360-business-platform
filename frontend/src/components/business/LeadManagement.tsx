@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
 import GenerateQuoteModal from './GenerateQuoteModal';
+import AddNotesModal from './AddNotesModal';
 import RequestedItemCard from './RequestedItemCard';
 import { mockLeads, Lead } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
@@ -52,6 +53,10 @@ function LeadManagement({
   // Quote generation modal state
   const [showGenerateQuoteModal, setShowGenerateQuoteModal] = useState(false);
   const [selectedLeadForQuote, setSelectedLeadForQuote] = useState<Lead | null>(null);
+  
+  // Notes modal state
+  const [showNotesModal, setShowNotesModal] = useState(false);
+  const [selectedLeadForNotes, setSelectedLeadForNotes] = useState<Lead | null>(null);
 
   // Auto-open modal based on URL parameter
   useEffect(() => {
@@ -219,11 +224,10 @@ function LeadManagement({
   };
 
   // Handle adding new lead
-  const handleAddLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
+  const handleAddLead = (leadData: Omit<Lead, 'id' | 'conversionStatus' | 'convertedToOrderDate'>) => {
     const newLead: Lead = {
       ...leadData,
       id: generateLeadId(),
-      lastContact: new Date().toLocaleDateString(),
       conversionStatus: 'active_lead',
       convertedToOrderDate: undefined
     };
@@ -262,14 +266,54 @@ function LeadManagement({
     }, 5000);
   };
 
+  // Notes modal handlers
+  const handleCloseNotesModal = () => {
+    setShowNotesModal(false);
+    setSelectedLeadForNotes(null);
+  };
+
+  const handleSaveNotes = (noteContent: string) => {
+    if (!selectedLeadForNotes || !noteContent.trim()) return;
+    
+    // Create new note entry
+    const newNote = {
+      id: `note-${Date.now()}`,
+      content: noteContent.trim(),
+      timestamp: new Date().toISOString(),
+      createdBy: 'current_user' // Future enhancement for multi-user
+    };
+    
+    // Update lead with new note in history
+    const updatedLeads = leads.map(lead => 
+      lead.id === selectedLeadForNotes.id 
+        ? { 
+            ...lead, 
+            notesHistory: [newNote, ...(lead.notesHistory || [])] // Add to beginning for newest first
+          }
+        : lead
+    );
+    
+    setLeads(updatedLeads);
+    
+    // Show success message
+    setSuccessMessage('Note added successfully!');
+    
+    // Close modal
+    handleCloseNotesModal();
+    
+    // Clear success message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+  };
+
   // Handle updating existing lead
-  const handleUpdateLead = (leadData: Omit<Lead, 'id' | 'lastContact' | 'conversionStatus' | 'convertedToOrderDate'>) => {
+  const handleUpdateLead = (leadData: Omit<Lead, 'id' | 'conversionStatus' | 'convertedToOrderDate'>) => {
     if (!editingLead) return;
 
     const updatedLead: Lead = {
       ...leadData,
       id: editingLead.id,
-      lastContact: `Updated on ${new Date().toLocaleDateString()}`,
       conversionStatus: editingLead.conversionStatus,
       convertedToOrderDate: editingLead.convertedToOrderDate
     };
@@ -295,6 +339,12 @@ function LeadManagement({
   const handleEditLead = (lead: Lead) => {
     setEditingLead(lead);
     setShowAddModal(true);
+  };
+
+  // Handle add notes action
+  const handleAddNotes = (lead: Lead) => {
+    setSelectedLeadForNotes(lead);
+    setShowNotesModal(true);
   };
 
   // Handle modal close
@@ -475,11 +525,6 @@ function LeadManagement({
                         <p><strong>Processing Timeline:</strong> {lead.timeline}</p>
                         <p><strong>Priority Level:</strong> {lead.priority === 'hot' ? '🔥 Urgent Processing' : lead.priority === 'warm' ? '🔶 Planning Stage' : '🔵 Initial Inquiry'}</p>
                       </div>
-                      {lead.notes && (
-                        <div className={styles.projectNotes}>
-                          <p><strong>Special Requirements:</strong> {lead.notes}</p>
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -539,11 +584,62 @@ function LeadManagement({
                     <div className={styles.statusGrid}>
                       <p><strong>{terms.lead} ID:</strong> {lead.id}</p>
                       <p><strong>Status:</strong> <span className={styles.conversionStatus}>{lead.conversionStatus.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></p>
-                      <p><strong>Created:</strong> {lead.lastContact}</p>
+                      <p><strong>Last Contact:</strong> {
+                        lead.notesHistory && lead.notesHistory.length > 0 
+                          ? lead.notesHistory[0].content
+                          : 'No interactions yet'
+                      }</p>
                       {lead.convertedToOrderDate && (
                         <p><strong>Converted:</strong> {lead.convertedToOrderDate}</p>
                       )}
                     </div>
+
+                    {/* Initial Notes */}
+                    {lead.notes && (
+                      <div className={styles.initialNotes}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>📝</span>
+                            Initial Notes
+                          </h4>
+                        </div>
+                        <div className={styles.notesContent}>
+                          <p>{lead.notes}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Additional Notes */}
+                    {lead.notesHistory && lead.notesHistory.length > 0 && (
+                      <div className={styles.conversationHistory}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>💬</span>
+                            Additional Notes
+                          </h4>
+                        </div>
+                        <div className={styles.notesHistoryList}>
+                          {lead.notesHistory.slice(0, 5).map((note, index) => (
+                            <div key={note.id} className={styles.noteEntry}>
+                              <div className={styles.noteTimestamp}>
+                                {new Date(note.timestamp).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </div>
+                              <div className={styles.noteContent}>{note.content}</div>
+                            </div>
+                          ))}
+                          {lead.notesHistory.length > 5 && (
+                            <div className={styles.showMoreNotes}>
+                              +{lead.notesHistory.length - 5} more notes
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Action Buttons - Keep at bottom for consistency */}
@@ -555,6 +651,15 @@ function LeadManagement({
                       📱 WhatsApp
                     </button>
                     {renderDynamicQuoteActions(lead)}
+                    <button 
+                      className="ds-btn ds-btn-secondary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddNotes(lead);
+                      }}
+                    >
+                      📝 Add Notes
+                    </button>
                     <button 
                       className="ds-btn ds-btn-secondary"
                       onClick={(e) => {
@@ -588,6 +693,14 @@ function LeadManagement({
         onClose={handleCloseGenerateQuoteModal}
         lead={selectedLeadForQuote}
         onQuoteGenerated={handleQuoteGenerated}
+      />
+
+      {/* Add Notes Modal */}
+      <AddNotesModal
+        isOpen={showNotesModal}
+        onClose={handleCloseNotesModal}
+        onSave={handleSaveNotes}
+        lead={selectedLeadForNotes}
       />
     </div>
   );
