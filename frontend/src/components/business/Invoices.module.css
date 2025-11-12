@@ -502,6 +502,416 @@
   color: var(--ds-text-primary); /* Neutral color for final totals */
 }
 
+/* ===== PROFESSIONAL PAYMENT SECTION STYLES ===== */
+
+/* Section Headers */
+.sectionHeader {
+  margin-bottom: var(--ds-space-md);
+  border-bottom: 2px solid var(--ds-border-primary);
+  padding-bottom: var(--ds-space-sm);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+}
+
+.sectionIcon {
+  font-size: var(--font-lg);
+  opacity: 0.8;
+}
+
+/* Payment Summary Styling */
+.paymentSummary {
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-md);
+  margin-bottom: var(--ds-space-md);
+  box-shadow: var(--ds-shadow-card);
+}
+
+.paymentSummary p {
+  margin: var(--ds-space-xs) 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-xs) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.paymentSummary p:last-child {
+  border-bottom: none;
+}
+
+/* Payment Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-primary);
+  border: 1px solid var(--ds-border-light);
+}
+
+/* Amount Styling */
+.receivedAmount {
+  color: var(--ds-color-success);
+  font-weight: 600;
+}
+
+.outstandingAmount {
+  color: var(--ds-color-warning);
+  font-weight: 600;
+}
+
+.overdue {
+  color: var(--ds-color-danger);
+  font-weight: 600;
+}
+
+.onTime {
+  color: var(--ds-color-success);
+  font-weight: 500;
+}
+
+/* Transaction Details */
+.transactionDetails {
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.transactionDetails h5 {
+  margin: 0 0 var(--ds-space-md) 0;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  border-bottom: 1px solid var(--ds-border-light);
+  padding-bottom: var(--ds-space-sm);
+}
+
+.transactionDetails p {
+  margin: var(--ds-space-xs) 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-xs) 0;
+}
+
+.transactionDetails .statusBadge {
+  margin-left: var(--ds-space-sm);
+  background: var(--ds-color-success);
+  color: white;
+  border: none;
+}
+
+.transactionDetails .statusBadge.received {
+  background: var(--ds-color-success);
+}
+
+.transactionDetails .statusBadge.verified {
+  background: var(--ds-color-primary);
+}
+
+.transactionDetails .statusBadge.reconciled {
+  background: var(--ds-color-info);
+}
+
+/* Payment Status Overview Grid */
+.paymentOverview {
+  display: grid;
+  gap: var(--ds-space-md);
+  margin-bottom: var(--ds-space-lg);
+}
+
+.paymentStatus {
+  background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-dark));
+  color: white;
+  padding: var(--ds-space-md);
+  border-radius: var(--ds-radius-lg);
+  text-align: center;
+  box-shadow: var(--ds-shadow-card);
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-sm);
+}
+
+.statusIcon {
+  font-size: var(--font-xl);
+}
+
+.statusLabel {
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+/* Summary Grid */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-md);
+}
+
+.summaryItem {
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-sm);
+  text-align: center;
+}
+
+.summaryLabel {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--ds-space-xs);
+  display: block;
+}
+
+.summaryValue {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: block;
+}
+
+/* Verification Status */
+.verificationStatus {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-light);
+}
+
+/* ===== ENHANCED PAYMENT CARD STYLES FOR MULTIPLE PAYMENTS ===== */
+
+/* Summary Row Structure */
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.summaryRow:last-child {
+  border-bottom: none;
+}
+
+.summaryLabel {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+}
+
+.summaryValue {
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+/* Payments Section */
+.paymentsSection {
+  margin-top: var(--ds-space-lg);
+}
+
+.paymentsHeader {
+  margin: 0 0 var(--ds-space-md) 0;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  border-bottom: 1px solid var(--ds-border-light);
+  padding-bottom: var(--ds-space-sm);
+}
+
+/* Individual Payment Cards */
+.paymentCard {
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-md);
+  margin-bottom: var(--ds-space-md);
+  box-shadow: var(--ds-shadow-card);
+  transition: all 0.3s ease;
+}
+
+.paymentCard:hover {
+  border-color: var(--ds-color-primary);
+  box-shadow: var(--ds-shadow-elevated);
+  transform: translateY(-1px);
+}
+
+.paymentCard:last-child {
+  margin-bottom: 0;
+}
+
+/* Payment Header */
+.paymentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--ds-space-md);
+  padding-bottom: var(--ds-space-sm);
+  border-bottom: 2px solid var(--ds-border-primary);
+}
+
+.paymentTitle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.paymentNumber {
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.paymentAmount {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--ds-color-success);
+}
+
+.paymentDate {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-subtle);
+  padding: var(--ds-space-xs) var(--ds-space-sm);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-light);
+}
+
+/* Payment Method */
+.paymentMethod {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  margin-bottom: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-light);
+}
+
+.methodIcon {
+  font-size: var(--font-lg);
+}
+
+.methodText {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+/* Transaction Information */
+.transactionInfo {
+  display: grid;
+  gap: var(--ds-space-xs);
+}
+
+.transactionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-xs) 0;
+}
+
+.transactionLabel {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transactionValue {
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Payment Notes */
+.paymentNotes {
+  margin-top: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-md);
+  border-left: 4px solid var(--ds-color-info);
+}
+
+.notesLabel {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: var(--ds-space-xs);
+}
+
+.notesText {
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* No Payments State */
+.noPayments {
+  text-align: center;
+  padding: var(--ds-space-xl);
+  background: var(--ds-bg-subtle);
+  border: 2px dashed var(--ds-border-light);
+  border-radius: var(--ds-radius-lg);
+  color: var(--ds-text-secondary);
+}
+
+.noPaymentsIcon {
+  font-size: 3rem;
+  margin-bottom: var(--ds-space-md);
+  opacity: 0.6;
+}
+
+.noPayments p {
+  margin: 0 0 var(--ds-space-xs) 0;
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.noPayments small {
+  font-size: var(--font-sm);
+  opacity: 0.8;
+}
+
 /* Mobile Responsive for Professional Display */
 @media (max-width: 768px) {
   .professionalToggle {
@@ -553,5 +963,69 @@
 
   .itemMeta {
     gap: var(--ds-space-sm);
+  }
+
+  /* Mobile Payment Styles */
+  .summaryGrid {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xs);
+  }
+
+  .paymentSummary p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+
+  .transactionDetails p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+
+  .statusBadge {
+    margin-left: 0;
+    margin-top: var(--ds-space-xs);
+  }
+
+  /* Mobile Payment Card Styles */
+  .paymentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-sm);
+  }
+
+  .paymentTitle {
+    width: 100%;
+  }
+
+  .paymentDate {
+    align-self: flex-start;
+  }
+
+  .summaryRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+    padding: var(--ds-space-xs) 0;
+  }
+
+  .transactionRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+
+  .transactionValue {
+    text-align: left;
+  }
+
+  .paymentMethod {
+    padding: var(--ds-space-sm);
+  }
+
+  .paymentCard {
+    padding: var(--ds-space-sm);
+    margin-bottom: var(--ds-space-sm);
   }
 }

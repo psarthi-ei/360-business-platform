@@ -560,35 +560,173 @@ function Invoices({
                         </div>
                       )}
 
-                      {/* Payment Details Section - For Paid Invoices */}
-                      {(invoice.status === 'paid' || invoice.status === 'payment_received') && (() => {
-                        // Get payment data for this invoice
-                        const paymentData = invoice.type === 'proforma' 
-                          ? getAdvancePaymentByProformaId(invoice.id)
-                          : mockFinalPayments.find(p => p.finalInvoiceId === invoice.id);
+                      {/* Payment Details Section */}
+                      {(() => {
+                        // Get ALL payment data for this invoice (supporting multiple payments)
+                        const proformaPayment = invoice.type === 'proforma' ? getAdvancePaymentByProformaId(invoice.id) : null;
+                        const finalPayments = invoice.type === 'final' ? mockFinalPayments.filter(p => p.finalInvoiceId === invoice.id) : [];
+                        const allPayments = proformaPayment ? [proformaPayment, ...finalPayments] : finalPayments;
                         
-                        if (!paymentData) return null;
+                        // Import receivables data for payment status
+                        const { mockReceivables } = require('../../data/salesMockData');
+                        const receivableData = mockReceivables.find((rec: { invoiceId: string }) => rec.invoiceId === invoice.id);
+                        
+                        // Calculate total received from all payments
+                        const totalReceived = allPayments.reduce((sum: number, payment) => {
+                          return sum + (payment?.amount || 0);
+                        }, 0);
                         
                         return (
                           <div className={styles.relationshipSection}>
-                            <h4>💰 Payment Details</h4>
-                            <div className={styles.detailsGrid}>
-                              <p><strong>Payment Method:</strong> {paymentData.paymentMethod}</p>
-                              <p><strong>Payment Date:</strong> {'paymentDate' in paymentData ? paymentData.paymentDate : (paymentData.receivedDate || paymentData.dueDate)}</p>
-                              <p><strong>Amount Paid:</strong> {formatCurrency('paymentDate' in paymentData ? paymentData.amount : (paymentData.receivedAmount || paymentData.amount))}</p>
-                              <p><strong>Transaction Reference:</strong> {paymentData.transactionReference}</p>
-                              <p>
-                                <strong>Payment ID:</strong> 
-                                <span 
-                                  className={styles.mappingLink}
-                                  onClick={() => {
-                                    if (onShowPayments) onShowPayments();
-                                  }}
-                                >
-                                  {paymentData.id} →
-                                </span>
-                              </p>
+                            <div className={styles.sectionHeader}>
+                              <h4 className={styles.sectionTitle}>
+                                <span className={styles.sectionIcon}>💰</span>
+                                Payment & Transaction Details
+                              </h4>
                             </div>
+
+                            {/* Payment Summary */}
+                            <div className={styles.paymentSummary}>
+                              <div className={styles.summaryRow}>
+                                <span className={styles.summaryLabel}>Payment Status:</span>
+                                <span className={styles.statusBadge}>
+                                  {invoice.status === 'paid' || invoice.status === 'payment_received' ? '✅ Fully Paid' : 
+                                   invoice.status === 'overdue' ? '⚠️ Overdue' : 
+                                   invoice.status === 'pending' ? '⏳ Payment Pending' : '📤 Sent - Awaiting Payment'}
+                                </span>
+                              </div>
+                              
+                              <div className={styles.summaryRow}>
+                                <span className={styles.summaryLabel}>Invoice Total:</span>
+                                <span className={styles.summaryValue}>{formatCurrency(invoice.totalAmount)}</span>
+                              </div>
+                              
+                              <div className={styles.summaryRow}>
+                                <span className={styles.summaryLabel}>Total Received:</span>
+                                <span className={`${styles.summaryValue} ${totalReceived > 0 ? styles.receivedAmount : ''}`}>
+                                  {formatCurrency(totalReceived)} {allPayments.length > 1 && `(${allPayments.length} payments)`}
+                                </span>
+                              </div>
+                              
+                              {receivableData && receivableData.balanceAmount > 0 && (
+                                <div className={styles.summaryRow}>
+                                  <span className={styles.summaryLabel}>Outstanding Balance:</span>
+                                  <span className={`${styles.summaryValue} ${styles.outstandingAmount}`}>
+                                    {formatCurrency(receivableData.balanceAmount)}
+                                  </span>
+                                </div>
+                              )}
+                              
+                              <div className={styles.summaryRow}>
+                                <span className={styles.summaryLabel}>Due Date:</span>
+                                <span className={styles.summaryValue}>{invoice.dueDate}</span>
+                              </div>
+                              
+                              {receivableData && receivableData.daysPastDue !== undefined && (
+                                <div className={styles.summaryRow}>
+                                  <span className={styles.summaryLabel}>Payment Timeline:</span>
+                                  <span className={`${styles.summaryValue} ${receivableData.daysPastDue > 0 ? styles.overdue : styles.onTime}`}>
+                                    {receivableData.daysPastDue > 0 
+                                      ? `${receivableData.daysPastDue} days overdue`
+                                      : receivableData.daysPastDue === 0 
+                                        ? 'Due today'
+                                        : `${Math.abs(receivableData.daysPastDue)} days remaining`
+                                    }
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Individual Payment Records */}
+                            {allPayments.length > 0 && (
+                              <div className={styles.paymentsSection}>
+                                <h5 className={styles.paymentsHeader}>
+                                  Payment History ({allPayments.length} payment{allPayments.length !== 1 ? 's' : ''})
+                                </h5>
+                                
+                                {allPayments.filter(Boolean).map((payment, index) => (
+                                    <div key={payment.id} className={styles.paymentCard}>
+                                      <div className={styles.paymentHeader}>
+                                        <div className={styles.paymentTitle}>
+                                          <span className={styles.paymentNumber}>Payment #{index + 1}</span>
+                                          <span className={styles.paymentAmount}>{formatCurrency(payment.amount)}</span>
+                                        </div>
+                                        <div className={styles.paymentDate}>
+                                          {'paymentDate' in payment ? payment.paymentDate : (payment.receivedDate || payment.dueDate)}
+                                        </div>
+                                      </div>
+                                      
+                                      <div className={styles.paymentDetails}>
+                                        <div className={styles.paymentMethod}>
+                                          <span className={styles.methodIcon}>
+                                            {payment.paymentMethod === 'RTGS' ? '🏦' :
+                                             payment.paymentMethod === 'NEFT' ? '💳' :
+                                             payment.paymentMethod === 'UPI' ? '📱' :
+                                             payment.paymentMethod === 'Cash' ? '💵' :
+                                             payment.paymentMethod === 'Cheque' ? '📝' : '💰'}
+                                          </span>
+                                          <span className={styles.methodText}>{payment.paymentMethod}</span>
+                                        </div>
+                                        
+                                        <div className={styles.transactionInfo}>
+                                          <div className={styles.transactionRow}>
+                                            <span className={styles.transactionLabel}>Transaction Ref:</span>
+                                            <span className={styles.transactionValue}>{payment.transactionReference || 'N/A'}</span>
+                                          </div>
+                                          
+                                          <div className={styles.transactionRow}>
+                                            <span className={styles.transactionLabel}>Payment ID:</span>
+                                            <span className={styles.transactionValue}>{payment.id}</span>
+                                          </div>
+                                          
+                                          {payment.status && (
+                                            <div className={styles.transactionRow}>
+                                              <span className={styles.transactionLabel}>Status:</span>
+                                              <span className={`${styles.statusBadge} ${styles[payment.status]}`}>
+                                                {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                                              </span>
+                                            </div>
+                                          )}
+                                          
+                                          {payment.bankDetails && (
+                                            <>
+                                              <div className={styles.transactionRow}>
+                                                <span className={styles.transactionLabel}>Bank:</span>
+                                                <span className={styles.transactionValue}>{payment.bankDetails.bankName}</span>
+                                              </div>
+                                              <div className={styles.transactionRow}>
+                                                <span className={styles.transactionLabel}>Account:</span>
+                                                <span className={styles.transactionValue}>{payment.bankDetails.accountNumber}</span>
+                                              </div>
+                                              {payment.bankDetails.ifscCode && (
+                                                <div className={styles.transactionRow}>
+                                                  <span className={styles.transactionLabel}>IFSC:</span>
+                                                  <span className={styles.transactionValue}>{payment.bankDetails.ifscCode}</span>
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
+                                        
+                                        {'notes' in payment && payment.notes && (
+                                          <div className={styles.paymentNotes}>
+                                            <span className={styles.notesLabel}>Notes:</span>
+                                            <span className={styles.notesText}>{payment.notes}</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {allPayments.length === 0 && (
+                              <div className={styles.noPayments}>
+                                <div className={styles.noPaymentsIcon}>💳</div>
+                                <p>No payments received yet</p>
+                                <small>Payment information will appear here once received</small>
+                              </div>
+                            )}
                           </div>
                         );
                       })()}
@@ -606,14 +744,6 @@ function Invoices({
                         </button>
                         
                         {/* Type-specific actions */}
-                        {invoice.type === 'proforma' && onShowPayments && (
-                          <button 
-                            className="ds-btn ds-btn-primary"
-                            onClick={() => onShowPayments()}
-                          >
-                            💰 View Payments
-                          </button>
-                        )}
                         
                         {invoice.type === 'final' && invoice.status === 'paid' && (
                           <button className="ds-btn ds-btn-secondary">

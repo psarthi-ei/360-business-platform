@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SalesOrders from '../components/business/SalesOrders';
 import { TranslationProvider } from '../contexts/TranslationContext';
+import { TerminologyProvider } from '../contexts/TerminologyContext';
 
 const mockProps = {
   currentLanguage: 'en',
@@ -29,7 +30,9 @@ const mockProps = {
 const renderWithTranslation = (component: React.ReactElement) => {
   return render(
     <TranslationProvider defaultLanguage="en">
-      {component}
+      <TerminologyProvider initialRegion="surat-processing">
+        {component}
+      </TerminologyProvider>
     </TranslationProvider>
   );
 };

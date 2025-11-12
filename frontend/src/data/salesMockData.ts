@@ -1238,8 +1238,8 @@ export const mockFinalInvoices: FinalInvoice[] = [
     invoiceNumber: 'INV-JO-2025-001',
     salesOrderId: 'JO-2025-001', // Job order reference (not regular sales order)
     businessProfileId: 'bp-surat-processors',
-    invoiceDate: 'October 22, 2024',
-    dueDate: 'November 21, 2024', // 30-day credit terms
+    invoiceDate: 'October 17, 2025',
+    dueDate: 'November 16, 2025', // 30-day credit terms
     
     company: {
       name: 'Surat Textile Mills Pvt Ltd',
@@ -1296,7 +1296,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalAmount: 56640,
     
     status: 'paid',
-    paymentReceivedDate: 'November 15, 2024',
+    paymentReceivedDate: 'November 15, 2025',
     notes: 'Service completed successfully. High-quality dyeing as per specifications.',
     
     // Phase 2 Day 13: Service Invoice Enhancement - Applied to existing service invoice
@@ -1322,8 +1322,8 @@ export const mockFinalInvoices: FinalInvoice[] = [
     invoiceNumber: 'INV-JO-2025-002',
     salesOrderId: 'JO-2025-002', // Job order reference
     businessProfileId: 'bp-ahmedabad-finishers',
-    invoiceDate: 'October 25, 2024',
-    dueDate: 'November 9, 2024', // 15-day credit terms
+    invoiceDate: 'October 20, 2025',
+    dueDate: 'November 4, 2025', // 15-day credit terms
     
     company: {
       name: 'Surat Textile Mills Pvt Ltd',
@@ -1379,15 +1379,15 @@ export const mockFinalInvoices: FinalInvoice[] = [
     totalTax: 9000,
     totalAmount: 59000,
     
-    status: 'draft',
+    status: 'pending',
     paymentReceivedDate: undefined,
-    notes: 'Premium finishing service completed. Payment due within 15 days.',
+    notes: 'Premium finishing service completed. Partial payment of ₹29,500 received. Balance ₹29,500 pending.',
     
     // Legacy fields for backward compatibility
     gstRate: 18,
     gstAmount: 9000,
     advanceAdjusted: 0,
-    balanceAmount: 59000
+    balanceAmount: 29500
   },
   
   {
@@ -1395,8 +1395,8 @@ export const mockFinalInvoices: FinalInvoice[] = [
     invoiceNumber: 'INV-JO-2025-003',
     salesOrderId: 'JO-2025-003', // Job order reference
     businessProfileId: 'bp-mumbai-printers',
-    invoiceDate: 'October 28, 2024',
-    dueDate: 'December 12, 2024', // 45-day credit terms
+    invoiceDate: 'October 30, 2025',
+    dueDate: 'December 14, 2025', // 45-day credit terms
     
     company: {
       name: 'Surat Textile Mills Pvt Ltd',
@@ -1454,7 +1454,7 @@ export const mockFinalInvoices: FinalInvoice[] = [
     
     status: 'overdue',
     paymentReceivedDate: undefined,
-    notes: 'Custom printing completed. Extended credit terms but payment overdue.',
+    notes: 'Custom printing completed. Payment overdue - follow up required.',
     
     // Legacy fields for backward compatibility
     gstRate: 18,
@@ -1466,26 +1466,76 @@ export const mockFinalInvoices: FinalInvoice[] = [
 
 // Final Payment Records Data - Payment closure tracking
 export const mockFinalPayments: FinalPayment[] = [
+  // Job Order Payment Records - Service invoicing for job work completion
   {
-    id: 'FP-2025-001',
-    finalInvoiceId: 'INV-2025-001',
-    amount: 825000,
-    paymentDate: 'October 10, 2025',  // Matches paymentReceivedDate in invoice
+    id: 'FP-JO-2025-001',
+    finalInvoiceId: 'INV-JO-2025-001', // Surat Processors - Dyeing Service
+    amount: 56640,
+    paymentDate: 'November 15, 2025',  // Paid before due date
     paymentMethod: 'RTGS',
-    transactionReference: 'ICICI251010RT97531',
+    transactionReference: 'AXIS251115RT45632',
     status: 'reconciled',
-    notes: 'Final payment received on time. Order closed successfully.'
+    notes: 'Job work payment for Navy Blue dyeing service. Delivered on time, customer satisfied.',
+    bankDetails: {
+      bankName: 'Axis Bank',
+      accountNumber: '1234567890',
+      ifscCode: 'UTIB0001234'
+    },
+    verificationStatus: 'verified',
+    reconciliationDate: 'November 16, 2025',
+    reconciliationNotes: 'Payment reconciled successfully for dyeing service completion'
   },
   {
-    id: 'FP-2025-002',
-    finalInvoiceId: 'INV-2025-002',
-    amount: 605000,
-    paymentDate: 'October 8, 2025',  // Matches paymentReceivedDate in invoice
-    paymentMethod: 'RTGS',
-    transactionReference: 'BOB251008RT86420',
+    id: 'FP-JO-2025-002-1',
+    finalInvoiceId: 'INV-JO-2025-002', // Ahmedabad Finishers - Finishing Service
+    amount: 29500,
+    paymentDate: 'November 3, 2025',  // First partial payment
+    paymentMethod: 'NEFT',
+    transactionReference: 'HDFC251103NF78901',
     status: 'reconciled',
-    notes: 'Regular customer - prompt payment as usual. Order completed.'
+    notes: 'First partial payment (50%) for finishing services. Customer requested payment split.',
+    bankDetails: {
+      bankName: 'HDFC Bank',
+      accountNumber: '9876543210',
+      ifscCode: 'HDFC0001234'
+    },
+    verificationStatus: 'verified',
+    reconciliationDate: 'November 4, 2025',
+    reconciliationNotes: 'First installment of split payment arrangement'
+  },
+  {
+    id: 'FP-JO-2025-002-2',
+    finalInvoiceId: 'INV-JO-2025-002', // Ahmedabad Finishers - Finishing Service
+    amount: 20000,
+    paymentDate: 'November 18, 2025',  // Second partial payment
+    paymentMethod: 'UPI',
+    transactionReference: 'UPI251118AXS890123',
+    status: 'verified',
+    notes: 'Second partial payment via UPI transfer. Balance ₹9,500 still pending.',
+    bankDetails: {
+      bankName: 'Axis Bank',
+      accountNumber: '9876543210',
+      ifscCode: 'UTIB0001234'
+    },
+    verificationStatus: 'pending',
+    reconciliationDate: undefined,
+    reconciliationNotes: 'Awaiting final reconciliation'
+  },
+  {
+    id: 'FP-JO-2025-003-1',
+    finalInvoiceId: 'INV-JO-2025-003', // Rajkot Digital Prints - Digital Printing
+    amount: 15000,
+    paymentDate: 'December 1, 2025',  // Small payment after overdue
+    paymentMethod: 'Cash',
+    transactionReference: 'CSH251201001',
+    status: 'received',
+    notes: 'Partial cash payment received. Customer experiencing cash flow issues.',
+    bankDetails: undefined, // Cash payment
+    verificationStatus: 'verified',
+    reconciliationDate: 'December 1, 2025',
+    reconciliationNotes: 'Cash payment verified and recorded'
   }
+  // Additional payments can be added as customers make installments
 ];
 
 // Customer feedback data moved to customerMockData.ts
@@ -1818,7 +1868,7 @@ export function calculateInvoiceItemTotals(items: InvoiceItem[]): {
   const totalDiscount = items.reduce((sum, item) => sum + (item.discount || 0), 0);
   const taxableAmount = items.reduce((sum, item) => sum + item.taxableAmount, 0);
   // For final invoices, we calculate tax differently - it's part of the taxableAmount calculation
-  const totalTax = taxableAmount * 0.05; // 5% GST (could be CGST+SGST or IGST)
+  const totalTax = taxableAmount * 0.18; // 18% GST (9% CGST + 9% SGST for intrastate)
   const total = taxableAmount + totalTax;
   
   return {
@@ -1945,12 +1995,12 @@ export const mockJobOrders: JobOrder[] = [
     advancePaymentId: '', // Job orders typically don't use advance payments
     orderDate: '2025-10-15',
     deliveryDate: '2025-10-22',
-    totalAmount: 48000,
-    status: 'production_started',
-    statusMessage: 'Dyeing process in progress - 60% completed',
-    paymentStatus: 'pending',
+    totalAmount: 56640,
+    status: 'delivered',
+    statusMessage: 'Dyeing completed and delivered to customer',
+    paymentStatus: 'fully_paid',
     urgency: 'normal',
-    progressPercentage: 60,
+    progressPercentage: 100,
     
     // ✅ NEW: Reference expected materials by name (no duplication)
     expectedClientMaterialNames: [
@@ -1995,12 +2045,12 @@ export const mockJobOrders: JobOrder[] = [
     advancePaymentId: '',
     orderDate: '2025-10-18',
     deliveryDate: '2025-10-25',
-    totalAmount: 36000,
-    status: 'order_confirmed',
-    statusMessage: 'Material received, processing scheduled',
-    paymentStatus: 'pending',
+    totalAmount: 59000,
+    status: 'completed',
+    statusMessage: 'Finishing completed, ready for dispatch',
+    paymentStatus: 'partial',
     urgency: 'normal',
-    progressPercentage: 10,
+    progressPercentage: 100,
     
     expectedClientMaterialNames: ['Cotton Blend Fabric 180 GSM'],
     creditApprovalStatus: 'approved',
@@ -2040,12 +2090,12 @@ export const mockJobOrders: JobOrder[] = [
     advancePaymentId: '',
     orderDate: '2025-10-21',
     deliveryDate: '2025-10-30',
-    totalAmount: 96000,
-    status: 'materials_pending',
-    statusMessage: 'Waiting for client material quality approval',
+    totalAmount: 53100,
+    status: 'quality_check',
+    statusMessage: 'Printing completed, quality verification in progress',
     paymentStatus: 'pending',
     urgency: 'urgent',
-    progressPercentage: 5,
+    progressPercentage: 85,
     
     expectedClientMaterialNames: [
       'Polyester Fabric - 150 GSM',
@@ -2091,11 +2141,11 @@ export const mockJobOrders: JobOrder[] = [
     orderDate: '2025-11-10',
     deliveryDate: '2025-11-17',
     totalAmount: 72000,
-    status: 'materials_pending',
-    statusMessage: 'Awaiting customer fabric for dyeing service',
-    paymentStatus: 'advance_received',
+    status: 'production_started',
+    statusMessage: 'Dyeing process in progress - 60% completed',
+    paymentStatus: 'pending',
     urgency: 'normal',
-    progressPercentage: 25,
+    progressPercentage: 60,
     
     expectedClientMaterialNames: [
       'Cotton Fabric - Grey 180 GSM',
@@ -2140,11 +2190,11 @@ export const mockJobOrders: JobOrder[] = [
     orderDate: '2025-11-08',
     deliveryDate: '2025-11-18',
     totalAmount: 105000,
-    status: 'materials_pending',
-    statusMessage: 'Customer fabric received - ready for processing',
-    paymentStatus: 'advance_received',
-    urgency: 'urgent',
-    progressPercentage: 35,
+    status: 'order_confirmed',
+    statusMessage: 'Material received, processing scheduled',
+    paymentStatus: 'pending',
+    urgency: 'normal',
+    progressPercentage: 10,
     
     expectedClientMaterialNames: [
       'Cotton Dyed Fabric - Blue 200 GSM',
@@ -2190,10 +2240,10 @@ export const mockJobOrders: JobOrder[] = [
     deliveryDate: '2025-11-25',
     totalAmount: 144000,
     status: 'materials_pending',
-    statusMessage: 'Premium digital printing - awaiting customer fabric',
-    paymentStatus: 'advance_received',
-    urgency: 'urgent',
-    progressPercentage: 20,
+    statusMessage: 'Awaiting customer fabric for printing service',
+    paymentStatus: 'pending',
+    urgency: 'normal',
+    progressPercentage: 0,
     
     expectedClientMaterialNames: [
       'Polyester Fabric - White 150 GSM',
@@ -2232,101 +2282,9 @@ export const mockJobOrders: JobOrder[] = [
 
 // ==================== FINANCIAL MANAGEMENT MOCK DATA ====================
 
-// Mock Receivables with Aging Analysis
+// Mock Receivables with Aging Analysis - Only Job Order receivables
 export const mockReceivables: ReceivableRecord[] = [
-  {
-    id: 'REC-001',
-    invoiceId: 'INV-2024-089',
-    customerId: 'bp-surat-dye-works',
-    customerName: 'Rajesh Agarwal',
-    companyName: 'Surat Dye Works Pvt. Ltd.',
-    invoiceNumber: 'INV-2024-089',
-    invoiceDate: '2024-09-15',
-    dueDate: '2024-10-15',
-    originalAmount: 48000,
-    receivedAmount: 0,
-    balanceAmount: 48000,
-    daysPastDue: 17,
-    agingCategory: '31-60',
-    orderType: 'job_order',
-    orderId: 'JO-2025-001',
-    orderDescription: 'Reactive Dyeing Service - Navy Blue',
-    creditLimit: 200000,
-    totalOutstanding: 75000,
-    creditUtilization: 37.5,
-    customerRisk: 'medium',
-    paymentHistory: 'good',
-    lastPaymentDate: '2024-08-20',
-    averagePaymentDays: 35,
-    remindersSent: 2,
-    lastReminderDate: '2024-10-20',
-    nextActionDate: '2024-11-05',
-    nextActionType: 'call',
-    assignedCollector: 'Priya Sharma',
-    paymentStatus: 'overdue'
-  },
-  
-  {
-    id: 'REC-003',
-    invoiceId: 'INV-2024-067',
-    customerId: 'bp-mumbai-exports',
-    customerName: 'Deepak Joshi',
-    companyName: 'Mumbai Export House',
-    invoiceNumber: 'INV-2024-067',
-    invoiceDate: '2024-07-20',
-    dueDate: '2024-08-19',
-    originalAmount: 180000,
-    receivedAmount: 0,
-    balanceAmount: 180000,
-    daysPastDue: 74,
-    agingCategory: '61-90',
-    orderType: 'job_order',
-    orderId: 'JO-2025-008',
-    orderDescription: 'Digital Printing Service - Multi-color Design',
-    creditLimit: 300000,
-    totalOutstanding: 280000,
-    creditUtilization: 93.3,
-    customerRisk: 'high',
-    paymentHistory: 'poor',
-    averagePaymentDays: 65,
-    remindersSent: 5,
-    lastReminderDate: '2024-10-25',
-    nextActionDate: '2024-11-10',
-    nextActionType: 'legal',
-    assignedCollector: 'Suresh Kumar',
-    paymentStatus: 'collection'
-  },
-  
-  {
-    id: 'REC-004',
-    invoiceId: 'INV-2024-095',
-    customerId: 'bp-coimbatore-mills',
-    customerName: 'Lakshmi Narayan',
-    companyName: 'Coimbatore Cotton Mills',
-    invoiceNumber: 'INV-2024-095',
-    invoiceDate: '2024-10-20',
-    dueDate: '2024-11-19',
-    originalAmount: 85000,
-    receivedAmount: 0,
-    balanceAmount: 85000,
-    daysPastDue: -18,
-    agingCategory: 'current',
-    orderType: 'job_order',
-    orderId: 'JO-2025-012',
-    orderDescription: 'Bleaching & Finishing Services',
-    creditLimit: 150000,
-    totalOutstanding: 85000,
-    creditUtilization: 56.7,
-    customerRisk: 'low',
-    paymentHistory: 'good',
-    averagePaymentDays: 25,
-    remindersSent: 0,
-    nextActionDate: '2024-11-15',
-    nextActionType: 'reminder',
-    paymentStatus: 'pending'
-  },
-  
-  // Phase 2 Day 14: Job Order Receivables for Financial Chain
+  // Job Order Receivables for Financial Chain
   // Linked to enhanced service invoices with new service-specific fields
   {
     id: 'REC-JO-001',
@@ -2336,8 +2294,8 @@ export const mockReceivables: ReceivableRecord[] = [
     companyName: 'Surat Dye Works',
     
     invoiceNumber: 'INV-JO-2025-001',
-    invoiceDate: '2024-10-22',
-    dueDate: '2024-11-21',
+    invoiceDate: '2025-10-17',
+    dueDate: '2025-11-16',
     originalAmount: 56640,
     receivedAmount: 56640, // Paid as per enhanced invoice
     balanceAmount: 0,
@@ -2356,7 +2314,7 @@ export const mockReceivables: ReceivableRecord[] = [
     creditUtilization: 0.0,
     customerRisk: 'low',
     paymentHistory: 'excellent',
-    lastPaymentDate: '2024-11-15',
+    lastPaymentDate: '2025-11-15',
     averagePaymentDays: 24,
     remindersSent: 0,
     nextActionDate: undefined,
@@ -2373,13 +2331,13 @@ export const mockReceivables: ReceivableRecord[] = [
     companyName: 'Advanced Textile Finishers',
     
     invoiceNumber: 'INV-JO-2025-002',
-    invoiceDate: '2024-10-25',
-    dueDate: '2024-11-09',
-    originalAmount: 84000,
-    receivedAmount: 0,
-    balanceAmount: 84000,
+    invoiceDate: '2025-10-20',
+    dueDate: '2025-11-04',
+    originalAmount: 59000,
+    receivedAmount: 29500,
+    balanceAmount: 29500,
     
-    daysPastDue: -5, // Due in 5 days
+    daysPastDue: 0,
     agingCategory: 'current',
     
     orderType: 'job_order',
@@ -2387,16 +2345,51 @@ export const mockReceivables: ReceivableRecord[] = [
     orderDescription: 'Finishing Services - Softening & Anti-wrinkle',
     
     creditLimit: 150000,
-    totalOutstanding: 84000,
-    creditUtilization: 56.0,
+    totalOutstanding: 29500,
+    creditUtilization: 19.7,
     customerRisk: 'medium',
     paymentHistory: 'good',
-    averagePaymentDays: 28,
+    averagePaymentDays: 14,
     remindersSent: 1,
-    lastReminderDate: '2024-11-01',
-    nextActionDate: '2024-11-08',
+    lastReminderDate: '2025-11-05',
+    nextActionDate: '2025-11-20',
     nextActionType: 'call',
-    paymentStatus: 'pending'
+    paymentStatus: 'partial'
+  },
+
+  // Additional Job Order Receivable
+  {
+    id: 'REC-JO-003',
+    invoiceId: 'INV-JO-2025-003',
+    customerId: 'bp-mumbai-printers',
+    customerName: 'Sunil Mehta',
+    companyName: 'Mumbai Digital Printers',
+    
+    invoiceNumber: 'INV-JO-2025-003',
+    invoiceDate: '2025-10-30',
+    dueDate: '2025-12-14',
+    originalAmount: 53100,
+    receivedAmount: 0,
+    balanceAmount: 53100,
+    
+    daysPastDue: 25,
+    agingCategory: '31-60',
+    
+    orderType: 'job_order',
+    orderId: 'JO-2025-003',
+    orderDescription: 'Digital Printing Service - Custom Pattern Design',
+    
+    creditLimit: 200000,
+    totalOutstanding: 53100,
+    creditUtilization: 26.6,
+    customerRisk: 'high',
+    paymentHistory: 'poor',
+    averagePaymentDays: 45,
+    remindersSent: 3,
+    lastReminderDate: '2025-12-10',
+    nextActionDate: '2025-12-20',
+    nextActionType: 'legal',
+    paymentStatus: 'overdue'
   }
 ];
 
@@ -2418,4 +2411,24 @@ function migrateQuotesToRevisionSystem() {
 
 // Auto-migrate quotes on module load
 migrateQuotesToRevisionSystem();
+
+// Job Order update utility function
+export const updateJobOrder = async (
+  jobOrderId: string,
+  updates: Partial<JobOrder>
+): Promise<JobOrder> => {
+  const index = mockJobOrders.findIndex(jo => jo.id === jobOrderId);
+  if (index === -1) {
+    throw new Error('Job Order not found');
+  }
+
+  const updatedJobOrder = {
+    ...mockJobOrders[index],
+    ...updates,
+    lastModified: new Date().toISOString()
+  };
+
+  mockJobOrders[index] = updatedJobOrder;
+  return updatedJobOrder;
+};
 

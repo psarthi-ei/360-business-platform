@@ -1,5 +1,5 @@
 import { InwardEntry, updateInwardEntry } from '../data/procurementMockData';
-import { getJobOrderById } from '../data/salesMockData';
+import { getJobOrderById, updateJobOrder } from '../data/salesMockData';
 import { autoCreateProductionOrder, canCreateProductionOrder } from './ProductionOrderService';
 
 export const completeInwardEntryInspection = async (
@@ -42,10 +42,15 @@ export const completeInwardEntryInspection = async (
       try {
         const productionOrder = await autoCreateProductionOrder(updatedEntry, jobOrder);
         
+        // Update Job Order status to reflect material receipt completion
+        await updateJobOrder(jobOrder.id, {
+          status: 'materials_acknowledged'
+        });
+        
         return {
           success: true,
           productionOrderId: productionOrder.id,
-          message: `Inward Entry completed. Production Order ${productionOrder.id} created automatically.`
+          message: `Inward Entry completed. Job Order updated to 'materials_acknowledged'. Production Order ${productionOrder.id} created automatically.`
         };
       } catch (error) {
         return {
@@ -110,11 +115,16 @@ export const recordCustomerFabricReceipt = async (
     // For now, we'll add to mock data
     const { createInwardEntry } = await import('../data/procurementMockData');
     createInwardEntry(inwardEntry);
+    
+    // Update Job Order status to reflect material receipt
+    await updateJobOrder(jobOrderId, {
+      status: 'awaiting_client_materials' // Update to show material receipt in progress
+    });
 
     return {
       success: true,
       inwardEntryId: inwardEntry.id,
-      message: `Customer fabric receipt recorded. Inward Entry ${inwardEntry.id} created. Complete quality inspection to proceed with production.`
+      message: `Customer fabric receipt recorded. Job Order updated to 'awaiting_client_materials'. Inward Entry ${inwardEntry.id} created. Complete quality inspection to proceed with production.`
     };
 
   } catch (error) {
