@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { ProductionOrder, getAllProductionOrders, getProductionOrdersByStatus } from '../../data/productionMockData';
+import { ProductionOrder, WorkOrder, getAllProductionOrders, getProductionOrdersByStatus } from '../../data/productionMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import { WorkOrderCreationModal } from './WorkOrderCreationModal';
 import { getWorkOrdersByProductionOrder } from '../../services/ProductionOrderService';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './ProductionOrderManagement.module.css';
 
 interface ProductionOrderManagementProps {
@@ -22,7 +23,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   openAddModal,
   onAddModalHandled
 }) => {
-  // Removed terminology context
+  const terms = useTerminologyTerms();
   const { toggleExpansion, isExpanded } = useCardExpansion();
   const [selectedProductionOrder, setSelectedProductionOrder] = useState<ProductionOrder | null>(null);
   const [showWorkOrderModal, setShowWorkOrderModal] = useState(false);
@@ -36,12 +37,12 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
     return getProductionOrdersByStatus(filterState as ProductionOrder['status']);
   }, [allProductionOrders, filterState]);
 
-  // Status display mapping
+  // Status display mapping with local terminology
   const getStatusDisplay = (status: ProductionOrder['status']) => {
     const statusMap = {
       'awaiting_material': { icon: '⏳', label: 'Awaiting Material', color: '#f59e0b' },
       'material_received': { icon: '📦', label: 'Material Received', color: '#3b82f6' },
-      'awaiting_work_order_creation': { icon: '📋', label: 'Awaiting Work Order Creation', color: '#8b5cf6' },
+      'awaiting_work_order_creation': { icon: '📋', label: `Awaiting ${terms.workOrder} Creation`, color: '#8b5cf6' },
       'ready_for_production': { icon: '🔄', label: 'Ready for Production', color: '#10b981' },
       'in_progress': { icon: '🏭', label: 'In Progress', color: '#06b6d4' },
       'completed': { icon: '✅', label: 'Completed', color: '#22c55e' },
@@ -90,6 +91,58 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
       'awaiting_material': 'ds-card-status-inactive'
     };
     return statusMap[status] || 'ds-card-status-inactive';
+  };
+
+  // Helper functions for work order status display (updated for status variety)
+  const getWorkOrderStatusClass = (status: WorkOrder['status']): string => {
+    const statusMap = {
+      'completed': 'status-completed',
+      'delivered': 'status-delivered',
+      'dispatched': 'status-delivered',
+      'qc_approved': 'status-completed',
+      'ready_for_delivery': 'status-completed',
+      'ready_qc': 'status-pending',
+      'in_progress': 'status-active',
+      'pending': 'status-pending',
+      'qc_rejected': 'status-rejected',
+      'rework_required': 'status-rejected',
+      'on_hold': 'status-inactive'
+    } as const satisfies Record<WorkOrder['status'], string>;
+    return statusMap[status] || 'status-pending';
+  };
+
+  const getWorkOrderStatusIcon = (status: WorkOrder['status']): string => {
+    const statusMap = {
+      'completed': '✅',
+      'delivered': '🚚',
+      'dispatched': '📤',
+      'qc_approved': '🔍✅',
+      'ready_for_delivery': '📦',
+      'ready_qc': '🔍',
+      'in_progress': '🔄',
+      'pending': '⏳',
+      'qc_rejected': '🔍❌',
+      'rework_required': '🔧',
+      'on_hold': '⏸️'
+    } as const satisfies Record<WorkOrder['status'], string>;
+    return statusMap[status] || '❓';
+  };
+
+  const getWorkOrderStatusText = (status: WorkOrder['status']): string => {
+    const statusMap = {
+      'completed': 'Completed',
+      'delivered': 'Delivered',
+      'dispatched': 'Dispatched',
+      'qc_approved': 'QC Approved',
+      'ready_for_delivery': 'Ready for Delivery',
+      'ready_qc': 'Ready for QC',
+      'in_progress': 'In Progress',
+      'pending': 'Pending',
+      'qc_rejected': 'QC Rejected',
+      'rework_required': 'Rework Required',
+      'on_hold': 'On Hold'
+    } as const satisfies Record<WorkOrder['status'], string>;
+    return statusMap[status] || 'Unknown';
   };
 
   return (
@@ -142,119 +195,182 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                   </div>
                 </div>
 
-                {/* Progressive Disclosure - Detailed Information */}
+                {/* Professional Expanded Details - Following Lead Management Pattern */}
                 {expanded && (
                   <div className="ds-expanded-details">
                     <div className="ds-details-content">
-                      {/* Enhanced Production Order Details */}
-                      <p><strong>Customer:</strong> 👤 {productionOrder.customerName} • <strong>Order Type:</strong> 🏭 Production Order • <strong>Status:</strong> {statusDisplay.icon} {statusDisplay.label}</p>
-                      {productionOrder.fabricDetails.challanReference && (
-                        <p><strong>Challan Reference:</strong> 📋 {productionOrder.fabricDetails.challanReference}</p>
-                      )}
-                      
-                      {/* Fabric Details Section */}
-                      <div className={styles.detailsSection}>
-                        <h4>📦 Fabric Specifications</h4>
-                        <div className={styles.detailsGrid}>
-                          <div className={styles.detailItem}>
-                            <span className={styles.label}>Material Type:</span>
-                            <span>{productionOrder.fabricDetails.type}</span>
+                      {/* Professional Fabric Details Section */}
+                      <div className={styles.expandedSection}>
+                        <h4 className={styles.sectionHeader}>📦 Fabric Specifications</h4>
+                        <div className={styles.professionalDetailsGrid}>
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>Material Type:</span>
+                            <span className={styles.detailValue}>{productionOrder.fabricDetails.type}</span>
                           </div>
-                          <div className={styles.detailItem}>
-                            <span className={styles.label}>Quantity:</span>
-                            <span>{productionOrder.fabricDetails.quantity} {productionOrder.fabricDetails.unit}</span>
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>Quantity:</span>
+                            <span className={styles.detailValue}>{productionOrder.fabricDetails.quantity} {productionOrder.fabricDetails.unit}</span>
                           </div>
-                          <div className={styles.detailItem}>
-                            <span className={styles.label}>Quality Grade:</span>
-                            <span>{productionOrder.fabricDetails.qualityGrade || 'Standard'}</span>
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>Quality Grade:</span>
+                            <span className={styles.detailValue}>{productionOrder.fabricDetails.qualityGrade || 'Standard'}</span>
                           </div>
                           {productionOrder.fabricDetails.colors && (
-                            <div className={styles.detailItem}>
-                              <span className={styles.label}>Colors:</span>
-                              <span>{productionOrder.fabricDetails.colors.join(', ')}</span>
+                            <div className={styles.detailRow}>
+                              <span className={styles.detailLabel}>Colors:</span>
+                              <span className={styles.detailValue}>{productionOrder.fabricDetails.colors.join(', ')}</span>
                             </div>
                           )}
                           {productionOrder.fabricDetails.specialInstructions && (
-                            <div className={styles.detailItem}>
-                              <span className={styles.label}>Special Instructions:</span>
-                              <span>{productionOrder.fabricDetails.specialInstructions}</span>
+                            <div className={styles.detailRowFull}>
+                              <span className={styles.detailLabel}>Special Instructions:</span>
+                              <span className={styles.detailValue}>{productionOrder.fabricDetails.specialInstructions}</span>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      {/* Work Orders Section */}
-                      <div className={styles.detailsSection}>
-                        <h4>🔧 Work Orders ({workOrders.length})</h4>
+                      {/* Professional Work Orders Section */}
+                      <div className={styles.expandedSection}>
+                        <h4 className={styles.sectionHeader}>🔧 {terms.workOrders} ({workOrders.length})</h4>
                         {workOrders.length > 0 ? (
-                          <div className={styles.workOrdersList}>
-                            {workOrders.map(wo => (
-                              <div key={wo.id} className={styles.workOrderItem}>
-                                <span className={styles.workOrderId}>{wo.id}</span>
-                                <span className={styles.workOrderProduct}>{wo.product}</span>
-                                <span className={styles.workOrderStatus}>{wo.status}</span>
+                          <div className={styles.professionalWorkOrdersList}>
+                            {workOrders.map((wo, index) => (
+                              <div key={wo.id} className={styles.professionalWorkOrderItem}>
+                                <div className={styles.workOrderHeader}>
+                                  <span className={styles.workOrderId}>{wo.id}</span>
+                                  <span className={`${styles.workOrderStatus} ${getWorkOrderStatusClass(wo.status)}`}>
+                                    {getWorkOrderStatusIcon(wo.status)} {getWorkOrderStatusText(wo.status)}
+                                  </span>
+                                </div>
+                                <div className={styles.workOrderDetails}>
+                                  <span className={styles.workOrderProduct}>{wo.product}</span>
+                                  {wo.assignedMachine && (
+                                    <span className={styles.workOrderMachine}>• Machine: {wo.assignedMachine}</span>
+                                  )}
+                                  {wo.assignedWorker && (
+                                    <span className={styles.workOrderWorker}>• Worker: {wo.assignedWorker}</span>
+                                  )}
+                                </div>
+                                <div className={styles.workOrderProgress}>
+                                  <span className={styles.progressText}>
+                                    Progress: {wo.producedQuantity}/{wo.targetQuantity} ({wo.progress}%)
+                                  </span>
+                                  <div className={styles.progressBarContainer}>
+                                    <div 
+                                      className={styles.progressBar} 
+                                      style={{ width: `${wo.progress}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <div className={styles.noWorkOrders}>
-                            <p>No work orders created yet</p>
+                          <div className={styles.emptyWorkOrders}>
+                            <p>📋 No {terms.workOrders.toLowerCase()} created yet</p>
+                            <p className={styles.emptySubtext}>{terms.workOrders} will be created once material processing begins</p>
                           </div>
                         )}
                       </div>
 
-                      {/* Action Buttons using Global Design System */}
-                      {productionOrder.status === 'awaiting_work_order_creation' && (
-                        <div className="ds-card-actions">
-                          <button
-                            className="ds-btn ds-btn-primary"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCreateWorkOrders(productionOrder);
-                            }}
-                          >
-                            🔧 Create Work Orders
-                          </button>
-                          <button 
-                            className="ds-btn ds-btn-secondary"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleViewCustomer(productionOrder.customerId);
-                            }}
-                          >
-                            👤 View Customer
-                          </button>
-                        </div>
-                      )}
-                      
-                      {/* Timeline Information */}
-                      <div className={styles.detailsSection}>
-                        <h4>📅 Timeline</h4>
-                        <div className={styles.timestamps}>
-                          <div className={styles.timestamp}>
-                            <span className={styles.label}>Created:</span>
-                            <span>{new Date(productionOrder.createdDate).toLocaleDateString()}</span>
+                      {/* Professional Timeline Section */}
+                      <div className={styles.expandedSection}>
+                        <h4 className={styles.sectionHeader}>📅 Production Timeline</h4>
+                        <div className={styles.professionalTimeline}>
+                          <div className={styles.timelineItem}>
+                            <span className={styles.timelineLabel}>Order Created:</span>
+                            <span className={styles.timelineValue}>
+                              {new Date(productionOrder.createdDate).toLocaleDateString('en-IN', { 
+                                year: 'numeric', month: 'long', day: 'numeric' 
+                              })}
+                            </span>
                           </div>
                           {productionOrder.receivedDate && (
-                            <div className={styles.timestamp}>
-                              <span className={styles.label}>Materials Received:</span>
-                              <span>{new Date(productionOrder.receivedDate).toLocaleDateString()}</span>
+                            <div className={styles.timelineItem}>
+                              <span className={styles.timelineLabel}>Materials Received:</span>
+                              <span className={styles.timelineValue}>
+                                {new Date(productionOrder.receivedDate).toLocaleDateString('en-IN', { 
+                                  year: 'numeric', month: 'long', day: 'numeric' 
+                                })}
+                              </span>
                             </div>
                           )}
                           {productionOrder.completedDate && (
-                            <div className={styles.timestamp}>
-                              <span className={styles.label}>Completed:</span>
-                              <span>{new Date(productionOrder.completedDate).toLocaleDateString()}</span>
+                            <div className={styles.timelineItem}>
+                              <span className={styles.timelineLabel}>Production Completed:</span>
+                              <span className={styles.timelineValue}>
+                                {new Date(productionOrder.completedDate).toLocaleDateString('en-IN', { 
+                                  year: 'numeric', month: 'long', day: 'numeric' 
+                                })}
+                              </span>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      {/* Notes Section */}
+                      {/* Professional Notes Section */}
                       {productionOrder.notes && (
-                        <div className={styles.detailsSection}>
-                          <h4>📝 Notes</h4>
-                          <p>{productionOrder.notes}</p>
+                        <div className={styles.expandedSection}>
+                          <h4 className={styles.sectionHeader}>📝 Production Notes</h4>
+                          <div className={styles.professionalNotes}>
+                            <p className={styles.notesContent}>{productionOrder.notes}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Professional Additional Context Section - Moved to bottom as supplementary info */}
+                      <div className={styles.expandedSection}>
+                        <h4 className={styles.sectionHeader}>📋 Reference Information</h4>
+                        <div className={styles.professionalDetailsGrid}>
+                          {/* Sales Order - Links to original customer order */}
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>Sales Order Reference:</span>
+                            <span className={styles.detailValue}>{productionOrder.salesOrderId}</span>
+                          </div>
+                          
+                          {/* Customer's fabric delivery document */}
+                          {productionOrder.fabricDetails.challanReference && (
+                            <div className={styles.detailRow}>
+                              <span className={styles.detailLabel}>Customer Challan Reference:</span>
+                              <span className={styles.detailValue}>📋 {productionOrder.fabricDetails.challanReference}</span>
+                            </div>
+                          )}
+                          
+                          {/* Internal tracking - Inward entry for material receipt */}
+                          {productionOrder.inwardEntryId && (
+                            <div className={styles.detailRow}>
+                              <span className={styles.detailLabel}>Inward Entry ID:</span>
+                              <span className={styles.detailValue}>{productionOrder.inwardEntryId}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Professional Action Buttons Section - Moved to end for better UX flow */}
+                      {productionOrder.status === 'awaiting_work_order_creation' && (
+                        <div className={styles.expandedSection}>
+                          <h4 className={styles.sectionHeader}>⚡ Available Actions</h4>
+                          <div className={styles.professionalActions}>
+                            <button
+                              className="ds-btn ds-btn-primary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCreateWorkOrders(productionOrder);
+                              }}
+                            >
+                              🔧 Create {terms.workOrders}
+                            </button>
+                            <button 
+                              className="ds-btn ds-btn-secondary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewCustomer(productionOrder.customerId);
+                              }}
+                            >
+                              👤 View Customer Profile
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>

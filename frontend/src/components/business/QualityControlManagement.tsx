@@ -25,12 +25,19 @@ const QualityControlManagement = ({
   const { toggleExpansion, isExpanded } = useCardExpansion();
   const [activeQCForm, setActiveQCForm] = useState<string | null>(null);
 
-  // Universal QC Logic: Display ALL completed work orders requiring QC inspection
+  // Universal QC Logic: Display ALL work orders requiring QC inspection
   const qcWorkOrders = useMemo(() => {
-    const completedWOs: WorkOrder[] = mockWorkOrders.filter(wo => 
-      wo.status === 'completed' || wo.status === 'ready_qc'
+    const qcEligibleWOs: WorkOrder[] = mockWorkOrders.filter(wo => 
+      wo.status === 'completed' || 
+      wo.status === 'ready_qc' ||
+      wo.status === 'qc_approved' ||
+      wo.status === 'qc_rejected' ||
+      wo.status === 'delivered' ||
+      wo.status === 'dispatched' ||
+      wo.status === 'ready_for_delivery' ||
+      wo.status === 'rework_required'
     );
-    return completedWOs.map(wo => ({
+    return qcEligibleWOs.map(wo => ({
       workOrder: wo,
       qcItem: mockQCItems.find(qc => qc.workOrderId === wo.id)
     }));
@@ -38,6 +45,11 @@ const QualityControlManagement = ({
 
   // Filter QC work orders based on QC status
   const filteredQCWorkOrders = useMemo(() => {
+    // Show all QC work orders when filter is 'all' for comprehensive visibility
+    if (filterState === 'all') {
+      return qcWorkOrders;
+    }
+    
     switch (filterState) {
       case 'pending_inspection': 
         return qcWorkOrders.filter(({ qcItem }) => 
@@ -56,7 +68,7 @@ const QualityControlManagement = ({
           qcItem?.status === 'rejected'
         );
       default: 
-        return qcWorkOrders;
+        return qcWorkOrders; // Default to showing all QC work orders
     }
   }, [qcWorkOrders, filterState]);
 

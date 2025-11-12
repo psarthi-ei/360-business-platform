@@ -51,7 +51,164 @@
 /* ===== PRODUCTION-SPECIFIC STYLES ===== */
 /* These styles are unique to production orders and not covered by global design system */
 
-/* Work Orders Display */
+/* ===== PROFESSIONAL WORK ORDERS DISPLAY ===== */
+.professionalWorkOrdersList {
+  display: grid;
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-sm);
+}
+
+.professionalWorkOrderItem {
+  background: var(--ds-bg-card);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  transition: all 0.2s ease;
+  overflow: hidden; /* Prevent content from overflowing */
+  min-width: 0; /* Allow container to shrink */
+  word-wrap: break-word;
+}
+
+.professionalWorkOrderItem:hover {
+  box-shadow: var(--ds-shadow-sm);
+  border-color: var(--ds-border-accent);
+}
+
+.workOrderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--ds-space-sm);
+  gap: var(--ds-space-sm);
+  min-width: 0; /* Allow flexbox children to shrink */
+}
+
+.workOrderId {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  font-family: 'Inter', monospace;
+  flex: 1;
+  min-width: 0; /* Allow text to wrap/truncate */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.workOrderStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0; /* Prevent status from shrinking */
+  max-width: 150px; /* Limit maximum width */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Work Order Status Colors */
+.workOrderStatus.status-completed {
+  background: var(--ds-bg-status-active-subtle);
+  color: var(--ds-status-active);
+}
+
+.workOrderStatus.status-delivered {
+  background: var(--ds-bg-status-active-subtle);
+  color: var(--ds-status-active);
+}
+
+.workOrderStatus.status-pending {
+  background: var(--ds-bg-priority-medium-subtle);
+  color: var(--ds-priority-medium);
+}
+
+.workOrderStatus.status-active {
+  background: var(--ds-bg-priority-low-subtle);
+  color: var(--ds-priority-low);
+}
+
+.workOrderStatus.status-rejected {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.workOrderStatus.status-inactive {
+  background: var(--ds-bg-subtle);
+  color: var(--ds-text-muted);
+}
+
+.workOrderDetails {
+  margin-bottom: var(--ds-space-sm);
+}
+
+.workOrderProduct {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-weight: 400;
+  margin-bottom: var(--ds-space-xs);
+  display: block;
+}
+
+.workOrderMachine,
+.workOrderWorker {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  margin-right: var(--ds-space-sm);
+}
+
+.workOrderProgress {
+  margin-top: var(--ds-space-sm);
+}
+
+.progressText {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  margin-bottom: var(--ds-space-xs);
+  display: block;
+}
+
+.progressBarContainer {
+  width: 100%;
+  height: 8px;
+  background: var(--ds-border-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ds-color-primary) 0%, var(--ds-color-success) 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Empty Work Orders Professional Styling */
+.emptyWorkOrders {
+  text-align: center;
+  padding: var(--ds-space-xl);
+  background: var(--ds-bg-secondary);
+  border: 2px dashed var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  margin-top: var(--ds-space-sm);
+}
+
+.emptyWorkOrders p {
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  margin: 0;
+}
+
+.emptySubtext {
+  font-size: var(--font-sm) !important;
+  color: var(--ds-text-muted) !important;
+  font-style: italic;
+  margin-top: var(--ds-space-xs) !important;
+}
+
+/* Legacy Work Orders Display Support */
 .workOrdersList {
   border: 1px solid var(--ds-border-secondary);
   border-radius: var(--ds-radius-sm);
@@ -73,28 +230,6 @@
   border-bottom: none;
 }
 
-.workOrderId {
-  font-family: var(--font-family);
-  color: var(--ds-text-primary);
-  font-weight: 500;
-  flex: 1;
-}
-
-.workOrderProduct {
-  font-family: var(--font-family);
-  color: var(--ds-text-secondary);
-  flex: 2;
-  text-align: center;
-}
-
-.workOrderStatus {
-  font-family: var(--font-family);
-  color: var(--ds-text-primary);
-  font-weight: 500;
-  flex: 1;
-  text-align: right;
-}
-
 .noWorkOrders {
   text-align: center;
   padding: var(--ds-space-md);
@@ -102,7 +237,143 @@
   font-style: italic;
 }
 
-/* Details Section Styling */
+/* ===== PROFESSIONAL EXPANDED DETAILS SYSTEM ===== */
+/* Following Lead Management's proven styling pattern */
+
+.expandedSection {
+  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-md) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.expandedSection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.sectionHeader {
+  margin: 0 0 var(--ds-space-md) 0;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding-bottom: var(--ds-space-sm);
+  border-bottom: 2px solid var(--ds-border-primary);
+}
+
+/* Professional Details Grid - Consistent spacing and typography */
+.professionalDetailsGrid {
+  display: grid;
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-sm);
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--ds-space-md);
+  align-items: start;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.detailRowFull {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.detailLabel {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.detailValue {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-weight: 400;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Professional status value styling */
+.statusValue {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--ds-color-primary);
+}
+
+/* ===== PROFESSIONAL ACTIONS SECTION ===== */
+.professionalActions {
+  display: flex;
+  gap: var(--ds-space-md);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-sm);
+}
+
+/* ===== PROFESSIONAL TIMELINE SECTION ===== */
+.professionalTimeline {
+  display: grid;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-sm);
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--ds-space-md);
+  align-items: center;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.timelineItem:last-child {
+  border-bottom: none;
+}
+
+.timelineLabel {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+}
+
+.timelineValue {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-weight: 400;
+}
+
+/* ===== PROFESSIONAL NOTES SECTION ===== */
+.professionalNotes {
+  margin-top: var(--ds-space-sm);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  border-left: 4px solid var(--ds-color-primary);
+}
+
+.notesContent {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Legacy Details Section Support */
 .detailsSection {
   padding: var(--ds-space-md);
   border-bottom: 1px solid var(--ds-border-tertiary);
@@ -117,7 +388,6 @@
   font-size: var(--font-base);
   font-weight: 600;
   color: var(--ds-text-primary);
-  font-family: var(--font-family);
   border-bottom: 1px solid var(--ds-border-primary);
   padding-bottom: var(--ds-space-xs);
 }
@@ -185,7 +455,30 @@
     padding-right: 0;
   }
   
-  /* Mobile optimization for work orders */
+  /* Mobile optimization for professional work orders */
+  .workOrderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-xs);
+  }
+  
+  .workOrderStatus {
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  
+  .workOrderDetails {
+    margin-bottom: var(--ds-space-xs);
+  }
+  
+  .workOrderMachine,
+  .workOrderWorker {
+    display: block;
+    margin-right: 0;
+    margin-bottom: var(--ds-space-xs);
+  }
+  
+  /* Mobile optimization for legacy work orders */
   .workOrderItem {
     flex-direction: column;
     align-items: flex-start;
@@ -224,23 +517,47 @@
     hyphens: auto;
   }
   
+  /* Mobile professional details grid */
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xs);
+  }
+  
+  .detailLabel {
+    font-weight: 600;
+  }
+  
   /* Mobile timeline */
-  .timestamps {
+  .timestamps,
+  .professionalTimeline {
     gap: var(--ds-space-sm);
   }
   
-  .timestamp {
+  .timestamp,
+  .timelineItem {
     display: block;
   }
   
-  .timestamp .label {
+  .timestamp .label,
+  .timelineLabel {
     display: block;
     margin-bottom: var(--ds-space-xs);
     font-weight: 600;
   }
   
-  .timestamp span:last-child {
+  .timestamp span:last-child,
+  .timelineValue {
     display: block;
     font-weight: 400;
+  }
+  
+  /* Mobile professional actions */
+  .professionalActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .professionalActions .ds-btn {
+    width: 100%;
   }
 }
