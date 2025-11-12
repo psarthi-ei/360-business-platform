@@ -7,18 +7,22 @@ import {
   mockLeads,
   mockProformaInvoices,
   OrderItem,
-  SalesOrder,
-  JobOrder
+  SalesOrder
 } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './SalesOrders.module.css';
 
 // Unified order type for processing both sales orders and job orders
-type UnifiedOrder = (SalesOrder | JobOrder) & {
+// Use base SalesOrder interface with additional discriminator fields
+type UnifiedOrder = SalesOrder & {
   orderType: 'sales_order' | 'job_order';
   materialOwnership: 'company' | 'client';
   paymentType: 'advance' | 'credit';
+  // Job order specific fields (optional for sales orders)
+  serviceType?: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+  creditTerms?: 15 | 30 | 45;
+  expectedClientMaterialNames?: string[];
 };
 
 interface SalesOrdersProps {

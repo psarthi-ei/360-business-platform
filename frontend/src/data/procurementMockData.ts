@@ -47,7 +47,26 @@ export interface GoodsReceiptNote {
   materialType?: 'raw_materials' | 'customer_fabric'; // Differentiates business type
   challanPhoto?: string; // Photo documentation for customer fabric
   customerId?: string; // Customer ID for customer fabric tracking
-  jobCardId?: string; // Links to JobCard for customer fabric
+  productionOrderId?: string; // Links to ProductionOrder for customer fabric
+}
+
+// InwardEntry - Customer Fabric Receipt for Job Work (ERP Standard)
+export interface InwardEntry {
+  id: string;
+  jobOrderId: string; // Links to Job Order (customer service order)
+  customerId: string;
+  customerName: string;
+  materialType: string;
+  receivedQuantity: number;
+  unit: 'meters' | 'yards' | 'kg';
+  challanNumber: string;
+  receivedDate: string;
+  qualityAssessment?: string;
+  receivedBy: string;
+  inspectionDate?: string;
+  inspectedBy?: string;
+  challanPhoto?: string;
+  notes?: string;
 }
 
 // ==================== CONSOLIDATED INTERFACES (PHASE 3) ====================
@@ -365,7 +384,7 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     materialType: 'customer_fabric',
     challanPhoto: '/uploads/challan_GG_1024.jpg',
     customerId: 'bp-gujarat-garments',
-    jobCardId: 'JC-001'
+    productionOrderId: 'JC-001'
   },
   {
     id: 'GRN-CF-002',
@@ -390,7 +409,7 @@ export const mockGoodsReceiptNotes: GoodsReceiptNote[] = [
     materialType: 'customer_fabric',
     challanPhoto: '/uploads/challan_MF_3012.jpg',
     customerId: 'bp-mumbai-fashion',
-    jobCardId: 'JC-003'
+    productionOrderId: 'JC-003'
   }
 ];
 
@@ -843,3 +862,80 @@ export const mockConsolidatedPurchaseRequests: ConsolidatedPurchaseRequest[] = [
     notes: "Price-sensitive wholesale order - focus on cost optimization"
   }
 ];
+
+// ==================== INWARD ENTRY MOCK DATA (CUSTOMER FABRIC) ====================
+
+export const mockInwardEntries: InwardEntry[] = [
+  {
+    id: 'IE-001',
+    jobOrderId: 'SO-002', // Gujarat Garments job order
+    customerId: 'bp-gujarat-garments',
+    customerName: 'Gujarat Garments',
+    materialType: 'Cotton Mixed',
+    receivedQuantity: 500,
+    unit: 'meters',
+    challanNumber: 'GG-CH-1024',
+    receivedDate: '2024-10-16',
+    qualityAssessment: 'A-Grade',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2024-10-16',
+    inspectedBy: 'Quality Inspector',
+    challanPhoto: '/uploads/challan_GG_1024.jpg',
+    notes: 'Customer fabric received in good condition - ready for dyeing'
+  },
+  {
+    id: 'IE-002',
+    jobOrderId: 'SO-003', // Chennai Exports job order
+    customerId: 'bp-chennai-exports',
+    customerName: 'Chennai Exports',
+    materialType: 'Silk',
+    receivedQuantity: 300,
+    unit: 'meters',
+    challanNumber: 'CE-CH-2041',
+    receivedDate: '2024-10-19',
+    qualityAssessment: 'Export-Grade',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2024-10-19',
+    inspectedBy: 'Quality Inspector',
+    notes: 'Premium silk fabric - temperature controlled processing required'
+  },
+  {
+    id: 'IE-003',
+    jobOrderId: 'SO-004', // Baroda Fashion job order
+    customerId: 'bp-baroda-fashion',
+    customerName: 'Baroda Fashion',
+    materialType: 'Cotton Blend',
+    receivedQuantity: 750,
+    unit: 'meters',
+    challanNumber: 'BF-CH-3012',
+    receivedDate: '2024-10-14',
+    qualityAssessment: 'A-Grade',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2024-10-14',
+    inspectedBy: 'Quality Inspector',
+    challanPhoto: '/uploads/challan_BF_3012.jpg',
+    notes: 'Pre-dyed cotton blend - ready for finishing process'
+  }
+];
+
+// ==================== HELPER FUNCTIONS ====================
+
+export const getInwardEntryByJobOrder = (jobOrderId: string): InwardEntry | undefined => {
+  return mockInwardEntries.find(ie => ie.jobOrderId === jobOrderId);
+};
+
+export const getInwardEntryById = (inwardEntryId: string): InwardEntry | undefined => {
+  return mockInwardEntries.find(ie => ie.id === inwardEntryId);
+};
+
+export const createInwardEntry = (inwardEntry: InwardEntry): void => {
+  mockInwardEntries.push(inwardEntry);
+};
+
+export const updateInwardEntry = (id: string, updates: Partial<InwardEntry>): InwardEntry | null => {
+  const index = mockInwardEntries.findIndex(ie => ie.id === id);
+  if (index === -1) return null;
+  
+  mockInwardEntries[index] = { ...mockInwardEntries[index], ...updates };
+  return mockInwardEntries[index];
+};

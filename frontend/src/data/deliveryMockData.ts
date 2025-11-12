@@ -2,9 +2,9 @@
 
 export interface DeliveryItem {
   id: string;
-  salesOrderId: string; // References actual SO ID from salesMockData.ts
+  workOrderId: string; // References Work Order (lot) from productionMockData.ts
+  salesOrderId: string; // References Job Order from salesMockData.ts for context
   businessProfileId: string; // References actual customer from customerMockData.ts
-  workOrderIds: string[];
   product: string;
   customer: string; // Display name only
   quantity: string;
@@ -126,164 +126,170 @@ export const mockDrivers: Driver[] = [
   }
 ];
 
-// Mock Delivery Items - Referenced to actual Sales Orders
+// Mock Delivery Items - Referenced to actual Work Orders (Lots)
 export const mockDeliveryItems: DeliveryItem[] = [
-  // DEL-001: Based on SO-001 (Gujarat Garments - Premium Cotton)
+  // Delivery Item for WO-2024-001-A (Navy Blue Dyeing - completed)
   {
-    id: 'DEL-001',
-    salesOrderId: 'SO-001',
-    businessProfileId: 'bp-gujarat-garments',
-    workOrderIds: ['WO-2025-001A', 'WO-2025-001B'],
-    product: 'Premium Cotton Fabric',
-    customer: 'Gujarat Garments',
-    quantity: '1,500 meters',
-    qcGrade: 'A Grade (Premium)',
+    id: 'DEL-2024-001-A',
+    workOrderId: 'WO-2024-001-A',
+    salesOrderId: 'JO-2024-001',
+    businessProfileId: 'bp-surat-processors',
+    product: 'Navy Blue Reactive Dyeing - Lot A',
+    customer: 'Surat Processors',
+    quantity: '2000m',
+    qcGrade: 'A Grade',
     status: 'ready_dispatch',
-    readyTime: '24 Oct 2:00 PM',
-    dueDate: '26 Oct 2024',
-    priority: 'normal'
-  },
-  
-  // DEL-002: Based on SO-002 (Gujarat Garments - Mixed Fabric)
-  {
-    id: 'DEL-002',
-    salesOrderId: 'SO-002',
-    businessProfileId: 'bp-gujarat-garments', 
-    workOrderIds: ['WO-2025-002A'],
-    product: 'Mixed fabric for casual wear',
-    customer: 'Gujarat Garments',
-    quantity: '2,500 meters',
-    qcGrade: 'A Grade (Standard)',
-    status: 'delivery_scheduled',
-    readyTime: '23 Oct 4:30 PM',
-    dueDate: '25 Oct 2024',
+    readyTime: '2024-10-17 14:30',
+    dueDate: '2024-10-20',
+    
+    // Logistics Details
     assignedVehicle: 'GJ-01-AB-1234',
     assignedDriver: 'Suresh Patel',
     driverPhone: '+91 98765 43210',
-    scheduledDelivery: '25 Oct 10:00 AM',
+    scheduledPickup: '2024-10-18 09:00',
+    scheduledDelivery: '2024-10-18 11:30',
+    
     priority: 'normal'
   },
   
-  // DEL-003: Based on SO-003 (Baroda Fashion - Polyester Blend)
+  // Delivery Item for WO-2024-002-A (Finishing - pending completion)
   {
-    id: 'DEL-003',
-    salesOrderId: 'SO-003',
-    businessProfileId: 'bp-baroda-fashion',
-    workOrderIds: ['WO-2025-003A'],
-    product: 'Polyester blend fabric',
-    customer: 'Baroda Fashion House',
-    quantity: '2,000 meters',
-    qcGrade: 'A Grade (Premium)',
-    status: 'dispatched',
-    readyTime: '22 Oct 2:00 PM',
-    dueDate: '24 Oct 2024',
+    id: 'DEL-2024-002-A',
+    workOrderId: 'WO-2024-002-A',
+    salesOrderId: 'JO-2024-002',
+    businessProfileId: 'bp-ahmedabad-finishers',
+    product: 'Softening & Anti-wrinkle Finishing - Lot A',
+    customer: 'Ahmedabad Finishers',
+    quantity: '1500m',
+    qcGrade: 'Pending QC',
+    status: 'ready_dispatch',
+    readyTime: '2024-10-18 16:00',
+    dueDate: '2024-10-22',
+    
+    priority: 'normal'
+  },
+  
+  // Delivery Items for WO-2024-003-A (Red Printing Lot)
+  {
+    id: 'DEL-2024-003-A',
+    workOrderId: 'WO-2024-003-A',
+    salesOrderId: 'JO-2024-003',
+    businessProfileId: 'bp-mumbai-printers',
+    product: 'Multi-color Printing - Red Lot A',
+    customer: 'Mumbai Printers',
+    quantity: '750m',
+    qcGrade: 'A Grade',
+    status: 'delivery_scheduled',
+    readyTime: '2024-10-18 12:00',
+    dueDate: '2024-10-25',
+    
+    // Logistics Details
     assignedVehicle: 'GJ-02-CD-5678',
     assignedDriver: 'Ramesh Shah',
     driverPhone: '+91 98765 43211',
-    actualDispatch: '24 Oct 8:15 AM',
-    estimatedDelivery: '24 Oct 11:30 AM',
+    scheduledPickup: '2024-10-19 08:00',
+    scheduledDelivery: '2024-10-19 14:00',
+    
+    // Tracking Information
     trackingInfo: {
-      currentLocation: 'NH-8, Anand',
-      distanceRemaining: '45 km',
-      lastUpdated: '5 minutes ago',
-      route: 'Surat → Vadodara (95km)',
-      speed: '70 km/h',
-      eta: '24 Oct 11:30 AM'
+      currentLocation: 'Surat Warehouse',
+      distanceRemaining: '280 km',
+      lastUpdated: '2024-10-19 06:30',
+      route: 'Surat → Vapi → Mumbai',
+      speed: '65 km/h',
+      eta: '2024-10-19 13:45'
     },
-    priority: 'normal'
-  },
-  
-  // DEL-004: Based on SO-004 (Baroda Fashion - Completed)
-  {
-    id: 'DEL-004',
-    salesOrderId: 'SO-004',
-    businessProfileId: 'bp-baroda-fashion',
-    workOrderIds: ['WO-2025-004A'],
-    product: 'Seasonal collection fabric',
-    customer: 'Baroda Fashion House',
-    quantity: '1,800 meters',
-    qcGrade: 'A Grade (Premium)',
-    status: 'delivered',
-    readyTime: '20 Oct 3:30 PM',
-    dueDate: '22 Oct 2024',
-    assignedVehicle: 'GJ-03-EF-9012',
-    assignedDriver: 'Kiran Modi',
-    driverPhone: '+91 98765 43212',
-    actualDispatch: '22 Oct 9:00 AM',
-    actualDelivery: '22 Oct 12:45 PM',
-    deliveryProof: {
-      photoEvidence: 'Delivered_Seasonal_Fabric_Oct22.jpg',
-      customerSignature: 'signature_captured.png',
-      receivedBy: 'Rajesh Mehta',
-      receivedDesignation: 'Creative Director',
-      deliveryNotes: 'Premium fabric delivered in excellent condition. Customer very satisfied with quality and timing.',
-      condition: 'Excellent'
-    },
-    priority: 'normal'
-  },
-  
-  // DEL-005: Based on SO-005 (Gujarat Garments - Cotton Bulk)
-  {
-    id: 'DEL-005',
-    salesOrderId: 'SO-005',
-    businessProfileId: 'bp-gujarat-garments',
-    workOrderIds: ['WO-2025-005A', 'WO-2025-005B'],
-    product: 'Cotton fabric bulk order',
-    customer: 'Gujarat Garments',
-    quantity: '3,000 meters',
-    qcGrade: 'A Grade (Standard)',
-    status: 'ready_dispatch',
-    readyTime: '24 Oct 11:00 AM',
-    dueDate: '27 Oct 2024',
-    priority: 'normal'
-  },
-  
-  // DEL-006: Based on SO-006 (Baroda Fashion - Cotton Yarn)
-  {
-    id: 'DEL-006',
-    salesOrderId: 'SO-006',
-    businessProfileId: 'bp-baroda-fashion',
-    workOrderIds: ['WO-2025-006A'],
-    product: 'Cotton yarn fabric',
-    customer: 'Baroda Fashion House',
-    quantity: '2,200 meters',
-    qcGrade: 'A Grade (Premium)',
-    status: 'delivery_scheduled',
-    readyTime: '23 Oct 1:15 PM',
-    dueDate: '25 Oct 2024',
-    assignedVehicle: 'GJ-03-EF-9012',
-    assignedDriver: 'Kiran Modi',
-    driverPhone: '+91 98765 43212',
-    scheduledDelivery: '25 Oct 2:00 PM',
+    
     priority: 'high'
   },
   
-  // DEL-007: Failed delivery scenario
+  // Delivery Items for WO-2024-003-B (Blue Printing Lot)
   {
-    id: 'DEL-007',
-    salesOrderId: 'SO-007',
-    businessProfileId: 'bp-gujarat-garments',
-    workOrderIds: ['WO-2025-007A'],
-    product: 'Cotton Denim fabric',
-    customer: 'Gujarat Garments',
-    quantity: '1,800 meters',
-    qcGrade: 'B Grade (Standard)',
-    status: 'failed_returned',
-    readyTime: '21 Oct 1:00 PM',
-    dueDate: '23 Oct 2024',
+    id: 'DEL-2024-003-B',
+    workOrderId: 'WO-2024-003-B',
+    salesOrderId: 'JO-2024-003',
+    businessProfileId: 'bp-mumbai-printers',
+    product: 'Multi-color Printing - Blue Lot B',
+    customer: 'Mumbai Printers',
+    quantity: '750m',
+    qcGrade: 'A Grade',
+    status: 'ready_dispatch',
+    readyTime: '2024-10-18 14:00',
+    dueDate: '2024-10-25',
+    
+    priority: 'normal'
+  },
+  
+  // Delivery Items for WO-2024-003-C (Green Printing Lot)
+  {
+    id: 'DEL-2024-003-C',
+    workOrderId: 'WO-2024-003-C',
+    salesOrderId: 'JO-2024-003',
+    businessProfileId: 'bp-mumbai-printers',
+    product: 'Multi-color Printing - Green Lot C',
+    customer: 'Mumbai Printers',
+    quantity: '750m',
+    qcGrade: 'B Grade',
+    status: 'dispatched',
+    readyTime: '2024-10-17 16:00',
+    dueDate: '2024-10-25',
+    
+    // Logistics Details
+    assignedVehicle: 'GJ-03-EF-9012',
+    assignedDriver: 'Kiran Modi',
+    driverPhone: '+91 98765 43212',
+    scheduledPickup: '2024-10-18 07:00',
+    scheduledDelivery: '2024-10-18 13:00',
+    actualDispatch: '2024-10-18 07:15',
+    estimatedDelivery: '2024-10-18 13:30',
+    
+    // Tracking Information
+    trackingInfo: {
+      currentLocation: 'Vapi Toll Plaza',
+      distanceRemaining: '180 km',
+      lastUpdated: '2024-10-18 10:15',
+      route: 'Surat → Vapi → Mumbai',
+      speed: '70 km/h',
+      eta: '2024-10-18 13:20'
+    },
+    
+    priority: 'normal'
+  },
+  
+  // Delivery Items for WO-2024-003-D (Yellow Printing Lot)
+  {
+    id: 'DEL-2024-003-D',
+    workOrderId: 'WO-2024-003-D',
+    salesOrderId: 'JO-2024-003',
+    businessProfileId: 'bp-mumbai-printers',
+    product: 'Multi-color Printing - Yellow Lot D',
+    customer: 'Mumbai Printers',
+    quantity: '750m',
+    qcGrade: 'A Grade',
+    status: 'delivered',
+    readyTime: '2024-10-16 18:00',
+    dueDate: '2024-10-25',
+    
+    // Logistics Details
     assignedVehicle: 'GJ-01-AB-1234',
     assignedDriver: 'Suresh Patel',
     driverPhone: '+91 98765 43210',
-    actualDispatch: '23 Oct 2:00 PM',
-    failureInfo: {
-      reason: 'Customer office closed',
-      attempt: 1,
-      maxAttempts: 3,
-      driverNotes: 'Office was locked, security said customer unavailable. No prior intimation received.',
-      returnStatus: 'En route to warehouse',
-      nextAttemptDate: '26 Oct 10:00 AM'
+    scheduledPickup: '2024-10-17 08:00',
+    scheduledDelivery: '2024-10-17 14:00',
+    actualDispatch: '2024-10-17 08:10',
+    actualDelivery: '2024-10-17 14:15',
+    
+    // Delivery Proof
+    deliveryProof: {
+      photoEvidence: 'delivery_photo_del_003_d.jpg',
+      customerSignature: 'signature_mumbai_printers.png',
+      receivedBy: 'Rajesh Kumar',
+      receivedDesignation: 'Warehouse Manager',
+      deliveryNotes: 'Material delivered in perfect condition. Customer satisfied with quality.',
+      condition: 'Excellent'
     },
-    priority: 'high'
+    
+    priority: 'normal'
   }
 ];
 

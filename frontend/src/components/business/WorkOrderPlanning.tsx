@@ -56,25 +56,53 @@ const WorkOrderPlanning = ({
 
   // Status mapping functions
   const getWOStatusClass = (workOrder: WorkOrder) => {
-    if (workOrder.status === 'completed') return 'ds-card-status-active';
-    if (workOrder.status === 'in_progress') return 'ds-card-status-pending'; 
-    if (workOrder.status === 'ready_qc') return 'ds-card-priority-high';
-    return 'ds-card-status-inactive'; // pending
+    switch(workOrder.status) {
+      case 'completed': return 'ds-card-status-active';
+      case 'in_progress': return 'ds-card-status-pending';
+      case 'ready_qc': return 'ds-card-priority-high';
+      case 'qc_approved': return 'ds-card-status-active';
+      case 'ready_for_delivery': return 'ds-card-status-active';
+      case 'dispatched': return 'ds-card-status-active';
+      case 'delivered': return 'ds-card-status-success';
+      case 'on_hold': return 'ds-card-priority-medium';
+      case 'qc_rejected': return 'ds-card-priority-high';
+      case 'rework_required': return 'ds-card-priority-high';
+      case 'pending': return 'ds-card-status-inactive';
+      default: return 'ds-card-status-inactive';
+    }
   };
 
   const getWOStatusIcon = (workOrder: WorkOrder) => {
-    if (workOrder.progress === 100) return '✅';
-    if (workOrder.progress > 0) return '🟡';
-    return '🔴';
+    switch(workOrder.status) {
+      case 'completed': return '✅';
+      case 'in_progress': return '🟡';
+      case 'ready_qc': return '🔍';
+      case 'qc_approved': return '✅';
+      case 'qc_rejected': return '❌';
+      case 'ready_for_delivery': return '📦';
+      case 'dispatched': return '🚚';
+      case 'delivered': return '✅';
+      case 'on_hold': return '⏸️';
+      case 'rework_required': return '🔧';
+      case 'pending': return '🔴';
+      default: return '❓';
+    }
   };
 
   const getWOStatusText = (workOrder: WorkOrder) => {
     switch(workOrder.status) {
-      case 'completed': return 'Completed';
-      case 'in_progress': return 'Running';
-      case 'ready_qc': return 'Ready QC';
       case 'pending': return 'Not Started';
-      default: return 'Unknown';
+      case 'in_progress': return 'Running';
+      case 'completed': return 'Completed';
+      case 'on_hold': return 'On Hold';
+      case 'ready_qc': return 'Ready QC';
+      case 'qc_approved': return 'QC Approved';
+      case 'qc_rejected': return 'QC Rejected';
+      case 'ready_for_delivery': return 'Ready for Delivery';
+      case 'dispatched': return 'Dispatched';
+      case 'delivered': return 'Delivered';
+      case 'rework_required': return 'Rework Required';
+      default: return 'Unknown Status';
     }
   };
 

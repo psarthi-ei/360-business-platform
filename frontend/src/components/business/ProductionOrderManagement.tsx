@@ -1,26 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { mockSalesOrders, SalesOrder, OrderItem } from '../../data/salesMockData';
-import { getBusinessProfileById } from '../../data/customerMockData';
+import { ProductionOrder, getAllProductionOrders, getProductionOrdersByStatus } from '../../data/productionMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
-// import { useTerminologyTerms } from '../../contexts/TerminologyContext'; // TODO: implement terminology display
-import ProgressBar from '../ui/ProgressBar';
-import { getWorkOrdersBySalesOrder } from '../../data/productionMockData';
+import { WorkOrderCreationModal } from './WorkOrderCreationModal';
+import { getWorkOrdersByProductionOrder } from '../../services/ProductionOrderService';
 import styles from './ProductionOrderManagement.module.css';
-
-// Helper function to format order items for display
-const getOrderItemsHeader = (order: { items: OrderItem[] }): string => {
-  if (!order.items || order.items.length === 0) {
-    return 'No items';
-  }
-  
-  if (order.items.length === 1) {
-    return `${order.items[0].description} (${order.items[0].quantity} ${order.items[0].unit})`;
-  } else {
-    const firstItem = order.items[0];
-    const remainingCount = order.items.length - 1;
-    return `${firstItem.description} (${firstItem.quantity} ${firstItem.unit}) + ${remainingCount} more items`;
-  }
-};
 
 interface ProductionOrderManagementProps {
   mobile?: boolean;
@@ -31,114 +14,6 @@ interface ProductionOrderManagementProps {
   onAddModalHandled?: () => void;
 }
 
-// Material status interface
-interface MaterialStatus {
-  status: 'available' | 'shortage';
-  icon: string;
-  display: string;
-  details: string | string[];
-}
-
-// Production status interface
-interface ProductionStatus {
-  status: 'not_started' | 'in_production' | 'completed' | 'material_pending';
-  icon: string;
-  label: string;
-}
-
-// Enhanced order interface with production context
-interface ProductionOrderEnhanced extends SalesOrder {
-  materialStatus: MaterialStatus;
-  productionWorkflowStatus: ProductionStatus; // Renamed to avoid conflict
-  productionProgress: number; // Progress percentage for in-production orders
-  quantity: string; // Add quantity field for display
-}
-
-// Material availability checking logic
-const getMaterialStatus = (order: SalesOrder): MaterialStatus => {
-  // Handle explicit material pending status from sales order
-  if (order.status === 'pending_materials') {
-    return {
-      status: 'shortage',
-      icon: '⚠️',
-      display: 'Shortage (Yarn, Dye)',
-      details: ['Cotton Yarn 30s: 300kg short', 'Blue Dye: 50L short']
-    };
-  }
-  
-  // SO-002 has pending_materials status, so it will be handled above
-  // Simulate material availability for other orders
-  const hasShortage = order.totalAmount > 500000; // Very high-value orders may have complexity
-  
-  if (hasShortage) {
-    return {
-      status: 'shortage',
-      icon: '⚠️',
-      display: 'Shortage (Dye)',
-      details: ['Special Dye: 25L short']
-    };
-  }
-  
-  return {
-    status: 'available',
-    icon: '✅',
-    display: 'Available',
-    details: 'All materials in stock'
-  };
-};
-
-// Production status workflow mapping
-const getProductionStatus = (order: SalesOrder, materialStatus: MaterialStatus): ProductionStatus => {
-  // Handle pending_materials status (explicit material shortage)
-  if (order.status === 'pending_materials') {
-    return {
-      status: 'material_pending',
-      icon: '🔴',
-      label: 'Material Pending'
-    };
-  }
-  
-  // Material shortage blocks production (for other statuses that haven't been handled above)
-  if (materialStatus.status === 'shortage') {
-    return {
-      status: 'material_pending',
-      icon: '🔴',
-      label: 'Material Pending'
-    };
-  }
-  
-  // Production workflow states based on sales order status
-  if (order.status === 'order_confirmed') {
-    return {
-      status: 'not_started',
-      icon: '🟡',
-      label: 'Not Started'
-    };
-  }
-  
-  if (order.status === 'production_started') {
-    return {
-      status: 'in_production',
-      icon: '🔵',
-      label: 'In Production'
-    };
-  }
-  
-  if (order.status === 'completed') {
-    return {
-      status: 'completed',
-      icon: '🟢',
-      label: 'Production Complete'
-    };
-  }
-  
-  return {
-    status: 'not_started',
-    icon: '🟡',
-    label: 'Not Started'
-  };
-};
-
 const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   mobile,
   onShowCustomerProfile,
@@ -147,291 +22,259 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   openAddModal,
   onAddModalHandled
 }) => {
-  // Use terminology hook for Surat processing terminology
-  // const { productionOrder, productionOrders: productionOrderTerminology } = useTerminologyTerms(); // TODO: implement display terminology // "Job Card", "Job Cards"
-  
+  // Removed terminology context
   const { toggleExpansion, isExpanded } = useCardExpansion();
-  
-  // State for tab-based information display
-  const [activeTab, setActiveTab] = useState<Map<string, 'work_orders' | 'details' | null>>(new Map());
-  
-  // Calculate production progress percentage
-  const calculateProductionProgress = (order: SalesOrder): number => {
-    // Completed orders show 100%
-    if (order.status === 'completed') return 100;
-    
-    // Production started orders show realistic progress
-    if (order.status === 'production_started') {
-      // SO-003: Matches "60% completed" from mock data statusMessage
-      if (order.id === 'SO-003') return 60; // "Production in progress - 60% completed"
-      return 80; // Default progress for other production_started orders
-    }
-    
-    return 0; // Not started or material pending
-  };
-  
-  // Transform Sales Orders for production context
-  const productionOrders = useMemo((): ProductionOrderEnhanced[] => {
-    return mockSalesOrders
-      .filter(order => ['order_confirmed', 'pending_materials', 'production_started', 'completed'].includes(order.status))
-      .map(order => {
-        const materialStatus = getMaterialStatus(order);
-        const productionWorkflowStatus = getProductionStatus(order, materialStatus);
-        const productionProgress = calculateProductionProgress(order);
-        
-        return {
-          ...order,
-          materialStatus,
-          productionWorkflowStatus,
-          productionProgress,
-          quantity: '1000m' // Add default quantity for display
-        };
-      });
-  }, []);
-  
-  // Apply filter state from parent Production component
-  const filteredOrders = useMemo(() => {
-    if (filterState === 'all') return productionOrders;
-    
-    return productionOrders.filter(order => {
-      switch (filterState) {
-        case 'not_started':
-          return order.productionWorkflowStatus.status === 'not_started';
-        case 'in_production':
-          return order.productionWorkflowStatus.status === 'in_production';
-        case 'material_pending':
-          return order.productionWorkflowStatus.status === 'material_pending';
-        default:
-          return true;
-      }
-    });
-  }, [productionOrders, filterState]);
-  
-  // Toggle card details
-  const toggleDetails = (orderId: string) => {
-    toggleExpansion(orderId, 'data-order-id');
-  };
-  
-  // Production workflow actions
-  const handleStartProduction = (orderId: string) => {
-    alert(`🏭 Starting production for ${orderId}\n\n✅ Work Orders created\n📋 Materials reserved\n🔄 Status updated to "In Production"\n\n(Mock functionality - will integrate with Work Order system)`);
-  };
-  
-  const handleGoToProcurement = (orderId: string) => {
-    alert(`📦 Navigating to Procurement module for ${orderId}\n\n🔍 Material shortage details:\n• Cotton Yarn 30s: 300kg needed\n• Blue Dye: 50L needed\n\n(Mock functionality - will navigate to Procurement MR tab)`);
+  const [selectedProductionOrder, setSelectedProductionOrder] = useState<ProductionOrder | null>(null);
+  const [showWorkOrderModal, setShowWorkOrderModal] = useState(false);
+
+  // Get all production orders
+  const allProductionOrders = getAllProductionOrders();
+
+  // Filter production orders based on filter state
+  const filteredProductionOrders = useMemo(() => {
+    if (filterState === 'all') return allProductionOrders;
+    return getProductionOrdersByStatus(filterState as ProductionOrder['status']);
+  }, [allProductionOrders, filterState]);
+
+  // Status display mapping
+  const getStatusDisplay = (status: ProductionOrder['status']) => {
+    const statusMap = {
+      'awaiting_material': { icon: '⏳', label: 'Awaiting Material', color: '#f59e0b' },
+      'material_received': { icon: '📦', label: 'Material Received', color: '#3b82f6' },
+      'awaiting_work_order_creation': { icon: '📋', label: 'Awaiting Work Order Creation', color: '#8b5cf6' },
+      'ready_for_production': { icon: '🔄', label: 'Ready for Production', color: '#10b981' },
+      'in_progress': { icon: '🏭', label: 'In Progress', color: '#06b6d4' },
+      'completed': { icon: '✅', label: 'Completed', color: '#22c55e' },
+      'awaiting_qc': { icon: '🔍', label: 'Awaiting QC', color: '#f59e0b' },
+      'quality_issues': { icon: '⚠️', label: 'Quality Issues', color: '#ef4444' },
+      'ready_for_delivery': { icon: '🚚', label: 'Ready for Delivery', color: '#22c55e' },
+      'partial_delivery': { icon: '📦', label: 'Partial Delivery', color: '#8b5cf6' }
+    };
+    return statusMap[status] || { icon: '❓', label: status, color: '#6b7280' };
   };
 
-  const handleCreateWorkOrder = (orderId: string) => {
-    alert(`📋 Creating Work Order for ${orderId}\n\n✅ Manual WO creation initiated\n🔄 Will be added to WO tab\n📋 Available for assignment and scheduling\n\n(Mock functionality - will create additional WO for this Sales Order)`);
+  const handleToggleDetails = (productionOrderId: string) => {
+    toggleExpansion(productionOrderId, 'data-production-order-id');
   };
-  
-  // Tab management functions
-  const handleTabChange = (orderId: string, tab: 'work_orders' | 'details') => {
-    setActiveTab(prev => {
-      const newMap = new Map(prev);
-      const currentTab = newMap.get(orderId);
-      
-      // Toggle off if clicking the same tab, otherwise switch to new tab
-      if (currentTab === tab) {
-        newMap.set(orderId, null);
-      } else {
-        newMap.set(orderId, tab);
-      }
-      
-      return newMap;
-    });
+
+  const handleCreateWorkOrders = (productionOrder: ProductionOrder) => {
+    setSelectedProductionOrder(productionOrder);
+    setShowWorkOrderModal(true);
   };
-  
-  const getActiveTab = (orderId: string) => {
-    return activeTab.get(orderId) || null;
+
+  const handleWorkOrdersCreated = (workOrderIds: string[]) => {
+    setShowWorkOrderModal(false);
+    setSelectedProductionOrder(null);
+    // In a real app, you would refresh the data or update state
+    // Work orders created: workOrderIds
   };
-  
-  // Format currency for display
-  const formatCurrency = (amount: number) => {
-    return `₹${(amount / 100000).toFixed(1)}L`;
+
+  const handleViewCustomer = (customerId: string) => {
+    if (onShowCustomerProfile) {
+      onShowCustomerProfile(customerId);
+    }
+  };
+
+  // Helper function to get status class for card styling
+  const getProductionOrderStatusClass = (status: ProductionOrder['status']) => {
+    const statusMap = {
+      'completed': 'ds-card-status-active',
+      'ready_for_delivery': 'ds-card-status-active',
+      'in_progress': 'ds-card-status-pending',
+      'awaiting_qc': 'ds-card-status-pending',
+      'ready_for_production': 'ds-card-status-pending',
+      'awaiting_work_order_creation': 'ds-card-status-pending',
+      'material_received': 'ds-card-status-pending',
+      'partial_delivery': 'ds-card-status-pending',
+      'quality_issues': 'ds-card-status-inactive',
+      'awaiting_material': 'ds-card-status-inactive'
+    };
+    return statusMap[status] || 'ds-card-status-inactive';
   };
 
   return (
-    <div className={styles.productionOrdersScreen}>
-      <div className={styles.pageContent}>
-        <div className={styles.ordersContainer}>
-          {filteredOrders.length === 0 ? (
-            <div className={styles.emptyState}>
-              <p>📋 No orders found for current filter</p>
-              <p>Switch to "All Orders" to see available orders</p>
-            </div>
-          ) : (
-            filteredOrders.map(order => {
-              const businessProfile = getBusinessProfileById(order.businessProfileId);
-              const companyName = businessProfile?.companyName || 'Unknown Company';
-              
-              // Status mapping for global card classes
-              const getCardStatusClass = () => {
-                if (order.productionWorkflowStatus.status === 'completed') return 'ds-card-status-active';
-                if (order.productionWorkflowStatus.status === 'in_production') return 'ds-card-status-pending';
-                if (order.productionWorkflowStatus.status === 'material_pending') return 'ds-card-priority-high';
-                return 'ds-card-status-pending'; // not_started
-              };
+    <div className={styles.productionOrderManagement}>
+      {filteredProductionOrders.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyStateIcon}>📋</div>
+          <h3>No Production Orders Found</h3>
+          <p>No production orders match the current filter criteria.</p>
+        </div>
+      ) : (
+        <div className={styles.productionOrderList}>
+          {filteredProductionOrders.map((productionOrder) => {
+            const workOrders = getWorkOrdersByProductionOrder(productionOrder.id);
+            const statusDisplay = getStatusDisplay(productionOrder.status);
+            const expanded = isExpanded(productionOrder.id);
 
-              return (
-                <div key={order.id} className="ds-card-container" data-order-id={order.id}>
-                  {/* Global Card System - 140px Template */}
+            return (
+              <div key={productionOrder.id} className="ds-card-container" data-production-order-id={productionOrder.id}>
+                {/* Clickable Card Summary - Global Design System 140px Template */}
+                <div 
+                  className={`ds-card ${getProductionOrderStatusClass(productionOrder.status)} ${expanded ? 'ds-card-expanded' : ''}`}
+                  onClick={() => handleToggleDetails(productionOrder.id)}
+                >
+                  {/* Enhanced Header - Production Order ID + Customer + Fabric Type */}
                   <div 
-                    className={`ds-card ${getCardStatusClass()} ${isExpanded(order.id) ? 'ds-card-expanded' : ''}`}
-                    onClick={() => toggleDetails(order.id)}
+                    className="ds-card-header"
+                    title={`Production Order ${productionOrder.id} - ${productionOrder.customerName} - ${productionOrder.fabricDetails.type}`}
                   >
-                    {/* Order Header - Company + Product */}
-                    <div 
-                      className="ds-card-header"
-                      title={`${order.id} - ${companyName} - ${order.items}`}
-                    >
-                      <span>{order.id} — </span>
-                      <span className={styles.truncateText}>{companyName}</span>
-                    </div>
-                    
-                    {/* Status Information - Material & Production Status */}
-                    <div className="ds-card-status">
-                      <div className={styles.statusLine}>
-                        {order.materialStatus.icon} {order.materialStatus.display}
-                      </div>
-                      <div className={styles.statusLine}>
-                        {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}
-                      </div>
-                    </div>
-                    
-                    {/* Meta Information - Product Details & Due Date */}
-                    <div 
-                      className="ds-card-meta"
-                      title={`${getOrderItemsHeader(order)} | Qty: ${order.quantity} | Due: ${order.deliveryDate}`}
-                    >
-                      {getOrderItemsHeader(order)} • {order.quantity}<br />
-                      Due: {order.deliveryDate}
-                    </div>
-
-                    {/* Expand Indicator */}
-                    <div className="ds-card-expand-indicator">
-                      {isExpanded(order.id) ? 'Less' : 'More'}
-                    </div>
+                    🏭 {productionOrder.customerName} — {productionOrder.fabricDetails.type} ({productionOrder.id})
+                  </div>
+                  
+                  {/* Production Order Status */}
+                  <div className="ds-card-status">
+                    {statusDisplay.icon} {statusDisplay.label}
+                  </div>
+                  
+                  {/* Production Meta - Quantity + Dates */}
+                  <div 
+                    className="ds-card-meta"
+                    title={`${productionOrder.fabricDetails.quantity} ${productionOrder.fabricDetails.unit} • Created: ${new Date(productionOrder.createdDate).toLocaleDateString()}`}
+                  >
+                    {productionOrder.fabricDetails.quantity} {productionOrder.fabricDetails.unit}<br />
+                    Created: {new Date(productionOrder.createdDate).toLocaleDateString()}
                   </div>
 
-                  {/* Expanded Content - Basic Information + Action Buttons */}
-                  {isExpanded(order.id) && (
-                    <div className="ds-expanded-details">
-                      <div className="ds-details-content">
-                        <h4>🏭 Production Order Details</h4>
-                        <p><strong>Customer:</strong> {companyName} ({businessProfile?.registeredAddress.city || 'Unknown'})</p>
-                        <p><strong>Product Details:</strong> {getOrderItemsHeader(order)}</p>
-                        <p><strong>Order Value:</strong> {formatCurrency(order.totalAmount)} • Delivery: {order.deliveryDate}</p>
-                        <p><strong>Material Status:</strong> {order.materialStatus.icon} {order.materialStatus.display}</p>
-                        <p><strong>Production Status:</strong> {order.productionWorkflowStatus.icon} {order.productionWorkflowStatus.label}</p>
-                        <p><strong>Order Date:</strong> {order.orderDate}</p>
-                        <p><strong>Payment Status:</strong> {order.paymentStatus === 'advance_received' ? '✅ Advance Received' : 
-                           order.paymentStatus === 'completed' ? '✅ Fully Paid' : 
-                           '🔴 Payment Pending'}</p>
-                        {(order.balancePaymentDue !== undefined || order.paymentStatus === 'completed') && (
-                          <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue || 0)}</p>
-                        )}
-                        
-                        {/* Progress Bar for In-Production Orders */}
-                        {order.productionWorkflowStatus.status === 'in_production' && order.productionProgress > 0 && (
-                          <div className={styles.progressBarContainer}>
-                            <strong>Production Progress:</strong> <ProgressBar percentage={order.productionProgress} size="sm" />
-                            <span className={styles.progressText}>({order.productionProgress}% completed)</span>
-                          </div>
-                        )}
-                        
-                        {/* Material Details for Shortage */}
-                        {order.materialStatus.status === 'shortage' && (
-                          <div className={styles.materialShortageDetails}>
-                            <p><strong>⚠️ Material Shortage Details:</strong></p>
-                            <ul>
-                              {Array.isArray(order.materialStatus.details) 
-                                ? order.materialStatus.details.map((detail: string, index: number) => (
-                                    <li key={index}>{detail}</li>
-                                  ))
-                                : <li>{order.materialStatus.details}</li>
-                              }
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Action Buttons - Status-based Conditional Rendering */}
-                      <div className={styles.cardActions}>
-                        <div className={styles.actionButtons}>
-                          {/* Start Production - Available for orders with materials ready */}
-                          {order.productionWorkflowStatus.status === 'not_started' && order.materialStatus.status === 'available' && (
-                            <button 
-                              className="ds-btn ds-btn-primary" 
-                              onClick={(e) => { e.stopPropagation(); handleStartProduction(order.id); }}
-                            >
-                              🏭 Start Production
-                            </button>
-                          )}
-                          
-                          {/* Go to Procurement - For material shortage issues */}
-                          {order.materialStatus.status === 'shortage' && (
-                            <button 
-                              className="ds-btn ds-btn-secondary" 
-                              onClick={(e) => { e.stopPropagation(); handleGoToProcurement(order.id); }}
-                            >
-                              📦 Go to Procurement
-                            </button>
-                          )}
-                          
-                          {/* No more duplicate buttons - replaced by tab system below */}
-                        </div>
-                      </div>
-                      
-                      {/* Tab System for Information Display */}
-                      <div className={styles.tabSystem}>
-                        <div className={styles.tabButtons}>
-                          {/* Work Orders Tab - Only show for in_production orders */}
-                          {order.productionWorkflowStatus.status === 'in_production' && (
-                            <button
-                              className={`ds-btn ${getActiveTab(order.id) === 'work_orders' || getActiveTab(order.id) === null ? 'ds-btn-primary' : 'ds-btn-secondary'}`}
-                              onClick={(e) => { e.stopPropagation(); handleTabChange(order.id, 'work_orders'); }}
-                            >
-                              📋 Work Orders
-                            </button>
-                          )}
-                        </div>
-                        
-                        {/* Tab Content - Simple Work Orders Status */}
-                        {getActiveTab(order.id) === 'work_orders' && order.productionWorkflowStatus.status === 'in_production' && (
-                          <div className={styles.tabContent}>
-                            <div className={styles.workOrdersSimple}>
-                              {getWorkOrdersBySalesOrder(order.id).map(workOrder => (
-                                <div key={workOrder.id} className={styles.workOrderSimpleItem}>
-                                  <span className={styles.workOrderId}>- {workOrder.id}</span>
-                                  <span className={styles.workOrderStatus}>
-                                    {workOrder.progress === 100 ? '✅ Done' : 
-                                     workOrder.progress > 0 ? `🟡 Running (${workOrder.progress}%)` : '🔴 Not Started'}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                            
-                            {/* Create Work Order Button - Show after existing WOs */}
-                            <div className={styles.actionButtons}>
-                              <button 
-                                className="ds-btn ds-btn-secondary" 
-                                onClick={(e) => { e.stopPropagation(); handleCreateWorkOrder(order.id); }}
-                              >
-                                📋 Create Additional WO
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  {/* Expand Indicator */}
+                  <div className="ds-card-expand-indicator">
+                    {expanded ? 'Less' : 'More'}
+                  </div>
                 </div>
-              );
-            })
-          )}
+
+                {/* Progressive Disclosure - Detailed Information */}
+                {expanded && (
+                  <div className="ds-expanded-details">
+                    <div className="ds-details-content">
+                      {/* Enhanced Production Order Details */}
+                      <p><strong>Customer:</strong> 👤 {productionOrder.customerName} • <strong>Order Type:</strong> 🏭 Production Order • <strong>Status:</strong> {statusDisplay.icon} {statusDisplay.label}</p>
+                      {productionOrder.fabricDetails.challanReference && (
+                        <p><strong>Challan Reference:</strong> 📋 {productionOrder.fabricDetails.challanReference}</p>
+                      )}
+                      
+                      {/* Fabric Details Section */}
+                      <div className={styles.detailsSection}>
+                        <h4>📦 Fabric Specifications</h4>
+                        <div className={styles.detailsGrid}>
+                          <div className={styles.detailItem}>
+                            <span className={styles.label}>Material Type:</span>
+                            <span>{productionOrder.fabricDetails.type}</span>
+                          </div>
+                          <div className={styles.detailItem}>
+                            <span className={styles.label}>Quantity:</span>
+                            <span>{productionOrder.fabricDetails.quantity} {productionOrder.fabricDetails.unit}</span>
+                          </div>
+                          <div className={styles.detailItem}>
+                            <span className={styles.label}>Quality Grade:</span>
+                            <span>{productionOrder.fabricDetails.qualityGrade || 'Standard'}</span>
+                          </div>
+                          {productionOrder.fabricDetails.colors && (
+                            <div className={styles.detailItem}>
+                              <span className={styles.label}>Colors:</span>
+                              <span>{productionOrder.fabricDetails.colors.join(', ')}</span>
+                            </div>
+                          )}
+                          {productionOrder.fabricDetails.specialInstructions && (
+                            <div className={styles.detailItem}>
+                              <span className={styles.label}>Special Instructions:</span>
+                              <span>{productionOrder.fabricDetails.specialInstructions}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Work Orders Section */}
+                      <div className={styles.detailsSection}>
+                        <h4>🔧 Work Orders ({workOrders.length})</h4>
+                        {workOrders.length > 0 ? (
+                          <div className={styles.workOrdersList}>
+                            {workOrders.map(wo => (
+                              <div key={wo.id} className={styles.workOrderItem}>
+                                <span className={styles.workOrderId}>{wo.id}</span>
+                                <span className={styles.workOrderProduct}>{wo.product}</span>
+                                <span className={styles.workOrderStatus}>{wo.status}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className={styles.noWorkOrders}>
+                            <p>No work orders created yet</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Buttons using Global Design System */}
+                      {productionOrder.status === 'awaiting_work_order_creation' && (
+                        <div className="ds-card-actions">
+                          <button
+                            className="ds-btn ds-btn-primary"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCreateWorkOrders(productionOrder);
+                            }}
+                          >
+                            🔧 Create Work Orders
+                          </button>
+                          <button 
+                            className="ds-btn ds-btn-secondary"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewCustomer(productionOrder.customerId);
+                            }}
+                          >
+                            👤 View Customer
+                          </button>
+                        </div>
+                      )}
+                      
+                      {/* Timeline Information */}
+                      <div className={styles.detailsSection}>
+                        <h4>📅 Timeline</h4>
+                        <div className={styles.timestamps}>
+                          <div className={styles.timestamp}>
+                            <span className={styles.label}>Created:</span>
+                            <span>{new Date(productionOrder.createdDate).toLocaleDateString()}</span>
+                          </div>
+                          {productionOrder.receivedDate && (
+                            <div className={styles.timestamp}>
+                              <span className={styles.label}>Materials Received:</span>
+                              <span>{new Date(productionOrder.receivedDate).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                          {productionOrder.completedDate && (
+                            <div className={styles.timestamp}>
+                              <span className={styles.label}>Completed:</span>
+                              <span>{new Date(productionOrder.completedDate).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Notes Section */}
+                      {productionOrder.notes && (
+                        <div className={styles.detailsSection}>
+                          <h4>📝 Notes</h4>
+                          <p>{productionOrder.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-      </div>
+      )}
+
+      {/* Work Order Creation Modal */}
+      {selectedProductionOrder && (
+        <WorkOrderCreationModal
+          productionOrder={selectedProductionOrder}
+          isOpen={showWorkOrderModal}
+          onClose={() => setShowWorkOrderModal(false)}
+          onWorkOrdersCreated={handleWorkOrdersCreated}
+        />
+      )}
     </div>
   );
 };

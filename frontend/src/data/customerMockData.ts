@@ -82,6 +82,7 @@ export interface BusinessProfile {
   priority: 'hot' | 'warm' | 'cold';
   loyalty?: CustomerLoyalty;
   fabricPreferences?: string[];
+  bankDetails?: BankDetails;
 }
 
 // Customer Feedback - Module 11: Post-delivery experience tracking
@@ -1082,6 +1083,169 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     
     priority: 'hot',
     fabricPreferences: ['Digital printing', 'Polyester fabrics', 'Multi-color designs']
+  },
+
+  // New Customer Companies for WorkOrder Creation Testing
+  {
+    id: 'bp-rajkot-textiles',
+    companyName: 'Rajkot Textiles Ltd.',
+    gstNumber: '24RAJKT9876A1B2',
+    panNumber: 'RAJKT9876A',
+    registeredAddress: {
+      street: 'Industrial Estate, Plot No. 15',
+      city: 'Rajkot',
+      state: 'Gujarat',
+      pincode: '360001',
+      country: 'India'
+    },
+    contactPerson: 'Kiran Patel',
+    phone: '+91 281 234 5678',
+    email: 'kiran@rajkottextiles.com',
+    
+    bankDetails: {
+      bankName: 'Bank of Baroda',
+      accountNumber: '12345678901',
+      ifscCode: 'BARB0RAJKOT',
+      accountName: 'Rajkot Textiles Ltd.',
+      branch: 'Rajkot Industrial Estate'
+    },
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'November 10, 2024',
+    firstPaymentProjectId: 'JO-2024-004',
+    
+    businessType: 'Cotton Processing & Dyeing',
+    specialization: 'Cotton fabric dyeing, color matching, bulk processing',
+    employeeCount: '75+ employees',
+    establishedYear: '2010',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 85000,
+    averageOrderValue: 85000,
+    
+    creditLimit: 200000,
+    paymentScore: 88,
+    creditStatus: 'good',
+    paymentBehavior: 'good',
+    
+    preferences: {
+      paymentMethod: 'NEFT - Bank of Baroda',
+      deliveryPreference: 'Pickup from facility',
+      qualityRequirements: 'Consistent dyeing, color fastness',
+      communication: 'WhatsApp for quick updates, email for formal communication',
+      specialNotes: 'Regular dyeing service customer - reliable partner'
+    },
+    priority: 'warm',
+    fabricPreferences: ['Cotton fabrics', 'Reactive dyeing', 'Color matching services']
+  },
+  
+  {
+    id: 'bp-vadodara-mills',
+    companyName: 'Vadodara Processing Mills',
+    gstNumber: '24VADOD5432C7D8',
+    panNumber: 'VADOD5432C',
+    registeredAddress: {
+      street: 'GIDC Estate, Phase-II, Plot 22',
+      city: 'Vadodara',
+      state: 'Gujarat',
+      pincode: '391760',
+      country: 'India'
+    },
+    contactPerson: 'Mehul Shah',
+    phone: '+91 265 567 8901',
+    email: 'mehul@vadodaramills.com',
+    
+    bankDetails: {
+      bankName: 'ICICI Bank',
+      accountNumber: '98765432101',
+      ifscCode: 'ICIC0002657',
+      accountName: 'Vadodara Processing Mills',
+      branch: 'Vadodara GIDC'
+    },
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'November 08, 2024',
+    firstPaymentProjectId: 'JO-2024-005',
+    
+    businessType: 'Textile Finishing Services',
+    specialization: 'Anti-wrinkle finishing, softening, specialized treatments',
+    employeeCount: '90+ employees',
+    establishedYear: '2005',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 125000,
+    averageOrderValue: 125000,
+    
+    creditLimit: 300000,
+    paymentScore: 92,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    preferences: {
+      paymentMethod: 'RTGS - ICICI Bank',
+      deliveryPreference: 'Direct delivery to customer location',
+      qualityRequirements: 'Premium finishing quality, chemical compliance',
+      communication: 'Email preferred, phone for urgent matters',
+      specialNotes: 'Premium finishing specialist - high quality standards'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Finishing services', 'Chemical treatments', 'Premium quality processing']
+  },
+  
+  {
+    id: 'bp-bharuch-printers',
+    companyName: 'Bharuch Digital Printers',
+    gstNumber: '24BHARU6789E1F2',
+    panNumber: 'BHARU6789E',
+    registeredAddress: {
+      street: 'Digital Park, Block C, Unit 8',
+      city: 'Bharuch',
+      state: 'Gujarat',
+      pincode: '392001',
+      country: 'India'
+    },
+    contactPerson: 'Priya Desai',
+    phone: '+91 265 789 0123',
+    email: 'priya@bharuchprinters.com',
+    
+    bankDetails: {
+      bankName: 'HDFC Bank',
+      accountNumber: '13579246801',
+      ifscCode: 'HDFC0002658',
+      accountName: 'Bharuch Digital Printers',
+      branch: 'Bharuch Commercial'
+    },
+    
+    customerStatus: 'customer',
+    becameCustomerDate: 'November 12, 2024',
+    firstPaymentProjectId: 'JO-2024-006',
+    
+    businessType: 'Digital Printing & Design',
+    specialization: 'Multi-color digital printing, complex patterns, export quality',
+    employeeCount: '65+ employees',
+    establishedYear: '2012',
+    
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 180000,
+    averageOrderValue: 180000,
+    
+    creditLimit: 400000,
+    paymentScore: 90,
+    creditStatus: 'excellent',
+    paymentBehavior: 'excellent',
+    
+    preferences: {
+      paymentMethod: 'UPI Business - HDFC Bank',
+      deliveryPreference: 'Express delivery required',
+      qualityRequirements: 'Export quality, precise color matching, complex patterns',
+      communication: 'WhatsApp business, email for documentation',
+      specialNotes: 'High-end digital printing specialist - premium pricing accepted'
+    },
+    priority: 'hot',
+    fabricPreferences: ['Digital printing', 'Complex patterns', 'Multi-color designs', 'Export quality fabrics']
   }
 ];
 

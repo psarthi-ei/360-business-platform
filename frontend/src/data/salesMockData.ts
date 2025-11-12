@@ -410,6 +410,7 @@ export interface OrderItem extends QuoteItem {
   // ✅ Production tracking handled by WorkOrder system for proper domain separation
 }
 
+// Base interface for all customer orders (universal business term)
 export interface SalesOrder {
   id: string;
   quoteId: string;
@@ -623,6 +624,7 @@ export interface ClientMaterialBalance {
 
 // Job Order - Extends SalesOrder with service-focused fields and client material tracking
 // JobOrder: Clean Sales-Only Interface (no production/inventory concerns)
+// Job Order - Service processing with client materials
 export interface JobOrder extends SalesOrder {
   // Sales differentiator fields
   orderType: 'job_order';                    // Key differentiator from regular sales
@@ -646,10 +648,11 @@ export interface JobOrder extends SalesOrder {
   creditHoldReason?: string;
 }
 
-// Enhanced SalesOrder for type differentiation
-export interface EnhancedSalesOrder extends SalesOrder {
-  orderType: 'sales_order';                 // Differentiator field
-  materialOwnership: 'company';             // Always company for sales
+// ProductOrder for product sales with company materials
+// Product Order - Product sales using company materials and inventory
+export interface ProductOrder extends SalesOrder {
+  orderType: 'product_order';               // Differentiator field
+  materialOwnership: 'company';             // Always company for product sales
 }
 
 // ==================== FINANCIAL MANAGEMENT INTERFACES ====================
@@ -1996,6 +1999,157 @@ export const mockJobOrders: JobOrder[] = [
       rate: 32,
       discount: 0,
       taxableAmount: 96000
+    }]
+  },
+
+  // New JobOrders for WorkOrder Creation Testing
+  {
+    id: 'JO-2024-004',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'dyeing',
+    creditTerms: 30,
+    quoteId: 'QT-JO-004',
+    businessProfileId: 'bp-rajkot-textiles',
+    advancePaymentId: 'PAY-JO-004-ADV',
+    orderDate: '2024-11-10',
+    deliveryDate: '2024-11-17',
+    totalAmount: 72000,
+    status: 'materials_pending',
+    statusMessage: 'Awaiting customer fabric for dyeing service',
+    paymentStatus: 'advance_received',
+    urgency: 'normal',
+    progressPercentage: 25,
+    
+    expectedClientMaterialNames: [
+      'Cotton Fabric - Grey 180 GSM',
+      'Cotton Fabric - Plain Weave 160 GSM'
+    ],
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Rajesh Agarwal',
+    
+    serviceRequirements: {
+      serviceType: 'dyeing',
+      materialType: 'Cotton Grey Fabric',
+      quantity: 2400,
+      unit: 'meters',
+      customerSpecifications: {
+        colors: ['Red', 'Blue']
+      },
+      deliveryTimeline: '5 days from material receipt',
+      specialInstructions: 'Two-color dyeing - separate lots for each color'
+    },
+    
+    items: [{
+      itemCode: 'SVC-DYE-002',
+      description: 'Reactive Dyeing Service - Red & Blue (Dual Color)',
+      hsnCode: '9988',
+      quantity: 2400,
+      unit: 'meters',
+      rate: 30,
+      discount: 0,
+      taxableAmount: 72000
+    }]
+  },
+
+  {
+    id: 'JO-2024-005',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'finishing',
+    creditTerms: 30,
+    quoteId: 'QT-JO-005',
+    businessProfileId: 'bp-vadodara-mills',
+    advancePaymentId: 'PAY-JO-005-ADV',
+    orderDate: '2024-11-08',
+    deliveryDate: '2024-11-18',
+    totalAmount: 105000,
+    status: 'materials_pending',
+    statusMessage: 'Customer fabric received - ready for processing',
+    paymentStatus: 'advance_received',
+    urgency: 'urgent',
+    progressPercentage: 35,
+    
+    expectedClientMaterialNames: [
+      'Cotton Dyed Fabric - Blue 200 GSM',
+      'Cotton Dyed Fabric - Red 180 GSM'
+    ],
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Mehul Shah',
+    
+    serviceRequirements: {
+      serviceType: 'finishing',
+      materialType: 'Cotton Dyed Fabric',
+      quantity: 3500,
+      unit: 'meters',
+      customerSpecifications: {
+        finishType: ['Anti-wrinkle', 'Softening', 'Water-repellent']
+      },
+      deliveryTimeline: '8 days from material receipt',
+      specialInstructions: 'Premium finishing - export quality standards required'
+    },
+    
+    items: [{
+      itemCode: 'SVC-FIN-001',
+      description: 'Premium Finishing Service - Multi-treatment',
+      hsnCode: '9988',
+      quantity: 3500,
+      unit: 'meters',
+      rate: 30,
+      discount: 0,
+      taxableAmount: 105000
+    }]
+  },
+
+  {
+    id: 'JO-2024-006',
+    orderType: 'job_order',
+    materialOwnership: 'client',
+    serviceType: 'printing',
+    creditTerms: 45,
+    quoteId: 'QT-JO-006',
+    businessProfileId: 'bp-bharuch-printers',
+    advancePaymentId: 'PAY-JO-006-ADV',
+    orderDate: '2024-11-12',
+    deliveryDate: '2024-11-25',
+    totalAmount: 144000,
+    status: 'materials_pending',
+    statusMessage: 'Premium digital printing - awaiting customer fabric',
+    paymentStatus: 'advance_received',
+    urgency: 'urgent',
+    progressPercentage: 20,
+    
+    expectedClientMaterialNames: [
+      'Polyester Fabric - White 150 GSM',
+      'Polyester Fabric - Premium 180 GSM'
+    ],
+    creditApprovalStatus: 'approved',
+    creditApprovalBy: 'Priya Desai',
+    
+    serviceRequirements: {
+      serviceType: 'printing',
+      materialType: 'Polyester Fabric',
+      quantity: 4000,
+      unit: 'meters',
+      customerSpecifications: {
+        colors: ['Royal Blue', 'Gold', 'White', 'Silver'],
+        printType: ['Digital printing'],
+        designComplexity: 'Complex geometric patterns',
+        printQuality: 'Export quality'
+      },
+      deliveryTimeline: '10 days from material receipt',
+      specialInstructions: 'High-resolution digital printing with precise color matching'
+    },
+    
+    items: [{
+      itemCode: 'SVC-PRT-002',
+      description: 'Digital Printing Service - 4-Color Premium Design',
+      hsnCode: '9988',
+      quantity: 4000,
+      unit: 'meters',
+      rate: 36,
+      discount: 0,
+      taxableAmount: 144000
     }]
   }
 ];

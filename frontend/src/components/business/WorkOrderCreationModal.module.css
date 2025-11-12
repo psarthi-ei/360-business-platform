@@ -1,0 +1,288 @@
+/* WorkOrderCreationModal.module.css - ERP Compliant Design System Implementation */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--ds-z-modal);
+  padding: var(--ds-space-md);
+}
+
+.modal {
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-lg);
+  max-width: 900px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-size: var(--font-lg);
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: var(--font-xl);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  padding: var(--ds-space-xs);
+  border-radius: var(--ds-radius-sm);
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--ds-bg-secondary);
+  color: var(--ds-text-primary);
+}
+
+.productionOrderInfo {
+  padding: var(--ds-space-lg);
+  background: var(--ds-bg-secondary);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.productionOrderInfo h3 {
+  margin: 0 0 var(--ds-space-sm) 0;
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.productionOrderInfo p {
+  margin: var(--ds-space-xs) 0;
+  color: var(--ds-text-secondary);
+  font-size: var(--font-sm);
+}
+
+.lotsSection {
+  padding: var(--ds-space-lg);
+}
+
+.lotsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-lg);
+}
+
+.lotsHeader h3 {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.addLotButton {
+  background: var(--ds-color-primary);
+  color: white;
+  border: none;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.addLotButton:hover {
+  background: var(--ds-color-primary-hover);
+}
+
+.lotRow {
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-md);
+  margin-bottom: var(--ds-space-md);
+  overflow: hidden;
+}
+
+.lotNumber {
+  background: var(--ds-bg-tertiary);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  font-size: var(--font-sm);
+  border-bottom: 1px solid var(--ds-border-primary);
+}
+
+.lotFields {
+  padding: var(--ds-space-md);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr auto;
+  gap: var(--ds-space-md);
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+}
+
+.field label {
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--ds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field input,
+.field select {
+  padding: var(--ds-space-sm);
+  border: 1px solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  background: var(--ds-bg-primary);
+  color: var(--ds-text-primary);
+  min-height: var(--ds-touch-target-sm);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--ds-color-primary);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-alpha);
+}
+
+.unit {
+  font-size: var(--font-xs);
+  color: var(--ds-text-secondary);
+  margin-left: var(--ds-space-xs);
+}
+
+.removeLotButton {
+  background: var(--ds-color-error);
+  color: white;
+  border: none;
+  padding: var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-xs);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  height: var(--ds-touch-target-sm);
+}
+
+.removeLotButton:hover {
+  background: var(--ds-color-error-hover);
+}
+
+.quantitySummary {
+  padding: var(--ds-space-md) var(--ds-space-lg);
+  background: var(--ds-bg-secondary);
+  border-top: 1px solid var(--ds-border-primary);
+}
+
+.totalQuantity {
+  padding: var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+}
+
+.totalQuantity.match {
+  background: var(--ds-bg-success);
+  color: var(--ds-text-success);
+}
+
+.totalQuantity.mismatch {
+  background: var(--ds-bg-error);
+  color: var(--ds-text-error);
+}
+
+.error {
+  margin: var(--ds-space-md) var(--ds-space-lg);
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: var(--ds-bg-error);
+  color: var(--ds-text-error);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+}
+
+.actions {
+  padding: var(--ds-space-lg);
+  display: flex;
+  gap: var(--ds-space-md);
+  justify-content: flex-end;
+  border-top: 1px solid var(--ds-border-primary);
+}
+
+.cancelButton,
+.createButton {
+  padding: var(--ds-space-sm) var(--ds-space-lg);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: var(--ds-touch-target-md);
+  min-width: 100px;
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--ds-text-secondary);
+  border: 1px solid var(--ds-border-primary);
+}
+
+.cancelButton:hover {
+  background: var(--ds-bg-secondary);
+  color: var(--ds-text-primary);
+}
+
+.createButton {
+  background: var(--ds-color-primary);
+  color: white;
+  border: 1px solid var(--ds-color-primary);
+}
+
+.createButton:hover:not(:disabled) {
+  background: var(--ds-color-primary-hover);
+}
+
+.createButton:disabled {
+  background: var(--ds-bg-disabled);
+  color: var(--ds-text-disabled);
+  border-color: var(--ds-border-disabled);
+  cursor: not-allowed;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .modal {
+    margin: var(--ds-space-md);
+    max-height: 90vh;
+  }
+  
+  .lotFields {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .cancelButton,
+  .createButton {
+    width: 100%;
+  }
+}

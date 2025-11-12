@@ -18,6 +18,7 @@
 ### **🔧 KEY BUSINESS CONCEPTS**
 - [**CRM MODULE ARCHITECTURE**](#crm-module-architecture)
 - [**CRITICAL DOCUMENT HIERARCHY: SALES ORDER vs WORK ORDER**](#critical-document-hierarchy-sales-order-vs-work-order)
+- [**CUSTOMER ORDER TYPES & BUSINESS MODEL ARCHITECTURE**](#customer-order-types--business-model-architecture)
 
 ### **🔄 COMPLETE 8-STAGE BUSINESS PIPELINE**
 - [**Stage 1: Lead Generation & Capture**](#stage-1-lead-generation--capture)
@@ -575,6 +576,204 @@ This separation ensures:
 
 ---
 
+## Customer Order Types & Business Model Architecture
+
+### Overview of Order Types
+
+The ElevateIdea 360° platform supports two distinct business models through a unified order management system. Understanding these order types is crucial for proper workflow management, material ownership handling, and production planning.
+
+### Customer Order Concept
+
+From a **customer perspective**, they place a "Customer Order" - a request for textile services or products. Internally, the platform processes these customer orders through two distinct business model paths based on material ownership and risk profile.
+
+### Document ID Naming Convention
+
+The platform uses a standardized naming convention to avoid confusion between different order types and ensure clear document identification throughout the workflow.
+
+#### Sales Order Level (Customer-Facing Orders)
+- **Job Orders**: `JO-YYYY-NNN` (e.g., `JO-2024-001`)
+  - Services like dyeing, finishing, printing, weaving
+  - Customer provides materials (material ownership: client)
+  - Payment typically after service completion
+
+- **Product Orders**: `PRD-YYYY-NNN` (e.g., `PRD-2024-001`)  
+  - Manufactured textile products
+  - Company provides materials (material ownership: company)
+  - Payment typically with advance
+
+#### Production Order Level (Manufacturing Execution)
+- **Production Orders for Job Orders**: `PROD-JO-YYYY-NNN-XX` (e.g., `PROD-JO-2024-001-01`)
+- **Production Orders for Product Orders**: `PROD-PRD-YYYY-NNN-XX` (e.g., `PROD-PRD-2024-001-01`)
+
+#### Supporting Documents
+- **Quotes**: `QT-JO-NNN` / `QT-PRD-NNN`
+- **Invoices**: `INV-JO-YYYY-NNN` / `INV-PRD-YYYY-NNN` 
+- **Work Orders**: `WO#NNN` (specific manufacturing tasks)
+- **Inward Entry**: `IE-NNN` (customer materials for Job Orders only)
+- **Goods Receipt Note**: `GRN-NNN` (purchased materials for inventory)
+
+#### Business Process Flow
+- **Job Orders** → Customer materials → **Inward Entry (IE)** → **Production Order (PROD-JO)**
+- **Product Orders** → Company materials → **Inventory reservation** → **Production Order (PROD-PRD)**  
+- **GRN** → Updates inventory → No direct link to Production Orders
+
+This naming convention ensures clear distinction between order types and eliminates confusion between Sales Orders, Production Orders, and Purchase Orders throughout the system.
+
+### Technical Architecture: CustomerOrder Base Interface
+
+All customer orders inherit from a common `CustomerOrder` base interface that captures universal commercial information:
+
+```typescript
+// Base interface for all customer orders (generic term)
+interface CustomerOrder {
+  id: string;
+  businessProfileId: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: OrderStatus;
+  orderDate: string;
+  materialOwnership: 'company' | 'client';
+}
+```
+
+### Business Model 1: Sales Orders (Product Sales)
+
+**Material Ownership**: Company owns materials  
+**Business Model**: Traditional product sales  
+**Customer Payment**: Full payment upfront or credit terms  
+**Risk Profile**: Company bears material cost risk  
+
+#### Key Characteristics:
+- **Purpose**: Selling company-owned finished textile products
+- **Material Source**: Company procures raw materials for inventory
+- **Production Planning**: Company-driven based on demand forecasting
+- **Payment Terms**: Standard sales terms, often credit-based for established customers
+- **Inventory Impact**: Products sold from company inventory or produced for stock
+
+#### Business Examples:
+- Ready-made fabric sales to garment manufacturers
+- Standard textile products from company inventory
+- Bulk fabric orders where company sources materials
+
+#### Technical Implementation:
+```typescript
+interface ProductOrder extends SalesOrder {
+  materialOwnership: 'company';
+  paymentTerms: 'upfront' | 'credit' | 'installments';
+  inventoryType: 'stock' | 'made_to_order';
+}
+```
+
+### Business Model 2: Job Orders (Service Processing)
+
+**Material Ownership**: Client owns materials  
+**Business Model**: Service processing and job work  
+**Customer Payment**: 30% advance + service fees  
+**Risk Profile**: Client bears material risk, company provides services  
+
+#### Key Characteristics:
+- **Purpose**: Processing client-owned materials into finished products
+- **Material Source**: Client provides raw materials (fabric, yarn, etc.)
+- **Production Planning**: Client material receipt triggers production planning
+- **Payment Terms**: 30% advance payment mandatory, balance on delivery
+- **Service Focus**: Dyeing, finishing, printing, weaving services on client materials
+
+#### Business Examples:
+- Custom dyeing services on client-provided fabric
+- Finishing and printing on customer-supplied textiles
+- Processing raw yarn into finished fabric for clients
+
+#### Technical Implementation:
+```typescript
+interface JobOrder extends CustomerOrder {
+  materialOwnership: 'client';
+  advancePaymentPercentage: 30;
+  serviceRequirements: {
+    processes: string[];
+    specifications: string;
+    specialInstructions?: string;
+  };
+  inwardEntryRequired: true;
+}
+```
+
+### Production Order Creation Rules
+
+The platform automatically creates Production Orders based on order type and material status:
+
+#### Sales Orders (Product Sales):
+- **Trigger**: Order creation + material availability check
+- **Production Order**: Created immediately if materials available
+- **Material Management**: Company manages procurement and inventory
+
+#### Job Orders (Service Processing):
+- **Trigger**: Inward Entry completion (client material receipt)
+- **Production Order**: Auto-created after material receipt verification
+- **Material Management**: Client provides materials, tracked through inward entry
+
+### Key Business Logic Differences
+
+#### Payment Flow:
+```
+Sales Orders: 
+Customer Order → Credit Check → Production → Delivery → Invoice → Payment
+
+Job Orders:
+Customer Order → 30% Advance → Material Receipt → Production → Delivery → Final Payment
+```
+
+#### Material Risk:
+- **Sales Orders**: Company bears material cost and quality risk
+- **Job Orders**: Client bears material cost and quality risk
+
+#### Production Triggering:
+- **Sales Orders**: Market demand and inventory optimization
+- **Job Orders**: Client material availability and processing requirements
+
+### Cross-Module Integration
+
+#### Sales & Quotations Module:
+- Manages both Sales Orders and Job Orders through unified interface
+- Displays local terminology while maintaining ERP compliance in backend
+
+#### Production Module:
+- Receives Production Orders automatically based on material readiness
+- Uses ERP standard terminology (Production Order, Work Order) in code
+- Displays local terminology (Job Card, Lot) in UI
+
+#### Procurement Module:
+- Handles company material procurement for Sales Orders
+- Manages client material inward entry for Job Orders
+- Triggers Production Order creation for Job Orders after material receipt
+
+### Status Flow by Order Type
+
+#### Sales Order Status Flow:
+```
+order_confirmed → material_ready → production_started → quality_check → ready_to_ship → delivered
+```
+
+#### Job Order Status Flow:
+```
+order_confirmed → awaiting_material → material_received → production_started → quality_check → ready_to_ship → delivered
+```
+
+### Business Intelligence & Reporting
+
+#### Revenue Recognition:
+- **Sales Orders**: Revenue recognized at delivery
+- **Job Orders**: Service revenue recognized at completion
+
+#### Profitability Analysis:
+- **Sales Orders**: Material cost + production cost vs selling price
+- **Job Orders**: Labor cost + overhead vs service charges
+
+#### Customer Relationship Management:
+- **Sales Orders**: Focus on volume, payment terms, and inventory planning
+- **Job Orders**: Focus on service quality, turnaround time, and material handling
+
+---
+
 ## Complete Business Pipeline
 
 ### **Stage 1: Lead Generation & Capture**
@@ -933,6 +1132,127 @@ This business area manages manufacturing execution from sales orders to complete
 - **Machine Scheduling**: Allocate loom time, dyeing time, finishing time
 - **Labor Planning**: Assign skilled workers for specific processes
 - **Quality Checkpoints**: Plan inspection stages throughout production
+
+#### **Production Order & Work Order Status Lifecycle**
+
+The manufacturing process follows a sophisticated status progression system where Production Orders and Work Orders evolve through distinct lifecycle stages. Each status change triggers specific business logic and determines visibility in different UI tabs.
+
+##### **Production Order Status Lifecycle**
+
+Production Orders aggregate the status of all their child Work Orders and progress through these stages:
+
+```
+awaiting_material → material_received → awaiting_work_order_creation → 
+ready_for_production → in_progress → awaiting_qc → 
+quality_issues (if QC rejects) | ready_for_delivery (if QC approves) → 
+partial_delivery → completed
+```
+
+**Status Definitions:**
+- **`awaiting_material`**: Customer fabric not yet received
+- **`material_received`**: Fabric received via GRN, ready for production planning
+- **`awaiting_work_order_creation`**: Material ready, work orders need to be generated
+- **`ready_for_production`**: All work orders created, awaiting machine allocation
+- **`in_progress`**: At least one child work order is actively being produced
+- **`awaiting_qc`**: All child work orders completed, awaiting quality inspection
+- **`quality_issues`**: One or more work orders rejected by QC, requires attention
+- **`ready_for_delivery`**: All work orders QC approved, ready for dispatch
+- **`partial_delivery`**: Some work orders delivered, others pending
+- **`completed`**: All work orders fully delivered to customer
+
+##### **Work Order (Lot) Status Lifecycle**
+
+Individual Work Orders represent lots (single color/process) and follow this progression:
+
+```
+pending → in_progress → completed → ready_qc → 
+qc_approved | qc_rejected → ready_for_delivery → 
+dispatched → delivered
+```
+
+**Status Definitions:**
+- **`pending`**: Work order created, awaiting machine assignment and start
+- **`in_progress`**: Active production on manufacturing floor
+- **`completed`**: Production finished, output ready for quality inspection
+- **`ready_qc`**: Same as completed but explicitly flagged for QC workflow
+- **`qc_approved`**: Quality control passed, approved for delivery
+- **`qc_rejected`**: Quality control failed, requires rework or rejection
+- **`ready_for_delivery`**: QC approved, ready for packaging and dispatch
+- **`dispatched`**: In transit to customer
+- **`delivered`**: Successfully delivered to customer
+- **`rework_required`**: Returned from QC for production corrections
+
+##### **Quality Control Status Lifecycle**
+
+QC Items are created when Work Orders reach `completed` or `ready_qc` status:
+
+```
+pending_inspection → in_progress → approved | rejected
+```
+
+**Status Definitions:**
+- **`pending_inspection`**: Work order completed, awaiting QC inspector assignment
+- **`in_progress`**: QC inspector actively conducting quality checks
+- **`approved`**: Quality standards met, work order cleared for delivery
+- **`rejected`**: Quality standards not met, work order requires rework
+
+**QC Results Impact:**
+- **QC Approved** → Work Order status becomes `qc_approved`
+- **QC Rejected** → Work Order status becomes `qc_rejected`, Production Order status becomes `quality_issues`
+
+##### **Delivery Status Lifecycle**
+
+Delivery Items are created only after QC approval:
+
+```
+ready_dispatch → delivery_scheduled → dispatched → delivered | failed_returned
+```
+
+**Status Definitions:**
+- **`ready_dispatch`**: QC approved, ready for logistics planning
+- **`delivery_scheduled`**: Vehicle and driver assigned, delivery planned
+- **`dispatched`**: In transit to customer location
+- **`delivered`**: Successfully delivered and customer confirmed
+- **`failed_returned`**: Delivery attempt failed, item returned to facility
+
+##### **Tab Visibility Rules**
+
+The status progression determines when items appear in different UI tabs:
+
+**Production Tab (Work Order Management)**:
+- Shows Work Orders in: `pending`, `in_progress`, `completed`, `ready_qc`
+- Filters by status: All | Pending | In Progress | Completed
+
+**QC Tab (Quality Control)**:
+- Shows Work Orders with status: `completed` OR `ready_qc`
+- Only displays work orders that need quality inspection
+- Filters by QC status: All | Pending Inspection | In Progress | Approved | Rejected
+
+**Ready Tab (Delivery Management)**:
+- Shows Delivery Items with any delivery status
+- Only items with `qcGrade` assigned (QC must be completed)
+- Filters by delivery status: All | Ready Dispatch | Scheduled | Dispatched | Delivered
+
+**Key Business Rule**: Items flow sequentially through tabs - Production → QC → Ready. An item cannot appear in Ready tab without first completing QC workflow.
+
+##### **Status Change Triggers**
+
+**Production Order Status Changes When:**
+- Any child Work Order status changes → Recalculate aggregated status
+- All Work Orders reach same milestone → Progress Production Order status
+- QC results received → Update based on approval/rejection pattern
+
+**Work Order Status Changes When:**
+- Production milestones reached → Manual or automated status update
+- QC inspection completed → Automatic status update based on QC result
+- Delivery events occur → Status updated by logistics workflow
+
+**Quality Control Status Changes When:**
+- Inspector assigned to Work Order → `pending_inspection` to `in_progress`
+- QC inspection completed → `in_progress` to `approved`/`rejected`
+- Rework completed after rejection → Reset to `pending_inspection`
+
+This status lifecycle ensures complete traceability and proper workflow progression throughout the manufacturing and delivery process.
 
 ---
 

@@ -213,10 +213,10 @@ const DeliveryFulfillment = ({
       return (
         <>
           <h4>📦 Order Details</h4>
-          <p><strong>Sales Order:</strong> {deliveryItem.salesOrderId}</p>
-          <p><strong>Total Quantity:</strong> {deliveryItem.quantity}</p>
+          <p><strong>Job Order:</strong> {deliveryItem.salesOrderId}</p>
+          <p><strong>Lot Quantity:</strong> {deliveryItem.quantity}</p>
           <p><strong>Quality Grade:</strong> {deliveryItem.qcGrade}</p>
-          <p><strong>Work Orders:</strong> {deliveryItem.workOrderIds.join(', ')}</p>
+          <p><strong>Work Order (Lot):</strong> {deliveryItem.workOrderId}</p>
 
           <h4>📍 Delivery Information</h4>
           <p><strong>Customer:</strong> {deliveryItem.customer}</p>
@@ -238,7 +238,7 @@ const DeliveryFulfillment = ({
 
           <h4>📍 Delivery Destination</h4>
           <p><strong>Customer:</strong> {deliveryItem.customer}</p>
-          <p><strong>Sales Order:</strong> {deliveryItem.salesOrderId}</p>
+          <p><strong>Job Order:</strong> {deliveryItem.salesOrderId}</p>
           <p><strong>Business Profile:</strong> {deliveryItem.businessProfileId}</p>
         </>
       );
@@ -428,7 +428,7 @@ const DeliveryFulfillment = ({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '14px', color: '#4a5568' }}>
                   <div>
                     <strong>Invoice Details:</strong><br />
-                    Sales Order: {deliveryItem.salesOrderId}<br />
+                    Job Order: {deliveryItem.salesOrderId}<br />
                     Amount: ₹{((parseFloat(deliveryItem.quantity.replace(/[^\d]/g, '')) || 1500) * 45).toLocaleString()}
                   </div>
                   <div>
@@ -918,7 +918,7 @@ const DeliveryFulfillment = ({
                   className={`ds-card ${hasActionButton(deliveryItem) ? 'ds-card-with-actions' : ''} ${getDeliveryStatusClass(deliveryItem)} ${isExpanded(deliveryItem.id) ? 'ds-card-expanded' : ''}`}
                   onClick={() => toggleDetails(deliveryItem.id)}
                 >
-                  {/* Card Header - Sales Order context */}
+                  {/* Card Header - Job Order context */}
                   <div className="ds-card-header" title={`${deliveryItem.salesOrderId} - ${deliveryItem.customer} | ${deliveryItem.product}`}>
                     {deliveryItem.salesOrderId} — {deliveryItem.customer}
                   </div>
