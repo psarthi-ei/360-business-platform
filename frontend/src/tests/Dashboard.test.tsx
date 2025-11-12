@@ -11,8 +11,7 @@ const mockProps = {
   onShowInvoices: jest.fn(),
   onShowCustomerList: jest.fn(),
   onShowInventory: jest.fn(),
-  onShowFulfillment: jest.fn(),
-  onShowAnalytics: jest.fn()
+  onShowProduction: jest.fn()
 };
 
 // Helper function to render Dashboard with TranslationProvider
@@ -43,40 +42,39 @@ describe('Dashboard Component', () => {
 
     test('should render KPI cards', () => {
       renderDashboard();
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-      expect(screen.getByText('Pending Invoices')).toBeInTheDocument();
-      expect(screen.getByText('Orders at Risk')).toBeInTheDocument();
-      expect(screen.getByText('Production Efficiency')).toBeInTheDocument();
+      expect(screen.getByText('Active Parties')).toBeInTheDocument();
+      expect(screen.getByText('Orders This Month')).toBeInTheDocument();
+      expect(screen.getByText('Lots in Process')).toBeInTheDocument();
+      expect(screen.getByText('Pending Collections')).toBeInTheDocument();
     });
 
     test('should render alert action button', () => {
       renderDashboard();
-      // MVP simplification: Quick action buttons removed, only alert action remains
-      expect(screen.getByText('Resolve →')).toBeInTheDocument();
+      expect(screen.getByText('Check Materials →')).toBeInTheDocument();
     });
 
     test('should render alert card', () => {
       renderDashboard();
-      expect(screen.getByText('2 orders blocked - Cotton shortage')).toBeInTheDocument();
-      expect(screen.getByText('Resolve →')).toBeInTheDocument();
+      expect(screen.getByText(/lots awaiting client materials/)).toBeInTheDocument();
+      expect(screen.getByText('Check Materials →')).toBeInTheDocument();
     });
 
     test('should render business snapshot cards', () => {
       renderDashboard();
-      expect(screen.getByText('SALES SNAPSHOT')).toBeInTheDocument();
-      expect(screen.getByText('PRODUCTION SNAPSHOT')).toBeInTheDocument();
-      expect(screen.getByText('PROCUREMENT SNAPSHOT')).toBeInTheDocument();
-      expect(screen.getByText('CUSTOMER HEALTH')).toBeInTheDocument();
+      expect(screen.getByText('INQUIRY PIPELINE')).toBeInTheDocument();
+      expect(screen.getByText('PROCESSING STATUS')).toBeInTheDocument();
+      expect(screen.getByText('SERVICE MIX')).toBeInTheDocument();
+      expect(screen.getByText('PARTY PORTFOLIO')).toBeInTheDocument();
     });
 
     test('should render activity timeline', () => {
       renderDashboard();
-      expect(screen.getByText('📋 RECENT ACTIVITY')).toBeInTheDocument();
+      expect(screen.getByText('📋 TODAY\'S ACTIVITY')).toBeInTheDocument();
     });
 
     test('should render sync status', () => {
       renderDashboard();
-      expect(screen.getByText(/Last synced:/)).toBeInTheDocument();
+      expect(screen.getByText(/Last updated:/)).toBeInTheDocument();
     });
   });
 });

@@ -114,8 +114,7 @@ function AppContent() {
     showInvoices,
     showCustomerList,
     showInventory,
-    showFulfillment,
-    showAnalytics,
+    showProduction,
     showLogin,
     showSignUp,
     showTurnaroundStories,
@@ -235,8 +234,7 @@ function AppContent() {
           onShowInvoices={showInvoices}
           onShowCustomerList={showCustomerList}
           onShowInventory={showInventory}
-          onShowFulfillment={showFulfillment}
-          onShowAnalytics={showAnalytics}
+          onShowProduction={showProduction}
         />
       </div>
     );

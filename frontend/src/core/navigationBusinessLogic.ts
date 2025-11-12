@@ -27,6 +27,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
     showCustomerList: () => navigate('/platform/customers'),
     showCustomerProfile: (customerId: string) => navigate(`/platform/customers/${customerId}`),
     showInventory: () => navigate('/platform/procurement'),
+    showProduction: () => navigate('/platform/production'),
     showFulfillment: () => navigate('/platform/fulfillment'),
     showAnalytics: () => navigate('/platform/production'),
     showLogin: () => navigate('/login'),
