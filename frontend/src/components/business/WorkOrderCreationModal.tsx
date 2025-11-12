@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProductionOrder } from '../../data/productionMockData';
 import { LotDefinition, createWorkOrdersFromLots, validateLotDefinitions } from '../../services/ProductionOrderService';
+import ModalPortal from '../ui/ModalPortal';
 import styles from './WorkOrderCreationModal.module.css';
 
 interface WorkOrderCreationModalProps {
@@ -78,11 +79,9 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modal}>
+    <ModalPortal isOpen={isOpen} onBackdropClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>Create Work Orders</h2>
           <button className={styles.closeButton} onClick={onClose}>×</button>
@@ -194,18 +193,18 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
         )}
 
         <div className={styles.actions}>
-          <button className={styles.cancelButton} onClick={onClose}>
-            Cancel
-          </button>
           <button 
-            className={styles.createButton}
+            className="ds-btn ds-btn-primary"
             onClick={handleCreate}
             disabled={isCreating || getTotalQuantity() !== productionOrderData.fabricDetails.quantity}
           >
             {isCreating ? 'Creating...' : 'Create Work Orders'}
           </button>
+          <button className="ds-btn ds-btn-secondary" onClick={onClose}>
+            Cancel
+          </button>
         </div>
       </div>
-    </div>
+    </ModalPortal>
   );
 };

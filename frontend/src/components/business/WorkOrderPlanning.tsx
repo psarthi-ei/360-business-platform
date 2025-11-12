@@ -147,8 +147,6 @@ const WorkOrderPlanning = ({
   const [pausedWorkOrders, setPausedWorkOrders] = useState<Map<string, string>>(new Map()); // Track paused work orders with reason
   
   // State for collapsible sections within expanded cards
-  const [expandedMaterialSections, setExpandedMaterialSections] = useState<Set<string>>(new Set());
-  const [expandedHistorySections, setExpandedHistorySections] = useState<Set<string>>(new Set());
 
   // Available machines and workers for reassignment
   const availableMachines = mockMachines.filter(machine => machine.status === 'available');
@@ -264,30 +262,6 @@ const WorkOrderPlanning = ({
     toggleExpansion(workOrderId, 'data-wo-id');
   };
 
-  // Toggle collapsible sections within expanded cards
-  const toggleMaterialSection = (workOrderId: string) => {
-    setExpandedMaterialSections(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workOrderId)) {
-        newSet.delete(workOrderId);
-      } else {
-        newSet.add(workOrderId);
-      }
-      return newSet;
-    });
-  };
-
-  const toggleHistorySection = (workOrderId: string) => {
-    setExpandedHistorySections(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workOrderId)) {
-        newSet.delete(workOrderId);
-      } else {
-        newSet.add(workOrderId);
-      }
-      return newSet;
-    });
-  };
 
   return (
     <div className={styles.workOrderPlanningScreen}>
@@ -378,85 +352,138 @@ const WorkOrderPlanning = ({
                     </div>
                   </div>
 
-                  {/* Expanded Content */}
+                  {/* Professional Expanded Content - Following LeadManagement Pattern */}
                   {isExpanded(workOrder.id) && (
-                    <div className="ds-expanded-details">
-                      <div className="ds-details-content">
-                        <h4>📋 Work Order Management</h4>
-                        
-                        <p><strong>Product:</strong> {workOrder.product}</p>
-                        <p><strong>Batch:</strong> {workOrder.batchNumber}</p>
-                        <p><strong>Priority:</strong> {workOrder.priority}</p>
-                        
-                        {/* Material Allocation Details - Collapsible */}
-                        <div className={styles.collapsibleSection}>
-                          <div 
-                            className={styles.collapsibleHeader}
-                            onClick={(e) => { e.stopPropagation(); toggleMaterialSection(workOrder.id); }}
-                          >
-                            <span className={styles.collapsibleTitle}>
-                              📦 Material Details {expandedMaterialSections.has(workOrder.id) ? '▼' : '▶'}
-                            </span>
-                            <span className={styles.collapsibleStatus}>
-                              {getMaterialAllocationStatus(workOrder).icon} {getMaterialAllocationStatus(workOrder).text}
-                            </span>
-                          </div>
-                          
-                          {expandedMaterialSections.has(workOrder.id) && (
-                            <div className={styles.collapsibleContent}>
-                              <div className={`${styles.materialStatus} ${getMaterialAllocationStatus(workOrder).status === 'partial' ? styles.materialWarning : styles.materialSuccess}`}>
-                                {workOrder.materialAllocations && workOrder.materialAllocations.length > 0 && (
-                                  <div className={styles.materialRequirements}>
-                                    {workOrder.materialAllocations.map((allocation, index) => (
-                                      <div key={index} className={styles.materialRequirement}>
-                                        <div className={styles.materialName}>{allocation.material}</div>
-                                        <div className={styles.materialQuantities}>
-                                          <div className={styles.materialRequired}>Allocated: {allocation.allocatedQuantity}</div>
-                                          <div className={styles.materialAvailable}>Consumed: {allocation.consumedQuantity}</div>
-                                          <div className={styles.materialRemaining}>Remaining: {allocation.remainingQuantity}</div>
-                                          <div className={styles.materialStatus}>Status: {allocation.reservationType}</div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
+                    <div className={styles.expandedSection}>
+                      
+                      {/* SECTION 1: Work Order & Production Details (Highest Priority) */}
+                      <div className={styles.productionDetailsSection}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>🏢</span>
+                            Work Order & Production Details
+                          </h4>
                         </div>
+                        <div className={styles.productionDetailsGrid}>
+                          <div className={styles.detailCard}>
+                            <p><strong>Work Order ID:</strong> {workOrder.id}</p>
+                            <p><strong>Product:</strong> {workOrder.product}</p>
+                            <p><strong>Batch Number:</strong> {workOrder.batchNumber}</p>
+                            <p><strong>Priority:</strong> {workOrder.priority}</p>
+                          </div>
+                          <div className={styles.detailCard}>
+                            <p><strong>Target Quantity:</strong> {workOrder.targetQuantity}</p>
+                            <p><strong>Produced Quantity:</strong> {workOrder.producedQuantity}</p>
+                            <p><strong>Progress:</strong> {workOrder.progress}%</p>
+                            <p><strong>Status:</strong> {getWOStatusText(workOrder)}</p>
+                          </div>
+                        </div>
+                      </div>
 
-                        {/* Conditional Assignment Controls */}
-                        {(workOrder.status === 'pending' || workOrder.status === 'in_progress') && (
-                          <>
-                            <div className={styles.assignmentSection}>
-                              <p><strong>Machine Assignment:</strong></p>
-                              <div className={styles.currentAssignment}>
-                                <span className={styles.currentLabel}>Current: {workOrder.assignedMachine}</span>
-                              </div>
-                              <div className={styles.reassignmentControl}>
-                                <select 
-                                  value={selectedMachines.get(workOrder.id) || ''}
-                                  onChange={(e) => { e.stopPropagation(); handleMachineSelection(workOrder.id, e.target.value); }}
-                                  className={styles.assignmentDropdown}
-                                >
-                                  <option value="">Select new machine...</option>
-                                  {availableMachines.map(machine => (
-                                    <option key={machine.id} value={machine.name}>
-                                      {machine.name} ({machine.status})
-                                    </option>
-                                  ))}
-                                </select>
-                                <button 
-                                  className="ds-btn ds-btn-primary"
-                                  onClick={(e) => { e.stopPropagation(); handleMachineReassign(workOrder.id); }}
-                                  disabled={!selectedMachines.get(workOrder.id)}
-                                >
-                                  🔄 Reassign
-                                </button>
-                              </div>
-                            </div>
+                      {/* SECTION 2: Machine & Worker Assignment */}
+                      <div className={styles.assignmentSection}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>🔧</span>
+                            Machine & Worker Assignment
+                          </h4>
+                        </div>
+                        <div className={styles.assignmentGrid}>
+                          <div className={styles.detailCard}>
+                            <p><strong>Assigned Machine:</strong> {workOrder.assignedMachine || 'Not assigned'}</p>
+                            <p><strong>Assigned Worker:</strong> {workOrder.assignedWorker || 'Not assigned'}</p>
+                            <p><strong>Machine Status:</strong> {workOrder.assignedMachine ? 'Allocated' : 'Pending assignment'}</p>
+                            <p><strong>Worker Status:</strong> {workOrder.assignedWorker ? 'Allocated' : 'Pending assignment'}</p>
+                          </div>
+                        </div>
+                      </div>
 
-                            <div className={styles.assignmentSection}>
+                      {/* SECTION 3: Material Allocation & Requirements */}
+                      <div className={styles.materialSection}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>📦</span>
+                            Material Allocation & Requirements
+                          </h4>
+                        </div>
+                        <div className={styles.materialGrid}>
+                          <div className={styles.detailCard}>
+                            <p><strong>Material Status:</strong> {getMaterialAllocationStatus(workOrder).text}</p>
+                            {workOrder.materialAllocations && workOrder.materialAllocations.length > 0 ? (
+                              workOrder.materialAllocations.map((allocation, index) => (
+                                <div key={index} className={styles.materialItem}>
+                                  <p><strong>{allocation.material}:</strong></p>
+                                  <p>• Allocated: {allocation.allocatedQuantity}</p>
+                                  <p>• Consumed: {allocation.consumedQuantity}</p>
+                                  <p>• Remaining: {allocation.remainingQuantity}</p>
+                                </div>
+                              ))
+                            ) : (
+                              <p>No material allocations defined</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SECTION 4: Progress & Timeline Information */}
+                      <div className={styles.progressSection}>
+                        <div className={styles.sectionHeader}>
+                          <h4 className={styles.sectionTitle}>
+                            <span className={styles.sectionIcon}>📈</span>
+                            Progress & Timeline Information
+                          </h4>
+                        </div>
+                        <div className={styles.progressGrid}>
+                          <div className={styles.detailCard}>
+                            <p><strong>Start Time:</strong> {workOrder.startTime || 'Not started'}</p>
+                            <p><strong>Target Date:</strong> {workOrder.estimatedCompletion || 'TBD'}</p>
+                            <p><strong>Current Progress:</strong> {workOrder.progress}% ({workOrder.producedQuantity} / {workOrder.targetQuantity})</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* SECTION 5: Actions */}
+                      {(workOrder.status === 'pending' || workOrder.status === 'in_progress') && (
+                        <div className={styles.actionsSection}>
+                          <div className={styles.sectionHeader}>
+                            <h4 className={styles.sectionTitle}>
+                              <span className={styles.sectionIcon}>⚙️</span>
+                              Assignment Controls
+                            </h4>
+                          </div>
+                          <div className={styles.assignmentControls}>
+                            {/* Machine Assignment Controls */}
+                            {(workOrder.status === 'pending' || workOrder.status === 'in_progress') && (
+                              <>
+                                <div className={styles.assignmentSection}>
+                                  <p><strong>Machine Assignment:</strong></p>
+                                  <div className={styles.currentAssignment}>
+                                    <span className={styles.currentLabel}>Current: {workOrder.assignedMachine}</span>
+                                  </div>
+                                  <div className={styles.reassignmentControl}>
+                                    <select 
+                                      value={selectedMachines.get(workOrder.id) || ''}
+                                      onChange={(e) => { e.stopPropagation(); handleMachineSelection(workOrder.id, e.target.value); }}
+                                      className={styles.assignmentDropdown}
+                                    >
+                                      <option value="">Select new machine...</option>
+                                      {availableMachines.map(machine => (
+                                        <option key={machine.id} value={machine.name}>
+                                          {machine.name} ({machine.status})
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <button 
+                                      className="ds-btn ds-btn-primary"
+                                      onClick={(e) => { e.stopPropagation(); handleMachineReassign(workOrder.id); }}
+                                      disabled={!selectedMachines.get(workOrder.id)}
+                                    >
+                                      🔄 Reassign
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className={styles.assignmentSection}>
                               <p><strong>Worker Assignment:</strong></p>
                               <div className={styles.currentAssignment}>
                                 <span className={styles.currentLabel}>Current: {workOrder.assignedWorker}</span>
@@ -486,94 +513,35 @@ const WorkOrderPlanning = ({
                           </>
                         )}
                         
-                        {/* Read-only Assignment Display for completed/qc_ready work orders */}
-                        {(workOrder.status === 'completed' || workOrder.status === 'ready_qc') && (
-                          <>
-                            <div className={styles.assignmentSection}>
-                              <p><strong>Final Machine Assignment:</strong></p>
-                              <div className={styles.assignmentReadonly}>
-                                <span className={styles.finalAssignment}>{workOrder.assignedMachine}</span>
-                              </div>
-                            </div>
-
-                            <div className={styles.assignmentSection}>
-                              <p><strong>Final Worker Assignment:</strong></p>
-                              <div className={styles.assignmentReadonly}>
-                                <span className={styles.finalAssignment}>{workOrder.assignedWorker}</span>
-                              </div>
-                            </div>
-                          </>
-                        )}
-
-                        {/* Read-only Progress Information */}
-                        <div className={styles.progressInfoSection}>
-                          <p><strong>📊 Production Progress:</strong></p>
-                          <div className={styles.progressDisplay}>
-                            <span className={styles.progressText}>
-                              {workOrder.producedQuantity} / {workOrder.targetQuantity} ({workOrder.progress}%)
-                            </span>
                           </div>
-                          
-                          {/* Pause Status Display - Information Only */}
-                          {isWorkOrderPaused(workOrder.id) && (
-                            <div className={styles.pauseStatus}>
-                              <div className={styles.pauseIndicator}>
-                                ⏸️ Work Order Paused
-                              </div>
-                              <div className={styles.pauseReason}>
-                                Reason: {getPauseReason(workOrder.id)}
-                              </div>
-                            </div>
-                          )}
                         </div>
-                        
-                        {/* Work Order Timeline */}
-                        <div className={styles.timelineInfo}>
-                          {workOrder.startTime && <p><strong>Started:</strong> {workOrder.startTime}</p>}
-                          {workOrder.estimatedCompletion && <p><strong>Target:</strong> {workOrder.estimatedCompletion}</p>}
-                        </div>
+                      )}
 
-                        {/* Status History - Collapsible */}
-                        {workOrder.statusHistory && workOrder.statusHistory.length > 0 && (
-                          <div className={styles.collapsibleSection}>
-                            <div 
-                              className={styles.collapsibleHeader}
-                              onClick={(e) => { e.stopPropagation(); toggleHistorySection(workOrder.id); }}
-                            >
-                              <span className={styles.collapsibleTitle}>
-                                📋 Status History {expandedHistorySections.has(workOrder.id) ? '▼' : '▶'}
-                              </span>
-                              <span className={styles.collapsibleStatus}>
-                                {workOrder.statusHistory.length} entries
-                              </span>
-                            </div>
-                            
-                            {expandedHistorySections.has(workOrder.id) && (
-                              <div className={styles.collapsibleContent}>
-                                <div className={styles.statusHistory}>
-                                  {workOrder.statusHistory.map((entry, index) => (
-                                    <div key={index} className={styles.statusHistoryEntry}>
-                                      <div className={styles.statusHistoryTime}>{entry.timestamp}</div>
-                                      <div className={styles.statusHistoryChange}>
-                                        {entry.fromStatus} → {entry.toStatus}
-                                      </div>
-                                      <div className={styles.statusHistoryUser}>by {entry.user}</div>
-                                      {entry.reason && (
-                                        <div className={styles.statusHistoryReason}>{entry.reason}</div>
-                                      )}
-                                    </div>
-                                  ))}
+                      {/* SECTION 6: Status History */}
+                      {workOrder.statusHistory && workOrder.statusHistory.length > 0 && (
+                        <div className={styles.statusSection}>
+                          <div className={styles.sectionHeader}>
+                            <h4 className={styles.sectionTitle}>
+                              <span className={styles.sectionIcon}>📋</span>
+                              Status History
+                            </h4>
+                          </div>
+                          <div className={styles.statusGrid}>
+                            <div className={styles.detailCard}>
+                              {/* Pause Status Display - Information Only */}
+                              {isWorkOrderPaused(workOrder.id) && (
+                                <div className={styles.pauseStatus}>
+                                  <div className={styles.pauseIndicator}>
+                                    ⏸️ Work Order Paused
+                                  </div>
+                                  <div className={styles.pauseReason}>
+                                    Reason: {getPauseReason(workOrder.id)}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                              <p><strong>📊 Current Progress:</strong> {workOrder.producedQuantity} / {workOrder.targetQuantity} ({workOrder.progress}%)</p>
+                            </div>
                           </div>
-                        )}
-                      </div>
-                      
-                      {/* QC Ready Status - Read-only information only */}
-                      {workOrder.status === 'ready_qc' && (
-                        <div className={styles.statusInfo}>
-                          <span className={styles.qcStatus}>🔍 Ready for QC Inspection</span>
                         </div>
                       )}
                     </div>

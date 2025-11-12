@@ -721,3 +721,145 @@
   background: var(--ds-bg-primary);
   border-radius: 0 0 var(--ds-radius-sm) var(--ds-radius-sm);
 }
+
+/* ===== PROFESSIONAL EXPANDED SECTION STYLES - Following LeadManagement Pattern ===== */
+.expandedSection {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-top: 2px solid #1D4ED8;
+  border-radius: 0 0 8px 8px;
+  padding: var(--ds-space-lg);
+  margin-top: 0;
+}
+
+/* Section Headers */
+.sectionHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.sectionTitle {
+  font-size: var(--font-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--ds-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  text-align: left;
+}
+
+.sectionIcon {
+  font-size: var(--font-lg);
+}
+
+/* Production Details Section */
+.productionDetailsSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.productionDetailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+/* Assignment Section */
+.assignmentSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.assignmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+/* Material Section */
+.materialSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.materialGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+.materialItem {
+  margin-bottom: var(--ds-space-sm);
+  padding-left: var(--ds-space-md);
+}
+
+/* Progress Section */
+.progressSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+/* Actions Section */
+.actionsSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.assignmentControls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+/* Detail Cards - Left Aligned */
+.detailCard {
+  background: var(--ds-bg-primary);
+  border: 1px solid #E5E7EB;
+  border-radius: var(--border-radius-md);
+  padding: var(--ds-space-md);
+  text-align: left;
+}
+
+.detailCard p {
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  text-align: left;
+}
+
+.detailCard p:last-child {
+  margin-bottom: 0;
+}
+
+.detailCard strong {
+  color: var(--ds-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-right: var(--ds-space-xs);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .expandedSection {
+    padding: var(--ds-space-md);
+  }
+  
+  .productionDetailsGrid,
+  .assignmentGrid,
+  .materialGrid,
+  .progressGrid,
+  .assignmentControls {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-sm);
+  }
+}

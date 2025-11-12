@@ -1,26 +1,15 @@
-/* WorkOrderCreationModal.module.css - ERP Compliant Design System Implementation */
+/* WorkOrderCreationModal.module.css - Architecture Compliant Modal Design */
 
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--ds-z-modal);
-  padding: var(--ds-space-md);
-}
+/* ModalPortal handles overlay, positioning, and z-index automatically */
 
-.modal {
+/* Modal Content Styling - Proper solid background */
+.modalContent {
   background: var(--ds-bg-primary);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-shadow-lg);
   max-width: 900px;
   width: 100%;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
   position: relative;
 }
@@ -266,12 +255,8 @@
 }
 
 /* Mobile Responsive Design */
+/* Mobile optimizations - ModalPortal handles container responsiveness */
 @media (max-width: 768px) {
-  .modal {
-    margin: var(--ds-space-md);
-    max-height: 90vh;
-  }
-  
   .lotFields {
     grid-template-columns: 1fr;
     gap: var(--ds-space-sm);
