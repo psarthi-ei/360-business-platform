@@ -1,0 +1,64 @@
+/* ConfirmationDialog.module.css - Design System Compliant */
+
+.dialogContent {
+  background: var(--ds-bg-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-modal);
+  max-width: 400px;
+  width: 90vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.dialogHeader {
+  padding: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-surface-subtle);
+}
+
+.dialogTitle {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-size: var(--ds-font-lg);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* Body */
+.dialogBody {
+  padding: var(--ds-space-lg);
+}
+
+.dialogMessage {
+  margin: 0;
+  color: var(--ds-text-secondary);
+  font-size: var(--ds-font-base);
+  line-height: var(--ds-line-height-relaxed);
+}
+
+/* Actions */
+.dialogActions {
+  padding: var(--ds-space-lg);
+  border-top: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-surface-subtle);
+  display: flex;
+  gap: var(--ds-space-sm);
+  justify-content: flex-end;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dialogContent {
+    max-width: 320px;
+    margin: var(--ds-space-md);
+  }
+  
+  .dialogActions {
+    flex-direction: column-reverse;
+  }
+  
+  .dialogActions button {
+    width: 100%;
+  }
+}

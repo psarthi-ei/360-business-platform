@@ -80,6 +80,11 @@ export interface LeadRequestedItem {
   budgetExpectation?: number;         // Expected price per unit
   priority: 'must_have' | 'preferred' | 'nice_to_have'; // Item priority
   notes?: string;                     // Additional notes
+  
+  // Pricing fields for quote editing (preserved from quote data)
+  customPrice?: number;               // Override price when editing quotes
+  discountPercentage?: number;        // Discount applied (from quote data)
+  quantity?: number;                  // Actual quantity (may differ from requested)
 }
 
 // Customer material information for Job Work leads
@@ -316,7 +321,7 @@ export interface QuoteHistory {
 }
 
 export interface QuoteAction {
-  action: 'generate' | 'view' | 'revise' | 'send' | 'approve' | 'generate_proforma';
+  action: 'generate' | 'view' | 'revise' | 'send' | 'approve' | 'generate_proforma' | 'create_job_order';
   label: string;
   icon: string;
   buttonClass: string;
@@ -819,7 +824,13 @@ export const mockLeads: Lead[] = [
         createdBy: 'sales_team'
       }
     ],
-    conversionStatus: 'quote_rejected'
+    conversionStatus: 'quote_rejected',
+    // Quote tracking
+    activeQuoteId: 'QT-L004-001',
+    quoteHistory: ['QT-L004-001'],
+    lastQuoteAction: 'revised',
+    lastQuoteActionDate: '2025-11-09T14:30:00.000Z',
+    quoteCount: 1
   },
 
   // 5. Warm Job Work Lead - Finishing Service
@@ -870,7 +881,13 @@ export const mockLeads: Lead[] = [
         createdBy: 'sales_team'
       }
     ],
-    conversionStatus: 'verbally_approved'
+    conversionStatus: 'active_lead',
+    // No quote tracking - demonstrates "Generate Quote" state
+    // activeQuoteId: undefined,
+    // quoteHistory: [],
+    // lastQuoteAction: undefined,
+    // lastQuoteActionDate: undefined,
+    // quoteCount: 0
   },
 
   // 6. Hot Job Work Lead - Multi-Service Pipeline (Dyeing + Finishing)
@@ -935,7 +952,13 @@ export const mockLeads: Lead[] = [
         createdBy: 'sales_team'
       }
     ],
-    conversionStatus: 'negotiation'
+    conversionStatus: 'negotiation',
+    // Quote tracking
+    activeQuoteId: 'QT-006',
+    quoteHistory: ['QT-006'],
+    lastQuoteAction: 'approved',
+    lastQuoteActionDate: '2025-11-09T10:00:00.000Z',
+    quoteCount: 1
   }
 ];
 
@@ -979,35 +1002,53 @@ export const mockQuotes: Quote[] = [
         unit: "meters",
         rate: 58, // Job work pricing for 2000 meters (volume tier)
         discount: 12, // Volume discount for job work
-        taxableAmount: 102080
+        taxableAmount: 102080,
+        catalogItemId: 'dyeing-001'
       }
     ]
   },
   
-  // QT-005: Bulk order quote (later converted to SO-005)
+  // QT-005: REMOVED to demonstrate "Generate Quote" functionality for lead-005
+
+  // QT-006: Multi-service pipeline quote for lead-006 (Dyeing + Finishing)
   {
-    id: 'QT-005',
-    leadId: 'lead-005',
-    quoteDate: 'March 10, 2025',
-    validUntil: 'March 25, 2025',
-    totalAmount: 38640,
+    id: 'QT-006',
+    leadId: 'lead-006',
+    businessProfileId: 'bp-rajkot-processors',
+    quoteDate: 'November 8, 2025',
+    validUntil: 'November 23, 2025',
+    totalAmount: 129000,
     status: 'approved',
-    statusMessage: 'Finishing service approved - Advance payment received',
-    advancePaymentRequired: 11592, // 30% advance
-    advancePaymentStatus: 'received',
-    revisionNumber: 1,
+    statusMessage: 'Multi-service pipeline approved - Ready for job order creation',
+    advancePaymentRequired: 0, // Job work - no advance needed
+    advancePaymentStatus: 'not_requested',
+    revisionNumber: 2,
     isActive: true,
-    // ✅ Job Work Service - Finishing service for customer's fabric (lead-005 request)
+    lastRevisionDate: '2025-11-09T10:00:00.000Z',
+    revisionReason: 'Updated pricing for premium finishing requirements',
+    // ✅ Job Work Service - Complete pipeline (Dyeing + Finishing)
     items: [
       {
-        itemCode: "FIN-CAL-STD",
-        description: "Calendering Service - Standard (Softening & Anti-wrinkle)",
+        itemCode: "DYE-REACTIVE-PREM",
+        description: "Reactive Dyeing Service - Premium Export Quality (Dark Navy Blue)",
         hsnCode: "9983",
-        quantity: 1500,
+        quantity: 3000,
         unit: "meters",
-        rate: 28, // Job work pricing
-        discount: 8, // Volume discount for 1500 meters
-        taxableAmount: 38640
+        rate: 28, // Premium dyeing rate
+        discount: 5, // Volume discount
+        taxableAmount: 79800,
+        catalogItemId: 'dyeing-001'
+      },
+      {
+        itemCode: "FIN-PREM-COMBO",
+        description: "Premium Finishing Service - Softening + Anti-wrinkle + Water-repellent",
+        hsnCode: "9983",
+        quantity: 3000,
+        unit: "meters",
+        rate: 18, // Premium finishing rate
+        discount: 3, // Volume discount
+        taxableAmount: 52380,
+        catalogItemId: 'finishing-001'
       }
     ]
   }

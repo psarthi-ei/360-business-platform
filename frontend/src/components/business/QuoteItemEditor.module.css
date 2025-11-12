@@ -30,6 +30,33 @@
   margin-bottom: var(--ds-space-md);
 }
 
+/* View mode styling - subtle visual distinction */
+.itemEditor.viewMode {
+  background: var(--ds-bg-surface-subtle);
+  border-left-color: var(--ds-border-info);
+  opacity: 0.95;
+}
+
+.itemEditor.viewMode:hover {
+  border-color: var(--ds-border-info);
+  box-shadow: var(--ds-shadow-card);
+}
+
+.itemEditor.viewMode .itemHeader {
+  background: var(--ds-bg-info-subtle);
+  border-color: var(--ds-border-info-subtle);
+}
+
+/* View mode indicator in header */
+.viewModeIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-text-info);
+  font-weight: 500;
+}
+
 /* Item Header */
 .itemHeader {
   display: flex;

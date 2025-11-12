@@ -17,6 +17,7 @@ interface QuoteItemEditorProps {
   onUpdate: (updatedItem: QuoteEditableItem) => void;
   onRemove: () => void;
   index?: number; // For visual styling
+  disabled?: boolean; // For view mode
 }
 
 interface QuoteItemEditData {
@@ -32,7 +33,8 @@ function QuoteItemEditor({
   businessModel,
   onUpdate,
   onRemove,
-  index = 0
+  index = 0,
+  disabled = false
 }: QuoteItemEditorProps) {
   // Get catalog item details
   const catalogItem = getItemById(item.masterItemId);
@@ -40,11 +42,11 @@ function QuoteItemEditor({
   // Collapse state - all items start collapsed for clean overview
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Local state for editing
+  // Local state for editing - preserve pricing data from quote
   const [editData, setEditData] = useState<QuoteItemEditData>({
-    quantity: item.requestedQuantity,
-    customPrice: undefined,
-    discountPercentage: 0,
+    quantity: Math.max(1, item.quantity || item.requestedQuantity || 1), // Ensure minimum quantity of 1
+    customPrice: item.customPrice,
+    discountPercentage: item.discountPercentage || 0,
     notes: item.notes || '',
     customSpecifications: item.customSpecifications || {}
   });
@@ -55,7 +57,7 @@ function QuoteItemEditor({
   const [newSpecValue, setNewSpecValue] = useState<string>('');
   const [customSpecKey, setCustomSpecKey] = useState<string>(''); // For custom specification type
 
-  // Pricing calculations
+  // Pricing calculations - start with zeros, let useEffect handle calculation
   const [pricing, setPricing] = useState<{
     basePrice: number;
     finalPrice: number;
@@ -78,29 +80,49 @@ function QuoteItemEditor({
   useEffect(() => {
     if (!catalogItem) return;
 
+
     let basePrice = 0;
     let effectiveRate = 0;
     let volumeDiscount = 0;
     let volumeDiscountAmount = 0;
     
-    if (editData.customPrice) {
-      // Use custom price override
-      basePrice = editData.customPrice;
-      effectiveRate = editData.customPrice;
+    try {
+      if (editData.customPrice !== undefined && editData.customPrice !== null) {
+        // Use custom price override (including zero)
+        basePrice = editData.customPrice;
+        effectiveRate = editData.customPrice;
+        volumeDiscount = 0;
+        volumeDiscountAmount = 0;
+      } else {
+        // Use catalog pricing with error handling
+        const priceCalculation = calculateItemPrice(
+          catalogItem.id, 
+          editData.quantity, 
+          businessModel
+        );
+        
+        // Safeguard against division by zero and invalid calculations
+        const safeQuantity = Math.max(1, editData.quantity);
+        if (priceCalculation && priceCalculation.basePrice >= 0 && priceCalculation.finalPrice >= 0) {
+          basePrice = priceCalculation.basePrice / safeQuantity; // Per unit base price
+          effectiveRate = priceCalculation.finalPrice / safeQuantity; // Per unit after volume discounts
+          volumeDiscount = priceCalculation.volumeDiscount || 0; // Volume discount percentage
+          volumeDiscountAmount = basePrice - effectiveRate; // Per unit volume discount amount
+        } else {
+          // Fallback to basic pricing if calculation fails
+          basePrice = 100; // Fallback base price
+          effectiveRate = 100;
+          volumeDiscount = 0;
+          volumeDiscountAmount = 0;
+        }
+      }
+    } catch (error) {
+      // Handle calculation errors gracefully
+      // Use fallback pricing values
+      basePrice = 100; // Fallback base price
+      effectiveRate = 100;
       volumeDiscount = 0;
       volumeDiscountAmount = 0;
-    } else {
-      // Use catalog pricing
-      const priceCalculation = calculateItemPrice(
-        catalogItem.id, 
-        editData.quantity, 
-        businessModel
-      );
-      
-      basePrice = priceCalculation.basePrice / editData.quantity; // Per unit base price
-      effectiveRate = priceCalculation.finalPrice / editData.quantity; // Per unit after volume discounts
-      volumeDiscount = priceCalculation.volumeDiscount; // Volume discount percentage
-      volumeDiscountAmount = basePrice - effectiveRate; // Per unit volume discount amount
     }
 
     // Apply additional manual discount
@@ -108,6 +130,7 @@ function QuoteItemEditor({
     const finalPrice = effectiveRate - manualDiscountAmount;
     const totalAmount = finalPrice * editData.quantity;
 
+    // Set the final pricing
     setPricing({
       basePrice,
       finalPrice,
@@ -117,8 +140,23 @@ function QuoteItemEditor({
       volumeDiscountAmount: volumeDiscountAmount * editData.quantity,
       effectiveRate
     });
-  }, [catalogItem, editData, businessModel]);
+  }, [catalogItem, editData, businessModel, item.quantity, item.requestedQuantity, item.customPrice, item.discountPercentage]);
 
+  // Ensure editData is updated when item props change (for edit mode transitions)
+  useEffect(() => {
+    setEditData(prev => ({
+      ...prev,
+      quantity: Math.max(1, item.quantity || item.requestedQuantity || prev.quantity),
+      customPrice: item.customPrice !== undefined ? item.customPrice : prev.customPrice,
+      discountPercentage: item.discountPercentage !== undefined ? item.discountPercentage : prev.discountPercentage,
+      notes: item.notes !== undefined ? item.notes : prev.notes,
+      customSpecifications: item.customSpecifications || prev.customSpecifications
+    }));
+  }, [item.customPrice, item.discountPercentage, item.quantity, item.requestedQuantity, item.notes, item.customSpecifications]);
+
+  // Track initialization state to prevent false change triggers
+  const isInitializedRef = useRef(false);
+  
   // Track previous values to prevent unnecessary updates
   const prevValuesRef = useRef<{
     quantity: number;
@@ -127,6 +165,14 @@ function QuoteItemEditor({
     notes: string;
     calculatedTotal: number;
   } | null>(null);
+
+  // Mark component as initialized after first render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      isInitializedRef.current = true;
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Update parent when pricing changes - only when actual changes occur
   useEffect(() => {
@@ -149,19 +195,22 @@ function QuoteItemEditor({
     if (hasChanged) {
       prevValuesRef.current = currentValues;
       
-      const updatedItem: QuoteEditableItem = {
-        ...item,
-        requestedQuantity: editData.quantity,
-        budgetExpectation: pricing.finalPrice,
-        notes: editData.notes,
-        customSpecifications: editData.customSpecifications,
-        // Add custom fields for quote tracking
-        customPrice: editData.customPrice,
-        discountPercentage: editData.discountPercentage,
-        calculatedTotal: pricing.totalAmount
-      };
-      
-      onUpdate(updatedItem);
+      // Only call onUpdate if component is fully initialized to prevent false change triggers
+      if (isInitializedRef.current) {
+        const updatedItem: QuoteEditableItem = {
+          ...item,
+          requestedQuantity: editData.quantity,
+          budgetExpectation: pricing.finalPrice,
+          notes: editData.notes,
+          customSpecifications: editData.customSpecifications,
+          // Add custom fields for quote tracking
+          customPrice: editData.customPrice,
+          discountPercentage: editData.discountPercentage,
+          calculatedTotal: pricing.totalAmount
+        };
+        
+        onUpdate(updatedItem);
+      }
     }
   }, [editData.quantity, editData.customPrice, editData.discountPercentage, editData.notes, pricing.totalAmount, pricing.finalPrice, item, editData.customSpecifications, onUpdate]);
 
@@ -177,7 +226,8 @@ function QuoteItemEditor({
   }
 
   const handleQuantityChange = (value: number) => {
-    if (value > 0 && value <= 999999) {
+    // Ensure quantity is always at least 1 and within valid range
+    if (value >= 1 && value <= 999999) {
       setEditData(prev => ({ ...prev, quantity: value }));
     }
   };
@@ -263,6 +313,7 @@ function QuoteItemEditor({
             onChange={(e) => setCustomSpecKey(e.target.value)}
             placeholder="Specification name (e.g., Pattern, Texture)"
             className={styles.specInput}
+            readOnly={disabled}
           />
           <input
             type="text"
@@ -270,6 +321,7 @@ function QuoteItemEditor({
             onChange={(e) => setNewSpecValue(e.target.value)}
             placeholder="Specification value"
             className={styles.specInput}
+            readOnly={disabled}
           />
         </div>
       );
@@ -282,6 +334,7 @@ function QuoteItemEditor({
             value={newSpecValue}
             onChange={(e) => setNewSpecValue(e.target.value)}
             className={styles.specInput}
+            disabled={disabled}
           >
             <option value="">Select {specificationType.label.toLowerCase()}</option>
             {specificationType.options?.map(option => (
@@ -301,6 +354,7 @@ function QuoteItemEditor({
               className={styles.specInput}
               min={specificationType.validation?.min}
               max={specificationType.validation?.max}
+              readOnly={disabled}
             />
             {specificationType.unit && (
               <span className={styles.unitLabel}>{specificationType.unit}</span>
@@ -317,6 +371,7 @@ function QuoteItemEditor({
             onChange={(e) => setNewSpecValue(e.target.value)}
             placeholder={specificationType.placeholder}
             className={styles.specInput}
+            readOnly={disabled}
           />
         );
     }
@@ -340,7 +395,7 @@ function QuoteItemEditor({
   };
 
   return (
-    <div className={`${styles.itemEditor} ${index % 2 === 0 ? styles.even : styles.odd} ${!isExpanded ? styles.collapsed : ''}`}>
+    <div className={`${styles.itemEditor} ${index % 2 === 0 ? styles.even : styles.odd} ${!isExpanded ? styles.collapsed : ''} ${disabled ? styles.viewMode : ''}`}>
       {/* Item Header */}
       <div className={styles.itemHeader}>
         <div 
@@ -350,6 +405,11 @@ function QuoteItemEditor({
           <div className={styles.itemInfo}>
             <span className={styles.itemCode}>{catalogItem.code}</span>
             <span className={styles.itemName}>{catalogItem.name}</span>
+            {disabled && (
+              <span className={styles.viewModeIndicator}>
+                👁️ View Only
+              </span>
+            )}
             {businessModel === 'job_work' && catalogItem.classification === 'material' && (
               <span className={styles.jobWorkNote}>
                 ⚠️ Material not included in job work pricing
@@ -369,6 +429,7 @@ function QuoteItemEditor({
           className={styles.removeButton}
           onClick={onRemove}
           title="Remove item"
+          disabled={disabled}
         >
           ×
         </button>
@@ -386,7 +447,7 @@ function QuoteItemEditor({
             <button 
               className={styles.quantityBtn}
               onClick={() => handleQuantityChange(editData.quantity - 1)}
-              disabled={editData.quantity <= 1}
+              disabled={disabled || editData.quantity <= 1}
             >
               -
             </button>
@@ -397,10 +458,12 @@ function QuoteItemEditor({
               className={styles.quantityInput}
               min="1"
               max="999999"
+              readOnly={disabled}
             />
             <button 
               className={styles.quantityBtn}
               onClick={() => handleQuantityChange(editData.quantity + 1)}
+              disabled={disabled}
             >
               +
             </button>
@@ -414,7 +477,7 @@ function QuoteItemEditor({
         <div className={styles.editorField}>
           <label>Unit Price</label>
           <div className={styles.priceEditor}>
-            {!editData.customPrice ? (
+            {editData.customPrice === undefined || editData.customPrice === null ? (
               <div className={styles.pricingBreakdown}>
                 <div className={styles.pricingRow}>
                   <span className={styles.pricingLabel}>Base Catalog Rate:</span>
@@ -439,7 +502,7 @@ function QuoteItemEditor({
             <label className={styles.customPriceToggle}>
               <input
                 type="checkbox"
-                checked={!!editData.customPrice}
+                checked={editData.customPrice !== undefined && editData.customPrice !== null}
                 onChange={(e) => {
                   if (e.target.checked) {
                     handleCustomPriceChange(pricing.basePrice);
@@ -447,10 +510,11 @@ function QuoteItemEditor({
                     handleCustomPriceChange(undefined);
                   }
                 }}
+                disabled={disabled}
               />
               Custom Price
             </label>
-            {editData.customPrice && (
+            {editData.customPrice !== undefined && editData.customPrice !== null && (
               <input
                 type="number"
                 value={editData.customPrice}
@@ -458,6 +522,7 @@ function QuoteItemEditor({
                 className={styles.customPriceInput}
                 min="0"
                 step="0.01"
+                readOnly={disabled}
                 placeholder="Enter custom price"
               />
             )}
@@ -475,6 +540,7 @@ function QuoteItemEditor({
               value={editData.discountPercentage}
               onChange={(e) => handleDiscountChange(parseFloat(e.target.value))}
               className={styles.discountSlider}
+              disabled={disabled}
             />
             <input
               type="number"
@@ -484,6 +550,7 @@ function QuoteItemEditor({
               min="0"
               max="100"
               step="0.1"
+              readOnly={disabled}
             />
             {pricing.discountAmount > 0 && (
               <div className={styles.discountAmount}>
@@ -533,6 +600,7 @@ function QuoteItemEditor({
             placeholder="Add any special requirements, notes, or instructions for this item..."
             className={styles.notesTextarea}
             rows={2}
+            readOnly={disabled}
           />
         </div>
 
@@ -554,6 +622,7 @@ function QuoteItemEditor({
                     className={styles.removeSpecButton}
                     onClick={() => handleRemoveSpecification(key)}
                     title="Remove specification"
+                    disabled={disabled}
                   >
                     ×
                   </button>
@@ -572,6 +641,7 @@ function QuoteItemEditor({
                   value={newSpecType}
                   onChange={(e) => setNewSpecType(e.target.value)}
                   className={styles.specSelectInput}
+                  disabled={disabled}
                 >
                   <option value="">Select specification type...</option>
                   {Object.keys({
@@ -607,6 +677,7 @@ function QuoteItemEditor({
                   type="button"
                   className={styles.cancelSpecButton}
                   onClick={handleCancelAddSpecification}
+                  disabled={disabled}
                 >
                   Cancel
                 </button>
@@ -614,7 +685,7 @@ function QuoteItemEditor({
                   type="button"
                   className={styles.saveSpecButton}
                   onClick={handleAddSpecification}
-                  disabled={!newSpecType || !newSpecValue || (newSpecType === 'custom' && !customSpecKey)}
+                  disabled={disabled || !newSpecType || !newSpecValue || (newSpecType === 'custom' && !customSpecKey)}
                 >
                   Add
                 </button>
@@ -633,7 +704,7 @@ function QuoteItemEditor({
           <button 
             className={styles.addSpecButton}
             onClick={() => setIsAddingSpec(true)}
-            disabled={isAddingSpec}
+            disabled={disabled || isAddingSpec}
           >
             + Add Specification
           </button>

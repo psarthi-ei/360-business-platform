@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddLeadModal from './AddLeadModal';
 import GenerateQuoteModal from './GenerateQuoteModal';
+import EditQuoteModal from './EditQuoteModal';
 import AddNotesModal from './AddNotesModal';
 import RequestedItemCard from './RequestedItemCard';
-import { mockLeads, Lead } from '../../data/salesMockData';
+import { mockLeads, Lead, Quote } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import { calculateItemPrice } from '../../data/catalogMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
@@ -50,9 +51,20 @@ function LeadManagement({
   // Mobile UX V2: Progressive disclosure state
   const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
   
-  // Quote generation modal state
-  const [showGenerateQuoteModal, setShowGenerateQuoteModal] = useState(false);
-  const [selectedLeadForQuote, setSelectedLeadForQuote] = useState<Lead | null>(null);
+  // Quote modal state - unified modal with mode support
+  const [quoteModal, setQuoteModal] = useState<{
+    open: boolean;
+    lead: Lead | null;
+    mode: 'generate' | 'view';
+    quote?: Quote;
+  }>({ open: false, lead: null, mode: 'generate' });
+  
+  // Edit Quote modal state - separate modal for dedicated editing
+  const [editQuoteModal, setEditQuoteModal] = useState<{
+    open: boolean;
+    lead: Lead | null;
+    quote: Quote | null;
+  }>({ open: false, lead: null, quote: null });
   
   // Notes modal state
   const [showNotesModal, setShowNotesModal] = useState(false);
@@ -169,9 +181,6 @@ function LeadManagement({
       case 'view':
         handleViewQuote(lead);
         break;
-      case 'revise':
-        handleReviseQuote(lead);
-        break;
       case 'send':
         handleSendQuote(lead);
         break;
@@ -181,6 +190,9 @@ function LeadManagement({
       case 'generate_proforma':
         handleGenerateProforma(lead);
         break;
+      case 'create_job_order':
+        handleCreateJobOrder(lead);
+        break;
       default:
         // Unknown quote action - no handler available
     }
@@ -188,22 +200,25 @@ function LeadManagement({
 
   // Quote Action Implementations (Phase 2.2)
   const handleGenerateQuote = (lead: Lead) => {
-    setSelectedLeadForQuote(lead);
-    setShowGenerateQuoteModal(true);
+    setQuoteModal({ open: true, lead, mode: 'generate' });
   };
 
   const handleViewQuote = (lead: Lead) => {
-    // View quote logic to be implemented
-    if (onShowQuoteFromLead) {
-      onShowQuoteFromLead(lead.id);
+    const quoteState = QuoteService.getQuoteStateForLead(lead.id);
+    if (quoteState.activeQuoteId) {
+      const quote = QuoteService.getQuoteById(quoteState.activeQuoteId);
+      setQuoteModal({ 
+        open: true, 
+        lead, 
+        mode: 'view',
+        quote
+      });
+    } else {
+      alert('No active quote found for this lead');
     }
   };
 
-  const handleReviseQuote = (lead: Lead) => {
-    // Revise quote logic to be implemented
-    // TODO: Implement quote revision
-    alert('Revise Quote - Implementation coming soon!');
-  };
+  // Edit functionality is available through the view modal -> edit transition
 
   const handleSendQuote = (lead: Lead) => {
     // Send quote logic to be implemented
@@ -221,6 +236,33 @@ function LeadManagement({
     // Generate proforma logic to be implemented
     // TODO: Implement proforma generation
     alert('Generate Proforma - Implementation coming soon!');
+  };
+
+  const handleCreateJobOrder = (lead: Lead) => {
+    // Create job order directly for job work (skip proforma)
+    const quoteState = QuoteService.getQuoteStateForLead(lead.id);
+    if (quoteState.activeQuoteId) {
+      // Update quote status to indicate order creation
+      const quote = QuoteService.getQuoteById(quoteState.activeQuoteId);
+      if (quote) {
+        quote.status = 'order_created';
+        quote.statusMessage = 'Job order created - Processing started';
+        
+        // Update lead conversion status
+        const conversionDate = new Date().toISOString();
+        const updatedLeads = leads.map(l => 
+          l.id === lead.id 
+            ? { ...l, conversionStatus: 'converted_to_order' as const, convertedToOrderDate: conversionDate }
+            : l
+        );
+        setLeads(updatedLeads);
+        
+        setSuccessMessage(`Job Order created successfully for ${lead.contactPerson}!`);
+        setTimeout(() => setSuccessMessage(''), 5000);
+      }
+    } else {
+      alert('No active quote found to convert to job order');
+    }
   };
 
   // Handle adding new lead
@@ -245,9 +287,12 @@ function LeadManagement({
   };
 
   // Quote modal handlers
-  const handleCloseGenerateQuoteModal = () => {
-    setShowGenerateQuoteModal(false);
-    setSelectedLeadForQuote(null);
+  const handleCloseQuoteModal = () => {
+    setQuoteModal({ open: false, lead: null, mode: 'generate' });
+  };
+  
+  const handleCloseEditQuoteModal = () => {
+    setEditQuoteModal({ open: false, lead: null, quote: null });
   };
 
   const handleQuoteGenerated = (quoteId: string) => {
@@ -255,15 +300,68 @@ function LeadManagement({
     setSuccessMessage(`Quote ${quoteId} generated successfully!`);
     
     // Close modal
-    handleCloseGenerateQuoteModal();
-    
-    // Optionally refresh the leads to show updated status
-    // For now, we'll keep it simple and just show the success message
+    handleCloseQuoteModal();
     
     // Clear success message after 5 seconds
     setTimeout(() => {
       setSuccessMessage('');
     }, 5000);
+  };
+  
+  const handleQuoteUpdated = (quoteId: string) => {
+    // Show success message
+    setSuccessMessage(`Quote ${quoteId} updated successfully!`);
+    
+    // Get the updated quote and lead data
+    const currentLead = editQuoteModal.lead;
+    const updatedQuote = QuoteService.getQuoteById(quoteId);
+    
+    // Close edit modal
+    handleCloseEditQuoteModal();
+    
+    // Reopen view modal with updated data to show changes
+    if (currentLead && updatedQuote) {
+      setTimeout(() => {
+        setQuoteModal({
+          open: true,
+          lead: currentLead,
+          mode: 'view',
+          quote: updatedQuote
+        });
+      }, 100); // Small delay to ensure edit modal closes first
+    }
+    
+    // Clear success message after 5 seconds
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 5000);
+  };
+
+  // Handler for transitioning from view to edit
+  const handleEditQuoteFromView = (quoteId: string) => {
+    // Get the current quote and lead from the view modal
+    const currentQuote = quoteModal.quote;
+    const currentLead = quoteModal.lead;
+    
+    // Close view modal
+    handleCloseQuoteModal();
+    
+    // Open edit modal with the quote data
+    if (currentQuote && currentLead) {
+      setEditQuoteModal({
+        open: true,
+        lead: currentLead,
+        quote: currentQuote
+      });
+    }
+  };
+
+  // Handler for sending quote from view modal
+  const handleSendQuoteFromView = (quoteId: string) => {
+    // Call the existing send quote handler
+    if (quoteModal.lead) {
+      handleSendQuote(quoteModal.lead);
+    }
   };
 
   // Notes modal handlers
@@ -679,12 +777,25 @@ function LeadManagement({
         editingLead={editingLead}
       />
 
-      {/* Generate Rate Modal (Surat terminology) */}
+      {/* Quote Modal - Unified with mode support */}
       <GenerateQuoteModal
-        isOpen={showGenerateQuoteModal}
-        onClose={handleCloseGenerateQuoteModal}
-        lead={selectedLeadForQuote}
+        isOpen={quoteModal.open}
+        onClose={handleCloseQuoteModal}
+        lead={quoteModal.lead}
+        mode={quoteModal.mode}
+        quote={quoteModal.quote}
         onQuoteGenerated={handleQuoteGenerated}
+        onEditQuote={handleEditQuoteFromView}
+        onSendQuote={handleSendQuoteFromView}
+      />
+      
+      {/* Edit Quote Modal - Separate modal for dedicated editing */}
+      <EditQuoteModal
+        isOpen={editQuoteModal.open}
+        onClose={handleCloseEditQuoteModal}
+        lead={editQuoteModal.lead}
+        quote={editQuoteModal.quote}
+        onQuoteUpdated={handleQuoteUpdated}
       />
 
       {/* Add Notes Modal */}

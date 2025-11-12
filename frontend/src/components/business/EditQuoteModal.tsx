@@ -19,15 +19,12 @@ interface QuoteEditableItem extends LeadRequestedItem {
   quantity?: number;
 }
 
-interface GenerateQuoteModalProps {
+interface EditQuoteModalProps {
   isOpen: boolean;
   onClose: () => void;
   lead: Lead | null;
-  mode?: 'generate' | 'view';
-  quote?: Quote;
-  onQuoteGenerated?: (quoteId: string) => void;
-  onEditQuote?: (quoteId: string) => void;
-  onSendQuote?: (quoteId: string) => void;
+  quote: Quote | null;
+  onQuoteUpdated?: (quoteId: string) => void;
 }
 
 interface QuoteSummary {
@@ -40,19 +37,16 @@ interface QuoteSummary {
   itemCount: number;
 }
 
-function GenerateQuoteModal({
+function EditQuoteModal({
   isOpen,
   onClose,
   lead,
-  mode = 'generate',
   quote,
-  onQuoteGenerated,
-  onEditQuote,
-  onSendQuote
-}: GenerateQuoteModalProps) {
+  onQuoteUpdated
+}: EditQuoteModalProps) {
   const terms = useTerminologyTerms();
   
-  // State for quote items (starts with lead's requested items)
+  // State for quote items (starts with quote's existing items)
   const [quoteItems, setQuoteItems] = useState<LeadRequestedItem[]>([]);
   const [showCatalogSelector, setShowCatalogSelector] = useState(false);
   const [quoteSummary, setQuoteSummary] = useState<QuoteSummary>({
@@ -68,34 +62,24 @@ function GenerateQuoteModal({
   // Quote metadata
   const [quoteNotes, setQuoteNotes] = useState('');
   const [validityDays, setValidityDays] = useState(15); // Default validity
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isQuoteSummaryCollapsed, setIsQuoteSummaryCollapsed] = useState(false); // Start expanded
   const [showConfirmClose, setShowConfirmClose] = useState(false);
 
-  // Initialize quote items from lead or existing quote when modal opens
+  // Initialize quote items from existing quote when modal opens
   useEffect(() => {
-    if (isOpen && lead) {
-      if (mode === 'view' && quote) {
-        // View mode: Load existing quote data
-        const convertedItems = QuoteService.convertQuoteItemsToLeadItems(quote.items);
-        setQuoteItems(convertedItems);
-        setQuoteNotes(quote.statusMessage || `${terms.quote} for ${lead.inquiry}`);
-        
-        // Calculate validity days from quote validUntil date
-        const validUntilDate = new Date(quote.validUntil);
-        const quoteDate = new Date(quote.quoteDate);
-        const diffTime = Math.abs(validUntilDate.getTime() - quoteDate.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        setValidityDays(diffDays || 15);
-      } else {
-        // Generate mode: Start with lead's requested items
-        const initialItems = lead.requestedItems ? [...lead.requestedItems] : [];
-        setQuoteItems(initialItems);
-        setQuoteNotes(`${terms.quote} for ${lead.inquiry}`);
-        
-        // Set business model specific validity
-        setValidityDays(lead.leadType === 'job_work' ? 7 : 15);
-      }
+    if (isOpen && lead && quote) {
+      // Load existing quote data
+      const convertedItems = QuoteService.convertQuoteItemsToLeadItems(quote.items);
+      setQuoteItems(convertedItems);
+      setQuoteNotes(quote.statusMessage || `${terms.quote} for ${lead.inquiry}`);
+      
+      // Calculate validity days from quote validUntil date
+      const validUntilDate = new Date(quote.validUntil);
+      const quoteDate = new Date(quote.quoteDate);
+      const diffTime = Math.abs(validUntilDate.getTime() - quoteDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setValidityDays(diffDays || 15);
     } else {
       // Reset state when modal closes
       setQuoteItems([]);
@@ -103,7 +87,7 @@ function GenerateQuoteModal({
       setValidityDays(15);
       setShowCatalogSelector(false);
     }
-  }, [isOpen, lead, mode, quote, terms.quote]);
+  }, [isOpen, lead, quote, terms.quote]);
 
   // Calculate quote summary whenever items change
   useEffect(() => {
@@ -160,21 +144,21 @@ function GenerateQuoteModal({
     return quoteItems.map(item => item.masterItemId);
   };
 
-  if (!lead) {
+  if (!lead || !quote) {
     return null;
   }
 
   const businessProfile = getBusinessProfileById(lead.businessProfileId);
   const companyName = businessProfile?.companyName || 'Unknown Company';
 
-  // Generate quote
-  const handleGenerateQuote = async () => {
+  // Update quote
+  const handleUpdateQuote = async () => {
     if (quoteItems.length === 0) {
-      // Items validation - prevent generation without items
+      // Items validation - prevent update without items
       return;
     }
 
-    setIsGenerating(true);
+    setIsUpdating(true);
     try {
       // Convert quote items to proper QuoteItem format
       const convertedItems: QuoteItem[] = quoteItems.map((item, index) => {
@@ -198,11 +182,9 @@ function GenerateQuoteModal({
         };
       });
 
-      // Create quote object
-      const newQuote = {
-        id: generateQuoteId(),
-        leadId: lead.id,
-        businessProfileId: lead.businessProfileId,
+      // Update quote object
+      const updatedQuote = {
+        ...quote,
         quoteDate: new Date().toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long', 
@@ -211,45 +193,39 @@ function GenerateQuoteModal({
         validUntil: getValidityDate(validityDays),
         totalAmount: quoteSummary.totalAmount,
         status: 'draft' as const,
-        statusMessage: `${terms.quote} generated - Ready for review`,
+        statusMessage: `${terms.quote} updated - Ready for review`,
         advancePaymentRequired: calculateAdvancePayment(),
-        advancePaymentStatus: 'not_requested' as const,
-        businessModel: lead.leadType,
-        businessModelTerms: getBusinessModelTerms(),
         items: convertedItems,
-        revisionNumber: 1,
+        revisionNumber: (quote.revisionNumber || 1) + 1,
         isActive: true,
-        leadQuoteState: 'generated'
+        leadQuoteState: 'revised'
       };
 
-      // Add quote to mockQuotes (simulating save)
+      // Update quote in mockQuotes (simulating save)
       const mockQuotes = await import('../../data/salesMockData');
-      (mockQuotes.mockQuotes as Quote[]).push(newQuote as Quote);
+      const quoteIndex = (mockQuotes.mockQuotes as Quote[]).findIndex(q => q.id === quote.id);
+      if (quoteIndex !== -1) {
+        (mockQuotes.mockQuotes as Quote[])[quoteIndex] = updatedQuote as Quote;
+      }
 
       // Update lead status and tracking
-      LeadStatusService.updateLeadStatus(lead.id, 'active_lead', `${terms.quote} generated successfully`);
-      QuoteService.updateLeadQuoteTracking(lead.id, newQuote.id, 'generated');
+      LeadStatusService.updateLeadStatus(lead.id, 'active_lead', `${terms.quote} updated successfully`);
+      QuoteService.updateLeadQuoteTracking(lead.id, quote.id, 'revised');
 
       // Notify parent component
-      if (onQuoteGenerated) {
-        onQuoteGenerated(newQuote.id);
+      if (onQuoteUpdated) {
+        onQuoteUpdated(quote.id);
       }
       onClose();
 
     } catch (error) {
       // Error handling - parent component will show appropriate messaging
     } finally {
-      setIsGenerating(false);
+      setIsUpdating(false);
     }
   };
 
   // Helper functions
-  const generateQuoteId = () => {
-    const timestamp = Date.now().toString().slice(-6);
-    const businessPrefix = lead.leadType === 'job_work' ? 'JW' : 'SO';
-    return `QT-${businessPrefix}-${timestamp}`;
-  };
-
   const getValidityDate = (days: number) => {
     const date = new Date();
     date.setDate(date.getDate() + days);
@@ -264,32 +240,6 @@ function GenerateQuoteModal({
     // Business model specific advance payment calculation
     const percentage = lead.leadType === 'sales' ? 0.30 : 0.00; // 30% for sales, 0% for job work (credit terms)
     return Math.round(quoteSummary.totalAmount * percentage);
-  };
-
-  const getBusinessModelTerms = () => {
-    const customerCreditDays = businessProfile?.loyalty?.paymentTerms || 30; // Default to 30 days if not found
-    
-    if (lead.leadType === 'job_work') {
-      return {
-        paymentTerms: `${customerCreditDays} days credit terms`,
-        processingDays: 7,
-        specialConditions: [
-          'Customer to provide materials',
-          'Quality as per customer specifications',
-          'Material handling charges extra if applicable'
-        ]
-      };
-    } else {
-      return {
-        paymentTerms: '30% advance, 70% on delivery',
-        deliveryDays: 14,
-        specialConditions: [
-          'All materials included',
-          'Standard quality assurance',
-          'Free delivery within city limits'
-        ]
-      };
-    }
   };
 
   const getHSNCodeForItem = (itemId: string): string => {
@@ -342,7 +292,7 @@ function GenerateQuoteModal({
         {/* Modal Header */}
         <div className={styles.modalHeader}>
           <div className={styles.headerInfo}>
-            <h2>{mode === 'view' ? '📋' : '🎯'} {mode === 'view' ? `View ${terms.quote}` : terms.generateQuote}</h2>
+            <h2>✏️ Edit {terms.quote} - {quote.id}</h2>
             <div className={styles.companyInfo}>
               <span className={styles.companyName}>{companyName}</span>
               <span className={styles.businessModel}>
@@ -359,27 +309,23 @@ function GenerateQuoteModal({
           <div className={styles.itemsSection}>
             <div className={styles.sectionHeader}>
               <h3>{terms.quote} Items ({quoteItems.length})</h3>
-              {mode === 'generate' && (
-                <button 
-                  className="ds-btn ds-btn-secondary ds-btn-sm"
-                  onClick={() => setShowCatalogSelector(true)}
-                >
-                  + Add Item from Catalog
-                </button>
-              )}
+              <button 
+                className="ds-btn ds-btn-secondary ds-btn-sm"
+                onClick={() => setShowCatalogSelector(true)}
+              >
+                + Add Item from Catalog
+              </button>
             </div>
 
             {quoteItems.length === 0 ? (
               <div className={styles.emptyState}>
-                <p>No items in {terms.quote.toLowerCase()}{mode === 'generate' ? '. Add items from your catalog to get started.' : '.'}</p>
-                {mode === 'generate' && (
-                  <button 
-                    className="ds-btn ds-btn-primary"
-                    onClick={() => setShowCatalogSelector(true)}
-                  >
-                    Browse Catalog
-                  </button>
-                )}
+                <p>No items in {terms.quote.toLowerCase()}. Add items from your catalog to get started.</p>
+                <button 
+                  className="ds-btn ds-btn-primary"
+                  onClick={() => setShowCatalogSelector(true)}
+                >
+                  Browse Catalog
+                </button>
               </div>
             ) : (
               <div className={styles.itemsList}>
@@ -389,9 +335,9 @@ function GenerateQuoteModal({
                     item={item}
                     businessModel={lead.leadType}
                     onUpdate={handleItemUpdate(index)}
-                    onRemove={mode === 'generate' ? () => handleItemRemove(index) : () => {}}
+                    onRemove={() => handleItemRemove(index)}
                     index={index}
-                    disabled={mode === 'view'}
+                    disabled={false}
                   />
                 ))}
               </div>
@@ -456,47 +402,33 @@ function GenerateQuoteModal({
 
           {/* Quote Settings */}
           <div className={styles.settingsSection}>
-            <h3>{terms.quote} {mode === 'view' ? 'Details' : 'Settings'}</h3>
+            <h3>{terms.quote} Settings</h3>
             <div className={styles.settingsGrid}>
               <div className={styles.settingField}>
-                <label htmlFor="validity">Validity {mode === 'view' ? '' : '(Days)'}</label>
-                {mode === 'view' ? (
-                  <div className={styles.settingDisplay}>
-                    <span>Valid until: {quote ? quote.validUntil : getValidityDate(validityDays)}</span>
-                  </div>
-                ) : (
-                  <>
-                    <input
-                      type="number"
-                      id="validity"
-                      value={validityDays}
-                      onChange={(e) => setValidityDays(parseInt(e.target.value) || 15)}
-                      className={styles.settingInput}
-                      min="1"
-                      max="90"
-                    />
-                    <span className={styles.settingNote}>
-                      Valid until: {getValidityDate(validityDays)}
-                    </span>
-                  </>
-                )}
+                <label htmlFor="validity">Validity (Days)</label>
+                <input
+                  type="number"
+                  id="validity"
+                  value={validityDays}
+                  onChange={(e) => setValidityDays(parseInt(e.target.value) || 15)}
+                  className={styles.settingInput}
+                  min="1"
+                  max="90"
+                />
+                <span className={styles.settingNote}>
+                  Valid until: {getValidityDate(validityDays)}
+                </span>
               </div>
               <div className={styles.settingField}>
                 <label htmlFor="notes">{terms.quote} Notes</label>
-                {mode === 'view' ? (
-                  <div className={styles.settingDisplay}>
-                    <p>{quoteNotes || 'No notes added'}</p>
-                  </div>
-                ) : (
-                  <textarea
-                    id="notes"
-                    value={quoteNotes}
-                    onChange={(e) => setQuoteNotes(e.target.value)}
-                    className={styles.notesTextarea}
-                    placeholder={`Add any special terms, conditions, or notes for this ${terms.quote.toLowerCase()}...`}
-                    rows={3}
-                  />
-                )}
+                <textarea
+                  id="notes"
+                  value={quoteNotes}
+                  onChange={(e) => setQuoteNotes(e.target.value)}
+                  className={styles.notesTextarea}
+                  placeholder={`Add any special terms, conditions, or notes for this ${terms.quote.toLowerCase()}...`}
+                  rows={3}
+                />
               </div>
             </div>
           </div>
@@ -513,41 +445,18 @@ function GenerateQuoteModal({
             <div className={styles.footerActions}>
               <button 
                 className="ds-btn ds-btn-secondary"
-                onClick={mode === 'view' ? onClose : handleClose}
-                disabled={mode === 'generate' && isGenerating}
+                onClick={handleClose}
+                disabled={isUpdating}
               >
-                {mode === 'view' ? 'Close' : 'Cancel'}
+                Cancel
               </button>
-              {mode === 'view' ? (
-                <>
-                  {/* Send Quote Button - for sendable statuses */}
-                  {quote && ['draft', 'pending', 'under_review'].includes(quote.status) && onSendQuote && (
-                    <button 
-                      className="ds-btn ds-btn-success"
-                      onClick={() => onSendQuote(quote.id)}
-                    >
-                      📧 Send {terms.quote}
-                    </button>
-                  )}
-                  {/* Edit Quote Button - for editable statuses */}
-                  {quote && ['draft', 'pending', 'rejected', 'under_review'].includes(quote.status) && onEditQuote && (
-                    <button 
-                      className="ds-btn ds-btn-primary"
-                      onClick={() => onEditQuote(quote.id)}
-                    >
-                      ✏️ Edit {terms.quote}
-                    </button>
-                  )}
-                </>
-              ) : (
-                <button 
-                  className="ds-btn ds-btn-primary"
-                  onClick={handleGenerateQuote}
-                  disabled={isGenerating || quoteItems.length === 0}
-                >
-                  {isGenerating ? 'Generating...' : terms.generateQuote}
-                </button>
-              )}
+              <button 
+                className="ds-btn ds-btn-primary"
+                onClick={handleUpdateQuote}
+                disabled={isUpdating || quoteItems.length === 0}
+              >
+                {isUpdating ? 'Updating...' : `Update ${terms.quote}`}
+              </button>
             </div>
           </div>
         </div>
@@ -577,4 +486,4 @@ function GenerateQuoteModal({
   );
 }
 
-export default GenerateQuoteModal;
+export default EditQuoteModal;

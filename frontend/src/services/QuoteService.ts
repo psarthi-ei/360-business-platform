@@ -3,7 +3,9 @@
 
 import { 
   Quote, 
+  QuoteItem,
   Lead, 
+  LeadRequestedItem,
   QuoteChanges, 
   QuoteState, 
   QuoteAction,
@@ -169,12 +171,7 @@ export class QuoteService {
         buttonClass: 'ds-btn ds-btn-secondary'
       });
 
-      actions.push({
-        action: 'revise',
-        label: terminology ? `✏️ Revise ${terminology.quote}` : '✏️ Revise Quote',
-        icon: '✏️',
-        buttonClass: 'ds-btn ds-btn-secondary'
-      });
+      // Edit functionality is available inside the view modal
 
       // Status-specific actions
       if (activeQuote.status === 'pending' || activeQuote.status === 'under_review') {
@@ -187,12 +184,24 @@ export class QuoteService {
       }
 
       if (activeQuote.status === 'approved') {
-        actions.push({
-          action: 'generate_proforma',
-          label: '📋 Send Proforma',
-          icon: '📋',
-          buttonClass: 'ds-btn ds-btn-primary'
-        });
+        // Business model differentiated actions
+        if (lead?.leadType === 'sales') {
+          // Sales Orders: Generate proforma for advance payment
+          actions.push({
+            action: 'generate_proforma',
+            label: '📋 Send Proforma',
+            icon: '📋',
+            buttonClass: 'ds-btn ds-btn-primary'
+          });
+        } else if (lead?.leadType === 'job_work') {
+          // Job Work: Direct order creation (skip proforma)
+          actions.push({
+            action: 'create_job_order',
+            label: '⚙️ Create Job Order',
+            icon: '⚙️',
+            buttonClass: 'ds-btn ds-btn-primary'
+          });
+        }
       }
     }
 
@@ -319,7 +328,7 @@ export class QuoteService {
     if (leadAction.includes('generate') || leadAction === 'send_quote') return 'generate';
     if (leadAction.includes('send')) return 'send';
     if (leadAction.includes('approve')) return 'approve';
-    if (leadAction.includes('revise')) return 'revise';
+    // Revise mapping removed - users can view quote and edit from within the modal
     if (leadAction.includes('proforma')) return 'generate_proforma';
     if (leadAction.includes('view')) return 'view';
     
@@ -364,7 +373,7 @@ export class QuoteService {
   }
 
   // Helper methods
-  private static getQuoteById(quoteId: string): Quote | undefined {
+  static getQuoteById(quoteId: string): Quote | undefined {
     return mockQuotes.find(quote => quote.id === quoteId);
   }
 
@@ -606,6 +615,81 @@ export class QuoteService {
     lead.quoteCount = 0;
 
     return true;
+  }
+
+  /**
+   * Get quote data formatted for viewing/editing
+   */
+  static getQuoteForViewing(quoteId: string): { quote: Quote; lead: Lead } | null {
+    const quote = this.getQuoteById(quoteId);
+    if (!quote) return null;
+
+    const lead = this.getLeadById(quote.leadId);
+    if (!lead) return null;
+
+    return { quote, lead };
+  }
+
+  /**
+   * Check if quote can be edited (not finalized)
+   */
+  static canEditQuote(quote: Quote): boolean {
+    // Quote cannot be edited if order has been created or if it's superseded
+    const nonEditableStatuses = ['order_created', 'superseded'];
+    return !nonEditableStatuses.includes(quote.status);
+  }
+
+  /**
+   * Update quote in place with revision tracking
+   */
+  static updateQuoteInPlace(
+    quoteId: string, 
+    changes: Partial<Quote>, 
+    revisionReason?: string
+  ): Quote | null {
+    const quote = this.getQuoteById(quoteId);
+    if (!quote) return null;
+
+    // Check if quote can be edited
+    if (!this.canEditQuote(quote)) {
+      throw new Error('Quote cannot be edited - order already created or quote superseded');
+    }
+
+    // Update quote with changes
+    Object.assign(quote, changes);
+    
+    // Update revision tracking
+    quote.revisionNumber = (quote.revisionNumber || 1) + 1;
+    quote.lastRevisionDate = new Date().toISOString();
+    quote.revisionReason = revisionReason || 'Quote revised';
+
+    return quote;
+  }
+
+  /**
+   * Convert QuoteItems to LeadRequestedItems for editing
+   */
+  static convertQuoteItemsToLeadItems(quoteItems: QuoteItem[]): LeadRequestedItem[] {
+    return quoteItems.map((item, index) => {
+      // CRITICAL FIX: Use catalogItemId first, then fallback to itemCode
+      const masterItemId = item.catalogItemId || item.itemCode || `quote-item-${index}`;
+      
+      return {
+        masterItemId,
+        requestedQuantity: item.quantity,
+        customSpecifications: {
+          // Only include actual custom specifications, not technical data
+          // Technical data like item code, description, unit, HSN are available from the catalog item
+        },
+        budgetExpectation: item.rate,
+        priority: 'must_have' as const,
+        notes: `Quote item: ${item.description} (Rate: ₹${item.rate}/${item.unit})`,
+        // Preserve pricing information for edit mode - always keep quote rate including zero values
+        customPrice: item.rate,
+        discountPercentage: item.discount || 0,
+        quantity: item.quantity
+      };
+    });
   }
 }
 

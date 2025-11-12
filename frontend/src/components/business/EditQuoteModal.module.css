@@ -1,10 +1,10 @@
-/* GenerateQuoteModal.module.css - Clean rebuild using AddLeadModal structure */
+/* EditQuoteModal.module.css - Exact replica of GenerateQuoteModal CSS */
 
 .modalContent {
   background: var(--ds-bg-primary);
   border-radius: var(--ds-radius-lg) !important;
   box-shadow: var(--ds-shadow-2xl);
-  /* Override global 500px constraint - GenerateQuoteModal needs more width for content */
+  /* Override global 500px constraint - EditQuoteModal needs more width for content */
   max-width: 600px !important;
   width: 90vw;
   /* Optimized height - as tall as possible while fitting in viewport */
@@ -312,6 +312,23 @@
   font-style: italic;
 }
 
+.settingDisplay {
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  background: var(--ds-bg-subtle);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-text-secondary);
+  font-size: var(--ds-text-base);
+}
+
+.settingDisplay span,
+.settingDisplay p {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-weight-medium);
+  font-family: var(--font-mono);
+}
+
 .notesTextarea {
   padding: var(--ds-space-sm) var(--ds-space-md);
   border: 1px solid var(--ds-border-subtle);
@@ -479,8 +496,6 @@
   }
 }
 
-/* Custom view mode actions removed - now using standard footerActions layout */
-
 /* Confirmation Overlay - Professional confirmation modal */
 .confirmationOverlay {
   position: fixed;
@@ -555,95 +570,6 @@
   text-align: center;
   padding: var(--ds-space-lg);
   color: var(--ds-text-secondary);
-}
-
-/* Quote Metadata - Professional Business Card Style */
-.quoteMetadata {
-  background: linear-gradient(135deg, var(--ds-bg-primary), var(--ds-bg-subtle));
-  border-radius: var(--ds-radius-lg);
-  padding: var(--ds-space-xl);
-  margin-bottom: var(--ds-space-xl);
-  border: 1px solid var(--ds-border-primary);
-  box-shadow: var(--ds-shadow-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-.quoteMetadata::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-accent));
-}
-
-.metadataGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--ds-space-lg) var(--ds-space-xl);
-  margin-top: var(--ds-space-sm);
-}
-
-.metadataGrid > div {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-xs);
-}
-
-.metadataGrid > div strong {
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-medium);
-  color: var(--ds-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--ds-space-xs);
-}
-
-.metadataGrid > div span:not(.statusBadge) {
-  font-size: var(--ds-text-base);
-  font-weight: var(--ds-weight-medium);
-  color: var(--ds-text-primary);
-  font-family: var(--font-mono);
-}
-
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--ds-space-sm) var(--ds-space-md);
-  background: var(--ds-color-success);
-  color: white;
-  border-radius: var(--ds-radius-md);
-  font-size: var(--ds-text-sm);
-  font-weight: var(--ds-weight-semibold);
-  text-transform: capitalize;
-  box-shadow: var(--ds-shadow-sm);
-  margin-top: var(--ds-space-xs);
-}
-
-.revisionInfo {
-  grid-column: 1 / -1;
-  padding-top: var(--ds-space-lg);
-  border-top: 2px solid var(--ds-border-subtle);
-  margin-top: var(--ds-space-lg);
-  background: var(--ds-bg-subtle);
-  padding: var(--ds-space-md) var(--ds-space-lg);
-  border-radius: var(--ds-radius-md);
-  font-style: italic;
-}
-
-.revisionInfo strong {
-  font-size: var(--ds-text-sm);
-  font-weight: var(--ds-weight-semibold);
-  color: var(--ds-text-primary);
-}
-
-@media (max-width: 768px) {
-  .metadataGrid {
-    grid-template-columns: 1fr;
-    gap: var(--ds-space-sm);
-  }
 }
 
 /* Focus management for accessibility */
