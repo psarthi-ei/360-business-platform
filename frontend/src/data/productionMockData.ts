@@ -246,7 +246,7 @@ export const mockProductionOrders: ProductionOrder[] = [
       colors: ['Red', 'Blue', 'Green', 'Yellow'],
       specialInstructions: 'Multi-color printing with precise registration'
     },
-    workOrderIds: ['WO-2025-003-A', 'WO-2025-003-B', 'WO-2025-003-C', 'WO-2025-003-D', 'WO-2025-003-E', 'WO-2025-003-F'],
+    workOrderIds: ['WO-2025-003-A', 'WO-2025-003-B', 'WO-2025-003-E', 'WO-2025-003-F'],
     status: 'quality_issues',
     createdDate: '2025-10-21',
     notes: 'Production Order for printing service - Multi-color printing job'
@@ -287,11 +287,12 @@ export const mockProductionOrders: ProductionOrder[] = [
       qualityGrade: 'Premium',
       specialInstructions: 'Multi-treatment finishing - anti-wrinkle, softening, water-repellent processes'
     },
-    workOrderIds: ['WO-2025-005-A', 'WO-2025-005-B', 'WO-2025-005-C'],
-    status: 'ready_for_production',
+    workOrderIds: ['WO-2025-005-A'],
+    status: 'completed',
     createdDate: '2025-11-08',
     receivedDate: '2025-11-09',
-    notes: 'Work orders created for multi-treatment finishing. All materials allocated. Ready to start production.'
+    completedDate: '2025-11-12',
+    notes: 'Multi-treatment finishing completed successfully. Premium quality achieved for customer delivery.'
   },
 
   {
@@ -308,11 +309,12 @@ export const mockProductionOrders: ProductionOrder[] = [
       colors: ['Royal Blue', 'Gold', 'White', 'Silver'],
       specialInstructions: 'High-resolution digital printing with precise color matching - complex geometric patterns'
     },
-    workOrderIds: ['WO-2025-006-A', 'WO-2025-006-B', 'WO-2025-006-C', 'WO-2025-006-D'],
-    status: 'in_progress',
+    workOrderIds: ['WO-2025-006-A'],
+    status: 'ready_for_delivery',
     createdDate: '2025-11-12',
     receivedDate: '2025-11-12',
-    notes: 'Multi-color digital printing in progress. Royal Blue lot completed, Gold lot currently running.'
+    completedDate: '2025-11-12',
+    notes: 'High-resolution digital printing completed and dispatched. Customer delivery in progress.'
   },
 
   // Production Order requiring Work Order Creation (Demo) - Additional batch for JO-2025-001
@@ -496,40 +498,7 @@ export const mockWorkOrders: WorkOrder[] = [
       }
     ]
   },
-  {
-    id: 'WO-2025-003-C',
-    productionOrderId: 'PROD-JO-2025-003-01',
-    salesOrderId: 'JO-2025-003',
-    product: 'Multi-color Printing - Green Lot',
-    customer: 'Mumbai Printers',
-    batchNumber: 'PRT-003-C-GREEN',
-    targetQuantity: '750m',
-    producedQuantity: '750m',
-    remainingQuantity: '0m',
-    progress: 100,
-    status: 'qc_approved',
-    assignedMachine: '',
-    assignedWorker: '',
-    priority: 'urgent',
-    createdDate: '2025-10-21'
-  },
-  {
-    id: 'WO-2025-003-D',
-    productionOrderId: 'PROD-JO-2025-003-01',
-    salesOrderId: 'JO-2025-003',
-    product: 'Multi-color Printing - Yellow Lot',
-    customer: 'Mumbai Printers',
-    batchNumber: 'PRT-003-D-YELLOW',
-    targetQuantity: '750m',
-    producedQuantity: '750m',
-    remainingQuantity: '0m',
-    progress: 100,
-    status: 'delivered',
-    assignedMachine: '',
-    assignedWorker: '',
-    priority: 'urgent',
-    createdDate: '2025-10-21'
-  },
+  // Removed WO-2025-003-C and WO-2025-003-D to eliminate duplicate statuses for cleaner demo,
 
   // Additional Work Orders for Status Variation Demo
   {
@@ -574,7 +543,7 @@ export const mockWorkOrders: WorkOrder[] = [
     issues: ['Color bleeding in purple sections', 'Print registration off by 2mm', 'GSM variation beyond tolerance']
   },
 
-  // New Work Orders for PROD-JO-2025-004 (Rajkot Textiles - Dyeing)
+  // Optimized Work Orders for Clean Demo - One Example of Each Status
   {
     id: 'WO-2025-004-A',
     productionOrderId: 'PROD-JO-2025-004-01',
@@ -612,7 +581,7 @@ export const mockWorkOrders: WorkOrder[] = [
     notes: 'On hold - waiting for red lot completion before dyeing machine becomes available'
   },
 
-  // New Work Orders for PROD-JO-2025-005 (Vadodara Mills - Multi-treatment Finishing)
+  // Work Orders for PROD-JO-2025-005 (Optimized for Status Variety)
   {
     id: 'WO-2025-005-A',
     productionOrderId: 'PROD-JO-2025-005-01',
@@ -620,130 +589,40 @@ export const mockWorkOrders: WorkOrder[] = [
     product: 'Anti-wrinkle Treatment',
     customer: 'Vadodara Processing Mills',
     batchNumber: 'FIN-005-A-AWR',
-    targetQuantity: '1167m',
-    producedQuantity: '0m',
-    remainingQuantity: '1167m',
-    progress: 0,
-    status: 'pending',
+    targetQuantity: '3500m',
+    producedQuantity: '3500m',
+    remainingQuantity: '0m',
+    progress: 100,
+    status: 'completed',
     assignedMachine: 'FINISH-F2',
     assignedWorker: 'Deepak',
     priority: 'high',
     createdDate: '2025-11-09',
-    notes: 'First treatment in sequence - anti-wrinkle processing'
-  },
-  {
-    id: 'WO-2025-005-B',
-    productionOrderId: 'PROD-JO-2025-005-01',
-    salesOrderId: 'JO-2025-005',
-    product: 'Softening Treatment',
-    customer: 'Vadodara Processing Mills',
-    batchNumber: 'FIN-005-B-SOFT',
-    targetQuantity: '1167m',
-    producedQuantity: '0m',
-    remainingQuantity: '1167m',
-    progress: 0,
-    status: 'pending',
-    assignedMachine: 'FINISH-F3',
-    assignedWorker: 'Prakash',
-    priority: 'high',
-    createdDate: '2025-11-09',
-    notes: 'Second treatment in sequence - softening process'
-  },
-  {
-    id: 'WO-2025-005-C',
-    productionOrderId: 'PROD-JO-2025-005-01',
-    salesOrderId: 'JO-2025-005',
-    product: 'Water-Repellent Treatment',
-    customer: 'Vadodara Processing Mills',
-    batchNumber: 'FIN-005-C-WR',
-    targetQuantity: '1166m',
-    producedQuantity: '0m',
-    remainingQuantity: '1166m',
-    progress: 0,
-    status: 'pending',
-    assignedMachine: 'FINISH-F1',
-    assignedWorker: 'Mukesh',
-    priority: 'high',
-    createdDate: '2025-11-09',
-    notes: 'Final treatment in sequence - water-repellent coating'
+    startTime: '08:00 AM',
+    actualCompletion: '2025-11-12 17:00',
+    notes: 'Multi-treatment finishing completed successfully. Premium quality achieved.'
   },
 
-  // New Work Orders for PROD-JO-2025-006 (Bharuch Printers - Digital Printing)
+  // Work Orders for PROD-JO-2025-006 (Optimized for Status Variety)
   {
     id: 'WO-2025-006-A',
     productionOrderId: 'PROD-JO-2025-006-01',
     salesOrderId: 'JO-2025-006',
-    product: 'Digital Printing - Royal Blue',
+    product: 'Digital Printing - 4-Color Pattern',
     customer: 'Bharuch Digital Printers',
-    batchNumber: 'PRT-006-A-RBLUE',
-    targetQuantity: '1000m',
-    producedQuantity: '1000m',
+    batchNumber: 'PRT-006-A-4COLOR',
+    targetQuantity: '4000m',
+    producedQuantity: '4000m',
     remainingQuantity: '0m',
     progress: 100,
-    status: 'ready_for_delivery',
+    status: 'dispatched',
     assignedMachine: 'DPRINT-DP1',
     assignedWorker: 'Sunil',
     priority: 'urgent',
     createdDate: '2025-11-12',
     startTime: '06:00 AM',
-    actualCompletion: '2025-11-12 14:00',
-    notes: 'Royal blue printing completed successfully. Quality approved.'
-  },
-  {
-    id: 'WO-2025-006-B',
-    productionOrderId: 'PROD-JO-2025-006-01',
-    salesOrderId: 'JO-2025-006',
-    product: 'Digital Printing - Gold',
-    customer: 'Bharuch Digital Printers',
-    batchNumber: 'PRT-006-B-GOLD',
-    targetQuantity: '1000m',
-    producedQuantity: '650m',
-    remainingQuantity: '350m',
-    progress: 65,
-    status: 'in_progress',
-    assignedMachine: 'DPRINT-DP1',
-    assignedWorker: 'Sunil',
-    priority: 'urgent',
-    createdDate: '2025-11-12',
-    startTime: '14:30 PM',
-    estimatedCompletion: '6:00 PM',
-    notes: 'Gold printing in progress. Geometric patterns showing excellent detail.'
-  },
-  {
-    id: 'WO-2025-006-C',
-    productionOrderId: 'PROD-JO-2025-006-01',
-    salesOrderId: 'JO-2025-006',
-    product: 'Digital Printing - White',
-    customer: 'Bharuch Digital Printers',
-    batchNumber: 'PRT-006-C-WHITE',
-    targetQuantity: '1000m',
-    producedQuantity: '0m',
-    remainingQuantity: '1000m',
-    progress: 0,
-    status: 'pending',
-    assignedMachine: 'DPRINT-DP1',
-    assignedWorker: 'Sunil',
-    priority: 'urgent',
-    createdDate: '2025-11-12',
-    notes: 'Scheduled after gold lot completion - white base printing'
-  },
-  {
-    id: 'WO-2025-006-D',
-    productionOrderId: 'PROD-JO-2025-006-01',
-    salesOrderId: 'JO-2025-006',
-    product: 'Digital Printing - Silver Accent',
-    customer: 'Bharuch Digital Printers',
-    batchNumber: 'PRT-006-D-SILVER',
-    targetQuantity: '1000m',
-    producedQuantity: '0m',
-    remainingQuantity: '1000m',
-    progress: 0,
-    status: 'pending',
-    assignedMachine: 'DPRINT-DP2',
-    assignedWorker: 'Anil',
-    priority: 'urgent',
-    createdDate: '2025-11-12',
-    notes: 'Final accent printing - silver details on geometric patterns'
+    actualCompletion: '2025-11-12 16:00',
+    notes: 'High-resolution digital printing completed. Dispatched for customer delivery.'
   }
 ];
 
@@ -875,55 +754,7 @@ export const mockQCItems: QualityControlItem[] = [
     }
   },
 
-  // QC for WO-2025-003-C (Green Printing Lot - QC Approved B Grade)
-  {
-    id: 'QC-2025-003-C',
-    workOrderId: 'WO-2025-003-C',
-    status: 'approved',
-    inspector: 'Priya Patel',
-    grade: 'B Grade',
-    startedTime: '2025-10-17 14:00',
-    completedTime: '2025-10-17 15:30',
-    notes: 'Slight color variation within acceptable limits. Minor print registration issues but within B grade standards.',
-    priority: 'urgent',
-    qualitySpecs: {
-      targetGrade: 'Export-Grade',
-      colorCode: 'Green - Pantone 17-5641',
-      gsmTarget: '150 ± 3',
-      widthTarget: '44" ± 0.25"',
-      shrinkageLimit: '<1%'
-    },
-    batchInfo: {
-      batchNumber: 'PRT-003-C-GREEN',
-      rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2025'
-    }
-  },
-
-  // QC for WO-2025-003-D (Yellow Printing Lot - QC Approved)  
-  {
-    id: 'QC-2025-003-D',
-    workOrderId: 'WO-2025-003-D',
-    status: 'approved',
-    inspector: 'Ravi Sharma',
-    grade: 'A Grade',
-    startedTime: '2025-10-16 16:00',
-    completedTime: '2025-10-16 17:00',
-    notes: 'Excellent quality. Perfect color matching and print registration. Customer delivery completed.',
-    priority: 'urgent',
-    qualitySpecs: {
-      targetGrade: 'Export-Grade',
-      colorCode: 'Yellow - Pantone 13-0859',
-      gsmTarget: '150 ± 3',
-      widthTarget: '44" ± 0.25"',
-      shrinkageLimit: '<1%'
-    },
-    batchInfo: {
-      batchNumber: 'PRT-003-D-YELLOW',
-      rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2025'
-    }
-  },
+  // QC items for WO-2025-003-C and WO-2025-003-D removed for cleaner demo
 
   // QC for WO-2025-003-E (Orange Printing Lot - QC Rejected)
   {
@@ -1015,25 +846,37 @@ export const mockQCItems: QualityControlItem[] = [
     }
   },
 
-  // QC for WO-2025-006-B (Digital Printing Gold - In Progress, QC can start)
+  // QC for WO-2025-005-A (Multi-treatment Finishing - Completed, QC approved for delivery)
   {
-    id: 'QC-2025-006-B',
-    workOrderId: 'WO-2025-006-B',
-    status: 'pending_inspection',
-    priority: 'urgent',
+    id: 'QC-2025-005-A',
+    workOrderId: 'WO-2025-005-A',
+    status: 'approved',
+    inspector: 'Priya Patel',
+    grade: 'A Grade',
+    startedTime: '2025-11-12 17:30',
+    completedTime: '2025-11-12 18:45',
+    notes: 'Excellent premium finishing quality. All treatments applied perfectly. Anti-wrinkle, softening, and water-repellent effects verified.',
+    priority: 'high',
     qualitySpecs: {
-      targetGrade: 'Export-Grade',
-      colorCode: 'Gold - Pantone 15-1163',
-      gsmTarget: '180 ± 5',
-      widthTarget: '60" ± 0.5"',
+      targetGrade: 'Premium',
+      colorCode: 'N/A - Multi-treatment Finishing',
+      gsmTarget: '185 ± 3',
+      widthTarget: '58" ± 0.5"',
       shrinkageLimit: '<2%'
     },
-    specialInstructions: ['Digital print quality check', 'Gold color accuracy', 'Pattern complexity verification'],
-    notes: 'Awaiting work order completion for full QC inspection. Partial batch ready for interim quality check.',
+    specialInstructions: ['Anti-wrinkle effect test', 'Softness verification', 'Water-repellent test'],
+    checklist: [
+      { item: 'Anti-wrinkle effect test', checked: true, required: true },
+      { item: 'Softness verification', checked: true, required: true },
+      { item: 'Water-repellent test', checked: true, required: true },
+      { item: 'GSM consistency check', checked: true, required: false },
+      { item: 'Surface finish inspection', checked: true, required: true }
+    ],
+    photos: ['qc_premium_finish_001.jpg', 'qc_premium_finish_002.jpg'],
     batchInfo: {
-      batchNumber: 'PRT-006-B-GOLD',
-      rawMaterial: 'Polyester Fabric',
-      productionDates: '12 Nov 2025'
+      batchNumber: 'FIN-005-A-AWR',
+      rawMaterial: 'Cotton Dyed Fabric',
+      productionDates: '09-12 Nov 2025'
     }
   }
 ];
