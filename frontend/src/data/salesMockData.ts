@@ -952,7 +952,7 @@ export const mockLeads: Lead[] = [
         createdBy: 'sales_team'
       }
     ],
-    conversionStatus: 'negotiation',
+    conversionStatus: 'verbally_approved',
     // Quote tracking
     activeQuoteId: 'QT-006',
     quoteHistory: ['QT-006'],
