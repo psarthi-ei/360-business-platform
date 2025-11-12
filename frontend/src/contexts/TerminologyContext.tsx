@@ -69,6 +69,11 @@ export const useTerminologyTerms = () => {
     customer: terminology.customer,
     customers: terminology.customers,
     
+    // Business module names
+    salesModule: terminology.salesModule,
+    procurementModule: terminology.procurementModule,
+    productionModule: terminology.productionModule,
+    
     // Sales process
     lead: terminology.lead,
     leads: terminology.leads,

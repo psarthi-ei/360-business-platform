@@ -6,6 +6,11 @@ export interface TerminologyConfig {
   customer: string;
   customers: string;
   
+  // Business module names
+  salesModule: string;
+  procurementModule: string;
+  productionModule: string;
+  
   // Sales process
   lead: string;
   leads: string;
@@ -39,6 +44,11 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     customer: 'Party',
     customers: 'Parties',
     
+    // Business module names - Surat specific terminology
+    salesModule: 'Job Work',
+    procurementModule: 'Materials',
+    productionModule: 'Process',
+    
     // Sales process - Local terms
     lead: 'Inquiry',
     leads: 'Inquiries',
@@ -70,6 +80,11 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     customer: 'Customer',
     customers: 'Customers',
     
+    // Business module names - Corporate terminology
+    salesModule: 'Sales',
+    procurementModule: 'Procurement',
+    productionModule: 'Production',
+    
     // Sales process - Formal terms
     lead: 'Lead',
     leads: 'Leads',
@@ -100,6 +115,11 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     // Core entities - Manufacturing terminology
     customer: 'Customer',
     customers: 'Customers',
+    
+    // Business module names - Manufacturing terminology
+    salesModule: 'Sales',
+    procurementModule: 'Procurement',
+    productionModule: 'Manufacturing',
     
     // Sales process - Manufacturing terms
     lead: 'RFQ',

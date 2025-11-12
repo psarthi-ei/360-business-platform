@@ -12,7 +12,7 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { customers, leads, quotes, workOrders } = useTerminologyTerms();
+  const { customers, leads, quotes, workOrders, salesModule, procurementModule, productionModule } = useTerminologyTerms();
 
   // Navigation items matching BottomNavigation for consistency
   // Core paths maintained for backend compatibility, labels use regional terminology
@@ -26,19 +26,19 @@ const LeftSidebarNavigation: React.FC<LeftSidebarNavigationProps> = ({
     { 
       path: '/platform/sales', 
       icon: '💼', 
-      label: 'Sales',
+      label: salesModule,
       description: `${leads} → ${quotes} → Orders`
     },
     { 
       path: '/platform/procurement', 
       icon: '📦', 
-      label: 'Procurement',
-      description: 'Purchasing & Materials'
+      label: procurementModule,
+      description: 'Purchasing & Inventory'
     },
     { 
       path: '/platform/production', 
       icon: '🏭', 
-      label: 'Production',
+      label: productionModule,
       description: `Manufacturing & ${workOrders}`
     },
     { 

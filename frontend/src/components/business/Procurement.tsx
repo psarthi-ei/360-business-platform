@@ -286,16 +286,16 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
           {inventory}
         </button>
         <button 
-          className={`${styles.tabButton} ${activeTab === 'pos' ? styles.active : ''}`}
-          onClick={() => setActiveTab('pos')}
-        >
-          Purchase Orders
-        </button>
-        <button 
           className={`${styles.tabButton} ${activeTab === 'grns' ? styles.active : ''}`}
           onClick={() => setActiveTab('grns')}
         >
           {goodsReceiptNote}
+        </button>
+        <button 
+          className={`${styles.tabButton} ${activeTab === 'pos' ? styles.active : ''}`}
+          onClick={() => setActiveTab('pos')}
+        >
+          Purchase Orders
         </button>
       </div>
       

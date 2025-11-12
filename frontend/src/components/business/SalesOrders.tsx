@@ -101,13 +101,39 @@ function SalesOrders({
   
   // Helper function to get payment details for an order from ProformaInvoice data
   const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string, orderType?: string) => {
-    // Job Orders are credit-based - no advance payment, bill after completion
+    // Job Orders are credit-based - check actual receivables data for payment status
     if (orderType === 'job_order') {
+      // Import receivables data to get actual payment status
+      const { mockReceivables } = require('../../data/salesMockData');
+      const receivableRecord = mockReceivables.find((rec: { orderId: string }) => rec.orderId === orderId);
+      
+      if (receivableRecord) {
+        const amountReceived = receivableRecord.originalAmount - receivableRecord.balanceAmount;
+        let paymentStatus = 'pending';
+        
+        if (receivableRecord.balanceAmount === 0) {
+          paymentStatus = 'received'; // Fully paid
+        } else if (receivableRecord.daysPastDue > 0) {
+          paymentStatus = 'overdue'; // Overdue payment
+        } else if (amountReceived > 0) {
+          paymentStatus = 'partial'; // Partial payment received
+        }
+        
+        return {
+          advanceAmount: 0, // No advance for Job Orders
+          advanceReceived: amountReceived,
+          balanceAdvance: receivableRecord.balanceAmount,
+          paymentStatus: paymentStatus as 'pending' | 'received' | 'overdue' | 'partial',
+          advancePercentage: 0
+        };
+      }
+      
+      // Fallback if no receivable record found
       return {
         advanceAmount: 0, // No advance for Job Orders
         advanceReceived: 0,
         balanceAdvance: totalAmount, // Full amount pending until completion
-        paymentStatus: 'pending' as const,
+        paymentStatus: 'pending' as 'pending',
         advancePercentage: 0
       };
     }
@@ -476,9 +502,24 @@ function SalesOrders({
                             style={{ marginLeft: '8px' }}
                           >
                             {order.orderType === 'job_order' ? (
-                              <span style={{ color: '#f39c12' }}>
-                                💳 Credit Order - Bill on Completion ({formatCurrency(order.totalAmount)})
-                              </span>
+                              // Use actual payment status from receivables data for job orders
+                              paymentDetails.paymentStatus === 'received' ? (
+                                <span style={{ color: '#27ae60' }}>
+                                  ✅ Paid {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(order.totalAmount)}
+                                </span>
+                              ) : paymentDetails.paymentStatus === 'overdue' ? (
+                                <span style={{ color: '#e74c3c' }}>
+                                  🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
+                                </span>
+                              ) : paymentDetails.paymentStatus === 'partial' ? (
+                                <span style={{ color: '#f39c12' }}>
+                                  💳 Partial Payment {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(order.totalAmount)}
+                                </span>
+                              ) : (
+                                <span style={{ color: '#f39c12' }}>
+                                  💳 Credit Order - Bill on Completion ({formatCurrency(order.totalAmount)})
+                                </span>
+                              )
                             ) : paymentDetails.paymentStatus === 'received' ? (
                               <span style={{ color: '#27ae60' }}>
                                 ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
