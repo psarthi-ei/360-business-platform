@@ -103,15 +103,29 @@ function SalesOrders({
   const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string, orderType?: string) => {
     // Job Orders are credit-based - check actual receivables data for payment status
     if (orderType === 'job_order') {
-      // Import receivables data to get actual payment status
-      const { mockReceivables } = require('../../data/salesMockData');
+      // Import receivables data and final payments to get actual payment status
+      const { mockReceivables, mockFinalPayments, mockFinalInvoices } = require('../../data/salesMockData');
       const receivableRecord = mockReceivables.find((rec: { orderId: string }) => rec.orderId === orderId);
       
       if (receivableRecord) {
-        const amountReceived = receivableRecord.originalAmount - receivableRecord.balanceAmount;
+        // Get actual payments made for this invoice
+        const invoice = mockFinalInvoices?.find((inv: { salesOrderId: string }) => inv.salesOrderId === orderId);
+        const payments = invoice ? mockFinalPayments?.filter((payment: { finalInvoiceId: string }) => payment.finalInvoiceId === invoice.id) || [] : [];
+        
+        // Calculate actual amount received from payment records
+        const actualAmountReceived = payments.reduce((total: number, payment: { amount: number; status: string }) => {
+          return payment.status === 'reconciled' || payment.status === 'verified' || payment.status === 'received' 
+            ? total + payment.amount 
+            : total;
+        }, 0);
+        
+        // Use receivableRecord.receivedAmount if available, otherwise use calculated amount
+        const amountReceived = receivableRecord.receivedAmount || actualAmountReceived;
+        const balanceAmount = receivableRecord.originalAmount - amountReceived;
+        
         let paymentStatus = 'pending';
         
-        if (receivableRecord.balanceAmount === 0) {
+        if (balanceAmount === 0) {
           paymentStatus = 'received'; // Fully paid
         } else if (receivableRecord.daysPastDue > 0) {
           paymentStatus = 'overdue'; // Overdue payment
@@ -122,7 +136,7 @@ function SalesOrders({
         return {
           advanceAmount: 0, // No advance for Job Orders
           advanceReceived: amountReceived,
-          balanceAdvance: receivableRecord.balanceAmount,
+          balanceAdvance: balanceAmount,
           paymentStatus: paymentStatus as 'pending' | 'received' | 'overdue' | 'partial',
           advancePercentage: 0
         };

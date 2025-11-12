@@ -569,12 +569,30 @@ function Invoices({
                         
                         // Import receivables data for payment status
                         const { mockReceivables } = require('../../data/salesMockData');
-                        const receivableData = mockReceivables.find((rec: { invoiceId: string }) => rec.invoiceId === invoice.id);
+                        const receivableData = mockReceivables.find((rec: { invoiceId: string; balanceAmount: number; daysPastDue?: number }) => rec.invoiceId === invoice.id);
                         
-                        // Calculate total received from all payments
+                        // Calculate total received from all confirmed/received payments only
                         const totalReceived = allPayments.reduce((sum: number, payment) => {
-                          return sum + (payment?.amount || 0);
+                          // Only count payments that are actually received, verified, or reconciled
+                          const isPaymentReceived = payment?.status === 'received' || 
+                                                   payment?.status === 'verified' || 
+                                                   payment?.status === 'reconciled' ||
+                                                   payment?.status === 'payment_received';
+                          
+                          return isPaymentReceived ? sum + (payment?.amount || 0) : sum;
                         }, 0);
+                        
+                        // Calculate pending payment amounts
+                        const totalPendingPayments = allPayments.reduce((sum: number, payment) => {
+                          const isPaymentPending = payment?.status === 'pending' || payment?.status === 'overdue';
+                          return isPaymentPending ? sum + (payment?.amount || 0) : sum;
+                        }, 0);
+                        
+                        const receivedPaymentCount = allPayments.filter(p => 
+                          p?.status === 'received' || p?.status === 'verified' || 
+                          p?.status === 'reconciled' || p?.status === 'payment_received').length;
+                        const pendingPaymentCount = allPayments.filter(p => 
+                          p?.status === 'pending' || p?.status === 'overdue').length;
                         
                         return (
                           <div className={styles.relationshipSection}>
@@ -604,18 +622,32 @@ function Invoices({
                               <div className={styles.summaryRow}>
                                 <span className={styles.summaryLabel}>Total Received:</span>
                                 <span className={`${styles.summaryValue} ${totalReceived > 0 ? styles.receivedAmount : ''}`}>
-                                  {formatCurrency(totalReceived)} {allPayments.length > 1 && `(${allPayments.length} payments)`}
+                                  {formatCurrency(totalReceived)} {receivedPaymentCount > 1 && `(${receivedPaymentCount} payments)`}
                                 </span>
                               </div>
                               
-                              {receivableData && receivableData.balanceAmount > 0 && (
+                              {totalPendingPayments > 0 && (
                                 <div className={styles.summaryRow}>
-                                  <span className={styles.summaryLabel}>Outstanding Balance:</span>
-                                  <span className={`${styles.summaryValue} ${styles.outstandingAmount}`}>
-                                    {formatCurrency(receivableData.balanceAmount)}
+                                  <span className={styles.summaryLabel}>Pending Payments:</span>
+                                  <span className={`${styles.summaryValue} ${styles.pendingAmount}`}>
+                                    {formatCurrency(totalPendingPayments)} {pendingPaymentCount > 1 && `(${pendingPaymentCount} payments)`}
                                   </span>
                                 </div>
                               )}
+                              
+                              {(() => {
+                                // Calculate dynamic outstanding balance based on actual received payments
+                                const dynamicOutstandingBalance = invoice.totalAmount - totalReceived;
+                                
+                                return dynamicOutstandingBalance > 0 ? (
+                                  <div className={styles.summaryRow}>
+                                    <span className={styles.summaryLabel}>Outstanding Balance:</span>
+                                    <span className={`${styles.summaryValue} ${styles.outstandingAmount}`}>
+                                      {formatCurrency(dynamicOutstandingBalance)}
+                                    </span>
+                                  </div>
+                                ) : null;
+                              })()}
                               
                               <div className={styles.summaryRow}>
                                 <span className={styles.summaryLabel}>Due Date:</span>
