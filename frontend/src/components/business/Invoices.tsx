@@ -576,8 +576,7 @@ function Invoices({
                           // Only count payments that are actually received, verified, or reconciled
                           const isPaymentReceived = payment?.status === 'received' || 
                                                    payment?.status === 'verified' || 
-                                                   payment?.status === 'reconciled' ||
-                                                   payment?.status === 'payment_received';
+                                                   payment?.status === 'reconciled';
                           
                           return isPaymentReceived ? sum + (payment?.amount || 0) : sum;
                         }, 0);
@@ -590,7 +589,7 @@ function Invoices({
                         
                         const receivedPaymentCount = allPayments.filter(p => 
                           p?.status === 'received' || p?.status === 'verified' || 
-                          p?.status === 'reconciled' || p?.status === 'payment_received').length;
+                          p?.status === 'reconciled').length;
                         const pendingPaymentCount = allPayments.filter(p => 
                           p?.status === 'pending' || p?.status === 'overdue').length;
                         

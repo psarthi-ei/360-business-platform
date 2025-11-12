@@ -8,7 +8,7 @@ import {
 } from '../../data/inventoryMockData';
 import styles from './Procurement.module.css';
 import PurchaseOrders from './PurchaseOrders';
-import GoodsReceiptNotes from './GoodsReceiptNotes';
+import InwardManagement from './InwardManagement';
 import InventoryManagement from './InventoryManagement';
 
 interface ProcurementProps {
@@ -40,7 +40,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   const [timelineFilter, setTimelineFilter] = useState('all');
   
   // Get terminology for UI labels
-  const { goodsReceiptNote, inventory } = useTerminologyTerms();
+  const { goodsReceiptNote, inventory, customer: party } = useTerminologyTerms();
   
   // Universal scroll behavior - always enabled for business modules (CSS handles it)
   
@@ -61,7 +61,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   const inventoryCounts = {
     all: inventorySummary.totalItems,
     company: inventorySummary.companyItemsCount,
-    client: inventorySummary.clientItemsCount,
+    party: inventorySummary.clientItemsCount, // Using 'party' instead of 'client'
     lowstock: inventorySummary.lowStockItems,
     expiring: getExpiringChemicals().length
   };
@@ -71,7 +71,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     inventory: [
       { value: 'all', label: `All ${inventory}`, count: inventoryCounts.all },
       { value: 'company', label: '🏢 Company Materials', count: inventoryCounts.company },
-      { value: 'client', label: '👤 Client Materials', count: inventoryCounts.client },
+      { value: 'party', label: `👤 ${party} Materials`, count: inventoryCounts.party },
       { value: 'lowstock', label: '⚠️ Low Stock', count: inventoryCounts.lowstock },
       { value: 'expiring', label: '⏰ Expiring Soon', count: inventoryCounts.expiring }
     ],
@@ -128,7 +128,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
           return [
             { value: 'all', label: `All ${inventory}`, count: invSummary.totalItems },
             { value: 'company', label: '🏢 Company Materials', count: invSummary.companyItemsCount },
-            { value: 'client', label: '👤 Client Materials', count: invSummary.clientItemsCount },
+            { value: 'party', label: `👤 ${party} Materials`, count: invSummary.clientItemsCount },
             { value: 'lowstock', label: '⚠️ Low Stock', count: invSummary.lowStockItems },
             { value: 'expiring', label: '⏰ Expiring Soon', count: getExpiringChemicals().length }
           ];
@@ -171,7 +171,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, inventoryFilterState, poFilterState, grnFilterState, timelineFilter, inventory]);
+  }, [activeTab, inventoryFilterState, poFilterState, grnFilterState, timelineFilter, inventory, party]);
 
   // Universal scroll - no complex calculations needed, browser handles overflow automatically
 
@@ -238,7 +238,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         );
       case 'grns':
         return (
-          <GoodsReceiptNotes
+          <InwardManagement
             filterState={grnFilterState}
             onFilterChange={setGrnFilterState}
           />

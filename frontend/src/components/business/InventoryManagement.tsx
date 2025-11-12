@@ -4,6 +4,7 @@ import {
   InventoryItem
 } from '../../data/inventoryMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './InventoryManagement.module.css';
 
 interface InventoryManagementProps {
@@ -18,6 +19,9 @@ const InventoryManagement = ({
   
   // Use card expansion hook for consistent single-card expansion behavior
   const { toggleExpansion, isExpanded } = useCardExpansion();
+  
+  // Get terminology for local language support
+  const { customer: party, orders: jobOrders } = useTerminologyTerms();
   
   // Filter inventory based on filter state
   const filteredInventory = useMemo(() => {
@@ -45,9 +49,9 @@ const InventoryManagement = ({
     }
   };
 
-  // Get ownership display
+  // Get ownership display using local terminology
   const getOwnershipDisplay = (item: InventoryItem) => {
-    return item.materialOwnership === 'company' ? '🏢 Company' : '👤 Client';
+    return item.materialOwnership === 'company' ? '🏢 Company' : `👤 ${party}`;
   };
 
   // Get category icon
@@ -96,7 +100,7 @@ const InventoryManagement = ({
   };
 
   const handleViewJobOrder = (jobOrderId: string) => {
-    alert(`🔍 Navigate to Job Order ${jobOrderId} - Functionality coming soon!`);
+    alert(`🔍 Navigate to ${jobOrders.slice(0, -1)} ${jobOrderId} - Functionality coming soon!`);
   };
 
   // Calculate inventory summary for alert header
@@ -218,10 +222,10 @@ const InventoryManagement = ({
                         {/* Client Information Card (Client Materials Only) */}
                         {item.materialOwnership === 'client' && (
                           <div className={styles.contextCard}>
-                            <div className={styles.contextHeader}>👤 Client Material Information</div>
+                            <div className={styles.contextHeader}>👤 {party} Material Information</div>
                             <div className={styles.contextContent}>
-                              <div><strong>Client ID:</strong> {item.clientId}</div>
-                              {item.jobOrderId && <div><strong>Job Order:</strong> {item.jobOrderId}</div>}
+                              <div><strong>{party} ID:</strong> {item.clientId}</div>
+                              {item.jobOrderId && <div><strong>{jobOrders.slice(0, -1)}:</strong> {item.jobOrderId}</div>}
                               {item.lastReceivedDate && <div><strong>Received:</strong> {formatDate(item.lastReceivedDate)}</div>}
                             </div>
                           </div>
@@ -273,13 +277,13 @@ const InventoryManagement = ({
                           </button>
                         )}
                         
-                        {/* Client material specific actions */}
+                        {/* Party material specific actions */}
                         {item.materialOwnership === 'client' && item.jobOrderId && (
                           <button 
                             className="ds-btn ds-btn-secondary"
                             onClick={() => handleViewJobOrder(item.jobOrderId!)}
                           >
-                            🔍 View Job Order
+                            🔍 View {jobOrders.slice(0, -1)}
                           </button>
                         )}
                       </div>

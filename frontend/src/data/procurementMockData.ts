@@ -69,6 +69,40 @@ export interface InwardEntry {
   notes?: string;
 }
 
+// ==================== UNIFIED INWARD INTERFACE ====================
+
+// Unified interface for displaying both GRN and Inward entries in same list
+export interface UnifiedInwardEntry {
+  id: string;
+  entryType: 'grn' | 'inward';
+  receiptDate: string;
+  materialName: string;
+  receivedQuantity: number;
+  unit: string;
+  qualityStatus: 'pending' | 'approved' | 'rejected';
+  receivedBy: string;
+  customerName?: string;
+  supplierName?: string;
+  
+  // For GRN entries (supplier materials via PO)
+  poId?: string;
+  materialValue?: number;
+  orderedQuantity?: number;
+  inspectionDate?: string;
+  inspectedBy?: string;
+  qualityDeadline?: string;
+  
+  // For Inward entries (customer materials via JO)
+  jobOrderId?: string;
+  customerId?: string;
+  materialType?: string;
+  challanNumber?: string;
+  qualityAssessment?: string;
+  challanPhoto?: string;
+  
+  notes?: string;
+}
+
 // ==================== CONSOLIDATED INTERFACES (PHASE 3) ====================
 
 export interface MaterialItem {
@@ -998,4 +1032,63 @@ export const updateInwardEntry = (id: string, updates: Partial<InwardEntry>): In
   
   mockInwardEntries[index] = { ...mockInwardEntries[index], ...updates };
   return mockInwardEntries[index];
+};
+
+// ==================== UNIFIED INWARD DATA FUNCTIONS ====================
+
+// Create unified list combining GRN and Inward entries for mixed display
+export const getUnifiedInwardEntries = (): UnifiedInwardEntry[] => {
+  // Convert GRN entries to unified format
+  const grnEntries: UnifiedInwardEntry[] = mockGoodsReceiptNotes.map(grn => ({
+    id: grn.id,
+    entryType: 'grn' as const,
+    receiptDate: grn.receiptDate,
+    materialName: grn.materialName,
+    receivedQuantity: grn.receivedQuantity,
+    unit: grn.unit,
+    qualityStatus: grn.qualityStatus,
+    receivedBy: grn.receivedBy,
+    supplierName: grn.supplierName,
+    // Note: customerName excluded for GRN - company supply doesn't need customer context
+    // GRN specific fields
+    poId: grn.poId,
+    materialValue: grn.materialValue,
+    orderedQuantity: grn.orderedQuantity,
+    inspectionDate: grn.inspectionDate,
+    inspectedBy: grn.inspectedBy,
+    qualityDeadline: grn.qualityDeadline,
+    notes: grn.notes
+  }));
+
+  // Convert Inward entries to unified format  
+  const inwardEntries: UnifiedInwardEntry[] = mockInwardEntries.map(entry => ({
+    id: entry.id,
+    entryType: 'inward' as const,
+    receiptDate: entry.receivedDate,
+    materialName: entry.materialType,
+    receivedQuantity: entry.receivedQuantity,
+    unit: entry.unit,
+    qualityStatus: entry.qualityAssessment?.toLowerCase().includes('reject') ? 'rejected' as const :
+                   entry.inspectionDate ? 'approved' as const : 'pending' as const,
+    receivedBy: entry.receivedBy,
+    customerName: entry.customerName,
+    // Inward specific fields
+    jobOrderId: entry.jobOrderId,
+    customerId: entry.customerId,
+    materialType: entry.materialType,
+    challanNumber: entry.challanNumber,
+    qualityAssessment: entry.qualityAssessment,
+    challanPhoto: entry.challanPhoto,
+    notes: entry.notes
+  }));
+
+  // Combine and sort by receipt date (most recent first)
+  const unified = [...grnEntries, ...inwardEntries];
+  return unified.sort((a, b) => new Date(b.receiptDate).getTime() - new Date(a.receiptDate).getTime());
+};
+
+// Filter unified entries by status
+export const filterUnifiedInwardEntries = (entries: UnifiedInwardEntry[], filterState: string): UnifiedInwardEntry[] => {
+  if (filterState === 'all') return entries;
+  return entries.filter(entry => entry.qualityStatus === filterState);
 };

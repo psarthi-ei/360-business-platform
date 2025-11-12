@@ -501,20 +501,39 @@ export const getOnHandStock = (materialName: string): number => {
 /**
  * Filter inventory by various criteria
  */
+// Get only job work related materials (materials with jobOrderId or company materials for processing)
+export const getJobWorkMaterials = (): InventoryItem[] => {
+  return mockInventory.filter(item => 
+    // Client materials with job order ID (materials brought by customers for processing)
+    (item.materialOwnership === 'client' && item.jobOrderId) ||
+    // Company materials used in job processing (chemicals and threads only)
+    (item.materialOwnership === 'company' && (
+      item.category === 'chemicals' || 
+      item.category === 'threads'
+    ))
+  );
+};
+
 export const filterInventory = (filter: string): InventoryItem[] => {
+  // Base inventory is now only job work materials
+  const jobWorkMaterials = getJobWorkMaterials();
+  
   switch(filter) {
     case 'all':
-      return mockInventory;
+      return jobWorkMaterials;
     case 'company':
-      return mockInventory.filter(item => item.materialOwnership === 'company');
-    case 'client':
-      return mockInventory.filter(item => item.materialOwnership === 'client');
+      return jobWorkMaterials.filter(item => item.materialOwnership === 'company');
+    case 'party':  // Using 'party' instead of 'client' for local terminology
+      return jobWorkMaterials.filter(item => item.materialOwnership === 'client');
     case 'lowstock':
-      return mockInventory.filter(item => item.stockStatus === 'low' || item.stockStatus === 'critical');
+      return jobWorkMaterials.filter(item => item.stockStatus === 'low' || item.stockStatus === 'critical');
     case 'expiring':
-      return getExpiringChemicals();
+      return getExpiringChemicals().filter(item => 
+        // Only show expiring items that are part of job work materials
+        jobWorkMaterials.some(jobItem => jobItem.materialName === item.materialName)
+      );
     default:
-      return mockInventory;
+      return jobWorkMaterials;
   }
 };
 

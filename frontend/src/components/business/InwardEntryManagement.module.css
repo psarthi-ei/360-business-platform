@@ -1,0 +1,181 @@
+/* ===== EXPANDED SECTION STYLES - Following DS Standard ===== */
+.expandedSection {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-top: 2px solid #1D4ED8;
+  border-radius: 0 0 8px 8px;
+  padding: var(--ds-space-lg);
+  margin-top: 0;
+}
+
+/* Section Headers */
+.sectionHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.sectionTitle {
+  font-size: var(--font-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--ds-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  text-align: left;
+}
+
+.sectionIcon {
+  font-size: var(--font-lg);
+}
+
+/* Business Information Grids */
+.materialInfoSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.materialInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+.businessContextSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.businessContextGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+.qualityInfoSection {
+  margin-bottom: var(--ds-space-lg);
+}
+
+.qualityInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-md);
+}
+
+/* Detail Cards - Left Aligned */
+.detailCard {
+  background: var(--ds-bg-primary);
+  border: 1px solid #E5E7EB;
+  border-radius: var(--border-radius-md);
+  padding: var(--ds-space-md);
+  text-align: left;
+}
+
+.detailCard p {
+  margin: 0 0 var(--ds-space-sm) 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  text-align: left;
+}
+
+.detailCard p:last-child {
+  margin-bottom: 0;
+}
+
+.detailCard strong {
+  color: var(--ds-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-right: var(--ds-space-xs);
+}
+
+/* Enhanced Action Buttons - Following Lead Standard */
+.expandedActions {
+  display: flex;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-xl);
+  padding-top: var(--ds-space-lg);
+  border-top: 2px solid var(--ds-border-subtle);
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.expandedActions .ds-btn {
+  min-height: var(--ds-touch-target-md) !important;
+  padding: var(--ds-space-sm) var(--ds-space-md) !important;
+  font-size: var(--font-sm) !important;
+  font-weight: var(--ds-font-weight-semibold) !important;
+  border-radius: var(--ds-radius-md) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--ds-space-xs) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.expandedActions .ds-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Status Grid - Left Aligned */
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.statusGrid p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-subtle);
+  border-radius: var(--ds-radius-sm);
+  border-left: 3px solid var(--ds-border-accent);
+  text-align: left;
+}
+
+.statusGrid p strong {
+  color: var(--ds-text-secondary);
+  font-weight: var(--ds-font-weight-medium);
+  margin-right: var(--ds-space-xs);
+}
+
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .expandedSection {
+    padding: var(--ds-space-md);
+  }
+  
+  .materialInfoGrid,
+  .businessContextGrid,
+  .qualityInfoGrid {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+  
+  .statusGrid {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-sm);
+  }
+  
+  .expandedActions {
+    gap: var(--ds-space-xs);
+  }
+  
+  .expandedActions .ds-btn {
+    flex: 1;
+    min-width: calc(50% - var(--ds-space-xs));
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-sm);
+  }
+}

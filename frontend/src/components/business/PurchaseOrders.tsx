@@ -32,9 +32,6 @@ const PurchaseOrders = ({
     alert(`${action} action for PO ${poId} - Mock functionality`);
   };
 
-  const handleViewPR = (consolidatedPrId: string) => {
-    alert(`🔍 Navigating to Purchase Request: ${consolidatedPrId}`);
-  };
   
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -72,13 +69,6 @@ const PurchaseOrders = ({
     return { icon: '📋', label: 'Unknown', className: 'default' };
   };
 
-  // Get order value percentage for business context
-  const getOrderValuePercentage = (po: typeof mockPurchaseOrders[0]) => {
-    // Calculate based on customer's total order value (mock calculation)
-    const totalOrderValue = po.totalAmount * 2.1; // Estimate total order as 2.1x this PO
-    const percentage = Math.round((po.totalAmount / totalOrderValue) * 100);
-    return `${percentage}% of total order`;
-  };
 
 
   // Calculate open orders for alert header
@@ -97,7 +87,6 @@ const PurchaseOrders = ({
         <div className={styles.poContainer}>
           {filteredPOs.map(po => {
             const statusInfo = getStatusWithUrgency(po);
-            const orderPercentage = getOrderValuePercentage(po);
 
             return (
               <div key={po.id} className="ds-card-container" data-po-id={po.id}>
@@ -106,12 +95,12 @@ const PurchaseOrders = ({
                   className={`ds-card ${po.status === 'delivered' ? 'ds-card-status-active' : statusInfo.className === 'urgent' ? 'ds-card-status-urgent' : 'ds-card-status-pending'} ${isExpanded(po.id) ? 'ds-card-expanded' : ''}`}
                   onClick={() => toggleDetails(po.id)}
                 >
-                  {/* Header - Customer & Material Focus */}
+                  {/* Header - Company Supply & Material Focus */}
                   <div 
                     className="ds-card-header"
-                    title={`${po.customerName} Order ${po.salesOrderId} - ${po.materialName} from ${po.supplierName}`}
+                    title={`Company Supply: ${po.materialName} from ${po.supplierName} - PO ${po.id}`}
                   >
-                    {po.customerName} — {po.materialName}
+                    {po.materialName} — {po.supplierName}
                   </div>
                   
                   {/* Status - Urgency & Delivery Context */}
@@ -119,13 +108,13 @@ const PurchaseOrders = ({
                     {statusInfo.icon} {statusInfo.label}
                   </div>
                   
-                  {/* Meta - Financial Priority & Business Context */}
+                  {/* Meta - Financial Priority & Company Supply Context */}
                   <div 
                     className="ds-card-meta"
-                    title={`₹${po.totalAmount.toLocaleString()} from ${po.supplierName} • ${po.quantity}${po.unit} • ${orderPercentage}`}
+                    title={`Company Supply: ₹${po.totalAmount.toLocaleString()} from ${po.supplierName} • ${po.quantity}${po.unit} • PO ${po.id}`}
                   >
                     ₹{po.totalAmount.toLocaleString()} • {po.supplierName} • {po.quantity}{po.unit}<br />
-                    Order {po.salesOrderId} • {orderPercentage}
+                    Company Supply • {po.id}
                   </div>
 
                   {/* Expand Indicator */}
@@ -140,11 +129,11 @@ const PurchaseOrders = ({
                     <div className="ds-details-content">
                       <h4>📋 Purchase Order Analysis</h4>
                       
-                      {/* Section 1: Business Metrics Grid */}
+                      {/* Section 1: Company Supply Metrics Grid */}
                       <div className={styles.businessMetrics}>
                         <div className={styles.metricCard}>
-                          <span className={styles.metricLabel}>Order Impact</span>
-                          <span className={styles.metricValue}>{getOrderValuePercentage(po)}</span>
+                          <span className={styles.metricLabel}>Supply Type</span>
+                          <span className={styles.metricValue}>Company Materials</span>
                         </div>
                         <div className={styles.metricCard}>
                           <span className={styles.metricLabel}>Financial Value</span>
@@ -190,17 +179,16 @@ const PurchaseOrders = ({
                             <div>Total Value: ₹{po.totalAmount.toLocaleString()}</div>
                             <div>Unit Price: ₹{po.unitPrice.toLocaleString()}/{po.unit}</div>
                             <div>Quantity: {po.quantity}{po.unit}</div>
-                            <div>Order: {po.salesOrderId} • PR: {po.consolidatedPrId}</div>
                           </div>
                         </div>
                         
                         <div className={styles.contextCard}>
-                          <div className={styles.contextHeader}>🏭 Supplier Details</div>
+                          <div className={styles.contextHeader}>🏭 Company Supply Details</div>
                           <div className={styles.contextContent}>
-                            <div>Name: {po.supplierName}</div>
-                            <div>ID: {po.supplierId}</div>
+                            <div>Supplier: {po.supplierName}</div>
+                            <div>Supplier ID: {po.supplierId}</div>
                             <div>Material: {po.materialName}</div>
-                            <div>Status: {getStatusWithUrgency(po).label}</div>
+                            <div>Supply Status: {getStatusWithUrgency(po).label}</div>
                           </div>
                         </div>
                       </div>
@@ -209,13 +197,6 @@ const PurchaseOrders = ({
                     {/* Internal Workflow Actions - Only visible when expanded */}
                     <div className={styles.cardActions}>
                       <div className={styles.actionButtons}>
-                        {/* Universal cross-navigation button */}
-                        <button 
-                          className="ds-btn ds-btn-secondary"
-                          onClick={() => handleViewPR(po.consolidatedPrId)}
-                        >
-                          📋 View PR
-                        </button>
                         
                         {po.status === 'open' && (
                           <>
@@ -224,12 +205,6 @@ const PurchaseOrders = ({
                               onClick={() => handlePOAction('contact-supplier', po.id)}
                             >
                               📞 Contact Supplier
-                            </button>
-                            <button 
-                              className="ds-btn ds-btn-secondary"
-                              onClick={() => handlePOAction('track-order', po.id)}
-                            >
-                              📋 Track Order
                             </button>
                             <button 
                               className="ds-btn ds-btn-danger"

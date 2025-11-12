@@ -15,7 +15,7 @@ const GoodsReceiptNotes = ({
 }: GoodsReceiptNotesProps) => {
   
   // Use terminology hook for Surat processing terminology
-  const { goodsReceiptNote } = useTerminologyTerms();
+  const { goodsReceiptNote, customer: party } = useTerminologyTerms();
   
   // Use card expansion hook for consistent single-card expansion behavior
   const { toggleExpansion, isExpanded } = useCardExpansion();
@@ -36,19 +36,16 @@ const GoodsReceiptNotes = ({
     alert(`${action} action for ${goodsReceiptNote} ${grnId} - Mock functionality`);
   };
 
-  // Customer fabric tracking for Surat job work model - TODO: implement
-  // const handleCustomerFabricReceipt = (customerId: string, challanPhoto?: string) => {
-  //   // Track party fabric inward with photo verification
-  //   alert(`Recording customer fabric receipt from Party ID: ${customerId}${challanPhoto ? ' with photo verification' : ''}`);
-  // };
+  // Print GRN functionality - only applicable for GRN entries
+  const handlePrintGRN = (grnId: string) => {
+    alert(`🖨️ Print ${goodsReceiptNote} ${grnId} - Functionality coming soon!`);
+  };
 
   const handleViewPO = (poId: string) => {
     alert(`🔍 Navigating to Purchase Order: ${poId}`);
   };
 
-  const handleViewPR = (consolidatedPrId: string) => {
-    alert(`🔍 Navigating to Purchase Request: ${consolidatedPrId}`);
-  };
+  // Removed PR concept - no longer used in business flow
   
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -147,9 +144,9 @@ const GoodsReceiptNotes = ({
                   {/* Header - Customer & Material Focus */}
                   <div 
                     className="ds-card-header"
-                    title={`${grn.customerName} Order ${grn.salesOrderId} - ${grn.materialName} from ${grn.supplierName}`}
+                    title={`${party} ${grn.customerName} Order ${grn.salesOrderId} - ${grn.materialName} from ${grn.supplierName}`}
                   >
-                    {grn.customerName} — {grn.materialName}
+                    {party} {grn.customerName} — {grn.materialName}
                   </div>
                   
                   {/* Status - Quality & Delivery Context */}
@@ -224,7 +221,7 @@ const GoodsReceiptNotes = ({
                         <div className={styles.contextCard}>
                           <div className={styles.contextHeader}>🏭 Supply Chain Details</div>
                           <div className={styles.contextContent}>
-                            <div>Customer: {grn.customerName}</div>
+                            <div>{party}: {grn.customerName}</div>
                             <div>Supplier: {grn.supplierName}</div>
                             <div>Material: {grn.materialName}</div>
                             <div>Order: {grn.salesOrderId}</div>
@@ -251,9 +248,9 @@ const GoodsReceiptNotes = ({
                         </button>
                         <button 
                           className="ds-btn ds-btn-secondary"
-                          onClick={() => handleViewPR(grn.consolidatedPrId)}
+                          onClick={() => handlePrintGRN(grn.id)}
                         >
-                          📋 View PR
+                          🖨️ Print {goodsReceiptNote}
                         </button>
                         
                         {grn.qualityStatus === 'pending' && (

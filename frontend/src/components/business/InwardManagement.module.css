@@ -1,0 +1,57 @@
+.inwardManagement {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.subTabNavigation {
+  display: flex;
+  gap: var(--ds-space-xs);
+  margin-bottom: var(--ds-space-md);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.subTabButton {
+  flex: 1;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-size: var(--font-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--ds-touch-target-sm);
+}
+
+.subTabButton:hover {
+  background: var(--ds-bg-tertiary);
+  color: var(--ds-text-primary);
+}
+
+.subTabButton.active {
+  background: var(--ds-color-primary);
+  color: var(--ds-text-inverse);
+  font-weight: var(--font-weight-semibold);
+}
+
+.subTabContent {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .subTabNavigation {
+    padding: var(--ds-space-xs);
+    gap: var(--ds-space-xs);
+  }
+  
+  .subTabButton {
+    padding: var(--ds-space-xs) var(--ds-space-sm);
+    font-size: var(--font-xs);
+  }
+}
