@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { useTerminologyTerms } from '../../contexts/TerminologyContext'; // TODO: implement terminology display
 import styles from './CustomerListManagement.module.css';
 import { mockBusinessProfiles, type BusinessProfile } from '../../data/customerMockData';
-import { mockSalesOrders, type SalesOrder } from '../../data/salesMockData';
+import { mockSalesOrders, type SalesOrder, mockLeads, mockJobOrders } from '../../data/salesMockData';
 import { getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, type AdvancePayment, type FinalPayment } from '../../data/salesMockData';
 
 interface CustomerListManagementProps {
@@ -21,6 +21,27 @@ interface CustomerMetrics {
   activeOrders: number;
 }
 
+// Helper function to check if a business profile has any business activity
+const hasBusinessActivity = (businessProfileId: string): boolean => {
+  // Check if profile has leads (quotes are generated from leads, so leads cover quotes)
+  const hasLeads = mockLeads.some(lead => lead.businessProfileId === businessProfileId);
+  
+  // Check if profile has job orders (can exist independently without leads)
+  const hasJobOrders = mockJobOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  // Check if profile has sales orders (currently empty but included for completeness)
+  const hasSalesOrders = mockSalesOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  return hasLeads || hasJobOrders || hasSalesOrders;
+};
+
+// Unified helper to get all customer orders (sales + job orders)
+const getAllCustomerOrders = (customerId: string): SalesOrder[] => {
+  const salesOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+  const jobOrders = mockJobOrders.filter(order => order.businessProfileId === customerId);
+  return [...salesOrders, ...jobOrders] as SalesOrder[];
+};
+
 const CustomerListManagement = ({ 
   mobile, 
   onShowCustomerProfile, 
@@ -32,7 +53,8 @@ const CustomerListManagement = ({
   // const { customer, customers: customersTerminology } = useTerminologyTerms(); // "Party", "Parties" - TODO: implement display terminology
   
   const [customers] = useState(mockBusinessProfiles.filter((bp: BusinessProfile) => 
-    bp.customerStatus === 'customer' || bp.customerStatus === 'prospect'
+    (bp.customerStatus === 'customer' || bp.customerStatus === 'prospect') && 
+    hasBusinessActivity(bp.id)
   ));
   const [customerMetrics, setCustomerMetrics] = useState<Record<string, CustomerMetrics>>({});
   
@@ -42,7 +64,7 @@ const CustomerListManagement = ({
     const metricsMap: Record<string, CustomerMetrics> = {};
     
     customers.forEach((customer: BusinessProfile) => {
-      const customerOrders = mockSalesOrders.filter((order: SalesOrder) => order.businessProfileId === customer.id);
+      const customerOrders = getAllCustomerOrders(customer.id); // Use unified helper for all orders
       const customerAdvancePayments = getAdvancePaymentsByCustomerId(customer.id);
       const customerFinalPayments = getFinalPaymentsByCustomerId(customer.id);
       
@@ -60,7 +82,7 @@ const CustomerListManagement = ({
         : 999;
       
       const activeOrders = customerOrders.filter((order: SalesOrder) => 
-        ['production_started', 'quality_check', 'production_completed'].includes(order.status)
+        ['production_started', 'quality_check', 'production_completed', 'in_process', 'ready_to_ship', 'order_confirmed', 'pending_materials', 'materials_pending', 'awaiting_client_materials', 'materials_acknowledged'].includes(order.status)
       ).length;
       
       metricsMap[customer.id] = {

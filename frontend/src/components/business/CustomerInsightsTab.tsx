@@ -1,5 +1,6 @@
 import React from 'react';
-import { mockSalesOrders, getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId } from '../../data/salesMockData';
+import { mockSalesOrders, getAdvancePaymentsByCustomerId, getFinalPaymentsByCustomerId, mockJobOrders } from '../../data/salesMockData';
+import type { SalesOrder } from '../../data/salesMockData';
 import { mockBusinessProfiles, BusinessProfile } from '../../data/customerMockData';
 import styles from './CustomerInsightsTab.module.css';
 
@@ -11,10 +12,17 @@ interface CustomerInsightsTabProps {
   creditStatus?: string;
 }
 
+// Unified helper to get all customer orders (sales + job orders)
+const getAllCustomerOrders = (customerId: string): SalesOrder[] => {
+  const salesOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+  const jobOrders = mockJobOrders.filter(order => order.businessProfileId === customerId);
+  return [...salesOrders, ...jobOrders] as SalesOrder[];
+};
+
 const CustomerInsightsTab = ({ customerId, customer: customerProp, loyaltyTier, paymentScore, creditStatus }: CustomerInsightsTabProps) => {
   // Get customer data
   const customer = customerProp || mockBusinessProfiles.find(bp => bp.id === customerId);
-  const customerOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+  const customerOrders = getAllCustomerOrders(customerId); // Use unified helper for all orders
   const customerAdvancePayments = getAdvancePaymentsByCustomerId(customerId);
   const customerFinalPayments = getFinalPaymentsByCustomerId(customerId);
 
@@ -29,7 +37,7 @@ const CustomerInsightsTab = ({ customerId, customer: customerProp, loyaltyTier, 
     const outstanding = totalOrderValue - totalPaid;
 
     const activeOrders = customerOrders.filter(order => 
-      ['production_started', 'quality_check', 'production_completed'].includes(order.status)
+      ['production_started', 'quality_check', 'production_completed', 'in_process', 'ready_to_ship', 'order_confirmed', 'materials_pending'].includes(order.status)
     ).length;
 
     const completedOrders = customerOrders.filter(order => order.status === 'delivered').length;

@@ -128,156 +128,156 @@ export const mockDrivers: Driver[] = [
 
 // Mock Delivery Items - Referenced to actual Work Orders (Lots)
 export const mockDeliveryItems: DeliveryItem[] = [
-  // Delivery Item for WO-2024-001-A (Navy Blue Dyeing - completed)
+  // Delivery Item for WO-2025-001-A (Navy Blue Dyeing - completed)
   {
-    id: 'DEL-2024-001-A',
-    workOrderId: 'WO-2024-001-A',
-    salesOrderId: 'JO-2024-001',
+    id: 'DEL-2025-001-A',
+    workOrderId: 'WO-2025-001-A',
+    salesOrderId: 'JO-2025-001',
     businessProfileId: 'bp-surat-processors',
     product: 'Navy Blue Reactive Dyeing - Lot A',
     customer: 'Surat Processors',
     quantity: '2000m',
     qcGrade: 'A Grade',
     status: 'ready_dispatch',
-    readyTime: '2024-10-17 14:30',
-    dueDate: '2024-10-20',
+    readyTime: '2025-10-17 14:30',
+    dueDate: '2025-10-20',
     
     // Logistics Details
     assignedVehicle: 'GJ-01-AB-1234',
     assignedDriver: 'Suresh Patel',
     driverPhone: '+91 98765 43210',
-    scheduledPickup: '2024-10-18 09:00',
-    scheduledDelivery: '2024-10-18 11:30',
+    scheduledPickup: '2025-10-18 09:00',
+    scheduledDelivery: '2025-10-18 11:30',
     
     priority: 'normal'
   },
   
-  // Delivery Item for WO-2024-002-A (Finishing - pending completion)
+  // Delivery Item for WO-2025-002-A (Finishing - pending completion)
   {
-    id: 'DEL-2024-002-A',
-    workOrderId: 'WO-2024-002-A',
-    salesOrderId: 'JO-2024-002',
+    id: 'DEL-2025-002-A',
+    workOrderId: 'WO-2025-002-A',
+    salesOrderId: 'JO-2025-002',
     businessProfileId: 'bp-ahmedabad-finishers',
     product: 'Softening & Anti-wrinkle Finishing - Lot A',
     customer: 'Ahmedabad Finishers',
     quantity: '1500m',
     qcGrade: 'Pending QC',
     status: 'ready_dispatch',
-    readyTime: '2024-10-18 16:00',
-    dueDate: '2024-10-22',
+    readyTime: '2025-10-18 16:00',
+    dueDate: '2025-10-22',
     
     priority: 'normal'
   },
   
-  // Delivery Items for WO-2024-003-A (Red Printing Lot)
+  // Delivery Items for WO-2025-003-A (Red Printing Lot)
   {
-    id: 'DEL-2024-003-A',
-    workOrderId: 'WO-2024-003-A',
-    salesOrderId: 'JO-2024-003',
+    id: 'DEL-2025-003-A',
+    workOrderId: 'WO-2025-003-A',
+    salesOrderId: 'JO-2025-003',
     businessProfileId: 'bp-mumbai-printers',
     product: 'Multi-color Printing - Red Lot A',
     customer: 'Mumbai Printers',
     quantity: '750m',
     qcGrade: 'A Grade',
     status: 'delivery_scheduled',
-    readyTime: '2024-10-18 12:00',
-    dueDate: '2024-10-25',
+    readyTime: '2025-10-18 12:00',
+    dueDate: '2025-10-25',
     
     // Logistics Details
     assignedVehicle: 'GJ-02-CD-5678',
     assignedDriver: 'Ramesh Shah',
     driverPhone: '+91 98765 43211',
-    scheduledPickup: '2024-10-19 08:00',
-    scheduledDelivery: '2024-10-19 14:00',
+    scheduledPickup: '2025-10-19 08:00',
+    scheduledDelivery: '2025-10-19 14:00',
     
     // Tracking Information
     trackingInfo: {
       currentLocation: 'Surat Warehouse',
       distanceRemaining: '280 km',
-      lastUpdated: '2024-10-19 06:30',
+      lastUpdated: '2025-10-19 06:30',
       route: 'Surat → Vapi → Mumbai',
       speed: '65 km/h',
-      eta: '2024-10-19 13:45'
+      eta: '2025-10-19 13:45'
     },
     
     priority: 'high'
   },
   
-  // Delivery Items for WO-2024-003-B (Blue Printing Lot)
+  // Delivery Items for WO-2025-003-B (Blue Printing Lot)
   {
-    id: 'DEL-2024-003-B',
-    workOrderId: 'WO-2024-003-B',
-    salesOrderId: 'JO-2024-003',
+    id: 'DEL-2025-003-B',
+    workOrderId: 'WO-2025-003-B',
+    salesOrderId: 'JO-2025-003',
     businessProfileId: 'bp-mumbai-printers',
     product: 'Multi-color Printing - Blue Lot B',
     customer: 'Mumbai Printers',
     quantity: '750m',
     qcGrade: 'A Grade',
     status: 'ready_dispatch',
-    readyTime: '2024-10-18 14:00',
-    dueDate: '2024-10-25',
+    readyTime: '2025-10-18 14:00',
+    dueDate: '2025-10-25',
     
     priority: 'normal'
   },
   
-  // Delivery Items for WO-2024-003-C (Green Printing Lot)
+  // Delivery Items for WO-2025-003-C (Green Printing Lot)
   {
-    id: 'DEL-2024-003-C',
-    workOrderId: 'WO-2024-003-C',
-    salesOrderId: 'JO-2024-003',
+    id: 'DEL-2025-003-C',
+    workOrderId: 'WO-2025-003-C',
+    salesOrderId: 'JO-2025-003',
     businessProfileId: 'bp-mumbai-printers',
     product: 'Multi-color Printing - Green Lot C',
     customer: 'Mumbai Printers',
     quantity: '750m',
     qcGrade: 'B Grade',
     status: 'dispatched',
-    readyTime: '2024-10-17 16:00',
-    dueDate: '2024-10-25',
+    readyTime: '2025-10-17 16:00',
+    dueDate: '2025-10-25',
     
     // Logistics Details
     assignedVehicle: 'GJ-03-EF-9012',
     assignedDriver: 'Kiran Modi',
     driverPhone: '+91 98765 43212',
-    scheduledPickup: '2024-10-18 07:00',
-    scheduledDelivery: '2024-10-18 13:00',
-    actualDispatch: '2024-10-18 07:15',
-    estimatedDelivery: '2024-10-18 13:30',
+    scheduledPickup: '2025-10-18 07:00',
+    scheduledDelivery: '2025-10-18 13:00',
+    actualDispatch: '2025-10-18 07:15',
+    estimatedDelivery: '2025-10-18 13:30',
     
     // Tracking Information
     trackingInfo: {
       currentLocation: 'Vapi Toll Plaza',
       distanceRemaining: '180 km',
-      lastUpdated: '2024-10-18 10:15',
+      lastUpdated: '2025-10-18 10:15',
       route: 'Surat → Vapi → Mumbai',
       speed: '70 km/h',
-      eta: '2024-10-18 13:20'
+      eta: '2025-10-18 13:20'
     },
     
     priority: 'normal'
   },
   
-  // Delivery Items for WO-2024-003-D (Yellow Printing Lot)
+  // Delivery Items for WO-2025-003-D (Yellow Printing Lot)
   {
-    id: 'DEL-2024-003-D',
-    workOrderId: 'WO-2024-003-D',
-    salesOrderId: 'JO-2024-003',
+    id: 'DEL-2025-003-D',
+    workOrderId: 'WO-2025-003-D',
+    salesOrderId: 'JO-2025-003',
     businessProfileId: 'bp-mumbai-printers',
     product: 'Multi-color Printing - Yellow Lot D',
     customer: 'Mumbai Printers',
     quantity: '750m',
     qcGrade: 'A Grade',
     status: 'delivered',
-    readyTime: '2024-10-16 18:00',
-    dueDate: '2024-10-25',
+    readyTime: '2025-10-16 18:00',
+    dueDate: '2025-10-25',
     
     // Logistics Details
     assignedVehicle: 'GJ-01-AB-1234',
     assignedDriver: 'Suresh Patel',
     driverPhone: '+91 98765 43210',
-    scheduledPickup: '2024-10-17 08:00',
-    scheduledDelivery: '2024-10-17 14:00',
-    actualDispatch: '2024-10-17 08:10',
-    actualDelivery: '2024-10-17 14:15',
+    scheduledPickup: '2025-10-17 08:00',
+    scheduledDelivery: '2025-10-17 14:00',
+    actualDispatch: '2025-10-17 08:10',
+    actualDelivery: '2025-10-17 14:15',
     
     // Delivery Proof
     deliveryProof: {

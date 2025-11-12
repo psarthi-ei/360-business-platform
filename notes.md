@@ -14,6 +14,7 @@
 5. Need to change Final Invoice name to Sales Invoice
 6. we have done hard coding or !important in index.css file
 7. when we go to any new tab, it should start from top and not in between
+8. We need to delete not active business profile from the mock data
 
 
 

@@ -208,12 +208,12 @@ export const masterCatalogItems: MasterItem[] = [
     },
     pricing: {
       salesOrderPricing: [
-        { baseRate: 85, unit: 'per_meter', minimumQuantity: 50, maximumQuantity: 499, currency: 'INR', effectiveDate: '2024-01-01' },
-        { baseRate: 78, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 85, unit: 'per_meter', minimumQuantity: 50, maximumQuantity: 499, currency: 'INR', effectiveDate: '2025-01-01' },
+        { baseRate: 78, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       jobWorkPricing: [
-        { baseRate: 65, unit: 'per_meter', minimumQuantity: 50, maximumQuantity: 499, currency: 'INR', effectiveDate: '2024-01-01' },
-        { baseRate: 58, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 65, unit: 'per_meter', minimumQuantity: 50, maximumQuantity: 499, currency: 'INR', effectiveDate: '2025-01-01' },
+        { baseRate: 58, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       volumeDiscounts: [
         { thresholdQuantity: 500, discountPercentage: 8, businessModel: 'both' },
@@ -222,8 +222,8 @@ export const masterCatalogItems: MasterItem[] = [
       ]
     },
     metadata: {
-      createdDate: '2024-01-01',
-      lastUpdated: '2024-01-12',
+      createdDate: '2025-01-01',
+      lastUpdated: '2025-01-12',
       createdBy: 'system',
       tags: ['dyeing', 'reactive', 'standard', 'service', 'cotton', 'color']
     }
@@ -259,12 +259,12 @@ export const masterCatalogItems: MasterItem[] = [
     },
     pricing: {
       salesOrderPricing: [
-        { baseRate: 145, unit: 'per_meter', minimumQuantity: 100, maximumQuantity: 499, currency: 'INR', effectiveDate: '2024-01-01' },
-        { baseRate: 135, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 145, unit: 'per_meter', minimumQuantity: 100, maximumQuantity: 499, currency: 'INR', effectiveDate: '2025-01-01' },
+        { baseRate: 135, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       jobWorkPricing: [
-        { baseRate: 120, unit: 'per_meter', minimumQuantity: 100, maximumQuantity: 499, currency: 'INR', effectiveDate: '2024-01-01' },
-        { baseRate: 110, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 120, unit: 'per_meter', minimumQuantity: 100, maximumQuantity: 499, currency: 'INR', effectiveDate: '2025-01-01' },
+        { baseRate: 110, unit: 'per_meter', minimumQuantity: 500, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       volumeDiscounts: [
         { thresholdQuantity: 750, discountPercentage: 6, businessModel: 'both' },
@@ -272,8 +272,8 @@ export const masterCatalogItems: MasterItem[] = [
       ]
     },
     metadata: {
-      createdDate: '2024-01-01',
-      lastUpdated: '2024-01-12',
+      createdDate: '2025-01-01',
+      lastUpdated: '2025-01-12',
       createdBy: 'system',
       tags: ['dyeing', 'reactive', 'premium', 'service', 'custom', 'high-fastness']
     }
@@ -308,10 +308,10 @@ export const masterCatalogItems: MasterItem[] = [
     },
     pricing: {
       salesOrderPricing: [
-        { baseRate: 35, unit: 'per_meter', minimumQuantity: 100, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 35, unit: 'per_meter', minimumQuantity: 100, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       jobWorkPricing: [
-        { baseRate: 28, unit: 'per_meter', minimumQuantity: 100, currency: 'INR', effectiveDate: '2024-01-01' }
+        { baseRate: 28, unit: 'per_meter', minimumQuantity: 100, currency: 'INR', effectiveDate: '2025-01-01' }
       ],
       volumeDiscounts: [
         { thresholdQuantity: 1000, discountPercentage: 8, businessModel: 'both' },
@@ -319,8 +319,8 @@ export const masterCatalogItems: MasterItem[] = [
       ]
     },
     metadata: {
-      createdDate: '2024-01-01',
-      lastUpdated: '2024-01-10',
+      createdDate: '2025-01-01',
+      lastUpdated: '2025-01-10',
       createdBy: 'system',
       tags: ['finishing', 'calendering', 'standard', 'service', 'luster', 'smooth']
     }

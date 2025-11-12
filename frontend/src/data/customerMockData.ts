@@ -1333,7 +1333,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     points: 150,
     source: 'feedback',
     description: 'Points earned for 5-star feedback on SO-004',
-    relatedOrderId: 'SO-004',
+    relatedOrderId: 'JO-2025-004',
     relatedFeedbackId: 'CF-2025-001'
   },
   {
@@ -1354,7 +1354,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     points: 110,
     source: 'feedback',
     description: 'Points earned for 4-star feedback on SO-002',
-    relatedOrderId: 'SO-002',
+    relatedOrderId: 'JO-2025-002',
     relatedFeedbackId: 'CF-2025-002'
   },
   {
@@ -1375,7 +1375,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     points: 100,
     source: 'feedback',
     description: 'Points earned for feedback on SO-001 (export quality)',
-    relatedOrderId: 'SO-001',
+    relatedOrderId: 'JO-2025-001',
     relatedFeedbackId: 'CF-2025-003'
   },
   {
@@ -1386,7 +1386,7 @@ export const mockLoyaltyTransactions: LoyaltyTransaction[] = [
     points: 85,
     source: 'feedback',
     description: 'Welcome bonus + feedback points for first order SO-003',
-    relatedOrderId: 'SO-003',
+    relatedOrderId: 'JO-2025-003',
     relatedFeedbackId: 'CF-2025-004'
   },
   {
@@ -1600,16 +1600,16 @@ export const getTopPerformingCustomers = (limit: number = 5): BusinessProfile[] 
 export const mockSupportTickets: SupportTicket[] = [
   {
     id: 'ST-001',
-    businessProfileId: 'bp-gujarat-garments',
-    title: 'Quality issue with fabric batch GJ-2025-03',
-    description: 'Received fabric has inconsistent thread count in approximately 200 yards. Some sections are looser than specified standards.',
+    businessProfileId: 'bp-surat-processors',
+    title: 'Dyeing color mismatch in Job Order JO-2025-001',
+    description: 'Navy blue dyeing result does not match the approved shade card. Color appears darker than required specification. Client materials affected: 2000 meters.',
     category: 'quality_issue',
     priority: 'high',
     status: 'in_progress',
-    createdDate: '2025-03-20',
-    updatedDate: '2025-03-22',
-    assignedTo: 'Quality Control Team',
-    relatedOrderId: 'SO-001',
+    createdDate: '2025-10-16',
+    updatedDate: '2025-10-18',
+    assignedTo: 'Dyeing Quality Team',
+    relatedOrderId: 'JO-2025-001',
     internalNotes: [
       'Quality team has examined the batch',
       'Replacement fabric being prepared',
@@ -1618,19 +1618,19 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: 'ST-002',
-    businessProfileId: 'bp-gujarat-garments',
-    title: 'Delivery delay notification needed',
-    description: 'Order SO-002 delivery might be delayed by 3-4 days due to raw material shortage. Need to inform customer and get approval.',
+    businessProfileId: 'bp-ahmedabad-finishers',
+    title: 'Client material quality approval delay for JO-2025-002',
+    description: 'Finishing service cannot commence as client material quality approval is pending. Material received 3 days ago but awaiting client quality sign-off.',
     category: 'delivery_delay',
     priority: 'medium',
     status: 'resolved',
-    createdDate: '2025-03-15',
-    updatedDate: '2025-03-16',
-    resolvedDate: '2025-03-16',
-    assignedTo: 'Customer Relations',
-    resolution: 'Customer contacted and agreed to revised timeline. Compensation offered in form of 2% discount on next order.',
+    createdDate: '2025-10-19',
+    updatedDate: '2025-10-21',
+    resolvedDate: '2025-10-21',
+    assignedTo: 'Client Coordination Team',
+    resolution: 'Client provided quality approval. Finishing process started with expedited timeline to recover lost time.',
     customerSatisfaction: 4,
-    relatedOrderId: 'SO-002'
+    relatedOrderId: 'JO-2025-002'
   },
   {
     id: 'ST-003',
@@ -1662,16 +1662,16 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: 'ST-005',
-    businessProfileId: 'bp-gujarat-garments',
-    title: 'Order customization request',
-    description: 'Customer wants to modify fabric weight from 200 GSM to 220 GSM for order SO-003. Already in production.',
+    businessProfileId: 'bp-mumbai-printers',
+    title: 'Printing design modification request for JO-2025-003',
+    description: 'Client wants to modify print design color from red to burgundy for job order JO-2025-003. Printing already 30% completed.',
     category: 'technical_support',
     priority: 'medium',
     status: 'in_progress',
-    createdDate: '2025-04-02',
-    updatedDate: '2025-04-02',
-    assignedTo: 'Production Team',
-    relatedOrderId: 'SO-003',
+    createdDate: '2025-10-22',
+    updatedDate: '2025-10-23',
+    assignedTo: 'Printing Design Team',
+    relatedOrderId: 'JO-2025-003',
     internalNotes: [
       'Production team consulted',
       'Change possible but will add 2 days to timeline',
@@ -1680,15 +1680,53 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: 'ST-006',
-    businessProfileId: 'bp-baroda-fashion',
-    title: 'Bulk discount inquiry',
-    description: 'Customer planning large order for next quarter. Requesting volume pricing and terms for orders above ₹10L.',
-    category: 'general_inquiry',
+    businessProfileId: 'bp-rajkot-textiles',
+    title: 'Material receipt confirmation delay for JO-2025-004',
+    description: 'Client materials for weaving service received but quality inspection taking longer than expected. Delaying service commencement.',
+    category: 'delivery_delay',
     priority: 'medium',
     status: 'open',
-    createdDate: '2025-04-03',
-    updatedDate: '2025-04-03',
-    assignedTo: 'Sales Manager'
+    createdDate: '2025-11-11',
+    updatedDate: '2025-11-12',
+    assignedTo: 'Material Handling Team',
+    relatedOrderId: 'JO-2025-004'
+  },
+  {
+    id: 'ST-007',
+    businessProfileId: 'bp-vadodara-mills',
+    title: 'Weaving specification clarification needed for JO-2025-005',
+    description: 'Client fabric specifications unclear regarding thread density. Need confirmation before starting weaving process to avoid rework.',
+    category: 'technical_support',
+    priority: 'high',
+    status: 'open',
+    createdDate: '2025-11-08',
+    updatedDate: '2025-11-09',
+    assignedTo: 'Technical Specification Team',
+    relatedOrderId: 'JO-2025-005',
+    internalNotes: [
+      'Contacted client for clarification',
+      'Awaiting technical drawings from client',
+      'Production on hold until clarification received'
+    ]
+  },
+  {
+    id: 'ST-008',
+    businessProfileId: 'bp-bharuch-printers',
+    title: 'Printing equipment maintenance delay affecting JO-2025-006',
+    description: 'Primary printing machine under maintenance. Job order JO-2025-006 timeline may be impacted by 2-3 days.',
+    category: 'delivery_delay',
+    priority: 'urgent',
+    status: 'in_progress',
+    createdDate: '2025-11-12',
+    updatedDate: '2025-11-12',
+    assignedTo: 'Production Planning',
+    resolution: 'Alternative machine allocated. Timeline maintained with overtime shifts.',
+    relatedOrderId: 'JO-2025-006',
+    internalNotes: [
+      'Machine maintenance was unplanned',
+      'Client notified of potential delay',
+      'Backup machine now operational'
+    ]
   }
 ];
 

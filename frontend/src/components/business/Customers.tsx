@@ -6,7 +6,8 @@ import CustomerListManagement from './CustomerListManagement';
 import SupportTicketManagement from './SupportTicketManagement';
 import Customer360View from './Customer360View';
 import SupportTicketFormModal from './SupportTicketFormModal';
-import { BusinessProfile, SupportTicket } from '../../data/customerMockData';
+import { BusinessProfile, SupportTicket, mockBusinessProfiles } from '../../data/customerMockData';
+import { mockLeads, mockJobOrders, mockSalesOrders } from '../../data/salesMockData';
 
 interface SupportTicketForm {
   title: string;
@@ -31,14 +32,35 @@ const CTA_CONFIG = {
   support: { showCTA: true }       // Support tickets can be created manually
 } as const;
 
-// Mock data counts for dynamic filtering
-const calculateCustomerCounts = () => ({
-  all: 24,  // Updated: 10 customers + 14 prospects = 24 total business profiles
-  premium: 8,
-  new: 5,
-  active: 12,
-  payment_issues: 3
-});
+// Helper function to check if a business profile has any business activity
+const hasBusinessActivity = (businessProfileId: string): boolean => {
+  // Check if profile has leads (quotes are generated from leads, so leads cover quotes)
+  const hasLeads = mockLeads.some(lead => lead.businessProfileId === businessProfileId);
+  
+  // Check if profile has job orders (can exist independently without leads)
+  const hasJobOrders = mockJobOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  // Check if profile has sales orders (currently empty but included for completeness)
+  const hasSalesOrders = mockSalesOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  return hasLeads || hasJobOrders || hasSalesOrders;
+};
+
+// Mock data counts for dynamic filtering - Only count active business profiles
+const calculateCustomerCounts = () => {
+  const activeProfiles = mockBusinessProfiles.filter((bp: BusinessProfile) => 
+    (bp.customerStatus === 'customer' || bp.customerStatus === 'prospect') && 
+    hasBusinessActivity(bp.id)
+  );
+  
+  return {
+    all: activeProfiles.length,  // Only profiles with business activity
+    premium: Math.floor(activeProfiles.length * 0.3), // ~30% premium
+    new: Math.floor(activeProfiles.length * 0.2),     // ~20% new
+    active: Math.floor(activeProfiles.length * 0.6),  // ~60% active
+    payment_issues: Math.floor(activeProfiles.length * 0.15) // ~15% payment issues
+  };
+};
 
 const calculateSupportCounts = () => ({
   all: 18,

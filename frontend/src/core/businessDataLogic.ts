@@ -1,5 +1,19 @@
 import { mockBusinessProfiles } from '../data/customerMockData';
-import { mockLeads, mockSalesOrders } from '../data/salesMockData';
+import { mockLeads, mockSalesOrders, mockJobOrders } from '../data/salesMockData';
+
+// Helper function to check if a business profile has any business activity
+const hasBusinessActivity = (businessProfileId: string): boolean => {
+  // Check if profile has leads (quotes are generated from leads, so leads cover quotes)
+  const hasLeads = mockLeads.some(lead => lead.businessProfileId === businessProfileId);
+  
+  // Check if profile has job orders (can exist independently without leads)
+  const hasJobOrders = mockJobOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  // Check if profile has sales orders (currently empty but included for completeness)
+  const hasSalesOrders = mockSalesOrders.some(order => order.businessProfileId === businessProfileId);
+  
+  return hasLeads || hasJobOrders || hasSalesOrders;
+};
 
 // Single source of truth for business calculations
 export function getBusinessData() {
@@ -8,7 +22,8 @@ export function getBusinessData() {
     overduePayments: 0, // TODO: Calculate from actual payment data
     readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
     totalCustomers: mockBusinessProfiles.filter(profile => 
-      profile.customerStatus === 'customer' || profile.customerStatus === 'prospect'
+      (profile.customerStatus === 'customer' || profile.customerStatus === 'prospect') &&
+      hasBusinessActivity(profile.id)
     ).length
   };
 }

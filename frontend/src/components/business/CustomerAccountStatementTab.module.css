@@ -8,6 +8,43 @@
   padding: var(--ds-space-md);
 }
 
+/* Empty State */
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-md);
+  /* No min-height - natural height based on content */
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 320px;
+}
+
+.emptyIcon {
+  font-size: var(--font-xl);
+  margin-bottom: var(--ds-space-md);
+  display: block;
+}
+
+.emptyTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-sm);
+  margin: 0;
+}
+
+.emptyDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
 /* Statement Header - Single row layout */
 .statementHeader {
   padding: var(--ds-space-md);

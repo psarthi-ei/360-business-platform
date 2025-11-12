@@ -119,8 +119,8 @@ export interface QualityControlItem {
   batchInfo?: {
     batchNumber: string;         // B2025-045
     rawMaterial: string;         // Cotton Yarn 30s
-    dyeLot?: string;            // DL-2024-089
-    productionDates: string;     // 20-22 Dec 2024
+    dyeLot?: string;            // DL-2025-089
+    productionDates: string;     // 20-22 Dec 2025
   };
 }
 
@@ -194,134 +194,134 @@ export const mockMachines: Machine[] = [
 // Mock ProductionOrder Data - Customer Fabric Processing Tracking
 export const mockProductionOrders: ProductionOrder[] = [
   {
-    id: 'PROD-JO-2024-001-01',
-    salesOrderId: 'JO-2024-001',
+    id: 'PROD-JO-2025-001-01',
+    salesOrderId: 'JO-2025-001',
     customerId: 'bp-surat-processors',
     customerName: 'Surat Processors',
     fabricDetails: {
       type: 'Cotton Grey Fabric',
       quantity: 2000,
       unit: 'meters',
-      challanReference: 'CH-SP-2024-001',
+      challanReference: 'CH-SP-2025-001',
       qualityGrade: 'A-Grade',
       colors: ['Navy Blue'],
       specialInstructions: 'Ensure color fastness as per export standards'
     },
-    workOrderIds: ['WO-2024-001-A'], 
+    workOrderIds: ['WO-2025-001-A'], 
     status: 'awaiting_qc',
-    createdDate: '2024-10-15',
-    receivedDate: '2024-10-16',
+    createdDate: '2025-10-15',
+    receivedDate: '2025-10-16',
     notes: 'Production Order for dyeing service - Navy Blue reactive dyeing'
   },
   {
-    id: 'PROD-JO-2024-002-01',
-    salesOrderId: 'JO-2024-002',
+    id: 'PROD-JO-2025-002-01',
+    salesOrderId: 'JO-2025-002',
     customerId: 'bp-ahmedabad-finishers',
     customerName: 'Ahmedabad Finishers',
     fabricDetails: {
       type: 'Cotton Dyed Fabric',
       quantity: 1500,
       unit: 'meters',
-      challanReference: 'CH-AF-2024-002',
+      challanReference: 'CH-AF-2025-002',
       qualityGrade: 'Standard',
       specialInstructions: 'Softening & Anti-wrinkle finishing required'
     },
-    workOrderIds: ['WO-2024-002-A'],
+    workOrderIds: ['WO-2025-002-A'],
     status: 'ready_for_production',
-    createdDate: '2024-10-18',
-    receivedDate: '2024-10-19',
+    createdDate: '2025-10-18',
+    receivedDate: '2025-10-19',
     notes: 'Production Order for finishing service - Softening & Anti-wrinkle'
   },
   {
-    id: 'PROD-JO-2024-003-01',
-    salesOrderId: 'JO-2024-003',
+    id: 'PROD-JO-2025-003-01',
+    salesOrderId: 'JO-2025-003',
     customerId: 'bp-mumbai-printers',
     customerName: 'Mumbai Printers',
     fabricDetails: {
       type: 'Polyester Fabric',
       quantity: 3000,
       unit: 'meters',
-      challanReference: 'CH-MP-2024-003',
+      challanReference: 'CH-MP-2025-003',
       qualityGrade: 'Export-Grade',
       colors: ['Red', 'Blue', 'Green', 'Yellow'],
       specialInstructions: 'Multi-color printing with precise registration'
     },
-    workOrderIds: ['WO-2024-003-A', 'WO-2024-003-B', 'WO-2024-003-C', 'WO-2024-003-D'],
+    workOrderIds: ['WO-2025-003-A', 'WO-2025-003-B', 'WO-2025-003-C', 'WO-2025-003-D'],
     status: 'partial_delivery',
-    createdDate: '2024-10-21',
+    createdDate: '2025-10-21',
     notes: 'Production Order for printing service - Multi-color printing job'
   },
 
   // New ProductionOrders for WorkOrder Creation Testing
   {
-    id: 'PROD-JO-2024-004-01',
-    salesOrderId: 'JO-2024-004',
+    id: 'PROD-JO-2025-004-01',
+    salesOrderId: 'JO-2025-004',
     customerId: 'bp-rajkot-textiles',
     customerName: 'Rajkot Textiles Ltd.',
     fabricDetails: {
       type: 'Cotton Grey Fabric',
       quantity: 2400,
       unit: 'meters',
-      challanReference: 'CH-RT-2024-004',
+      challanReference: 'CH-RT-2025-004',
       qualityGrade: 'A-Grade',
       colors: ['Red', 'Blue'],
       specialInstructions: 'Two-color dyeing - separate lots for each color required'
     },
     workOrderIds: [],
     status: 'awaiting_work_order_creation',
-    createdDate: '2024-11-10',
-    receivedDate: '2024-11-11',
+    createdDate: '2025-11-10',
+    receivedDate: '2025-11-11',
     notes: 'Production Order auto-created after customer fabric receipt - awaiting lot definition for dual-color dyeing'
   },
 
   {
-    id: 'PROD-JO-2024-005-01',
-    salesOrderId: 'JO-2024-005',
+    id: 'PROD-JO-2025-005-01',
+    salesOrderId: 'JO-2025-005',
     customerId: 'bp-vadodara-mills',
     customerName: 'Vadodara Processing Mills',
     fabricDetails: {
       type: 'Cotton Dyed Fabric',
       quantity: 3500,
       unit: 'meters',
-      challanReference: 'CH-VM-2024-005',
+      challanReference: 'CH-VM-2025-005',
       qualityGrade: 'Premium',
       specialInstructions: 'Multi-treatment finishing - anti-wrinkle, softening, water-repellent processes'
     },
     workOrderIds: [],
     status: 'awaiting_work_order_creation',
-    createdDate: '2024-11-08',
-    receivedDate: '2024-11-09',
+    createdDate: '2025-11-08',
+    receivedDate: '2025-11-09',
     notes: 'Production Order auto-created after customer fabric receipt - awaiting lot creation for premium finishing'
   },
 
   {
-    id: 'PROD-JO-2024-006-01',
-    salesOrderId: 'JO-2024-006',
+    id: 'PROD-JO-2025-006-01',
+    salesOrderId: 'JO-2025-006',
     customerId: 'bp-bharuch-printers',
     customerName: 'Bharuch Digital Printers',
     fabricDetails: {
       type: 'Polyester Fabric',
       quantity: 4000,
       unit: 'meters',
-      challanReference: 'CH-BD-2024-006',
+      challanReference: 'CH-BD-2025-006',
       qualityGrade: 'Export-Grade',
       colors: ['Royal Blue', 'Gold', 'White', 'Silver'],
       specialInstructions: 'High-resolution digital printing with precise color matching - complex geometric patterns'
     },
     workOrderIds: [],
     status: 'awaiting_work_order_creation',
-    createdDate: '2024-11-12',
-    receivedDate: '2024-11-12',
+    createdDate: '2025-11-12',
+    receivedDate: '2025-11-12',
     notes: 'Production Order auto-created after customer fabric receipt - awaiting lot creation for 4-color digital printing'
   }
 ];
 
 export const mockWorkOrders: WorkOrder[] = [
-  // Work Orders for JO-2024-001 (Dyeing Service - Navy Blue)
+  // Work Orders for JO-2025-001 (Dyeing Service - Navy Blue)
   {
-    id: 'WO-2024-001-A',
-    productionOrderId: 'PROD-JO-2024-001-01',
-    salesOrderId: 'JO-2024-001',
+    id: 'WO-2025-001-A',
+    productionOrderId: 'PROD-JO-2025-001-01',
+    salesOrderId: 'JO-2025-001',
     product: 'Navy Blue Reactive Dyeing - Lot A',
     customer: 'Surat Processors',
     batchNumber: 'DYE-001-A',
@@ -335,7 +335,7 @@ export const mockWorkOrders: WorkOrder[] = [
     startTime: '08:00 AM',
     estimatedCompletion: '02:00 PM',
     priority: 'normal',
-    createdDate: '2024-10-16',
+    createdDate: '2025-10-16',
     materialAllocations: [
       {
         material: 'Reactive Dye - Navy Blue',
@@ -343,13 +343,13 @@ export const mockWorkOrders: WorkOrder[] = [
         consumedQuantity: '30L',
         remainingQuantity: '20L',
         unit: 'L',
-        allocationDate: '2024-10-16 07:30',
+        allocationDate: '2025-10-16 07:30',
         reservationType: 'hard_reserved'
       }
     ],
     statusHistory: [
       {
-        timestamp: '2024-10-16 07:30',
+        timestamp: '2025-10-16 07:30',
         fromStatus: 'pending',
         toStatus: 'in_progress',
         user: 'Suresh',
@@ -358,11 +358,11 @@ export const mockWorkOrders: WorkOrder[] = [
     ]
   },
 
-  // Work Orders for JO-2024-002 (Finishing Service)
+  // Work Orders for JO-2025-002 (Finishing Service)
   {
-    id: 'WO-2024-002-A',
-    productionOrderId: 'PROD-JO-2024-002-01',
-    salesOrderId: 'JO-2024-002',
+    id: 'WO-2025-002-A',
+    productionOrderId: 'PROD-JO-2025-002-01',
+    salesOrderId: 'JO-2025-002',
     product: 'Softening & Anti-wrinkle Finishing - Lot A',
     customer: 'Ahmedabad Finishers',
     batchNumber: 'FIN-002-A',
@@ -374,7 +374,7 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: 'FINISH-F1',
     assignedWorker: 'Vikram',
     priority: 'normal',
-    createdDate: '2024-10-19',
+    createdDate: '2025-10-19',
     materialAllocations: [
       {
         material: 'Softening Agent',
@@ -382,7 +382,7 @@ export const mockWorkOrders: WorkOrder[] = [
         consumedQuantity: '0L',
         remainingQuantity: '25L',
         unit: 'L',
-        allocationDate: '2024-10-19 06:00',
+        allocationDate: '2025-10-19 06:00',
         reservationType: 'soft_reserved'
       },
       {
@@ -391,13 +391,13 @@ export const mockWorkOrders: WorkOrder[] = [
         consumedQuantity: '0L',
         remainingQuantity: '15L',
         unit: 'L',
-        allocationDate: '2024-10-19 06:00',
+        allocationDate: '2025-10-19 06:00',
         reservationType: 'soft_reserved'
       }
     ],
     statusHistory: [
       {
-        timestamp: '2024-10-19 06:00',
+        timestamp: '2025-10-19 06:00',
         fromStatus: 'pending',
         toStatus: 'pending',
         user: 'System',
@@ -406,11 +406,11 @@ export const mockWorkOrders: WorkOrder[] = [
     ]
   },
 
-  // Work Orders for JO-2024-003 (Printing Service - Multiple Colors)
+  // Work Orders for JO-2025-003 (Printing Service - Multiple Colors)
   {
-    id: 'WO-2024-003-A',
-    productionOrderId: 'PROD-JO-2024-003-01',
-    salesOrderId: 'JO-2024-003',
+    id: 'WO-2025-003-A',
+    productionOrderId: 'PROD-JO-2025-003-01',
+    salesOrderId: 'JO-2025-003',
     product: 'Multi-color Printing - Red Lot',
     customer: 'Mumbai Printers',
     batchNumber: 'PRT-003-A-RED',
@@ -422,7 +422,7 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: '',
     assignedWorker: '',
     priority: 'urgent',
-    createdDate: '2024-10-21',
+    createdDate: '2025-10-21',
     materialAllocations: [
       {
         material: 'Printing Ink - Red',
@@ -430,13 +430,13 @@ export const mockWorkOrders: WorkOrder[] = [
         consumedQuantity: '0L',
         remainingQuantity: '8L',
         unit: 'L',
-        allocationDate: '2024-10-21 00:00',
+        allocationDate: '2025-10-21 00:00',
         reservationType: 'soft_reserved'
       }
     ],
     statusHistory: [
       {
-        timestamp: '2024-10-21 00:00',
+        timestamp: '2025-10-21 00:00',
         fromStatus: 'pending',
         toStatus: 'pending',
         user: 'System',
@@ -445,9 +445,9 @@ export const mockWorkOrders: WorkOrder[] = [
     ]
   },
   {
-    id: 'WO-2024-003-B',
-    productionOrderId: 'PROD-JO-2024-003-01',
-    salesOrderId: 'JO-2024-003',
+    id: 'WO-2025-003-B',
+    productionOrderId: 'PROD-JO-2025-003-01',
+    salesOrderId: 'JO-2025-003',
     product: 'Multi-color Printing - Blue Lot',
     customer: 'Mumbai Printers',
     batchNumber: 'PRT-003-B-BLUE',
@@ -459,7 +459,7 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: '',
     assignedWorker: '',
     priority: 'urgent',
-    createdDate: '2024-10-21',
+    createdDate: '2025-10-21',
     materialAllocations: [
       {
         material: 'Printing Ink - Blue',
@@ -467,15 +467,15 @@ export const mockWorkOrders: WorkOrder[] = [
         consumedQuantity: '0L',
         remainingQuantity: '8L',
         unit: 'L',
-        allocationDate: '2024-10-21 00:00',
+        allocationDate: '2025-10-21 00:00',
         reservationType: 'soft_reserved'
       }
     ]
   },
   {
-    id: 'WO-2024-003-C',
-    productionOrderId: 'PROD-JO-2024-003-01',
-    salesOrderId: 'JO-2024-003',
+    id: 'WO-2025-003-C',
+    productionOrderId: 'PROD-JO-2025-003-01',
+    salesOrderId: 'JO-2025-003',
     product: 'Multi-color Printing - Green Lot',
     customer: 'Mumbai Printers',
     batchNumber: 'PRT-003-C-GREEN',
@@ -487,12 +487,12 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: '',
     assignedWorker: '',
     priority: 'urgent',
-    createdDate: '2024-10-21'
+    createdDate: '2025-10-21'
   },
   {
-    id: 'WO-2024-003-D',
-    productionOrderId: 'PROD-JO-2024-003-01',
-    salesOrderId: 'JO-2024-003',
+    id: 'WO-2025-003-D',
+    productionOrderId: 'PROD-JO-2025-003-01',
+    salesOrderId: 'JO-2025-003',
     product: 'Multi-color Printing - Yellow Lot',
     customer: 'Mumbai Printers',
     batchNumber: 'PRT-003-D-YELLOW',
@@ -504,15 +504,15 @@ export const mockWorkOrders: WorkOrder[] = [
     assignedMachine: '',
     assignedWorker: '',
     priority: 'urgent',
-    createdDate: '2024-10-21'
+    createdDate: '2025-10-21'
   }
 ];
 
 export const mockQCItems: QualityControlItem[] = [
-  // QC for WO-2024-001-A (Navy Blue Dyeing - completed, pending QC)
+  // QC for WO-2025-001-A (Navy Blue Dyeing - completed, pending QC)
   {
-    id: 'QC-2024-001-A',
-    workOrderId: 'WO-2024-001-A',
+    id: 'QC-2025-001-A',
+    workOrderId: 'WO-2025-001-A',
     status: 'pending_inspection',
     priority: 'normal',
     qualitySpecs: {
@@ -526,15 +526,15 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'DYE-001-A',
       rawMaterial: 'Cotton Grey Fabric',
-      dyeLot: 'DL-2024-089',
-      productionDates: '16 Oct 2024'
+      dyeLot: 'DL-2025-089',
+      productionDates: '16 Oct 2025'
     }
   },
 
-  // QC for WO-2024-002-A (Finishing - pending, will need QC after completion)
+  // QC for WO-2025-002-A (Finishing - pending, will need QC after completion)
   {
-    id: 'QC-2024-002-A',
-    workOrderId: 'WO-2024-002-A',
+    id: 'QC-2025-002-A',
+    workOrderId: 'WO-2025-002-A',
     status: 'pending_inspection',
     priority: 'normal',
     qualitySpecs: {
@@ -548,19 +548,19 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'FIN-002-A',
       rawMaterial: 'Cotton Dyed Fabric',
-      productionDates: '19 Oct 2024'
+      productionDates: '19 Oct 2025'
     }
   },
 
-  // QC for WO-2024-003-A (Red Printing Lot - QC Approved)
+  // QC for WO-2025-003-A (Red Printing Lot - QC Approved)
   {
-    id: 'QC-2024-003-A',
-    workOrderId: 'WO-2024-003-A',
+    id: 'QC-2025-003-A',
+    workOrderId: 'WO-2025-003-A',
     status: 'approved',
     inspector: 'Ravi Sharma',
     grade: 'A Grade',
-    startedTime: '2024-10-18 10:00',
-    completedTime: '2024-10-18 11:15',
+    startedTime: '2025-10-18 10:00',
+    completedTime: '2025-10-18 11:15',
     notes: 'Excellent print registration and color matching. Export quality standards met.',
     priority: 'urgent',
     qualitySpecs: {
@@ -574,7 +574,7 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'PRT-003-A-RED',
       rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2024'
+      productionDates: '21 Oct 2025'
     },
     checklist: [
       { item: 'Print registration accuracy check', checked: true, required: true },
@@ -586,10 +586,10 @@ export const mockQCItems: QualityControlItem[] = [
     photos: ['qc_red_lot_001.jpg', 'qc_red_lot_002.jpg']
   },
 
-  // QC for WO-2024-003-B (Blue Printing Lot)
+  // QC for WO-2025-003-B (Blue Printing Lot)
   {
-    id: 'QC-2024-003-B',
-    workOrderId: 'WO-2024-003-B',
+    id: 'QC-2025-003-B',
+    workOrderId: 'WO-2025-003-B',
     status: 'pending_inspection',
     priority: 'urgent',
     qualitySpecs: {
@@ -603,19 +603,19 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'PRT-003-B-BLUE',
       rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2024'
+      productionDates: '21 Oct 2025'
     }
   },
 
-  // QC for WO-2024-003-C (Green Printing Lot - QC Approved B Grade)
+  // QC for WO-2025-003-C (Green Printing Lot - QC Approved B Grade)
   {
-    id: 'QC-2024-003-C',
-    workOrderId: 'WO-2024-003-C',
+    id: 'QC-2025-003-C',
+    workOrderId: 'WO-2025-003-C',
     status: 'approved',
     inspector: 'Priya Patel',
     grade: 'B Grade',
-    startedTime: '2024-10-17 14:00',
-    completedTime: '2024-10-17 15:30',
+    startedTime: '2025-10-17 14:00',
+    completedTime: '2025-10-17 15:30',
     notes: 'Slight color variation within acceptable limits. Minor print registration issues but within B grade standards.',
     priority: 'urgent',
     qualitySpecs: {
@@ -628,19 +628,19 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'PRT-003-C-GREEN',
       rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2024'
+      productionDates: '21 Oct 2025'
     }
   },
 
-  // QC for WO-2024-003-D (Yellow Printing Lot - QC Approved)  
+  // QC for WO-2025-003-D (Yellow Printing Lot - QC Approved)  
   {
-    id: 'QC-2024-003-D',
-    workOrderId: 'WO-2024-003-D',
+    id: 'QC-2025-003-D',
+    workOrderId: 'WO-2025-003-D',
     status: 'approved',
     inspector: 'Ravi Sharma',
     grade: 'A Grade',
-    startedTime: '2024-10-16 16:00',
-    completedTime: '2024-10-16 17:00',
+    startedTime: '2025-10-16 16:00',
+    completedTime: '2025-10-16 17:00',
     notes: 'Excellent quality. Perfect color matching and print registration. Customer delivery completed.',
     priority: 'urgent',
     qualitySpecs: {
@@ -653,7 +653,7 @@ export const mockQCItems: QualityControlItem[] = [
     batchInfo: {
       batchNumber: 'PRT-003-D-YELLOW',
       rawMaterial: 'Polyester Fabric',
-      productionDates: '21 Oct 2024'
+      productionDates: '21 Oct 2025'
     }
   }
 ];

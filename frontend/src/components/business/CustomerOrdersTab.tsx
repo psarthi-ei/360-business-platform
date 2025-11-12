@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { mockSalesOrders, type SalesOrder, OrderItem } from '../../data/salesMockData';
+import { mockSalesOrders, type SalesOrder, OrderItem, mockJobOrders, type JobOrder } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import OrderDetailsModal from './OrderDetailsModal';
 import styles from './CustomerOrdersTab.module.css';
@@ -28,8 +28,10 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Get customer orders
-  const customerOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+  // Get customer orders - combine sales orders and job orders
+  const customerSalesOrders = mockSalesOrders.filter(order => order.businessProfileId === customerId);
+  const customerJobOrders = mockJobOrders.filter(order => order.businessProfileId === customerId);
+  const customerOrders = [...customerSalesOrders, ...customerJobOrders] as SalesOrder[];
 
   // Modal handlers
   const handleViewDetails = (order: SalesOrder) => {
@@ -89,6 +91,29 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
     }
   };
 
+  // Check if order is a job order and get service info
+  const getOrderTypeInfo = (order: SalesOrder) => {
+    const jobOrder = order as JobOrder;
+    if (jobOrder.orderType === 'job_order') {
+      const serviceIcons = {
+        'dyeing': '🎨',
+        'finishing': '✨', 
+        'printing': '🖨️',
+        'weaving': '🧵'
+      };
+      return {
+        isJobOrder: true,
+        icon: serviceIcons[jobOrder.serviceType] || '⚙️',
+        label: `Job Work - ${jobOrder.serviceType.charAt(0).toUpperCase() + jobOrder.serviceType.slice(1)}`
+      };
+    }
+    return {
+      isJobOrder: false,
+      icon: '📦',
+      label: 'Sales Order'
+    };
+  };
+
 
   // Sort orders by date (newest first)
   const sortedOrders = customerOrders.sort((a, b) => 
@@ -117,6 +142,7 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
           const companyName = businessProfile?.companyName || 'Unknown Company';
           const statusInfo = getOrderStatusInfo(order);
           const paymentStatus = getPaymentStatus(order);
+          const orderTypeInfo = getOrderTypeInfo(order);
           
           return (
             <div key={order.id} className="ds-card-container" data-order-id={order.id}>
@@ -131,8 +157,11 @@ const CustomerOrdersTab = ({ customerId }: CustomerOrdersTabProps) => {
                   <span className={styles.truncateText}>{companyName}</span>
                 </div>
                 
-                {/* Status Information - Order Status & Payment Status */}
+                {/* Status Information - Order Type, Status & Payment */}
                 <div className="ds-card-status">
+                  <div className={styles.statusLine}>
+                    {orderTypeInfo.icon} {orderTypeInfo.label}
+                  </div>
                   <div className={styles.statusLine}>
                     {statusInfo.icon} {statusInfo.label}
                   </div>

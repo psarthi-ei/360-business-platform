@@ -22,7 +22,6 @@ export type OrderStatus =
   
   // Legacy SalesOrder status values (kept for compatibility)
   | 'production_planning'    // Production being planned
-  | 'pending_materials'      // Same as materials_pending (alias)
   | 'production_started'     // Same as in_process (alias)
   | 'production_completed'   // Production finished
   | 'in_transit'            // Same as shipped (alias)
@@ -1158,9 +1157,9 @@ export const mockAdvancePayments: AdvancePayment[] = [];
 export const mockFinalInvoices: FinalInvoice[] = [
   // Service Invoices for Job Orders (2024)
   {
-    id: 'INV-JO-2024-001',
-    invoiceNumber: 'INV-JO-2024-001',
-    salesOrderId: 'JO-2024-001', // Job order reference (not regular sales order)
+    id: 'INV-JO-2025-001',
+    invoiceNumber: 'INV-JO-2025-001',
+    salesOrderId: 'JO-2025-001', // Job order reference (not regular sales order)
     businessProfileId: 'bp-surat-processors',
     invoiceDate: 'October 22, 2024',
     dueDate: 'November 21, 2024', // 30-day credit terms
@@ -1242,9 +1241,9 @@ export const mockFinalInvoices: FinalInvoice[] = [
   },
   
   {
-    id: 'INV-JO-2024-002',
-    invoiceNumber: 'INV-JO-2024-002',
-    salesOrderId: 'JO-2024-002', // Job order reference
+    id: 'INV-JO-2025-002',
+    invoiceNumber: 'INV-JO-2025-002',
+    salesOrderId: 'JO-2025-002', // Job order reference
     businessProfileId: 'bp-ahmedabad-finishers',
     invoiceDate: 'October 25, 2024',
     dueDate: 'November 9, 2024', // 15-day credit terms
@@ -1315,9 +1314,9 @@ export const mockFinalInvoices: FinalInvoice[] = [
   },
   
   {
-    id: 'INV-JO-2024-003',
-    invoiceNumber: 'INV-JO-2024-003',
-    salesOrderId: 'JO-2024-003', // Job order reference
+    id: 'INV-JO-2025-003',
+    invoiceNumber: 'INV-JO-2025-003',
+    salesOrderId: 'JO-2025-003', // Job order reference
     businessProfileId: 'bp-mumbai-printers',
     invoiceDate: 'October 28, 2024',
     dueDate: 'December 12, 2024', // 45-day credit terms
@@ -1859,7 +1858,7 @@ export function requiresProformaInvoice(quoteType: 'product_sale' | 'service_pro
 // Mock Job Orders - Service-based processing orders
 export const mockJobOrders: JobOrder[] = [
   {
-    id: 'JO-2024-001',
+    id: 'JO-2025-001',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'dyeing',
@@ -1867,8 +1866,8 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-001',
     businessProfileId: 'bp-surat-processors',
     advancePaymentId: '', // Job orders typically don't use advance payments
-    orderDate: '2024-10-15',
-    deliveryDate: '2024-10-22',
+    orderDate: '2025-10-15',
+    deliveryDate: '2025-10-22',
     totalAmount: 48000,
     status: 'production_started',
     statusMessage: 'Dyeing process in progress - 60% completed',
@@ -1909,7 +1908,7 @@ export const mockJobOrders: JobOrder[] = [
   },
   
   {
-    id: 'JO-2024-002',
+    id: 'JO-2025-002',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'finishing',
@@ -1917,8 +1916,8 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-002',
     businessProfileId: 'bp-ahmedabad-finishers',
     advancePaymentId: '',
-    orderDate: '2024-10-18',
-    deliveryDate: '2024-10-25',
+    orderDate: '2025-10-18',
+    deliveryDate: '2025-10-25',
     totalAmount: 36000,
     status: 'order_confirmed',
     statusMessage: 'Material received, processing scheduled',
@@ -1954,7 +1953,7 @@ export const mockJobOrders: JobOrder[] = [
   },
   
   {
-    id: 'JO-2024-003',
+    id: 'JO-2025-003',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'printing',
@@ -1962,10 +1961,10 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-003',
     businessProfileId: 'bp-mumbai-printers',
     advancePaymentId: '',
-    orderDate: '2024-10-21',
-    deliveryDate: '2024-10-30',
+    orderDate: '2025-10-21',
+    deliveryDate: '2025-10-30',
     totalAmount: 96000,
-    status: 'pending_materials',
+    status: 'materials_pending',
     statusMessage: 'Waiting for client material quality approval',
     paymentStatus: 'pending',
     urgency: 'urgent',
@@ -2004,7 +2003,7 @@ export const mockJobOrders: JobOrder[] = [
 
   // New JobOrders for WorkOrder Creation Testing
   {
-    id: 'JO-2024-004',
+    id: 'JO-2025-004',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'dyeing',
@@ -2012,8 +2011,8 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-004',
     businessProfileId: 'bp-rajkot-textiles',
     advancePaymentId: 'PAY-JO-004-ADV',
-    orderDate: '2024-11-10',
-    deliveryDate: '2024-11-17',
+    orderDate: '2025-11-10',
+    deliveryDate: '2025-11-17',
     totalAmount: 72000,
     status: 'materials_pending',
     statusMessage: 'Awaiting customer fabric for dyeing service',
@@ -2053,7 +2052,7 @@ export const mockJobOrders: JobOrder[] = [
   },
 
   {
-    id: 'JO-2024-005',
+    id: 'JO-2025-005',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'finishing',
@@ -2061,8 +2060,8 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-005',
     businessProfileId: 'bp-vadodara-mills',
     advancePaymentId: 'PAY-JO-005-ADV',
-    orderDate: '2024-11-08',
-    deliveryDate: '2024-11-18',
+    orderDate: '2025-11-08',
+    deliveryDate: '2025-11-18',
     totalAmount: 105000,
     status: 'materials_pending',
     statusMessage: 'Customer fabric received - ready for processing',
@@ -2102,7 +2101,7 @@ export const mockJobOrders: JobOrder[] = [
   },
 
   {
-    id: 'JO-2024-006',
+    id: 'JO-2025-006',
     orderType: 'job_order',
     materialOwnership: 'client',
     serviceType: 'printing',
@@ -2110,8 +2109,8 @@ export const mockJobOrders: JobOrder[] = [
     quoteId: 'QT-JO-006',
     businessProfileId: 'bp-bharuch-printers',
     advancePaymentId: 'PAY-JO-006-ADV',
-    orderDate: '2024-11-12',
-    deliveryDate: '2024-11-25',
+    orderDate: '2025-11-12',
+    deliveryDate: '2025-11-25',
     totalAmount: 144000,
     status: 'materials_pending',
     statusMessage: 'Premium digital printing - awaiting customer fabric',
@@ -2173,7 +2172,7 @@ export const mockReceivables: ReceivableRecord[] = [
     daysPastDue: 17,
     agingCategory: '31-60',
     orderType: 'job_order',
-    orderId: 'JO-2024-001',
+    orderId: 'JO-2025-001',
     orderDescription: 'Reactive Dyeing Service - Navy Blue',
     creditLimit: 200000,
     totalOutstanding: 75000,
@@ -2205,7 +2204,7 @@ export const mockReceivables: ReceivableRecord[] = [
     daysPastDue: 74,
     agingCategory: '61-90',
     orderType: 'job_order',
-    orderId: 'JO-2024-008',
+    orderId: 'JO-2025-008',
     orderDescription: 'Digital Printing Service - Multi-color Design',
     creditLimit: 300000,
     totalOutstanding: 280000,
@@ -2236,7 +2235,7 @@ export const mockReceivables: ReceivableRecord[] = [
     daysPastDue: -18,
     agingCategory: 'current',
     orderType: 'job_order',
-    orderId: 'JO-2024-012',
+    orderId: 'JO-2025-012',
     orderDescription: 'Bleaching & Finishing Services',
     creditLimit: 150000,
     totalOutstanding: 85000,
@@ -2254,12 +2253,12 @@ export const mockReceivables: ReceivableRecord[] = [
   // Linked to enhanced service invoices with new service-specific fields
   {
     id: 'REC-JO-001',
-    invoiceId: 'INV-JO-2024-001', // Links to enhanced service invoice
+    invoiceId: 'INV-JO-2025-001', // Links to enhanced service invoice
     customerId: 'bp-surat-dye-works',
     customerName: 'Ramesh Kumar',
     companyName: 'Surat Dye Works',
     
-    invoiceNumber: 'INV-JO-2024-001',
+    invoiceNumber: 'INV-JO-2025-001',
     invoiceDate: '2024-10-22',
     dueDate: '2024-11-21',
     originalAmount: 56640,
@@ -2272,7 +2271,7 @@ export const mockReceivables: ReceivableRecord[] = [
     
     // Job order specific fields
     orderType: 'job_order',
-    orderId: 'JO-2024-001',
+    orderId: 'JO-2025-001',
     orderDescription: 'Reactive Dyeing Service - Navy Blue Premium Grade',
     
     creditLimit: 200000,
@@ -2291,12 +2290,12 @@ export const mockReceivables: ReceivableRecord[] = [
   // Additional service quote receivables  
   {
     id: 'REC-JO-002',
-    invoiceId: 'INV-JO-2024-002',
+    invoiceId: 'INV-JO-2025-002',
     customerId: 'bp-ahmedabad-finishers',
     customerName: 'Arvind Patel',
     companyName: 'Advanced Textile Finishers',
     
-    invoiceNumber: 'INV-JO-2024-002',
+    invoiceNumber: 'INV-JO-2025-002',
     invoiceDate: '2024-10-25',
     dueDate: '2024-11-09',
     originalAmount: 84000,
@@ -2307,7 +2306,7 @@ export const mockReceivables: ReceivableRecord[] = [
     agingCategory: 'current',
     
     orderType: 'job_order',
-    orderId: 'JO-2024-002',
+    orderId: 'JO-2025-002',
     orderDescription: 'Finishing Services - Softening & Anti-wrinkle',
     
     creditLimit: 150000,
