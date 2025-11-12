@@ -69,7 +69,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
   // Status filter configurations for each tab (Filter 1) - MVP simplified
   const statusFilterConfigs = {
     inventory: [
-      { value: 'all', label: 'All Materials', count: inventoryCounts.all },
+      { value: 'all', label: `All ${inventory}`, count: inventoryCounts.all },
       { value: 'company', label: '🏢 Company Materials', count: inventoryCounts.company },
       { value: 'client', label: '👤 Client Materials', count: inventoryCounts.client },
       { value: 'lowstock', label: '⚠️ Low Stock', count: inventoryCounts.lowstock },
@@ -126,7 +126,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
         case 'inventory': {
           const invSummary = getInventorySummary();
           return [
-            { value: 'all', label: 'All Materials', count: invSummary.totalItems },
+            { value: 'all', label: `All ${inventory}`, count: invSummary.totalItems },
             { value: 'company', label: '🏢 Company Materials', count: invSummary.companyItemsCount },
             { value: 'client', label: '👤 Client Materials', count: invSummary.clientItemsCount },
             { value: 'lowstock', label: '⚠️ Low Stock', count: invSummary.lowStockItems },
@@ -171,7 +171,7 @@ const Procurement = ({ mobile, onShowCustomerProfile, onUniversalAction }: Procu
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, inventoryFilterState, poFilterState, grnFilterState, timelineFilter]);
+  }, [activeTab, inventoryFilterState, poFilterState, grnFilterState, timelineFilter, inventory]);
 
   // Universal scroll - no complex calculations needed, browser handles overflow automatically
 

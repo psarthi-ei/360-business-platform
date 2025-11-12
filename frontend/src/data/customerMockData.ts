@@ -928,16 +928,16 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     phone: '+91 98765 43210',
     email: 'ramesh@suratcotton.com',
     
-    customerStatus: 'prospect',
+    customerStatus: 'customer',
     
     businessType: 'Cotton fabric manufacturing',
     specialization: 'Grey cotton fabric production and textile manufacturing',
     employeeCount: '50-100 employees',
     
-    totalOrders: 0,
-    activeOrders: 0,
-    totalRevenue: 0,
-    averageOrderValue: 0,
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 48000,
+    averageOrderValue: 48000,
     
     creditLimit: 200000,
     paymentScore: 75,
@@ -971,16 +971,16 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     phone: '+91 97654 32108',
     email: 'kiran@ahmedabadtextiles.com',
     
-    customerStatus: 'prospect',
+    customerStatus: 'customer',
     
     businessType: 'Textile manufacturing',
     specialization: 'Woven fabric manufacturing and textile production',
     employeeCount: '30-50 employees',
     
-    totalOrders: 0,
-    activeOrders: 0,
-    totalRevenue: 0,
-    averageOrderValue: 0,
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 36000,
+    averageOrderValue: 36000,
     
     creditLimit: 150000,
     paymentScore: 80,
@@ -1014,7 +1014,7 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     phone: '+91 95123 67890',
     email: 'ravi@rajkotcotton.com',
     
-    customerStatus: 'prospect',
+    customerStatus: 'customer',
     
     businessType: 'Cotton textile manufacturing',
     specialization: 'Premium cotton fabric production and textile manufacturing',
@@ -1057,16 +1057,16 @@ export const mockBusinessProfiles: BusinessProfile[] = [
     phone: '+91 96543 21087',
     email: 'deepak@mumbaiprints.com',
     
-    customerStatus: 'prospect',
+    customerStatus: 'customer',
     
     businessType: 'Digital textile printing',
     specialization: 'Multi-color digital printing on polyester and cotton',
     employeeCount: '20-30 employees',
     
-    totalOrders: 0,
-    activeOrders: 0,
-    totalRevenue: 0,
-    averageOrderValue: 0,
+    totalOrders: 1,
+    activeOrders: 1,
+    totalRevenue: 96000,
+    averageOrderValue: 96000,
     
     creditLimit: 250000,
     paymentScore: 85,

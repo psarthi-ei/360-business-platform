@@ -961,6 +961,83 @@ export const mockLeads: Lead[] = [
     lastQuoteAction: 'approved',
     lastQuoteActionDate: '2025-11-09T10:00:00.000Z',
     quoteCount: 1
+  },
+
+  // 7. New Customer Lead - Job Work Service Inquiry
+  {
+    id: 'lead-007',
+    businessProfileId: 'bp-surat-wholesale',
+    contactPerson: 'Kiran Shah',
+    designation: 'Production Manager',
+    department: 'Production',
+    contact: '+91 98765 43203',
+    phone: '+91 98765 43203',
+    email: 'kiran@suratmarket.com',
+    inquiry: 'Dyeing and finishing services for 5,000 meters grey cotton fabric - retail quality',
+    budget: '₹2,50,000-3,00,000',
+    timeline: '12 days',
+    priority: 'warm',
+    leadType: 'job_work',
+    requestedItems: [
+      {
+        masterItemId: 'dyeing-001',
+        requestedQuantity: 5000,
+        priority: 'must_have',
+        budgetExpectation: 32,
+        customSpecifications: {
+          'Service Type': 'Reactive Dyeing',
+          'Material Type': 'Cotton Grey Fabric',
+          'Colors': 'Light Blue, Dark Blue, Green',
+          'Quality Grade': 'Commercial Grade',
+          'Chemical Requirements': 'Reactive Dyes, Basic chemicals'
+        },
+        notes: 'First-time job work customer. Need reliable service for retail market.'
+      },
+      {
+        masterItemId: 'finishing-001',
+        requestedQuantity: 5000,
+        priority: 'nice_to_have',
+        budgetExpectation: 18,
+        customSpecifications: {
+          'Service Type': 'Basic Finishing',
+          'Material Type': 'Dyed Cotton Fabric',
+          'Finish Type': 'Softening, Basic treatments',
+          'Quality Grade': 'Commercial Grade',
+          'Special Requirements': 'Ready for retail market'
+        },
+        notes: 'Optional finishing service if dyeing quality is satisfactory.'
+      }
+    ],
+    priorityLevel: 'nice_to_have',
+    deliveryRequirements: {
+      preferredDate: '2025-12-01',
+      isDateFlexible: true,
+      deliveryLocation: 'Surat Wholesale Market - Shop No. 45',
+      specialHandling: ['Client will provide grey fabric', 'Quality inspection before processing'],
+      qualityInspectionRequired: true
+    },
+    notes: 'New job work customer inquiry. First contact with our company. Looking for reliable processing partner for retail market supply.',
+    notesHistory: [
+      {
+        id: 'note-1731394800000',
+        content: 'Initial inquiry received via phone. Customer interested in job work services for retail market supply.',
+        timestamp: '2025-11-12T10:00:00.000Z',
+        createdBy: 'sales_team'
+      },
+      {
+        id: 'note-1731408400000',
+        content: 'Sent service portfolio and pricing for dyeing and finishing. Customer reviewing quote requirements.',
+        timestamp: '2025-11-12T14:00:00.000Z',
+        createdBy: 'sales_team'
+      }
+    ],
+    conversionStatus: 'active_lead',
+    // Quote tracking
+    activeQuoteId: undefined,
+    quoteHistory: [],
+    lastQuoteAction: undefined,
+    lastQuoteActionDate: undefined,
+    quoteCount: 0
   }
 ];
 

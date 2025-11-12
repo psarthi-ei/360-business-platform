@@ -110,7 +110,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
       { value: 'unassigned', label: '⚪ Unassigned', count: 0 }
     ],
     qc: [
-      { value: 'all', label: 'All Items', count: qcCounts.all },
+      { value: 'all', label: 'All QC Items', count: qcCounts.all },
       { value: 'pending_inspection', label: '🔍 Pending Inspection', count: qcCounts.pending_inspection },
       { value: 'approved', label: '✅ Approved', count: qcCounts.approved },
       { value: 'rejected', label: '❌ Rejected', count: qcCounts.rejected }
@@ -182,7 +182,7 @@ const Production = ({ mobile, onShowCustomerProfile, onUniversalAction }: Produc
         case 'qc': {
           const qcCounts = { all: 15, pending_inspection: 4, approved: 8, rejected: 3 };
           return [
-            { value: 'all', label: 'All Items', count: qcCounts.all },
+            { value: 'all', label: 'All QC Items', count: qcCounts.all },
             { value: 'pending_inspection', label: '🔍 Pending Inspection', count: qcCounts.pending_inspection },
             { value: 'approved', label: '✅ Approved', count: qcCounts.approved },
             { value: 'rejected', label: '❌ Rejected', count: qcCounts.rejected }

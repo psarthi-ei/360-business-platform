@@ -105,14 +105,14 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
   // Status filter configurations for each section (Filter 1) - Dynamic counts
   const statusFilterConfigs = {
     customers: [
-      { value: 'all', label: 'All', count: customerCounts.all },
+      { value: 'all', label: `All ${customers}`, count: customerCounts.all },
       { value: 'premium', label: '🏆 Premium', count: customerCounts.premium },
-      { value: 'new', label: '🎉 New', count: customerCounts.new },
+      { value: 'new', label: `🎉 New ${customers}`, count: customerCounts.new },
       { value: 'active', label: '⚡ Active', count: customerCounts.active },
       { value: 'payment_issues', label: '⚠️ Payment', count: customerCounts.payment_issues }
     ],
     support: [
-      { value: 'all', label: 'All', count: supportCounts.all },
+      { value: 'all', label: 'All Tickets', count: supportCounts.all },
       { value: 'open', label: '🔴 Open', count: supportCounts.open },
       { value: 'in_progress', label: '🟡 Progress', count: supportCounts.in_progress },
       { value: 'resolved', label: '✅ Resolved', count: supportCounts.resolved }
@@ -153,9 +153,9 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
         case 'customers': {
           const customerCounts = { all: 24, premium: 8, new: 5, active: 12, payment_issues: 3 };
           return [
-            { value: 'all', label: 'All Customers', count: customerCounts.all },
+            { value: 'all', label: `All ${customers}`, count: customerCounts.all },
             { value: 'premium', label: '🏆 Premium', count: customerCounts.premium },
-            { value: 'new', label: '🎉 New Customers', count: customerCounts.new },
+            { value: 'new', label: `🎉 New ${customers}`, count: customerCounts.new },
             { value: 'active', label: '⚡ Active', count: customerCounts.active },
             { value: 'payment_issues', label: '⚠️ Payment Issues', count: customerCounts.payment_issues }
           ];
@@ -190,7 +190,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeSection, customerFilterState, supportFilterState, timelineFilter]);
+  }, [activeSection, customerFilterState, supportFilterState, timelineFilter, customers]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {

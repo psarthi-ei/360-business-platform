@@ -61,19 +61,19 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
   // Status filter configurations for each tab (Filter 1) - MVP simplified
   const statusFilterConfigs = {
     leads: [
-      { value: 'all', label: 'All Leads', count: leadCounts.all },
-      { value: 'hot', label: '🔥 Hot Leads', count: leadCounts.hot },
-      { value: 'warm', label: '🔶 Warm Leads', count: leadCounts.warm },
-      { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
+      { value: 'all', label: `All ${leads}`, count: leadCounts.all },
+      { value: 'hot', label: `🔥 Hot ${leads}`, count: leadCounts.hot },
+      { value: 'warm', label: `🔶 Warm ${leads}`, count: leadCounts.warm },
+      { value: 'cold', label: `🔵 Cold ${leads}`, count: leadCounts.cold }
     ],
     orders: [
-      { value: 'all', label: 'All Orders', count: 5 },
+      { value: 'all', label: `All ${orders}`, count: 5 },
       { value: 'production', label: '🟡 Production', count: 2 },
       { value: 'blocked', label: '⚠️ Blocked', count: 1 },
       { value: 'delivered', label: '✅ Delivered', count: 2 }
     ],
     invoices: [
-      { value: 'all', label: 'All Invoices', count: 15 },
+      { value: 'all', label: `All ${invoices}`, count: 15 },
       { value: 'paid', label: '💰 Paid', count: 8 },
       { value: 'pending', label: '🟡 Pending', count: 5 },
       { value: 'overdue', label: '🔴 Overdue', count: 2 }
@@ -122,22 +122,22 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
             cold: mockLeads.filter(l => l.priority === 'cold').length
           };
           return [
-            { value: 'all', label: 'All Leads', count: leadCounts.all },
-            { value: 'hot', label: '🔥 Hot Leads', count: leadCounts.hot },
-            { value: 'warm', label: '🔶 Warm Leads', count: leadCounts.warm },
-            { value: 'cold', label: '🔵 Cold Leads', count: leadCounts.cold }
+            { value: 'all', label: `All ${leads}`, count: leadCounts.all },
+            { value: 'hot', label: `🔥 Hot ${leads}`, count: leadCounts.hot },
+            { value: 'warm', label: `🔶 Warm ${leads}`, count: leadCounts.warm },
+            { value: 'cold', label: `🔵 Cold ${leads}`, count: leadCounts.cold }
           ];
         }
         case 'orders':
           return [
-            { value: 'all', label: 'All Orders', count: 5 },
+            { value: 'all', label: `All ${orders}`, count: 5 },
             { value: 'production', label: '🟡 Production', count: 2 },
             { value: 'blocked', label: '⚠️ Blocked', count: 1 },
             { value: 'delivered', label: '✅ Delivered', count: 2 }
           ];
         case 'invoices':
           return [
-            { value: 'all', label: 'All Invoices', count: 15 },
+            { value: 'all', label: `All ${invoices}`, count: 15 },
             { value: 'paid', label: '💰 Paid', count: 8 },
             { value: 'pending', label: '🟡 Pending', count: 5 },
             { value: 'overdue', label: '🔴 Overdue', count: 2 }
@@ -164,7 +164,7 @@ const Sales = ({ mobile, onShowCustomerProfile, onUniversalAction }: SalesProps)
     }
     
     return Math.round(baseCount * timelineModifier);
-  }, [activeTab, leadFilterState, orderFilterState, invoiceFilterState, timelineFilter]);
+  }, [activeTab, leadFilterState, orderFilterState, invoiceFilterState, timelineFilter, leads, orders, invoices]);
 
   // Intelligent scroll calculation
   const calculateScrollBehavior = useCallback(() => {
