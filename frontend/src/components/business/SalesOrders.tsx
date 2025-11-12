@@ -24,6 +24,19 @@ type UnifiedOrder = SalesOrder & {
   serviceType?: 'dyeing' | 'finishing' | 'printing' | 'weaving';
   creditTerms?: 15 | 30 | 45;
   expectedClientMaterialNames?: string[];
+  // Job order credit fields
+  creditApprovalStatus?: 'approved' | 'pending' | 'requires_review';
+  creditApprovalBy?: string;
+  // Service requirements from JobOrder
+  serviceRequirements?: {
+    serviceType: 'dyeing' | 'finishing' | 'printing' | 'weaving';
+    materialType: string;
+    quantity: number;
+    unit: 'meters' | 'yards' | 'kg' | 'pieces';
+    customerSpecifications: Record<string, string | string[]>;
+    deliveryTimeline: string;
+    specialInstructions?: string;
+  };
 };
 
 interface SalesOrdersProps {
@@ -443,16 +456,16 @@ function SalesOrders({
                       </div>
                       <div className={styles.requirementsGrid}>
                         <div className={styles.serviceDetails}>
-                          <p><strong>Material Type:</strong> {(order.serviceRequirements as any).materialType || 'Not specified'}</p>
-                          <p><strong>Quantity:</strong> {((order.serviceRequirements as any).quantity || 0).toLocaleString()} {(order.serviceRequirements as any).unit || 'units'}</p>
-                          <p><strong>Delivery Timeline:</strong> {(order.serviceRequirements as any).deliveryTimeline || 'Not specified'}</p>
+                          <p><strong>Material Type:</strong> {order.serviceRequirements?.materialType || 'Not specified'}</p>
+                          <p><strong>Quantity:</strong> {(order.serviceRequirements?.quantity || 0).toLocaleString()} {order.serviceRequirements?.unit || 'units'}</p>
+                          <p><strong>Delivery Timeline:</strong> {order.serviceRequirements?.deliveryTimeline || 'Not specified'}</p>
                         </div>
                         <div className={styles.specifications}>
-                          {(order.serviceRequirements as any).customerSpecifications && (
+                          {order.serviceRequirements?.customerSpecifications && (
                             <>
                               <p><strong>{customer} Specifications:</strong></p>
                               <ul className={styles.specsList}>
-                                {Object.entries((order.serviceRequirements as any).customerSpecifications).map(([key, value]) => (
+                                {Object.entries(order.serviceRequirements.customerSpecifications).map(([key, value]) => (
                                   <li key={key}>
                                     <span>
                                       {`${key.charAt(0).toUpperCase() + key.slice(1)}: ${Array.isArray(value) ? value.join(', ') : value}`}
@@ -462,8 +475,8 @@ function SalesOrders({
                               </ul>
                             </>
                           )}
-                          {(order.serviceRequirements as any).specialInstructions && (
-                            <p><strong>Special Instructions:</strong> {(order.serviceRequirements as any).specialInstructions}</p>
+                          {order.serviceRequirements?.specialInstructions && (
+                            <p><strong>Special Instructions:</strong> {order.serviceRequirements.specialInstructions}</p>
                           )}
                         </div>
                       </div>
@@ -553,7 +566,7 @@ function SalesOrders({
                           <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue)}</p>
                         )}
                         {order.orderType === 'job_order' && 'creditApprovalStatus' in order && (
-                          <p><strong>Credit Approval:</strong> {(order as any).creditApprovalStatus} {(order as any).creditApprovalBy && `by ${(order as any).creditApprovalBy}`}</p>
+                          <p><strong>Credit Approval:</strong> {order.creditApprovalStatus} {order.creditApprovalBy && `by ${order.creditApprovalBy}`}</p>
                         )}
                       </div>
                     </div>

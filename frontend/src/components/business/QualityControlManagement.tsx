@@ -160,40 +160,100 @@ const QualityControlManagement = ({
 
     return (
       <>
-        <h4>🎯 Quality Specifications</h4>
-        <p><strong>Target Grade:</strong> {qcItem.qualitySpecs.targetGrade}</p>
-        <p><strong>Color:</strong> {qcItem.qualitySpecs.colorCode}</p>
-        <p><strong>GSM Target:</strong> {qcItem.qualitySpecs.gsmTarget}</p>
-        <p><strong>Width:</strong> {qcItem.qualitySpecs.widthTarget}</p>
-        <p><strong>Shrinkage Limit:</strong> {qcItem.qualitySpecs.shrinkageLimit}</p>
+        {/* Quality Specifications Section */}
+        <div className={styles.expandedSection}>
+          <h3 className={styles.sectionHeader}>🎯 Quality Specifications</h3>
+          <div className={styles.professionalDetailsGrid}>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>Target Grade</div>
+              <div className={styles.detailValue}>{qcItem.qualitySpecs.targetGrade}</div>
+            </div>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>Color Code</div>
+              <div className={styles.detailValue}>{qcItem.qualitySpecs.colorCode}</div>
+            </div>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>GSM Target</div>
+              <div className={styles.detailValue}>{qcItem.qualitySpecs.gsmTarget}</div>
+            </div>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>Width Target</div>
+              <div className={styles.detailValue}>{qcItem.qualitySpecs.widthTarget}</div>
+            </div>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>Shrinkage Limit</div>
+              <div className={styles.detailValue}>{qcItem.qualitySpecs.shrinkageLimit}</div>
+            </div>
+          </div>
+        </div>
 
+        {/* QC Checklist Preview Section */}
         {qcItem.checklist && (
-          <>
-            <h4>📋 QC Checklist Preview</h4>
-            {qcItem.checklist.map((item, index) => (
-              <p key={index}>□ {item.item}</p>
-            ))}
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📋 QC Checklist Preview</h3>
+            <div className={styles.checklistPreview}>
+              {qcItem.checklist.map((item, index) => (
+                <div key={index} className={styles.checklistPreviewItem}>
+                  <span>□</span>
+                  <span>{item.item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
+        {/* Batch Information Section */}
         {qcItem.batchInfo && (
-          <>
-            <h4>📦 Batch Information</h4>
-            <p><strong>Batch:</strong> {qcItem.batchInfo.batchNumber}</p>
-            <p><strong>Raw Material:</strong> {qcItem.batchInfo.rawMaterial}</p>
-            {qcItem.batchInfo.dyeLot && <p><strong>Dye Lot:</strong> {qcItem.batchInfo.dyeLot}</p>}
-            <p><strong>Production:</strong> {qcItem.batchInfo.productionDates}</p>
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📦 Batch Information</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Batch Number</div>
+                <div className={styles.detailValue}>{qcItem.batchInfo.batchNumber}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Raw Material</div>
+                <div className={styles.detailValue}>{qcItem.batchInfo.rawMaterial}</div>
+              </div>
+              {qcItem.batchInfo.dyeLot && (
+                <div className={styles.detailRow}>
+                  <div className={styles.detailLabel}>Dye Lot</div>
+                  <div className={styles.detailValue}>{qcItem.batchInfo.dyeLot}</div>
+                </div>
+              )}
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Production Dates</div>
+                <div className={styles.detailValue}>{qcItem.batchInfo.productionDates}</div>
+              </div>
+            </div>
+          </div>
         )}
 
+        {/* Special Instructions Section */}
         {qcItem.specialInstructions && qcItem.specialInstructions.length > 0 && (
-          <>
-            <h4>⚠️ Special Instructions</h4>
-            {qcItem.specialInstructions.map((instruction, index) => (
-              <p key={index}>• {instruction}</p>
-            ))}
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>⚠️ Special Instructions</h3>
+            <div className={styles.professionalNotes}>
+              {qcItem.specialInstructions.map((instruction, index) => (
+                <div key={index} className={styles.notesContent}>
+                  • {instruction}
+                </div>
+              ))}
+            </div>
+          </div>
         )}
+
+        {/* QC Actions Section */}
+        <div className={styles.expandedSection}>
+          <div className={styles.professionalActions}>
+            <button 
+              className="ds-btn ds-btn-primary"
+              onClick={() => handleQCAction('start', qcItem.workOrderId)}
+            >
+              Start QC Inspection
+            </button>
+          </div>
+        </div>
       </>
     );
   };
@@ -204,37 +264,106 @@ const QualityControlManagement = ({
 
     return (
       <>
-        <h4>✅ QC Results</h4>
-        <p><strong>Grade:</strong> {qcItem.grade || 'Pending'}</p>
-        {qcItem.inspector && <p><strong>Inspector:</strong> {qcItem.inspector}</p>}
-        {qcItem.completedTime && <p><strong>Completed:</strong> {qcItem.completedTime}</p>}
-        {qcItem.startedTime && qcItem.completedTime && (
-          <p><strong>Duration:</strong> 1 hour 15 minutes</p>
+        {/* QC Results Section */}
+        <div className={styles.expandedSection}>
+          <h3 className={styles.sectionHeader}>✅ QC Results</h3>
+          <div className={styles.professionalDetailsGrid}>
+            <div className={styles.detailRow}>
+              <div className={styles.detailLabel}>Grade</div>
+              <div className={`${styles.detailValue} ${styles.statusValue}`}>{qcItem.grade || 'Pending'}</div>
+            </div>
+            {qcItem.inspector && (
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Inspector</div>
+                <div className={styles.detailValue}>{qcItem.inspector}</div>
+              </div>
+            )}
+            {qcItem.completedTime && (
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Completed</div>
+                <div className={styles.detailValue}>{qcItem.completedTime}</div>
+              </div>
+            )}
+            {qcItem.startedTime && qcItem.completedTime && (
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Duration</div>
+                <div className={styles.detailValue}>1 hour 15 minutes</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* QC Timeline Section */}
+        {qcItem.startedTime && (
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>🔄 QC Timeline</h3>
+            <div className={styles.professionalTimeline}>
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineLabel}>Started</div>
+                <div className={styles.timelineValue}>{qcItem.startedTime}</div>
+              </div>
+              {qcItem.completedTime && (
+                <div className={styles.timelineItem}>
+                  <div className={styles.timelineLabel}>Completed</div>
+                  <div className={styles.timelineValue}>{qcItem.completedTime}</div>
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
+        {/* Quality Checklist Results Section */}
         {qcItem.checklist && (
-          <>
-            <h4>✅ Quality Checklist Results</h4>
-            {qcItem.checklist.map((item, index) => (
-              <p key={index}>{item.checked ? '☑️' : '☐'} {item.item}</p>
-            ))}
-            <p><strong>Score:</strong> {qcItem.checklist.filter(item => item.checked).length}/{qcItem.checklist.length} passed</p>
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>✅ Quality Checklist Results</h3>
+            <div className={styles.checklistResults}>
+              {qcItem.checklist.map((item, index) => (
+                <div key={index} className={`${styles.checklistResultItem} ${item.checked ? 'passed' : 'failed'}`}>
+                  <span>{item.checked ? '☑️' : '☐'}</span>
+                  <span>{item.item}</span>
+                </div>
+              ))}
+              <div className={styles.checklistScore}>
+                Score: {qcItem.checklist.filter(item => item.checked).length}/{qcItem.checklist.length} passed
+              </div>
+            </div>
+          </div>
         )}
 
+        {/* QC Notes Section */}
         {qcItem.notes && (
-          <>
-            <h4>📝 QC Notes</h4>
-            <p>"{qcItem.notes}"</p>
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📝 QC Notes</h3>
+            <div className={styles.professionalNotes}>
+              <div className={styles.notesContent}>"{qcItem.notes}"</div>
+            </div>
+          </div>
         )}
 
+        {/* Quality Evidence Section */}
         {qcItem.photos && qcItem.photos.length > 0 && (
-          <>
-            <h4>📷 Quality Evidence</h4>
-            <p>{qcItem.photos.length} photos captured</p>
-          </>
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📷 Quality Evidence</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Photos Captured</div>
+                <div className={styles.detailValue}>{qcItem.photos.length} photos</div>
+              </div>
+            </div>
+          </div>
         )}
+
+        {/* QC Actions Section */}
+        <div className={styles.expandedSection}>
+          <div className={styles.professionalActions}>
+            <button className="ds-btn ds-btn-secondary">
+              📝 View QC Report
+            </button>
+            <button className="ds-btn ds-btn-outline">
+              📷 View Evidence
+            </button>
+          </div>
+        </div>
       </>
     );
   };

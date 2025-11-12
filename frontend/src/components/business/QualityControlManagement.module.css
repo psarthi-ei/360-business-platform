@@ -288,6 +288,190 @@
   }
 }
 
+/* ===== PROFESSIONAL EXPANDED DETAILS SYSTEM ===== */
+/* Following Production Order Management's proven styling pattern */
+
+.expandedSection {
+  margin-bottom: var(--ds-space-lg);
+  padding: var(--ds-space-md) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.expandedSection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.sectionHeader {
+  margin: 0 0 var(--ds-space-md) 0;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding-bottom: var(--ds-space-sm);
+  border-bottom: 2px solid var(--ds-border-primary);
+}
+
+/* Professional Details Grid - Consistent spacing and typography */
+.professionalDetailsGrid {
+  display: grid;
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-sm);
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--ds-space-md);
+  align-items: start;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.detailRowFull {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs);
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.detailLabel {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.detailValue {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-weight: 400;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Professional status value styling */
+.statusValue {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--ds-color-primary);
+}
+
+/* ===== PROFESSIONAL TIMELINE SECTION ===== */
+.professionalTimeline {
+  display: grid;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-sm);
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--ds-space-md);
+  align-items: center;
+  padding: var(--ds-space-sm) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.timelineItem:last-child {
+  border-bottom: none;
+}
+
+.timelineLabel {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+}
+
+.timelineValue {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  font-weight: 400;
+}
+
+/* ===== PROFESSIONAL ACTIONS SECTION ===== */
+.professionalActions {
+  display: flex;
+  gap: var(--ds-space-md);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--ds-space-sm);
+}
+
+/* ===== PROFESSIONAL NOTES SECTION ===== */
+.professionalNotes {
+  margin-top: var(--ds-space-sm);
+  padding: var(--ds-space-md);
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-sm);
+  border-left: 4px solid var(--ds-color-primary);
+}
+
+.notesContent {
+  font-size: var(--font-base);
+  color: var(--ds-text-primary);
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ===== QC CHECKLIST STYLING ===== */
+.checklistPreview {
+  display: grid;
+  gap: var(--ds-space-xs);
+  margin-top: var(--ds-space-sm);
+}
+
+.checklistPreviewItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  padding: var(--ds-space-xs) 0;
+}
+
+.checklistResults {
+  display: grid;
+  gap: var(--ds-space-xs);
+  margin-top: var(--ds-space-sm);
+}
+
+.checklistResultItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  font-size: var(--font-sm);
+  color: var(--ds-text-primary);
+  padding: var(--ds-space-xs) 0;
+}
+
+.checklistResultItem.passed {
+  color: var(--ds-status-active);
+}
+
+.checklistResultItem.failed {
+  color: var(--ds-text-muted);
+}
+
+.checklistScore {
+  margin-top: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  background: var(--ds-bg-status-active-subtle);
+  border-radius: var(--ds-radius-sm);
+  font-weight: 600;
+  color: var(--ds-status-active);
+}
+
 /* ===== QC EXPANDED CONTENT STYLING ===== */
 .qcSpecifications {
   display: grid;
@@ -328,5 +512,41 @@
   .actionButtons button {
     flex: 1;
     min-width: calc(50% - 3px);
+  }
+
+  /* Mobile professional details grid */
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-xs);
+  }
+  
+  .detailLabel {
+    font-weight: 600;
+  }
+  
+  /* Mobile timeline */
+  .timelineItem {
+    display: block;
+  }
+  
+  .timelineLabel {
+    display: block;
+    margin-bottom: var(--ds-space-xs);
+    font-weight: 600;
+  }
+  
+  .timelineValue {
+    display: block;
+    font-weight: 400;
+  }
+  
+  /* Mobile professional actions */
+  .professionalActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .professionalActions .ds-btn {
+    width: 100%;
   }
 }

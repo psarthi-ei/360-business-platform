@@ -95,7 +95,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
 
   // Helper functions for work order status display (updated for status variety)
   const getWorkOrderStatusClass = (status: WorkOrder['status']): string => {
-    const statusMap = {
+    const statusMap: Record<WorkOrder['status'], string> = {
       'completed': 'status-completed',
       'delivered': 'status-delivered',
       'dispatched': 'status-delivered',
@@ -107,12 +107,12 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
       'qc_rejected': 'status-rejected',
       'rework_required': 'status-rejected',
       'on_hold': 'status-inactive'
-    } as const satisfies Record<WorkOrder['status'], string>;
+    };
     return statusMap[status] || 'status-pending';
   };
 
   const getWorkOrderStatusIcon = (status: WorkOrder['status']): string => {
-    const statusMap = {
+    const statusMap: Record<WorkOrder['status'], string> = {
       'completed': '✅',
       'delivered': '🚚',
       'dispatched': '📤',
@@ -124,12 +124,12 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
       'qc_rejected': '🔍❌',
       'rework_required': '🔧',
       'on_hold': '⏸️'
-    } as const satisfies Record<WorkOrder['status'], string>;
+    };
     return statusMap[status] || '❓';
   };
 
   const getWorkOrderStatusText = (status: WorkOrder['status']): string => {
-    const statusMap = {
+    const statusMap: Record<WorkOrder['status'], string> = {
       'completed': 'Completed',
       'delivered': 'Delivered',
       'dispatched': 'Dispatched',
@@ -141,7 +141,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
       'qc_rejected': 'QC Rejected',
       'rework_required': 'Rework Required',
       'on_hold': 'On Hold'
-    } as const satisfies Record<WorkOrder['status'], string>;
+    };
     return statusMap[status] || 'Unknown';
   };
 

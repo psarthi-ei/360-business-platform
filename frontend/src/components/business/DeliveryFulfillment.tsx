@@ -96,17 +96,6 @@ const DeliveryFulfillment = ({
     }
   };
 
-  // Helper function to get invoice status based on delivery workflow
-  const getInvoiceStatus = (deliveryItem: DeliveryItem) => {
-    switch(deliveryItem.status) {
-      case 'ready_dispatch': return '📄 Invoice Pending';
-      case 'delivery_scheduled': return '📄 Invoice Generated';
-      case 'dispatched': return '📄 Invoice Final';
-      case 'delivered': return '📄 Invoice Final';
-      case 'failed_returned': return '📄 Invoice Review';
-      default: return '';
-    }
-  };
 
 
   // Delivery Workflow Functions
@@ -212,86 +201,348 @@ const DeliveryFulfillment = ({
     if (deliveryItem.status === 'ready_dispatch') {
       return (
         <>
-          <h4>📦 Order Details</h4>
-          <p><strong>Job Order:</strong> {deliveryItem.salesOrderId}</p>
-          <p><strong>Lot Quantity:</strong> {deliveryItem.quantity}</p>
-          <p><strong>Quality Grade:</strong> {deliveryItem.qcGrade}</p>
-          <p><strong>Work Order (Lot):</strong> {deliveryItem.workOrderId}</p>
+          {/* Order Details Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📦 Order Details</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Job Order</div>
+                <div className={styles.detailValue}>{deliveryItem.salesOrderId}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Lot Quantity</div>
+                <div className={styles.detailValue}>{deliveryItem.quantity}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Quality Grade</div>
+                <div className={`${styles.detailValue} ${styles.statusValue}`}>{deliveryItem.qcGrade}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Work Order (Lot)</div>
+                <div className={styles.detailValue}>{deliveryItem.workOrderId}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📍 Delivery Information</h4>
-          <p><strong>Customer:</strong> {deliveryItem.customer}</p>
-          <p><strong>Business Profile ID:</strong> {deliveryItem.businessProfileId}</p>
+          {/* Delivery Information Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📍 Delivery Information</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailValue}>{deliveryItem.customer}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Business Profile ID</div>
+                <div className={styles.detailValue}>{deliveryItem.businessProfileId}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📋 Production Summary</h4>
-          <p><strong>Ready Since:</strong> {deliveryItem.readyTime}</p>
-          <p><strong>Priority:</strong> {deliveryItem.priority}</p>
+          {/* Production Summary Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📋 Production Summary</h3>
+            <div className={styles.professionalTimeline}>
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineLabel}>Ready Since</div>
+                <div className={styles.timelineValue}>{deliveryItem.readyTime}</div>
+              </div>
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineLabel}>Priority</div>
+                <div className={styles.timelineValue}>{deliveryItem.priority}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery Actions Section */}
+          <div className={styles.expandedSection}>
+            <div className={styles.professionalActions}>
+              <button 
+                className="ds-btn ds-btn-primary"
+                onClick={() => handleDeliveryAction('schedule', deliveryItem.id)}
+              >
+                📋 Schedule Delivery
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📦 View Order
+              </button>
+            </div>
+          </div>
         </>
       );
     } else if (deliveryItem.status === 'delivery_scheduled') {
       return (
         <>
-          <h4>🚚 Logistics Details</h4>
-          <p><strong>Vehicle:</strong> {deliveryItem.assignedVehicle}</p>
-          <p><strong>Driver:</strong> {deliveryItem.assignedDriver}</p>
-          <p><strong>Phone:</strong> {deliveryItem.driverPhone}</p>
-          <p><strong>Scheduled Delivery:</strong> {deliveryItem.scheduledDelivery}</p>
+          {/* Logistics Details Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>🚚 Logistics Details</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Vehicle</div>
+                <div className={styles.detailValue}>{deliveryItem.assignedVehicle}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Driver</div>
+                <div className={styles.detailValue}>{deliveryItem.assignedDriver}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Phone</div>
+                <div className={styles.detailValue}>{deliveryItem.driverPhone}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Scheduled Delivery</div>
+                <div className={styles.detailValue}>{deliveryItem.scheduledDelivery}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📍 Delivery Destination</h4>
-          <p><strong>Customer:</strong> {deliveryItem.customer}</p>
-          <p><strong>Job Order:</strong> {deliveryItem.salesOrderId}</p>
-          <p><strong>Business Profile:</strong> {deliveryItem.businessProfileId}</p>
+          {/* Delivery Destination Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📍 Delivery Destination</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailValue}>{deliveryItem.customer}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Job Order</div>
+                <div className={styles.detailValue}>{deliveryItem.salesOrderId}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Business Profile</div>
+                <div className={styles.detailValue}>{deliveryItem.businessProfileId}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery Actions Section */}
+          <div className={styles.expandedSection}>
+            <div className={styles.professionalActions}>
+              <button 
+                className="ds-btn ds-btn-primary"
+                onClick={() => handleDeliveryAction('dispatch', deliveryItem.id)}
+              >
+                🚚 Dispatch Now
+              </button>
+              <button className="ds-btn ds-btn-secondary">
+                📞 Call Driver
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📋 Edit Schedule
+              </button>
+            </div>
+          </div>
         </>
       );
     } else if (deliveryItem.status === 'dispatched' && deliveryItem.trackingInfo) {
       return (
         <>
-          <h4>📍 Live Tracking</h4>
-          <p><strong>Current Location:</strong> {deliveryItem.trackingInfo.currentLocation}</p>
-          <p><strong>Distance Remaining:</strong> {deliveryItem.trackingInfo.distanceRemaining}</p>
-          <p><strong>ETA:</strong> {deliveryItem.trackingInfo.eta}</p>
-          <p><strong>Last Updated:</strong> {deliveryItem.trackingInfo.lastUpdated}</p>
+          {/* Live Tracking Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📍 Live Tracking</h3>
+            <div className={styles.trackingProgress}>
+              <div className={styles.trackingStatus}>
+                🚚 En Route - {deliveryItem.trackingInfo.distanceRemaining} remaining
+              </div>
+            </div>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Current Location</div>
+                <div className={styles.detailValue}>{deliveryItem.trackingInfo.currentLocation}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Distance Remaining</div>
+                <div className={styles.detailValue}>{deliveryItem.trackingInfo.distanceRemaining}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>ETA</div>
+                <div className={`${styles.detailValue} ${styles.statusValue}`}>{deliveryItem.trackingInfo.eta}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Last Updated</div>
+                <div className={styles.detailValue}>{deliveryItem.trackingInfo.lastUpdated}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>🛣️ Delivery Progress</h4>
-          <p><strong>Route:</strong> {deliveryItem.trackingInfo.route}</p>
-          <p><strong>Speed:</strong> {deliveryItem.trackingInfo.speed}</p>
+          {/* Delivery Progress Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>🛣️ Delivery Progress</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Route</div>
+                <div className={styles.detailValue}>{deliveryItem.trackingInfo.route}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Speed</div>
+                <div className={styles.detailValue}>{deliveryItem.trackingInfo.speed}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📞 Communication</h4>
-          <p><strong>Driver:</strong> {deliveryItem.assignedDriver}</p>
-          <p><strong>Phone:</strong> {deliveryItem.driverPhone}</p>
+          {/* Communication Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📞 Communication</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Driver</div>
+                <div className={styles.detailValue}>{deliveryItem.assignedDriver}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Phone</div>
+                <div className={styles.detailValue}>{deliveryItem.driverPhone}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Tracking Actions Section */}
+          <div className={styles.expandedSection}>
+            <div className={styles.professionalActions}>
+              <button className="ds-btn ds-btn-secondary">
+                📞 Call Driver
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📍 View Map
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📋 Delivery Details
+              </button>
+            </div>
+          </div>
         </>
       );
     } else if (deliveryItem.status === 'delivered' && deliveryItem.deliveryProof) {
       return (
         <>
-          <h4>📋 Delivery Confirmation</h4>
-          <p><strong>Delivery Time:</strong> {deliveryItem.actualDelivery}</p>
-          <p><strong>Received By:</strong> {deliveryItem.deliveryProof.receivedBy}</p>
-          <p><strong>Designation:</strong> {deliveryItem.deliveryProof.receivedDesignation}</p>
-          <p><strong>Condition:</strong> {deliveryItem.deliveryProof.condition}</p>
+          {/* Delivery Confirmation Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📋 Delivery Confirmation</h3>
+            <div className={styles.deliveryProofSection}>
+              <div className={styles.deliveryProofStatus}>
+                ✅ Delivery Completed Successfully
+              </div>
+            </div>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Delivery Time</div>
+                <div className={styles.detailValue}>{deliveryItem.actualDelivery}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Received By</div>
+                <div className={styles.detailValue}>{deliveryItem.deliveryProof.receivedBy}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Designation</div>
+                <div className={styles.detailValue}>{deliveryItem.deliveryProof.receivedDesignation}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Condition</div>
+                <div className={`${styles.detailValue} ${styles.statusValue}`}>{deliveryItem.deliveryProof.condition}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📷 Proof of Delivery</h4>
-          <p><strong>Photo Evidence:</strong> {deliveryItem.deliveryProof.photoEvidence ? 'Captured ✅' : 'Not Available'}</p>
-          <p><strong>Customer Signature:</strong> {deliveryItem.deliveryProof.customerSignature ? 'Captured ✅' : 'Not Available'}</p>
+          {/* Proof of Delivery Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📷 Proof of Delivery</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Photo Evidence</div>
+                <div className={styles.detailValue}>{deliveryItem.deliveryProof.photoEvidence ? 'Captured ✅' : 'Not Available'}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Customer Signature</div>
+                <div className={styles.detailValue}>{deliveryItem.deliveryProof.customerSignature ? 'Captured ✅' : 'Not Available'}</div>
+              </div>
+            </div>
+          </div>
           
-          <h4>📝 Delivery Notes</h4>
-          <p>"{deliveryItem.deliveryProof.deliveryNotes}"</p>
+          {/* Delivery Notes Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📝 Delivery Notes</h3>
+            <div className={styles.professionalNotes}>
+              <div className={styles.notesContent}>"{deliveryItem.deliveryProof.deliveryNotes}"</div>
+            </div>
+          </div>
+
+          {/* Delivery Actions Section */}
+          <div className={styles.expandedSection}>
+            <div className={styles.professionalActions}>
+              <button className="ds-btn ds-btn-secondary">
+                📷 View Proof
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📋 Generate Report
+              </button>
+            </div>
+          </div>
         </>
       );
     } else if (deliveryItem.status === 'failed_returned' && deliveryItem.failureInfo) {
       return (
         <>
-          <h4>❌ Delivery Failure Details</h4>
-          <p><strong>Reason:</strong> {deliveryItem.failureInfo.reason}</p>
-          <p><strong>Attempt:</strong> {deliveryItem.failureInfo.attempt} of {deliveryItem.failureInfo.maxAttempts}</p>
-          <p><strong>Driver Notes:</strong> "{deliveryItem.failureInfo.driverNotes}"</p>
+          {/* Delivery Failure Details Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>❌ Delivery Failure Details</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Reason</div>
+                <div className={styles.detailValue}>{deliveryItem.failureInfo.reason}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Attempt</div>
+                <div className={styles.detailValue}>{deliveryItem.failureInfo.attempt} of {deliveryItem.failureInfo.maxAttempts}</div>
+              </div>
+            </div>
+            <div className={styles.professionalNotes}>
+              <div className={styles.notesContent}>Driver Notes: "{deliveryItem.failureInfo.driverNotes}"</div>
+            </div>
+          </div>
 
-          <h4>🔄 Return Information</h4>
-          <p><strong>Return Status:</strong> {deliveryItem.failureInfo.returnStatus}</p>
-          <p><strong>Next Attempt:</strong> {deliveryItem.failureInfo.nextAttemptDate}</p>
+          {/* Return Information Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>🔄 Return Information</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Return Status</div>
+                <div className={`${styles.detailValue} ${styles.statusValue}`}>{deliveryItem.failureInfo.returnStatus}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Next Attempt</div>
+                <div className={styles.detailValue}>{deliveryItem.failureInfo.nextAttemptDate}</div>
+              </div>
+            </div>
+          </div>
 
-          <h4>📞 Customer Contact</h4>
-          <p><strong>Customer:</strong> {deliveryItem.customer}</p>
-          <p><strong>Business Profile:</strong> {deliveryItem.businessProfileId}</p>
+          {/* Customer Contact Section */}
+          <div className={styles.expandedSection}>
+            <h3 className={styles.sectionHeader}>📞 Customer Contact</h3>
+            <div className={styles.professionalDetailsGrid}>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailValue}>{deliveryItem.customer}</div>
+              </div>
+              <div className={styles.detailRow}>
+                <div className={styles.detailLabel}>Business Profile</div>
+                <div className={styles.detailValue}>{deliveryItem.businessProfileId}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recovery Actions Section */}
+          <div className={styles.expandedSection}>
+            <div className={styles.professionalActions}>
+              <button className="ds-btn ds-btn-primary">
+                🔄 Reschedule Delivery
+              </button>
+              <button className="ds-btn ds-btn-secondary">
+                📞 Contact Customer
+              </button>
+              <button className="ds-btn ds-btn-outline">
+                📋 View History
+              </button>
+            </div>
+          </div>
         </>
       );
     }
@@ -923,9 +1174,9 @@ const DeliveryFulfillment = ({
                     {deliveryItem.salesOrderId} — {deliveryItem.customer}
                   </div>
 
-                  {/* Card Status - Delivery status + due date */}
+                  {/* Card Status - Delivery status + due date + priority */}
                   <div className="ds-card-status">
-                    {statusInfo.icon} {statusInfo.label} • Due: {deliveryItem.dueDate}{getDeliveryPriorityText(deliveryItem) && ` • ${getDeliveryPriorityText(deliveryItem)}`} • {getInvoiceStatus(deliveryItem)}
+                    {statusInfo.icon} {statusInfo.label} • Due: {deliveryItem.dueDate}{getDeliveryPriorityText(deliveryItem) && ` • ${getDeliveryPriorityText(deliveryItem)}`}
                   </div>
 
                   {/* Card Meta - product + quantity + timing */}
