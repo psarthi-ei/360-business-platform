@@ -329,7 +329,7 @@ export const mockWorkOrders: WorkOrder[] = [
     producedQuantity: '2000m',
     remainingQuantity: '0m',
     progress: 100,
-    status: 'completed',
+    status: 'delivered',
     assignedMachine: 'DYE-D1',
     assignedWorker: 'Suresh',
     startTime: '08:00 AM',
@@ -367,10 +367,10 @@ export const mockWorkOrders: WorkOrder[] = [
     customer: 'Ahmedabad Finishers',
     batchNumber: 'FIN-002-A',
     targetQuantity: '1500m',
-    producedQuantity: '0m',
-    remainingQuantity: '1500m',
-    progress: 0,
-    status: 'pending',
+    producedQuantity: '1500m',
+    remainingQuantity: '0m',
+    progress: 100,
+    status: 'ready_for_delivery',
     assignedMachine: 'FINISH-F1',
     assignedWorker: 'Vikram',
     priority: 'normal',
@@ -513,7 +513,12 @@ export const mockQCItems: QualityControlItem[] = [
   {
     id: 'QC-2025-001-A',
     workOrderId: 'WO-2025-001-A',
-    status: 'pending_inspection',
+    status: 'approved',
+    inspector: 'Ravi Sharma',
+    grade: 'A Grade',
+    startedTime: '2025-10-17 09:00',
+    completedTime: '2025-10-17 10:30',
+    notes: 'Excellent dyeing quality. Color fastness test passed. Export standards met.',
     priority: 'normal',
     qualitySpecs: {
       targetGrade: 'A Grade',
@@ -523,6 +528,13 @@ export const mockQCItems: QualityControlItem[] = [
       shrinkageLimit: '<3%'
     },
     specialInstructions: ['Color fastness test required', 'Export standard compliance check'],
+    checklist: [
+      { item: 'Color fastness test', checked: true, required: true },
+      { item: 'Export standard compliance check', checked: true, required: true },
+      { item: 'Visual quality inspection', checked: true, required: true },
+      { item: 'GSM weight verification', checked: true, required: false }
+    ],
+    photos: ['qc_navy_dyeing_001.jpg', 'qc_navy_dyeing_002.jpg'],
     batchInfo: {
       batchNumber: 'DYE-001-A',
       rawMaterial: 'Cotton Grey Fabric',
@@ -535,7 +547,12 @@ export const mockQCItems: QualityControlItem[] = [
   {
     id: 'QC-2025-002-A',
     workOrderId: 'WO-2025-002-A',
-    status: 'pending_inspection',
+    status: 'approved',
+    inspector: 'Priya Patel',
+    grade: 'A Grade',
+    startedTime: '2025-10-19 11:00',
+    completedTime: '2025-10-19 12:15',
+    notes: 'Excellent finishing quality. Softness test and anti-wrinkle effectiveness check passed.',
     priority: 'normal',
     qualitySpecs: {
       targetGrade: 'Standard',
@@ -545,6 +562,13 @@ export const mockQCItems: QualityControlItem[] = [
       shrinkageLimit: '<2%'
     },
     specialInstructions: ['Softness test required', 'Anti-wrinkle effectiveness check', 'Chemical residue test'],
+    checklist: [
+      { item: 'Softness test', checked: true, required: true },
+      { item: 'Anti-wrinkle effectiveness check', checked: true, required: true },
+      { item: 'Chemical residue test', checked: true, required: true },
+      { item: 'Visual finish inspection', checked: true, required: false }
+    ],
+    photos: ['qc_finishing_001.jpg', 'qc_finishing_002.jpg'],
     batchInfo: {
       batchNumber: 'FIN-002-A',
       rawMaterial: 'Cotton Dyed Fabric',

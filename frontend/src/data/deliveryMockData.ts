@@ -138,7 +138,7 @@ export const mockDeliveryItems: DeliveryItem[] = [
     customer: 'Surat Processors',
     quantity: '2000m',
     qcGrade: 'A Grade',
-    status: 'ready_dispatch',
+    status: 'delivered',
     readyTime: '2025-10-17 14:30',
     dueDate: '2025-10-20',
     
@@ -148,11 +148,23 @@ export const mockDeliveryItems: DeliveryItem[] = [
     driverPhone: '+91 98765 43210',
     scheduledPickup: '2025-10-18 09:00',
     scheduledDelivery: '2025-10-18 11:30',
+    actualDispatch: '2025-10-18 09:15',
+    actualDelivery: '2025-10-18 11:45',
+    
+    // Delivery Proof
+    deliveryProof: {
+      photoEvidence: '/uploads/delivery_proof_navy_dyeing.jpg',
+      customerSignature: '/uploads/signature_surat_processors.jpg',
+      receivedBy: 'Rakesh Kumar',
+      receivedDesignation: 'Production Manager',
+      deliveryNotes: 'Material delivered in excellent condition. Customer satisfied with quality.',
+      condition: 'Perfect'
+    },
     
     priority: 'normal'
   },
   
-  // Delivery Item for WO-2025-002-A (Finishing - pending completion)
+  // Delivery Item for WO-2025-002-A (Finishing - completed)
   {
     id: 'DEL-2025-002-A',
     workOrderId: 'WO-2025-002-A',
@@ -161,10 +173,29 @@ export const mockDeliveryItems: DeliveryItem[] = [
     product: 'Softening & Anti-wrinkle Finishing - Lot A',
     customer: 'Ahmedabad Finishers',
     quantity: '1500m',
-    qcGrade: 'Pending QC',
-    status: 'ready_dispatch',
+    qcGrade: 'A Grade',
+    status: 'delivered',
     readyTime: '2025-10-18 16:00',
     dueDate: '2025-10-22',
+    
+    // Logistics Details
+    assignedVehicle: 'GJ-03-EF-9012',
+    assignedDriver: 'Kiran Modi',
+    driverPhone: '+91 98765 43212',
+    scheduledPickup: '2025-10-19 10:00',
+    scheduledDelivery: '2025-10-19 15:00',
+    actualDispatch: '2025-10-19 10:30',
+    actualDelivery: '2025-10-19 15:30',
+    
+    // Delivery Proof
+    deliveryProof: {
+      photoEvidence: '/uploads/delivery_proof_finishing.jpg',
+      customerSignature: '/uploads/signature_ahmedabad_finishers.jpg',
+      receivedBy: 'Arvind Patel',
+      receivedDesignation: 'Quality Manager',
+      deliveryNotes: 'Finishing work completed perfectly. Softness and anti-wrinkle properties as per specifications.',
+      condition: 'Excellent'
+    },
     
     priority: 'normal'
   },

@@ -866,57 +866,117 @@ export const mockConsolidatedPurchaseRequests: ConsolidatedPurchaseRequest[] = [
 // ==================== INWARD ENTRY MOCK DATA (CUSTOMER FABRIC) ====================
 
 export const mockInwardEntries: InwardEntry[] = [
+  // Fixed to align with actual Job Order IDs and Production Orders
   {
-    id: 'IE-001',
-    jobOrderId: 'SO-002', // Gujarat Garments job order
-    customerId: 'bp-gujarat-garments',
-    customerName: 'Gujarat Garments',
-    materialType: 'Cotton Mixed',
-    receivedQuantity: 500,
+    id: 'IE-2025-001',
+    jobOrderId: 'JO-2025-001', // Surat Processors - Dyeing Service
+    customerId: 'bp-surat-processors',
+    customerName: 'Surat Processors',
+    materialType: 'Cotton Grey Fabric',
+    receivedQuantity: 2000,
     unit: 'meters',
-    challanNumber: 'GG-CH-1024',
+    challanNumber: 'SP-CH-2025-001',
     receivedDate: '2025-10-16',
     qualityAssessment: 'A-Grade',
     receivedBy: 'Warehouse Team',
     inspectionDate: '2025-10-16',
     inspectedBy: 'Quality Inspector',
-    challanPhoto: '/uploads/challan_GG_1024.jpg',
-    notes: 'Customer fabric received in good condition - ready for dyeing'
+    challanPhoto: '/uploads/challan_SP_2025_001.jpg',
+    notes: 'Customer fabric received in good condition - ready for Navy Blue dyeing'
   },
   {
-    id: 'IE-002',
-    jobOrderId: 'SO-003', // Chennai Exports job order
-    customerId: 'bp-chennai-exports',
-    customerName: 'Chennai Exports',
-    materialType: 'Silk',
-    receivedQuantity: 300,
+    id: 'IE-2025-002',
+    jobOrderId: 'JO-2025-002', // Ahmedabad Finishers - Finishing Service
+    customerId: 'bp-ahmedabad-finishers',
+    customerName: 'Ahmedabad Finishers',
+    materialType: 'Cotton Dyed Fabric',
+    receivedQuantity: 1500,
     unit: 'meters',
-    challanNumber: 'CE-CH-2041',
+    challanNumber: 'AF-CH-2025-002',
     receivedDate: '2025-10-19',
-    qualityAssessment: 'Export-Grade',
+    qualityAssessment: 'Standard',
     receivedBy: 'Warehouse Team',
     inspectionDate: '2025-10-19',
     inspectedBy: 'Quality Inspector',
-    notes: 'Premium silk fabric - temperature controlled processing required'
+    challanPhoto: '/uploads/challan_AF_2025_002.jpg',
+    notes: 'Dyed fabric received - ready for softening & anti-wrinkle finishing'
   },
   {
-    id: 'IE-003',
-    jobOrderId: 'SO-004', // Baroda Fashion job order
-    customerId: 'bp-baroda-fashion',
-    customerName: 'Baroda Fashion',
-    materialType: 'Cotton Blend',
-    receivedQuantity: 750,
+    id: 'IE-2025-003',
+    jobOrderId: 'JO-2025-003', // Mumbai Printers - Printing Service
+    customerId: 'bp-mumbai-printers',
+    customerName: 'Mumbai Printers',
+    materialType: 'Polyester Fabric',
+    receivedQuantity: 3000,
     unit: 'meters',
-    challanNumber: 'BF-CH-3012',
-    receivedDate: '2025-10-14',
-    qualityAssessment: 'A-Grade',
+    challanNumber: 'MP-CH-2025-003',
+    receivedDate: '2025-10-21',
+    qualityAssessment: 'Export-Grade',
     receivedBy: 'Warehouse Team',
-    inspectionDate: '2025-10-14',
+    inspectionDate: '2025-10-21',
     inspectedBy: 'Quality Inspector',
-    challanPhoto: '/uploads/challan_BF_3012.jpg',
-    notes: 'Pre-dyed cotton blend - ready for finishing process'
+    challanPhoto: '/uploads/challan_MP_2025_003.jpg',
+    notes: 'Premium polyester fabric received - ready for multi-color printing'
   }
 ];
+
+// Additional Inward Entries for Production Orders awaiting Work Order creation
+export const mockNewInwardEntries: InwardEntry[] = [
+  {
+    id: 'IE-2025-004',
+    jobOrderId: 'JO-2025-004', // Rajkot Textiles - Two-color dyeing
+    customerId: 'bp-rajkot-textiles',
+    customerName: 'Rajkot Textiles Ltd.',
+    materialType: 'Cotton Grey Fabric',
+    receivedQuantity: 2400,
+    unit: 'meters',
+    challanNumber: 'RT-CH-2025-004',
+    receivedDate: '2025-11-11',
+    qualityAssessment: 'A-Grade',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2025-11-11',
+    inspectedBy: 'Quality Inspector',
+    challanPhoto: '/uploads/challan_RT_2025_004.jpg',
+    notes: 'Customer fabric received for dual-color dyeing - awaiting lot definition'
+  },
+  {
+    id: 'IE-2025-005',
+    jobOrderId: 'JO-2025-005', // Vadodara Mills - Multi-treatment finishing
+    customerId: 'bp-vadodara-mills',
+    customerName: 'Vadodara Processing Mills',
+    materialType: 'Cotton Dyed Fabric',
+    receivedQuantity: 3500,
+    unit: 'meters',
+    challanNumber: 'VM-CH-2025-005',
+    receivedDate: '2025-11-09',
+    qualityAssessment: 'Premium',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2025-11-09',
+    inspectedBy: 'Quality Inspector',
+    challanPhoto: '/uploads/challan_VM_2025_005.jpg',
+    notes: 'Premium fabric received for multi-treatment finishing - awaiting lot creation'
+  },
+  {
+    id: 'IE-2025-006',
+    jobOrderId: 'JO-2025-006', // Bharuch Digital Printers
+    customerId: 'bp-bharuch-printers',
+    customerName: 'Bharuch Digital Printers',
+    materialType: 'Polyester Fabric',
+    receivedQuantity: 4000,
+    unit: 'meters',
+    challanNumber: 'BD-CH-2025-006',
+    receivedDate: '2025-11-12',
+    qualityAssessment: 'Export-Grade',
+    receivedBy: 'Warehouse Team',
+    inspectionDate: '2025-11-12',
+    inspectedBy: 'Quality Inspector',
+    challanPhoto: '/uploads/challan_BD_2025_006.jpg',
+    notes: 'Export-grade polyester received for 4-color digital printing - awaiting lot creation'
+  }
+];
+
+// Combine all inward entries
+mockInwardEntries.push(...mockNewInwardEntries);
 
 // ==================== HELPER FUNCTIONS ====================
 

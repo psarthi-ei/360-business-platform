@@ -10,6 +10,7 @@ import {
   SalesOrder
 } from '../../data/salesMockData';
 import { useTranslation } from '../../contexts/TranslationContext';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
 import styles from './SalesOrders.module.css';
 
@@ -43,6 +44,11 @@ function SalesOrders({
   includeJobOrders = true // Default to include both types
 }: SalesOrdersProps) {
   const { t } = useTranslation();
+  
+  // Use terminology hook for local terminology
+  const { 
+    customer, lead, quote, order: orderTerm 
+  } = useTerminologyTerms();
   
   // Use card expansion hook for consistent single-card expansion behavior
   const { toggleExpansion, isExpanded } = useCardExpansion();
@@ -94,8 +100,19 @@ function SalesOrders({
   }, [getAllOrders, filterState]);
   
   // Helper function to get payment details for an order from ProformaInvoice data
-  const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string) => {
-    // Default values
+  const getOrderPaymentDetails = (orderId: string, totalAmount: number, quoteId?: string, orderType?: string) => {
+    // Job Orders are credit-based - no advance payment, bill after completion
+    if (orderType === 'job_order') {
+      return {
+        advanceAmount: 0, // No advance for Job Orders
+        advanceReceived: 0,
+        balanceAdvance: totalAmount, // Full amount pending until completion
+        paymentStatus: 'pending' as const,
+        advancePercentage: 0
+      };
+    }
+    
+    // Sales Orders logic - advance payment model
     let advanceAmount = 0;
     let advancePercentage = 0;
     
@@ -108,7 +125,7 @@ function SalesOrders({
       }
     }
     
-    // Simulate different payment states based on order ID (same logic as Payments)
+    // Sales Order payment simulation based on ID
     let advanceReceived = 0;
     let paymentStatus = 'pending';
     
@@ -281,7 +298,7 @@ function SalesOrders({
             in_transit: 'In Transit',
             
             // Legacy JobOrder status values (compatibility)
-            awaiting_client_materials: 'Awaiting Client Materials',
+            awaiting_client_materials: `Awaiting ${customer} Materials`,
             materials_acknowledged: 'Materials Received',
             service_completed: 'Service Completed',
             ready_for_invoice: 'Ready for Invoice'
@@ -289,7 +306,7 @@ function SalesOrders({
 
           const relatedQuote = mockQuotes.find(quote => quote.id === order.quoteId);
           const relatedLead = relatedQuote ? mockLeads.find(lead => lead.id === relatedQuote.leadId) : null;
-          const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount, order.quoteId);
+          const paymentDetails = getOrderPaymentDetails(order.id, order.totalAmount, order.quoteId, order.orderType);
 
           const businessProfile = getBusinessProfileById(order.businessProfileId);
           const companyName = businessProfile?.companyName || 'Unknown Company';
@@ -329,74 +346,201 @@ function SalesOrders({
                 </div>
               </div>
 
-              {/* Progressive Disclosure - Detailed Information */}
+              {/* Progressive Disclosure - Professional Sectioned Layout */}
               {isExpanded(order.id) && (
-                <div className="ds-expanded-details">
-                  <div className="ds-details-content">
-                    {/* Enhanced Order Details - Focus on NEW information not in card */}
-                    <p><strong>Order Type:</strong> {order.orderType === 'job_order' ? '🔧 Job Work Order' : '📦 Sales Order'} • <strong>Materials:</strong> {order.materialOwnership === 'client' ? '👤 Client Owned' : '🏭 Company Owned'} • <strong>Payment:</strong> {order.paymentType === 'credit' ? '💳 Credit Terms' : '💰 Advance Payment'}</p>
-                    <p><strong>Status Details:</strong> {order.statusMessage}</p>
-                    <p><strong>Production Status:</strong> {order.statusMessage}</p>
-                    {order.balancePaymentDue && order.balancePaymentDue > 0 && (
-                      <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue)}</p>
-                    )}
-                    {order.progressPercentage && (
-                      <p><strong>Progress:</strong> {order.progressPercentage}% completed</p>
-                    )}
-                    {order.orderType === 'job_order' && 'serviceType' in order && (
-                      <p><strong>Service Type:</strong> {order.serviceType} • <strong>Credit Terms:</strong> {order.creditTerms} days</p>
-                    )}
+                <div className={styles.expandedSection}>
+                  <>
+                    {/* SECTION 1: Order Summary (Top Priority) */}
+                  <div className={order.orderType === 'job_order' ? styles.jobOrderSummarySection : styles.salesOrderSummarySection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>{order.orderType === 'job_order' ? '🔧' : '📦'}</span>
+                        {order.orderType === 'job_order' ? `${orderTerm} Summary` : `${orderTerm} Summary`}
+                      </h4>
+                    </div>
+                    <div className={styles.summaryGrid}>
+                      <div className={styles.summaryDetails}>
+                        {order.orderType === 'job_order' && (
+                          <p><strong>Service Type:</strong> {('serviceType' in order && order.serviceType) ? order.serviceType.charAt(0).toUpperCase() + order.serviceType.slice(1) : 'Standard Processing'}</p>
+                        )}
+                        <p><strong>{order.orderType === 'job_order' ? `${orderTerm} Value:` : `${orderTerm} Value:`}</strong> {formatCurrency(order.totalAmount)}</p>
+                        <p><strong>{order.orderType === 'job_order' ? 'Credit Terms:' : 'Payment Terms:'}</strong> {order.orderType === 'job_order' && 'creditTerms' in order && order.creditTerms ? `${order.creditTerms} days` : 'Standard Terms'}</p>
+                        <p><strong>Material Ownership:</strong> {order.materialOwnership === 'client' ? `👤 ${customer} Owned Materials` : '🏭 Company Materials'}</p>
+                      </div>
+                      <div className={styles.statusDetails}>
+                        <p><strong>Current Status:</strong> {order.statusMessage}</p>
+                        <p><strong>Delivery Date:</strong> {order.deliveryDate}</p>
+                        {order.progressPercentage !== undefined && (
+                          <div className={styles.progressSection}>
+                            {order.status === 'materials_pending' ? (
+                              <p><strong>Progress:</strong> Awaiting materials delivery</p>
+                            ) : (
+                              <>
+                                <p><strong>Progress:</strong> {order.progressPercentage}% completed</p>
+                                <div className={styles.progressBar}>
+                                  <div 
+                                    className={styles.progressFill}
+                                    style={{ width: `${order.progressPercentage}%` }}
+                                  ></div>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Comprehensive Item Details with Production Context - Always Visible */}
+                  {/* SECTION 2: Service Requirements & Processing Details (Job Orders Only) */}
+                  {order.orderType === 'job_order' && 'serviceRequirements' in order && order.serviceRequirements && 
+                   typeof order.serviceRequirements === 'object' && 'materialType' in order.serviceRequirements && (
+                    <div className={styles.serviceRequirementsSection}>
+                      <div className={styles.sectionHeader}>
+                        <h4 className={styles.sectionTitle}>
+                          <span className={styles.sectionIcon}>⚙️</span>
+                          Service Requirements
+                        </h4>
+                      </div>
+                      <div className={styles.requirementsGrid}>
+                        <div className={styles.serviceDetails}>
+                          <p><strong>Material Type:</strong> {(order.serviceRequirements as any).materialType || 'Not specified'}</p>
+                          <p><strong>Quantity:</strong> {((order.serviceRequirements as any).quantity || 0).toLocaleString()} {(order.serviceRequirements as any).unit || 'units'}</p>
+                          <p><strong>Delivery Timeline:</strong> {(order.serviceRequirements as any).deliveryTimeline || 'Not specified'}</p>
+                        </div>
+                        <div className={styles.specifications}>
+                          {(order.serviceRequirements as any).customerSpecifications && (
+                            <>
+                              <p><strong>{customer} Specifications:</strong></p>
+                              <ul className={styles.specsList}>
+                                {Object.entries((order.serviceRequirements as any).customerSpecifications).map(([key, value]) => (
+                                  <li key={key}>
+                                    <span>
+                                      {`${key.charAt(0).toUpperCase() + key.slice(1)}: ${Array.isArray(value) ? value.join(', ') : value}`}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
+                          {(order.serviceRequirements as any).specialInstructions && (
+                            <p><strong>Special Instructions:</strong> {(order.serviceRequirements as any).specialInstructions}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SECTION 3: Party Materials & Tracking */}
+                  {order.orderType === 'job_order' && 'expectedClientMaterialNames' in order && order.expectedClientMaterialNames && (
+                    <div className={styles.clientMaterialsSection}>
+                      <div className={styles.sectionHeader}>
+                        <h4 className={styles.sectionTitle}>
+                          <span className={styles.sectionIcon}>📦</span>
+                          {customer} Materials Tracking
+                        </h4>
+                      </div>
+                      <div className={styles.materialsContent}>
+                        <p><strong>Expected Materials:</strong></p>
+                        <ul className={styles.materialsList}>
+                          {order.expectedClientMaterialNames.map((material, index) => (
+                            <li key={index} className={styles.materialItem}>
+                              <span className={styles.materialStatus}>📥</span>
+                              {material}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className={styles.materialNote}>
+                          <strong>Material Status:</strong> {order.status === 'order_confirmed' ? 'Awaiting material receipt' : 
+                          order.status === 'production_started' ? 'Materials received and in process' : 'Processing stage'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SECTION 4: Financial & Payment Information */}
+                  <div className={styles.financialSection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>💳</span>
+                        Financial & Payment Information
+                      </h4>
+                    </div>
+                    <div className={styles.financialGrid}>
+                      <div className={styles.paymentDetails}>
+                        <p>
+                          <strong>Payment Status:</strong> 
+                          <span 
+                            className={styles.mappingLink} 
+                            onClick={() => onShowPayments && onShowPayments()}
+                            title="View payment details"
+                            style={{ marginLeft: '8px' }}
+                          >
+                            {order.orderType === 'job_order' ? (
+                              <span style={{ color: '#f39c12' }}>
+                                💳 Credit Order - Bill on Completion ({formatCurrency(order.totalAmount)})
+                              </span>
+                            ) : paymentDetails.paymentStatus === 'received' ? (
+                              <span style={{ color: '#27ae60' }}>
+                                ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
+                              </span>
+                            ) : paymentDetails.paymentStatus === 'overdue' ? (
+                              <span style={{ color: '#e74c3c' }}>
+                                🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
+                              </span>
+                            ) : (
+                              <span style={{ color: '#f39c12' }}>
+                                ⏳ Pending {formatCurrency(paymentDetails.balanceAdvance)} of {formatCurrency(paymentDetails.advanceAmount)}
+                              </span>
+                            )}
+                          </span>
+                        </p>
+                        {order.balancePaymentDue && order.balancePaymentDue > 0 && (
+                          <p><strong>Balance Due:</strong> {formatCurrency(order.balancePaymentDue)}</p>
+                        )}
+                        {order.orderType === 'job_order' && 'creditApprovalStatus' in order && (
+                          <p><strong>Credit Approval:</strong> {(order as any).creditApprovalStatus} {(order as any).creditApprovalBy && `by ${(order as any).creditApprovalBy}`}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION 5: Service Item Details */}
                   {hasStructuredItems(order) && (
-                    <div className={styles.itemsSection}>
-                      <h4 className={styles.sectionTitle}>📋 Item Details</h4>
+                    <div className={styles.serviceItemsSection}>
+                      <div className={styles.sectionHeader}>
+                        <h4 className={styles.sectionTitle}>
+                          <span className={styles.sectionIcon}>📋</span>
+                          Service Item Details
+                        </h4>
+                      </div>
                       {renderOrderItemsDetails(order)}
                     </div>
                   )}
                   
-                  {/* Related Quote and Lead Information */}
-                  <div className={styles.orderMapping}>
-                    <div className={styles.mappingInfo}>
+                  {/* SECTION 6: Related Records & Actions */}
+                  <div className={styles.relatedRecordsSection}>
+                    <div className={styles.sectionHeader}>
+                      <h4 className={styles.sectionTitle}>
+                        <span className={styles.sectionIcon}>🔗</span>
+                        Related Records
+                      </h4>
+                    </div>
+                    <div className={styles.relatedContent}>
                       {relatedLead && (
-                        <p><strong>📋 Original Lead:</strong> 
+                        <p><strong>📋 Original {lead}:</strong> 
                           <span className={styles.mappingLink} onClick={() => onShowLeadManagement?.()}>
                             {relatedLead.id}
                           </span> 
                         - {relatedLead.priority} priority (Budget: {relatedLead.budget})</p>
                       )}
                       {relatedQuote && (
-                        <p><strong>📄 From Quote:</strong> 
+                        <p><strong>📄 From {quote}:</strong> 
                           <span className={styles.mappingLink} onClick={() => onShowQuotationOrders?.()}>
                             {relatedQuote.id}
                           </span> 
                         - {relatedQuote.quoteDate} ({relatedQuote.status})</p>
                       )}
-                      <p>
-                        <strong>💳 Payment:</strong> 
-                        <span 
-                          className={styles.mappingLink} 
-                          onClick={() => onShowPayments && onShowPayments()}
-                          title="View payment details"
-                          style={{ marginLeft: '8px' }}
-                        >
-                          {paymentDetails.paymentStatus === 'received' ? (
-                            <span style={{ color: '#27ae60' }}>
-                              ✅ Received {formatCurrency(paymentDetails.advanceReceived)} / {formatCurrency(paymentDetails.advanceAmount)}
-                            </span>
-                          ) : paymentDetails.paymentStatus === 'overdue' ? (
-                            <span style={{ color: '#e74c3c' }}>
-                              🔴 Overdue {formatCurrency(paymentDetails.balanceAdvance)} pending
-                            </span>
-                          ) : (
-                            <span style={{ color: '#f39c12' }}>
-                              ⏳ Pending {formatCurrency(paymentDetails.balanceAdvance)} of {formatCurrency(paymentDetails.advanceAmount)}
-                            </span>
-                          )}
-                        </span>
-                      </p>
-                      <p><strong>🏭 Production:</strong> {order.statusMessage}</p>
+                      <p><strong>{customer}:</strong> {companyName}</p>
                     </div>
                   </div>
                   
@@ -438,6 +582,7 @@ function SalesOrders({
                       )}
                     </div>
                   </div>
+                  </>
                 </div>
               )}
             </div>

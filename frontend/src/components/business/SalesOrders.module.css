@@ -698,3 +698,291 @@
   align-items: center;
   margin-top: var(--ds-space-md);
 }
+
+/* =================================================================== */
+/* PROFESSIONAL JOB ORDER EXPANDED VIEW STYLING */
+/* Following Lead Management Professional Section Pattern */
+/* =================================================================== */
+
+/* Main Expanded Section Container */
+.expandedSection {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-top: 2px solid #1D4ED8;
+  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  margin-top: 0;
+}
+
+/* Section Header Styling */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ds-space-md);
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  font-size: var(--font-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-text-primary);
+  margin: 0;
+}
+
+.sectionIcon {
+  font-size: 1.2em;
+  opacity: 0.8;
+}
+
+/* Job Order Summary Section */
+.jobOrderSummarySection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+/* Sales Order Summary Section */
+.salesOrderSummarySection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-lg);
+  margin-top: var(--ds-space-md);
+}
+
+.summaryDetails p,
+.statusDetails p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+}
+
+.summaryDetails strong,
+.statusDetails strong {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* Progress Bar Styling */
+.progressSection {
+  margin-top: var(--ds-space-md);
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: var(--ds-space-xs);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #059669);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Service Requirements Section */
+.serviceRequirementsSection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+.requirementsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-lg);
+  margin-top: var(--ds-space-md);
+}
+
+.serviceDetails p,
+.specifications p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+}
+
+.serviceDetails strong,
+.specifications strong {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.specsList {
+  margin: var(--ds-space-sm) 0;
+  padding-left: var(--ds-space-lg);
+}
+
+.specsList li {
+  margin: var(--ds-space-xs) 0;
+  color: var(--ds-text-secondary);
+}
+
+/* Client Materials Section */
+.clientMaterialsSection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+.materialsContent {
+  margin-top: var(--ds-space-md);
+}
+
+.materialsContent p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+}
+
+.materialsContent strong {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.materialsList {
+  margin: var(--ds-space-md) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.materialItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+  padding: var(--ds-space-sm);
+  margin: var(--ds-space-xs) 0;
+  background: #F3F4F6;
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+}
+
+.materialStatus {
+  font-size: 1.2em;
+}
+
+.materialNote {
+  background: #EFF6FF;
+  padding: var(--ds-space-sm);
+  border-radius: var(--ds-radius-sm);
+  border-left: 3px solid #3B82F6;
+}
+
+/* Financial Section */
+.financialSection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+.financialGrid {
+  margin-top: var(--ds-space-md);
+}
+
+.paymentDetails p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+}
+
+.paymentDetails strong {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* Service Items Section */
+.serviceItemsSection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+/* Related Records Section */
+.relatedRecordsSection {
+  margin-bottom: var(--ds-space-xl);
+  padding: var(--ds-space-md);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--ds-radius-md);
+}
+
+.relatedContent {
+  margin-top: var(--ds-space-md);
+}
+
+.relatedContent p {
+  margin: var(--ds-space-sm) 0;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+}
+
+.relatedContent strong {
+  color: var(--ds-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* Clickable Links */
+.mappingLink {
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.mappingLink:hover {
+  color: var(--ds-hover-primary);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .expandedSection {
+    padding: 16px;
+  }
+  
+  .summaryGrid,
+  .requirementsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-md);
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-base);
+  }
+  
+  .sectionIcon {
+    font-size: 1em;
+  }
+  
+  .materialItem {
+    padding: var(--ds-space-xs);
+  }
+}
