@@ -7,7 +7,9 @@ export function getBusinessData() {
     hotLeads: mockLeads.filter(lead => lead.priority === 'hot').length,
     overduePayments: 0, // TODO: Calculate from actual payment data
     readyToShip: mockSalesOrders.filter(order => order.status === 'ready_to_ship').length,
-    totalCustomers: mockBusinessProfiles.filter(profile => profile.customerStatus === 'customer').length
+    totalCustomers: mockBusinessProfiles.filter(profile => 
+      profile.customerStatus === 'customer' || profile.customerStatus === 'prospect'
+    ).length
   };
 }
 

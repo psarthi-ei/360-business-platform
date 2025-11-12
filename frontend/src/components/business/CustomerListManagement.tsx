@@ -31,7 +31,9 @@ const CustomerListManagement = ({
   // Use terminology hook for Surat processing terminology
   // const { customer, customers: customersTerminology } = useTerminologyTerms(); // "Party", "Parties" - TODO: implement display terminology
   
-  const [customers] = useState(mockBusinessProfiles.filter((bp: BusinessProfile) => bp.customerStatus === 'customer'));
+  const [customers] = useState(mockBusinessProfiles.filter((bp: BusinessProfile) => 
+    bp.customerStatus === 'customer' || bp.customerStatus === 'prospect'
+  ));
   const [customerMetrics, setCustomerMetrics] = useState<Record<string, CustomerMetrics>>({});
   
 

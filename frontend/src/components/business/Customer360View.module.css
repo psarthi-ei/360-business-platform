@@ -4,13 +4,17 @@
 .customer360Container {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Fill available parent space instead of claiming full viewport */
+  height: 100%; /* Fill parent container height */
   background: var(--ds-bg-primary);
-  /* Allow sticky positioning to work properly */
+  position: relative;
 }
 
 /* Header - Touch Target Preferred */
 .customer360Header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: var(--ds-touch-target-preferred);
   display: flex;
   align-items: center;
@@ -18,9 +22,7 @@
   border-bottom: 1px solid var(--ds-border-subtle);
   background: var(--ds-bg-primary);
   gap: var(--ds-space-sm);
-  position: sticky;
-  top: 0;
-  z-index: 101;
+  z-index: 100;
 }
 
 .backButton {
@@ -70,13 +72,15 @@
 
 /* Tab Navigation - Touch Target Preferred */
 .tabNavigation {
+  position: absolute;
+  top: var(--ds-touch-target-preferred);
+  left: 0;
+  right: 0;
   height: var(--ds-touch-target-preferred);
   display: flex;
   border-bottom: 1px solid var(--ds-border-subtle);
   background: var(--ds-bg-primary);
-  position: sticky;
-  top: var(--ds-touch-target-preferred);
-  z-index: 100;
+  z-index: 99;
 }
 
 .tabButton {
@@ -170,13 +174,14 @@
 /* Tab Content Area - Individual Tab Scroll */
 .tabContent {
   background: var(--ds-bg-primary);
-  flex: 1;
-  min-height: 0;
+  margin-top: calc(var(--ds-touch-target-preferred) * 2); /* Space for fixed header + tabs */
+  height: calc(100vh - var(--ds-touch-target-preferred) * 2); /* Full viewport minus fixed elements */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   /* Mobile scroll optimizations */
   touch-action: pan-y;
   overscroll-behavior: contain;
+  /* No padding - let individual tab components handle their own spacing */
 }
 
 

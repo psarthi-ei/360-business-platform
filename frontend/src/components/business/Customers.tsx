@@ -33,7 +33,7 @@ const CTA_CONFIG = {
 
 // Mock data counts for dynamic filtering
 const calculateCustomerCounts = () => ({
-  all: 25,
+  all: 24,  // Updated: 10 customers + 14 prospects = 24 total business profiles
   premium: 8,
   new: 5,
   active: 12,
@@ -129,7 +129,7 @@ const Customers = ({ mobile, onShowCustomerProfile, onUniversalAction }: Custome
     const getStatusFilters = () => {
       switch(activeSection) {
         case 'customers': {
-          const customerCounts = { all: 25, premium: 8, new: 5, active: 12, payment_issues: 3 };
+          const customerCounts = { all: 24, premium: 8, new: 5, active: 12, payment_issues: 3 };
           return [
             { value: 'all', label: 'All Customers', count: customerCounts.all },
             { value: 'premium', label: '🏆 Premium', count: customerCounts.premium },
