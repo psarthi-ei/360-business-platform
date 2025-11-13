@@ -23,7 +23,14 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   openAddModal,
   onAddModalHandled
 }) => {
-  const terms = useTerminologyTerms();
+  // Use regional terminology for consistent user experience
+  const { 
+    customer,
+    order, orders,
+    material, materials,
+    workOrder, workOrders: workOrdersTerminology,
+    delivery
+  } = useTerminologyTerms();
   const { toggleExpansion, isExpanded } = useCardExpansion();
   const [selectedProductionOrder, setSelectedProductionOrder] = useState<ProductionOrder | null>(null);
   const [showWorkOrderModal, setShowWorkOrderModal] = useState(false);
@@ -42,7 +49,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
     const statusMap = {
       'awaiting_material': { icon: '⏳', label: 'Awaiting Material', color: '#f59e0b' },
       'material_received': { icon: '📦', label: 'Material Received', color: '#3b82f6' },
-      'awaiting_work_order_creation': { icon: '📋', label: `Awaiting ${terms.workOrder} Creation`, color: '#8b5cf6' },
+      'awaiting_work_order_creation': { icon: '📋', label: `Awaiting ${workOrder} Creation`, color: '#8b5cf6' },
       'ready_for_production': { icon: '🔄', label: 'Ready for Production', color: '#10b981' },
       'in_progress': { icon: '🏭', label: 'In Progress', color: '#06b6d4' },
       'completed': { icon: '✅', label: 'Completed', color: '#22c55e' },
@@ -95,7 +102,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
 
   // Helper functions for work order status display (updated for status variety)
   const getWorkOrderStatusClass = (status: WorkOrder['status']): string => {
-    const statusMap: Record<WorkOrder['status'], string> = {
+    const statusMap: Partial<Record<WorkOrder['status'], string>> = {
       'completed': 'status-completed',
       'delivered': 'status-delivered',
       'dispatched': 'status-delivered',
@@ -112,7 +119,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   };
 
   const getWorkOrderStatusIcon = (status: WorkOrder['status']): string => {
-    const statusMap: Record<WorkOrder['status'], string> = {
+    const statusMap: Partial<Record<WorkOrder['status'], string>> = {
       'completed': '✅',
       'delivered': '🚚',
       'dispatched': '📤',
@@ -129,12 +136,12 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
   };
 
   const getWorkOrderStatusText = (status: WorkOrder['status']): string => {
-    const statusMap: Record<WorkOrder['status'], string> = {
+    const statusMap: Partial<Record<WorkOrder['status'], string>> = {
       'completed': 'Completed',
       'delivered': 'Delivered',
       'dispatched': 'Dispatched',
       'qc_approved': 'QC Approved',
-      'ready_for_delivery': 'Ready for Delivery',
+      'ready_for_delivery': `Ready for ${delivery}`,
       'ready_qc': 'Ready for QC',
       'in_progress': 'In Progress',
       'pending': 'Pending',
@@ -150,8 +157,8 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
       {filteredProductionOrders.length === 0 ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyStateIcon}>📋</div>
-          <h3>No Production Orders Found</h3>
-          <p>No production orders match the current filter criteria.</p>
+          <h3>No Production {orders} Found</h3>
+          <p>No production {orders.toLowerCase()} match the current filter criteria.</p>
         </div>
       ) : (
         <div className={styles.productionOrderList}>
@@ -170,7 +177,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                   {/* Enhanced Header - Production Order ID + Customer + Fabric Type */}
                   <div 
                     className="ds-card-header"
-                    title={`Production Order ${productionOrder.id} - ${productionOrder.customerName} - ${productionOrder.fabricDetails.type}`}
+                    title={`Production ${order} ${productionOrder.id} - ${productionOrder.customerName} - ${productionOrder.fabricDetails.type}`}
                   >
                     🏭 {productionOrder.customerName} — {productionOrder.fabricDetails.type} ({productionOrder.id})
                   </div>
@@ -232,7 +239,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
 
                       {/* Professional Work Orders Section */}
                       <div className={styles.expandedSection}>
-                        <h4 className={styles.sectionHeader}>🔧 {terms.workOrders} ({workOrders.length})</h4>
+                        <h4 className={styles.sectionHeader}>🔧 {workOrdersTerminology} ({workOrders.length})</h4>
                         {workOrders.length > 0 ? (
                           <div className={styles.professionalWorkOrdersList}>
                             {workOrders.map((wo, index) => (
@@ -268,8 +275,8 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                           </div>
                         ) : (
                           <div className={styles.emptyWorkOrders}>
-                            <p>📋 No {terms.workOrders.toLowerCase()} created yet</p>
-                            <p className={styles.emptySubtext}>{terms.workOrders} will be created once material processing begins</p>
+                            <p>📋 No {workOrdersTerminology.toLowerCase()} created yet</p>
+                            <p className={styles.emptySubtext}>{workOrdersTerminology} will be created once {material.toLowerCase()} processing begins</p>
                           </div>
                         )}
                       </div>
@@ -279,7 +286,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                         <h4 className={styles.sectionHeader}>📅 Production Timeline</h4>
                         <div className={styles.professionalTimeline}>
                           <div className={styles.timelineItem}>
-                            <span className={styles.timelineLabel}>Order Created:</span>
+                            <span className={styles.timelineLabel}>{order} Created:</span>
                             <span className={styles.timelineValue}>
                               {new Date(productionOrder.createdDate).toLocaleDateString('en-IN', { 
                                 year: 'numeric', month: 'long', day: 'numeric' 
@@ -288,7 +295,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                           </div>
                           {productionOrder.receivedDate && (
                             <div className={styles.timelineItem}>
-                              <span className={styles.timelineLabel}>Materials Received:</span>
+                              <span className={styles.timelineLabel}>{materials} Received:</span>
                               <span className={styles.timelineValue}>
                                 {new Date(productionOrder.receivedDate).toLocaleDateString('en-IN', { 
                                   year: 'numeric', month: 'long', day: 'numeric' 
@@ -325,14 +332,14 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                         <div className={styles.professionalDetailsGrid}>
                           {/* Sales Order - Links to original customer order */}
                           <div className={styles.detailRow}>
-                            <span className={styles.detailLabel}>Sales Order Reference:</span>
+                            <span className={styles.detailLabel}>Sales {order} Reference:</span>
                             <span className={styles.detailValue}>{productionOrder.salesOrderId}</span>
                           </div>
                           
                           {/* Customer's fabric delivery document */}
                           {productionOrder.fabricDetails.challanReference && (
                             <div className={styles.detailRow}>
-                              <span className={styles.detailLabel}>Customer Challan Reference:</span>
+                              <span className={styles.detailLabel}>{customer} Challan Reference:</span>
                               <span className={styles.detailValue}>📋 {productionOrder.fabricDetails.challanReference}</span>
                             </div>
                           )}
@@ -359,7 +366,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                                 handleCreateWorkOrders(productionOrder);
                               }}
                             >
-                              🔧 Create {terms.workOrders}
+                              🔧 Create {workOrdersTerminology}
                             </button>
                             <button 
                               className="ds-btn ds-btn-secondary"
@@ -368,7 +375,7 @@ const ProductionOrderManagement: React.FC<ProductionOrderManagementProps> = ({
                                 handleViewCustomer(productionOrder.customerId);
                               }}
                             >
-                              👤 View Customer Profile
+                              👤 View {customer} Profile
                             </button>
                           </div>
                         </div>

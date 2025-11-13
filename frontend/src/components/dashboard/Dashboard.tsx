@@ -122,7 +122,7 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{formatCurrency(salesKPIs.unbilledWork)}</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>Manage {leads} →</div>
+          <div className={styles.moduleAction}>Manage {salesModule} →</div>
         </div>
 
         {/* Store/Procurement Module KPIs */}

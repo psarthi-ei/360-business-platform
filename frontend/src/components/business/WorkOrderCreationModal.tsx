@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProductionOrder } from '../../data/productionMockData';
 import { LotDefinition, createWorkOrdersFromLots, validateLotDefinitions } from '../../services/ProductionOrderService';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import ModalPortal from '../ui/ModalPortal';
 import styles from './WorkOrderCreationModal.module.css';
 
@@ -17,7 +18,13 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
   onClose,
   onWorkOrdersCreated
 }) => {
-  // Remove unused import and fix conflicts
+  // Use regional terminology for consistent user experience
+  const { 
+    customer,
+    order,
+    workOrders
+  } = useTerminologyTerms();
+
   const [lots, setLots] = useState<LotDefinition[]>([
     {
       description: '',
@@ -73,7 +80,7 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
       onWorkOrdersCreated(workOrders.map(wo => wo.id));
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create work orders');
+      setError(err instanceof Error ? err.message : `Failed to create ${workOrders.toLowerCase()}`);
     } finally {
       setIsCreating(false);
     }
@@ -83,20 +90,20 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
     <ModalPortal isOpen={isOpen} onBackdropClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
-          <h2>Create Work Orders</h2>
+          <h2>Create {workOrders}</h2>
           <button className={styles.closeButton} onClick={onClose}>×</button>
         </div>
 
         <div className={styles.productionOrderInfo}>
-          <h3>Production Order: {productionOrderData.id}</h3>
-          <p><strong>Customer:</strong> {productionOrderData.customerName}</p>
+          <h3>Production {order}: {productionOrderData.id}</h3>
+          <p><strong>{customer}:</strong> {productionOrderData.customerName}</p>
           <p><strong>Fabric Type:</strong> {productionOrderData.fabricDetails.type}</p>
           <p><strong>Total Quantity:</strong> {productionOrderData.fabricDetails.quantity} {productionOrderData.fabricDetails.unit}</p>
         </div>
 
         <div className={styles.lotsSection}>
           <div className={styles.lotsHeader}>
-            <h3>Define Work Orders</h3>
+            <h3>Define {workOrders}</h3>
             <button className={styles.addLotButton} onClick={handleAddLot}>
               + Add Lot
             </button>
@@ -198,7 +205,7 @@ export const WorkOrderCreationModal: React.FC<WorkOrderCreationModalProps> = ({
             onClick={handleCreate}
             disabled={isCreating || getTotalQuantity() !== productionOrderData.fabricDetails.quantity}
           >
-            {isCreating ? 'Creating...' : 'Create Work Orders'}
+            {isCreating ? 'Creating...' : `Create ${workOrders}`}
           </button>
           <button className="ds-btn ds-btn-secondary" onClick={onClose}>
             Cancel
