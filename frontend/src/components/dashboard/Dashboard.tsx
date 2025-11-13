@@ -2,8 +2,7 @@ import React from 'react';
 import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import { 
   calculateAllDashboardKPIs, 
-  formatCurrency, 
-  formatQuantity,
+  formatCurrency,
   ComprehensiveDashboardData 
 } from '../../utils/dashboardKPICalculations';
 import styles from './dashboard.module.css';
@@ -48,7 +47,11 @@ function Dashboard({
   const { 
     customers, 
     orders,
-    service
+    service,
+    leads,
+    materials,
+    salesModule,
+    workOrders
   } = useTerminologyTerms();
   
   // ===== COMPREHENSIVE DASHBOARD KPIs CALCULATION =====
@@ -71,12 +74,12 @@ function Dashboard({
         <div className={styles.globalKpiStrip}>
           <div className={styles.globalKpiCard}>
             <div className={styles.globalKpiValue}>{globalKPIs.activeJobOrders}</div>
-            <div className={styles.globalKpiLabel}>Job {orders}</div>
+            <div className={styles.globalKpiLabel}>Active {orders}</div>
             <div className={styles.globalKpiTrend}>↑3</div>
           </div>
           <div className={styles.globalKpiCard}>
             <div className={styles.globalKpiValue}>{globalKPIs.lotsInProcess}</div>
-            <div className={styles.globalKpiLabel}>WIP</div>
+            <div className={styles.globalKpiLabel}>WIP {workOrders}</div>
             <div className={styles.globalKpiTrend}>↓2</div>
           </div>
           <div className={styles.globalKpiCard}>
@@ -95,42 +98,38 @@ function Dashboard({
       {/* MODULE KPI SECTIONS */}
       <div className={styles.moduleKpiSections}>
         
-        {/* Sales Module KPIs */}
+        {/* Inquiry Module KPIs */}
         <div className={styles.moduleKpiSection} onClick={() => onShowSales()}>
           <div className={styles.moduleHeader}>
-            <span className={styles.moduleIcon}>📈</span>
-            <span className={styles.moduleTitle}>SALES KPIs</span>
+            <span className={styles.moduleIcon}>📋</span>
+            <span className={styles.moduleTitle}>{salesModule.toUpperCase()} KPIs</span>
           </div>
           <div className={styles.moduleKpiGrid}>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Inquiries</span>
-              <span className={styles.moduleKpiValue}>{salesKPIs.inquiriesThisMonth}</span>
+              <span className={styles.moduleKpiLabel}>{leads} This Month</span>
+              <span className={styles.moduleKpiValue}>{salesKPIs.leadsThisMonth}</span>
             </div>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Conversion</span>
+              <span className={styles.moduleKpiLabel}>Conversion Rate</span>
               <span className={styles.moduleKpiValue}>{salesKPIs.conversionRate}%</span>
             </div>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Job {orders}</span>
-              <span className={styles.moduleKpiValue}>{salesKPIs.jobOrdersThisMonth}</span>
-            </div>
-            <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Meters Inwarded</span>
-              <span className={styles.moduleKpiValue}>{formatQuantity(salesKPIs.metersInwarded, 'm')}</span>
+              <span className={styles.moduleKpiLabel}>New {orders} This Month</span>
+              <span className={styles.moduleKpiValue}>{salesKPIs.ordersThisMonth}</span>
             </div>
             <div className={styles.moduleKpi}>
               <span className={styles.moduleKpiLabel}>Unbilled Work</span>
               <span className={styles.moduleKpiValue}>{formatCurrency(salesKPIs.unbilledWork)}</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>Manage Sales →</div>
+          <div className={styles.moduleAction}>Manage {leads} →</div>
         </div>
 
         {/* Store/Procurement Module KPIs */}
         <div className={styles.moduleKpiSection} onClick={() => onShowInventory?.()}>
           <div className={styles.moduleHeader}>
             <span className={styles.moduleIcon}>📦</span>
-            <span className={styles.moduleTitle}>STORE KPIs</span>
+            <span className={styles.moduleTitle}>{materials.toUpperCase()} KPIs</span>
           </div>
           <div className={styles.moduleKpiGrid}>
             <div className={styles.moduleKpi}>
@@ -154,7 +153,7 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{storeKPIs.purchaseOrdersPending}</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>Check Store →</div>
+          <div className={styles.moduleAction}>Check {materials} →</div>
         </div>
 
         {/* Process/Production Module KPIs */}
@@ -164,9 +163,35 @@ function Dashboard({
             <span className={styles.moduleTitle}>PROCESS KPIs</span>
           </div>
           <div className={styles.moduleKpiGrid}>
-            <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Stage</span>
-              <span className={styles.moduleKpiValue}>Dye:{processKPIs.lotsByStage.dyeing} Print:{processKPIs.lotsByStage.printing} Finish:{processKPIs.lotsByStage.finishing} QC:{processKPIs.lotsByStage.qc} Ready:{processKPIs.lotsByStage.ready}</span>
+            <div className={styles.stagesContainer}>
+              <span className={styles.stagesHeader}>Production Stages</span>
+              <div className={styles.stagesVisual}>
+                <div className={styles.stageItem}>
+                  <div className={styles.stageIcon}>🎨</div>
+                  <div className={styles.stageCount}>{processKPIs.lotsByStage.dyeing}</div>
+                  <div className={styles.stageLabel}>Dye</div>
+                </div>
+                <div className={styles.stageItem}>
+                  <div className={styles.stageIcon}>🖨️</div>
+                  <div className={styles.stageCount}>{processKPIs.lotsByStage.printing}</div>
+                  <div className={styles.stageLabel}>Print</div>
+                </div>
+                <div className={styles.stageItem}>
+                  <div className={styles.stageIcon}>✨</div>
+                  <div className={styles.stageCount}>{processKPIs.lotsByStage.finishing}</div>
+                  <div className={styles.stageLabel}>Finish</div>
+                </div>
+                <div className={styles.stageItem}>
+                  <div className={styles.stageIcon}>🔍</div>
+                  <div className={styles.stageCount}>{processKPIs.lotsByStage.qc}</div>
+                  <div className={styles.stageLabel}>QC</div>
+                </div>
+                <div className={styles.stageItem}>
+                  <div className={styles.stageIcon}>✅</div>
+                  <div className={styles.stageCount}>{processKPIs.lotsByStage.ready}</div>
+                  <div className={styles.stageLabel}>Ready</div>
+                </div>
+              </div>
             </div>
             <div className={styles.moduleKpi}>
               <span className={styles.moduleKpiLabel}>Avg Processing</span>
@@ -188,32 +213,32 @@ function Dashboard({
           <div className={styles.moduleAction}>View Production →</div>
         </div>
 
-        {/* Customer Module KPIs */}
+        {/* Party Module KPIs */}
         <div className={styles.moduleKpiSection} onClick={() => onShowCustomerList()}>
           <div className={styles.moduleHeader}>
-            <span className={styles.moduleIcon}>👥</span>
-            <span className={styles.moduleTitle}>CUSTOMER KPIs</span>
+            <span className={styles.moduleIcon}>🤝</span>
+            <span className={styles.moduleTitle}>{customers.toUpperCase()} KPIs</span>
           </div>
           <div className={styles.moduleKpiGrid}>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Active</span>
-              <span className={styles.moduleKpiValue}>{customerKPIs.activeParties}</span>
+              <span className={styles.moduleKpiLabel}>Active {customers}</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.activeCustomers}</span>
             </div>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>New</span>
-              <span className={styles.moduleKpiValue}>{customerKPIs.newPartiesThisMonth}</span>
+              <span className={styles.moduleKpiLabel}>New This Month</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.newCustomersThisMonth}</span>
             </div>
             <div className={styles.moduleKpi}>
-              <span className={styles.moduleKpiLabel}>Repeat %</span>
+              <span className={styles.moduleKpiLabel}>Repeat {customers.slice(0, -1)} %</span>
               <span className={styles.moduleKpiValue}>{customerKPIs.repeatCustomerPercentage}%</span>
             </div>
             <div className={styles.moduleKpi}>
               <span className={styles.moduleKpiLabel}>Top Billing</span>
-              <span className={styles.moduleKpiValue}>{customerKPIs.topPartiesByBilling[0]?.name || 'N/A'} ({formatCurrency(customerKPIs.topPartiesByBilling[0]?.amount || 0)})</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.topCustomersByRevenue[0]?.name} ({formatCurrency(customerKPIs.topCustomersByRevenue[0]?.amount)})</span>
             </div>
             <div className={styles.moduleKpi}>
               <span className={styles.moduleKpiLabel}>Top Outstanding</span>
-              <span className={styles.moduleKpiValue}>{customerKPIs.topPartiesByOutstanding[0]?.name || 'N/A'} ({formatCurrency(customerKPIs.topPartiesByOutstanding[0]?.amount || 0)})</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.topCustomersByOutstanding[0]?.name} ({formatCurrency(customerKPIs.topCustomersByOutstanding[0]?.amount)})</span>
             </div>
           </div>
           <div className={styles.moduleAction}>View {customers} →</div>
@@ -229,8 +254,8 @@ function Dashboard({
         </div>
         <div className={styles.alertsList}>
           <span className={styles.alertItem}>• {processKPIs.delayedLots} lots delayed</span>
-          <span className={styles.alertItem}>• {Math.floor(globalKPIs.outstandingAmount / 50000)} overdue bills</span>
-          <span className={styles.alertItem}>• {Math.floor(salesKPIs.inquiriesThisMonth * 0.2)} inquiries need rate</span>
+          <span className={styles.alertItem}>• {Math.floor(globalKPIs.outstandingAmount / 80000)} overdue bills</span>
+          <span className={styles.alertItem}>• {Math.floor(salesKPIs.leadsThisMonth * 0.3)} {leads.toLowerCase()} need rate</span>
           <span className={styles.alertItem}>• {processKPIs.readyNotDispatched} lots ready not dispatched</span>
         </div>
       </div>
@@ -241,7 +266,7 @@ function Dashboard({
           Last updated: {new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit'})} • {awaitingClientMaterials + readyForPickup} pending actions
         </div>
         <div className={styles.businessMetrics}>
-          Total {service.toLowerCase()} value: {formatCurrency(globalKPIs.billedThisMonth)} | Active processes: {globalKPIs.lotsInProcess + salesKPIs.inquiriesThisMonth}
+          Total {service.toLowerCase()} value: {formatCurrency(globalKPIs.billedThisMonth)} | Active processes: {globalKPIs.lotsInProcess + salesKPIs.leadsThisMonth}
         </div>
       </div>
       
