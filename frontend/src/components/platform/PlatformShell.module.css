@@ -93,7 +93,7 @@
       "content"
       "navigation";
     grid-template-columns: 1fr;
-    grid-template-rows: 56px 72px auto 64px;
+    grid-template-rows: 56px 72px 1fr 64px;
     min-height: 100vh;
     overflow: visible;
   }
@@ -128,7 +128,7 @@
 /* Small Mobile (480px and below) - Optimize for smaller screens */
 @media (max-width: 480px) {
   .platformShell {
-    grid-template-rows: 56px 72px auto 80px; /* Larger navigation on small screens */
+    grid-template-rows: 56px 72px 1fr 80px; /* Larger navigation on small screens */
   }
   
   .contentArea {
