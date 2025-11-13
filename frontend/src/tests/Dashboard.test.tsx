@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Dashboard from '../components/dashboard/Dashboard';
 import { TranslationProvider } from '../contexts/TranslationContext';
+import { TerminologyProvider } from '../contexts/TerminologyContext';
 
 const mockProps = {
   onShowLeadManagement: jest.fn(),
@@ -14,11 +15,13 @@ const mockProps = {
   onShowProduction: jest.fn()
 };
 
-// Helper function to render Dashboard with TranslationProvider
+// Helper function to render Dashboard with required providers
 const renderDashboard = (props = mockProps) => {
   return render(
     <TranslationProvider defaultLanguage="en">
-      <Dashboard {...props} />
+      <TerminologyProvider>
+        <Dashboard {...props} />
+      </TerminologyProvider>
     </TranslationProvider>
   );
 };
@@ -40,36 +43,41 @@ describe('Dashboard Component', () => {
       expect(dashboard).toHaveClass('dashboard');
     });
 
-    test('should render KPI cards', () => {
+    test('should render Global Business Pulse', () => {
       renderDashboard();
-      expect(screen.getByText('Active Parties')).toBeInTheDocument();
-      expect(screen.getByText('Orders This Month')).toBeInTheDocument();
-      expect(screen.getByText('Lots in Process')).toBeInTheDocument();
-      expect(screen.getByText('Pending Collections')).toBeInTheDocument();
+      expect(screen.getByText('BUSINESS PULSE')).toBeInTheDocument();
+      expect(screen.getByText('WIP')).toBeInTheDocument();
+      expect(screen.getByText('Outstanding')).toBeInTheDocument();
+      expect(screen.getByText('Billed This Month')).toBeInTheDocument();
     });
 
-    test('should render alert action button', () => {
+    test('should render Module KPI sections', () => {
       renderDashboard();
-      expect(screen.getByText('Check Materials →')).toBeInTheDocument();
+      expect(screen.getByText('SALES KPIs')).toBeInTheDocument();
+      expect(screen.getByText('STORE KPIs')).toBeInTheDocument();
+      expect(screen.getByText('PROCESS KPIs')).toBeInTheDocument();
+      expect(screen.getByText('CUSTOMER KPIs')).toBeInTheDocument();
     });
 
-    test('should render alert card', () => {
+    test('should render Quick Alerts section', () => {
       renderDashboard();
-      expect(screen.getByText(/lots awaiting client materials/)).toBeInTheDocument();
-      expect(screen.getByText('Check Materials →')).toBeInTheDocument();
+      expect(screen.getByText('QUICK ALERTS')).toBeInTheDocument();
+      expect(screen.getByText(/lots delayed/)).toBeInTheDocument();
     });
 
-    test('should render business snapshot cards', () => {
+    test('should render KPI values', () => {
       renderDashboard();
-      expect(screen.getByText('INQUIRY PIPELINE')).toBeInTheDocument();
-      expect(screen.getByText('PROCESSING STATUS')).toBeInTheDocument();
-      expect(screen.getByText('SERVICE MIX')).toBeInTheDocument();
-      expect(screen.getByText('PARTY PORTFOLIO')).toBeInTheDocument();
+      expect(screen.getByText('Inquiries')).toBeInTheDocument();
+      expect(screen.getByText('Conversion')).toBeInTheDocument();
+      expect(screen.getByText('Low Stock')).toBeInTheDocument();
+      expect(screen.getByText('Active')).toBeInTheDocument();
     });
 
-    test('should render activity timeline', () => {
+    test('should render module action buttons', () => {
       renderDashboard();
-      expect(screen.getByText('📋 TODAY\'S ACTIVITY')).toBeInTheDocument();
+      expect(screen.getByText('Manage Sales →')).toBeInTheDocument();
+      expect(screen.getByText('Check Store →')).toBeInTheDocument();
+      expect(screen.getByText('View Production →')).toBeInTheDocument();
     });
 
     test('should render sync status', () => {
