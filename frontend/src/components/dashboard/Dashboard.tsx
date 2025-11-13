@@ -1,7 +1,11 @@
 import React from 'react';
-import { mockLeads, mockQuotes, mockJobOrders, mockFinalInvoices } from '../../data/salesMockData';
-import { mockWorkOrders, mockMachines } from '../../data/productionMockData';
-import { mockBusinessProfiles } from '../../data/customerMockData';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
+import { 
+  calculateAllDashboardKPIs, 
+  formatCurrency, 
+  formatQuantity,
+  ComprehensiveDashboardData 
+} from '../../utils/dashboardKPICalculations';
 import styles from './dashboard.module.css';
 
 interface DashboardProps {
@@ -40,216 +44,195 @@ function Dashboard({
   userMode
 }: DashboardProps) {
   
-  // Regional terminology integration available for future enhancement
+  // Use regional terminology for consistent user experience
+  const { 
+    customers, 
+    orders,
+    service
+  } = useTerminologyTerms();
   
-  // ===== JOB WORK BUSINESS METRICS CALCULATION =====
-  // Answering the 5 core questions: Kitna maal aaya, kitna process mein hai, kitna ready hai, kitna bill bana, kitna paisa pending hai
+  // ===== COMPREHENSIVE DASHBOARD KPIs CALCULATION =====
+  const dashboardData: ComprehensiveDashboardData = calculateAllDashboardKPIs();
+  const { globalKPIs, salesKPIs, storeKPIs, processKPIs, customerKPIs } = dashboardData;
   
-  // 1. Service Pipeline Metrics (Inquiry → Rate → Job Order flow)
-  const activeInquiries = mockLeads.filter(lead => !lead.conversionStatus?.includes('converted')).length;
-  const hotInquiries = mockLeads.filter(lead => lead.priority === 'hot' && !lead.conversionStatus?.includes('converted')).length;
-  const pendingRates = mockQuotes.filter(quote => quote.status === 'pending').length;
-  const ratesToRevenue = mockQuotes.reduce((sum, quote) => sum + (quote.totalAmount || 0), 0);
-  
-  // 2. Financial Health Metrics - Service Revenue Focus
-  const jobOrderRevenue = mockJobOrders.reduce((sum, order) => sum + order.totalAmount, 0);
-  const invoiceRevenue = mockFinalInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
-  const totalServiceRevenue = jobOrderRevenue + invoiceRevenue;
-  
-  const totalOutstanding = mockJobOrders
-    .filter(order => order.paymentStatus?.includes('pending') || order.paymentStatus?.includes('partial'))
-    .reduce((sum, order) => sum + order.totalAmount, 0);
-  
-  // 3. Processing Operations Metrics (Service-based, not manufacturing)
-  const totalProcessingUnits = mockMachines.length;
-  const activeProcessingUnits = mockMachines.filter(machine => machine.status === 'busy').length;
-  const processCapacityUtilization = Math.round((activeProcessingUnits / totalProcessingUnits) * 100);
-  const activeLots = mockWorkOrders.filter(wo => wo.status === 'in_progress').length;
-  const delayedLots = mockWorkOrders.filter(wo => 
-    wo.status === 'in_progress' && 
-    wo.estimatedCompletion && 
-    new Date(wo.estimatedCompletion) < new Date()
-  ).length;
-  
-  // 4. Service Type Distribution (Core job work services)
-  const dyeingLots = mockJobOrders.filter(job => job.serviceType === 'dyeing').length;
-  const printingLots = mockJobOrders.filter(job => job.serviceType === 'printing').length;
-  const finishingLots = mockJobOrders.filter(job => job.serviceType === 'finishing').length;
-  const totalActiveLots = dyeingLots + printingLots + finishingLots;
-  
-  // 5. Party Portfolio Metrics (Business relationships)
-  const activeParties = mockBusinessProfiles.filter(bp => bp.customerStatus === 'customer').length;
-  const topParties = mockBusinessProfiles
-    .filter(bp => bp.customerStatus === 'customer')
-    .sort((a, b) => (b.loyalty?.totalBusinessValue || 0) - (a.loyalty?.totalBusinessValue || 0))
-    .slice(0, 3);
-  
-  // 6. Client Material Flow (Job work specific alerts)
-  const awaitingClientMaterials = mockJobOrders.filter(job => job.status === 'awaiting_client_materials').length;
-  const readyForPickup = mockJobOrders.filter(job => job.status === 'ready_to_ship' || job.status === 'service_completed').length;
-  
-  // 7. Monthly Business Volume Metrics
-  const currentMonth = new Date().getMonth();
-  const ordersThisMonth = mockJobOrders.filter(order => {
-    const orderDate = new Date(order.orderDate);
-    return orderDate.getMonth() === currentMonth;
-  }).length;
+  // Legacy calculations for alerts and activity timeline
+  const awaitingClientMaterials = globalKPIs.activeJobOrders; // Simplified for demo
+  const readyForPickup = Math.floor(globalKPIs.activeJobOrders * 0.3); // Estimated 30%
 
   return (
     <div className={styles.dashboard} data-testid="dashboard-container">
       
-      {/* KPI Strip - 4 cards with horizontal scroll */}
-      <div className={styles.kpiStrip}>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiValue}>{activeParties}</div>
-          <div className={styles.kpiLabel}>Active Parties</div>
-          <div className={styles.kpiTrend}>↑3</div>
+      {/* GLOBAL BUSINESS PULSE - Top 4 KPIs */}
+      <div className={styles.globalPulse}>
+        <div className={styles.pulseHeader}>
+          <span className={styles.pulseIcon}>📊</span>
+          <span className={styles.pulseTitle}>BUSINESS PULSE</span>
         </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiValue}>{ordersThisMonth}</div>
-          <div className={styles.kpiLabel}>Orders This Month</div>
-          <div className={styles.kpiTrend}>↑5</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiValue}>{totalActiveLots}</div>
-          <div className={styles.kpiLabel}>Lots in Process</div>
-          <div className={styles.kpiTrend}>↓2</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiValue}>₹{(totalOutstanding/100000).toFixed(1)}L</div>
-          <div className={styles.kpiLabel}>Pending Collections</div>
-          <div className={styles.kpiTrend}>↓₹0.8L</div>
-        </div>
-      </div>
-
-
-      {/* Alert Card - 2-Column Layout: Content | Action */}
-      <div className={styles.alertCard}>
-        <div className={styles.alertContent}>
-          <span className={styles.alertIcon}>📦</span>
-          <div className={styles.alertText}>
-            <div className={styles.alertTitle}>{awaitingClientMaterials} lots awaiting client materials</div>
-            <div className={styles.alertSubtitle}>({readyForPickup} ready for pickup)</div>
+        <div className={styles.globalKpiStrip}>
+          <div className={styles.globalKpiCard}>
+            <div className={styles.globalKpiValue}>{globalKPIs.activeJobOrders}</div>
+            <div className={styles.globalKpiLabel}>Job {orders}</div>
+            <div className={styles.globalKpiTrend}>↑3</div>
+          </div>
+          <div className={styles.globalKpiCard}>
+            <div className={styles.globalKpiValue}>{globalKPIs.lotsInProcess}</div>
+            <div className={styles.globalKpiLabel}>WIP</div>
+            <div className={styles.globalKpiTrend}>↓2</div>
+          </div>
+          <div className={styles.globalKpiCard}>
+            <div className={styles.globalKpiValue}>{formatCurrency(globalKPIs.billedThisMonth)}</div>
+            <div className={styles.globalKpiLabel}>Billed This Month</div>
+            <div className={styles.globalKpiTrend}>↑₹1.2L</div>
+          </div>
+          <div className={styles.globalKpiCard}>
+            <div className={styles.globalKpiValue}>{formatCurrency(globalKPIs.outstandingAmount)}</div>
+            <div className={styles.globalKpiLabel}>Outstanding</div>
+            <div className={styles.globalKpiTrend}>↓₹0.8L</div>
           </div>
         </div>
-        <button className={styles.alertAction} onClick={() => onShowInventory?.()}>
-          Check Materials →
-        </button>
       </div>
 
-      {/* Enhanced Business Module Snapshots - Real Data Integration */}
-      
-      {/* Inquiry Pipeline Intelligence */}
-      <div className={styles.snapshotCard} onClick={() => onShowSales()}>
-        <div className={styles.snapshotHeader}>
-          <span className={styles.snapshotIcon}>📈</span>
-          <span className={styles.snapshotTitle}>INQUIRY PIPELINE</span>
-        </div>
-        <div className={styles.snapshotContent}>
-          Pipeline: {activeInquiries} Inquiries→{pendingRates} Rates→₹{(ratesToRevenue/100000).toFixed(1)}L
-        </div>
-        <div className={styles.snapshotMeta}>
-          Hot inquiries: {hotInquiries} | Conversion rate: {activeInquiries > 0 ? Math.round((pendingRates/activeInquiries)*100) : 0}%
-        </div>
-        <div className={styles.snapshotAction}>Manage Pipeline →</div>
-      </div>
-
-      {/* Processing Operations Status */}
-      <div className={styles.snapshotCard} onClick={() => onShowProduction?.()}>
-        <div className={styles.snapshotHeader}>
-          <span className={styles.snapshotIcon}>⚙️</span>
-          <span className={styles.snapshotTitle}>PROCESSING STATUS</span>
-        </div>
-        <div className={styles.snapshotContent}>
-          Active lots: {activeLots} | Units: {activeProcessingUnits}/{totalProcessingUnits} busy
-        </div>
-        <div className={styles.snapshotMeta}>
-          Capacity: {processCapacityUtilization}% | Delays: {delayedLots} lots
-        </div>
-        <div className={styles.snapshotAction}>View Work Orders →</div>
-      </div>
-
-      {/* Service Mix Distribution */}
-      <div className={styles.snapshotCard} onClick={() => onShowProduction?.()}>
-        <div className={styles.snapshotHeader}>
-          <span className={styles.snapshotIcon}>🎨</span>
-          <span className={styles.snapshotTitle}>SERVICE MIX</span>
-        </div>
-        <div className={styles.snapshotContent}>
-          Dyeing: {dyeingLots} | Printing: {printingLots} | Finishing: {finishingLots}
-        </div>
-        <div className={styles.snapshotMeta}>
-          Total active services: {totalActiveLots} lots | Avg processing: 5 days
-        </div>
-        <div className={styles.snapshotAction}>View Production Orders →</div>
-      </div>
-
-      {/* Party Portfolio Intelligence */}
-      <div className={styles.snapshotCard} onClick={() => onShowCustomerList()}>
-        <div className={styles.snapshotHeader}>
-          <span className={styles.snapshotIcon}>👥</span>
-          <span className={styles.snapshotTitle}>PARTY PORTFOLIO</span>
-        </div>
-        <div className={styles.snapshotContent}>
-          Active: {activeParties} parties | Revenue: ₹{(totalServiceRevenue/100000).toFixed(1)}L
-        </div>
-        <div className={styles.snapshotMeta}>
-          Top: {topParties.map(party => party.companyName.split(' ')[0]).slice(0, 2).join(', ')} | Outstanding: ₹{(totalOutstanding/100000).toFixed(1)}L
-        </div>
-        <div className={styles.snapshotAction}>View Parties →</div>
-      </div>
-
-      {/* Smart Activity Timeline - Real Business Events */}
-      <div className={styles.activityTimeline}>
-        <div className={styles.activityHeader}>📋 TODAY'S ACTIVITY</div>
+      {/* MODULE KPI SECTIONS */}
+      <div className={styles.moduleKpiSections}>
         
-        {/* Job work activity from recent orders */}
-        {mockJobOrders
-          .filter(order => order.orderDate && new Date(order.orderDate) > new Date(Date.now() - 7*24*60*60*1000))
-          .slice(0, 2)
-          .map((order, index) => {
-            const partyProfile = mockBusinessProfiles.find(bp => bp.id === order.businessProfileId);
-            return (
-              <div key={order.id} className={styles.activityItem}>
-                <span className={styles.activityTime}>{new Date().getHours() - index}:{new Date().getMinutes().toString().padStart(2, '0')}</span>
-                <span className={styles.activityText}>
-                  Lot {order.serviceType} ₹{(order.totalAmount/1000).toFixed(0)}K ({partyProfile?.companyName.split(' ')[0] || 'Party'})
-                </span>
-              </div>
-            );
-          })
-        }
-        
-        {/* Client material receipts */}
-        {mockJobOrders
-          .filter(order => order.status === 'materials_acknowledged')
-          .slice(0, 1)
-          .map((order, index) => {
-            const partyProfile = mockBusinessProfiles.find(bp => bp.id === order.businessProfileId);
-            return (
-              <div key={order.id + '-material'} className={styles.activityItem}>
-                <span className={styles.activityTime}>{new Date().getHours() - 2}:{(new Date().getMinutes() - 15).toString().padStart(2, '0')}</span>
-                <span className={styles.activityText}>
-                  Client material received: {order.serviceRequirements?.quantity || 0}m ({partyProfile?.companyName.split(' ')[0] || 'Party'})
-                </span>
-              </div>
-            );
-          })
-        }
-        
-        {/* Processing updates */}
-        {mockWorkOrders
-          .filter(wo => wo.status === 'in_progress')
-          .slice(0, 1)
-          .map((wo, index) => (
-            <div key={wo.id} className={styles.activityItem}>
-              <span className={styles.activityTime}>{new Date().getHours() - 3}:{(new Date().getMinutes() - 30).toString().padStart(2, '0')}</span>
-              <span className={styles.activityText}>
-                Lot #{wo.id.split('-')[1]} processing started ({wo.assignedMachine})
-              </span>
+        {/* Sales Module KPIs */}
+        <div className={styles.moduleKpiSection} onClick={() => onShowSales()}>
+          <div className={styles.moduleHeader}>
+            <span className={styles.moduleIcon}>📈</span>
+            <span className={styles.moduleTitle}>SALES KPIs</span>
+          </div>
+          <div className={styles.moduleKpiGrid}>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Inquiries</span>
+              <span className={styles.moduleKpiValue}>{salesKPIs.inquiriesThisMonth}</span>
             </div>
-          ))
-        }
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Conversion</span>
+              <span className={styles.moduleKpiValue}>{salesKPIs.conversionRate}%</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Job {orders}</span>
+              <span className={styles.moduleKpiValue}>{salesKPIs.jobOrdersThisMonth}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Meters Inwarded</span>
+              <span className={styles.moduleKpiValue}>{formatQuantity(salesKPIs.metersInwarded, 'm')}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Unbilled Work</span>
+              <span className={styles.moduleKpiValue}>{formatCurrency(salesKPIs.unbilledWork)}</span>
+            </div>
+          </div>
+          <div className={styles.moduleAction}>Manage Sales →</div>
+        </div>
+
+        {/* Store/Procurement Module KPIs */}
+        <div className={styles.moduleKpiSection} onClick={() => onShowInventory?.()}>
+          <div className={styles.moduleHeader}>
+            <span className={styles.moduleIcon}>📦</span>
+            <span className={styles.moduleTitle}>STORE KPIs</span>
+          </div>
+          <div className={styles.moduleKpiGrid}>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Low Stock</span>
+              <span className={styles.moduleKpiValue}>{storeKPIs.lowStockItems}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Out of Stock</span>
+              <span className={styles.moduleKpiValue}>{storeKPIs.outOfStockItems}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Material Inward</span>
+              <span className={styles.moduleKpiValue}>{storeKPIs.materialInwardThisMonth}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>PO Raised</span>
+              <span className={styles.moduleKpiValue}>{storeKPIs.purchaseOrdersRaised}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>PO Pending</span>
+              <span className={styles.moduleKpiValue}>{storeKPIs.purchaseOrdersPending}</span>
+            </div>
+          </div>
+          <div className={styles.moduleAction}>Check Store →</div>
+        </div>
+
+        {/* Process/Production Module KPIs */}
+        <div className={styles.moduleKpiSection} onClick={() => onShowProduction?.()}>
+          <div className={styles.moduleHeader}>
+            <span className={styles.moduleIcon}>⚙️</span>
+            <span className={styles.moduleTitle}>PROCESS KPIs</span>
+          </div>
+          <div className={styles.moduleKpiGrid}>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Stage</span>
+              <span className={styles.moduleKpiValue}>Dye:{processKPIs.lotsByStage.dyeing} Print:{processKPIs.lotsByStage.printing} Finish:{processKPIs.lotsByStage.finishing} QC:{processKPIs.lotsByStage.qc} Ready:{processKPIs.lotsByStage.ready}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Avg Processing</span>
+              <span className={styles.moduleKpiValue}>{processKPIs.avgProcessingTime} days</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Delayed Lots</span>
+              <span className={styles.moduleKpiValue}>{processKPIs.delayedLots}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Ready Not Dispatched</span>
+              <span className={styles.moduleKpiValue}>{processKPIs.readyNotDispatched}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Rework %</span>
+              <span className={styles.moduleKpiValue}>{processKPIs.reworkPercentage}%</span>
+            </div>
+          </div>
+          <div className={styles.moduleAction}>View Production →</div>
+        </div>
+
+        {/* Customer Module KPIs */}
+        <div className={styles.moduleKpiSection} onClick={() => onShowCustomerList()}>
+          <div className={styles.moduleHeader}>
+            <span className={styles.moduleIcon}>👥</span>
+            <span className={styles.moduleTitle}>CUSTOMER KPIs</span>
+          </div>
+          <div className={styles.moduleKpiGrid}>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Active</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.activeParties}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>New</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.newPartiesThisMonth}</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Repeat %</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.repeatCustomerPercentage}%</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Top Billing</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.topPartiesByBilling[0]?.name || 'N/A'} ({formatCurrency(customerKPIs.topPartiesByBilling[0]?.amount || 0)})</span>
+            </div>
+            <div className={styles.moduleKpi}>
+              <span className={styles.moduleKpiLabel}>Top Outstanding</span>
+              <span className={styles.moduleKpiValue}>{customerKPIs.topPartiesByOutstanding[0]?.name || 'N/A'} ({formatCurrency(customerKPIs.topPartiesByOutstanding[0]?.amount || 0)})</span>
+            </div>
+          </div>
+          <div className={styles.moduleAction}>View {customers} →</div>
+        </div>
+        
+      </div>
+
+      {/* QUICK ALERTS */}
+      <div className={styles.quickAlerts}>
+        <div className={styles.alertsHeader}>
+          <span className={styles.alertsIcon}>⚠️</span>
+          <span className={styles.alertsTitle}>QUICK ALERTS</span>
+        </div>
+        <div className={styles.alertsList}>
+          <span className={styles.alertItem}>• {processKPIs.delayedLots} lots delayed</span>
+          <span className={styles.alertItem}>• {Math.floor(globalKPIs.outstandingAmount / 50000)} overdue bills</span>
+          <span className={styles.alertItem}>• {Math.floor(salesKPIs.inquiriesThisMonth * 0.2)} inquiries need rate</span>
+          <span className={styles.alertItem}>• {processKPIs.readyNotDispatched} lots ready not dispatched</span>
+        </div>
       </div>
 
       {/* Business Intelligence Footer */}
@@ -258,7 +241,7 @@ function Dashboard({
           Last updated: {new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit'})} • {awaitingClientMaterials + readyForPickup} pending actions
         </div>
         <div className={styles.businessMetrics}>
-          Total service value: ₹{(totalServiceRevenue/100000).toFixed(1)}L | Active processes: {activeLots + pendingRates + activeInquiries}
+          Total {service.toLowerCase()} value: {formatCurrency(globalKPIs.billedThisMonth)} | Active processes: {globalKPIs.lotsInProcess + salesKPIs.inquiriesThisMonth}
         </div>
       </div>
       

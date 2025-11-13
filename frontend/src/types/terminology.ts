@@ -31,6 +31,26 @@ export interface TerminologyConfig {
   goodsReceiptNote: string;
   inventory: string;
   
+  // Delivery process
+  delivery: string;
+  deliveries: string;
+  
+  // Material management
+  material: string;
+  materials: string;
+  
+  // Vendor relationships
+  supplier: string;
+  suppliers: string;
+  
+  // Financial transactions
+  payment: string;
+  payments: string;
+  
+  // Service offerings
+  service: string;
+  services: string;
+  
   // Actions
   generateQuote: string;
   generateInvoice: string;
@@ -69,6 +89,26 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     goodsReceiptNote: 'Inward',
     inventory: 'Stock',
     
+    // Delivery process - Industry terms
+    delivery: 'Delivery',
+    deliveries: 'Deliveries',
+    
+    // Material management - Industry terms
+    material: 'Material',
+    materials: 'Materials',
+    
+    // Vendor relationships - Industry terms
+    supplier: 'Supplier',
+    suppliers: 'Suppliers',
+    
+    // Financial transactions - Local terms
+    payment: 'Payment',
+    payments: 'Payments',
+    
+    // Service offerings - Job work terms
+    service: 'Job',
+    services: 'Jobs',
+    
     // Actions - Local terminology
     generateQuote: 'Send Rate',
     generateInvoice: 'Generate Job Bill', 
@@ -105,6 +145,26 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     goodsReceiptNote: 'GRN',
     inventory: 'Inventory',
     
+    // Delivery process - Corporate terms
+    delivery: 'Delivery',
+    deliveries: 'Deliveries',
+    
+    // Material management - Corporate terms
+    material: 'Material',
+    materials: 'Materials',
+    
+    // Vendor relationships - Corporate terms
+    supplier: 'Supplier',
+    suppliers: 'Suppliers',
+    
+    // Financial transactions - Corporate terms
+    payment: 'Payment',
+    payments: 'Payments',
+    
+    // Service offerings - Corporate terms
+    service: 'Service',
+    services: 'Services',
+    
     // Actions - Formal terminology
     generateQuote: 'Generate Quote',
     generateInvoice: 'Generate Invoice',
@@ -140,6 +200,26 @@ export const REGIONAL_TERMINOLOGY: Record<string, TerminologyConfig> = {
     // Procurement process - Manufacturing terms
     goodsReceiptNote: 'Goods Receipt',
     inventory: 'Inventory',
+    
+    // Delivery process - Manufacturing terms
+    delivery: 'Shipment',
+    deliveries: 'Shipments',
+    
+    // Material management - Manufacturing terms
+    material: 'Raw Material',
+    materials: 'Raw Materials',
+    
+    // Vendor relationships - Manufacturing terms
+    supplier: 'Vendor',
+    suppliers: 'Vendors',
+    
+    // Financial transactions - Manufacturing terms
+    payment: 'Payment',
+    payments: 'Payments',
+    
+    // Service offerings - Manufacturing terms
+    service: 'Service',
+    services: 'Services',
     
     // Actions - Manufacturing terminology
     generateQuote: 'Generate Quotation',

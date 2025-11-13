@@ -94,6 +94,26 @@ export const useTerminologyTerms = () => {
     goodsReceiptNote: terminology.goodsReceiptNote,
     inventory: terminology.inventory,
     
+    // Delivery process
+    delivery: terminology.delivery,
+    deliveries: terminology.deliveries,
+    
+    // Material management
+    material: terminology.material,
+    materials: terminology.materials,
+    
+    // Vendor relationships
+    supplier: terminology.supplier,
+    suppliers: terminology.suppliers,
+    
+    // Financial transactions
+    payment: terminology.payment,
+    payments: terminology.payments,
+    
+    // Service offerings
+    service: terminology.service,
+    services: terminology.services,
+    
     // Actions
     generateQuote: terminology.generateQuote,
     generateInvoice: terminology.generateInvoice,

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { mockDeliveryItems, DeliveryItem } from '../../data/deliveryMockData';
 import { FinalInvoice, getFinalInvoicesBySalesOrderId } from '../../data/salesMockData';
 import { useCardExpansion } from '../../hooks/useCardExpansion';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import ModalPortal from '../ui/ModalPortal';
 import styles from './DeliveryFulfillment.module.css';
 
@@ -22,6 +23,14 @@ const DeliveryFulfillment = ({
   openAddModal,
   onAddModalHandled
 }: DeliveryFulfillmentProps) => {
+  // Use regional terminology for consistent user experience  
+  const { 
+    customer,
+    order,
+    invoice,
+    delivery
+  } = useTerminologyTerms();
+  
   const { toggleExpansion, isExpanded } = useCardExpansion();
   const [activeDeliveryForm, setActiveDeliveryForm] = useState<string | null>(null);
   const [activeInvoiceEdit, setActiveInvoiceEdit] = useState<string | null>(null);
@@ -168,9 +177,9 @@ const DeliveryFulfillment = ({
   // Get action button text based on delivery status
   const getActionButtonText = (deliveryItem: DeliveryItem) => {
     switch(deliveryItem.status) {
-      case 'ready_dispatch': return 'Plan Delivery';
+      case 'ready_dispatch': return `Plan ${delivery}`;
       case 'delivery_scheduled': return 'Prepare Dispatch';
-      case 'dispatched': return 'Track Delivery';
+      case 'dispatched': return `Track ${delivery}`;
       case 'delivered': return 'View Proof';
       case 'failed_returned': return 'Reschedule';
       default: return null;
@@ -181,7 +190,7 @@ const DeliveryFulfillment = ({
     switch(deliveryItem.status) {
       case 'dispatched': return 'Call Driver';
       case 'delivered': return 'Get Feedback';
-      case 'failed_returned': return 'Contact Customer';
+      case 'failed_returned': return `Contact ${customer}`;
       default: return null;
     }
   };
@@ -203,10 +212,10 @@ const DeliveryFulfillment = ({
         <>
           {/* Order Details Section */}
           <div className={styles.expandedSection}>
-            <h3 className={styles.sectionHeader}>📦 Order Details</h3>
+            <h3 className={styles.sectionHeader}>📦 {order} Details</h3>
             <div className={styles.professionalDetailsGrid}>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Job Order</div>
+                <div className={styles.detailLabel}>{order}</div>
                 <div className={styles.detailValue}>{deliveryItem.salesOrderId}</div>
               </div>
               <div className={styles.detailRow}>
@@ -226,10 +235,10 @@ const DeliveryFulfillment = ({
 
           {/* Delivery Information Section */}
           <div className={styles.expandedSection}>
-            <h3 className={styles.sectionHeader}>📍 Delivery Information</h3>
+            <h3 className={styles.sectionHeader}>📍 {delivery} Information</h3>
             <div className={styles.professionalDetailsGrid}>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailLabel}>{customer}</div>
                 <div className={styles.detailValue}>{deliveryItem.customer}</div>
               </div>
               <div className={styles.detailRow}>
@@ -261,10 +270,10 @@ const DeliveryFulfillment = ({
                 className="ds-btn ds-btn-primary"
                 onClick={() => handleDeliveryAction('schedule', deliveryItem.id)}
               >
-                📋 Schedule Delivery
+                📋 Schedule {delivery}
               </button>
               <button className="ds-btn ds-btn-outline">
-                📦 View Order
+                📦 View {order}
               </button>
             </div>
           </div>
@@ -290,7 +299,7 @@ const DeliveryFulfillment = ({
                 <div className={styles.detailValue}>{deliveryItem.driverPhone}</div>
               </div>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Scheduled Delivery</div>
+                <div className={styles.detailLabel}>Scheduled {delivery}</div>
                 <div className={styles.detailValue}>{deliveryItem.scheduledDelivery}</div>
               </div>
             </div>
@@ -298,14 +307,14 @@ const DeliveryFulfillment = ({
 
           {/* Delivery Destination Section */}
           <div className={styles.expandedSection}>
-            <h3 className={styles.sectionHeader}>📍 Delivery Destination</h3>
+            <h3 className={styles.sectionHeader}>📍 {delivery} Destination</h3>
             <div className={styles.professionalDetailsGrid}>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailLabel}>{customer}</div>
                 <div className={styles.detailValue}>{deliveryItem.customer}</div>
               </div>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Job Order</div>
+                <div className={styles.detailLabel}>{order}</div>
                 <div className={styles.detailValue}>{deliveryItem.salesOrderId}</div>
               </div>
               <div className={styles.detailRow}>
@@ -367,7 +376,7 @@ const DeliveryFulfillment = ({
 
           {/* Delivery Progress Section */}
           <div className={styles.expandedSection}>
-            <h3 className={styles.sectionHeader}>🛣️ Delivery Progress</h3>
+            <h3 className={styles.sectionHeader}>🛣️ {delivery} Progress</h3>
             <div className={styles.professionalDetailsGrid}>
               <div className={styles.detailRow}>
                 <div className={styles.detailLabel}>Route</div>
@@ -516,10 +525,10 @@ const DeliveryFulfillment = ({
 
           {/* Customer Contact Section */}
           <div className={styles.expandedSection}>
-            <h3 className={styles.sectionHeader}>📞 Customer Contact</h3>
+            <h3 className={styles.sectionHeader}>📞 {customer} Contact</h3>
             <div className={styles.professionalDetailsGrid}>
               <div className={styles.detailRow}>
-                <div className={styles.detailLabel}>Customer</div>
+                <div className={styles.detailLabel}>{customer}</div>
                 <div className={styles.detailValue}>{deliveryItem.customer}</div>
               </div>
               <div className={styles.detailRow}>
@@ -533,10 +542,10 @@ const DeliveryFulfillment = ({
           <div className={styles.expandedSection}>
             <div className={styles.professionalActions}>
               <button className="ds-btn ds-btn-primary">
-                🔄 Reschedule Delivery
+                🔄 Reschedule {delivery}
               </button>
               <button className="ds-btn ds-btn-secondary">
-                📞 Contact Customer
+                📞 Contact {customer}
               </button>
               <button className="ds-btn ds-btn-outline">
                 📋 View History
@@ -592,18 +601,18 @@ const DeliveryFulfillment = ({
       switch (action) {
         case 'primary':
           switch (deliveryItem.status) {
-            case 'ready_dispatch': return '📋 Plan Delivery';
+            case 'ready_dispatch': return `📋 Plan ${delivery}`;
             case 'delivery_scheduled': return '📦 Prepare Dispatch';
-            case 'dispatched': return '📍 Track Delivery';
-            case 'delivered': return '📋 Delivery Proof';
-            case 'failed_returned': return '🔄 Reschedule Delivery';
+            case 'dispatched': return `📍 Track ${delivery}`;
+            case 'delivered': return `📋 ${delivery} Proof`;
+            case 'failed_returned': return `🔄 Reschedule ${delivery}`;
             default: return 'Delivery Action';
           }
         case 'secondary':
           switch (deliveryItem.status) {
             case 'dispatched': return '📞 Call Driver';
             case 'delivered': return '💬 Get Feedback';
-            case 'failed_returned': return '📞 Contact Customer';
+            case 'failed_returned': return `📞 Contact ${customer}`;
             default: return 'Secondary Action';
           }
         default: return 'Delivery Action';
@@ -679,7 +688,7 @@ const DeliveryFulfillment = ({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '14px', color: '#4a5568' }}>
                   <div>
                     <strong>Invoice Details:</strong><br />
-                    Job Order: {deliveryItem.salesOrderId}<br />
+                    {order}: {deliveryItem.salesOrderId}<br />
                     Amount: ₹{((parseFloat(deliveryItem.quantity.replace(/[^\d]/g, '')) || 1500) * 45).toLocaleString()}
                   </div>
                   <div>
@@ -696,7 +705,7 @@ const DeliveryFulfillment = ({
                   style={{ flex: 1 }}
                   onClick={closeDeliveryForm}
                 >
-                  ✅ Schedule Delivery & Generate Tax Invoice
+                  ✅ Schedule {delivery} & Generate Tax {invoice}
                 </button>
                 <button 
                   className="ds-btn ds-btn-secondary" 
@@ -763,7 +772,7 @@ const DeliveryFulfillment = ({
                     openInvoiceEdit(deliveryItem);
                   }}
                 >
-                  ✏️ Update Invoice Details
+                  ✏️ Update {invoice} Details
                 </button>
               </div>
 
@@ -910,7 +919,7 @@ const DeliveryFulfillment = ({
                     openInvoiceView(deliveryItem);
                   }}
                 >
-                  📄 View Tax Invoice
+                  📄 View Tax {invoice}
                 </button>
                 <button 
                   className="ds-btn ds-btn-secondary" 
@@ -926,7 +935,7 @@ const DeliveryFulfillment = ({
         case 'failed_returned':
           return (
             <div>
-              <h4>🔄 Reschedule Delivery</h4>
+              <h4>🔄 Reschedule {delivery}</h4>
               {deliveryItem.failureInfo && (
                 <div style={{ marginBottom: '16px', padding: '12px', background: '#fef2f2', borderRadius: '6px', border: '1px solid #fecaca' }}>
                   <p><strong>Failure Reason:</strong> {deliveryItem.failureInfo.reason}</p>
@@ -975,14 +984,14 @@ const DeliveryFulfillment = ({
                   style={{ flex: 1 }}
                   onClick={closeDeliveryForm}
                 >
-                  📅 Reschedule Delivery
+                  📅 Reschedule {delivery}
                 </button>
                 <button 
                   className="ds-btn ds-btn-secondary" 
                   style={{ flex: 1 }}
                   onClick={closeDeliveryForm}
                 >
-                  📞 Contact Customer
+                  📞 Contact {customer}
                 </button>
               </div>
             </div>
@@ -1048,7 +1057,7 @@ const DeliveryFulfillment = ({
               <h4>💬 Customer Feedback</h4>
               <div style={{ marginBottom: '16px', padding: '12px', background: '#f0fdf4', borderRadius: '6px' }}>
                 <p><strong>Delivery Completed:</strong> {deliveryItem.actualDelivery}</p>
-                <p><strong>Customer:</strong> {deliveryItem.customer}</p>
+                <p><strong>{customer}:</strong> {deliveryItem.customer}</p>
               </div>
               
               <div style={{ marginBottom: '16px' }}>
@@ -1096,9 +1105,9 @@ const DeliveryFulfillment = ({
         case 'failed_returned':
           return (
             <div>
-              <h4>📞 Contact Customer</h4>
+              <h4>📞 Contact {customer}</h4>
               <div style={{ marginBottom: '16px', padding: '12px', background: '#fef2f2', borderRadius: '6px' }}>
-                <p><strong>Customer:</strong> {deliveryItem.customer}</p>
+                <p><strong>{customer}:</strong> {deliveryItem.customer}</p>
                 <p><strong>Failed Attempt:</strong> {deliveryItem.failureInfo?.attempt} of {deliveryItem.failureInfo?.maxAttempts}</p>
                 <p><strong>Failure Reason:</strong> {deliveryItem.failureInfo?.reason}</p>
               </div>

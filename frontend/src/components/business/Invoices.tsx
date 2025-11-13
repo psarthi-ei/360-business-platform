@@ -12,6 +12,7 @@ import {
   ProformaInvoice,
   FinalInvoice
 } from '../../data/salesMockData';
+import { useTerminologyTerms } from '../../contexts/TerminologyContext';
 import styles from './Invoices.module.css';
 
 interface InvoicesProps {
@@ -58,6 +59,15 @@ function Invoices({
   filterState,
   onFilterChange
 }: InvoicesProps) {
+  
+  // Use regional terminology for consistent user experience
+  const { 
+    customer,
+    quote,
+    order,
+    invoices,
+    payment, payments
+  } = useTerminologyTerms();
   
   // Removed nested items expansion - items now shown directly in main expanded view
   
@@ -132,7 +142,7 @@ function Invoices({
       }
     
     // Fallback to existing string display or basic info
-    return 'Invoice items';
+    return `${invoices} items`;
   };
 
   // Get formatted items display for details (comprehensive)
@@ -309,7 +319,7 @@ function Invoices({
         id: invoice.id,
         type: 'proforma' as const,
         invoiceNumber: invoice.id, // Use ID as invoice number
-        customerName: businessProfile?.companyName || `Customer ${invoice.businessProfileId}`,
+        customerName: businessProfile?.companyName || `${customer} ${invoice.businessProfileId}`,
         location: businessProfile ? `${businessProfile.registeredAddress.city}, ${businessProfile.registeredAddress.state}` : 'Location not available',
         totalAmount: invoice.totalAmount,
         status: invoice.status,
@@ -317,7 +327,7 @@ function Invoices({
         dueDate: invoice.dueDate,
         relatedId: invoice.quoteId,
         contactInfo: businessProfile?.phone || 'No contact available',
-        paymentTerms: 'Advance payment required', // Default for proforma invoices
+        paymentTerms: `Advance ${payment.toLowerCase()} required`, // Default for proforma invoices
         gstAmount: invoice.gstAmount,
         netAmount: invoice.subtotal, // Use subtotal as net amount
         businessProfileId: invoice.businessProfileId
@@ -331,7 +341,7 @@ function Invoices({
         id: invoice.id,
         type: 'final' as const,
         invoiceNumber: invoice.id, // Use ID as invoice number
-        customerName: businessProfile?.companyName || `Customer ${invoice.businessProfileId}`,
+        customerName: businessProfile?.companyName || `${customer} ${invoice.businessProfileId}`,
         location: businessProfile ? `${businessProfile.registeredAddress.city}, ${businessProfile.registeredAddress.state}` : 'Location not available',
         totalAmount: invoice.totalAmount,
         status: invoice.status === 'paid' ? 'paid' : (invoice.status === 'pending' ? 'pending' : 'overdue'),
@@ -339,7 +349,7 @@ function Invoices({
         dueDate: invoice.dueDate || invoice.invoiceDate, // Use invoice date if no due date
         relatedId: invoice.salesOrderId,
         contactInfo: businessProfile?.phone || 'No contact available',
-        paymentTerms: 'As per sales order', // Default for final invoices
+        paymentTerms: `As per sales ${order.toLowerCase()}`, // Default for final invoices
         gstAmount: invoice.gstAmount,
         netAmount: invoice.subtotal, // Use subtotal as net amount
         businessProfileId: invoice.businessProfileId
@@ -464,8 +474,8 @@ function Invoices({
             <div className={styles.noInvoices}>
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>📄</div>
-                <h3>No invoices found</h3>
-                <p>No invoices match the selected filter criteria.</p>
+                <h3>No {invoices.toLowerCase()} found</h3>
+                <p>No {invoices.toLowerCase()} match the selected filter criteria.</p>
               </div>
             </div>
           ) : (
@@ -483,7 +493,7 @@ function Invoices({
                     {/* Enhanced Header - Customer Name + Financial Value */}
                     <div 
                       className="ds-card-header"
-                      title={`${invoice.customerName} - ${formatCurrency(invoice.totalAmount)} (Invoice ID: ${invoice.invoiceNumber})`}
+                      title={`${invoice.customerName} - ${formatCurrency(invoice.totalAmount)} (${invoices.slice(0, -1)} ID: ${invoice.invoiceNumber})`}
                     >
                       {invoice.customerName} — {formatCurrency(invoice.totalAmount)}
                     </div>
@@ -513,18 +523,18 @@ function Invoices({
                     <div className={styles.expandedSection}>
                       {/* Enhanced Invoice Details - Focus on NEW information not in card */}
                       <div className={styles.invoiceDetailsSection}>
-                        <h4>Invoice Details</h4>
+                        <h4>{invoices.slice(0, -1)} Details</h4>
                         <div className={styles.detailsGrid}>
                           {invoice.type === 'proforma' && (
-                            <p><strong>Payment Instructions:</strong> {(() => {
+                            <p><strong>{payment} Instructions:</strong> {(() => {
                               const originalInvoice = getOriginalInvoiceData(invoice);
                               return originalInvoice && 'paymentInstructions' in originalInvoice 
                                 ? originalInvoice.paymentInstructions 
-                                : 'Standard payment terms apply';
+                                : `Standard ${payment.toLowerCase()} terms apply`;
                             })()}</p>
                           )}
                           <p><strong>Contact:</strong> {invoice.contactInfo}</p>
-                          <p><strong>Payment Terms:</strong> {invoice.paymentTerms}</p>
+                          <p><strong>{payment} Terms:</strong> {invoice.paymentTerms}</p>
                         </div>
                       </div>
 
@@ -541,7 +551,7 @@ function Invoices({
                           <div className={styles.detailsGrid}>
                             <p>
                               <strong>
-                                {invoice.type === 'proforma' ? '📋 From Quote:' : '📦 From Order:'}
+                                {invoice.type === 'proforma' ? `📋 From ${quote}:` : `📦 From ${order}:`}
                               </strong> 
                               <span 
                                 className={styles.mappingLink}
@@ -598,23 +608,23 @@ function Invoices({
                             <div className={styles.sectionHeader}>
                               <h4 className={styles.sectionTitle}>
                                 <span className={styles.sectionIcon}>💰</span>
-                                Payment & Transaction Details
+                                {payment} & Transaction Details
                               </h4>
                             </div>
 
                             {/* Payment Summary */}
                             <div className={styles.paymentSummary}>
                               <div className={styles.summaryRow}>
-                                <span className={styles.summaryLabel}>Payment Status:</span>
+                                <span className={styles.summaryLabel}>{payment} Status:</span>
                                 <span className={styles.statusBadge}>
                                   {invoice.status === 'paid' || invoice.status === 'payment_received' ? '✅ Fully Paid' : 
                                    invoice.status === 'overdue' ? '⚠️ Overdue' : 
-                                   invoice.status === 'pending' ? '⏳ Payment Pending' : '📤 Sent - Awaiting Payment'}
+                                   invoice.status === 'pending' ? `⏳ ${payment} Pending` : `📤 Sent - Awaiting ${payment}`}
                                 </span>
                               </div>
                               
                               <div className={styles.summaryRow}>
-                                <span className={styles.summaryLabel}>Invoice Total:</span>
+                                <span className={styles.summaryLabel}>{invoices.slice(0, -1)} Total:</span>
                                 <span className={styles.summaryValue}>{formatCurrency(invoice.totalAmount)}</span>
                               </div>
                               
@@ -627,9 +637,9 @@ function Invoices({
                               
                               {totalPendingPayments > 0 && (
                                 <div className={styles.summaryRow}>
-                                  <span className={styles.summaryLabel}>Pending Payments:</span>
+                                  <span className={styles.summaryLabel}>Pending {payments}:</span>
                                   <span className={`${styles.summaryValue} ${styles.pendingAmount}`}>
-                                    {formatCurrency(totalPendingPayments)} {pendingPaymentCount > 1 && `(${pendingPaymentCount} payments)`}
+                                    {formatCurrency(totalPendingPayments)} {pendingPaymentCount > 1 && `(${pendingPaymentCount} ${payments.toLowerCase()})`}
                                   </span>
                                 </div>
                               )}
@@ -655,7 +665,7 @@ function Invoices({
                               
                               {receivableData && receivableData.daysPastDue !== undefined && (
                                 <div className={styles.summaryRow}>
-                                  <span className={styles.summaryLabel}>Payment Timeline:</span>
+                                  <span className={styles.summaryLabel}>{payment} Timeline:</span>
                                   <span className={`${styles.summaryValue} ${receivableData.daysPastDue > 0 ? styles.overdue : styles.onTime}`}>
                                     {receivableData.daysPastDue > 0 
                                       ? `${receivableData.daysPastDue} days overdue`
@@ -672,77 +682,77 @@ function Invoices({
                             {allPayments.length > 0 && (
                               <div className={styles.paymentsSection}>
                                 <h5 className={styles.paymentsHeader}>
-                                  Payment History ({allPayments.length} payment{allPayments.length !== 1 ? 's' : ''})
+                                  {payment} History ({allPayments.length} {allPayments.length === 1 ? payment.toLowerCase() : payments.toLowerCase()})
                                 </h5>
                                 
-                                {allPayments.filter(Boolean).map((payment, index) => (
-                                    <div key={payment.id} className={styles.paymentCard}>
+                                {allPayments.filter(Boolean).map((paymentRecord, index) => (
+                                    <div key={paymentRecord.id} className={styles.paymentCard}>
                                       <div className={styles.paymentHeader}>
                                         <div className={styles.paymentTitle}>
-                                          <span className={styles.paymentNumber}>Payment #{index + 1}</span>
-                                          <span className={styles.paymentAmount}>{formatCurrency(payment.amount)}</span>
+                                          <span className={styles.paymentNumber}>{payment} #{index + 1}</span>
+                                          <span className={styles.paymentAmount}>{formatCurrency(paymentRecord.amount)}</span>
                                         </div>
                                         <div className={styles.paymentDate}>
-                                          {'paymentDate' in payment ? payment.paymentDate : (payment.receivedDate || payment.dueDate)}
+                                          {'paymentDate' in paymentRecord ? paymentRecord.paymentDate : (paymentRecord.receivedDate || paymentRecord.dueDate)}
                                         </div>
                                       </div>
                                       
                                       <div className={styles.paymentDetails}>
                                         <div className={styles.paymentMethod}>
                                           <span className={styles.methodIcon}>
-                                            {payment.paymentMethod === 'RTGS' ? '🏦' :
-                                             payment.paymentMethod === 'NEFT' ? '💳' :
-                                             payment.paymentMethod === 'UPI' ? '📱' :
-                                             payment.paymentMethod === 'Cash' ? '💵' :
-                                             payment.paymentMethod === 'Cheque' ? '📝' : '💰'}
+                                            {paymentRecord.paymentMethod === 'RTGS' ? '🏦' :
+                                             paymentRecord.paymentMethod === 'NEFT' ? '💳' :
+                                             paymentRecord.paymentMethod === 'UPI' ? '📱' :
+                                             paymentRecord.paymentMethod === 'Cash' ? '💵' :
+                                             paymentRecord.paymentMethod === 'Cheque' ? '📝' : '💰'}
                                           </span>
-                                          <span className={styles.methodText}>{payment.paymentMethod}</span>
+                                          <span className={styles.methodText}>{paymentRecord.paymentMethod}</span>
                                         </div>
                                         
                                         <div className={styles.transactionInfo}>
                                           <div className={styles.transactionRow}>
                                             <span className={styles.transactionLabel}>Transaction Ref:</span>
-                                            <span className={styles.transactionValue}>{payment.transactionReference || 'N/A'}</span>
+                                            <span className={styles.transactionValue}>{paymentRecord.transactionReference || 'N/A'}</span>
                                           </div>
                                           
                                           <div className={styles.transactionRow}>
-                                            <span className={styles.transactionLabel}>Payment ID:</span>
-                                            <span className={styles.transactionValue}>{payment.id}</span>
+                                            <span className={styles.transactionLabel}>{payment} ID:</span>
+                                            <span className={styles.transactionValue}>{paymentRecord.id}</span>
                                           </div>
                                           
-                                          {payment.status && (
+                                          {paymentRecord.status && (
                                             <div className={styles.transactionRow}>
                                               <span className={styles.transactionLabel}>Status:</span>
-                                              <span className={`${styles.statusBadge} ${styles[payment.status]}`}>
-                                                {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                                              <span className={`${styles.statusBadge} ${styles[paymentRecord.status]}`}>
+                                                {paymentRecord.status.charAt(0).toUpperCase() + paymentRecord.status.slice(1)}
                                               </span>
                                             </div>
                                           )}
                                           
-                                          {payment.bankDetails && (
+                                          {paymentRecord.bankDetails && (
                                             <>
                                               <div className={styles.transactionRow}>
                                                 <span className={styles.transactionLabel}>Bank:</span>
-                                                <span className={styles.transactionValue}>{payment.bankDetails.bankName}</span>
+                                                <span className={styles.transactionValue}>{paymentRecord.bankDetails.bankName}</span>
                                               </div>
                                               <div className={styles.transactionRow}>
                                                 <span className={styles.transactionLabel}>Account:</span>
-                                                <span className={styles.transactionValue}>{payment.bankDetails.accountNumber}</span>
+                                                <span className={styles.transactionValue}>{paymentRecord.bankDetails.accountNumber}</span>
                                               </div>
-                                              {payment.bankDetails.ifscCode && (
+                                              {paymentRecord.bankDetails.ifscCode && (
                                                 <div className={styles.transactionRow}>
                                                   <span className={styles.transactionLabel}>IFSC:</span>
-                                                  <span className={styles.transactionValue}>{payment.bankDetails.ifscCode}</span>
+                                                  <span className={styles.transactionValue}>{paymentRecord.bankDetails.ifscCode}</span>
                                                 </div>
                                               )}
                                             </>
                                           )}
                                         </div>
                                         
-                                        {'notes' in payment && payment.notes && (
+                                        {'notes' in paymentRecord && paymentRecord.notes && (
                                           <div className={styles.paymentNotes}>
                                             <span className={styles.notesLabel}>Notes:</span>
-                                            <span className={styles.notesText}>{payment.notes}</span>
+                                            <span className={styles.notesText}>{paymentRecord.notes}</span>
                                           </div>
                                         )}
                                       </div>
@@ -754,8 +764,8 @@ function Invoices({
                             {allPayments.length === 0 && (
                               <div className={styles.noPayments}>
                                 <div className={styles.noPaymentsIcon}>💳</div>
-                                <p>No payments received yet</p>
-                                <small>Payment information will appear here once received</small>
+                                <p>No {payments.toLowerCase()} received yet</p>
+                                <small>{payment} information will appear here once received</small>
                               </div>
                             )}
                           </div>
