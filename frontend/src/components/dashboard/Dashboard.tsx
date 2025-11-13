@@ -164,7 +164,7 @@ function Dashboard({
           </div>
           <div className={styles.moduleKpiGrid}>
             <div className={styles.stagesContainer}>
-              <span className={styles.stagesHeader}>Production Stages</span>
+              <span className={styles.stagesHeader}>Stages</span>
               <div className={styles.stagesVisual}>
                 <div className={styles.stageItem}>
                   <div className={styles.stageIcon}>🎨</div>
