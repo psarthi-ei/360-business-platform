@@ -99,7 +99,7 @@ function Dashboard({
       <div className={styles.moduleKpiSections}>
         
         {/* Inquiry Module KPIs */}
-        <div className={styles.moduleKpiSection} onClick={() => onShowSales()}>
+        <div className={styles.moduleKpiSection}>
           <div className={styles.moduleHeader}>
             <span className={styles.moduleIcon}>📋</span>
             <span className={styles.moduleTitle}>{salesModule.toUpperCase()} KPIs</span>
@@ -122,11 +122,11 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{formatCurrency(salesKPIs.unbilledWork)}</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>Manage {salesModule} →</div>
+          <div className={styles.moduleAction} onClick={() => onShowSales()}>Manage {salesModule} →</div>
         </div>
 
         {/* Store/Procurement Module KPIs */}
-        <div className={styles.moduleKpiSection} onClick={() => onShowInventory?.()}>
+        <div className={styles.moduleKpiSection}>
           <div className={styles.moduleHeader}>
             <span className={styles.moduleIcon}>📦</span>
             <span className={styles.moduleTitle}>{materials.toUpperCase()} KPIs</span>
@@ -153,11 +153,11 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{storeKPIs.purchaseOrdersPending}</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>Check {materials} →</div>
+          <div className={styles.moduleAction} onClick={() => onShowInventory?.()}>Check {materials} →</div>
         </div>
 
         {/* Process/Production Module KPIs */}
-        <div className={styles.moduleKpiSection} onClick={() => onShowProduction?.()}>
+        <div className={styles.moduleKpiSection}>
           <div className={styles.moduleHeader}>
             <span className={styles.moduleIcon}>⚙️</span>
             <span className={styles.moduleTitle}>PROCESS KPIs</span>
@@ -210,11 +210,11 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{processKPIs.reworkPercentage}%</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>View Production →</div>
+          <div className={styles.moduleAction} onClick={() => onShowProduction?.()}>View Production →</div>
         </div>
 
         {/* Party Module KPIs */}
-        <div className={styles.moduleKpiSection} onClick={() => onShowCustomerList()}>
+        <div className={styles.moduleKpiSection}>
           <div className={styles.moduleHeader}>
             <span className={styles.moduleIcon}>🤝</span>
             <span className={styles.moduleTitle}>{customers.toUpperCase()} KPIs</span>
@@ -241,7 +241,7 @@ function Dashboard({
               <span className={styles.moduleKpiValue}>{customerKPIs.topCustomersByOutstanding[0]?.name} ({formatCurrency(customerKPIs.topCustomersByOutstanding[0]?.amount)})</span>
             </div>
           </div>
-          <div className={styles.moduleAction}>View {customers} →</div>
+          <div className={styles.moduleAction} onClick={() => onShowCustomerList()}>View {customers} →</div>
         </div>
         
       </div>
