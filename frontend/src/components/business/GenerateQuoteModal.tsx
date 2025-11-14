@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Lead, LeadRequestedItem, QuoteItem, Quote } from '../../data/salesMockData';
 import { getBusinessProfileById } from '../../data/customerMockData';
 import ModalPortal from '../ui/ModalPortal';
@@ -146,9 +146,19 @@ function GenerateQuoteModal({
   };
 
   // Handle updating existing item - memoized to prevent infinite loops
-  const handleItemUpdate = useCallback((index: number) => (updatedItem: QuoteEditableItem) => {
+  const handleItemUpdate = useCallback((index: number, updatedItem: QuoteEditableItem) => {
     setQuoteItems(prev => prev.map((item, i) => i === index ? updatedItem : item));
   }, []);
+
+  // Create stable update handlers for each item to prevent re-renders
+  const itemUpdateHandlers = useMemo(() => {
+    const handlers: Record<number, (updatedItem: QuoteEditableItem) => void> = {};
+    quoteItems.forEach((_, index) => {
+      handlers[index] = (updatedItem: QuoteEditableItem) => handleItemUpdate(index, updatedItem);
+    });
+    return handlers;
+  }, [quoteItems, handleItemUpdate]);
+
 
   // Handle removing item
   const handleItemRemove = (index: number) => {
@@ -388,7 +398,7 @@ function GenerateQuoteModal({
                     key={`${item.masterItemId}-${index}`}
                     item={item}
                     businessModel={lead.leadType}
-                    onUpdate={handleItemUpdate(index)}
+                    onUpdate={itemUpdateHandlers[index]}
                     onRemove={mode === 'generate' ? () => handleItemRemove(index) : () => {}}
                     index={index}
                     disabled={mode === 'view'}

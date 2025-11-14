@@ -140,10 +140,21 @@ function QuoteItemEditor({
       volumeDiscountAmount: volumeDiscountAmount * editData.quantity,
       effectiveRate
     });
-  }, [catalogItem, editData, businessModel, item.quantity, item.requestedQuantity, item.customPrice, item.discountPercentage]);
+  }, [catalogItem, editData.quantity, editData.customPrice, editData.discountPercentage, businessModel]);
 
+  // Track if component has been initialized to prevent initial render side effects
+  const isInitialRenderRef = useRef(true);
+
+  
   // Ensure editData is updated when item props change (for edit mode transitions)
+  // Use individual values in dependencies to prevent unnecessary updates
   useEffect(() => {
+    // Skip updates on initial render to prevent conflicts with initial state
+    if (isInitialRenderRef.current) {
+      isInitialRenderRef.current = false;
+      return;
+    }
+    
     setEditData(prev => ({
       ...prev,
       quantity: Math.max(1, item.quantity || item.requestedQuantity || prev.quantity),
@@ -152,7 +163,7 @@ function QuoteItemEditor({
       notes: item.notes !== undefined ? item.notes : prev.notes,
       customSpecifications: item.customSpecifications || prev.customSpecifications
     }));
-  }, [item.customPrice, item.discountPercentage, item.quantity, item.requestedQuantity, item.notes, item.customSpecifications]);
+  }, [item.quantity, item.requestedQuantity, item.customPrice, item.discountPercentage, item.notes, item.customSpecifications]);
 
   // Track initialization state to prevent false change triggers
   const isInitializedRef = useRef(false);
@@ -165,6 +176,10 @@ function QuoteItemEditor({
     notes: string;
     calculatedTotal: number;
   } | null>(null);
+
+  // Store onUpdate in a ref to prevent it from causing re-renders
+  const onUpdateRef = useRef(onUpdate);
+  onUpdateRef.current = onUpdate;
 
   // Mark component as initialized after first render
   useEffect(() => {
@@ -198,7 +213,7 @@ function QuoteItemEditor({
       // Only call onUpdate if component is fully initialized to prevent false change triggers
       if (isInitializedRef.current) {
         const updatedItem: QuoteEditableItem = {
-          ...item,
+          ...item, // Keep all original item properties
           requestedQuantity: editData.quantity,
           budgetExpectation: pricing.finalPrice,
           notes: editData.notes,
@@ -209,10 +224,11 @@ function QuoteItemEditor({
           calculatedTotal: pricing.totalAmount
         };
         
-        onUpdate(updatedItem);
+        onUpdateRef.current(updatedItem);
       }
     }
-  }, [editData.quantity, editData.customPrice, editData.discountPercentage, editData.notes, pricing.totalAmount, pricing.finalPrice, item, editData.customSpecifications, onUpdate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editData.quantity, editData.customPrice, editData.discountPercentage, editData.notes, pricing.totalAmount, pricing.finalPrice, editData.customSpecifications]);
 
   if (!catalogItem) {
     return (
@@ -533,15 +549,6 @@ function QuoteItemEditor({
         <div className={styles.editorField}>
           <label>Discount %</label>
           <div className={styles.discountEditor}>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={editData.discountPercentage}
-              onChange={(e) => handleDiscountChange(parseFloat(e.target.value))}
-              className={styles.discountSlider}
-              disabled={disabled}
-            />
             <input
               type="number"
               value={editData.discountPercentage}
