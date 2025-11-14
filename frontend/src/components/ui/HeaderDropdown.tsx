@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useResponsive } from '../../hooks/useResponsive';
 import styles from './HeaderDropdown.module.css';
 
 interface HeaderDropdownProps {
@@ -54,6 +55,12 @@ function HeaderDropdown({
 }: HeaderDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { isMobile } = useResponsive();
+  
+  // Smart navigation visibility logic:
+  // - Platform pages: Always show navigation (no nav in platform header)
+  // - Website pages: Show navigation only on mobile (desktop has nav in header)
+  const shouldShowWebsiteNavigation = showWebsiteNavigation && (isPlatformPage || isMobile);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -102,8 +109,8 @@ function HeaderDropdown({
       {isOpen && (
         <div className={styles.dropdownMenu}>
 
-          {/* Website Navigation Section - Top Priority for Mobile */}
-          {showWebsiteNavigation && (
+          {/* Website Navigation Section - Smart Responsive Display */}
+          {shouldShowWebsiteNavigation && (
             <div className={`${styles.menuSection} ${styles.websiteNavigationSection}`}>
               <div className={styles.sectionTitle}>Navigation</div>
               <button
