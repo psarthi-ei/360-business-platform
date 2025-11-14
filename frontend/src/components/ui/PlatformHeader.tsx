@@ -28,6 +28,14 @@ interface PlatformHeaderProps {
   onVoiceHover?: (buttonPosition: { x: number; y: number; width: number; height: number }) => void;
   onNotificationClick?: () => void;
   voiceState?: 'IDLE' | 'LISTENING' | 'PROCESSING' | 'ERROR';
+  // Website navigation props
+  onServicesHub?: () => void;
+  onTurnaroundStories?: () => void;
+  onBlogHome?: () => void;
+  onAbout?: () => void;
+  onContact?: () => void;
+  // Page context
+  isPlatformPage?: boolean;
 }
 
 function PlatformHeader({
@@ -50,7 +58,15 @@ function PlatformHeader({
   onVoiceSearch,
   onVoiceHover,
   onNotificationClick,
-  voiceState = 'IDLE'
+  voiceState = 'IDLE',
+  // Website navigation props
+  onServicesHub,
+  onTurnaroundStories,
+  onBlogHome,
+  onAbout,
+  onContact,
+  // Page context
+  isPlatformPage = false
 }: PlatformHeaderProps) {
   return (
     <div className={styles.platformHeader}>
@@ -96,6 +112,7 @@ function PlatformHeader({
             currentLanguage={currentLanguage}
             onLanguageChange={onLanguageChange}
             showThemeSelector={false}
+            onNavigateHome={onHome}
             onLogin={onLogin}
             onSignUp={onSignUp}
             onGuestMode={onGuestMode}
@@ -103,7 +120,13 @@ function PlatformHeader({
             onLogout={onLogout}
             isAuthenticated={isAuthenticated}
             userMode={userMode}
-            showWebsiteNavigation={false}
+            showWebsiteNavigation={true}
+            onServicesHub={onServicesHub}
+            onTurnaroundStories={onTurnaroundStories}
+            onBlogHome={onBlogHome}
+            onAbout={onAbout}
+            onContact={onContact}
+            isPlatformPage={isPlatformPage}
           />
         </div>
       </div>

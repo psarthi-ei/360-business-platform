@@ -162,14 +162,14 @@
   font-size: 14px;
 }
 
-/* Hide website navigation on desktop (already shown in header) */
+/* Website navigation section - visible on all devices */
 .websiteNavigationSection {
-  display: none;
+  display: block;
 }
 
 /* Professional Mobile Design */
 @media (max-width: 1024px) {
-  /* Show website navigation on tablet and mobile */
+  /* Mobile-specific styling for website navigation */
   .websiteNavigationSection {
     display: block;
   }

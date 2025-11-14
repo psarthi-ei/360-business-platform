@@ -534,6 +534,12 @@ function AppContent() {
               currentScreen={currentScreen}
               onUniversalAction={handleUniversalAction}
               onPerformSearch={handleUniversalSearch}
+              onServicesHub={showServicesHubWithReset}
+              onTurnaroundStories={showTurnaroundStories}
+              onBlogHome={showBlogHome}
+              onAbout={showAbout}
+              onContact={showContact}
+              isPlatformPage={true}
             >
               <Outlet />
             </PlatformShell>

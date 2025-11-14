@@ -165,6 +165,7 @@ function WebsiteHeader({
             onBlogHome={onBlogHome}
             onAbout={onAbout}
             onContact={onContact}
+            isPlatformPage={false}
           />
         </div>
       </div>

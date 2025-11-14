@@ -23,6 +23,8 @@ interface HeaderDropdownProps {
   onBlogHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
+  // Page Context
+  isPlatformPage?: boolean;
 }
 
 function HeaderDropdown({
@@ -46,7 +48,9 @@ function HeaderDropdown({
   onTurnaroundStories,
   onBlogHome,
   onAbout,
-  onContact
+  onContact,
+  // Page Context
+  isPlatformPage = false
 }: HeaderDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -105,17 +109,21 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  // Match ProductHeader logic: authenticated users or non-guest users go to dashboard, others to demo
-                  if (isAuthenticated || userMode !== 'guest') {
-                    onDashboard?.();
+                  if (isPlatformPage) {
+                    onNavigateHome?.();
                   } else {
-                    onDemoMode?.();
+                    // On website pages, go to dashboard/demo based on auth status
+                    if (isAuthenticated || userMode !== 'guest') {
+                      onDashboard?.();
+                    } else {
+                      onDemoMode?.();
+                    }
                   }
                   setIsOpen(false);
                 }}
               >
-                <span className={styles.itemIcon}>⚡</span>
-                <span className={styles.itemText}>ElevateBusiness 360°</span>
+                <span className={styles.itemIcon}>{isPlatformPage ? '🏠' : '⚡'}</span>
+                <span className={styles.itemText}>{isPlatformPage ? 'Home' : 'ElevateBusiness 360°'}</span>
               </button>
               <button
                 className={styles.menuItem}

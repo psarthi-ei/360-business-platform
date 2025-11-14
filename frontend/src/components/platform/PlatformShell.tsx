@@ -30,6 +30,14 @@ interface PlatformShellProps {
   onUniversalAction: (actionType: string, params?: ActionParams) => void;
   onPerformSearch: (query: string) => void;
   children: React.ReactNode;
+  // Website navigation props
+  onServicesHub?: () => void;
+  onTurnaroundStories?: () => void;
+  onBlogHome?: () => void;
+  onAbout?: () => void;
+  onContact?: () => void;
+  // Page context
+  isPlatformPage?: boolean;
 }
 
 function PlatformShell({
@@ -47,7 +55,15 @@ function PlatformShell({
   currentScreen,
   onUniversalAction,
   onPerformSearch,
-  children
+  children,
+  // Website navigation props
+  onServicesHub,
+  onTurnaroundStories,
+  onBlogHome,
+  onAbout,
+  onContact,
+  // Page context
+  isPlatformPage = true
 }: PlatformShellProps) {
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
@@ -114,6 +130,13 @@ function PlatformShell({
           onVoiceSearch={handleVoiceSearch}
           onVoiceHover={handleVoiceHover}
           voiceState={voiceState}
+          // Website navigation integration
+          onServicesHub={onServicesHub}
+          onTurnaroundStories={onTurnaroundStories}
+          onBlogHome={onBlogHome}
+          onAbout={onAbout}
+          onContact={onContact}
+          isPlatformPage={isPlatformPage}
         />
       </header>
       
