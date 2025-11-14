@@ -96,6 +96,11 @@
   --ds-padding-button-card: 4px 8px;  /* Visual Design Spec - Fixed padding for 120px cards */
   --font-sm-card: 14px;               /* Visual Design Spec - Fixed size for card buttons */
 
+  /* Universal Modal System - Modern CSS Standards */
+  --modal-safe-height: 100vh;  /* Fallback for older browsers */
+  --modal-content-max-height: calc(100vh - clamp(40px, 8vh, 120px));
+  --modal-padding: clamp(20px, 4vh, 60px) 16px;
+
   /* Grid Gap System */
   --ds-gap-sm: clamp(0.25rem, 1.5vw, 0.75rem);
   --ds-gap-md: clamp(0.5rem, 2vw, 1rem);
@@ -673,8 +678,13 @@ body.modal-open {
 
 /* ===== SAFARI-SPECIFIC MODAL FIXES ===== */
 
-/* Safari viewport height support */
+/* Modern viewport height support - 100dvh automatically handles dynamic browser UI */
 @supports (height: 100dvh) {
+  :root {
+    --modal-safe-height: 100dvh;  /* Use dynamic viewport height when supported */
+    --modal-content-max-height: calc(100dvh - clamp(40px, 8vh, 120px));
+  }
+  
   .modal-portal-container {
     height: 100dvh !important;
     min-height: 100dvh !important;
