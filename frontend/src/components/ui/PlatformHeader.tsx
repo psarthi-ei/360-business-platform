@@ -4,7 +4,7 @@ import GlobalSearch, { GlobalSearchRef } from '../search/GlobalSearch';
 import { SearchDataSources, SearchNavigationHandlers } from '../search/useGlobalSearch';
 import styles from './PlatformHeader.module.css';
 import logoImage from '../../assets/images/logo.png';
-import { companyName, tagline, logoAlt } from '../../config/brand';
+import { platformName, tagline, logoAlt } from '../../config/brand';
 
 interface PlatformHeaderProps {
   currentLanguage: string;
@@ -73,10 +73,10 @@ function PlatformHeader({
       {/* Unified Header Content - Mobile and Desktop */}
       <div className={styles.headerContent}>
         {/* Left: Logo Section */}
-        <div className={styles.logoSection} onClick={onHome}>
+        <div className={styles.logoSection}>
           <img src={logoImage} alt={logoAlt} className={styles.logoImage} />
           <div className={styles.logoTextContainer}>
-            <span className={styles.logoText}>{companyName}</span>
+            <span className={styles.logoText}>{platformName}</span>
             <span className={styles.logoTagline}>{tagline}</span>
           </div>
         </div>
