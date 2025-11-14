@@ -782,3 +782,54 @@ body.modal-open {
   }
 }
 
+/* ===== PLATFORM CONTENT SAFE AREA UTILITIES ===== */
+
+/* Bottom Navigation Safe Area - Minimal additional spacing for special components */
+.platform-content-safe-area {
+  padding-bottom: var(--ds-space-xs, 8px); /* Minimal extra safe area for edge cases */
+}
+
+/* Mobile safe area - minimal additional spacing (PlatformShell already handles main spacing) */
+@media (max-width: 1024px) {
+  .platform-content-safe-area {
+    padding-bottom: var(--ds-space-xs, 8px);
+  }
+}
+
+/* Small mobile safe area - minimal additional spacing */
+@media (max-width: 480px) {
+  .platform-content-safe-area {
+    padding-bottom: var(--ds-space-xs, 8px);
+  }
+}
+
+/* Very small mobile safe area - minimal additional spacing */
+@media (max-width: 360px) {
+  .platform-content-safe-area {
+    padding-bottom: var(--ds-space-xs, 8px);
+  }
+}
+
+/* Enhanced safe area for floating action buttons - minimal extra spacing since PlatformShell handles main spacing */
+.platform-content-safe-area-fab {
+  padding-bottom: var(--ds-space-sm, 12px); /* Minimal extra space for FAB components */
+}
+
+@media (max-width: 1024px) {
+  .platform-content-safe-area-fab {
+    padding-bottom: var(--ds-space-sm, 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  .platform-content-safe-area-fab {
+    padding-bottom: var(--ds-space-sm, 12px);
+  }
+}
+
+@media (max-width: 360px) {
+  .platform-content-safe-area-fab {
+    padding-bottom: var(--ds-space-sm, 12px);
+  }
+}
+

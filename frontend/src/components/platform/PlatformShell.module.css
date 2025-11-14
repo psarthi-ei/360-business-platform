@@ -116,7 +116,7 @@
   }
   
   .contentArea {
-    padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px) var(--ds-space-m, 16px) var(--ds-space-m, 16px);
+    padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px) 24px var(--ds-space-m, 16px);
     /* Enable smooth touch scrolling on mobile */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
@@ -132,7 +132,7 @@
   }
   
   .contentArea {
-    padding: var(--ds-space-xs, 8px) var(--ds-space-s, 12px) var(--ds-space-s, 12px) var(--ds-space-s, 12px);
+    padding: var(--ds-space-xs, 8px) var(--ds-space-s, 12px) 24px var(--ds-space-s, 12px);
     /* Enable smooth touch scrolling on small mobile */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
