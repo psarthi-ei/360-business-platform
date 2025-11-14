@@ -11,21 +11,23 @@ interface ModalPortalProps {
 }
 
 /**
- * Simplified Modal Portal Component
+ * Safari-Optimized Modal Portal Component
  * 
  * Renders modals at document.body level to escape CSS Grid constraints
- * and ensure proper mobile behavior across all devices.
+ * and ensure proper mobile behavior across all devices, with special
+ * Safari compatibility fixes.
  * 
  * Features:
  * - React Portal for container escape
- * - Clean body scroll prevention (no complex timeouts)
- * - Touch-friendly backdrop handling
- * - Simplified mobile optimization
+ * - Safari-specific viewport height calculations
+ * - Safari scroll freeze prevention
+ * - Safari browser UI compensation
+ * - Cross-browser scroll lock management
  * 
- * SIMPLIFIED APPROACH (October 2025):
- * - Removed 30-second timeout logic
- * - Removed complex recovery functions
- * - Basic scroll lock with reliable cleanup
+ * SAFARI COMPATIBILITY (November 2025):
+ * - Dynamic viewport height for Safari address bar
+ * - Safari-specific scroll prevention
+ * - WebKit scroll conflict resolution
  */
 const ModalPortal: React.FC<ModalPortalProps> = ({ 
   children, 
@@ -34,7 +36,25 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
   onBackdropClick 
 }) => {
   
-  // Mobile-First Body Scroll Management
+  // Safari Detection for Browser-Specific Fixes
+  const isSafari = typeof navigator !== 'undefined' && 
+    /Safari/.test(navigator.userAgent) && 
+    !/Chrome/.test(navigator.userAgent);
+  
+  // Calculate actual viewport height for Safari
+  const getViewportHeight = () => {
+    if (typeof window === 'undefined') return '100vh';
+    
+    if (isSafari) {
+      // Safari: Use actual window inner height to exclude browser UI
+      return `${window.innerHeight}px`;
+    }
+    
+    // Other browsers: Standard viewport units work fine
+    return '100vh';
+  };
+  
+  // Safari-Optimized Body Scroll Management
   useEffect(() => {
     if (!isOpen) return;
 
@@ -52,14 +72,25 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
       // Use CSS class-based approach for better reliability
       document.body.classList.add('modal-open');
       
-      // For mobile Safari compatibility - avoid position fixed issues
-      if (window.innerWidth <= 768) {
-        // Mobile: Use overflow hidden only, avoid position fixed
+      // Safari-Specific Scroll Prevention (prevents freeze on subsequent opens)
+      if (isSafari) {
+        // Safari: Use overflow hidden only, never position fixed
         document.body.style.overflow = 'hidden';
         document.body.style.touchAction = 'none';
+        // Force reflow to ensure styles are applied in Safari
+        void document.body.offsetHeight;
       } else {
-        // Desktop: Use position fixed approach
-        document.body.style.top = `-${scrollY}px`;
+        // Non-Safari browsers: Use standard approach
+        if (window.innerWidth <= 768) {
+          // Mobile: Use overflow hidden only
+          document.body.style.overflow = 'hidden';
+          document.body.style.touchAction = 'none';
+        } else {
+          // Desktop: Use position fixed approach
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${scrollY}px`;
+          document.body.style.width = '100%';
+        }
       }
 
       // Cleanup function to restore scroll
@@ -82,19 +113,33 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         if (!originalTop) document.body.style.removeProperty('top');
         if (!originalTouchAction) document.body.style.removeProperty('touch-action');
         
-        // Restore scroll position with mobile-specific handling
-        if (window.innerWidth <= 768) {
-          // Mobile: Simple scroll restoration
+        // Safari-Specific Scroll Restoration
+        if (isSafari) {
+          // Safari: Delayed scroll restoration to prevent freeze
           setTimeout(() => {
             window.scrollTo(0, scrollY);
-          }, 0);
+            // Double-check in Safari - sometimes needs extra push
+            setTimeout(() => {
+              if (window.scrollY !== scrollY) {
+                window.scrollTo(0, scrollY);
+              }
+            }, 50);
+          }, 100);
         } else {
-          // Desktop: Immediate scroll restoration
-          try {
-            window.scrollTo(0, scrollY);
-          } catch {
-            // Fallback scroll restoration
-            document.documentElement.scrollTop = scrollY;
+          // Standard browsers: Immediate or delayed restoration
+          if (window.innerWidth <= 768) {
+            // Mobile: Simple scroll restoration
+            setTimeout(() => {
+              window.scrollTo(0, scrollY);
+            }, 0);
+          } else {
+            // Desktop: Immediate scroll restoration
+            try {
+              window.scrollTo(0, scrollY);
+            } catch {
+              // Fallback scroll restoration
+              document.documentElement.scrollTop = scrollY;
+            }
           }
         }
         
@@ -102,7 +147,7 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         void document.body.offsetHeight;
       };
     }
-  }, [isOpen, preventScroll]);
+  }, [isOpen, preventScroll, isSafari]);
 
   // Don't render if modal is closed
   if (!isOpen) return null;
@@ -127,16 +172,15 @@ const ModalPortal: React.FC<ModalPortalProps> = ({
         right: 0,
         bottom: 0,
         
-        // Dynamic viewport height for mobile
-        height: '100vh',
-        minHeight: '100vh',
+        // Safari-Compatible Dynamic Viewport Height
+        height: getViewportHeight(),
+        minHeight: getViewportHeight(),
         
         // Z-index following Visual Design Spec hierarchy
         zIndex: 16000, // Layer 4: Modals & Critical UI
         
-        // Mobile touch optimization
-        WebkitOverflowScrolling: 'touch',
-        touchAction: 'manipulation',
+        // Safari-Compatible Touch Optimization (no WebkitOverflowScrolling conflicts)
+        touchAction: isSafari ? 'none' : 'manipulation',
         
         // Backdrop styling
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

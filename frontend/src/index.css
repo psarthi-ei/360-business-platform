@@ -657,19 +657,49 @@ code {
 
 /* ===== SIMPLIFIED MODAL SYSTEM ===== */
 
-/* Body scroll management for modals */
+/* Body scroll management for modals - Safari Compatible */
 body.modal-open {
   overflow: hidden;
   position: fixed;
   width: 100%;
-  /* Prevent background scrolling on mobile */
-  -webkit-overflow-scrolling: none;
+  /* Safari-compatible scroll prevention - no webkit conflicts */
   touch-action: none;
 }
 
 /* Modal portal container - simplified */
 .modal-portal-container {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== SAFARI-SPECIFIC MODAL FIXES ===== */
+
+/* Safari viewport height support */
+@supports (height: 100dvh) {
+  .modal-portal-container {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+}
+
+/* Safari-specific modal content adjustments */
+@media not all and (min-resolution:.001dpcm) {
+  /* Safari-only styles */
+  .modal-portal-container {
+    /* Ensure proper height calculation in Safari */
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Safari scroll management - no position fixed conflicts */
+  body.modal-open {
+    position: static;
+    overflow: hidden;
+  }
+  
+  /* Safari modal content spacing */
+  .modal-portal-container .modalContent {
+    /* Add extra bottom padding for Safari address bar */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ===== GLOBAL MODAL DESIGN SYSTEM STANDARD ===== */

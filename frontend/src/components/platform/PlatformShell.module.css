@@ -51,7 +51,7 @@
 
 .contentArea {
   grid-area: content;
-  overflow-y: auto;
+  overflow: hidden;
   padding: var(--ds-space-m, 16px) var(--ds-space-l, 24px) var(--ds-space-l, 24px) var(--ds-space-l, 24px);
   background: var(--color-background, #F3F4F6);
   /* z-index removed - enables global overlay z-index competition */
@@ -117,10 +117,8 @@
   
   .contentArea {
     padding: var(--ds-space-s, 12px) var(--ds-space-m, 16px) 24px var(--ds-space-m, 16px);
-    /* Enable smooth touch scrolling on mobile */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overflow-y: auto;
+    /* No scroll - let tab components handle their own scrolling */
+    overflow: hidden;
     /* position: relative; ❌ REMOVED - clips fixed modals on mobile */
   }
 }
@@ -133,10 +131,8 @@
   
   .contentArea {
     padding: var(--ds-space-xs, 8px) var(--ds-space-s, 12px) 24px var(--ds-space-s, 12px);
-    /* Enable smooth touch scrolling on small mobile */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overflow-y: auto;
+    /* No scroll - let tab components handle their own scrolling */
+    overflow: hidden;
     /* position: relative; ❌ REMOVED - clips fixed modals on mobile */
   }
   
