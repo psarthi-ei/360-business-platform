@@ -8,6 +8,9 @@ interface SEOProps {
   canonical?: string;
   type?: 'website' | 'article' | 'profile';
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageAlt?: string;
   author?: string;
   structuredData?: object;
 }
@@ -18,7 +21,10 @@ function SEO({
   keywords,
   canonical,
   type = 'website',
-  image = '/logo192.png',
+  image = '/social-preview.jpg',
+  imageWidth = 1200,
+  imageHeight = 630,
+  imageAlt,
   author = 'ElevateIdea Technologies',
   structuredData
 }: SEOProps) {
@@ -26,6 +32,7 @@ function SEO({
   const fullTitle = title.includes('ElevateIdea') ? title : `${title} | ElevateIdea Technologies`;
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
   const fullImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+  const defaultImageAlt = imageAlt || `${title} - ElevateIdea Technologies`;
 
   return (
     <Helmet>
@@ -41,6 +48,9 @@ function SEO({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImage} />
+      <meta property="og:image:width" content={imageWidth.toString()} />
+      <meta property="og:image:height" content={imageHeight.toString()} />
+      <meta property="og:image:alt" content={defaultImageAlt} />
       <meta property="og:url" content={fullCanonical} />
       <meta property="og:site_name" content="ElevateIdea Technologies" />
 
@@ -49,6 +59,11 @@ function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
+      <meta name="twitter:image:alt" content={defaultImageAlt} />
+
+      {/* WhatsApp and Additional Social Media Optimizations */}
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:locale" content="en_US" />
 
       {/* Additional SEO Meta Tags */}
       <meta name="robots" content="index, follow" />

@@ -56,6 +56,10 @@ function HomePage({
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
         canonical="/"
         type="website"
+        image="/social-preview.jpg"
+        imageWidth={1200}
+        imageHeight={630}
+        imageAlt="ElevateIdea Technologies - 360° Business Platform for Indian Textile Manufacturers"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Organization",
