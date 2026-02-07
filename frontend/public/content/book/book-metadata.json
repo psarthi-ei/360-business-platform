@@ -2,45 +2,45 @@
   "chapters": [
     {
       "id": "introduction",
-      "number": 0,
+      "number": null,
       "title": "Why This Book",
       "subtitle": "When Code Is No Longer the Bottleneck",
       "excerpt": "I am writing this book because I believe we have reached the end of a long chapter in the history of software development — and the beginning of another for which we do not yet have a playbook.",
-      "filename": "chapter1-why-this-book.html",
-      "publishedDate": "2025-01-15",
+      "filename": "chapter0-why-this-book.html",
+      "publishedDate": "2026-02-06",
       "readTime": "8 min read",
       "section": "Introduction",
       "order": 0,
       "isPublished": true,
-      "slug": "chapter1"
+      "slug": "introduction"
     },
     {
       "id": "chapter1",
       "number": 1,
-      "title": "Why software work broke after 2020",
-      "subtitle": "The Fundamental Shift in Software Development",
-      "excerpt": "Something fundamental shifted in how software gets built. The old playbook—more engineers, better processes, clearer requirements—stopped working. Understanding this shift is crucial for every engineering leader.",
-      "filename": "chapter1-software-work-broke.html",
-      "publishedDate": null,
-      "readTime": "Coming Soon",
-      "section": "Part 1 — What Actually Changed",
+      "title": "The Two Engineering Organizations Most of Us Actually Work In",
+      "subtitle": "Traditional vs Agile Organizations",
+      "excerpt": "Most engineering organizations fall into two categories: traditional engineering orgs, and reasonably mature (but imperfect) agile organizations. Understanding where we are is crucial before we can evolve.",
+      "filename": "chapter1.html",
+      "publishedDate": "2026-02-07",
+      "readTime": "12 min read",
+      "section": "Part 1 — Where We Are (Reality, Not Ideals)",
       "order": 1,
-      "isPublished": false,
-      "slug": "chapter1-software-work-broke"
+      "isPublished": true,
+      "slug": "chapter1"
     },
     {
       "id": "chapter2", 
       "number": 2,
-      "title": "Why 'more engineers' no longer means 'more output'",
-      "subtitle": "The Broken Scaling Relationship",
-      "excerpt": "For decades, the answer to slow delivery was simple: hire more engineers. That linear relationship between headcount and output has broken down. Here's why, and what works instead.",
-      "filename": "chapter2-more-engineers.html",
+      "title": "Why These Models Worked for a Long Time",
+      "subtitle": "Understanding the Historical Context",
+      "excerpt": "Human-written code was the core bottleneck, and specialization with handoffs made perfect sense. Understanding why these models worked helps us see why they're breaking down now.",
+      "filename": "chapter2-why-models-worked.html",
       "publishedDate": null,
       "readTime": "Coming Soon",
-      "section": "Part 1 — What Actually Changed",
+      "section": "Part 1 — Where We Are (Reality, Not Ideals)",
       "order": 2,
       "isPublished": false,
-      "slug": "chapter2-more-engineers"
+      "slug": "chapter2-why-models-worked"
     }
   ]
 }

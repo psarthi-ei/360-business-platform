@@ -2,7 +2,7 @@
 
 export interface BookChapter {
   id: string;
-  number: number;
+  number: number | null;
   title: string;
   subtitle?: string;
   excerpt: string;

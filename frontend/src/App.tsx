@@ -345,6 +345,7 @@ function AppContent() {
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onEngineeringBook={showBookHome}
+        onIntroduction={() => navigate('/book/introduction')}
         onChapter1={() => navigate('/book/chapter1')}
         on365DaysReflections={() => navigate('/365-days-reflections')}
         onTurnaroundStories={showTurnaroundStories}

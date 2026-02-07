@@ -172,9 +172,11 @@ function BookHome({
                   onClick={() => handleChapterClick(chapter.slug)}
                 >
                   <div className={styles.chapterHeader}>
-                    <div className={styles.chapterNumber}>Chapter {chapter.number}</div>
                     <div className={styles.chapterSection}>
                       {getSectionIcon(chapter.section)} {chapter.section}
+                    </div>
+                    <div className={styles.chapterNumber}>
+                      {chapter.number ? `Chapter ${chapter.number}` : 'Introduction'}
                     </div>
                   </div>
                   <div className={styles.chapterContent}>
@@ -198,6 +200,96 @@ function BookHome({
             ) : (
               <div className={styles.noChapters}>No chapters found in this section.</div>
             )}
+          </div>
+        </section>
+
+        {/* Table of Contents */}
+        <section className={styles.tableOfContents}>
+          <h2 className={styles.tocTitle}>Table of Contents</h2>
+          <p className={styles.tocSubtitle}>
+            Complete book structure - chapters will be published progressively
+          </p>
+          
+          <div className={styles.tocContent}>
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 1 — Where We Are (Reality, Not Ideals)</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>1. The Two Engineering Organizations Most of Us Actually Work In</li>
+                <li className={styles.tocChapter}>2. Why These Models Worked for a Long Time</li>
+                <li className={styles.tocChapter}>3. The Invisible Cost of Modern Engineering</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 2 — What Actually Changed (Not the Hype)</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>4. When Writing Code Stops Being the Center of Gravity</li>
+                <li className={styles.tocChapter}>5. How AI Quietly Breaks Existing Assumptions</li>
+                <li className={styles.tocChapter}>6. Why Old SDLC Thinking Starts Lying to You</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 3 — The New Engineer</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>7. When AI Becomes the Junior Engineer</li>
+                <li className={styles.tocChapter}>8. What Happens to Junior Engineers Now</li>
+                <li className={styles.tocChapter}>9. Thinking, Judgment, and Trade-offs in an AI World</li>
+                <li className={styles.tocChapter}>10. What Skills Actually Compound Over Time</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 4 — The New Engineering Team</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>11. Why Specialization Is Collapsing</li>
+                <li className={styles.tocChapter}>12. What an AI-Native Engineering Team Looks Like</li>
+                <li className={styles.tocChapter}>13. Platforms, Enablement, and Shared Services — Revisited</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 5 — The New SDLC (How Work Really Flows)</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>14. SDLC When AI Is Always in the Loop</li>
+                <li className={styles.tocChapter}>15. Quality Is Not a Phase, Role, or Gate</li>
+                <li className={styles.tocChapter}>16. Code Review Without Code Ownership</li>
+                <li className={styles.tocChapter}>17. Pair Programming in an AI World</li>
+                <li className={styles.tocChapter}>18. Continuous Delivery Without False Confidence</li>
+                <li className={styles.tocChapter}>19. Metrics That Reflect Reality</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 6 — Leadership Transformation</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>20. Why Control-Based Engineering Management Fails</li>
+                <li className={styles.tocChapter}>21. The Engineering Manager's Role in the AI Era</li>
+                <li className={styles.tocChapter}>22. Leading Multiple Teams Without Becoming the Bottleneck</li>
+                <li className={styles.tocChapter}>23. Decision-Making as the New Bottleneck</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 7 — Transitioning Without Burning the Organization Down</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>24. Why You Can't Transform Overnight</li>
+                <li className={styles.tocChapter}>25. Evolving Existing Teams (Not Replacing Them)</li>
+                <li className={styles.tocChapter}>26. Hiring for Judgment, Not Keywords</li>
+                <li className={styles.tocChapter}>27. Growing Engineers in an AI World</li>
+                <li className={styles.tocChapter}>28. Working Within Organizational Constraints</li>
+              </ul>
+            </div>
+
+            <div className={styles.tocPart}>
+              <h3 className={styles.tocPartTitle}>Part 8 — The Future (Practical, Not Sci-Fi)</h3>
+              <ul className={styles.tocChapterList}>
+                <li className={styles.tocChapter}>29. Where AI Replaces Work vs Amplifies Work</li>
+                <li className={styles.tocChapter}>30. What Will Not Change (This Is Crucial)</li>
+                <li className={styles.tocChapter}>31. The Kinds of Engineers Who Will Win</li>
+                <li className={styles.tocChapter}>32. What a Future-Ready Engineering Organization Looks Like</li>
+              </ul>
+            </div>
           </div>
         </section>
 

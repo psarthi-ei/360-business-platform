@@ -201,9 +201,10 @@
 
 .chapterHeader {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: var(--ds-space-md);
+  gap: var(--ds-space-xs);
 }
 
 .chapterNumber {
@@ -384,5 +385,93 @@
 
   .heroStat {
     padding: 12px 20px;
+  }
+}
+
+/* Table of Contents Section */
+.tableOfContents {
+  background: var(--ds-bg-secondary);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-xxl);
+  margin-top: var(--ds-space-xxl);
+}
+
+.tocTitle {
+  font-size: var(--font-xl);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-sm);
+  text-align: center;
+}
+
+.tocSubtitle {
+  font-size: var(--font-base);
+  color: var(--ds-text-secondary);
+  text-align: center;
+  margin-bottom: var(--ds-space-xl);
+  line-height: 1.6;
+}
+
+.tocContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--ds-space-xl);
+}
+
+.tocPart {
+  background: var(--ds-bg-primary);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-lg);
+  border: 1px solid var(--ds-border);
+}
+
+.tocPartTitle {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  margin-bottom: var(--ds-space-md);
+  padding-bottom: var(--ds-space-sm);
+  border-bottom: 2px solid var(--ds-color-primary);
+  text-align: left;
+}
+
+.tocChapterList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tocChapter {
+  font-size: var(--font-sm);
+  color: var(--ds-text-secondary);
+  line-height: 1.5;
+  padding: var(--ds-space-xs) 0;
+  border-bottom: 1px solid var(--ds-border-subtle);
+  margin-bottom: var(--ds-space-xs);
+  text-align: left;
+}
+
+.tocChapter:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Mobile TOC */
+@media (max-width: 768px) {
+  .tableOfContents {
+    padding: var(--ds-space-lg);
+  }
+  
+  .tocContent {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-lg);
+  }
+  
+  .tocPart {
+    padding: var(--ds-space-md);
+  }
+  
+  .tocPartTitle {
+    font-size: var(--font-base);
   }
 }

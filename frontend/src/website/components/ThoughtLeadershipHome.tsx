@@ -1,11 +1,13 @@
 import React from 'react';
 import SEO from '../../components/ui/SEO';
 import styles from '../styles/ThoughtLeadershipHome.module.css';
+import { scrollToTop } from '../../utils/scrollUtils';
 
 interface ThoughtLeadershipHomeProps {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   onEngineeringBook: () => void;
+  onIntroduction: () => void;
   onChapter1: () => void;
   on365DaysReflections: () => void;
   onTurnaroundStories: () => void;
@@ -18,6 +20,7 @@ function ThoughtLeadershipHome({
   currentLanguage, 
   onLanguageChange, 
   onEngineeringBook,
+  onIntroduction,
   onChapter1,
   on365DaysReflections,
   onTurnaroundStories,
@@ -25,6 +28,21 @@ function ThoughtLeadershipHome({
   onAbout,
   onContact
 }: ThoughtLeadershipHomeProps) {
+
+  // Wrapper functions to ensure scroll to top on navigation
+  const handleElevateBusiness360Click = () => {
+    scrollToTop({ behavior: 'auto' });
+    setTimeout(() => {
+      onElevateBusiness360();
+    }, 100);
+  };
+
+  const handle365DaysReflectionsClick = () => {
+    scrollToTop({ behavior: 'auto' });
+    setTimeout(() => {
+      on365DaysReflections();
+    }, 100);
+  };
 
   return (
     <>
@@ -97,7 +115,7 @@ function ThoughtLeadershipHome({
               <div className={styles.chapterCard}>
                 <div className={styles.chapterMeta}>
                   <span className={styles.chapterNumber}>Introduction</span>
-                  <span className={styles.chapterDate}>Published Jan 15, 2025</span>
+                  <span className={styles.chapterDate}>Published Feb 6, 2026</span>
                 </div>
                 <h3 className={styles.chapterTitle}>Why This Book</h3>
                 <p className={styles.chapterExcerpt}>
@@ -107,24 +125,24 @@ function ThoughtLeadershipHome({
                   <span className={styles.readTime}>8 min read</span>
                   <span className={styles.chapterTags}>#AI-Era #SoftwareDevelopment #BookIntro</span>
                 </div>
-                <button className={styles.chapterCta} onClick={onChapter1}>Continue Reading →</button>
+                <button className={styles.chapterCta} onClick={onIntroduction}>Continue Reading →</button>
               </div>
 
               {/* Chapter 1 Preview */}
               <div className={styles.chapterCard}>
                 <div className={styles.chapterMeta}>
                   <span className={styles.chapterNumber}>Chapter 1</span>
-                  <span className={styles.chapterDate}>Coming Soon</span>
+                  <span className={styles.chapterDate}>Published Feb 7, 2026</span>
                 </div>
-                <h3 className={styles.chapterTitle}>Why software work broke after 2020</h3>
+                <h3 className={styles.chapterTitle}>The Two Engineering Organizations Most of Us Actually Work In</h3>
                 <p className={styles.chapterExcerpt}>
-                  "Something fundamental shifted in how software gets built. The old playbook—more engineers, better processes, clearer requirements—stopped working. Understanding this shift is crucial for every engineering leader."
+                  "Most engineering organizations fall into two categories: traditional engineering orgs, and reasonably mature (but imperfect) agile organizations. Understanding where we are is crucial before we can evolve."
                 </p>
                 <div className={styles.chapterStats}>
-                  <span className={styles.readTime}>Coming Soon</span>
-                  <span className={styles.chapterTags}>#SoftwareDevelopment #EngineeringLeadership</span>
+                  <span className={styles.readTime}>12 min read</span>
+                  <span className={styles.chapterTags}>#EngineeringOrganizations #TeamStructure</span>
                 </div>
-                <button className={styles.chapterCta} disabled>Coming Soon</button>
+                <button className={styles.chapterCta} onClick={onChapter1}>Continue Reading →</button>
               </div>
 
               {/* Chapter 2 Preview */}
@@ -133,13 +151,13 @@ function ThoughtLeadershipHome({
                   <span className={styles.chapterNumber}>Chapter 2</span>
                   <span className={styles.chapterDate}>Coming Soon</span>
                 </div>
-                <h3 className={styles.chapterTitle}>Why 'more engineers' no longer means 'more output'</h3>
+                <h3 className={styles.chapterTitle}>Why These Models Worked for a Long Time</h3>
                 <p className={styles.chapterExcerpt}>
-                  "For decades, the answer to slow delivery was simple: hire more engineers. That linear relationship between headcount and output has broken down. Here's why, and what works instead."
+                  "Human-written code was the core bottleneck, and specialization with handoffs made perfect sense. Understanding why these models worked helps us see why they're breaking down now."
                 </p>
                 <div className={styles.chapterStats}>
                   <span className={styles.readTime}>Coming Soon</span>
-                  <span className={styles.chapterTags}>#EngineeringScaling #TeamProductivity</span>
+                  <span className={styles.chapterTags}>#EngineeringHistory #Specialization</span>
                 </div>
                 <button className={styles.chapterCta} disabled>Coming Soon</button>
               </div>
@@ -168,13 +186,13 @@ function ThoughtLeadershipHome({
               AI-enabled B2B platform showcasing modern engineering leadership principles and intelligent automation for textile manufacturing workflows
             </p>
             
-            <div className={styles.portfolioShowcase} onClick={onElevateBusiness360}>
+            <div className={styles.portfolioShowcase} onClick={handleElevateBusiness360Click}>
               <div className={styles.portfolioContent}>
                 <h3 className={styles.portfolioTitle}>ElevateBusiness 360°</h3>
                 <p className={styles.portfolioSubtitle}>AI-Enabled Enterprise Platform</p>
                 <p className={styles.portfolioDescription}>
-                  Engineering excellence demonstration using AI-first development methodology. 
-                  Complete enterprise-grade business platform with zero manual coding, showcasing rapid development and intelligent automation.
+                  Engineering excellence demonstration built by a solo founder using AI-first development methodology. 
+                  Complete enterprise-grade business platform with zero manual coding, showcasing rapid solo development with AI assistance and intelligent automation.
                 </p>
                 
                 <div className={styles.portfolioHighlights}>
@@ -183,8 +201,8 @@ function ThoughtLeadershipHome({
                     <span className={styles.highlightLabel}>Days</span>
                   </div>
                   <div className={styles.highlight}>
-                    <span className={styles.highlightNumber}>375+</span>
-                    <span className={styles.highlightLabel}>Git Commits</span>
+                    <span className={styles.highlightNumber}>61,664</span>
+                    <span className={styles.highlightLabel}>Lines of Code</span>
                   </div>
                   <div className={styles.highlight}>
                     <span className={styles.highlightNumber}>8</span>
@@ -259,7 +277,7 @@ function ThoughtLeadershipHome({
                 </div>
                 
                 <div className={styles.categoryCta}>
-                  <button className={styles.categoryButton} onClick={on365DaysReflections}>
+                  <button className={styles.categoryButton} onClick={handle365DaysReflectionsClick}>
                     Read Personal Stories
                   </button>
                 </div>
