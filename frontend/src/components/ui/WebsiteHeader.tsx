@@ -25,8 +25,10 @@ interface WebsiteHeaderProps {
   onServicesHub?: () => void;
   onTurnaroundStories?: () => void;
   onBlogHome?: () => void;
+  onBookHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
+  onElevateBusiness360?: () => void;
   userName?: string;
 }
 
@@ -51,8 +53,10 @@ function WebsiteHeader({
   onServicesHub,
   onTurnaroundStories,
   onBlogHome,
+  onBookHome,
   onAbout,
-  onContact
+  onContact,
+  onElevateBusiness360
 }: WebsiteHeaderProps) {
   const location = useLocation();
   
@@ -63,6 +67,11 @@ function WebsiteHeader({
     // Special case for blog routes (both /blog and /blog/* should be active)
     if (routePath === '/blog') {
       return currentPath === '/blog' || currentPath.startsWith('/blog/');
+    }
+    
+    // Special case for book routes (both /book and /book/* should be active)
+    if (routePath === '/book') {
+      return currentPath === '/book' || currentPath.startsWith('/book/');
     }
     
     // Exact match for other routes
@@ -88,8 +97,8 @@ function WebsiteHeader({
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
               <button 
-                onClick={isAuthenticated || userMode !== 'guest' ? onDashboard : onDemoMode} 
-                className={`${styles.navButton} ${location.pathname.startsWith('/platform') ? styles.activeNavButton : ''}`}
+                onClick={onElevateBusiness360} 
+                className={`${styles.navButton} ${location.pathname === '/elevatebusiness-360' ? styles.activeNavButton : ''}`}
               >
                 <span className={styles.navLabel}>ElevateBusiness 360°</span>
               </button>
@@ -109,17 +118,24 @@ function WebsiteHeader({
               </button>
               
               <button 
+                onClick={onBookHome} 
+                className={`${styles.navButton} ${isActiveRoute('/book') ? styles.activeNavButton : ''}`}
+              >
+                <span className={styles.navLabel}>Book</span>
+              </button>
+              
+              <button 
                 onClick={onTurnaroundStories} 
                 className={`${styles.navButton} ${isActiveRoute('/turnaround-stories') ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>Turnaround Stories</span>
+                <span className={styles.navLabel}>Case Studies</span>
               </button>
               
               <button 
                 onClick={onBlogHome} 
                 className={`${styles.navButton} ${isActiveRoute('/blog') ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>365 Days of Stories</span>
+                <span className={styles.navLabel}>Stories</span>
               </button>
               
               <button 
@@ -163,8 +179,10 @@ function WebsiteHeader({
             onServicesHub={onServicesHub}
             onTurnaroundStories={onTurnaroundStories}
             onBlogHome={onBlogHome}
+            onBookHome={onBookHome}
             onAbout={onAbout}
             onContact={onContact}
+            onElevateBusiness360={onElevateBusiness360}
             isPlatformPage={false}
           />
         </div>

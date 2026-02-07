@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 // Interface for render functions to ensure type safety
 export interface RenderFunctions {
   renderHomePage: () => React.ReactElement;
+  renderElevateBusiness360: () => React.ReactElement;
   renderDashboard: () => React.ReactElement;
   renderLeadManagement: () => React.ReactElement;
   renderSales: () => React.ReactElement;
@@ -18,6 +19,8 @@ export interface RenderFunctions {
   renderTurnaroundStories: () => React.ReactElement;
   renderBlogHome: () => React.ReactElement;
   renderBlogPost: () => React.ReactElement;
+  renderBookHome: () => React.ReactElement;
+  renderBookChapter: () => React.ReactElement;
   renderAbout: () => React.ReactElement;
   renderContact: () => React.ReactElement;
   renderExternalProfileForm: () => React.ReactElement;
@@ -51,6 +54,9 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
 export function createWebsiteRoutes(renderFunctions: RenderFunctions): React.ReactElement[] {
   return [
     <Route key="index" index element={renderFunctions.renderHomePage()} />,
+    <Route key="engineering-book" path="engineering-book" element={renderFunctions.renderBookHome()} />,
+    <Route key="elevatebusiness-360" path="elevatebusiness-360" element={renderFunctions.renderElevateBusiness360()} />,
+    <Route key="365-days-reflections" path="365-days-reflections" element={renderFunctions.renderBlogHome()} />,
     <Route key="login" path="login" element={renderFunctions.renderAuthentication()} />,
     <Route key="signup" path="signup" element={renderFunctions.renderAuthentication()} />,
     <Route key="profile-completion" path="profile-completion" element={renderFunctions.renderProfileCompletion()} />,
@@ -60,6 +66,8 @@ export function createWebsiteRoutes(renderFunctions: RenderFunctions): React.Rea
     <Route key="turnaround-stories/:story" path="turnaround-stories/:story" element={renderFunctions.renderTurnaroundStories()} />,
     <Route key="blog" path="blog" element={renderFunctions.renderBlogHome()} />,
     <Route key="blog/:slug" path="blog/:slug" element={renderFunctions.renderBlogPost()} />,
+    <Route key="book" path="book" element={renderFunctions.renderBookHome()} />,
+    <Route key="book/:slug" path="book/:slug" element={renderFunctions.renderBookChapter()} />,
     <Route key="about" path="about" element={renderFunctions.renderAbout()} />,
     <Route key="contact" path="contact" element={renderFunctions.renderContact()} />,
     <Route key="external-profile-form" path="external-profile-form" element={renderFunctions.renderExternalProfileForm()} />

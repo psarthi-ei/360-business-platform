@@ -151,7 +151,7 @@ function ServicesHub({
     return (
       <>
         <SEO
-          title="ElevateIdea Services - AI-Accelerated Development & Startup Consulting"
+          title="Consulting - ElevateIdea"
           description="ElevateIdea provides AI-era business building services for early-stage startups and MSME manufacturers. MVP development, project acceleration, scalability solutions."
           keywords="ElevateIdea services, AI-accelerated MVP development, startup consulting India, early-stage startup services, MSME business solutions"
           canonical={framework ? `/services/${framework}` : "/services"}
@@ -213,7 +213,7 @@ function ServicesHub({
   return (
     <>
       <SEO
-        title="ElevateIdea Services - AI-Era Strategic Technology Partner for Early-Stage Startups"
+        title="Consulting - ElevateIdea"
         description="ElevateIdea provides strategic technology partnership for early-stage startups. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Strategic project acceleration and scalability solutions."
         keywords="ElevateIdea services, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery"
         canonical="/services"

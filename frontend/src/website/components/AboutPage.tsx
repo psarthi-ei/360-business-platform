@@ -52,7 +52,7 @@ function AboutPage({
   return (
     <>
       <SEO
-        title="About ElevateIdea Technologies - Empowering MSMEs Through Technology"
+        title="About Us - ElevateIdea"
         description="ElevateIdea's vision: empower small & medium businesses to scale and innovate. Founded by 20+ year technology veteran with 6 major turnarounds. Digitizing Manufacturing MSMEs with 360° Business Platform."
         keywords="About ElevateIdea Technologies, MSME empowerment, small business technology, manufacturing digitization, 20+ years experience, technology veteran India"
         canonical="/about"

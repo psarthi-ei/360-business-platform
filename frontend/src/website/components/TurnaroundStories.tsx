@@ -33,7 +33,7 @@ function TurnaroundStories({
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
-  // Reset to stories overview when component mounts or resetKey changes
+  // Reset to case studies overview when component mounts or resetKey changes
   useEffect(() => {
     setSelectedStory(null);
     setMarkdownContent('');
@@ -44,7 +44,7 @@ function TurnaroundStories({
     setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
   }, []);
 
-  // Turnaround stories configuration
+  // Turnaround case studies configuration
   const stories: StoryInfo[] = [
     {
       key: 'government-project-revival',
@@ -178,14 +178,14 @@ function TurnaroundStories({
         setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       } else {
         // Debug statement removed
-        setMarkdownContent('# Story content not found\n\nThis turnaround story is currently being prepared.');
+        setMarkdownContent('# Case study content not found\n\nThis turnaround case study is currently being prepared.');
         
         // Scroll to top even on error
         setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
       }
     } catch (error) {
       // Debug statement removed
-      setMarkdownContent('# Error loading story\n\nPlease try again later.');
+      setMarkdownContent('# Error loading case study\n\nPlease try again later.');
       
       // Scroll to top even on error
       setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
@@ -203,7 +203,7 @@ function TurnaroundStories({
   }
 
   function handleBackToOverview() {
-    // Navigate back to stories overview
+    // Navigate back to case studies overview
     navigate('/turnaround-stories');
   }
 
@@ -213,7 +213,7 @@ function TurnaroundStories({
     return (
       <>
         <SEO
-          title="ElevateIdea Founder's Corporate Turnaround Story"
+          title="Case Studies - ElevateIdea"
           description="Real corporate turnaround experience from ElevateIdea founder. Detailed case study from 20+ years experience across banks, government, startups, retailers."
           keywords="ElevateIdea founder, corporate turnaround, business transformation, crisis management, turnaround specialist India"
           canonical="/turnaround-stories"
@@ -224,15 +224,15 @@ function TurnaroundStories({
           <button 
             className={styles.backButton}
             onClick={handleBackToOverview}
-            aria-label="Return to turnaround stories overview"
+            aria-label="Return to case studies overview"
             tabIndex={0}
           >
-            ← Back to Turnaround Stories
+            ← Back to Case Studies
           </button>
           {loading ? (
-            <div className={styles.loading}>Loading story content...</div>
+            <div className={styles.loading}>Loading case study content...</div>
           ) : (
-            <article className={styles.markdownContent} role="main" aria-label="Turnaround story content">
+            <article className={styles.markdownContent} role="main" aria-label="Turnaround case study content">
               <ReactMarkdown>{markdownContent}</ReactMarkdown>
             </article>
           )}
@@ -245,9 +245,9 @@ function TurnaroundStories({
   return (
     <>
       <SEO
-        title="ElevateIdea Founder's Corporate Turnaround Stories - 6 Major Turnarounds, $15M+ Recovery"
+        title="Case Studies - ElevateIdea"
         description="Real corporate turnaround experiences from ElevateIdea founder. 20+ years experience across banks, government projects, startups, retailers. 6 major turnarounds, $15M+ recovery value."
-        keywords="ElevateIdea founder turnaround stories, corporate turnaround expert India, business crisis management, $15M recovery, transformation specialist, 6 major turnarounds"
+        keywords="ElevateIdea founder turnaround case studies, corporate turnaround expert India, business crisis management, $15M recovery, transformation specialist, 6 major turnarounds"
         canonical="/turnaround-stories"
         type="website"
         structuredData={{
@@ -288,9 +288,9 @@ function TurnaroundStories({
       />
       <div className={styles.turnaroundStoriesContainer}>
       <div className={styles.header}>
-        <h1 className={styles.title}>🔄 Turnaround Stories</h1>
+        <h1 className={styles.title}>🔄 Case Studies</h1>
         <p className={styles.subtitle}>
-          Sharing my corporate turnaround experiences that are helping me build ElevateIdea - hoping these real stories and lessons may help other entrepreneurs and businesses as well.
+          Sharing my corporate turnaround experiences that are helping me build ElevateIdea - hoping these real case studies and lessons may help other entrepreneurs and businesses as well.
         </p>
         <p className={styles.contextText}>
           During 8 years of corporate turnaround experience (2016-2023) within my 20+ year career, I've led major turnarounds across large banks, growing startups, government projects, and major retailers. 
@@ -309,7 +309,7 @@ function TurnaroundStories({
       </div>
 
 
-      {/* Stories Grid */}
+      {/* Case Studies Grid */}
       <div className={styles.storiesGrid}>
         {stories.map(story => (
           <div
@@ -318,7 +318,7 @@ function TurnaroundStories({
             onClick={() => handleStorySelect(story.key)}
             role="button"
             tabIndex={0}
-            aria-label={`Read full story: ${story.title}`}
+            aria-label={`Read full case study: ${story.title}`}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -355,7 +355,7 @@ function TurnaroundStories({
               </div>
 
               <div className={styles.readMore}>
-                Read Full Story →
+                Read Full Case Study →
               </div>
             </div>
           </div>

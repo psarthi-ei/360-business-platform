@@ -20,7 +20,7 @@ function ContactPage({
   return (
     <>
       <SEO
-        title="Contact ElevateIdea Technologies - Transform Your MSME Business"
+        title="Contact - ElevateIdea"
         description="Get in touch with ElevateIdea Technologies for AI-accelerated business solutions. Whether you're a textile manufacturer, enterprise seeking consulting, or investor - let's connect."
         keywords="ElevateIdea contact, textile manufacturer consulting, MSME business solutions, ElevateBusiness 360, AI business transformation"
         canonical="/contact"

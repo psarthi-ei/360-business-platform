@@ -1,9 +1,9 @@
 import React from 'react';
 import { openBetaSignup } from '../../utils/contactUtils';
 import SEO from '../../components/ui/SEO';
-import styles from '../styles/HomePage.module.css';
+import styles from '../styles/ElevateBusiness360.module.css';
 
-interface HomePageProps {
+interface ElevateBusiness360Props {
   currentLanguage: string;
   onLanguageChange: (language: string) => void;
   onLogin: () => void;
@@ -16,7 +16,7 @@ interface HomePageProps {
   onContact: () => void;
 }
 
-function HomePage({ 
+function ElevateBusiness360({ 
   currentLanguage, 
   onLanguageChange, 
   onLogin,
@@ -27,7 +27,7 @@ function HomePage({
   onBlogHome,
   onAbout,
   onContact
-}: HomePageProps) {
+}: ElevateBusiness360Props) {
   // Note: Mobile menu functionality to be implemented when needed
   // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -51,7 +51,7 @@ function HomePage({
   return (
     <>
       <SEO
-        title="ElevateIdea Technologies - Complete 360° Business Platform for India's Textile Manufacturers"
+        title="ElevateIdea"
         description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Building ElevateBusiness 360° for textile manufacturers."
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
         canonical="/"
@@ -101,6 +101,7 @@ function HomePage({
             <p className={styles.heroSubtitle}>
               Voice-first, multilingual business platform under development to provide 360° visibility across textile manufacturing workflows. From leads to final payment - we're building intelligent automation for the textile industry. Launching soon in Gujarat for early access partners.
             </p>
+          </div>
           
           {/* Circular Business Flow Visualization */}
           <div className={styles.storyFlowContainer}>
@@ -228,8 +229,6 @@ function HomePage({
             >
               Sign Up for Beta 📱
             </button>
-          </div>
-          
           </div>
         </div>
       </section>
@@ -474,4 +473,4 @@ function HomePage({
   );
 }
 
-export default HomePage;
+export default ElevateBusiness360;

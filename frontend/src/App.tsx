@@ -3,7 +3,8 @@ import './App.css';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams, Outlet } from 'react-router-dom';
 import LanguageSwitcher from './components/ui/LanguageSwitcher';
-import HomePage from './website/components/HomePage';
+import ThoughtLeadershipHome from './website/components/ThoughtLeadershipHome';
+import ElevateBusiness360 from './website/components/ElevateBusiness360';
 import Dashboard from './components/dashboard/Dashboard';
 import LeadManagement from './components/business/LeadManagement';
 import SalesOrders from './components/business/SalesOrders';
@@ -19,6 +20,8 @@ import ServicesHub from './website/components/ServicesHub';
 import TurnaroundStories from './website/components/TurnaroundStories';
 import BlogHome from './website/components/BlogHome';
 import BlogPost from './website/components/BlogPost';
+import BookHome from './website/components/BookHome';
+import BookChapter from './website/components/BookChapter';
 import AboutPage from './website/components/AboutPage';
 import ContactPage from './website/components/ContactPage';
 import Footer from './website/components/Footer';
@@ -49,6 +52,8 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/turnaround-stories') return 'turnaround-stories';
   if (pathname === '/blog') return 'blog-home';
   if (pathname.startsWith('/blog/')) return 'blog-post';
+  if (pathname === '/book') return 'book-home';
+  if (pathname.startsWith('/book/')) return 'book-chapter';
   if (pathname === '/about') return 'about';
   if (pathname === '/contact') return 'contact';
   if (pathname === '/profile-completion') return 'profilecompletion';
@@ -89,6 +94,7 @@ function AppContent() {
   const [profileCompanyName] = useState('');
   const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
+  const [currentBookChapterSlug, setCurrentBookChapterSlug] = useState('');
 
 
 
@@ -99,7 +105,8 @@ function AppContent() {
   // Shared navigation helpers - single source of truth
   const navigationHelpers = createNavigationHelpers(navigate, {
     setServicesHubResetKey,
-    setCurrentBlogPostSlug
+    setCurrentBlogPostSlug,
+    setCurrentBookChapterSlug
   });
 
 
@@ -119,13 +126,15 @@ function AppContent() {
     showSignUp,
     showTurnaroundStories,
     showBlogHome,
+    showBookHome,
     showAbout,
     showContact,
     showQuoteFromLead,
     // Enhanced navigation functions with state management
     showCustomerProfileWithState,
     showServicesHubWithReset,
-    showBlogPostWithState
+    showBlogPostWithState,
+    showBookChapterWithState
   } = navigationHelpers;
 
   // Universal search function - Now handled by PlatformShell
@@ -165,12 +174,15 @@ function AppContent() {
     }, 200);
   }, [currentScreen]);
 
-  // Extract blog slug and customer ID from URL
+  // Extract blog slug and book chapter slug from URL
   useEffect(() => {
     const path = location.pathname;
     if (path.startsWith('/blog/')) {
       const slug = path.replace('/blog/', '');
       setCurrentBlogPostSlug(slug);
+    } else if (path.startsWith('/book/')) {
+      const slug = path.replace('/book/', '');
+      setCurrentBookChapterSlug(slug);
     }
   }, [location.pathname]);
 
@@ -185,6 +197,18 @@ function AppContent() {
       }, 200);
     }
   }, [currentBlogPostSlug]);
+
+  // Scroll effect for book chapter changes
+  useEffect(() => {
+    if (currentBookChapterSlug) {
+      // Immediate scroll for book chapter changes
+      scrollToTop({ behavior: 'auto' });
+      
+      setTimeout(() => {
+        scrollToTop({ behavior: 'smooth' });
+      }, 200);
+    }
+  }, [currentBookChapterSlug]);
 
 
   function handleAuthSuccess() {
@@ -317,7 +341,23 @@ function AppContent() {
 
   function renderHomePage() {
     return (
-      <HomePage
+      <ThoughtLeadershipHome
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onEngineeringBook={showBookHome}
+        onChapter1={() => navigate('/book/chapter1')}
+        on365DaysReflections={() => navigate('/365-days-reflections')}
+        onTurnaroundStories={showTurnaroundStories}
+        onElevateBusiness360={() => navigate('/elevatebusiness-360')}
+        onAbout={showAbout}
+        onContact={showContact}
+      />
+    );
+  }
+
+  function renderElevateBusiness360() {
+    return (
+      <ElevateBusiness360
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
         onLogin={showLogin}
@@ -331,6 +371,7 @@ function AppContent() {
       />
     );
   }
+
 
   function renderProfileCompletion() {
     function handleProfileSubmit(profileData: BusinessProfileFormData) {
@@ -445,6 +486,42 @@ function AppContent() {
     return <BlogPostWrapper />;
   }
 
+  function renderBookHome() {
+    return (
+      <BookHome
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onChapterClick={showBookChapterWithState}
+      />
+    );
+  }
+
+  function renderBookChapter() {
+    // Create a wrapper component that can use useParams
+    const BookChapterWrapper = () => {
+      const { slug } = useParams<{ slug: string }>();
+      
+      // Update state with the URL parameter
+      useEffect(() => {
+        if (slug) {
+          setCurrentBookChapterSlug(slug);
+        }
+      }, [slug]);
+      
+      return (
+        <BookChapter
+          slug={slug || ''}
+          currentLanguage={currentLanguage}
+          onLanguageChange={switchLanguage}
+          onBackClick={showBookHome}
+          onNavigateToChapter={showBookChapterWithState}
+        />
+      );
+    };
+    
+    return <BookChapterWrapper />;
+  }
+
   function renderAbout() {
     return (
       <AboutPage
@@ -489,6 +566,7 @@ function AppContent() {
   // Render functions object for shared route configuration
   const renderFunctions: RenderFunctions = {
     renderHomePage,
+    renderElevateBusiness360,
     renderDashboard,
     renderLeadManagement,
     renderSales,
@@ -503,6 +581,8 @@ function AppContent() {
     renderTurnaroundStories,
     renderBlogHome,
     renderBlogPost,
+    renderBookHome,
+    renderBookChapter,
     renderAbout,
     renderContact,
     renderExternalProfileForm
@@ -566,8 +646,10 @@ function AppContent() {
                 onServicesHub={showServicesHubWithReset}
                 onTurnaroundStories={showTurnaroundStories}
                 onBlogHome={showBlogHome}
+                onBookHome={showBookHome}
                 onAbout={showAbout}
                 onContact={showContact}
+                onElevateBusiness360={() => navigate('/elevatebusiness-360')}
               />
               <Outlet />
               <Footer

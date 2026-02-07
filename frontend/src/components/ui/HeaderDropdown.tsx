@@ -22,8 +22,10 @@ interface HeaderDropdownProps {
   onServicesHub?: () => void;
   onTurnaroundStories?: () => void;
   onBlogHome?: () => void;
+  onBookHome?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
+  onElevateBusiness360?: () => void;
   // Page Context
   isPlatformPage?: boolean;
 }
@@ -48,8 +50,10 @@ function HeaderDropdown({
   onServicesHub,
   onTurnaroundStories,
   onBlogHome,
+  onBookHome,
   onAbout,
   onContact,
+  onElevateBusiness360,
   // Page Context
   isPlatformPage = false
 }: HeaderDropdownProps) {
@@ -119,12 +123,7 @@ function HeaderDropdown({
                   if (isPlatformPage) {
                     onNavigateHome?.();
                   } else {
-                    // On website pages, go to dashboard/demo based on auth status
-                    if (isAuthenticated || userMode !== 'guest') {
-                      onDashboard?.();
-                    } else {
-                      onDemoMode?.();
-                    }
+                    onElevateBusiness360?.();
                   }
                   setIsOpen(false);
                 }}
@@ -155,12 +154,22 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
+                  onBookHome?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>📖</span>
+                <span className={styles.itemText}>Book</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
                   onTurnaroundStories?.();
                   setIsOpen(false);
                 }}
               >
                 <span className={styles.itemIcon}>🔄</span>
-                <span className={styles.itemText}>Turnaround Stories</span>
+                <span className={styles.itemText}>Case Studies</span>
               </button>
               <button
                 className={styles.menuItem}
@@ -170,7 +179,7 @@ function HeaderDropdown({
                 }}
               >
                 <span className={styles.itemIcon}>📝</span>
-                <span className={styles.itemText}>365 Days of Stories</span>
+                <span className={styles.itemText}>Stories</span>
               </button>
               <button
                 className={styles.menuItem}

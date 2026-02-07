@@ -1,0 +1,46 @@
+{
+  "chapters": [
+    {
+      "id": "introduction",
+      "number": 0,
+      "title": "Why This Book",
+      "subtitle": "When Code Is No Longer the Bottleneck",
+      "excerpt": "I am writing this book because I believe we have reached the end of a long chapter in the history of software development — and the beginning of another for which we do not yet have a playbook.",
+      "filename": "chapter1-why-this-book.html",
+      "publishedDate": "2025-01-15",
+      "readTime": "8 min read",
+      "section": "Introduction",
+      "order": 0,
+      "isPublished": true,
+      "slug": "chapter1"
+    },
+    {
+      "id": "chapter1",
+      "number": 1,
+      "title": "Why software work broke after 2020",
+      "subtitle": "The Fundamental Shift in Software Development",
+      "excerpt": "Something fundamental shifted in how software gets built. The old playbook—more engineers, better processes, clearer requirements—stopped working. Understanding this shift is crucial for every engineering leader.",
+      "filename": "chapter1-software-work-broke.html",
+      "publishedDate": null,
+      "readTime": "Coming Soon",
+      "section": "Part 1 — What Actually Changed",
+      "order": 1,
+      "isPublished": false,
+      "slug": "chapter1-software-work-broke"
+    },
+    {
+      "id": "chapter2", 
+      "number": 2,
+      "title": "Why 'more engineers' no longer means 'more output'",
+      "subtitle": "The Broken Scaling Relationship",
+      "excerpt": "For decades, the answer to slow delivery was simple: hire more engineers. That linear relationship between headcount and output has broken down. Here's why, and what works instead.",
+      "filename": "chapter2-more-engineers.html",
+      "publishedDate": null,
+      "readTime": "Coming Soon",
+      "section": "Part 1 — What Actually Changed",
+      "order": 2,
+      "isPublished": false,
+      "slug": "chapter2-more-engineers"
+    }
+  ]
+}

@@ -7,7 +7,6 @@ import {
   getBlogPostsByDayNumber,
   getBlogPostsByCategoryDayOrder,
   getBlogCategories, 
-  getFeaturedPost,
   searchBlogPosts,
   formatDate,
   getCategoryIcon,
@@ -30,7 +29,6 @@ function BlogHome({
   const [activeCategory, setActiveCategory] = useState('all');
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
-  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -96,15 +94,13 @@ function BlogHome({
   const loadBlogData = async () => {
     setLoading(true);
     try {
-      const [posts, cats, featured] = await Promise.all([
+      const [posts, cats] = await Promise.all([
         getBlogPostsByDayNumber(),
-        getBlogCategories(),
-        getFeaturedPost()
+        getBlogCategories()
       ]);
       
       setBlogPosts(posts);
       setCategories(cats);
-      setFeaturedPost(featured);
     } catch (error) {
       // Debug statement removed
     } finally {
@@ -115,7 +111,7 @@ function BlogHome({
   return (
     <>
       <SEO
-        title="ElevateIdea Blog - AI-Era Business Insights & MSME Growth Strategies"
+        title="Stories - ElevateIdea"
         description="Discover AI-powered business insights, MSME growth strategies, and technology transformation tips from ElevateIdea. Expert perspectives on scaling textile manufacturing businesses."
         keywords="ElevateIdea blog, MSME growth strategies, AI business insights, textile manufacturing technology, business transformation"
         canonical="/blog"
@@ -129,9 +125,7 @@ function BlogHome({
             365 Days of Stories
           </h1>
           <p className={styles.heroSubtitle}>
-            My complete entrepreneurship evolution - sharing 365 raw stories from corporate life, 
-            personal reflections, first startup venture, and my current second entrepreneurial stint. 
-            Authentic stories of struggle, failure, learning, and growth across multiple chapters.
+            One fine day, to attract customers for my business, I decided to share my personal career and entrepreneurship experiences in raw, honest format to build credibility for myself and my company. As a startup founder, you need to sell yourself first, then your product. I started with many stories, but they slowed down over time. After one year, only ~60 stories from 20+ years of career - makes you realize we have fewer meaningful life stories than we think. I continue writing as life provides more experiences, hoping to complete the original 365 stories vision.
           </p>
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
@@ -145,51 +139,6 @@ function BlogHome({
           </div>
         </section>
 
-        {/* Featured Story */}
-        {featuredPost && (
-          <section className={styles.featuredSection}>
-            <h2 className={styles.sectionTitle}>Featured Story</h2>
-            <div className={styles.featuredPostContainer}>
-              <div 
-                className={styles.featuredPost}
-                onClick={() => handlePostClick(featuredPost.day)}
-              >
-                <div className={styles.featuredContent}>
-                  <div className={styles.featuredText}>
-                    <span className={styles.featuredCategory}>
-                      ⭐ {featuredPost.primaryCategory}
-                    </span>
-                    <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
-                    <p className={styles.featuredExcerpt}>
-                      {featuredPost.content ? 
-                        featuredPost.content
-                          .split('\n')
-                          .filter(line => !line.includes('365 Days of Stories') && !line.includes('💔') && line.trim().length > 0)
-                          .slice(0, 15)
-                          .join(' ')
-                          .replace(/[💔🚀🤯⚡🏗️❤️❌✅👉💬🎨💻⚙️🧪🛡️📐💡🧭]/g, '')
-                          .substring(0, 800) + '...' 
-                        : featuredPost.excerpt
-                      }
-                    </p>
-                    <div className={styles.featuredMeta}>
-                      <span className={styles.postDate}>{formatDate(featuredPost.publishedDate)}</span> • <span className={styles.readTime}>{featuredPost.readTime}</span>
-                    </div>
-                  </div>
-                  <div className={styles.featuredImage}>
-                    {featuredPost.imagePath ? (
-                      <img src={featuredPost.imagePath} alt={featuredPost.title} className={styles.featuredImageImg} />
-                    ) : (
-                      <div className={styles.featuredImageFallback}>
-                        {getCategoryIcon(featuredPost.primaryCategory)}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* Search */}
         <section className={styles.searchSection}>
@@ -282,26 +231,20 @@ function BlogHome({
           </div>
         </section>
 
-        {/* Newsletter Signup */}
+        {/* Stay Updated */}
         <section className={styles.newsletter}>
           <h2 className={styles.newsletterTitle}>Stay Updated</h2>
           <p className={styles.newsletterSubtitle}>
-            Follow my ongoing entrepreneurship journey! From corporate to first venture to current startup experiments - 
-            raw, authentic stories as I navigate my second entrepreneurial stint. Real experiences and lessons I'm learning along the way.
+            Follow me on LinkedIn for the latest stories and updates.
           </p>
-          <div className={styles.comingSoonContainer}>
-            <p className={styles.comingSoonText}>
-              📧 Newsletter coming soon - follow my LinkedIn for real-time updates on this entrepreneurship journey
-            </p>
-            <a 
-              href="https://linkedin.com/in/parthasarthi" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.linkedinButton}
-            >
-              Follow on LinkedIn
-            </a>
-          </div>
+          <a 
+            href="https://linkedin.com/in/parthasarthi" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={styles.linkedinButton}
+          >
+            Follow on LinkedIn
+          </a>
         </section>
       </div>
 

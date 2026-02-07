@@ -68,7 +68,7 @@ describe('TurnaroundStories Component', () => {
       renderWithProviders(<TurnaroundStories {...getTurnaroundStoriesProps()} />);
       
       // Check for main title
-      expect(screen.getByText(/Turnaround Stories/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Case Studies/i })).toBeInTheDocument();
       
       // Check for subtitle content
       expect(screen.getByText(/Sharing my corporate turnaround experiences/i)).toBeInTheDocument();
@@ -138,11 +138,11 @@ describe('TurnaroundStories Component', () => {
       expect(impactLabels.length).toBe(6);
     });
 
-    test('renders "Read Full Story" call-to-action', () => {
+    test('renders "Read Full Case Study" call-to-action', () => {
       renderWithProviders(<TurnaroundStories {...getTurnaroundStoriesProps()} />);
       
-      // Check for "Read Full Story" buttons
-      const readMoreButtons = screen.getAllByText(/Read Full Story/i);
+      // Check for "Read Full Case Study" buttons
+      const readMoreButtons = screen.getAllByText(/Read Full Case Study/i);
       expect(readMoreButtons.length).toBe(6); // One for each story
     });
   });

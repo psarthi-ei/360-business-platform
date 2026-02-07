@@ -6,6 +6,7 @@ export interface NavigationStateSetters {
   setSelectedCustomerId?: (customerId: string) => void;
   setServicesHubResetKey?: (updater: (prev: number) => number) => void;
   setCurrentBlogPostSlug?: (slug: string) => void;
+  setCurrentBookChapterSlug?: (slug: string) => void;
 }
 
 // Single source of truth for navigation functions
@@ -36,6 +37,8 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
     showTurnaroundStories: () => navigate('/turnaround-stories'),
     showBlogHome: () => navigate('/blog'),
     showBlogPost: (slug: string) => navigate(`/blog/${slug}`),
+    showBookHome: () => navigate('/book'),
+    showBookChapter: (slug: string) => navigate(`/book/${slug}`),
     showAbout: () => navigate('/about'),
     showContact: () => navigate('/contact'),
     showQuoteFromLead: (leadId: string) => navigate(`/platform/quotes?from-lead=${leadId}`),
@@ -61,6 +64,13 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
         stateSetters.setCurrentBlogPostSlug(slug);
       }
       navigate(`/blog/${slug}`);
+    },
+    
+    showBookChapterWithState: (slug: string) => {
+      if (stateSetters?.setCurrentBookChapterSlug) {
+        stateSetters.setCurrentBookChapterSlug(slug);
+      }
+      navigate(`/book/${slug}`);
     }
   };
 }
