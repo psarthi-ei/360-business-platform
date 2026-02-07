@@ -17,6 +17,43 @@
 8. We need to delete not active business profile from the mock data
 
 
+### **UI Issues:**
+
+Important 
+
+1. CTA not visible and if you scroll down then it becomes visible but product header goes missing
+2. Alerts needs to be there in each tab which talks about key issues
+4. Search should show result in the corresponding tab 
+5. we should have some option to filter content in each tab by keyword
+11. Update stock function not working in stock
+15. Update stck not working in Inward
+16. Approve quality / reject material not wortking in inward
+17. Record Inward not implemented as CTA
+18. Update Stock not implemented as CTA
+19. All CTA needs to be implemenetd e.g. New Job Order, New Job Bill, New PO
+21. Check do we need proper action button in Job Cards except create Lots
+22. Start Work not working in Lot
+23. On hold lot can't be resumed as there is no action button
+24. Start QC model not scrolling down and cancel is not visible 
+
+Parked - 
+
+3. Call / WhatsApp not implemented action
+6. View PDF not implemented in Job Order
+7. Full paid bills shows due date
+8. Follow up action not implemented in Job Bills
+9. Filter not working across all tabs e.g. Job Orders 
+10. Stock expanded view doesn't have proper style - it uses paragraph basic font
+12. view history not working in stock
+13. Create purchase request should be called as purchase order for critical low stock
+14. View PO not applicable for Inward custoemr stock and instead it shopuld view Job Order
+20. Create GRN not implemented in PO when material arrive (its shown as action in PO screen)
+25. Statement should be shown as transaction in Parties 360 degree view
+
+
+
+
+
 
 ### **DONE:**
 
