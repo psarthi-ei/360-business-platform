@@ -337,7 +337,7 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 0 var(--ds-space-sm);
+    padding: 0 16px;
   }
 
   .chapterTitle {
@@ -386,7 +386,7 @@
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 var(--ds-space-xs);
+    padding: 0 15px;
   }
 
   .chapterHeader {
