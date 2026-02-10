@@ -10,6 +10,7 @@ interface ThoughtLeadershipHomeProps {
   onEngineeringBook: () => void;
   onIntroduction: () => void;
   onChapter1: () => void;
+  onChapter2: () => void;
   on365DaysReflections: () => void;
   onTurnaroundStories: () => void;
   onElevateBusiness360: () => void;
@@ -23,6 +24,7 @@ function ThoughtLeadershipHome({
   onEngineeringBook,
   onIntroduction,
   onChapter1,
+  onChapter2,
   on365DaysReflections,
   onTurnaroundStories,
   onElevateBusiness360,
@@ -57,6 +59,8 @@ function ThoughtLeadershipHome({
       onIntroduction();
     } else if (chapter.slug === 'chapter1-two-engineering-organizations') {
       onChapter1();
+    } else if (chapter.slug === 'chapter2-why-models-worked') {
+      onChapter2();
     } else {
       // For future chapters, can navigate to book page with specific chapter
       onEngineeringBook();

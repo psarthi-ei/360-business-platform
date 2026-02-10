@@ -346,7 +346,8 @@ function AppContent() {
         onLanguageChange={switchLanguage}
         onEngineeringBook={showBookHome}
         onIntroduction={() => navigate('/book/introduction')}
-        onChapter1={() => navigate('/book/chapter1')}
+        onChapter1={() => navigate('/book/chapter1-two-engineering-organizations')}
+        onChapter2={() => navigate('/book/chapter2-why-models-worked')}
         on365DaysReflections={() => navigate('/365-days-reflections')}
         onTurnaroundStories={showTurnaroundStories}
         onElevateBusiness360={() => navigate('/elevatebusiness-360')}
