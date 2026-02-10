@@ -51,7 +51,7 @@ function ElevateBusiness360({
   return (
     <>
       <SEO
-        title="ElevateIdea"
+        title="ElevateBusiness 360° - ElevateIdea"
         description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Building ElevateBusiness 360° for textile manufacturers."
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
         canonical="/"

@@ -166,6 +166,7 @@ function WebsiteHeader({
             onLanguageChange={onLanguageChange}
             currentTheme={currentTheme}
             onThemeChange={onThemeChange}
+            onNavigateHome={onHome}
             onDashboard={onDashboard}
             showThemeSelector={showThemeSelector}
             onLogin={onLogin}

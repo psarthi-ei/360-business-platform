@@ -120,16 +120,22 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  if (isPlatformPage) {
-                    onNavigateHome?.();
-                  } else {
-                    onElevateBusiness360?.();
-                  }
+                  onNavigateHome?.();
                   setIsOpen(false);
                 }}
               >
-                <span className={styles.itemIcon}>{isPlatformPage ? '🏠' : '⚡'}</span>
-                <span className={styles.itemText}>{isPlatformPage ? 'Home' : 'ElevateBusiness 360°'}</span>
+                <span className={styles.itemIcon}>🏠</span>
+                <span className={styles.itemText}>Home</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onElevateBusiness360?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>⚡</span>
+                <span className={styles.itemText}>ElevateBusiness 360°</span>
               </button>
               <button
                 className={styles.menuItem}
