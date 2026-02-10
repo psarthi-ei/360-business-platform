@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SEO from '../../components/ui/SEO';
 import styles from '../styles/ThoughtLeadershipHome.module.css';
 import { scrollToTop } from '../../utils/scrollUtils';
+import { getAllChapters, formatDate, BookChapter } from '../../utils/bookUtils';
 
 interface ThoughtLeadershipHomeProps {
   currentLanguage: string;
@@ -28,6 +29,39 @@ function ThoughtLeadershipHome({
   onAbout,
   onContact
 }: ThoughtLeadershipHomeProps) {
+
+  // Chapter data state
+  const [chapters, setChapters] = useState<BookChapter[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load chapter data on component mount
+  useEffect(() => {
+    loadChapterData();
+  }, []);
+
+  const loadChapterData = async () => {
+    setLoading(true);
+    try {
+      const chapterResults = await getAllChapters();
+      setChapters(chapterResults.slice(0, 3)); // Get first 3 chapters (Introduction + Chapter 1 + Chapter 2)
+    } catch (error) {
+      // Error loading chapter data
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Dynamic chapter navigation
+  const handleChapterClick = (chapter: BookChapter) => {
+    if (chapter.slug === 'introduction') {
+      onIntroduction();
+    } else if (chapter.slug === 'chapter1-two-engineering-organizations') {
+      onChapter1();
+    } else {
+      // For future chapters, can navigate to book page with specific chapter
+      onEngineeringBook();
+    }
+  };
 
   // Wrapper functions to ensure scroll to top on navigation
   const handleElevateBusiness360Click = () => {
@@ -111,56 +145,46 @@ function ThoughtLeadershipHome({
             </p>
             
             <div className={styles.chaptersGrid}>
-              {/* Why This Book Preview */}
-              <div className={styles.chapterCard}>
-                <div className={styles.chapterMeta}>
-                  <span className={styles.chapterNumber}>Introduction</span>
-                  <span className={styles.chapterDate}>Published Feb 6, 2026</span>
+              {loading ? (
+                <div className={styles.chapterCard}>
+                  <div className={styles.chapterMeta}>
+                    <span className={styles.chapterNumber}>Loading...</span>
+                    <span className={styles.chapterDate}>Loading...</span>
+                  </div>
+                  <h3 className={styles.chapterTitle}>Loading chapters...</h3>
+                  <p className={styles.chapterExcerpt}>Please wait while we load the latest chapter information.</p>
                 </div>
-                <h3 className={styles.chapterTitle}>Why This Book</h3>
-                <p className={styles.chapterExcerpt}>
-                  "I am writing this book because I believe we have reached the end of a long chapter in the history of software development — and the beginning of another for which we do not yet have a playbook."
-                </p>
-                <div className={styles.chapterStats}>
-                  <span className={styles.readTime}>8 min read</span>
-                  <span className={styles.chapterTags}>#AI-Era #SoftwareDevelopment #BookIntro</span>
-                </div>
-                <button className={styles.chapterCta} onClick={onIntroduction}>Continue Reading →</button>
-              </div>
-
-              {/* Chapter 1 Preview */}
-              <div className={styles.chapterCard}>
-                <div className={styles.chapterMeta}>
-                  <span className={styles.chapterNumber}>Chapter 1</span>
-                  <span className={styles.chapterDate}>Published Feb 7, 2026</span>
-                </div>
-                <h3 className={styles.chapterTitle}>The Two Engineering Organizations Most of Us Actually Work In</h3>
-                <p className={styles.chapterExcerpt}>
-                  "Most engineering organizations fall into two categories: traditional engineering orgs, and reasonably mature (but imperfect) agile organizations. Understanding where we are is crucial before we can evolve."
-                </p>
-                <div className={styles.chapterStats}>
-                  <span className={styles.readTime}>12 min read</span>
-                  <span className={styles.chapterTags}>#EngineeringOrganizations #TeamStructure</span>
-                </div>
-                <button className={styles.chapterCta} onClick={onChapter1}>Continue Reading →</button>
-              </div>
-
-              {/* Chapter 2 Preview */}
-              <div className={styles.chapterCard}>
-                <div className={styles.chapterMeta}>
-                  <span className={styles.chapterNumber}>Chapter 2</span>
-                  <span className={styles.chapterDate}>Coming Soon</span>
-                </div>
-                <h3 className={styles.chapterTitle}>Why These Models Worked for a Long Time</h3>
-                <p className={styles.chapterExcerpt}>
-                  "Human-written code was the core bottleneck, and specialization with handoffs made perfect sense. Understanding why these models worked helps us see why they're breaking down now."
-                </p>
-                <div className={styles.chapterStats}>
-                  <span className={styles.readTime}>Coming Soon</span>
-                  <span className={styles.chapterTags}>#EngineeringHistory #Specialization</span>
-                </div>
-                <button className={styles.chapterCta} disabled>Coming Soon</button>
-              </div>
+              ) : (
+                chapters.map((chapter) => (
+                  <div key={chapter.id} className={styles.chapterCard}>
+                    <div className={styles.chapterMeta}>
+                      <span className={styles.chapterNumber}>
+                        {chapter.number ? `Chapter ${chapter.number}` : 'Introduction'}
+                      </span>
+                      <span className={styles.chapterDate}>
+                        {chapter.isPublished ? `Published ${formatDate(chapter.publishedDate)}` : 'Coming Soon'}
+                      </span>
+                    </div>
+                    <h3 className={styles.chapterTitle}>{chapter.title}</h3>
+                    <p className={styles.chapterExcerpt}>
+                      "{chapter.excerpt}"
+                    </p>
+                    <div className={styles.chapterStats}>
+                      <span className={styles.readTime}>{chapter.readTime}</span>
+                      <span className={styles.chapterTags}>
+                        #{chapter.section.replace(/\s+/g, '')} #{chapter.title.split(' ').slice(0, 2).join('')}
+                      </span>
+                    </div>
+                    <button 
+                      className={styles.chapterCta} 
+                      onClick={() => handleChapterClick(chapter)}
+                      disabled={!chapter.isPublished}
+                    >
+                      {chapter.isPublished ? 'Continue Reading →' : 'Coming Soon'}
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
             
             <div className={styles.sectionCta}>

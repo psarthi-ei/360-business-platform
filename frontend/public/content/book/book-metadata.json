@@ -20,26 +20,26 @@
       "title": "The Two Engineering Organizations Most of Us Actually Work In",
       "subtitle": "Traditional vs Agile Organizations",
       "excerpt": "Most engineering organizations fall into two categories: traditional engineering orgs, and reasonably mature (but imperfect) agile organizations. Understanding where we are is crucial before we can evolve.",
-      "filename": "chapter1.html",
+      "filename": "chapter1-two-engineering-organizations.html",
       "publishedDate": "2026-02-07",
       "readTime": "12 min read",
       "section": "Part 1 — Where We Are (Reality, Not Ideals)",
       "order": 1,
       "isPublished": true,
-      "slug": "chapter1"
+      "slug": "chapter1-two-engineering-organizations"
     },
     {
       "id": "chapter2", 
       "number": 2,
       "title": "Why These Models Worked for a Long Time",
       "subtitle": "Understanding the Historical Context",
-      "excerpt": "Human-written code was the core bottleneck, and specialization with handoffs made perfect sense. Understanding why these models worked helps us see why they're breaking down now.",
+      "excerpt": "The way most engineering organizations work today is not accidental. It is the result of years—sometimes decades—of practical learning under very real constraints. And for a long time, these models didn't just exist. They worked.",
       "filename": "chapter2-why-models-worked.html",
-      "publishedDate": null,
-      "readTime": "Coming Soon",
+      "publishedDate": "2026-02-10",
+      "readTime": "15 min read",
       "section": "Part 1 — Where We Are (Reality, Not Ideals)",
       "order": 2,
-      "isPublished": false,
+      "isPublished": true,
       "slug": "chapter2-why-models-worked"
     }
   ]

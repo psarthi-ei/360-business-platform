@@ -1,0 +1,442 @@
+<h1>Chapter 2</h1>
+<h2>Why These Models Worked for a Long Time</h2>
+
+<p>
+After reading the previous chapter, it would be easy to jump to conclusions.
+</p>
+
+<p>
+It would be easy to say:
+</p>
+
+<ul>
+  <li>Traditional organizations were slow.</li>
+  <li>Agile organizations didn’t do Agile properly.</li>
+  <li>If only teams were more disciplined, things would be better.</li>
+</ul>
+
+<p>
+This chapter is written to stop that thinking.
+</p>
+
+<p>
+Because before we talk about why things must change, we need to acknowledge something honestly:
+</p>
+
+<p><strong>
+The way most engineering organizations work today is not accidental.
+</strong></p>
+
+<p>
+It is the result of years—sometimes decades—of practical learning under very real constraints.
+</p>
+
+<p>
+And for a long time, these models didn’t just exist.
+<strong>They worked.</strong>
+</p>
+
+<hr/>
+
+<h3>Software Was Hard, Slow, and Expensive</h3>
+
+<p>
+For most of the history of software development, writing code was not cheap.
+</p>
+
+<ul>
+  <li>Writing correct code took time.</li>
+  <li>Understanding existing systems took even more time.</li>
+  <li>Debugging was painful.</li>
+  <li>Deploying was risky.</li>
+  <li>Infrastructure was scarce and expensive.</li>
+  <li>Production failures were career-limiting events.</li>
+</ul>
+
+<p>
+In that world, <strong>speed was dangerous</strong>.
+</p>
+
+<p>
+Moving fast didn’t mean learning faster.
+It meant breaking things in ways you didn’t understand yet.
+</p>
+
+<p>
+So organizations learned—often the hard way—that they needed protection mechanisms.
+</p>
+
+<p>
+That is where many of the structures we now criticize actually came from.
+</p>
+
+<hr/>
+
+<h3>Humans Writing Code Were the Bottleneck</h3>
+
+<p>
+This is the most important idea in this chapter.
+</p>
+
+<p><strong>
+For a long time, human-written code was the primary bottleneck in software delivery.
+</strong></p>
+
+<p>
+Not business ideas.<br/>
+Not infrastructure.<br/>
+Not even coordination.
+</p>
+
+<p>
+It was the fact that:
+</p>
+
+<ul>
+  <li>Only humans could translate intent into code.</li>
+  <li>Good engineers were rare.</li>
+  <li>Senior engineers were even rarer.</li>
+  <li>Knowledge lived in people’s heads.</li>
+  <li>Context transfer was slow and lossy.</li>
+</ul>
+
+<p>
+When this is your reality, you optimize differently.
+</p>
+
+<p>
+You don’t optimize for speed.
+You optimize for <strong>protecting scarce human expertise</strong>.
+</p>
+
+<hr/>
+
+<h3>Specialization Was a Rational Survival Strategy</h3>
+
+<p>
+Specialization did not emerge because people loved silos.
+</p>
+
+<p>
+It emerged because depth mattered more than breadth.
+</p>
+
+<p>
+When systems are complex and opaque:
+</p>
+
+<ul>
+  <li>Knowing a small part very deeply is safer than knowing everything shallowly.</li>
+  <li>Context switching increases mistakes.</li>
+  <li>“Full ownership” becomes unrealistic.</li>
+</ul>
+
+<p>
+So organizations naturally created roles:
+</p>
+
+<ul>
+  <li>Frontend engineers</li>
+  <li>Backend engineers</li>
+  <li>QA engineers</li>
+  <li>Infrastructure / DevOps engineers</li>
+  <li>Security engineers</li>
+</ul>
+
+<p>
+Each role reduced risk by limiting cognitive load.
+</p>
+
+<p>
+This wasn’t about efficiency.
+It was about <strong>survivability</strong>.
+</p>
+
+<hr/>
+
+<h3>Handoffs Reduced Individual Risk</h3>
+
+<p>
+Today, handoffs are often criticized—and rightly so.
+</p>
+
+<p>
+But historically, handoffs served an important function.
+</p>
+
+<p>
+They distributed responsibility.
+</p>
+
+<p>
+When something went wrong:
+</p>
+
+<ul>
+  <li>QA missed it.</li>
+  <li>Infrastructure misconfigured it.</li>
+  <li>Security didn’t flag it.</li>
+  <li>Product didn’t specify it clearly.</li>
+</ul>
+
+<p>
+No single individual carried full blame.
+</p>
+
+<p>
+This made large-scale delivery emotionally and organizationally survivable.
+</p>
+
+<p>
+Organizations don’t just optimize for output.
+They also optimize for <strong>psychological safety</strong>—even if they don’t say it out loud.
+</p>
+
+<hr/>
+
+<h3>QA as a Gate Made Sense</h3>
+
+<p>
+In a world where:
+</p>
+
+<ul>
+  <li>Engineers were specialized</li>
+  <li>Integration happened late</li>
+  <li>Feedback was slow</li>
+</ul>
+
+<p>
+QA became the final line of defense.
+</p>
+
+<p>
+Not because engineers didn’t care about quality, but because:
+</p>
+
+<ul>
+  <li>No single engineer saw the whole system.</li>
+  <li>No one trusted partial validation.</li>
+  <li>Production failures were costly.</li>
+</ul>
+
+<p>
+So QA existed as a <strong>risk buffer</strong>.
+</p>
+
+<p>
+Manual testing survived because automation couldn’t keep up with constant change.
+</p>
+
+<p>
+This wasn’t incompetence.
+It was pragmatism.
+</p>
+
+<hr/>
+
+<h3>Infrastructure and Security Had to Be Centralized</h3>
+
+<p>
+Infrastructure used to be:
+</p>
+
+<ul>
+  <li>Expensive</li>
+  <li>Fragile</li>
+  <li>Hard to automate</li>
+  <li>Easy to misconfigure</li>
+</ul>
+
+<p>
+Security vulnerabilities were:
+</p>
+
+<ul>
+  <li>Hard to detect</li>
+  <li>Harder to reason about</li>
+  <li>Easy to exploit once exposed</li>
+</ul>
+
+<p>
+Centralization wasn’t about control for its own sake.
+</p>
+
+<p>
+It was about <strong>reducing blast radius</strong>.
+</p>
+
+<p>
+Giving every team full control would have caused more harm than good.
+</p>
+
+<p>
+So organizations centralized these functions—and accepted slower delivery as the trade-off.
+</p>
+
+<hr/>
+
+<h3>Agile Improved the Flow, Not the Assumption</h3>
+
+<p>
+When Agile arrived, it did not replace this world overnight.
+</p>
+
+<p>
+Agile didn’t say:
+</p>
+
+<blockquote>
+  <p>“Human-written code is no longer the bottleneck.”</p>
+</blockquote>
+
+<p>
+It said:
+</p>
+
+<blockquote>
+  <p>“Let’s reduce waste and get feedback sooner.”</p>
+</blockquote>
+
+<p>
+So Agile improved flow <strong>within the same constraint</strong>.
+</p>
+
+<p>
+That’s why:
+</p>
+
+<ul>
+  <li>Story points mattered.</li>
+  <li>Velocity mattered.</li>
+  <li>Predictability mattered.</li>
+  <li>Sprints mattered.</li>
+</ul>
+
+<p>
+Even in Agile organizations, the real definition of “done” was rarely “in production”.
+</p>
+
+<p>
+Because production still depended on:
+</p>
+
+<ul>
+  <li>Integrations</li>
+  <li>Infrastructure</li>
+  <li>Security</li>
+  <li>Coordination across teams</li>
+</ul>
+
+<p>
+So even Agile organizations shipped slower than they planned.
+</p>
+
+<p>
+And that was normal.
+</p>
+
+<hr/>
+
+<h3>Success Reinforced the Model</h3>
+
+<p>
+Perhaps the most important reason these models lasted is simple:
+</p>
+
+<p><strong>
+They worked well enough.
+</strong></p>
+
+<p>
+Companies:
+</p>
+
+<ul>
+  <li>Grew</li>
+  <li>Made money</li>
+  <li>Shipped products</li>
+  <li>Built careers</li>
+</ul>
+
+<p>
+Entire industries were built on these models.
+</p>
+
+<p>
+No organization abandons a model that keeps the lights on.
+</p>
+
+<p>
+Success is the strongest argument for correctness.
+</p>
+
+<hr/>
+
+<h3>What This Chapter Is Really Saying</h3>
+
+<p>
+This chapter is not saying:
+</p>
+
+<ul>
+  <li>Traditional organizations are bad.</li>
+  <li>Agile organizations failed.</li>
+  <li>People didn’t try hard enough.</li>
+</ul>
+
+<p>
+It is saying something more uncomfortable—and more honest:
+</p>
+
+<p><strong>
+These models were optimized for a world where writing code was expensive, slow, and risky.
+</strong></p>
+
+<p>
+They were designed to be:
+</p>
+
+<ul>
+  <li>Safe</li>
+  <li>Scalable</li>
+  <li>Survivable</li>
+</ul>
+
+<p>
+Not fast.
+</p>
+
+<hr/>
+
+<h3>Why This Matters Now</h3>
+
+<p>
+If the assumptions that shaped these models were still true, there would be no reason to change anything.
+</p>
+
+<p>
+But that assumption—the cost and speed of writing code—is no longer stable.
+</p>
+
+<p>
+And when the primary bottleneck shifts,
+<strong>every optimization around it starts to misfire</strong>.
+</p>
+
+<p>
+That is not a failure of people or process.
+</p>
+
+<p>
+It is a signal.
+</p>
+
+<p>
+And understanding <em>why</em> the old world worked
+is the only way to understand <em>why</em> it now feels strained.
+</p>
+
+<p>
+The next chapter explores that strain—and the invisible cost we’ve been carrying without naming it.
+</p>
