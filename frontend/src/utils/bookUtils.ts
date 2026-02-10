@@ -67,8 +67,18 @@ export async function getChaptersBySection(section: string): Promise<BookChapter
     return allChapters;
   }
   
+  // Find the section name that matches the section ID
+  // First get all sections to find the mapping
+  const sections = await getBookSections();
+  const sectionData = sections.find(s => s.id === section);
+  
+  if (!sectionData) {
+    return [];
+  }
+  
+  // Filter chapters by the actual section name
   return allChapters.filter(chapter => 
-    chapter.section === section
+    chapter.section === sectionData.name
   );
 }
 
@@ -203,7 +213,8 @@ export function getChapterHashtags(chapterSlug: string): string {
   const hashtagMap: Record<string, string> = {
     'introduction': '#BookLaunch #EngineeringFuture',
     'chapter1-two-engineering-organizations': '#EngineeringOrganizations #TechLeadership',
-    'chapter2-why-models-worked': '#EngineeringHistory #AgileEvolution'
+    'chapter2-why-models-worked': '#EngineeringHistory #AgileEvolution',
+    'chapter3-invisible-cost': '#EngineeringCosts #SystemicIssues'
   };
   
   return hashtagMap[chapterSlug] || '#Engineering #Leadership';

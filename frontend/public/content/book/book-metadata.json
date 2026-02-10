@@ -41,6 +41,20 @@
       "order": 2,
       "isPublished": true,
       "slug": "chapter2-why-models-worked"
+    },
+    {
+      "id": "chapter3",
+      "number": 3,
+      "title": "The Invisible Cost of Modern Engineering",
+      "subtitle": "Why Everything Feels So Slow",
+      "excerpt": "By most visible measures, modern engineering organizations look busy. Jira boards are full, sprints are packed, standups happen every day. People are working hard. And yet, almost everywhere, the same sentence keeps coming up: 'Why does everything still feel so slow?'",
+      "filename": "chapter3.html",
+      "publishedDate": "2026-02-10",
+      "readTime": "18 min read",
+      "section": "Part 1 — Where We Are (Reality, Not Ideals)",
+      "order": 3,
+      "isPublished": true,
+      "slug": "chapter3-invisible-cost"
     }
   ]
 }
