@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SEO from '../../components/ui/SEO';
 import styles from '../styles/ThoughtLeadershipHome.module.css';
 import { scrollToTop } from '../../utils/scrollUtils';
-import { getAllChapters, formatDate, BookChapter } from '../../utils/bookUtils';
+import { getAllChapters, formatDate, getChapterHashtags, BookChapter } from '../../utils/bookUtils';
 
 interface ThoughtLeadershipHomeProps {
   currentLanguage: string;
@@ -176,7 +176,7 @@ function ThoughtLeadershipHome({
                     <div className={styles.chapterStats}>
                       <span className={styles.readTime}>{chapter.readTime}</span>
                       <span className={styles.chapterTags}>
-                        #{chapter.section.replace(/\s+/g, '')} #{chapter.title.split(' ').slice(0, 2).join('')}
+                        {getChapterHashtags(chapter.slug)}
                       </span>
                     </div>
                     <button 

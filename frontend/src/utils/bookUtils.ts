@@ -198,6 +198,17 @@ export function getSectionIcon(section: string): string {
   return icons[section] || '📖';
 }
 
+// Get appropriate hashtags for a chapter
+export function getChapterHashtags(chapterSlug: string): string {
+  const hashtagMap: Record<string, string> = {
+    'introduction': '#BookLaunch #EngineeringFuture',
+    'chapter1-two-engineering-organizations': '#EngineeringOrganizations #TechLeadership',
+    'chapter2-why-models-worked': '#EngineeringHistory #AgileEvolution'
+  };
+  
+  return hashtagMap[chapterSlug] || '#Engineering #Leadership';
+}
+
 // Get total reading progress (for future use)
 export function calculateReadingProgress(completedChapters: number, totalChapters: number): number {
   if (totalChapters === 0) return 0;
