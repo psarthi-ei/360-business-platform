@@ -55,6 +55,48 @@
       "order": 3,
       "isPublished": true,
       "slug": "chapter3-invisible-cost"
+    },
+    {
+      "id": "chapter4",
+      "number": 4,
+      "title": "When Writing Code Stops Being the Center of Gravity",
+      "subtitle": "The Personal Journey of Discovery",
+      "excerpt": "For some time, I had been exploring business ideas as part of my entrepreneurial journey. I kept returning to one question: Where can technology create real impact in an industry that still runs mostly manually? That question led me to textiles. And to a realization that changed everything.",
+      "filename": "chapter4.html",
+      "publishedDate": "2026-02-13",
+      "readTime": "22 min read",
+      "section": "Part 2 — What Actually Changed (Not the Hype)",
+      "order": 4,
+      "isPublished": true,
+      "slug": "chapter4-code-gravity"
+    },
+    {
+      "id": "chapter5",
+      "number": 5,
+      "title": "How AI Quietly Breaks Existing Assumptions",
+      "subtitle": "The Structural Implications",
+      "excerpt": "The shift we explored in the previous chapter is not just personal. It is structural. If writing code is no longer the bottleneck, then the entire engineering organization — as we designed it over the past 20 years — rests on an assumption that may no longer hold.",
+      "filename": "chapter5.html",
+      "publishedDate": "2026-02-13",
+      "readTime": "25 min read",
+      "section": "Part 2 — What Actually Changed (Not the Hype)",
+      "order": 5,
+      "isPublished": true,
+      "slug": "chapter5-broken-assumptions"
+    },
+    {
+      "id": "chapter6",
+      "number": 6,
+      "title": "Why Old SDLC Thinking Starts Lying to You",
+      "subtitle": "When Processes Become Misleading",
+      "excerpt": "There is something more dangerous than a broken process. A process that appears to work. Most engineering organizations today are not chaotic. They are structured. But when AI changes where effort lives, those same structures begin to distort reality.",
+      "filename": "chapter6.html",
+      "publishedDate": "2026-02-13",
+      "readTime": "24 min read",
+      "section": "Part 2 — What Actually Changed (Not the Hype)",
+      "order": 6,
+      "isPublished": true,
+      "slug": "chapter6-sdlc-lying"
     }
   ]
 }

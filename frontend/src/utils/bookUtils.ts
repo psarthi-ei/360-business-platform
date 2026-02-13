@@ -214,7 +214,10 @@ export function getChapterHashtags(chapterSlug: string): string {
     'introduction': '#BookLaunch #EngineeringFuture',
     'chapter1-two-engineering-organizations': '#EngineeringOrganizations #TechLeadership',
     'chapter2-why-models-worked': '#EngineeringHistory #AgileEvolution',
-    'chapter3-invisible-cost': '#EngineeringCosts #SystemicIssues'
+    'chapter3-invisible-cost': '#EngineeringCosts #SystemicIssues',
+    'chapter4-code-gravity': '#AITransformation #CodingBottleneck',
+    'chapter5-broken-assumptions': '#BrokenAssumptions #EngineeringShift',
+    'chapter6-sdlc-lying': '#SDLCEvolution #ProcessLimitations'
   };
   
   return hashtagMap[chapterSlug] || '#Engineering #Leadership';

@@ -62,7 +62,8 @@ function SEO({
       <meta name="twitter:image:alt" content={defaultImageAlt} />
 
       {/* WhatsApp and Additional Social Media Optimizations */}
-      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:secure_url" content={fullImage} />
       <meta property="og:locale" content="en_US" />
 
       {/* Additional SEO Meta Tags */}

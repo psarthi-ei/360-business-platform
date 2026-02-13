@@ -85,28 +85,28 @@ function ThoughtLeadershipHome({
   return (
     <>
       <SEO
-        title="ElevateIdea"
-        description="20+ years engineering leadership experience with 6 engineering program turnarounds worth $15M+ recovery. Author of engineering leadership insights and strategic advisor for engineering organizations."
-        keywords="engineering leadership, engineering program turnaround, technical leadership, engineering advisor, engineering organization transformation, engineering team recovery"
+        title="Partha Sarthi - Engineering Leadership Thought Leader | AI-Era Engineering Expert"
+        description="Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation."
+        keywords="engineering thought leader, industry expert, engineering transformation, program turnaround specialist, AI-era leadership, future of engineering, engineering evolution, organizational transformation, technical leadership, engineering advisor"
         canonical="/"
         type="website"
         image="/social-preview.jpg"
         imageWidth={1200}
         imageHeight={630}
-        imageAlt="Partha Sarthi - Engineering Leadership & Engineering Program Turnaround Expert"
+        imageAlt="Partha Sarthi - Engineering Leadership Thought Leader & AI-Era Engineering Expert"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Person",
           "name": "Partha Sarthi",
-          "jobTitle": "Engineering Leadership & Engineering Program Turnaround Expert",
+          "jobTitle": "Engineering Leadership Thought Leader & AI-Era Engineering Expert",
           "url": "https://elevateidea.com",
-          "image": "https://elevateidea.com/logo192.png",
-          "description": "20+ years engineering leadership experience with 6 engineering program turnarounds worth $15M+ recovery value. Author and engineering advisor.",
-          "knowsAbout": ["Engineering Leadership", "Engineering Program Turnarounds", "Technical Team Recovery", "Engineering Organization Transformation", "AI-Enabled Development"],
+          "image": "https://elevateidea.com/social-preview.jpg",
+          "description": "Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation.",
+          "knowsAbout": ["Engineering Thought Leadership", "AI-Era Engineering", "Engineering Transformation", "Program Turnaround Strategy", "Future of Engineering", "Organizational Change", "Engineering Evolution", "Technical Leadership Innovation"],
           "hasOccupation": {
             "@type": "Occupation",
-            "name": "Engineering Leadership Expert",
-            "description": "Specializes in engineering program turnarounds and engineering organization transformation"
+            "name": "Engineering Transformation Expert & Industry Thought Leader",
+            "description": "Pioneering the future of engineering leadership through AI-era transformation and organizational evolution"
           },
           "sameAs": [
             "https://www.linkedin.com/in/parthasarthi/",
@@ -126,13 +126,13 @@ function ThoughtLeadershipHome({
               For the first time in software history, the activity that consumed most engineering effort — writing code — is no longer the primary bottleneck. The way we organize, lead, and measure engineering teams must change too.
             </p>
             <p className={styles.heroMission}>
-              So I'm attempting to figure it out in public, based on 20 years of lived experience, failures, and turnarounds.
+              So I'm attempting to figure it out in public, based on proven transformation expertise, failures, and turnarounds.
             </p>
             
             <div className={styles.authorIntro}>
               <h2 className={styles.authorName}>Partha Sarthi</h2>
               <p className={styles.authorCredentials}>
-                Technology Leader | Product Builder | Program Turnaround Specialist | 2X Entrepreneur
+                Engineering Thought Leader | Transformation Expert | AI-Era Pioneer | 2X Entrepreneur
               </p>
             </div>
           </div>
@@ -255,7 +255,7 @@ function ThoughtLeadershipHome({
               Engineering Leadership in Action
             </h2>
             <p className={styles.sectionSubtitle}>
-              Real case studies and personal insights from 20+ years of technology leadership
+              Real case studies and personal insights from proven engineering transformation expertise
             </p>
             
             <div className={styles.storiesCategories}>
