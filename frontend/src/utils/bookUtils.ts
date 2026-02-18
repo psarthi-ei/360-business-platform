@@ -217,7 +217,11 @@ export function getChapterHashtags(chapterSlug: string): string {
     'chapter3-invisible-cost': '#EngineeringCosts #SystemicIssues',
     'chapter4-code-gravity': '#AITransformation #CodingBottleneck',
     'chapter5-broken-assumptions': '#BrokenAssumptions #EngineeringShift',
-    'chapter6-sdlc-lying': '#SDLCEvolution #ProcessLimitations'
+    'chapter6-sdlc-lying': '#SDLCEvolution #ProcessLimitations',
+    'chapter7-junior-engineer': '#JuniorEngineers #StructuralDiscipline',
+    'chapter8-junior-engineers': '#EngineeringGrowth #ApprenticeshipEvolution',
+    'chapter9-judgment-tradeoffs': '#EngineeringJudgment #TradeOffThinking',
+    'chapter10-compounding-skills': '#SkillEvolution #CompoundingExpertise'
   };
   
   return hashtagMap[chapterSlug] || '#Engineering #Leadership';

@@ -97,6 +97,62 @@
       "order": 6,
       "isPublished": true,
       "slug": "chapter6-sdlc-lying"
+    },
+    {
+      "id": "chapter7",
+      "number": 7,
+      "title": "When AI Becomes the Junior Engineer",
+      "subtitle": "The Collapse of Implementation Effort",
+      "excerpt": "Implementation can be generated rapidly. But structural discipline cannot. When I started noticing architectural drift, I realized something: AI will happily generate working code. It will not automatically generate harmony.",
+      "filename": "chapter7.html",
+      "publishedDate": "2026-02-18",
+      "readTime": "12 min read",
+      "section": "Part 3 — What This Means for People",
+      "order": 7,
+      "isPublished": true,
+      "slug": "chapter7-junior-engineer"
+    },
+    {
+      "id": "chapter8",
+      "number": 8,
+      "title": "What Happens to Junior Engineers Now?",
+      "subtitle": "The Apprenticeship Model Crisis",
+      "excerpt": "If you are not the one writing, are you really the one thinking? If you are not the one debugging deeply, are you truly building intuition? The friction that built judgment is disappearing.",
+      "filename": "chapter8.html",
+      "publishedDate": "2026-02-18",
+      "readTime": "14 min read",
+      "section": "Part 3 — What This Means for People",
+      "order": 8,
+      "isPublished": true,
+      "slug": "chapter8-junior-engineers"
+    },
+    {
+      "id": "chapter9",
+      "number": 9,
+      "title": "Thinking, Judgment, and Trade-offs in an AI World",
+      "subtitle": "What Really Matters Now",
+      "excerpt": "Code was never the real value. The real value was always: Deciding what to build, how to structure it, what not to build, which trade-offs to accept. Now AI can write the same volume in minutes. What remains is judgment.",
+      "filename": "chapter9.html",
+      "publishedDate": "2026-02-18",
+      "readTime": "16 min read",
+      "section": "Part 3 — What This Means for People",
+      "order": 9,
+      "isPublished": true,
+      "slug": "chapter9-judgment-tradeoffs"
+    },
+    {
+      "id": "chapter10",
+      "number": 10,
+      "title": "What Skills Actually Compound Over Time",
+      "subtitle": "The New Engineer's Growth Path",
+      "excerpt": "Earlier, experience meant: 'I have written a lot of code.' Now, experience increasingly means: 'I have made a lot of architectural decisions and lived with their consequences.' That is what compounds.",
+      "filename": "chapter10.html",
+      "publishedDate": "2026-02-18",
+      "readTime": "18 min read",
+      "section": "Part 3 — What This Means for People",
+      "order": 10,
+      "isPublished": true,
+      "slug": "chapter10-compounding-skills"
     }
   ]
 }
