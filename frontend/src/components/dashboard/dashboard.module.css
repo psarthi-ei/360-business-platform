@@ -115,12 +115,7 @@
   border-radius: 2px 0 0 2px;
 }
 
-.globalKpiCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 35px rgba(0, 0, 0, 0.12),
-    0 6px 15px rgba(0, 0, 0, 0.05);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 .globalKpiValue {
   font-size: var(--font-2xl);
@@ -187,13 +182,7 @@
   );
 }
 
-.moduleKpiSection:hover {
-  transform: translateY(-3px);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.12),
-    0 8px 20px rgba(0, 0, 0, 0.05);
-  border-color: rgba(29, 78, 216, 0.2);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 .moduleHeader {
   display: flex;
@@ -240,11 +229,7 @@
   transition: all 0.2s ease;
 }
 
-.moduleKpi:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-color: rgba(29, 78, 216, 0.2);
-  transform: translateX(4px);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 .moduleKpiLabel {
   font-size: var(--font-sm);
@@ -279,10 +264,7 @@
   transition: all 0.2s ease;
 }
 
-.moduleAction:hover {
-  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(59, 130, 246, 0.08) 100%);
-  border-color: rgba(29, 78, 216, 0.3);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 /* ===== VISUAL STAGES REPRESENTATION ===== */
 .stagesContainer {
@@ -319,11 +301,7 @@
   transition: all 0.2s ease;
 }
 
-.stageItem:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: rgba(29, 78, 216, 0.3);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 .stageIcon {
   font-size: var(--font-base);
@@ -433,11 +411,7 @@
   transition: all 0.2s ease;
 }
 
-.alertItem:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateX(4px);
-  border-color: rgba(245, 158, 11, 0.5);
-}
+/* Removed hover effect to prevent flickering during rapid mouse movement */
 
 /* Business Footer System */
 .businessFooter {
