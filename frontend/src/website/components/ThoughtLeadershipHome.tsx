@@ -83,17 +83,12 @@ function ThoughtLeadershipHome({
         keywords="engineering thought leader, industry expert, engineering transformation, program turnaround specialist, AI-era leadership, future of engineering, engineering evolution, organizational transformation, technical leadership, engineering advisor"
         canonical="/leadership"
         type="website"
-        image="/social-preview.jpg"
-        imageWidth={1200}
-        imageHeight={630}
-        imageAlt="Partha Sarthi - Engineering Leadership Thought Leader & AI-Era Engineering Expert"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Person",
           "name": "Partha Sarthi",
           "jobTitle": "Engineering Leadership Thought Leader & AI-Era Engineering Expert",
           "url": "https://elevateidea.com",
-          "image": "https://elevateidea.com/social-preview.jpg",
           "description": "Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation.",
           "knowsAbout": ["Engineering Thought Leadership", "AI-Era Engineering", "Engineering Transformation", "Program Turnaround Strategy", "Future of Engineering", "Organizational Change", "Engineering Evolution", "Technical Leadership Innovation"],
           "hasOccupation": {

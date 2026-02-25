@@ -21,7 +21,7 @@ function SEO({
   keywords,
   canonical,
   type = 'website',
-  image = '/social-preview.jpg',
+  image,
   imageWidth = 1200,
   imageHeight = 630,
   imageAlt,
@@ -31,7 +31,7 @@ function SEO({
   const siteUrl = 'https://elevateidea.com';
   const fullTitle = title.includes('ElevateIdea') ? title : `${title} | ElevateIdea Technologies`;
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
-  const fullImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+  const fullImage = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : undefined;
   const defaultImageAlt = imageAlt || `${title} - ElevateIdea Technologies`;
 
   return (
@@ -47,23 +47,35 @@ function SEO({
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={fullImage} />
-      <meta property="og:image:width" content={imageWidth.toString()} />
-      <meta property="og:image:height" content={imageHeight.toString()} />
-      <meta property="og:image:alt" content={defaultImageAlt} />
+      {fullImage && (
+        <>
+          <meta property="og:image" content={fullImage} />
+          <meta property="og:image:width" content={imageWidth.toString()} />
+          <meta property="og:image:height" content={imageHeight.toString()} />
+          <meta property="og:image:alt" content={defaultImageAlt} />
+        </>
+      )}
       <meta property="og:url" content={fullCanonical} />
       <meta property="og:site_name" content="ElevateIdea Technologies" />
 
       {/* Twitter Card Meta Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:card" content={fullImage ? "summary_large_image" : "summary"} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={fullImage} />
-      <meta name="twitter:image:alt" content={defaultImageAlt} />
+      {fullImage && (
+        <>
+          <meta name="twitter:image" content={fullImage} />
+          <meta name="twitter:image:alt" content={defaultImageAlt} />
+        </>
+      )}
 
       {/* WhatsApp and Additional Social Media Optimizations */}
-      <meta property="og:image:type" content="image/jpeg" />
-      <meta property="og:image:secure_url" content={fullImage} />
+      {fullImage && (
+        <>
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:secure_url" content={fullImage} />
+        </>
+      )}
       <meta property="og:locale" content="en_US" />
 
       {/* Additional SEO Meta Tags */}
