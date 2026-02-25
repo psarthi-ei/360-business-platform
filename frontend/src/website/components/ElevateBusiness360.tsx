@@ -51,7 +51,7 @@ function ElevateBusiness360({
   return (
     <>
       <SEO
-        title="ElevateBusiness 360° - ElevateIdea"
+        title="Textile Business Platform - ElevateIdea"
         description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Complete ElevateBusiness 360° demo for textile manufacturers."
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
         canonical="/"
@@ -96,7 +96,7 @@ function ElevateBusiness360({
         <div className={styles.heroContent}>
           <div className={styles.purposeStatement}>
             <h1 className={styles.heroTitle}>
-              ElevateBusiness 360° - Complete Business Platform Demonstration
+              Complete Textile Business Platform
             </h1>
             <p className={styles.heroSubtitle}>
               Experience our voice-first, multilingual business platform that provides 360° visibility across textile manufacturing workflows. From leads to final payment - explore intelligent automation designed specifically for the textile industry. Complete demonstration platform ready for exploration.

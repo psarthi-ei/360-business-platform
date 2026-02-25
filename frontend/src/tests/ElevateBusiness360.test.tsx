@@ -62,7 +62,7 @@ describe('ElevateBusiness360 Component', () => {
       renderWithProviders(<ElevateBusiness360 {...getElevateBusiness360Props()} />);
       
       // Check for hero section content using more specific text
-      expect(screen.getByText(/Complete Business Platform Demonstration/i)).toBeInTheDocument();
+      expect(screen.getByText(/Complete Textile Business Platform/i)).toBeInTheDocument();
       expect(screen.getByText(/Voice-first, multilingual business platform/i)).toBeInTheDocument();
     });
 

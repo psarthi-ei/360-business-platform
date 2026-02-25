@@ -28,7 +28,7 @@ function Footer({ currentLanguage, onLanguageChange, onAbout, onContact }: Foote
           </div>
           
           <div className={styles.footerLinks}>
-            <button className={styles.footerLink} onClick={onAbout}>About Us</button>
+            <button className={styles.footerLink} onClick={onAbout}>About</button>
             <span className={styles.linkSeparator}>|</span>
             <button className={styles.footerLink} onClick={onContact}>Contact</button>
             <span className={styles.linkSeparator}>|</span>

@@ -78,7 +78,7 @@ function ThoughtLeadershipHome({
   return (
     <>
       <SEO
-        title="Partha Sarthi - Engineering Leadership Thought Leader | AI-Era Engineering Expert"
+        title="Leadership - ElevateIdea"
         description="Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation."
         keywords="engineering thought leader, industry expert, engineering transformation, program turnaround specialist, AI-era leadership, future of engineering, engineering evolution, organizational transformation, technical leadership, engineering advisor"
         canonical="/leadership"
