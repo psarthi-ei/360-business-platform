@@ -52,9 +52,9 @@ function ElevateBusiness360({
     <>
       <SEO
         title="ElevateBusiness 360° - ElevateIdea"
-        description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Building ElevateBusiness 360° for textile manufacturers."
+        description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Complete ElevateBusiness 360° demo for textile manufacturers."
         keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
-        canonical="/elevatebusiness-360"
+        canonical="/"
         type="website"
         image="/social-preview.jpg"
         imageWidth={1200}
@@ -96,10 +96,10 @@ function ElevateBusiness360({
         <div className={styles.heroContent}>
           <div className={styles.purposeStatement}>
             <h1 className={styles.heroTitle}>
-              Developing ElevateBusiness 360° - Complete Business Platform for Textile Manufacturers
+              ElevateBusiness 360° - Complete Business Platform Demonstration
             </h1>
             <p className={styles.heroSubtitle}>
-              Voice-first, multilingual business platform under development to provide 360° visibility across textile manufacturing workflows. From leads to final payment - we're building intelligent automation for the textile industry. Launching soon in Gujarat for early access partners.
+              Experience our voice-first, multilingual business platform that provides 360° visibility across textile manufacturing workflows. From leads to final payment - explore intelligent automation designed specifically for the textile industry. Complete demonstration platform ready for exploration.
             </p>
           </div>
           
@@ -221,7 +221,7 @@ function ElevateBusiness360({
           {/* Hero CTA */}
           <div className={styles.heroCta}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              Experience Platform 🚀
+              Explore Full Demo 🚀
             </button>
             <button 
               className={styles.secondaryCta} 
@@ -237,11 +237,11 @@ function ElevateBusiness360({
       <section className={styles.aiStory}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>
-            Building WITH AI - Our Development Journey
+            Built WITH AI - Our Development Story
           </h2>
           <p className={styles.sectionSubtitle}>
-            We're developing ElevateBusiness 360° with AI as our team member, demonstrating how modern businesses can leverage AI effectively. 
-            This is our real-time development story - not replacing experience, but amplifying it to build 10X faster.
+            We built ElevateBusiness 360° with AI as our team member, demonstrating how modern businesses can leverage AI effectively. 
+            This is our real development story - not replacing experience, but amplifying it to build 10X faster.
           </p>
           
           <div className={styles.aiStoryGrid}>
@@ -249,12 +249,12 @@ function ElevateBusiness360({
               <div className={styles.aiStoryIcon}>🤖</div>
               <h3 className={styles.aiStoryTitle}>AI as Team Member</h3>
               <p className={styles.aiStoryDescription}>
-                We're developing ElevateBusiness 360° with AI as our "Aladdin ka chirag" - a powerful team member that helps us create 10X faster. 
-                Haven't written a single line of code manually, yet developing enterprise-grade software.
+                We built ElevateBusiness 360° with AI as our "Aladdin ka chirag" - a powerful team member that helped us create 10X faster. 
+                Haven't written a single line of code manually, yet built enterprise-grade software.
               </p>
               <div className={styles.aiStoryProof}>
                 <span className={styles.proofBadge}>PROOF</span>
-                <span className={styles.proofText}>Haven't written single line of code, building 10X faster</span>
+                <span className={styles.proofText}>Haven't written single line of code, built 10X faster</span>
               </div>
             </div>
 
@@ -276,11 +276,11 @@ function ElevateBusiness360({
               <h3 className={styles.aiStoryTitle}>AI-Era Development</h3>
               <p className={styles.aiStoryDescription}>
                 This is the new reality - small teams building enterprise-level products in weeks instead of years. 
-                We're demonstrating how strategic AI implementation transforms business development through our own product journey.
+                We're demonstrating how strategic AI implementation transforms business development through our product.
               </p>
               <div className={styles.aiStoryProof}>
                 <span className={styles.proofBadge}>RESULT</span>
-                <span className={styles.proofText}>Enterprise platform development in months, not years</span>
+                <span className={styles.proofText}>Enterprise platform built in months, not years</span>
               </div>
             </div>
           </div>
@@ -450,11 +450,11 @@ function ElevateBusiness360({
             Be Among the First to Experience ElevateBusiness 360°
           </h2>
           <p className={styles.ctaSubtitle}>
-            We're launching soon in Gujarat for early access partners. Join the development journey and help shape the future of textile business management.
+            Join our beta program for early access to the complete platform. Help shape the future of textile business management while getting first access to our AI-built solution.
           </p>
           <div className={styles.ctaButtons}>
             <button className={styles.primaryCta} onClick={onDemoMode}>
-              Experience Platform 🚀
+              Explore Full Demo 🚀
             </button>
             <button 
               className={styles.secondaryCta} 

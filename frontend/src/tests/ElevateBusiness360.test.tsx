@@ -62,7 +62,7 @@ describe('ElevateBusiness360 Component', () => {
       renderWithProviders(<ElevateBusiness360 {...getElevateBusiness360Props()} />);
       
       // Check for hero section content using more specific text
-      expect(screen.getByText(/Complete Business Platform for Textile Manufacturers/i)).toBeInTheDocument();
+      expect(screen.getByText(/Complete Business Platform Demonstration/i)).toBeInTheDocument();
       expect(screen.getByText(/Voice-first, multilingual business platform/i)).toBeInTheDocument();
     });
 
@@ -113,11 +113,11 @@ describe('ElevateBusiness360 Component', () => {
   });
 
   describe('CTA Buttons', () => {
-    test('renders Experience Platform CTA button', () => {
+    test('renders Explore Full Demo CTA button', () => {
       renderWithProviders(<ElevateBusiness360 {...getElevateBusiness360Props()} />);
       
-      // Check for Experience Platform CTA button (multiple instances expected)
-      const experienceButtons = screen.getAllByText(/Experience Platform/i);
+      // Check for Explore Full Demo CTA button (multiple instances expected)
+      const experienceButtons = screen.getAllByText(/Explore Full Demo/i);
       expect(experienceButtons.length).toBeGreaterThan(0);
     });
 
@@ -133,7 +133,7 @@ describe('ElevateBusiness360 Component', () => {
       const props = getElevateBusiness360Props();
       renderWithProviders(<ElevateBusiness360 {...props} />);
       
-      // Verify onDemoMode callback is defined for Experience Platform button
+      // Verify onDemoMode callback is defined for Explore Full Demo button
       expect(props.onDemoMode).toBeDefined();
       expect(typeof props.onDemoMode).toBe('function');
     });

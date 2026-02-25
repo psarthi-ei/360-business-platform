@@ -341,6 +341,23 @@ function AppContent() {
 
   function renderHomePage() {
     return (
+      <ElevateBusiness360
+        currentLanguage={currentLanguage}
+        onLanguageChange={switchLanguage}
+        onLogin={showLogin}
+        onSignUp={showSignUp}
+        onGuestMode={handleGuestMode}
+        onDemoMode={handleDemoMode}
+        onServicesHub={showServicesHubWithReset}
+        onBlogHome={showBlogHome}
+        onAbout={showAbout}
+        onContact={showContact}
+      />
+    );
+  }
+
+  function renderLeadership() {
+    return (
       <ThoughtLeadershipHome
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
@@ -351,23 +368,6 @@ function AppContent() {
         on365DaysReflections={() => navigate('/365-days-reflections')}
         onTurnaroundStories={showTurnaroundStories}
         onElevateBusiness360={() => navigate('/elevatebusiness-360')}
-        onAbout={showAbout}
-        onContact={showContact}
-      />
-    );
-  }
-
-  function renderElevateBusiness360() {
-    return (
-      <ElevateBusiness360
-        currentLanguage={currentLanguage}
-        onLanguageChange={switchLanguage}
-        onLogin={showLogin}
-        onSignUp={showSignUp}
-        onGuestMode={handleGuestMode}
-        onDemoMode={handleDemoMode}
-        onServicesHub={showServicesHubWithReset}
-        onBlogHome={showBlogHome}
         onAbout={showAbout}
         onContact={showContact}
       />
@@ -568,7 +568,7 @@ function AppContent() {
   // Render functions object for shared route configuration
   const renderFunctions: RenderFunctions = {
     renderHomePage,
-    renderElevateBusiness360,
+    renderLeadership,
     renderDashboard,
     renderLeadManagement,
     renderSales,
@@ -617,8 +617,7 @@ function AppContent() {
               onUniversalAction={handleUniversalAction}
               onPerformSearch={handleUniversalSearch}
               onServicesHub={showServicesHubWithReset}
-              onTurnaroundStories={showTurnaroundStories}
-              onBlogHome={showBlogHome}
+              onLeadership={() => navigate('/leadership')}
               onAbout={showAbout}
               onContact={showContact}
               isPlatformPage={true}
@@ -646,9 +645,7 @@ function AppContent() {
                 userMode={userMode}
                 showWebsiteNavigation={true}
                 onServicesHub={showServicesHubWithReset}
-                onTurnaroundStories={showTurnaroundStories}
-                onBlogHome={showBlogHome}
-                onBookHome={showBookHome}
+                onLeadership={() => navigate('/leadership')}
                 onAbout={showAbout}
                 onContact={showContact}
                 onElevateBusiness360={() => navigate('/elevatebusiness-360')}

@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 // Interface for render functions to ensure type safety
 export interface RenderFunctions {
   renderHomePage: () => React.ReactElement;
-  renderElevateBusiness360: () => React.ReactElement;
+  renderLeadership: () => React.ReactElement;
   renderDashboard: () => React.ReactElement;
   renderLeadManagement: () => React.ReactElement;
   renderSales: () => React.ReactElement;
@@ -54,8 +54,9 @@ export function createPlatformRoutes(renderFunctions: RenderFunctions): React.Re
 export function createWebsiteRoutes(renderFunctions: RenderFunctions): React.ReactElement[] {
   return [
     <Route key="index" index element={renderFunctions.renderHomePage()} />,
+    <Route key="leadership" path="leadership" element={renderFunctions.renderLeadership()} />,
     <Route key="engineering-book" path="engineering-book" element={renderFunctions.renderBookHome()} />,
-    <Route key="elevatebusiness-360" path="elevatebusiness-360" element={renderFunctions.renderElevateBusiness360()} />,
+    <Route key="elevatebusiness-360" path="elevatebusiness-360" element={renderFunctions.renderLeadership()} />,
     <Route key="365-days-reflections" path="365-days-reflections" element={renderFunctions.renderBlogHome()} />,
     <Route key="login" path="login" element={renderFunctions.renderAuthentication()} />,
     <Route key="signup" path="signup" element={renderFunctions.renderAuthentication()} />,

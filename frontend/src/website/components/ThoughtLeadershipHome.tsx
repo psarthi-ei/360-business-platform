@@ -68,13 +68,6 @@ function ThoughtLeadershipHome({
   };
 
   // Wrapper functions to ensure scroll to top on navigation
-  const handleElevateBusiness360Click = () => {
-    scrollToTop({ behavior: 'auto' });
-    setTimeout(() => {
-      onElevateBusiness360();
-    }, 100);
-  };
-
   const handle365DaysReflectionsClick = () => {
     scrollToTop({ behavior: 'auto' });
     setTimeout(() => {
@@ -88,7 +81,7 @@ function ThoughtLeadershipHome({
         title="Partha Sarthi - Engineering Leadership Thought Leader | AI-Era Engineering Expert"
         description="Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation."
         keywords="engineering thought leader, industry expert, engineering transformation, program turnaround specialist, AI-era leadership, future of engineering, engineering evolution, organizational transformation, technical leadership, engineering advisor"
-        canonical="/"
+        canonical="/leadership"
         type="website"
         image="/social-preview.jpg"
         imageWidth={1200}
@@ -132,7 +125,7 @@ function ThoughtLeadershipHome({
             <div className={styles.authorIntro}>
               <h2 className={styles.authorName}>Partha Sarthi</h2>
               <p className={styles.authorCredentials}>
-                Engineering Thought Leader | Transformation Expert | AI-Era Pioneer | 2X Entrepreneur
+                Engineering Thought Leader | Transformation Expert | AI-Era Pioneer | Former Head of Technology, Aadhaar
               </p>
             </div>
           </div>
@@ -204,49 +197,6 @@ function ThoughtLeadershipHome({
           </div>
         </section>
 
-        {/* ElevateBusiness 360° Portfolio Showcase */}
-        <section className={styles.portfolio}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>
-              Proof of AI-First Engineering
-            </h2>
-            <p className={styles.sectionSubtitle}>
-              AI-enabled B2B platform showcasing modern engineering leadership principles and intelligent automation for textile manufacturing workflows
-            </p>
-            
-            <div className={styles.portfolioShowcase} onClick={handleElevateBusiness360Click}>
-              <div className={styles.portfolioContent}>
-                <h3 className={styles.portfolioTitle}>ElevateBusiness 360°</h3>
-                <p className={styles.portfolioSubtitle}>AI-Enabled Enterprise Platform</p>
-                <p className={styles.portfolioDescription}>
-                  Engineering excellence demonstration built by a solo founder using AI-first development methodology. 
-                  Complete enterprise-grade business platform with zero manual coding, showcasing rapid solo development with AI assistance and intelligent automation.
-                </p>
-                
-                <div className={styles.portfolioHighlights}>
-                  <div className={styles.highlight}>
-                    <span className={styles.highlightNumber}>78</span>
-                    <span className={styles.highlightLabel}>Days</span>
-                  </div>
-                  <div className={styles.highlight}>
-                    <span className={styles.highlightNumber}>61,664</span>
-                    <span className={styles.highlightLabel}>Lines of Code</span>
-                  </div>
-                  <div className={styles.highlight}>
-                    <span className={styles.highlightNumber}>8</span>
-                    <span className={styles.highlightLabel}>Business Modules</span>
-                  </div>
-                  <div className={styles.highlight}>
-                    <span className={styles.highlightNumber}>Zero</span>
-                    <span className={styles.highlightLabel}>Manual Code</span>
-                  </div>
-                </div>
-                
-                <button className={styles.portfolioCta}>Learn About Our Product →</button>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Stories Section - Two Categories */}
         <section className={styles.storiesSection}>

@@ -20,9 +20,7 @@ interface HeaderDropdownProps {
   // Website Navigation Props
   showWebsiteNavigation?: boolean;
   onServicesHub?: () => void;
-  onTurnaroundStories?: () => void;
-  onBlogHome?: () => void;
-  onBookHome?: () => void;
+  onLeadership?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
   onElevateBusiness360?: () => void;
@@ -48,9 +46,7 @@ function HeaderDropdown({
   // Website Navigation Props
   showWebsiteNavigation = false,
   onServicesHub,
-  onTurnaroundStories,
-  onBlogHome,
-  onBookHome,
+  onLeadership,
   onAbout,
   onContact,
   onElevateBusiness360,
@@ -130,22 +126,22 @@ function HeaderDropdown({
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  onElevateBusiness360?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>⚡</span>
-                <span className={styles.itemText}>ElevateBusiness 360°</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
                   onServicesHub?.();
                   setIsOpen(false);
                 }}
               >
                 <span className={styles.itemIcon}>🎯</span>
-                <span className={styles.itemText}>Consulting Services</span>
+                <span className={styles.itemText}>Consulting</span>
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  onLeadership?.();
+                  setIsOpen(false);
+                }}
+              >
+                <span className={styles.itemIcon}>🧠</span>
+                <span className={styles.itemText}>Leadership</span>
               </button>
               <button
                 className={styles.menuItem}
@@ -155,37 +151,7 @@ function HeaderDropdown({
                 }}
               >
                 <span className={styles.itemIcon}>ℹ️</span>
-                <span className={styles.itemText}>About Us</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onBookHome?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>📖</span>
-                <span className={styles.itemText}>Book</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onTurnaroundStories?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>🔄</span>
-                <span className={styles.itemText}>Case Studies</span>
-              </button>
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  onBlogHome?.();
-                  setIsOpen(false);
-                }}
-              >
-                <span className={styles.itemIcon}>📝</span>
-                <span className={styles.itemText}>Stories</span>
+                <span className={styles.itemText}>About</span>
               </button>
               <button
                 className={styles.menuItem}

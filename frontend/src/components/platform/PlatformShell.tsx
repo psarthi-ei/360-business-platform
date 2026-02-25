@@ -32,8 +32,7 @@ interface PlatformShellProps {
   children: React.ReactNode;
   // Website navigation props
   onServicesHub?: () => void;
-  onTurnaroundStories?: () => void;
-  onBlogHome?: () => void;
+  onLeadership?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
   // Page context
@@ -58,8 +57,7 @@ function PlatformShell({
   children,
   // Website navigation props
   onServicesHub,
-  onTurnaroundStories,
-  onBlogHome,
+  onLeadership,
   onAbout,
   onContact,
   // Page context
@@ -132,8 +130,7 @@ function PlatformShell({
           voiceState={voiceState}
           // Website navigation integration
           onServicesHub={onServicesHub}
-          onTurnaroundStories={onTurnaroundStories}
-          onBlogHome={onBlogHome}
+          onLeadership={onLeadership}
           onAbout={onAbout}
           onContact={onContact}
           isPlatformPage={isPlatformPage}

@@ -23,9 +23,7 @@ interface WebsiteHeaderProps {
   // Website Navigation Props
   showWebsiteNavigation?: boolean;
   onServicesHub?: () => void;
-  onTurnaroundStories?: () => void;
-  onBlogHome?: () => void;
-  onBookHome?: () => void;
+  onLeadership?: () => void;
   onAbout?: () => void;
   onContact?: () => void;
   onElevateBusiness360?: () => void;
@@ -51,9 +49,7 @@ function WebsiteHeader({
   // Website Navigation Props
   showWebsiteNavigation = false,
   onServicesHub,
-  onTurnaroundStories,
-  onBlogHome,
-  onBookHome,
+  onLeadership,
   onAbout,
   onContact,
   onElevateBusiness360
@@ -64,14 +60,9 @@ function WebsiteHeader({
   const isActiveRoute = (routePath: string): boolean => {
     const currentPath = location.pathname;
     
-    // Special case for blog routes (both /blog and /blog/* should be active)
-    if (routePath === '/blog') {
-      return currentPath === '/blog' || currentPath.startsWith('/blog/');
-    }
-    
-    // Special case for book routes (both /book and /book/* should be active)
-    if (routePath === '/book') {
-      return currentPath === '/book' || currentPath.startsWith('/book/');
+    // Special case for leadership route
+    if (routePath === '/leadership') {
+      return currentPath === '/leadership';
     }
     
     // Exact match for other routes
@@ -97,45 +88,31 @@ function WebsiteHeader({
           {showWebsiteNavigation && (
             <nav className={styles.websiteNavigation}>
               <button 
-                onClick={onElevateBusiness360} 
-                className={`${styles.navButton} ${location.pathname === '/elevatebusiness-360' ? styles.activeNavButton : ''}`}
+                onClick={onHome} 
+                className={`${styles.navButton} ${location.pathname === '/' ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>ElevateBusiness 360°</span>
+                <span className={styles.navLabel}>Home</span>
               </button>
               
               <button 
                 onClick={onServicesHub} 
                 className={`${styles.navButton} ${isActiveRoute('/services') ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>Consulting Services</span>
+                <span className={styles.navLabel}>Consulting</span>
+              </button>
+              
+              <button 
+                onClick={onLeadership} 
+                className={`${styles.navButton} ${isActiveRoute('/leadership') ? styles.activeNavButton : ''}`}
+              >
+                <span className={styles.navLabel}>Leadership</span>
               </button>
               
               <button 
                 onClick={onAbout} 
                 className={`${styles.navButton} ${isActiveRoute('/about') ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>About Us</span>
-              </button>
-              
-              <button 
-                onClick={onBookHome} 
-                className={`${styles.navButton} ${isActiveRoute('/book') ? styles.activeNavButton : ''}`}
-              >
-                <span className={styles.navLabel}>Book</span>
-              </button>
-              
-              <button 
-                onClick={onTurnaroundStories} 
-                className={`${styles.navButton} ${isActiveRoute('/turnaround-stories') ? styles.activeNavButton : ''}`}
-              >
-                <span className={styles.navLabel}>Case Studies</span>
-              </button>
-              
-              <button 
-                onClick={onBlogHome} 
-                className={`${styles.navButton} ${isActiveRoute('/blog') ? styles.activeNavButton : ''}`}
-              >
-                <span className={styles.navLabel}>Stories</span>
+                <span className={styles.navLabel}>About</span>
               </button>
               
               <button 
@@ -178,9 +155,7 @@ function WebsiteHeader({
             userMode={userMode}
             showWebsiteNavigation={showWebsiteNavigation}
             onServicesHub={onServicesHub}
-            onTurnaroundStories={onTurnaroundStories}
-            onBlogHome={onBlogHome}
-            onBookHome={onBookHome}
+            onLeadership={onLeadership}
             onAbout={onAbout}
             onContact={onContact}
             onElevateBusiness360={onElevateBusiness360}
