@@ -153,6 +153,48 @@
       "order": 10,
       "isPublished": true,
       "slug": "chapter10-compounding-skills"
+    },
+    {
+      "id": "chapter11",
+      "number": 11,
+      "title": "Why Role Fragmentation Breaks in the AI Era",
+      "subtitle": "From Specialization to Problem Ownership",
+      "excerpt": "What happens when the constraint that created these roles no longer dominates? Each role emerged to solve a specific pain. But when AI changes where effort lives, role boundaries begin to distort reality.",
+      "filename": "chapter11.html",
+      "publishedDate": "2026-02-25",
+      "readTime": "16 min read",
+      "section": "Part 4 — The New Engineering Team",
+      "order": 11,
+      "isPublished": true,
+      "slug": "chapter11-role-fragmentation"
+    },
+    {
+      "id": "chapter12",
+      "number": 12,
+      "title": "The AI-Native Product Engineering Team",
+      "subtitle": "The Team as Atomic Unit of Delivery",
+      "excerpt": "The product engineering team becomes the atomic unit of delivery. Not the individual engineer. Not the QA function. Not DevOps. Not management. The team. When AI accelerates implementation, accountability must consolidate.",
+      "filename": "chapter12.html",
+      "publishedDate": "2026-02-25",
+      "readTime": "18 min read",
+      "section": "Part 4 — The New Engineering Team",
+      "order": 12,
+      "isPublished": true,
+      "slug": "chapter12-ai-native-team"
+    },
+    {
+      "id": "chapter13",
+      "number": 13,
+      "title": "Platform, Reliability, and Security as Enablement",
+      "subtitle": "From Ownership to Enablement",
+      "excerpt": "If the product engineering team becomes the atomic unit of delivery, what happens to platform, reliability, and security? They don't disappear. They become more important. But their role changes from ownership to enablement.",
+      "filename": "chapter13.html",
+      "publishedDate": "2026-02-25",
+      "readTime": "20 min read",
+      "section": "Part 4 — The New Engineering Team",
+      "order": 13,
+      "isPublished": true,
+      "slug": "chapter13-platform-enablement"
     }
   ]
 }
