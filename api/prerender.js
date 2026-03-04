@@ -50,6 +50,20 @@ async function loadBookMetadata() {
   }
 }
 
+// Load turnaround stories metadata from static file
+async function loadTurnaroundStoriesMetadata() {
+  try {
+    const response = await fetch('https://elevateidea.com/content/turnaround-stories-metadata.json');
+    if (!response.ok) {
+      throw new Error('Failed to load turnaround stories metadata');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error loading turnaround stories metadata:', error);
+    return [];
+  }
+}
+
 // Get blog post by slug
 async function getBlogPost(slug) {
   const posts = await loadBlogMetadata();
@@ -58,8 +72,15 @@ async function getBlogPost(slug) {
 
 // Get book chapter by slug
 async function getBookChapter(slug) {
-  const chapters = await loadBookMetadata();
+  const bookData = await loadBookMetadata();
+  const chapters = bookData.chapters || [];
   return chapters.find(chapter => chapter.slug === slug) || null;
+}
+
+// Get turnaround story by slug
+async function getTurnaroundStory(slug) {
+  const stories = await loadTurnaroundStoriesMetadata();
+  return stories.find(story => story.slug === slug) || null;
 }
 
 // Generate meta tags based on content type
@@ -133,6 +154,38 @@ function generateMetaTags(type, data, slug) {
         description: 'Read real stories of business transformation and technology turnarounds. Learn from successful projects across banking, retail, and government sectors.',
         image: `${baseUrl}/images/turnaround-stories-og.jpg`,
         url: `${baseUrl}/turnaround-stories`,
+        type: 'website',
+        author: 'ElevateIdea Technologies'
+      };
+      
+    case 'turnaround-story':
+      if (data) {
+        return {
+          title: `${data.title} | ElevateIdea`,
+          description: data.excerpt || 'Read this business transformation case study from ElevateIdea.',
+          image: `${baseUrl}/images/turnaround-case-og.jpg`,
+          url: `${baseUrl}/turnaround-stories/${data.slug}`,
+          type: 'article',
+          author: 'ElevateIdea Technologies',
+          publishedTime: data.publishedDate,
+          tags: ['Business Transformation', data.category, 'Technology Leadership']
+        };
+      }
+      return {
+        title: 'Business Transformation Case Study | ElevateIdea',
+        description: 'Read this real business transformation case study from ElevateIdea Technologies.',
+        image: `${baseUrl}/images/turnaround-case-og.jpg`,
+        url: `${baseUrl}/turnaround-stories`,
+        type: 'article',
+        author: 'ElevateIdea Technologies'
+      };
+      
+    case 'leadership':
+      return {
+        title: 'Technology Leadership & Executive Profile | ElevateIdea',
+        description: 'Learn about ElevateIdea\'s technology leadership experience. 20+ years in enterprise software, AI transformation, and business scaling.',
+        image: `${baseUrl}/images/leadership-og.jpg`,
+        url: `${baseUrl}/leadership`,
         type: 'website',
         author: 'ElevateIdea Technologies'
       };
@@ -271,6 +324,9 @@ module.exports = async function handler(req, res) {
       } else if (type === 'book' && slug) {
         const chapter = await getBookChapter(slug);
         metaTags = generateMetaTags('book', chapter, slug);
+      } else if (type === 'turnaround-story' && slug) {
+        const story = await getTurnaroundStory(slug);
+        metaTags = generateMetaTags('turnaround-story', story, slug);
       } else {
         metaTags = generateMetaTags(type);
       }

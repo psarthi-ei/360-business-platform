@@ -12,6 +12,14 @@
       "destination": "/api/prerender?type=book&slug=$slug&path=/book/:slug"
     },
     {
+      "source": "/book",
+      "destination": "/api/prerender?type=book&path=/book"
+    },
+    {
+      "source": "/turnaround-stories/:slug",
+      "destination": "/api/prerender?type=turnaround-story&slug=$slug&path=/turnaround-stories/:slug"
+    },
+    {
       "source": "/services",
       "destination": "/api/prerender?type=services&path=/services"
     },
@@ -22,6 +30,10 @@
     {
       "source": "/contact",
       "destination": "/api/prerender?type=contact&path=/contact"
+    },
+    {
+      "source": "/leadership",
+      "destination": "/api/prerender?type=leadership&path=/leadership"
     },
     {
       "source": "/turnaround-stories",
