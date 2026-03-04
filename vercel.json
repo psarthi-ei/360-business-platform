@@ -2,48 +2,6 @@
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/build",
-  "rewrites": [
-    {
-      "source": "/blog/([^/]+)",
-      "destination": "/api/prerender?type=blog&slug=$1"
-    },
-    {
-      "source": "/book/([^/]+)", 
-      "destination": "/api/prerender?type=book&slug=$1"
-    },
-    {
-      "source": "/turnaround-stories/([^/]+)",
-      "destination": "/api/prerender?type=turnaround-story&slug=$1"
-    },
-    {
-      "source": "/book",
-      "destination": "/api/prerender?type=book&path=/book"
-    },
-    {
-      "source": "/services",
-      "destination": "/api/prerender?type=services&path=/services"
-    },
-    {
-      "source": "/about",
-      "destination": "/api/prerender?type=about&path=/about"
-    },
-    {
-      "source": "/contact",
-      "destination": "/api/prerender?type=contact&path=/contact"
-    },
-    {
-      "source": "/leadership",
-      "destination": "/api/prerender?type=leadership&path=/leadership"
-    },
-    {
-      "source": "/turnaround-stories",
-      "destination": "/api/prerender?type=turnaround&path=/turnaround-stories"
-    },
-    {
-      "source": "/",
-      "destination": "/api/prerender?type=home&path=/"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
