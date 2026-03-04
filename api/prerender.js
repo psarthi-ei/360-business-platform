@@ -307,8 +307,21 @@ module.exports = async function handler(req, res) {
     
     // Check if this is a crawler
     if (!isCrawler(userAgent)) {
-      // For regular users, redirect to the React app
-      return res.redirect(302, '/');
+      // For regular users, serve the React app's index.html
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const indexPath = path.join(process.cwd(), 'frontend/build/index.html');
+        const indexHtml = fs.readFileSync(indexPath, 'utf-8');
+        
+        res.setHeader('Content-Type', 'text/html');
+        res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        return res.status(200).send(indexHtml);
+      } catch (error) {
+        console.error('Error serving React app:', error);
+        // Fallback: redirect to home if file reading fails
+        return res.redirect(302, 'https://elevateidea.com');
+      }
     }
 
     // Extract parameters from URL
