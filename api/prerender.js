@@ -91,8 +91,8 @@ function generateMetaTags(type, data, slug) {
     case 'blog':
       if (data) {
         return {
-          title: `${data.title} | ElevateIdea`,
-          description: data.excerpt || data.content?.substring(0, 160) || 'Read this business transformation story from ElevateIdea.',
+          title: `${data.title} - ElevateIdea`,
+          description: `${data.excerpt || data.content?.substring(0, 160)}...`,
           image: data.imagePath ? `${baseUrl}${data.imagePath}` : `${baseUrl}/images/blog-default-og.jpg`,
           url: `${baseUrl}/blog/${data.slug}`,
           type: 'article',
@@ -106,8 +106,8 @@ function generateMetaTags(type, data, slug) {
     case 'book':
       if (data) {
         return {
-          title: `${data.title} | Engineering in the AI Era`,
-          description: data.excerpt || 'Read this chapter from Engineering in the AI Era book.',
+          title: `${data.title} - ElevateIdea`,
+          description: data.excerpt,
           image: `${baseUrl}/images/book-chapter-og.jpg`,
           url: `${baseUrl}/book/${data.slug}`,
           type: 'article',
@@ -120,8 +120,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'services':
       return {
-        title: 'Strategic Technology Partnership for Early-Stage Startups | ElevateIdea',
-        description: 'AI-era strategic technology partnership for early-stage startups. 30-day MVP development, project acceleration, and scalability solutions with 20+ years experience.',
+        title: 'Consulting - ElevateIdea',
+        description: 'ElevateIdea provides strategic technology partnership for early-stage startups. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Strategic project acceleration and scalability solutions.',
         image: `${baseUrl}/images/services-og.jpg`,
         url: `${baseUrl}/services`,
         type: 'website',
@@ -130,8 +130,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'about':
       return {
-        title: 'About ElevateIdea - Technology Leadership & Business Transformation',
-        description: '20+ years of technology leadership experience helping businesses transform. Learn about our journey and expertise in AI-era development.',
+        title: 'About Us - ElevateIdea',
+        description: 'ElevateIdea\'s vision: empower small & medium businesses to scale and innovate. Founded by 20+ year technology veteran with 6 major turnarounds. Digitizing Manufacturing MSMEs with 360° Business Platform.',
         image: `${baseUrl}/images/about-og.jpg`,
         url: `${baseUrl}/about`,
         type: 'website',
@@ -140,8 +140,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'contact':
       return {
-        title: 'Contact ElevateIdea - Start Your Business Transformation',
-        description: 'Ready to accelerate your startup with AI-powered development? Contact ElevateIdea for strategic technology partnership and 30-day MVP delivery.',
+        title: 'Contact - ElevateIdea',
+        description: 'Get in touch with ElevateIdea Technologies for AI-accelerated business solutions. Whether you\'re a textile manufacturer, enterprise seeking consulting, or investor - let\'s connect.',
         image: `${baseUrl}/images/contact-og.jpg`,
         url: `${baseUrl}/contact`,
         type: 'website',
@@ -150,8 +150,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'turnaround':
       return {
-        title: 'Turnaround Stories - Real Business Transformation Cases | ElevateIdea',
-        description: 'Read real stories of business transformation and technology turnarounds. Learn from successful projects across banking, retail, and government sectors.',
+        title: 'Case Studies - ElevateIdea',
+        description: 'Real corporate turnaround experiences from ElevateIdea founder. 20+ years experience across banks, government projects, startups, retailers. 6 major turnarounds, $15M+ recovery value.',
         image: `${baseUrl}/images/turnaround-stories-og.jpg`,
         url: `${baseUrl}/turnaround-stories`,
         type: 'website',
@@ -161,7 +161,7 @@ function generateMetaTags(type, data, slug) {
     case 'turnaround-story':
       if (data) {
         return {
-          title: `${data.title} | ElevateIdea`,
+          title: `${data.title} - ElevateIdea`,
           description: data.excerpt || 'Read this business transformation case study from ElevateIdea.',
           image: `${baseUrl}/images/turnaround-case-og.jpg`,
           url: `${baseUrl}/turnaround-stories/${data.slug}`,
@@ -172,7 +172,7 @@ function generateMetaTags(type, data, slug) {
         };
       }
       return {
-        title: 'Business Transformation Case Study | ElevateIdea',
+        title: 'Business Transformation Case Study - ElevateIdea',
         description: 'Read this real business transformation case study from ElevateIdea Technologies.',
         image: `${baseUrl}/images/turnaround-case-og.jpg`,
         url: `${baseUrl}/turnaround-stories`,
@@ -182,8 +182,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'leadership':
       return {
-        title: 'Technology Leadership & Executive Profile | ElevateIdea',
-        description: 'Learn about ElevateIdea\'s technology leadership experience. 20+ years in enterprise software, AI transformation, and business scaling.',
+        title: 'Leadership - ElevateIdea',
+        description: 'Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation.',
         image: `${baseUrl}/images/leadership-og.jpg`,
         url: `${baseUrl}/leadership`,
         type: 'website',
@@ -208,8 +208,8 @@ function getDefaultHomeMeta() {
 
 function getDefaultBlogMeta() {
   return {
-    title: 'Business Transformation Stories | ElevateIdea Blog',
-    description: 'Read the latest business insights and transformation strategies from ElevateIdea. Real-world examples of MSME growth and technology adoption.',
+    title: 'Stories - ElevateIdea',
+    description: 'Discover AI-powered business insights, MSME growth strategies, and technology transformation tips from ElevateIdea. Expert perspectives on scaling textile manufacturing businesses.',
     image: 'https://elevateidea.com/images/blog-home-og.jpg',
     url: 'https://elevateidea.com/blog',
     type: 'website',
@@ -219,8 +219,8 @@ function getDefaultBlogMeta() {
 
 function getDefaultBookMeta() {
   return {
-    title: 'Engineering in the AI Era | ElevateIdea Book',
-    description: 'A comprehensive guide to software engineering in the AI era. Learn how AI transforms development practices, team structures, and technical leadership.',
+    title: 'Book - ElevateIdea',
+    description: 'When Code Is No Longer the Bottleneck - A book about building future-ready engineering organizations in the AI era. Written in public, chapter by chapter.',
     image: 'https://elevateidea.com/images/book-home-og.jpg',
     url: 'https://elevateidea.com/book',
     type: 'website',
