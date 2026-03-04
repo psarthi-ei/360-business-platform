@@ -325,7 +325,29 @@ module.exports = async function handler(req, res) {
     }
 
     // Extract parameters from URL
-    const { type, slug } = req.query;
+    let { type, slug, path } = req.query;
+    
+    // Parse path parameter for new routing format
+    if (path && !type) {
+      const pathParts = path.split('/').filter(Boolean);
+      
+      if (pathParts.length === 0) {
+        // Root path - home page
+        type = 'home';
+      } else if (pathParts[0] === 'blog' && pathParts[1]) {
+        type = 'blog';
+        slug = pathParts[1];
+      } else if (pathParts[0] === 'book' && pathParts[1]) {
+        type = 'book';
+        slug = pathParts[1];
+      } else if (pathParts[0] === 'turnaround-stories' && pathParts[1]) {
+        type = 'turnaround-story';
+        slug = pathParts[1];
+      } else {
+        // Single path segments: leadership, services, about, contact, etc.
+        type = pathParts[0];
+      }
+    }
     
     let metaTags = getDefaultHomeMeta();
     

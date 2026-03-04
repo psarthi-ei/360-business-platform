@@ -4,6 +4,17 @@
   "outputDirectory": "frontend/build",
   "rewrites": [
     {
+      "source": "/(.*)",
+      "destination": "/api/prerender.js?path=$1",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|facebot|twitterbot|whatsapp|linkedinbot|googlebot|bingbot|slackbot|telegrambot|skypeuripreview|discordbot).*"
+        }
+      ]
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
