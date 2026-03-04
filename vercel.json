@@ -12,12 +12,12 @@
       "destination": "/api/prerender?type=book&slug=$slug&path=/book/:slug"
     },
     {
-      "source": "/book",
-      "destination": "/api/prerender?type=book&path=/book"
-    },
-    {
       "source": "/turnaround-stories/:slug",
       "destination": "/api/prerender?type=turnaround-story&slug=$slug&path=/turnaround-stories/:slug"
+    },
+    {
+      "source": "/book",
+      "destination": "/api/prerender?type=book&path=/book"
     },
     {
       "source": "/services",
@@ -40,8 +40,8 @@
       "destination": "/api/prerender?type=turnaround&path=/turnaround-stories"
     },
     {
-      "source": "/(.*)",
-      "destination": "/api/prerender?type=home&path=$1"
+      "source": "/",
+      "destination": "/api/prerender?type=home&path=/"
     }
   ],
   "headers": [
