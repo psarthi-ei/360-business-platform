@@ -4,16 +4,16 @@
   "outputDirectory": "frontend/build",
   "rewrites": [
     {
-      "source": "/blog/:slug",
-      "destination": "/api/prerender?type=blog&slug=$slug&path=/blog/:slug"
+      "source": "/blog/([^/]+)",
+      "destination": "/api/prerender?type=blog&slug=$1"
     },
     {
-      "source": "/book/:slug", 
-      "destination": "/api/prerender?type=book&slug=$slug&path=/book/:slug"
+      "source": "/book/([^/]+)", 
+      "destination": "/api/prerender?type=book&slug=$1"
     },
     {
-      "source": "/turnaround-stories/:slug",
-      "destination": "/api/prerender?type=turnaround-story&slug=$slug&path=/turnaround-stories/:slug"
+      "source": "/turnaround-stories/([^/]+)",
+      "destination": "/api/prerender?type=turnaround-story&slug=$1"
     },
     {
       "source": "/book",
