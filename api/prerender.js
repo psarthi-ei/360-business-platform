@@ -1,4 +1,4 @@
-// Vercel Edge Function for Social Media Meta Tag Prerendering
+// Vercel Serverless Function for Social Media Meta Tag Prerendering
 // This function detects social media crawlers and serves prerendered HTML with correct meta tags
 
 // Simple crawler detection
@@ -247,27 +247,19 @@ function generatePrerenderedHTML(metaTags) {
 </html>`;
 }
 
-// Main edge function handler
-export default async function handler(request) {
+// Main serverless function handler
+module.exports = async function handler(req, res) {
   try {
-    const url = new URL(request.url);
-    const userAgent = request.headers.get('user-agent') || '';
+    const userAgent = req.headers['user-agent'] || '';
     
     // Check if this is a crawler
     if (!isCrawler(userAgent)) {
-      // For regular users, return a simple response that lets Vercel serve the React app
-      return new Response(null, {
-        status: 200,
-        headers: {
-          'Content-Type': 'text/html',
-          'Cache-Control': 'public, max-age=3600'
-        }
-      });
+      // For regular users, redirect to the React app
+      return res.redirect(302, '/');
     }
 
     // Extract parameters from URL
-    const type = url.searchParams.get('type') || 'home';
-    const slug = url.searchParams.get('slug');
+    const { type, slug } = req.query;
     
     let metaTags = getDefaultHomeMeta();
     
@@ -290,27 +282,22 @@ export default async function handler(request) {
     // Generate and return prerendered HTML
     const html = generatePrerenderedHTML(metaTags);
     
-    return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html',
-        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-        'X-Prerendered': 'true'
-      }
-    });
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    res.setHeader('X-Prerendered', 'true');
+    
+    return res.status(200).send(html);
     
   } catch (error) {
-    console.error('Edge function error:', error);
+    console.error('Serverless function error:', error);
     
     // Return fallback HTML on error
     const fallbackMeta = getDefaultHomeMeta();
     const fallbackHTML = generatePrerenderedHTML(fallbackMeta);
     
-    return new Response(fallbackHTML, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html',
-        'Cache-Control': 'public, max-age=300'
-      }
-    });
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    
+    return res.status(200).send(fallbackHTML);
   }
-}
+};

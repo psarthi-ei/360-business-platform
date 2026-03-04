@@ -2,12 +2,6 @@
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/build",
-  "functions": {
-    "api/prerender.js": {
-      "runtime": "nodejs18.x",
-      "maxDuration": 10
-    }
-  },
   "rewrites": [
     {
       "source": "/blog/:slug",
