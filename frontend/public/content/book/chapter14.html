@@ -1,0 +1,452 @@
+<h1>Chapter 14</h1>
+<h2>SDLC When AI Is Always in the Loop</h2>
+
+<p>
+Every engineering organization follows some version of a Software Development Lifecycle.
+</p>
+
+<p>
+The names may change.<br>
+The tooling may change.<br>
+The diagrams may change.
+</p>
+
+<p>
+But the underlying flow is usually familiar.
+</p>
+
+<p>
+A feature begins as an idea or requirement.<br>
+Engineers design how it should work.<br>
+Code is written.<br>
+The system is tested.<br>
+Then the change moves through different environments until it finally reaches production.
+</p>
+
+<p>
+In many organizations that journey looks something like this:
+</p>
+
+<p>
+Development → Integration testing → User acceptance → Staging → Production.
+</p>
+
+<p>
+The environments might be called different things — SIT, UAT, staging, pre-production — but the idea is the same.
+</p>
+
+<p>
+Each step exists to answer a different question.
+</p>
+
+<p>
+Does the code work in isolation?<br>
+Does it work with other systems?<br>
+Does it match what the business expects?<br>
+Will it behave safely under production conditions?
+</p>
+
+<p>
+Only after passing through these checks does the feature reach real users.
+</p>
+
+<p>
+For a long time, this structure made perfect sense.
+</p>
+
+<p>
+Not because it was elegant.
+</p>
+
+<p>
+But because it matched the reality of how software was built.
+</p>
+
+<p>
+Writing software was slow.
+</p>
+
+<p>
+Developers spent most of their time implementing functionality.<br>
+Testing required manual effort.<br>
+Deployments were risky and infrequent.
+</p>
+
+<p>
+The lifecycle existed to manage the uncertainty introduced by human-written code.
+</p>
+
+<p>
+In other words:
+</p>
+
+<p>
+<strong>The entire SDLC was built around the assumption that implementation was the hardest and slowest step.</strong>
+</p>
+
+<h3>When the Bottleneck Moves</h3>
+
+<p>
+AI changes that assumption.
+</p>
+
+<p>
+Today, large portions of implementation can be generated quickly.
+</p>
+
+<p>
+Boilerplate code appears almost instantly.<br>
+Complex integrations can be scaffolded within minutes.<br>
+Even unfamiliar technologies become easier to work with.
+</p>
+
+<p>
+Implementation effort begins to collapse.
+</p>
+
+<p>
+But the rest of the lifecycle does not collapse automatically.
+</p>
+
+<p>
+The testing environments remain.<br>
+Approval processes remain.<br>
+Deployment pipelines remain.
+</p>
+
+<p>
+Suddenly something interesting happens.
+</p>
+
+<p>
+The stage that used to take the longest — development — becomes the fastest part of the process.
+</p>
+
+<p>
+Everything else becomes the bottleneck.
+</p>
+
+<p>
+Features wait in queues.<br>
+Testing environments become overloaded.<br>
+Releases pile up in staging.
+</p>
+
+<p>
+The lifecycle that once protected the system now begins to slow it down.
+</p>
+
+<p>
+Not because the stages are wrong.
+</p>
+
+<p>
+But because the assumptions behind them have changed.
+</p>
+
+<h3>Speed Creates a Different Risk</h3>
+
+<p>
+At first glance, faster development sounds like an obvious advantage.
+</p>
+
+<p>
+But speed introduces a new kind of challenge.
+</p>
+
+<p>
+When engineers write code manually, the pace of change naturally limits how quickly systems evolve.
+</p>
+
+<p>
+AI removes that natural limit.
+</p>
+
+<p>
+Teams can now introduce more changes in less time.
+</p>
+
+<p>
+Which means systems can also become complex much faster.
+</p>
+
+<p>
+Two risks begin to appear.
+</p>
+
+<p>
+The first is <strong>architectural drift</strong>.
+</p>
+
+<p>
+When features are added quickly, the structure of the system can slowly erode.
+</p>
+
+<p>
+Service boundaries blur.<br>
+Dependencies multiply.<br>
+Design decisions made under pressure accumulate.
+</p>
+
+<p>
+The system may still function — but it becomes harder to reason about.
+</p>
+
+<p>
+The second risk is <strong>loss of evolvability</strong>.
+</p>
+
+<p>
+A system that works today may become increasingly difficult to modify tomorrow.
+</p>
+
+<p>
+When architecture becomes tangled, every new feature requires more effort than the previous one.
+</p>
+
+<p>
+This is the quiet danger of extremely fast development.
+</p>
+
+<p>
+Speed can gradually turn into complexity.
+</p>
+
+<p>
+And complexity eventually slows everything down.
+</p>
+
+<h3>The Lifecycle Still Matters</h3>
+
+<p>
+AI does not eliminate the Software Development Lifecycle.
+</p>
+
+<p>
+Large systems still require validation.<br>
+Integration still needs verification.<br>
+Production environments still require careful handling.
+</p>
+
+<p>
+The lifecycle remains necessary.
+</p>
+
+<p>
+But the <strong>center of gravity shifts</strong>.
+</p>
+
+<p>
+Earlier models focused on controlling implementation risk.
+</p>
+
+<p>
+The modern lifecycle must focus on <strong>protecting system integrity while development accelerates</strong>.
+</p>
+
+<p>
+This means three things become more important than ever.
+</p>
+
+<p>
+Clarity of the problem being solved.<br>
+Integrity of the system design.<br>
+Continuous validation of system behavior.
+</p>
+
+<p>
+The lifecycle must now revolve around these elements.
+</p>
+
+<h3>A More Realistic Flow of Work</h3>
+
+<p>
+Instead of rigid stages, the lifecycle becomes a continuous feedback loop.
+</p>
+
+<p>
+A feature typically moves through the following flow:
+</p>
+
+<p>
+Definition of Ready<br>
+→ Design discussion<br>
+→ Implementation with AI<br>
+→ Automated validation<br>
+→ Structural review<br>
+→ Deployment<br>
+→ Production observation<br>
+→ Iteration
+</p>
+
+<p>
+Each step serves a specific purpose.
+</p>
+
+<p>
+Definition of Ready ensures the team understands what outcome the system must produce.
+</p>
+
+<p>
+Design discussion protects the architecture before implementation begins.
+</p>
+
+<p>
+Automated validation ensures the system behaves as expected.
+</p>
+
+<p>
+Structural review checks that the design decisions align with the overall system.
+</p>
+
+<p>
+Production observation provides the final confirmation that the system works under real conditions.
+</p>
+
+<p>
+This flow does not eliminate environments or validation steps.
+</p>
+
+<p>
+But it reframes them around <strong>feedback and system health</strong>, rather than slow implementation.
+</p>
+
+<h3>Definition of Ready</h3>
+
+<p>
+Work should not begin simply because a ticket exists.
+</p>
+
+<p>
+A feature is ready when the team understands the intended outcome.
+</p>
+
+<p>
+What problem are we solving?<br>
+What behavior should the system produce?<br>
+What constraints must be respected?<br>
+What does success look like?
+</p>
+
+<p>
+This clarity becomes even more important when AI participates in development.
+</p>
+
+<p>
+AI can generate implementation quickly.
+</p>
+
+<p>
+But it cannot compensate for poorly defined intent.
+</p>
+
+<p>
+When the input is vague, the output will be vague.
+</p>
+
+<p>
+Definition of Ready ensures that development begins with clear expectations.
+</p>
+
+<h3>Definition of Done</h3>
+
+<p>
+Many teams declare work complete too early.
+</p>
+
+<p>
+Code merged into the main branch.<br>
+Tests passing in staging.<br>
+Deployment ready for release.
+</p>
+
+<p>
+But the system has not yet experienced real-world conditions.
+</p>
+
+<p>
+Users have not interacted with the feature.<br>
+Production traffic has not exercised the system.
+</p>
+
+<p>
+The final validation always happens in production.
+</p>
+
+<p>
+For this reason, the definition of completion must be stricter.
+</p>
+
+<p>
+<strong>Work is not done until it runs successfully in production.</strong>
+</p>
+
+<p>
+Intermediate environments reduce risk, but they do not provide the final answer.
+</p>
+
+<p>
+Production does.
+</p>
+
+<p>
+Only when a feature behaves correctly under real conditions can it truly be considered finished.
+</p>
+
+<p>
+Everything else is preparation.
+</p>
+
+<h3>The Real Purpose of the Modern SDLC</h3>
+
+<p>
+The Software Development Lifecycle has always existed to manage risk.
+</p>
+
+<p>
+In the past, the primary risk was implementation errors.
+</p>
+
+<p>
+In the AI era, the risk shifts.
+</p>
+
+<p>
+The danger is no longer that engineers cannot write code quickly.
+</p>
+
+<p>
+The danger is that systems can evolve faster than teams can fully understand them.
+</p>
+
+<p>
+The purpose of the modern SDLC is therefore different.
+</p>
+
+<p>
+It ensures that speed does not destroy structure.
+</p>
+
+<p>
+It ensures that rapid development does not compromise system integrity.
+</p>
+
+<p>
+And it ensures that engineering teams can continue evolving their systems without losing control of them.
+</p>
+
+<p>
+Because when AI is always in the loop, the most important question is no longer:
+</p>
+
+<p>
+How fast can we build software?
+</p>
+
+<p>
+The real question becomes:
+</p>
+
+<p>
+<strong>How fast can we build software while keeping the system understandable, stable, and ready to evolve?</strong>
+</p>

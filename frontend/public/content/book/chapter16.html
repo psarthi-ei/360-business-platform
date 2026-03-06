@@ -1,0 +1,372 @@
+<h1>Chapter 16</h1>
+<h2>From Code Review to Thinking Review</h2>
+
+<p>
+Code review has long been one of the most widely practiced quality mechanisms in software engineering.
+</p>
+
+<p>
+Before any change reaches production, another engineer examines the code.
+</p>
+
+<p>
+They look for mistakes.<br>
+They check the logic.<br>
+They verify that the implementation follows the expected patterns.
+</p>
+
+<p>
+In theory, this practice serves multiple purposes.
+</p>
+
+<p>
+It catches defects before they reach production.<br>
+It spreads knowledge across the team.<br>
+It ensures consistency in how the system evolves.
+</p>
+
+<p>
+For many years, code review worked well because code was written entirely by humans.
+</p>
+
+<p>
+Developers carefully crafted each function, each class, each integration.
+</p>
+
+<p>
+Reviewing the code meant reviewing the developer’s thinking.
+</p>
+
+<p>
+But when AI becomes a significant participant in writing code, the dynamics begin to change.
+</p>
+
+<h3>The Volume Problem</h3>
+
+<p>
+AI dramatically increases the amount of code that can be produced in a short time.
+</p>
+
+<p>
+Developers can generate large blocks of implementation quickly.
+</p>
+
+<p>
+Boilerplate disappears.<br>
+Infrastructure scaffolding appears instantly.<br>
+Even complex patterns can be generated within minutes.
+</p>
+
+<p>
+This creates a new challenge.
+</p>
+
+<p>
+The amount of code grows faster than humans can realistically review line by line.
+</p>
+
+<p>
+A reviewer may find themselves looking at hundreds of lines of generated code.
+</p>
+
+<p>
+Trying to verify every conditional branch.<br>
+Every null check.<br>
+Every implementation detail.
+</p>
+
+<p>
+In practice, this quickly becomes unsustainable.
+</p>
+
+<p>
+Code review begins to turn into a superficial exercise.
+</p>
+
+<p>
+Reviewers skim the code.<br>
+Approve the pull request.<br>
+And hope that automated tests catch any real problems.
+</p>
+
+<p>
+The original intent of code review starts to weaken.
+</p>
+
+<h3>The Illusion of Line-by-Line Review</h3>
+
+<p>
+Even before AI, the effectiveness of detailed code reviews was often overstated.
+</p>
+
+<p>
+In many teams, reviewers focused on minor issues:
+</p>
+
+<p>
+Formatting.<br>
+Variable naming.<br>
+Style consistency.
+</p>
+
+<p>
+Meanwhile, deeper architectural questions often received less attention.
+</p>
+
+<p>
+Does this change introduce unnecessary coupling?<br>
+Does it violate existing system boundaries?<br>
+Will this design scale as the system evolves?
+</p>
+
+<p>
+These questions matter far more than small syntax details.
+</p>
+
+<p>
+But they are harder to evaluate.
+</p>
+
+<p>
+As AI accelerates implementation, this imbalance becomes even more obvious.
+</p>
+
+<p>
+Reviewing syntax becomes less valuable.
+</p>
+
+<p>
+Reviewing intent becomes far more important.
+</p>
+
+<h3>What Actually Matters in a Review</h3>
+
+<p>
+When engineers review code today, the most valuable questions are rarely about syntax.
+</p>
+
+<p>
+They are about structure.
+</p>
+
+<p>
+Does this change respect the architecture of the system?
+</p>
+
+<p>
+Does it introduce hidden dependencies?
+</p>
+
+<p>
+Does it make the system easier or harder to evolve?
+</p>
+
+<p>
+Does it align with existing design patterns?
+</p>
+
+<p>
+These are not questions that require examining every line of code.
+</p>
+
+<p>
+They require understanding the <strong>design decisions behind the change</strong>.
+</p>
+
+<p>
+This shifts the focus of review away from implementation details.
+</p>
+
+<p>
+And toward engineering judgment.
+</p>
+
+<h3>The Rise of Thinking Review</h3>
+
+<p>
+In an AI-assisted development environment, the purpose of review changes.
+</p>
+
+<p>
+Instead of reviewing code line by line, teams review the thinking behind the change.
+</p>
+
+<p>
+This type of review focuses on:
+</p>
+
+<p>
+Architectural decisions.<br>
+System boundaries.<br>
+Long-term maintainability.<br>
+Impact on other components.
+</p>
+
+<p>
+The reviewer asks:
+</p>
+
+<p>
+Why was this approach chosen?
+</p>
+
+<p>
+How does this change interact with the rest of the system?
+</p>
+
+<p>
+What assumptions does it introduce?
+</p>
+
+<p>
+What could break if this component evolves?
+</p>
+
+<p>
+These discussions protect the long-term health of the system.
+</p>
+
+<p>
+They ensure that rapid development does not slowly erode the structure of the architecture.
+</p>
+
+<h3>Supporting Signals for Review</h3>
+
+<p>
+Thinking reviews are supported by other signals produced during development.
+</p>
+
+<p>
+Automated tests confirm functional behavior.
+</p>
+
+<p>
+Validation reports indicate whether the system behaves correctly.
+</p>
+
+<p>
+Monitoring tools reveal production behavior.
+</p>
+
+<p>
+Together, these signals reduce the need to manually inspect every implementation detail.
+</p>
+
+<p>
+Instead, reviewers focus on the decisions that shape the system.
+</p>
+
+<h3>Collaboration Over Inspection</h3>
+
+<p>
+When review becomes a thinking exercise, the tone of the process changes.
+</p>
+
+<p>
+Traditional code review sometimes feels like inspection.
+</p>
+
+<p>
+One engineer checks another engineer’s work.
+</p>
+
+<p>
+Errors are pointed out.<br>
+Corrections are requested.
+</p>
+
+<p>
+In contrast, thinking review is closer to collaboration.
+</p>
+
+<p>
+Engineers discuss design trade-offs.
+</p>
+
+<p>
+They evaluate the long-term consequences of decisions.
+</p>
+
+<p>
+The conversation becomes less about mistakes and more about engineering judgment.
+</p>
+
+<h3>A New Role for Senior Engineers</h3>
+
+<p>
+As this shift occurs, the role of experienced engineers becomes even more important.
+</p>
+
+<p>
+Their value is not in reviewing syntax.
+</p>
+
+<p>
+It is in recognizing patterns.
+</p>
+
+<p>
+Understanding architectural implications.
+</p>
+
+<p>
+Anticipating how the system will evolve.
+</p>
+
+<p>
+Senior engineers help ensure that the system continues to grow in a coherent way.
+</p>
+
+<p>
+They act as guardians of system integrity.
+</p>
+
+<p>
+Not by policing code.
+</p>
+
+<p>
+But by guiding decisions.
+</p>
+
+<h3>Protecting System Integrity</h3>
+
+<p>
+AI allows software systems to evolve faster than ever.
+</p>
+
+<p>
+But speed without structure creates fragile systems.
+</p>
+
+<p>
+Code review once acted as a safety mechanism for implementation errors.
+</p>
+
+<p>
+In the AI era, the safety mechanism must shift toward protecting architectural integrity.
+</p>
+
+<p>
+This is why the most valuable reviews today focus on thinking.
+</p>
+
+<p>
+Not typing.
+</p>
+
+<p>
+Because the real question is no longer:
+</p>
+
+<p>
+Did someone write this code correctly?
+</p>
+
+<p>
+The real question becomes:
+</p>
+
+<p>
+<strong>Does this change make the system stronger or weaker over time?</strong>
+</p>
