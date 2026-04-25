@@ -21,8 +21,8 @@ function ContactPage({
     <>
       <SEO
         title="Contact - ElevateIdea"
-        description="Get in touch with ElevateIdea Technologies for AI-accelerated business solutions. Whether you're a textile manufacturer, enterprise seeking consulting, or investor - let's connect."
-        keywords="ElevateIdea contact, textile manufacturer consulting, MSME business solutions, ElevateBusiness 360, AI business transformation"
+        description="Get in touch with ElevateIdea Technologies for strategic technology partnership. Whether you're an early-stage startup founder, tech entrepreneur, or investor interested in AI-era development - let's connect."
+        keywords="ElevateIdea contact, strategic technology partner, early-stage startup consulting, AI-era development, startup technology solutions, MVP development"
         canonical="/contact"
       />
       <div className={styles.contactPage}>
@@ -31,15 +31,15 @@ function ContactPage({
           {/* Hero Section */}
           <section className={styles.hero}>
             <h1 className={styles.heroTitle}>
-              Let's Connect
+              Ready to Build 10X Faster in the AI Era?
             </h1>
             <p className={styles.heroSubtitle}>
-              Whether you're a textile manufacturer ready to transform your business, 
-              an enterprise seeking consulting services, or an investor interested in 
-              India's MSME technology revolution - we'd love to hear from you.
+              Whether you're an early-stage startup founder ready for 30-day MVP development, 
+              a tech entrepreneur seeking strategic guidance, or an investor interested in 
+              AI-era development methodology - we'd love to hear from you.
             </p>
             <button className={styles.heroCta} onClick={handleConnectClick}>
-              Connect with Us
+              Start the Conversation
             </button>
           </section>
 
