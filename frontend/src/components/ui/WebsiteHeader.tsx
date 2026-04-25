@@ -60,6 +60,11 @@ function WebsiteHeader({
   const isActiveRoute = (routePath: string): boolean => {
     const currentPath = location.pathname;
     
+    // Special case for elevatebusiness-360 route
+    if (routePath === '/elevatebusiness-360') {
+      return currentPath === '/elevatebusiness-360';
+    }
+    
     // Special case for leadership route
     if (routePath === '/leadership') {
       return currentPath === '/leadership';
@@ -91,14 +96,14 @@ function WebsiteHeader({
                 onClick={onHome} 
                 className={`${styles.navButton} ${location.pathname === '/' ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>Home</span>
+                <span className={styles.navLabel}>Services</span>
               </button>
               
               <button 
-                onClick={onServicesHub} 
-                className={`${styles.navButton} ${isActiveRoute('/services') ? styles.activeNavButton : ''}`}
+                onClick={onElevateBusiness360} 
+                className={`${styles.navButton} ${isActiveRoute('/elevatebusiness-360') ? styles.activeNavButton : ''}`}
               >
-                <span className={styles.navLabel}>Consulting</span>
+                <span className={styles.navLabel}>Our Work</span>
               </button>
               
               <button 

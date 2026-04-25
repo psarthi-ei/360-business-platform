@@ -33,7 +33,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
     showAnalytics: () => navigate('/platform/production'),
     showLogin: () => navigate('/login'),
     showSignUp: () => navigate('/signup'),
-    showServicesHub: () => navigate('/services'),
+    showServicesHub: () => navigate('/'),  // Services is now the home page
     showTurnaroundStories: () => navigate('/turnaround-stories'),
     showBlogHome: () => navigate('/blog'),
     showBlogPost: (slug: string) => navigate(`/blog/${slug}`),
@@ -53,10 +53,7 @@ export function createNavigationHelpers(navigate: NavigateFunction, stateSetters
     },
     
     showServicesHubWithReset: () => {
-      if (stateSetters?.setServicesHubResetKey) {
-        stateSetters.setServicesHubResetKey(prev => prev + 1);
-      }
-      navigate('/services');
+      navigate('/');  // Services is now the home page
     },
     
     showBlogPostWithState: (slug: string) => {

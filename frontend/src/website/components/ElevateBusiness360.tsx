@@ -51,39 +51,39 @@ function ElevateBusiness360({
   return (
     <>
       <SEO
-        title="Textile Business Platform - ElevateIdea"
-        description="ElevateIdea empowers MSMEs with voice-first, multilingual business platform. 20+ years experience, 6 major turnarounds, $15M+ recovery value. Complete ElevateBusiness 360° demo for textile manufacturers."
-        keywords="ElevateIdea Technologies, 360° business platform, textile manufacturers India, MSME digitization, voice-first platform, multilingual business software, corporate turnaround expert"
-        canonical="/"
+        title="Our Work: ElevateBusiness 360° - ElevateIdea"
+        description="See how we build for our clients: ElevateBusiness 360° - a complete textile business platform built WITH AI as our team member. Demonstrates our AI-era development capabilities and strategic approach to startup technology."
+        keywords="ElevateIdea portfolio, AI-era development showcase, startup technology case study, textile business platform, AI-accelerated development, strategic technology partnership"
+        canonical="/elevatebusiness-360"
         type="website"
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "ElevateIdea Technologies Private Limited",
-          "alternateName": "ElevateIdea",
-          "url": "https://elevateidea.com",
-          "logo": "https://elevateidea.com/logo192.png",
-          "description": "Complete 360° Business Platform for India's Textile Manufacturers. Empowering MSMEs with voice-first, multilingual business solutions.",
-          "foundingDate": "2023",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "India"
+          "@type": "SoftwareApplication",
+          "name": "ElevateBusiness 360°",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web Browser",
+          "description": "Complete textile business platform built with AI acceleration. Demonstrates ElevateIdea's AI-era development capabilities for startup clients.",
+          "url": "https://elevateidea.com/elevatebusiness-360",
+          "creator": {
+            "@type": "Organization",
+            "name": "ElevateIdea Technologies Private Limited",
+            "founder": {
+              "@type": "Person",
+              "name": "Partha Sarthi",
+              "jobTitle": "Strategic Technology Partner",
+              "description": "20+ years technology veteran helping startups build 10X faster with AI + strategic guidance"
+            }
           },
-          "founder": {
-            "@type": "Person",
-            "name": "Partha Sarthi",
-            "jobTitle": "Founder & CEO",
-            "description": "20+ years technology veteran with 6 major corporate turnarounds, $15M+ recovery value",
-            "url": "https://www.linkedin.com/in/parthasarthi/"
-          },
-          "industry": "Software Technology",
-          "numberOfEmployees": "1-10",
-          "areaServed": "India",
-          "knowsAbout": ["MSME Digitization", "Textile Manufacturing", "Business Platforms", "Corporate Turnarounds", "AI-Accelerated Development"],
-          "sameAs": [
-            "https://www.linkedin.com/in/parthasarthi/",
-            "https://github.com/psarthi-ei"
-          ]
+          "featureList": [
+            "Voice-first multilingual interface",
+            "Complete textile workflow management", 
+            "AI-accelerated development showcase",
+            "Mobile-first business platform"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Potential startup clients seeking AI-era development capabilities"
+          }
         }}
       />
       <div className={styles.homePage}>
@@ -233,24 +233,24 @@ function ElevateBusiness360({
       <section className={styles.aiStory}>
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>
-            Built WITH AI - Our Development Story
+            Built WITH AI - Our Development Showcase
           </h2>
           <p className={styles.sectionSubtitle}>
-            We built ElevateBusiness 360° with AI as our team member, demonstrating how modern businesses can leverage AI effectively. 
-            This is our real development story - not replacing experience, but amplifying it to build 10X faster.
+            We built ElevateBusiness 360° as a proof-of-concept to demonstrate our AI-era development capabilities. 
+            This showcases how we help clients build complex platforms using AI acceleration - amplifying experience to deliver 10X faster.
           </p>
           
           <div className={styles.aiStoryGrid}>
             <div className={styles.aiStoryCard}>
               <div className={styles.aiStoryIcon}>🤖</div>
-              <h3 className={styles.aiStoryTitle}>AI as Team Member</h3>
+              <h3 className={styles.aiStoryTitle}>AI as Development Partner</h3>
               <p className={styles.aiStoryDescription}>
-                We built ElevateBusiness 360° with AI as our "Aladdin ka chirag" - a powerful team member that helped us create 10X faster. 
-                Haven't written a single line of code manually, yet built enterprise-grade software.
+                This proof-of-concept demonstrates our AI-accelerated development approach - using AI as a powerful development partner to build 10X faster. 
+                Shows how we help clients leverage AI without writing code manually, while maintaining enterprise-grade quality.
               </p>
               <div className={styles.aiStoryProof}>
-                <span className={styles.proofBadge}>PROOF</span>
-                <span className={styles.proofText}>Haven't written single line of code, built 10X faster</span>
+                <span className={styles.proofBadge}>SHOWCASE</span>
+                <span className={styles.proofText}>AI-accelerated development capability demonstration</span>
               </div>
             </div>
 
@@ -269,14 +269,14 @@ function ElevateBusiness360({
 
             <div className={styles.aiStoryCard}>
               <div className={styles.aiStoryIcon}>🚀</div>
-              <h3 className={styles.aiStoryTitle}>AI-Era Development</h3>
+              <h3 className={styles.aiStoryTitle}>Client Capability Preview</h3>
               <p className={styles.aiStoryDescription}>
-                This is the new reality - small teams building enterprise-level products in weeks instead of years. 
-                We're demonstrating how strategic AI implementation transforms business development through our product.
+                This proof-of-concept represents the new reality - small teams building enterprise-level products in weeks instead of years. 
+                Demonstrates how we help clients leverage strategic AI implementation for rapid business development.
               </p>
               <div className={styles.aiStoryProof}>
-                <span className={styles.proofBadge}>RESULT</span>
-                <span className={styles.proofText}>Enterprise platform built in months, not years</span>
+                <span className={styles.proofBadge}>CAPABILITY</span>
+                <span className={styles.proofText}>Enterprise platform development in months, not years</span>
               </div>
             </div>
           </div>

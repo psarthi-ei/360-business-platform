@@ -57,10 +57,17 @@ function HeaderDropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { isMobile } = useResponsive();
   
-  // Smart navigation visibility logic:
+  // Smart navigation visibility logic (Option 2):
   // - Platform pages: Always show navigation (no nav in platform header)
-  // - Website pages: Show navigation only on mobile (desktop has nav in header)
-  const shouldShowWebsiteNavigation = showWebsiteNavigation && (isPlatformPage || isMobile);
+  // - Website pages: Show navigation ONLY on mobile (desktop gets quick actions only)
+  const shouldShowWebsiteNavigation = isPlatformPage || (showWebsiteNavigation && isMobile);
+  
+  // Context-aware sections:
+  // - Authentication: Only show on platform pages
+  // - Language: Only show on platform pages  
+  // - Website gets clean navigation-only menu
+  const shouldShowAuthSection = isPlatformPage;
+  const shouldShowLanguageSection = isPlatformPage;
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -97,7 +104,7 @@ function HeaderDropdown({
   // };
 
   return (
-    <div className={styles.headerDropdown} ref={dropdownRef}>
+    <div className={`${styles.headerDropdown} ${isPlatformPage ? styles.platformPage : ''}`} ref={dropdownRef}>
       <button 
         className={styles.dropdownTrigger}
         onClick={() => setIsOpen(!isOpen)}
@@ -120,18 +127,18 @@ function HeaderDropdown({
                   setIsOpen(false);
                 }}
               >
-                <span className={styles.itemIcon}>🏠</span>
-                <span className={styles.itemText}>Home</span>
+                <span className={styles.itemIcon}>🎯</span>
+                <span className={styles.itemText}>Services</span>
               </button>
               <button
                 className={styles.menuItem}
                 onClick={() => {
-                  onServicesHub?.();
+                  onElevateBusiness360?.();
                   setIsOpen(false);
                 }}
               >
-                <span className={styles.itemIcon}>🎯</span>
-                <span className={styles.itemText}>Consulting</span>
+                <span className={styles.itemIcon}>🚀</span>
+                <span className={styles.itemText}>Our Work</span>
               </button>
               <button
                 className={styles.menuItem}
@@ -166,7 +173,9 @@ function HeaderDropdown({
             </div>
           )}
 
-          {/* Authentication Section */}
+
+          {/* Authentication Section - Only on Platform Pages */}
+          {shouldShowAuthSection && (
           <div className={styles.menuSection}>
             <div className={styles.sectionTitle}>
               {isAuthenticated ? `Account: ${userMode === 'guest' ? '👤 Guest' : userMode === 'demo' ? '🎬 Demo User' : '👤 User'}` : 'Access'}
@@ -229,8 +238,10 @@ function HeaderDropdown({
               </button>
             )}
           </div>
+          )}
 
-          {/* Language Section - Available on All Devices */}
+          {/* Language Section - Only on Platform Pages */}
+          {shouldShowLanguageSection && (
           <div className={styles.menuSection}>
             <div className={styles.sectionTitle}>
               Language: {currentLang?.flag} {currentLang?.name}
@@ -249,6 +260,7 @@ function HeaderDropdown({
               </button>
             ))}
           </div>
+          )}
 
 
           {/* Theme Section removed for MVP simplicity */}

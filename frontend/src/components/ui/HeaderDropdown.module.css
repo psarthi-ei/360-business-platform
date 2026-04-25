@@ -5,6 +5,18 @@
   z-index: 15000; /* Dropdown container z-index above contentArea */
 }
 
+/* Platform page identifier */
+.platformPage {
+  /* This class is used to identify platform pages for responsive behavior */
+}
+
+/* Hide hamburger menu on desktop for website pages */
+@media (min-width: 1025px) {
+  .headerDropdown:not(.platformPage) {
+    display: none;
+  }
+}
+
 /* Dropdown Trigger Button */
 .dropdownTrigger {
   background: var(--gradient-card, rgba(102, 126, 234, 0.1));

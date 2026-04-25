@@ -151,10 +151,10 @@ function ServicesHub({
     return (
       <>
         <SEO
-          title="Consulting - ElevateIdea"
-          description="ElevateIdea provides AI-era business building services for early-stage startups and MSME manufacturers. MVP development, project acceleration, scalability solutions."
-          keywords="ElevateIdea services, AI-accelerated MVP development, startup consulting India, early-stage startup services, MSME business solutions"
-          canonical={framework ? `/services/${framework}` : "/services"}
+          title={`${framework ? framework.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Services'} - ElevateIdea`}
+          description="ElevateIdea provides AI-era strategic technology services for early-stage startups. MVP development, project acceleration, scalability solutions with 20+ years experience."
+          keywords="ElevateIdea services, AI-accelerated MVP development, startup consulting India, early-stage startup services, strategic technology partnership"
+          canonical={framework ? `/${framework}` : "/"}
           type="website"
         />
         <div className={styles.servicesHub}>
@@ -213,10 +213,10 @@ function ServicesHub({
   return (
     <>
       <SEO
-        title="Consulting - ElevateIdea"
-        description="ElevateIdea provides strategic technology partnership for early-stage startups. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Strategic project acceleration and scalability solutions."
-        keywords="ElevateIdea services, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery"
-        canonical="/services"
+        title="Strategic Technology Partner for Early-Stage Startups - ElevateIdea"
+        description="ElevateIdea provides strategic technology partnership for early-stage startups in the AI era. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Build 10X faster with strategic guidance."
+        keywords="ElevateIdea, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery, AI-era development"
+        canonical="/"
         type="website"
         structuredData={{
           "@context": "https://schema.org",
@@ -323,7 +323,7 @@ function ServicesHub({
               <span className={styles.approachIcon}>🤝</span>
               <h3 className={styles.approachTitle}>Strategic Partnership</h3>
               <p className={styles.approachDescription}>
-                Not just delivery - ongoing guidance and support from founders building their own product, understanding startup challenges firsthand.
+                Not just delivery - ongoing guidance and support from founders who have built their own proof-of-concept, understanding startup challenges firsthand.
               </p>
             </div>
           </div>
@@ -355,7 +355,7 @@ function ServicesHub({
               <span className={styles.approachIcon}>🤝</span>
               <h3 className={styles.approachTitle}>Founder Empathy</h3>
               <p className={styles.approachDescription}>
-                We're building our own product (ElevateBusiness 360°), so we understand startup challenges and constraints firsthand.
+                We built our own proof-of-concept (ElevateBusiness 360°), so we understand startup challenges and constraints firsthand.
               </p>
             </div>
           </div>

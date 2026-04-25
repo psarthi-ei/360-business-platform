@@ -92,7 +92,6 @@ function AppContent() {
   
   // GlobalSearch ref now handled within PlatformShell
   const [profileCompanyName] = useState('');
-  const [servicesHubResetKey, setServicesHubResetKey] = useState(0);
   const [currentBlogPostSlug, setCurrentBlogPostSlug] = useState('');
   const [currentBookChapterSlug, setCurrentBookChapterSlug] = useState('');
 
@@ -104,7 +103,6 @@ function AppContent() {
 
   // Shared navigation helpers - single source of truth
   const navigationHelpers = createNavigationHelpers(navigate, {
-    setServicesHubResetKey,
     setCurrentBlogPostSlug,
     setCurrentBookChapterSlug
   });
@@ -341,17 +339,10 @@ function AppContent() {
 
   function renderHomePage() {
     return (
-      <ElevateBusiness360
+      <ServicesHub
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        onLogin={showLogin}
-        onSignUp={showSignUp}
-        onGuestMode={handleGuestMode}
-        onDemoMode={handleDemoMode}
-        onServicesHub={showServicesHubWithReset}
-        onBlogHome={showBlogHome}
         onAbout={showAbout}
-        onContact={showContact}
       />
     );
   }
@@ -431,13 +422,19 @@ function AppContent() {
     );
   }
 
-  function renderServicesHub() {
+  function renderElevateBusiness360() {
     return (
-      <ServicesHub
+      <ElevateBusiness360
         currentLanguage={currentLanguage}
         onLanguageChange={switchLanguage}
-        resetKey={servicesHubResetKey}
+        onLogin={showLogin}
+        onSignUp={showSignUp}
+        onGuestMode={handleGuestMode}
+        onDemoMode={handleDemoMode}
+        onServicesHub={showServicesHubWithReset}
+        onBlogHome={showBlogHome}
         onAbout={showAbout}
+        onContact={showContact}
       />
     );
   }
@@ -579,7 +576,8 @@ function AppContent() {
     renderCustomers,
     renderAuthentication,
     renderProfileCompletion,
-    renderServicesHub,
+    renderServicesHub: renderHomePage, // Services hub is now the home page
+    renderElevateBusiness360,
     renderTurnaroundStories,
     renderBlogHome,
     renderBlogPost,

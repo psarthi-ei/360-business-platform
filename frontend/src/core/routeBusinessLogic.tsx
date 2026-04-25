@@ -16,6 +16,7 @@ export interface RenderFunctions {
   renderAuthentication: () => React.ReactElement;
   renderProfileCompletion: () => React.ReactElement;
   renderServicesHub: () => React.ReactElement;
+  renderElevateBusiness360: () => React.ReactElement;
   renderTurnaroundStories: () => React.ReactElement;
   renderBlogHome: () => React.ReactElement;
   renderBlogPost: () => React.ReactElement;
@@ -56,13 +57,13 @@ export function createWebsiteRoutes(renderFunctions: RenderFunctions): React.Rea
     <Route key="index" index element={renderFunctions.renderHomePage()} />,
     <Route key="leadership" path="leadership" element={renderFunctions.renderLeadership()} />,
     <Route key="engineering-book" path="engineering-book" element={renderFunctions.renderBookHome()} />,
-    <Route key="elevatebusiness-360" path="elevatebusiness-360" element={renderFunctions.renderLeadership()} />,
+    <Route key="elevatebusiness-360" path="elevatebusiness-360" element={renderFunctions.renderElevateBusiness360()} />,
     <Route key="365-days-reflections" path="365-days-reflections" element={renderFunctions.renderBlogHome()} />,
     <Route key="login" path="login" element={renderFunctions.renderAuthentication()} />,
     <Route key="signup" path="signup" element={renderFunctions.renderAuthentication()} />,
     <Route key="profile-completion" path="profile-completion" element={renderFunctions.renderProfileCompletion()} />,
-    <Route key="services" path="services" element={renderFunctions.renderServicesHub()} />,
-    <Route key="services/:framework" path="services/:framework" element={renderFunctions.renderServicesHub()} />,
+    <Route key="services" path="services" element={renderFunctions.renderHomePage()} />,
+    <Route key="services-framework" path="services/:framework" element={renderFunctions.renderHomePage()} />,
     <Route key="turnaround-stories" path="turnaround-stories" element={renderFunctions.renderTurnaroundStories()} />,
     <Route key="turnaround-stories/:story" path="turnaround-stories/:story" element={renderFunctions.renderTurnaroundStories()} />,
     <Route key="blog" path="blog" element={renderFunctions.renderBlogHome()} />,
