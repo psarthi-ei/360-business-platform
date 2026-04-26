@@ -20,8 +20,18 @@
   padding: 60px 0;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 16px;
+  margin-top: 40px;
   margin-bottom: 60px;
   border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    padding: 40px 0;
+  }
 }
 
 .heroTitle {
