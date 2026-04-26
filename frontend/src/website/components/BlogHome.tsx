@@ -112,8 +112,8 @@ function BlogHome({
     <>
       <SEO
         title="Stories - ElevateIdea"
-        description="Discover AI-powered business insights, MSME growth strategies, and technology transformation tips from ElevateIdea. Expert perspectives on scaling textile manufacturing businesses."
-        keywords="ElevateIdea blog, MSME growth strategies, AI business insights, textile manufacturing technology, business transformation"
+        description="Discover AI-era development insights, startup consulting stories, and strategic technology leadership from ElevateIdea. Expert perspectives on building in the AI era and scaling early-stage startups."
+        keywords="ElevateIdea blog, startup consulting stories, AI-era development insights, strategic technology leadership, early-stage startup guidance, business transformation"
         canonical="/blog"
       />
       <div className={styles.blogHome}>
