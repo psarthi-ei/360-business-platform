@@ -57,6 +57,13 @@ function getScreenFromPath(pathname: string): string {
   if (pathname === '/about') return 'about';
   if (pathname === '/contact') return 'contact';
   if (pathname === '/profile-completion') return 'profilecompletion';
+  if (pathname === '/leadership') return 'leadership';
+  if (pathname === '/elevatebusiness-360') return 'elevatebusiness-360';
+  if (pathname === '/engineering-book') return 'engineering-book';
+  if (pathname === '/365-days-reflections') return '365-days-reflections';
+  if (pathname === '/external-profile-form') return 'external-profile-form';
+  if (pathname.startsWith('/services/')) return 'services-framework';
+  if (pathname.startsWith('/turnaround-stories/')) return 'turnaround-story';
   
   // Platform routes - /platform/* pattern with nested routing
   if (pathname === '/platform' || pathname === '/platform/' || pathname === '/platform/dashboard') return 'dashboard';
