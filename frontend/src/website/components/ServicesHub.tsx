@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
+import React, { useEffect } from 'react';
 import { scrollToTop } from '../../utils/scrollUtils';
 import { openConsultationForm } from '../../utils/contactUtils';
 import SEO from '../../components/ui/SEO';
@@ -13,256 +11,48 @@ interface ServicesHubProps {
   onAbout?: () => void;
 }
 
-interface ServiceInfo {
-  key: string;
-  title: string;
-  filename: string;
-  gradient: string;
-}
-
 function ServicesHub({ 
   currentLanguage, 
   onLanguageChange,
   resetKey,
   onAbout
 }: ServicesHubProps) {
-  const { framework } = useParams<{ framework: string }>();
-  const navigate = useNavigate();
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [markdownContent, setMarkdownContent] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-
-  // Reset to services overview when component mounts or resetKey changes
-  useEffect(() => {
-    setSelectedService(null);
-    setMarkdownContent('');
-  }, [resetKey]);
-
   // Scroll to top when component initially mounts
   useEffect(() => {
     setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
   }, []);
 
-  // Load specific framework when URL parameter is present
+  // Reset effect when resetKey changes
   useEffect(() => {
-    // Add small delay to ensure component is fully mounted in development
-    const timer = setTimeout(() => {
-      if (framework) {
-        loadServiceContent(framework);
-      } else {
-        setSelectedService(null);
-        setMarkdownContent('');
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [framework]);
-
-  // Service configuration - 4 core offerings (MVP Development as key offering, others have frameworks)
-  const services: ServiceInfo[] = [
-    {
-      key: 'mvp-development',
-      title: 'MVP Development',
-      filename: '', // No framework document yet - key offering only
-      gradient: 'linear-gradient(135deg, #2980b9 0%, #3498db 100%)'
-    },
-    {
-      key: 'strategic-project-acceleration',
-      title: 'Strategic Project Acceleration',
-      filename: 'strategic-project-acceleration.md',
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    },
-    {
-      key: 'scalability-for-growth',
-      title: 'Scalability Solutions',
-      filename: 'scalability-for-growth.md',
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-    },
-    {
-      key: 'agile-ai-transformation',
-      title: 'Agile AI Transformation',
-      filename: 'agile-systems-for-rapid-innovation.md',
-      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-    }
-  ];
-
-  // Load markdown content for a service
-  const loadServiceContent = async (serviceName: string) => {
-    setLoading(true);
-    try {
-      const service = services.find(s => s.key === serviceName);
-      if (!service) {
-        throw new Error(`Service not found: ${serviceName}`);
-      }
-
-      // Handle MVP Development without framework document
-      if (!service.filename) {
-        setMarkdownContent('# MVP Development\n\nComing soon - detailed framework documentation.\n\nFor now, contact us to discuss your 30-day AI-accelerated MVP development needs.');
-        setSelectedService(serviceName);
-        setLoading(false);
-        
-        // Scroll to top for MVP Development
-        setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
-        return;
-      }
-
-      const url = `/content/services/${service.filename}`;
-      
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to load ${service.filename}, status: ${response.status}`);
-      }
-      
-      const markdown = await response.text();
-      setMarkdownContent(markdown);
-      setSelectedService(serviceName);
-      
-      // Scroll to top after content loads
-      setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
-    } catch (error) {
-      // Debug statement removed
-      setMarkdownContent('# Error\n\nUnable to load service content. Please try again.');
-      setSelectedService(serviceName);
-      
-      // Scroll to top even on error
-      setTimeout(() => scrollToTop({ behavior: 'smooth' }), 200);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle service selection
-  const handleServiceClick = (serviceKey: string) => {
-    // Navigate to the service URL instead of loading content directly
-    navigate(`/services/${serviceKey}`);
-  };
-
-  // Handle back to services list
-  const handleBackToServices = () => {
-    // Navigate back to services overview
-    navigate('/services');
-  };
+    // Component reset logic if needed
+  }, [resetKey]);
 
 
-  // Show service detail view
-  if (selectedService) {
-    return (
-      <>
-        <SEO
-          title={`${framework ? framework.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Services'} - ElevateIdea`}
-          description="ElevateIdea provides AI-era strategic technology services for early-stage startups. MVP development, project acceleration, scalability solutions with 20+ years experience."
-          keywords="ElevateIdea services, AI-accelerated MVP development, startup consulting India, early-stage startup services, strategic technology partnership"
-          canonical={framework ? `/${framework}` : "/"}
-          type="website"
-        />
-        <div className={styles.servicesHub}>
-        <div className={styles.container}>
-          {/* Navigation */}
-          <div className={styles.navigation}>
-            <button 
-              className={styles.backButton}
-              onClick={handleBackToServices}
-            >
-              ← Back to Services
-            </button>
-          </div>
-
-          {/* Service Content */}
-          <div className={styles.serviceContent}>
-            <div className={styles.contentWrapper}>
-              {loading ? (
-                <div className={styles.loading}>
-                  <div className={styles.loadingSpinner}></div>
-                  <p>Loading service content...</p>
-                </div>
-              ) : (
-                <div className={styles.markdownContent}>
-                  <ReactMarkdown>{markdownContent}</ReactMarkdown>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className={styles.cta}>
-            <div className={styles.ctaContent}>
-              <h2>Ready to Get Started?</h2>
-              <p>
-                Let's discuss how this framework can address your specific challenges 
-                and accelerate your business growth.
-              </p>
-              <div className={styles.ctaButtons}>
-                <button 
-                  className={styles.primaryCta}
-                  onClick={openConsultationForm}
-                >
-                  Schedule Consultation
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </>
-    );
-  }
-
-  // Show services list view
+  // Single page view - no service portfolio complexity
   return (
     <>
       <SEO
-        title="Strategic Technology Partner for Early-Stage Startups - ElevateIdea"
-        description="ElevateIdea provides strategic technology partnership for early-stage startups in the AI era. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Build 10X faster with strategic guidance."
-        keywords="ElevateIdea, strategic technology partner, early-stage startup consulting, AI-accelerated MVP development, startup technology solutions India, 30-day MVP delivery, AI-era development"
+        title="Fractional CTO for Early-Stage Startups - ElevateIdea"
+        description="I help early-stage startups make better technology decisions, accelerate product development, and build scalable systems using AI-native engineering practices. 20+ years experience."
+        keywords="Fractional CTO, consulting CTO, early-stage startups, AI-native engineering, startup technology leadership, MVP development India"
         canonical="/"
         type="website"
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Service",
-          "serviceType": "Technology Consulting",
-          "provider": {
+          "@type": "Person",
+          "name": "Partha Sarthi",
+          "jobTitle": "Fractional CTO",
+          "worksFor": {
             "@type": "Organization",
             "name": "ElevateIdea Technologies Private Limited",
             "url": "https://elevateidea.com"
           },
-          "name": "Strategic Technology Partnership for Early-Stage Startups",
-          "description": "AI-era strategic technology partnership for early-stage startups. MVP development, project acceleration, and scalability solutions.",
+          "description": "Fractional CTO for early-stage startups. Former Head of Technology for Aadhaar (UIDAI). 20+ years experience at IBM, Thoughtworks, helping startups make better technology decisions and move faster with AI-native engineering.",
           "areaServed": "India",
-          "audience": {
-            "@type": "Audience",
-            "audienceType": "Early-stage startups and MSME manufacturers"
-          },
-          "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "ElevateIdea Services",
-            "itemListElement": [
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "MVP Development",
-                  "description": "30-day AI-accelerated MVP development for early-stage startups"
-                }
-              },
-              {
-                "@type": "Offer", 
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Strategic Project Acceleration",
-                  "description": "Rescue stuck projects and accelerate delivery with experienced guidance"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service", 
-                  "name": "Scalability Solutions",
-                  "description": "Fix existing products struggling with scale using AI-powered solutions"
-                }
-              }
-            ]
+          "offers": {
+            "@type": "Service",
+            "name": "Fractional CTO Services",
+            "description": "Technology leadership for early-stage startups including MVP development, engineering guidance, and AI-native development practices"
           }
         }}
       />
@@ -272,11 +62,16 @@ function ServicesHub({
         {/* Hero Section */}
         <section className={styles.hero}>
           <h1 className={styles.heroTitle}>
-            Strategic Technology Partner for Early-Stage Startups in the AI Era
+            Fractional CTO for Early-Stage Startups
           </h1>
           <p className={styles.heroSubtitle}>
-            Leverage 20+ years of industry experience to build 10X faster with AI while knowing exactly what and how to build. 
-            We help early-stage startups navigate the new AI landscape where small teams can create big impact.
+            I help early-stage startups make better technology decisions, accelerate product development, 
+            and build scalable systems using AI-native engineering practices. <span className={styles.credentialHighlight}>Former Head of Technology for Aadhaar (UIDAI)</span>.
+          </p>
+          <p className={styles.heroDescription}>
+            Whether you're building your MVP, struggling with execution, or preparing to scale — I bring 
+            20+ years of experience across startups and enterprise systems to help you move faster with 
+            clarity and confidence.
           </p>
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
@@ -294,164 +89,182 @@ function ServicesHub({
           </div>
         </section>
 
-        {/* What We Do Section */}
+        {/* Who I Work With Section */}
         <section className={styles.whatWeDo}>
-          <h2 className={styles.sectionTitle}>What We Do</h2>
+          <h2 className={styles.sectionTitle}>Who I Work With</h2>
           <p className={styles.sectionSubtitle}>
-            We help early-stage startups navigate the new AI landscape where small teams can build enterprise-level products. 
-            AI makes building 10X faster, but you still need industry experience to know what to build and how to build it right.
+            I work with early-stage startups that need senior technology leadership but are not ready for a full-time CTO.
           </p>
           
-          <div className={styles.approachGrid}>
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>🧠</span>
-              <h3 className={styles.approachTitle}>AI-Era Strategic Guidance</h3>
-              <p className={styles.approachDescription}>
-                Combine 20+ years industry experience with cutting-edge AI tools to make strategic decisions about what to build and how to build it efficiently.
+          <div className={styles.customerCriteria}>
+            <div className={styles.criteriaCard}>
+              <h3 className={styles.criteriaTitle}>Early-stage startups that:</h3>
+              <ul className={styles.criteriaList}>
+                <li>Need technical leadership but are not ready for a full-time CTO</li>
+                <li>Want to move faster without compromising technical foundations</li>
+                <li>Are struggling with product execution or engineering direction</li>
+                <li>Need help building and scaling engineering teams and systems</li>
+              </ul>
+            </div>
+            
+            <div className={styles.criteriaCard}>
+              <h3 className={styles.criteriaTitle}>Typical Startup Stage:</h3>
+              <ul className={styles.criteriaList}>
+                <li>Pre-seed to Series A</li>
+                <li>5-20 employee companies</li>
+                <li>0-10 engineering team size</li>
+                <li>Product-focused startups with complexity</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Common Problems Section */}
+        <section className={styles.problemsSection}>
+          <h2 className={styles.sectionTitle}>Common Challenges I Help Solve</h2>
+          <p className={styles.sectionSubtitle}>
+            What engineering or product challenges are slowing you down right now?
+          </p>
+          
+          <div className={styles.problemsGrid}>
+            <div className={styles.problemCard}>
+              <h3 className={styles.problemTitle}>"We need senior technical leadership."</h3>
+              <p className={styles.problemDescription}>
+                Gain strategic CTO-level guidance without hiring a full-time senior executive.
               </p>
             </div>
             
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>⚡</span>
-              <h3 className={styles.approachTitle}>10X Faster Development</h3>
-              <p className={styles.approachDescription}>
-                Leverage AI tools strategically to accelerate development while avoiding common pitfalls that come from moving too fast without experience.
+            <div className={styles.problemCard}>
+              <h3 className={styles.problemTitle}>"We are unsure about technical direction."</h3>
+              <p className={styles.problemDescription}>
+                Get clarity on architecture, technology choices, scalability, and engineering strategy.
               </p>
             </div>
             
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>🤝</span>
-              <h3 className={styles.approachTitle}>Strategic Partnership</h3>
-              <p className={styles.approachDescription}>
-                Not just delivery - ongoing guidance and support from founders who have built their own proof-of-concept, understanding startup challenges firsthand.
+            <div className={styles.problemCard}>
+              <h3 className={styles.problemTitle}>"We need to build faster."</h3>
+              <p className={styles.problemDescription}>
+                Move from idea to product quickly using pragmatic architecture and AI-assisted development workflows.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Why We're Doing This Section */}
-        <section className={styles.whatWeDo}>
-          <h2 className={styles.sectionTitle}>Why We're Doing This</h2>
+        {/* How I Help Section */}
+        <section className={styles.howIHelp}>
+          <h2 className={styles.sectionTitle}>How I Help</h2>
           <p className={styles.sectionSubtitle}>
-            The AI era has changed everything. Traditional development timelines are obsolete - small teams can now build enterprise-level products. 
-            But there's a gap: startups can access AI tools but often lack the industry experience to use them strategically.
-          </p>
-          <div className={styles.approachGrid}>
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>🚀</span>
-              <h3 className={styles.approachTitle}>AI Era Reality</h3>
-              <p className={styles.approachDescription}>
-                Small teams can now accomplish what used to require large engineering departments, but strategic decisions matter more than ever.
-              </p>
-            </div>
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>🎯</span>
-              <h3 className={styles.approachTitle}>The Experience Gap</h3>
-              <p className={styles.approachDescription}>
-                AI tools are powerful but you still need to know what to build, how to build it, and when to pivot based on industry experience.
-              </p>
-            </div>
-            <div className={styles.approachCard}>
-              <span className={styles.approachIcon}>🤝</span>
-              <h3 className={styles.approachTitle}>Founder Empathy</h3>
-              <p className={styles.approachDescription}>
-                We built our own proof-of-concept (ElevateBusiness 360°), so we understand startup challenges and constraints firsthand.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Tier 1: MVP Development - Primary Offering */}
-        <section className={styles.primaryOffering}>
-          <h2 className={styles.sectionTitle}>Starting Your Startup Journey? Begin Here</h2>
-          <p className={styles.sectionSubtitle}>
-            For very early stage startups in MVP phase - get your product built in 30 days with AI acceleration and strategic guidance.
+            Depending on your needs, I help with various aspects of technology leadership and execution.
           </p>
           
-          <div className={styles.mvpCard}>
-            <div className={styles.mvpHeader} style={{ background: services[0].gradient }}>
-              <span className={styles.mvpBadge}>Tier 1: Early Stage</span>
-              <h3 className={styles.mvpTitle}>{services[0].title}</h3>
-              <p className={styles.mvpDescription}>
-                Build your MVP in 30 days with AI acceleration and strategic guidance from 20+ years of industry experience. 
-                Perfect for pre-seed startups ready to validate their ideas quickly.
+          <div className={styles.helpGrid}>
+            <div className={styles.helpCard}>
+              <h3 className={styles.helpTitle}>Engineering Leadership</h3>
+              <p className={styles.helpDescription}>
+                Provide strategic direction across architecture, execution, engineering process, and team structure.
               </p>
-              <div className={styles.mvpFeatures}>
-                <span className={styles.feature}>✨ 30-Day Timeline</span>
-                <span className={styles.feature}>🤖 AI-Accelerated Development</span>
-                <span className={styles.feature}>🎯 Strategic Guidance</span>
-              </div>
             </div>
-            <div className={styles.mvpAction}>
-              <button 
-                className={styles.primaryActionButton}
-                onClick={openConsultationForm}
-              >
-                Start Your MVP Journey →
-              </button>
+            
+            <div className={styles.helpCard}>
+              <h3 className={styles.helpTitle}>MVP & Product Development</h3>
+              <p className={styles.helpDescription}>
+                Help founders turn ideas into working products with practical engineering guidance and fast execution.
+              </p>
+            </div>
+            
+            <div className={styles.helpCard}>
+              <h3 className={styles.helpTitle}>AI-Native Engineering</h3>
+              <p className={styles.helpDescription}>
+                Leverage modern AI-assisted development workflows to improve engineering speed and productivity.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Tier 2: Scale-Up Services */}
-        <section className={styles.scaleUpServices}>
-          <h2 className={styles.sectionTitle}>Already Have an MVP? Scale Up With These Frameworks</h2>
-          <p className={styles.sectionSubtitle}>
-            For startups in scale-up phase - structured frameworks to accelerate growth, fix challenges, and optimize performance.
-          </p>
-          
-          <div className={styles.scaleUpGrid}>
-            {services.slice(1).map((service, index) => (
-              <div 
-                key={service.key} 
-                className={styles.scaleUpCard}
-                onClick={() => handleServiceClick(service.key)}
-              >
-                <div className={styles.scaleUpHeader} style={{ background: service.gradient }}>
-                  <span className={styles.scaleUpBadge}>Tier 2: Scale-Up</span>
-                  <h3 className={styles.scaleUpTitle}>{service.title}</h3>
-                  <p className={styles.scaleUpDescription}>
-                    {service.key === 'strategic-project-acceleration' && 'Rescue stuck projects and get back on track with experienced guidance and AI-powered acceleration.'}
-                    {service.key === 'scalability-for-growth' && 'Fix existing products struggling with scale using AI-powered solutions and strategic architecture guidance.'}
-                    {service.key === 'agile-ai-transformation' && 'Help your team work 10X faster with AI-first development workflows and strategic implementation.'}
-                  </p>
-                </div>
-                
-                <div className={styles.scaleUpAction}>
-                  <button 
-                    className={styles.learnMoreButton}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleServiceClick(service.key);
-                    }}
-                  >
-                    Learn More →
-                  </button>
-                </div>
-              </div>
-            ))}
+        {/* Why Trust Me Section */}
+        <section className={styles.whyTrustMe}>
+          <h2 className={styles.sectionTitle}>Why Founders Work With Me</h2>
+          <div className={styles.credibilityGrid}>
+            <div className={styles.credibilityCard}>
+              <span className={styles.credibilityIcon}>⭐</span>
+              <h3 className={styles.credibilityTitle}>20+ years of experience</h3>
+              <p className={styles.credibilityDescription}>
+                Across startups and large-scale technology systems
+              </p>
+            </div>
+            
+            <div className={styles.credibilityCard}>
+              <span className={styles.credibilityIcon}>🏢</span>
+              <h3 className={styles.credibilityTitle}>Leadership at scale</h3>
+              <p className={styles.credibilityDescription}>
+                Head of Technology for Aadhaar (UIDAI), plus enterprise experience at IBM and Thoughtworks
+              </p>
+            </div>
+            
+            <div className={styles.credibilityCard}>
+              <span className={styles.credibilityIcon}>🎯</span>
+              <h3 className={styles.credibilityTitle}>Practical approach</h3>
+              <p className={styles.credibilityDescription}>
+                Execution-focused, understanding both startup speed and engineering fundamentals
+              </p>
+            </div>
+            
+            <div className={styles.credibilityCard}>
+              <span className={styles.credibilityIcon}>🤝</span>
+              <h3 className={styles.credibilityTitle}>Founder empathy</h3>
+              <p className={styles.credibilityDescription}>
+                Built my own startup and understand the challenges and constraints firsthand
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Engagement Models Section */}
+        <section className={styles.engagementModels}>
+          <h2 className={styles.sectionTitle}>How Engagement Works</h2>
+          <div className={styles.engagementGrid}>
+            <div className={styles.engagementCard}>
+              <h3 className={styles.engagementTitle}>Fractional CTO</h3>
+              <p className={styles.engagementDescription}>
+                Ongoing strategic technology guidance for early-stage startups
+              </p>
+            </div>
+            
+            <div className={styles.engagementCard}>
+              <h3 className={styles.engagementTitle}>Product Acceleration</h3>
+              <p className={styles.engagementDescription}>
+                Focused engagement to help accelerate MVP or product delivery
+              </p>
+            </div>
+            
+            <div className={styles.engagementCard}>
+              <h3 className={styles.engagementTitle}>Technical Advisory</h3>
+              <p className={styles.engagementDescription}>
+                Short-term guidance for architecture, scalability, and engineering execution challenges
+              </p>
+            </div>
           </div>
         </section>
 
         {/* Call to Action */}
         <section className={styles.cta}>
-          <h2 className={styles.ctaTitle}>Ready to Build 10X Faster in the AI Era?</h2>
+          <h2 className={styles.ctaTitle}>Need Senior Technology Guidance for Your Startup?</h2>
           <p className={styles.ctaSubtitle}>
-            Let's discuss how 20+ years of industry experience combined with AI tools can accelerate 
-            your startup's technology development while making strategic decisions that matter.
+            Whether you're building your MVP, scaling your product, or trying to improve engineering execution, 
+            I can help you move faster with the right technical direction.
           </p>
           <div className={styles.ctaButtons}>
             <button 
               className={styles.primaryCta}
               onClick={openConsultationForm}
             >
-              Schedule Startup Assessment
+              Book a Startup Technology Discussion
             </button>
             <button 
               className={styles.secondaryCta}
               onClick={() => onAbout?.()}
             >
-              Our Experience
+              Learn More About My Experience
             </button>
           </div>
         </section>

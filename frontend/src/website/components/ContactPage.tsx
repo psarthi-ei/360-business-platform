@@ -20,9 +20,9 @@ function ContactPage({
   return (
     <>
       <SEO
-        title="Contact - ElevateIdea"
-        description="Get in touch with ElevateIdea Technologies for strategic technology partnership. Whether you're an early-stage startup founder, tech entrepreneur, or investor interested in AI-era development - let's connect."
-        keywords="ElevateIdea contact, strategic technology partner, early-stage startup consulting, AI-era development, startup technology solutions, MVP development"
+        title="Contact Partha Sarthi - Fractional CTO - ElevateIdea"
+        description="Get in touch with Partha Sarthi for fractional CTO services. Early-stage startup technology leadership, AI-native engineering, and strategic guidance. Let's discuss your startup's technology challenges."
+        keywords="Contact Partha Sarthi, Fractional CTO contact, consulting CTO, early-stage startup technology leadership, startup technology guidance"
         canonical="/contact"
       />
       <div className={styles.contactPage}>
@@ -31,15 +31,41 @@ function ContactPage({
           {/* Hero Section */}
           <section className={styles.hero}>
             <h1 className={styles.heroTitle}>
-              Ready to Build 10X Faster in the AI Era?
+              Let's Discuss Your Startup's Technology Challenges
             </h1>
             <p className={styles.heroSubtitle}>
-              Whether you're an early-stage startup founder ready for 30-day MVP development, 
-              a tech entrepreneur seeking strategic guidance, or an investor interested in 
-              AI-era development methodology - we'd love to hear from you.
+              Whether you're building your MVP, scaling your product, or improving engineering execution — 
+              I can help you make better technology decisions and move faster with AI-native practices.
             </p>
+            
+            <div className={styles.engagementOptions}>
+              <h2 className={styles.engagementTitle}>How I Can Help</h2>
+              <div className={styles.engagementGrid}>
+                <div className={styles.engagementCard}>
+                  <h3 className={styles.engagementName}>Fractional CTO</h3>
+                  <p className={styles.engagementDescription}>
+                    Ongoing strategic technology guidance for early-stage startups
+                  </p>
+                </div>
+                
+                <div className={styles.engagementCard}>
+                  <h3 className={styles.engagementName}>Product Acceleration</h3>
+                  <p className={styles.engagementDescription}>
+                    Focused engagement to help accelerate MVP or product delivery
+                  </p>
+                </div>
+                
+                <div className={styles.engagementCard}>
+                  <h3 className={styles.engagementName}>Technical Advisory</h3>
+                  <p className={styles.engagementDescription}>
+                    Short-term guidance for architecture, scalability, and execution challenges
+                  </p>
+                </div>
+              </div>
+            </div>
+            
             <button className={styles.heroCta} onClick={handleConnectClick}>
-              Start the Conversation
+              Book a Startup Technology Discussion
             </button>
           </section>
 

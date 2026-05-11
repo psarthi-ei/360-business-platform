@@ -70,7 +70,7 @@ function ElevateBusiness360({
             "founder": {
               "@type": "Person",
               "name": "Partha Sarthi",
-              "jobTitle": "Strategic Technology Partner",
+              "jobTitle": "Fractional CTO",
               "description": "20+ years technology veteran helping startups build 10X faster with AI + strategic guidance"
             }
           },

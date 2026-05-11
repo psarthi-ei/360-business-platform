@@ -35,9 +35,9 @@
 }
 
 .heroTitle {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -45,11 +45,11 @@
 }
 
 .heroSubtitle {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: #64748b;
   line-height: 1.6;
-  margin-bottom: 40px;
-  max-width: 800px;
+  margin-bottom: 30px;
+  max-width: 750px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -70,6 +70,60 @@
 .heroCta:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+/* Engagement Options Section */
+.engagementOptions {
+  margin: 40px 0;
+  padding: 0 20px;
+}
+
+.engagementTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1e293b;
+}
+
+.engagementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 35px;
+  margin-top: 30px;
+}
+
+.engagementCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid #f1f5f9;
+}
+
+.engagementCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.engagementName {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.engagementDescription {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 
@@ -519,6 +573,23 @@
   .responseItems {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .engagementGrid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .engagementCard {
+    padding: 25px;
+  }
+  
+  .engagementTitle {
+    font-size: 1.6rem;
+  }
+  
+  .engagementOptions {
+    padding: 0 15px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -576,5 +647,25 @@
   .responseItems {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .engagementCard {
+    padding: 20px;
+  }
+  
+  .engagementName {
+    font-size: 1.2rem;
+  }
+  
+  .engagementTitle {
+    font-size: 1.4rem;
+  }
+  
+  .engagementGrid {
+    gap: 25px;
+  }
+  
+  .engagementOptions {
+    padding: 0 10px;
   }
 }

@@ -48,10 +48,32 @@
   font-size: 1.3rem;
   color: #64748b;
   line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heroDescription {
+  font-size: 1.1rem;
+  color: #64748b;
+  line-height: 1.6;
   margin-bottom: 40px;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Credential Highlighting */
+.credentialHighlight {
+  font-weight: 700;
+  font-size: 1.05em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  white-space: nowrap;
 }
 
 .heroStats {
@@ -140,6 +162,229 @@
 .approachDescription {
   color: #64748b;
   line-height: 1.6;
+}
+
+/* Customer Criteria Section */
+.customerCriteria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.criteriaCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.criteriaTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.criteriaList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.criteriaList li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #64748b;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 20px;
+}
+
+.criteriaList li:last-child {
+  border-bottom: none;
+}
+
+.criteriaList li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* Problems Section */
+.problemsSection {
+  margin-bottom: 80px;
+}
+
+.problemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.problemCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-left: 4px solid #667eea;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.problemCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.problemTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+  font-style: italic;
+}
+
+.problemDescription {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* How I Help Section */
+.howIHelp {
+  margin-bottom: 80px;
+}
+
+.helpGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.helpCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 4px solid #667eea;
+}
+
+.helpCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.helpTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.helpDescription {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Why Trust Me / Credibility Section */
+.whyTrustMe {
+  margin-bottom: 80px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  padding: 60px 0;
+  border-radius: 20px;
+}
+
+.credibilityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.credibilityCard {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.credibilityCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.credibilityIcon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.credibilityTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.credibilityDescription {
+  color: #64748b;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Engagement Models Section */
+.engagementModels {
+  margin-bottom: 80px;
+}
+
+.engagementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.engagementCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.engagementCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.engagementTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #1e293b;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.engagementDescription {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* Our Services Section */
@@ -661,6 +906,12 @@
     font-size: 1.1rem;
   }
   
+  .credentialHighlight {
+    white-space: normal;
+    display: inline-block;
+    font-size: 1.02em;
+  }
+  
   .heroStats {
     gap: 20px;
   }
@@ -705,6 +956,32 @@
   .scaleUpTitle {
     font-size: 1.2rem;
   }
+  
+  /* Responsive styles for new content sections */
+  .customerCriteria {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .problemsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .helpGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .credibilityGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .engagementGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -718,6 +995,11 @@
   
   .heroTitle {
     font-size: 1.8rem;
+  }
+  
+  .credentialHighlight {
+    font-size: 1.01em;
+    white-space: normal;
   }
   
   .serviceCard {
@@ -754,5 +1036,24 @@
   
   .scaleUpAction {
     padding: 20px 15px;
+  }
+  
+  /* Extra responsive styling for new content sections */
+  .criteriaCard, .problemCard, .helpCard, .credibilityCard, .engagementCard {
+    margin: 0 5px;
+    padding: 20px;
+  }
+  
+  .criteriaTitle, .problemTitle, .helpTitle, .credibilityTitle, .engagementTitle {
+    font-size: 1.1rem;
+  }
+  
+  .heroStats {
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
   }
 }

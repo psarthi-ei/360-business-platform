@@ -253,6 +253,46 @@
   margin-bottom: 10px;
 }
 
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+.linkedinLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0077b5;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(0, 119, 181, 0.1);
+  height: 44px;
+  width: 44px;
+}
+
+.linkedinIcon {
+  width: 28px;
+  height: 28px;
+  fill: #0077b5;
+  transition: all 0.3s ease;
+}
+
+.linkedinLink:hover {
+  background: rgba(0, 119, 181, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 119, 181, 0.2);
+}
+
+.linkedinLink:hover .linkedinIcon {
+  fill: #005885;
+  transform: scale(1.1);
+}
+
 .founderTitle {
   font-size: 1.2rem;
   color: #667eea;
@@ -803,6 +843,18 @@
     font-size: 1.8rem;
   }
   
+  
+  .linkedinLink {
+    height: 40px;
+    width: 40px;
+    padding: 6px;
+  }
+  
+  .linkedinIcon {
+    width: 24px;
+    height: 24px;
+  }
+  
   .entrepreneurshipJourney {
     padding: 60px 25px;
   }
@@ -864,6 +916,18 @@
   
   .founderName {
     font-size: 1.6rem;
+  }
+  
+  
+  .linkedinLink {
+    height: 36px;
+    width: 36px;
+    padding: 4px;
+  }
+  
+  .linkedinIcon {
+    width: 22px;
+    height: 22px;
   }
   
   .entrepreneurshipJourney {

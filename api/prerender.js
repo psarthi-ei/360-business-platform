@@ -111,7 +111,7 @@ function generateMetaTags(type, data, slug) {
           image: `${baseUrl}/images/book-chapter-og.jpg`,
           url: `${baseUrl}/book/${data.slug}`,
           type: 'article',
-          author: 'Partha Sarathi',
+          author: 'Partha Sarthi',
           publishedTime: data.publishedDate,
           tags: ['Engineering', 'AI Era', 'Leadership']
         };
@@ -120,32 +120,32 @@ function generateMetaTags(type, data, slug) {
       
     case 'services':
       return {
-        title: 'Consulting - ElevateIdea',
-        description: 'ElevateIdea provides strategic technology partnership for early-stage startups. 30-day MVP development, AI-accelerated solutions, 20+ years experience. Strategic project acceleration and scalability solutions.',
+        title: 'Fractional CTO for Early-Stage Startups - ElevateIdea',
+        description: 'I help early-stage startups make better technology decisions, accelerate product development, and build scalable systems using AI-native engineering practices. Former Head of Technology for Aadhaar (UIDAI).',
         image: `${baseUrl}/images/services-og.jpg`,
         url: `${baseUrl}/services`,
         type: 'website',
-        author: 'ElevateIdea Technologies'
+        author: 'Partha Sarthi'
       };
       
     case 'about':
       return {
-        title: 'About Us - ElevateIdea',
-        description: 'ElevateIdea\'s vision: empower small & medium businesses to scale and innovate. Founded by 20+ year technology veteran with 6 major turnarounds. Digitizing Manufacturing MSMEs with 360° Business Platform.',
+        title: 'About Partha Sarthi - Fractional CTO - ElevateIdea',
+        description: 'Fractional CTO for early-stage startups. 20+ years experience at IBM, Thoughtworks, and Aadhaar. I help startups make better technology decisions and move faster with AI-native engineering practices.',
         image: `${baseUrl}/images/about-og.jpg`,
         url: `${baseUrl}/about`,
         type: 'website',
-        author: 'ElevateIdea Technologies'
+        author: 'Partha Sarthi'
       };
       
     case 'contact':
       return {
         title: 'Contact - ElevateIdea',
-        description: 'Get in touch with ElevateIdea Technologies for AI-accelerated business solutions. Whether you\'re a textile manufacturer, enterprise seeking consulting, or investor - let\'s connect.',
+        description: 'Get in touch with Partha Sarthi for Fractional CTO services. Whether you\'re an early-stage startup needing technology leadership, MVP development, or AI-native engineering guidance - let\'s connect.',
         image: `${baseUrl}/images/contact-og.jpg`,
         url: `${baseUrl}/contact`,
         type: 'website',
-        author: 'ElevateIdea Technologies'
+        author: 'Partha Sarthi'
       };
       
     case 'turnaround':
@@ -155,7 +155,7 @@ function generateMetaTags(type, data, slug) {
         image: `${baseUrl}/images/turnaround-stories-og.jpg`,
         url: `${baseUrl}/turnaround-stories`,
         type: 'website',
-        author: 'ElevateIdea Technologies'
+        author: 'Partha Sarthi'
       };
       
     case 'turnaround-story':
@@ -187,7 +187,7 @@ function generateMetaTags(type, data, slug) {
         image: `${baseUrl}/images/leadership-og.jpg`,
         url: `${baseUrl}/leadership`,
         type: 'website',
-        author: 'ElevateIdea Technologies'
+        author: 'Partha Sarthi'
       };
       
     default:
@@ -197,12 +197,12 @@ function generateMetaTags(type, data, slug) {
 
 function getDefaultHomeMeta() {
   return {
-    title: 'ElevateIdea - Complete Business Platform for Textile Manufacturers',
-    description: 'ElevateIdea empowers textile manufacturers with 360° business platform. Voice-first, multilingual solutions for Indian MSMEs. 20+ years engineering expertise.',
+    title: 'Fractional CTO for Early-Stage Startups | Partha Sarthi - Former Head of Tech, Aadhaar',
+    description: 'Fractional CTO for early-stage startups. Former Head of Technology for Aadhaar (UIDAI). I help startups make better technology decisions, accelerate product development, and build scalable systems using AI-native engineering practices.',
     image: 'https://elevateidea.com/images/elevateidea-og.jpg',
     url: 'https://elevateidea.com',
     type: 'website',
-    author: 'ElevateIdea Technologies'
+    author: 'Partha Sarthi'
   };
 }
 
@@ -224,7 +224,7 @@ function getDefaultBookMeta() {
     image: 'https://elevateidea.com/images/book-home-og.jpg',
     url: 'https://elevateidea.com/book',
     type: 'website',
-    author: 'Partha Sarathi'
+    author: 'Partha Sarthi'
   };
 }
 
