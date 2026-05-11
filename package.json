@@ -20,6 +20,10 @@
     "type": "git",
     "url": "https://github.com/yourusername/360-business-platform.git"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "author": "Partha Sarthi - ElevateIdea Technologies",
   "license": "MIT"
 }

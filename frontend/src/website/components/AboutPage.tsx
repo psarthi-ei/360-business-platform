@@ -58,21 +58,23 @@ function AboutPage({
               
               <div className={styles.bioSection}>
                 <p>
-                  I am a fractional CTO with over 20 years of experience, including serving as <strong>Head of Technology for Aadhaar (UIDAI)</strong>, one of the world's largest digital identity platforms. My expertise spans strategic architecture, AI-era development, and turning around failing technology projects.
+                  I'm a Fractional CTO with over 20 years of experience across startups, enterprise platforms, and national-scale technology systems.
                 </p>
                 
                 <p>
-                  My experience includes enterprise leadership roles at IBM and Thoughtworks, where I led 
-                  complex platform consolidation and scaling initiatives. I have rescued major technology 
-                  initiatives, including <strong>$15M+ in recovery value across 6 turnarounds</strong>, 
-                  helping organizations navigate complex technology decisions across enterprise, startup, 
-                  and national-scale environments.
+                  Previously, I served as <strong>Head of Technology for Aadhaar (UIDAI)</strong>, contributing to one of the world's largest digital identity platforms. My experience also includes leadership roles at IBM and Thoughtworks, where I worked on large-scale engineering, architecture, and platform modernization initiatives.
                 </p>
                 
                 <p>
-                  Through ElevateIdea, I help early-stage startups build 10X faster in the AI era while making 
-                  strategic decisions that matter. I built ElevateBusiness 360° as a proof-of-concept with AI acceleration, 
-                  demonstrating how strategic AI implementation can accelerate startup development without sacrificing quality.
+                  Over the years, I've helped organizations navigate complex engineering challenges — from scaling platforms and improving execution to stabilizing high-risk technology initiatives and aligning engineering teams around clear technical direction.
+                </p>
+                
+                <p>
+                  Today, through ElevateIdea, I work closely with early-stage startups as a Fractional CTO and technology partner. I help founders accelerate product development, make pragmatic architecture decisions, improve engineering execution, and build scalable technical foundations without needing a full-time senior technology leader.
+                </p>
+                
+                <p>
+                  I'm particularly interested in how AI is changing software engineering and product development — not just by making coding faster, but by fundamentally changing how startups build, scale, and operate engineering teams.
                 </p>
                 
                 <div className={styles.socialLinks}>
