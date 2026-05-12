@@ -199,7 +199,7 @@ function getDefaultHomeMeta() {
   return {
     title: 'Technology Direction for Startups | Partha Sarthi - Former Head of Tech, Aadhaar',
     description: 'Many early-stage startups struggle with technology direction and engineering execution. Former Head of Technology at Aadhaar (UIDAI), previously at IBM and Thoughtworks, I help startups navigate these challenges using AI-accelerated development practices.',
-    image: 'https://elevateidea.com/images/elevateidea-og.jpg',
+    image: 'https://elevateidea.com/social-preview.jpg',
     url: 'https://elevateidea.com',
     type: 'website',
     author: 'Partha Sarthi'

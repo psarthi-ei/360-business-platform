@@ -53,6 +53,13 @@ function AboutPage({
         <section className={styles.founderProfile}>
           <h2 className={styles.sectionTitle}>About Me</h2>
           <div className={styles.founderContent}>
+            <div className={styles.founderPhoto}>
+              <img 
+                src="/photo/Informal Dress Photo.png" 
+                alt="Partha Sarthi - Fractional CTO"
+                className={styles.photoImage}
+              />
+            </div>
             <div className={styles.founderBio}>
               <h3 className={styles.founderName}>Partha Sarthi</h3>
               
