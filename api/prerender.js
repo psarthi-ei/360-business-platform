@@ -120,8 +120,8 @@ function generateMetaTags(type, data, slug) {
       
     case 'services':
       return {
-        title: 'Fractional CTO for Early-Stage Startups - ElevateIdea',
-        description: 'I help early-stage startups make better technology decisions, accelerate product development, and build scalable systems using AI-native engineering practices. Former Head of Technology for Aadhaar (UIDAI).',
+        title: 'Technology Direction for Startups - ElevateIdea',
+        description: 'Many early-stage startups struggle with technology direction and engineering execution. Former Head of Technology at Aadhaar (UIDAI), previously at IBM and Thoughtworks, I help startups navigate these challenges using AI-accelerated development practices.',
         image: `${baseUrl}/images/services-og.jpg`,
         url: `${baseUrl}/services`,
         type: 'website',
@@ -131,7 +131,7 @@ function generateMetaTags(type, data, slug) {
     case 'about':
       return {
         title: 'About Partha Sarthi - Fractional CTO - ElevateIdea',
-        description: 'Fractional CTO for early-stage startups. 20+ years experience at IBM, Thoughtworks, and Aadhaar. I help startups make better technology decisions and move faster with AI-native engineering practices.',
+        description: 'Fractional CTO for early-stage startups. 20+ years experience at Aadhaar, IBM, and Thoughtworks. I help startups make better technology decisions and move faster with AI-native engineering practices.',
         image: `${baseUrl}/images/about-og.jpg`,
         url: `${baseUrl}/about`,
         type: 'website',
@@ -197,8 +197,8 @@ function generateMetaTags(type, data, slug) {
 
 function getDefaultHomeMeta() {
   return {
-    title: 'Fractional CTO for Early-Stage Startups | Partha Sarthi - Former Head of Tech, Aadhaar',
-    description: 'Fractional CTO for early-stage startups. Former Head of Technology for Aadhaar (UIDAI). I help startups make better technology decisions, accelerate product development, and build scalable systems using AI-native engineering practices.',
+    title: 'Technology Direction for Startups | Partha Sarthi - Former Head of Tech, Aadhaar',
+    description: 'Many early-stage startups struggle with technology direction and engineering execution. Former Head of Technology at Aadhaar (UIDAI), previously at IBM and Thoughtworks, I help startups navigate these challenges using AI-accelerated development practices.',
     image: 'https://elevateidea.com/images/elevateidea-og.jpg',
     url: 'https://elevateidea.com',
     type: 'website',

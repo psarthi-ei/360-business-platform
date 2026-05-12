@@ -22,8 +22,8 @@ function AboutPage({
     <>
       <SEO
         title="About Partha Sarthi - Fractional CTO - ElevateIdea"
-        description="Fractional CTO for early-stage startups. 20+ years experience at IBM, Sapient, and Aadhaar. I help startups make better technology decisions and move faster with AI-native engineering practices."
-        keywords="Partha Sarthi, Fractional CTO, consulting CTO, early-stage startups, IBM experience, Sapient experience, Aadhaar experience, startup technology leadership"
+        description="Fractional CTO for early-stage startups. Previously at Aadhaar, IBM, and Thoughtworks. I help startups with technology direction and engineering execution using AI-accelerated development practices."
+        keywords="Partha Sarthi, technology direction, engineering execution, Aadhaar UIDAI, IBM, Thoughtworks, Former Head of Technology, Fractional CTO, consulting CTO, early-stage startups, startup technology leadership"
         canonical="/about"
         type="website"
       />

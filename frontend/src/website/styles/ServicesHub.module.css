@@ -17,11 +17,11 @@
 /* Hero Section */
 .hero {
   text-align: center;
-  padding: 60px 0;
+  padding: 45px 0;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.8) 100%);
   border-radius: 20px;
   margin-top: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
@@ -29,26 +29,50 @@
 @media (max-width: 768px) {
   .hero {
     margin-top: 20px;
-    margin-bottom: 40px;
-    padding: 40px 0;
+    margin-bottom: 30px;
+    padding: 35px 0;
   }
 }
 
 .heroTitle {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+.authorIntro {
+  text-align: center;
+  margin: 20px 0 25px 0;
+}
+
+.authorName {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.authorCredentials {
+  font-size: 1rem;
+  color: #64748b;
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .heroSubtitle {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #64748b;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -899,7 +923,15 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .heroTitle {
-    font-size: 2.2rem;
+    font-size: 2rem;
+  }
+  
+  .authorName {
+    font-size: clamp(1.3rem, 4vw, 1.7rem);
+  }
+  
+  .authorCredentials {
+    font-size: 1rem;
   }
   
   .heroSubtitle {

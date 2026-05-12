@@ -21,8 +21,8 @@ function ContactPage({
     <>
       <SEO
         title="Contact Partha Sarthi - Fractional CTO - ElevateIdea"
-        description="Get in touch with Partha Sarthi for fractional CTO services. Early-stage startup technology leadership, AI-native engineering, and strategic guidance. Let's discuss your startup's technology challenges."
-        keywords="Contact Partha Sarthi, Fractional CTO contact, consulting CTO, early-stage startup technology leadership, startup technology guidance"
+        description="Get in touch with Fractional CTO for startup technology guidance. Previously at Aadhaar, IBM, and Thoughtworks. I help early-stage startups with technology direction, engineering execution, and AI-accelerated development practices."
+        keywords="Contact Partha Sarthi, technology direction, engineering execution, startup technology guidance, Former Head of Technology Aadhaar, Fractional CTO contact, consulting CTO, early-stage startup technology leadership"
         canonical="/contact"
       />
       <div className={styles.contactPage}>
