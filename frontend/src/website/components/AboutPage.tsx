@@ -32,17 +32,17 @@ function AboutPage({
 
         {/* Hero Section */}
         <section className={styles.hero}>
-          <h1 className={styles.heroTitle}>My Vision</h1>
+          <h1 className={styles.heroTitle}>Vision</h1>
           <p className={styles.heroVision}>
-            To help early-stage startups focus on solving business problems while I handle 
-            the technology complexity, enabling founders to build faster and smarter in the AI era.
+            To build a premier boutique technology firm that empowers startups through 
+            strategic consulting and breakthrough technology solutions.
           </p>
           <div className={styles.heroMissionSection}>
-            <h2 className={styles.heroMissionTitle}>My Mission</h2>
+            <h2 className={styles.heroMissionTitle}>Mission</h2>
             <p className={styles.heroMission}>
-              I partner with startup founders in the AI era, providing strategic technology 
-              guidance and rapid development so they can focus on what matters most — 
-              their customers and business model.
+              To partner with early-stage startup founders as their Fractional CTO, enabling 
+              them to focus on their core business while we handle technology complexity 
+              and accelerate product development.
             </p>
           </div>
         </section>

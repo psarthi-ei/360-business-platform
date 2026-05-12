@@ -95,7 +95,7 @@ function ServicesHub({
         <section className={styles.problemsSection}>
           <h2 className={styles.sectionTitle}>Startups Typically Reach Out When...</h2>
           <p className={styles.sectionSubtitle}>
-            What engineering or product challenges are slowing you down right now?
+            Common technology challenges that bring startup founders to us:
           </p>
           
           <div className={styles.problemsGrid}>
