@@ -93,7 +93,7 @@ function generateMetaTags(type, data, slug) {
         return {
           title: `${data.title} - ElevateIdea`,
           description: `${data.excerpt || data.content?.substring(0, 160)}...`,
-          image: data.imagePath ? `${baseUrl}${data.imagePath}` : `${baseUrl}/images/blog-default-og.jpg`,
+          image: data.imagePath ? `${baseUrl}${data.imagePath}` : `${baseUrl}/social-preview.jpg`,
           url: `${baseUrl}/blog/${data.slug}`,
           type: 'article',
           author: 'ElevateIdea Technologies',
@@ -108,7 +108,7 @@ function generateMetaTags(type, data, slug) {
         return {
           title: `${data.title} - ElevateIdea`,
           description: data.excerpt,
-          image: `${baseUrl}/images/book-chapter-og.jpg`,
+          image: `${baseUrl}/social-preview.jpg`,
           url: `${baseUrl}/book/${data.slug}`,
           type: 'article',
           author: 'Partha Sarthi',
@@ -122,7 +122,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'Technology Direction for Startups - ElevateIdea',
         description: 'Many early-stage startups struggle with technology direction and engineering execution. Former Head of Technology at Aadhaar (UIDAI), previously at IBM and Thoughtworks, I help startups navigate these challenges using AI-accelerated development practices.',
-        image: `${baseUrl}/images/services-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/services`,
         type: 'website',
         author: 'Partha Sarthi'
@@ -132,7 +132,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'About Partha Sarthi - Fractional CTO - ElevateIdea',
         description: 'Fractional CTO for early-stage startups. 20+ years experience at Aadhaar, IBM, and Thoughtworks. I help startups make better technology decisions and move faster with AI-native engineering practices.',
-        image: `${baseUrl}/images/about-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/about`,
         type: 'website',
         author: 'Partha Sarthi'
@@ -142,7 +142,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'Contact - ElevateIdea',
         description: 'Get in touch with Partha Sarthi for Fractional CTO services. Whether you\'re an early-stage startup needing technology leadership, MVP development, or AI-native engineering guidance - let\'s connect.',
-        image: `${baseUrl}/images/contact-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/contact`,
         type: 'website',
         author: 'Partha Sarthi'
@@ -152,7 +152,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'Case Studies - ElevateIdea',
         description: 'Real corporate turnaround experiences from ElevateIdea founder. 20+ years experience across banks, government projects, startups, retailers. 6 major turnarounds, $15M+ recovery value.',
-        image: `${baseUrl}/images/turnaround-stories-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/turnaround-stories`,
         type: 'website',
         author: 'Partha Sarthi'
@@ -163,7 +163,7 @@ function generateMetaTags(type, data, slug) {
         return {
           title: `${data.title} - ElevateIdea`,
           description: data.excerpt || 'Read this business transformation case study from ElevateIdea.',
-          image: `${baseUrl}/images/turnaround-case-og.jpg`,
+          image: `${baseUrl}/social-preview.jpg`,
           url: `${baseUrl}/turnaround-stories/${data.slug}`,
           type: 'article',
           author: 'ElevateIdea Technologies',
@@ -174,7 +174,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'Business Transformation Case Study - ElevateIdea',
         description: 'Read this real business transformation case study from ElevateIdea Technologies.',
-        image: `${baseUrl}/images/turnaround-case-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/turnaround-stories`,
         type: 'article',
         author: 'ElevateIdea Technologies'
@@ -184,7 +184,7 @@ function generateMetaTags(type, data, slug) {
       return {
         title: 'Leadership - ElevateIdea',
         description: 'Engineering transformation expert and industry thought leader. $15M+ recovery value across 6 major turnarounds. Pioneering AI-era engineering leadership and organizational transformation.',
-        image: `${baseUrl}/images/leadership-og.jpg`,
+        image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/leadership`,
         type: 'website',
         author: 'Partha Sarthi'
@@ -210,7 +210,7 @@ function getDefaultBlogMeta() {
   return {
     title: 'Stories - ElevateIdea',
     description: 'Discover AI-powered business insights, MSME growth strategies, and technology transformation tips from ElevateIdea. Expert perspectives on scaling textile manufacturing businesses.',
-    image: 'https://elevateidea.com/images/blog-home-og.jpg',
+    image: 'https://elevateidea.com/social-preview.jpg',
     url: 'https://elevateidea.com/blog',
     type: 'website',
     author: 'ElevateIdea Technologies'
@@ -221,7 +221,7 @@ function getDefaultBookMeta() {
   return {
     title: 'Book - ElevateIdea',
     description: 'When Code Is No Longer the Bottleneck - A book about building future-ready engineering organizations in the AI era. Written in public, chapter by chapter.',
-    image: 'https://elevateidea.com/images/book-home-og.jpg',
+    image: 'https://elevateidea.com/social-preview.jpg',
     url: 'https://elevateidea.com/book',
     type: 'website',
     author: 'Partha Sarthi'
