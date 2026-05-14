@@ -140,7 +140,7 @@ function generateMetaTags(type, data, slug) {
       
     case 'contact':
       return {
-        title: 'Contact - ElevateIdea',
+        title: 'Contact Partha Sarthi - Fractional CTO - ElevateIdea',
         description: 'Get in touch with Partha Sarthi for Fractional CTO services. Whether you\'re an early-stage startup needing technology leadership, MVP development, or AI-native engineering guidance - let\'s connect.',
         image: `${baseUrl}/social-preview.jpg`,
         url: `${baseUrl}/contact`,
@@ -190,6 +190,16 @@ function generateMetaTags(type, data, slug) {
         author: 'Partha Sarthi'
       };
       
+    case 'elevatebusiness-360':
+      return {
+        title: 'Our Work: ElevateBusiness 360° - ElevateIdea',
+        description: 'See how we build for our clients: ElevateBusiness 360° - a complete textile business platform built WITH AI as our team member. Demonstrates our AI-era development capabilities and strategic approach to startup technology.',
+        image: `${baseUrl}/social-preview.jpg`,
+        url: `${baseUrl}/elevatebusiness-360`,
+        type: 'website',
+        author: 'Partha Sarthi'
+      };
+      
     default:
       return getDefaultHomeMeta();
   }
@@ -197,7 +207,7 @@ function generateMetaTags(type, data, slug) {
 
 function getDefaultHomeMeta() {
   return {
-    title: 'Technology Direction for Startups | Partha Sarthi - Former Head of Tech, Aadhaar',
+    title: 'Technology Direction for Startups - ElevateIdea',
     description: 'Many early-stage startups struggle with technology direction and engineering execution. Former Head of Technology at Aadhaar (UIDAI), previously at IBM and Thoughtworks, I help startups navigate these challenges using AI-accelerated development practices.',
     image: 'https://elevateidea.com/social-preview.jpg',
     url: 'https://elevateidea.com',
